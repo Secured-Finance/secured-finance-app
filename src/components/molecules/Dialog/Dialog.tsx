@@ -16,6 +16,7 @@ export const Dialog = ({
     onClose,
     children,
     disableActionButton,
+    showCancelButton = false,
 }: {
     title: string;
     description: string;
@@ -23,6 +24,7 @@ export const Dialog = ({
     onClick: () => void;
     children: JSX.Element;
     disableActionButton?: boolean;
+    showCancelButton?: boolean;
 } & DialogState) => {
     return (
         <HeadlessDialog
@@ -51,15 +53,27 @@ export const Dialog = ({
                             </div>
                             <div className='w-full pb-12 tablet:pb-0'>
                                 {callToAction ? (
-                                    <Button
-                                        size='sm'
-                                        fullWidth
-                                        onClick={onClick}
-                                        data-testid='dialog-action-button'
-                                        disabled={disableActionButton}
-                                    >
-                                        {callToAction}
-                                    </Button>
+                                    <div className='grid w-full gap-4'>
+                                        <Button
+                                            size='sm'
+                                            fullWidth
+                                            onClick={onClick}
+                                            data-testid='dialog-action-button'
+                                            disabled={disableActionButton}
+                                        >
+                                            {callToAction}
+                                        </Button>
+                                        {showCancelButton && (
+                                            <Button
+                                                variant='outlined'
+                                                size='sm'
+                                                fullWidth
+                                                onClick={onClose}
+                                            >
+                                                Cancel
+                                            </Button>
+                                        )}
+                                    </div>
                                 ) : (
                                     <div className='h-10' />
                                 )}

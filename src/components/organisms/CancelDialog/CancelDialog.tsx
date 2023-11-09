@@ -58,7 +58,7 @@ const stateRecord: Record<Step, State> = {
     [Step.cancelled]: {
         currentStep: Step.cancelled,
         nextStep: Step.confirm,
-        title: 'Success!',
+        title: 'Cancelled!',
         description: 'Your order was successfully cancelled.',
         buttonText: 'OK',
     },
@@ -237,6 +237,7 @@ export const CancelDialog = ({
             onClose={handleClose}
             isOpen={isOpen}
             onClick={() => onClick(state.currentStep)}
+            showCancelButton={state.currentStep === Step.confirm}
         >
             {renderSelection()}
         </Dialog>
