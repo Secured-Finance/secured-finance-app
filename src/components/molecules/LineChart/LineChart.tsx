@@ -117,7 +117,7 @@ export const LineChart = ({
         const element = chartRef.current.getElementsAtEventForMode(
             event as unknown as Event,
             'nearest',
-            { axis: 'x', intersect: false },
+            { axis: 'x', intersect: false, includeInvisible: true },
             true
         );
         if (element && element[0]) {

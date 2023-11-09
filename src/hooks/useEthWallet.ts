@@ -1,4 +1,3 @@
-import { BigNumber } from 'ethers';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAsset } from 'src/store/assetPrices/selectors';
@@ -8,7 +7,7 @@ import {
     resetEthWallet,
     updateEthBalance,
 } from 'src/store/wallet';
-import { CurrencySymbol, amountFormatterFromBase } from 'src/utils';
+import { CurrencySymbol, ZERO_BI, amountFormatterFromBase } from 'src/utils';
 import { useAccount, useBalance } from 'wagmi';
 
 export const useEthereumWalletStore = () => {
@@ -19,7 +18,7 @@ export const useEthereumWalletStore = () => {
         watch: true,
     });
     const ethBalance = amountFormatterFromBase[CurrencySymbol.ETH](
-        BigNumber.from(balance?.value ?? 0)
+        balance?.value ?? ZERO_BI
     );
     const { price } = useSelector((state: RootState) =>
         getAsset(CurrencySymbol.ETH)(state)

@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
-import { BigNumber } from 'ethers';
 import { ViewType } from 'src/components/atoms';
 import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
@@ -41,7 +40,7 @@ const landingOrderFormSlice = createSlice({
         setSide: (state, action: PayloadAction<OrderSide>) => {
             state.side = action.payload;
         },
-        setAmount: (state, action: PayloadAction<BigNumber>) => {
+        setAmount: (state, action: PayloadAction<bigint>) => {
             state.amount = action.payload.toString();
         },
         setUnitPrice: (state, action: PayloadAction<number | undefined>) => {
@@ -68,7 +67,7 @@ const landingOrderFormSlice = createSlice({
 export const selectLandingOrderForm = (state: LandingOrderFormStore) => {
     return {
         ...state,
-        amount: BigNumber.from(state.amount),
+        amount: BigInt(state.amount),
     };
 };
 

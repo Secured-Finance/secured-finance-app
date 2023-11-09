@@ -1,4 +1,4 @@
-import { utils } from 'ethers';
+import { toBytes32 } from '@secured-finance/sf-graph-client';
 import { useMemo } from 'react';
 import { LendingMarket, baseContracts, useLendingMarkets } from 'src/hooks';
 import { CurrencySymbol, getCurrencyMapAsList } from 'src/utils';
@@ -21,7 +21,7 @@ export const useMarketLists = () => {
                 const market = {
                     ...contract,
                     ccy: ccy.symbol,
-                    currency: utils.formatBytes32String(ccy.symbol),
+                    currency: toBytes32(ccy.symbol),
                 };
 
                 if (isItayoseOrPreOrder) {

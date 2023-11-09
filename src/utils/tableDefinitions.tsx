@@ -7,12 +7,11 @@ import {
     Row,
 } from '@tanstack/react-table';
 import classNames from 'classnames';
-import { BigNumber } from 'ethers';
 import { Chip, CurrencyItem, PriceYieldItem } from 'src/components/atoms';
 import { TableContractCell, TableHeader } from 'src/components/molecules';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
 import { Alignment, ColorFormat } from 'src/types';
-import { formatTimestamp } from 'src/utils';
+import { ZERO_BI, formatTimestamp } from 'src/utils';
 import {
     CurrencySymbol,
     currencyMap,
@@ -41,13 +40,13 @@ type SideProperty = {
     side: number;
 };
 type AmountProperty = {
-    amount: BigNumber;
+    amount: bigint;
 };
 type InputAmountProperty = {
-    inputAmount: BigNumber;
+    inputAmount: bigint;
 };
 type FilledAmountProperty = {
-    filledAmount: BigNumber;
+    filledAmount: bigint;
 };
 type TypeProperty = {
     type: string;
@@ -57,7 +56,7 @@ type StatusProperty = {
 };
 
 type ForwardValueProperty = {
-    forwardValue: BigNumber;
+    forwardValue: bigint;
 };
 
 type AmountColumnType = (AmountProperty | SideProperty | ForwardValueProperty) &
@@ -91,7 +90,7 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
     columnHelper: ColumnHelper<T>,
     title: string,
     id: string,
-    accessor: AccessorFn<T, BigNumber | undefined>,
+    accessor: AccessorFn<T, bigint | undefined>,
     options: {
         color: boolean;
         compact: boolean;
@@ -116,9 +115,7 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
             if (hasSideProperty(info.row.original)) {
                 color = info.row.original.side === 1 ? 'negative' : 'positive';
             } else if (hasAmountProperty(info.row.original)) {
-                color = info.row.original.amount.isNegative()
-                    ? 'negative'
-                    : 'positive';
+                color = info.row.original.amount < 0 ? 'negative' : 'positive';
             } else {
                 // do nothing
             }
@@ -127,7 +124,7 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
                 <div className='flex justify-end'>
                     <CurrencyItem
                         amount={currencyMap[ccy].fromBaseUnit(
-                            info.getValue() as BigNumber
+                            info.getValue() as bigint
                         )}
                         ccy={ccy}
                         align='right'
@@ -159,7 +156,7 @@ export const inputAmountColumnDefinition = <T extends InputAmountColumnType>(
     columnHelper: ColumnHelper<T>,
     title: string,
     id: string,
-    accessor: AccessorFn<T, BigNumber>,
+    accessor: AccessorFn<T, bigint>,
     options: {
         color: boolean;
         compact: boolean;
@@ -209,7 +206,7 @@ export const forwardValueColumnDefinition = <T extends AmountColumnType>(
     columnHelper: ColumnHelper<T>,
     title: string,
     id: string,
-    accessor: AccessorFn<T, BigNumber>,
+    accessor: AccessorFn<T, bigint>,
     options: {
         color: boolean;
         compact: boolean;
@@ -227,9 +224,10 @@ export const forwardValueColumnDefinition = <T extends AmountColumnType>(
             if (hasSideProperty(info.row.original)) {
                 color = info.row.original.side === 1 ? 'negative' : 'positive';
             } else if (hasForwardValueProperty(info.row.original)) {
-                color = info.row.original.forwardValue.isNegative()
-                    ? 'negative'
-                    : 'positive';
+                color =
+                    info.row.original.forwardValue < 0
+                        ? 'negative'
+                        : 'positive';
             } else {
                 // do nothing
             }
@@ -239,7 +237,7 @@ export const forwardValueColumnDefinition = <T extends AmountColumnType>(
                     <div className='flex justify-end'>
                         <CurrencyItem
                             amount={currencyMap[ccy].fromBaseUnit(
-                                info.getValue() as BigNumber
+                                info.getValue() as bigint
                             )}
                             ccy={ccy}
                             align='right'
@@ -285,17 +283,15 @@ export const loanTypeFromFVColumnDefinition = <T extends ForwardValueProperty>(
     title: string,
     id: string
 ) => {
-    const assessorFn: AccessorFn<T, BigNumber> = row => row.forwardValue;
+    const assessorFn: AccessorFn<T, bigint> = row => row.forwardValue;
 
     return columnHelper.accessor(assessorFn, {
         id: id,
         cell: info => {
-            if (info.getValue().isZero()) return null;
+            if (info.getValue() === ZERO_BI) return null;
             return (
                 <div className='flex justify-center'>
-                    <Chip
-                        label={info.getValue().isNegative() ? 'Borrow' : 'Lend'}
-                    />
+                    <Chip label={info.getValue() < 0 ? 'Borrow' : 'Lend'} />
                 </div>
             );
         },
@@ -307,7 +303,7 @@ export const contractColumnDefinition = <
     T extends {
         maturity: string | number;
         currency: string;
-        forwardValue?: BigNumber;
+        forwardValue?: bigint;
     }
 >(
     columnHelper: ColumnHelper<T>,
@@ -332,11 +328,10 @@ export const contractColumnDefinition = <
                 currency && delistedCurrencySet
                     ? delistedCurrencySet.has(currency)
                     : false;
-            const side = BigNumber.from(
-                info.row.original.forwardValue ?? 0
-            ).isNegative()
-                ? OrderSide.BORROW
-                : OrderSide.LEND;
+            const side =
+                BigInt(info.row.original.forwardValue ?? 0) < 0
+                    ? OrderSide.BORROW
+                    : OrderSide.LEND;
             return (
                 <div
                     className={classNames('flex', {
@@ -412,19 +407,21 @@ const contractSortingFn = <
     return ccyA.localeCompare(ccyB);
 };
 
-export const priceYieldColumnDefinition = <T extends { maturity: string }>(
+export const priceYieldColumnDefinition = <
+    T extends { maturity: string; calculationDate?: number }
+>(
     columnHelper: ColumnHelper<T>,
     title: string,
     id: string,
-    accessor: AccessorFn<T, BigNumber>,
+    accessor: AccessorFn<T, bigint>,
     variant: 'compact' | 'default' = 'default',
     type: Parameters<typeof PriceYieldItem>[0]['firstLineType'] = 'price',
-    calculationDate?: number | undefined,
     titleHint?: string
 ) => {
     return columnHelper.accessor(accessor, {
         id: id,
         cell: info => {
+            const calculationDate = info.row.original.calculationDate;
             return (
                 <div className='flex justify-center'>
                     <PriceYieldItem
@@ -447,7 +444,7 @@ export const inputPriceYieldColumnDefinition = <T extends { maturity: string }>(
     columnHelper: ColumnHelper<T>,
     title: string,
     id: string,
-    accessor: AccessorFn<T, BigNumber>
+    accessor: AccessorFn<T, bigint>
 ) => {
     return columnHelper.accessor(accessor, {
         id: id,
@@ -472,11 +469,11 @@ export const inputPriceYieldColumnDefinition = <T extends { maturity: string }>(
     });
 };
 
-export const dateAndTimeColumnDefinition = <T extends { createdAt: BigNumber }>(
+export const dateAndTimeColumnDefinition = <T extends { createdAt: bigint }>(
     columnHelper: ColumnHelper<T>,
     title: string,
     id: string,
-    accessor: AccessorFn<T, BigNumber>,
+    accessor: AccessorFn<T, bigint>,
     fontSize?: string,
     titleHint?: string
 ) => {

@@ -7,6 +7,7 @@ import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Provider } from 'react-redux';
+import 'src/bigIntPatch';
 import { Footer } from 'src/components/atoms';
 import { Header } from 'src/components/organisms';
 import { Layout } from 'src/components/templates';

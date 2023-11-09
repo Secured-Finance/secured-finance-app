@@ -1,4 +1,3 @@
-import { BigNumber } from 'ethers';
 import { useCallback, useReducer, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { CollateralSelector, Spinner } from 'src/components/atoms';
@@ -18,7 +17,7 @@ import {
     CollateralEvents,
     CollateralInfo,
     CurrencySymbol,
-    ZERO_BN,
+    ZERO_BI,
     amountFormatterFromBase,
     amountFormatterToBase,
     formatAmount,
@@ -104,7 +103,7 @@ export const DepositCollateral = ({
 } & DialogState) => {
     const etherscanUrl = useEtherscanUrl();
     const [asset, setAsset] = useState(CurrencySymbol.USDC);
-    const [collateral, setCollateral] = useState<BigNumber>();
+    const [collateral, setCollateral] = useState<bigint>();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [errorMessage, setErrorMessage] = useState(
         'Your deposit transaction has failed.'
@@ -114,7 +113,7 @@ export const DepositCollateral = ({
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const { onDepositCollateral } = useDepositCollateral(
         asset,
-        collateral ?? ZERO_BN
+        collateral ?? ZERO_BI
     );
     const handleContractTransaction = useHandleContractTransaction();
 
@@ -136,12 +135,10 @@ export const DepositCollateral = ({
         return (
             state.currentStep === Step.depositCollateral &&
             (!collateral ||
-                collateral.isZero() ||
-                collateral.gt(
+                collateral >
                     amountFormatterToBase[asset](
                         collateralList[asset]?.available ?? 0
-                    )
-                ))
+                    ))
         );
     }, [asset, collateral, collateralList, state.currentStep]);
 
@@ -152,11 +149,11 @@ export const DepositCollateral = ({
             if (!transactionStatus) {
                 dispatch({ type: 'error' });
             } else {
-                setTxHash(tx?.hash);
+                setTxHash(tx);
                 trackCollateralEvent(
                     CollateralEvents.DEPOSIT_COLLATERAL,
                     asset,
-                    collateral ?? ZERO_BN,
+                    collateral ?? ZERO_BI,
                     source ?? ''
                 );
                 dispatch({ type: 'next' });
@@ -224,9 +221,9 @@ export const DepositCollateral = ({
                                 <CollateralInput
                                     price={priceList[asset]}
                                     asset={asset}
-                                    onAmountChange={(
-                                        v: BigNumber | undefined
-                                    ) => setCollateral(v)}
+                                    onAmountChange={(v: bigint | undefined) =>
+                                        setCollateral(v)
+                                    }
                                     availableAmount={
                                         collateralList[asset]?.available ?? 0
                                     }
@@ -260,7 +257,7 @@ export const DepositCollateral = ({
                                         'Amount',
                                         `${formatAmount(
                                             amountFormatterFromBase[asset](
-                                                collateral ?? ZERO_BN
+                                                collateral ?? ZERO_BI
                                             )
                                         )} ${asset}`,
                                     ],

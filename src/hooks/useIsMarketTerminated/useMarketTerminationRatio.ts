@@ -4,7 +4,7 @@ import { QueryKeys } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import {
     CurrencySymbol,
-    ZERO_BN,
+    ZERO_BI,
     hexToCurrencySymbol,
     toCurrency,
 } from 'src/utils';
@@ -27,7 +27,7 @@ export const useMarketTerminationRatio = () => {
                         ratio:
                             (await securedFinance?.getMarketTerminationRatio(
                                 toCurrency(ccy)
-                            )) ?? ZERO_BN,
+                            )) ?? ZERO_BI,
                     };
                 })
             );
@@ -35,8 +35,8 @@ export const useMarketTerminationRatio = () => {
         enabled: !!securedFinance,
         select: ratios => {
             const total = ratios.reduce((acc, { ratio }) => {
-                return acc.add(ratio);
-            }, ZERO_BN);
+                return acc + ratio;
+            }, ZERO_BI);
 
             return ratios.map(({ currency, ratio }) => {
                 return {

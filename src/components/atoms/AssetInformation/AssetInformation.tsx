@@ -1,4 +1,3 @@
-import { BigNumber } from 'ethers';
 import { useSelector } from 'react-redux';
 import { CurrencyIcon, CurrencyItem } from 'src/components/atoms';
 import { Tooltip } from 'src/components/templates';
@@ -6,9 +5,10 @@ import { CollateralBook } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
+    CurrencySymbol,
+    ZERO_BI,
     amountFormatterFromBase,
     currencyMap,
-    CurrencySymbol,
 } from 'src/utils';
 
 interface AssetInformationProps {
@@ -38,10 +38,10 @@ export const AssetInformation = ({
                     (
                         Object.entries(collateralBook) as [
                             CurrencySymbol,
-                            BigNumber
+                            bigint
                         ][]
                     )
-                        .filter(([_asset, quantity]) => !quantity.isZero())
+                        .filter(([_asset, quantity]) => quantity !== ZERO_BI)
                         .map(([asset, quantity]) => (
                             <div
                                 className='flex h-10 w-full flex-row items-center gap-2'

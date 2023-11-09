@@ -1,4 +1,3 @@
-import { BigNumber } from 'ethers';
 import {
     dec22Fixture,
     ethBytes32,
@@ -14,56 +13,56 @@ import { useIsGlobalItayose } from './useIsGlobalItayose';
 const noOpenMarkets = [
     {
         name: 'DEC22',
-        maturity: BigNumber.from(dec22Fixture.toString()),
-        openingDate: BigNumber.from('1685587600'),
-        marketUnitPrice: BigNumber.from('9001'),
-        openingUnitPrice: BigNumber.from('9710'),
+        maturity: BigInt(dec22Fixture.toString()),
+        openingDate: BigInt('1685587600'),
+        marketUnitPrice: BigInt('9001'),
+        openingUnitPrice: BigInt('9710'),
         isReady: false,
         isOpened: false,
         isMatured: false,
         isPreOrderPeriod: true,
         isItayosePeriod: false,
-        bestBorrowUnitPrice: BigNumber.from('9615'),
-        bestLendUnitPrice: BigNumber.from('9617'),
-        minBorrowUnitPrice: BigNumber.from('9602'),
-        maxLendUnitPrice: BigNumber.from('9630'),
-        currentMinDebtUnitPrice: BigNumber.from('9500'),
+        bestBorrowUnitPrice: BigInt('9615'),
+        bestLendUnitPrice: BigInt('9617'),
+        minBorrowUnitPrice: BigInt('9602'),
+        maxLendUnitPrice: BigInt('9630'),
+        currentMinDebtUnitPrice: BigInt('9500'),
         ccy: ethBytes32,
     },
     {
         name: 'MAR23',
-        maturity: BigNumber.from(mar23Fixture.toString()),
-        openingDate: BigNumber.from('1685587600'),
-        marketUnitPrice: BigNumber.from('9001'),
-        openingUnitPrice: BigNumber.from('9710'),
+        maturity: BigInt(mar23Fixture.toString()),
+        openingDate: BigInt('1685587600'),
+        marketUnitPrice: BigInt('9001'),
+        openingUnitPrice: BigInt('9710'),
         isReady: false,
         isOpened: false,
         isMatured: false,
         isPreOrderPeriod: true,
         isItayosePeriod: false,
-        bestBorrowUnitPrice: BigNumber.from('9615'),
-        bestLendUnitPrice: BigNumber.from('9617'),
-        minBorrowUnitPrice: BigNumber.from('9602'),
-        maxLendUnitPrice: BigNumber.from('9630'),
-        currentMinDebtUnitPrice: BigNumber.from('9500'),
+        bestBorrowUnitPrice: BigInt('9615'),
+        bestLendUnitPrice: BigInt('9617'),
+        minBorrowUnitPrice: BigInt('9602'),
+        maxLendUnitPrice: BigInt('9630'),
+        currentMinDebtUnitPrice: BigInt('9500'),
         ccy: ethBytes32,
     },
     {
         name: 'JUN23',
-        maturity: BigNumber.from(jun23Fixture.toString()),
-        openingDate: BigNumber.from('1685587600'),
-        marketUnitPrice: BigNumber.from('9001'),
-        openingUnitPrice: BigNumber.from('9710'),
+        maturity: BigInt(jun23Fixture.toString()),
+        openingDate: BigInt('1685587600'),
+        marketUnitPrice: BigInt('9001'),
+        openingUnitPrice: BigInt('9710'),
         isReady: false,
         isOpened: false,
         isMatured: false,
         isPreOrderPeriod: true,
         isItayosePeriod: false,
-        bestBorrowUnitPrice: BigNumber.from('9615'),
-        bestLendUnitPrice: BigNumber.from('9617'),
-        minBorrowUnitPrice: BigNumber.from('9602'),
-        maxLendUnitPrice: BigNumber.from('9630'),
-        currentMinDebtUnitPrice: BigNumber.from('9500'),
+        bestBorrowUnitPrice: BigInt('9615'),
+        bestLendUnitPrice: BigInt('9617'),
+        minBorrowUnitPrice: BigInt('9602'),
+        maxLendUnitPrice: BigInt('9630'),
+        currentMinDebtUnitPrice: BigInt('9500'),
         ccy: ethBytes32,
     },
 ];
@@ -84,7 +83,7 @@ describe('useIsGlobalItayose', () => {
             useIsGlobalItayose()
         );
         await waitForNextUpdate();
-        expect(result.current).toEqual(true);
+        expect(result.current.data).toEqual(true);
     });
 
     it('should return false if itayose and open markets exist', async () => {
@@ -92,7 +91,7 @@ describe('useIsGlobalItayose', () => {
             useIsGlobalItayose()
         );
         await waitForNextUpdate();
-        expect(result.current).toEqual(false);
+        expect(result.current.data).toEqual(false);
     });
 
     it('should return false if there are no itayose markets', async () => {
@@ -103,6 +102,6 @@ describe('useIsGlobalItayose', () => {
             useIsGlobalItayose()
         );
         await waitForNextUpdate();
-        expect(result.current).toEqual(false);
+        expect(result.current.data).toEqual(false);
     });
 });

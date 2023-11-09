@@ -1,4 +1,3 @@
-import { BigNumber } from 'ethers';
 import { dec24Fixture, wfilBytes32 } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
@@ -39,20 +38,20 @@ describe('useOrderList', () => {
                     orderId: 3,
                     ccy: wfilBytes32,
                     side: 1,
-                    maturity: BigNumber.from(dec24Fixture.toString()),
-                    unitPrice: BigNumber.from('9800'),
-                    amount: BigNumber.from('100000000000000000000'),
-                    timestamp: BigNumber.from('1609205000'),
+                    maturity: BigInt(dec24Fixture.toString()),
+                    unitPrice: BigInt('9800'),
+                    amount: BigInt('100000000000000000000'),
+                    timestamp: BigInt('1609205000'),
                     isPreOrder: false,
                 },
                 {
                     orderId: 4,
                     ccy: wfilBytes32,
                     side: 1,
-                    maturity: BigNumber.from(dec24Fixture.toString()),
-                    unitPrice: BigNumber.from('7800'),
-                    amount: BigNumber.from('100000000000000000000'),
-                    timestamp: BigNumber.from('1409220000'),
+                    maturity: BigInt(dec24Fixture.toString()),
+                    unitPrice: BigInt('7800'),
+                    amount: BigInt('100000000000000000000'),
+                    timestamp: BigInt('1409220000'),
                     isPreOrder: true,
                 },
             ],
@@ -63,20 +62,20 @@ describe('useOrderList', () => {
                 'account',
                 CurrencySymbol.WFIL,
                 dec24Fixture.toNumber(),
-                order => order.unitPrice.eq(BigNumber.from('7800'))
+                order => order.unitPrice === BigInt('7800')
             )
         );
         await waitForNextUpdate();
 
         expect(result.current).toEqual([
             {
-                orderId: BigNumber.from(4),
+                orderId: BigInt(4),
                 currency: wfilBytes32,
                 side: 1,
                 maturity: dec24Fixture.toString(),
-                unitPrice: BigNumber.from('7800'),
-                amount: BigNumber.from('100000000000000000000'),
-                createdAt: BigNumber.from('1409220000'),
+                unitPrice: BigInt('7800'),
+                amount: BigInt('100000000000000000000'),
+                createdAt: BigInt('1409220000'),
                 isPreOrder: true,
             },
         ]);
