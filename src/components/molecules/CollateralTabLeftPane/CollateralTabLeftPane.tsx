@@ -135,7 +135,7 @@ export const CollateralTabLeftPane = ({
                         <div className='mx-3 mt-6 flex flex-col gap-3 tablet:hidden'>
                             <CollateralManagementConciseTab
                                 collateralCoverage={
-                                    Number(collateralBook.coverage) / 100
+                                    collateralBook.coverage / 100
                                 }
                                 totalCollateralInUSD={
                                     collateralBook.usdCollateral

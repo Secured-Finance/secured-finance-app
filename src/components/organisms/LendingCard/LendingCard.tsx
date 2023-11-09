@@ -239,9 +239,7 @@ export const LendingCard = ({
                         <div className='px-2'>
                             <CollateralUsageSection
                                 usdCollateral={collateralBook.usdCollateral}
-                                collateralCoverage={Number(
-                                    collateralBook.coverage
-                                )}
+                                collateralCoverage={collateralBook.coverage}
                                 currency={currency}
                                 collateralThreshold={
                                     collateralBook.collateralThreshold
