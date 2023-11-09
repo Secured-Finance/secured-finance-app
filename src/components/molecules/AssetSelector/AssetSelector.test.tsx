@@ -1,5 +1,4 @@
 import { composeStories } from '@storybook/react';
-import { BigNumber } from 'ethers';
 import { fireEvent, render, screen } from 'src/test-utils.js';
 import { CurrencySymbol } from 'src/utils';
 import * as stories from './AssetSelector.stories';
@@ -8,12 +7,10 @@ const { Default } = composeStories(stories);
 
 describe('AssetSelector Component', () => {
     const amountFormatterMap = {
-        [CurrencySymbol.WBTC]: (amount: number) => BigNumber.from(amount * 100),
-        [CurrencySymbol.ETH]: (amount: number) => BigNumber.from(amount * 1000),
-        [CurrencySymbol.WFIL]: (amount: number) =>
-            BigNumber.from(amount * 10000),
-        [CurrencySymbol.USDC]: (amount: number) =>
-            BigNumber.from(amount * 100000),
+        [CurrencySymbol.WBTC]: (amount: number) => BigInt(amount * 100),
+        [CurrencySymbol.ETH]: (amount: number) => BigInt(amount * 1000),
+        [CurrencySymbol.WFIL]: (amount: number) => BigInt(amount * 10000),
+        [CurrencySymbol.USDC]: (amount: number) => BigInt(amount * 100000),
     };
 
     it('should render a AssetSelector', () => {
@@ -39,17 +36,17 @@ describe('AssetSelector Component', () => {
         expect(onAmountChange).toHaveBeenCalled();
     });
 
-    it('should call onAmountChange function with the amount converted to BigNumber if no amountFormatterMap was provided', () => {
+    it('should call onAmountChange function with the amount converted to BigInt if no amountFormatterMap was provided', () => {
         const onAmountChange = jest.fn();
         render(<Default onAmountChange={onAmountChange} />);
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '1' } });
-        expect(onAmountChange).toHaveBeenCalledWith(BigNumber.from(1));
+        expect(onAmountChange).toHaveBeenCalledWith(BigInt(1));
         fireEvent.change(input, { target: { value: '10' } });
-        expect(onAmountChange).toHaveBeenLastCalledWith(BigNumber.from(10));
+        expect(onAmountChange).toHaveBeenLastCalledWith(BigInt(10));
     });
 
-    it('should call onAmountChange function with the amount converted to BigNumber with the function from amountFormatterMap', () => {
+    it('should call onAmountChange function with the amount converted to BigInt with the function from amountFormatterMap', () => {
         const onAmountChange = jest.fn();
         render(
             <Default
@@ -59,9 +56,9 @@ describe('AssetSelector Component', () => {
         );
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '1' } });
-        expect(onAmountChange).toHaveBeenCalledWith(BigNumber.from(100));
+        expect(onAmountChange).toHaveBeenCalledWith(BigInt(100));
         fireEvent.change(input, { target: { value: '10' } });
-        expect(onAmountChange).toHaveBeenLastCalledWith(BigNumber.from(1000));
+        expect(onAmountChange).toHaveBeenLastCalledWith(BigInt(1000));
     });
 
     it('should not call onAmountChange function when the asset is changed', () => {

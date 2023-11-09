@@ -1,13 +1,14 @@
-import { BigNumber, BigNumberish } from 'ethers';
 import { CurrencyInfo, CurrencySymbol, currencyMap } from '../currencyList';
 
+export type BigNumberish = bigint | string | number;
+
 export class Amount {
-    private readonly _baseValue: BigNumber;
+    private readonly _baseValue: bigint;
     private readonly _formatterFromBase: CurrencyInfo['fromBaseUnit'];
     private readonly _currency: CurrencySymbol;
 
     constructor(value: BigNumberish, ccy: CurrencySymbol) {
-        this._baseValue = BigNumber.from(value);
+        this._baseValue = BigInt(value);
         this._currency = ccy;
         this._formatterFromBase = currencyMap[ccy].fromBaseUnit;
     }
@@ -24,7 +25,7 @@ export class Amount {
         return this.value * price;
     }
 
-    toBigNumber() {
+    toBigInt() {
         return this._baseValue;
     }
 }

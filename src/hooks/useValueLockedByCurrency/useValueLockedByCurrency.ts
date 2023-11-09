@@ -1,16 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
-import { BigNumber } from 'ethers';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
-import { CurrencySymbol, ZERO_BN } from 'src/utils';
+import { CurrencySymbol, ZERO_BI } from 'src/utils';
 
-type ValueLockedBook = Record<CurrencySymbol, BigNumber>;
+type ValueLockedBook = Record<CurrencySymbol, bigint>;
 
 export const emptyValueLockedBook: ValueLockedBook = {
-    [CurrencySymbol.ETH]: ZERO_BN,
-    [CurrencySymbol.USDC]: ZERO_BN,
-    [CurrencySymbol.WFIL]: ZERO_BN,
-    [CurrencySymbol.WBTC]: ZERO_BN,
+    [CurrencySymbol.ETH]: ZERO_BI,
+    [CurrencySymbol.USDC]: ZERO_BI,
+    [CurrencySymbol.WFIL]: ZERO_BI,
+    [CurrencySymbol.WBTC]: ZERO_BI,
 };
 
 export const useValueLockedByCurrency = () => {

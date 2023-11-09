@@ -1,4 +1,3 @@
-import { BigNumber } from 'ethers';
 import { useEffect, useMemo, useState } from 'react';
 import { GradientBox, TextLink } from 'src/components/atoms';
 import { CollateralSnapshot } from 'src/components/molecules';
@@ -22,7 +21,7 @@ import {
     usePositions,
     useTerminationPrices,
 } from 'src/hooks';
-import { ZERO_BN, computeNetValue, usdFormat } from 'src/utils';
+import { ZERO_BI, computeNetValue, usdFormat } from 'src/utils';
 import { toHex } from 'viem';
 import { useAccount } from 'wagmi';
 
@@ -43,17 +42,17 @@ export const EmergencyGlobalSettlement = () => {
             .filter(o => o.side === 0) // only lend orders
             .reduce((acc, o) => {
                 const key = o.currency;
-                const amount = acc.get(key) ?? ZERO_BN;
-                acc.set(key, amount.add(o.amount));
+                const amount = acc.get(key) ?? ZERO_BI;
+                acc.set(key, amount + o.amount);
                 return acc;
-            }, new Map<string, BigNumber>());
+            }, new Map<string, bigint>());
 
         const lendOrders: WithdrawablePosition[] = [];
         aggregated.forEach((v, k) => {
             lendOrders.push({
                 amount: v,
                 currency: k,
-                forwardValue: ZERO_BN,
+                forwardValue: ZERO_BI,
                 maturity: '0',
                 type: 'lending-order' as const,
             });
@@ -66,11 +65,11 @@ export const EmergencyGlobalSettlement = () => {
                 type: 'position' as const,
             })),
             ...Object.entries(collateralBook.collateral)
-                .filter(v => v[1] && !v[1].isZero())
+                .filter(v => v[1] && v[1] !== ZERO_BI)
                 .map(([key, value]) => ({
                     amount: value,
                     currency: toHex(key),
-                    forwardValue: ZERO_BN,
+                    forwardValue: ZERO_BI,
                     maturity: '0',
                     type: 'collateral' as const,
                 })),
@@ -79,13 +78,13 @@ export const EmergencyGlobalSettlement = () => {
 
     const withdrawableTokens = [
         ...Object.entries(collateralBook.nonCollateral)
-            .filter(v => v[1] && !v[1].isZero())
+            .filter(v => v[1] && v[1] !== ZERO_BI)
             .map(([key, value]) => ({
                 amount: value,
                 currency: toHex(key),
             })),
         ...Object.entries(collateralBook.withdrawableCollateral)
-            .filter(v => v[1] && !v[1].isZero())
+            .filter(v => v[1] && v[1] !== ZERO_BI)
             .map(([key, value]) => ({
                 amount: value,
                 currency: toHex(key),

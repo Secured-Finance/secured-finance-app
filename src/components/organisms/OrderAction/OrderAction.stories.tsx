@@ -5,7 +5,6 @@ import {
 } from '.storybook/decorators';
 import { OrderSide } from '@secured-finance/sf-client';
 import type { Meta, StoryFn } from '@storybook/react';
-import { BigNumber } from 'ethers';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { emptyCollateralBook } from 'src/hooks';
@@ -55,7 +54,7 @@ const Template: StoryFn<typeof OrderAction> = args => {
     useEffect(() => {
         const timerId = setTimeout(() => {
             dispatch(setCurrency(CurrencySymbol.USDC));
-            dispatch(setAmount(BigNumber.from(500000000)));
+            dispatch(setAmount(BigInt(500000000)));
             dispatch(setSide(OrderSide.BORROW));
             dispatch(setMaturity(dec22Fixture.toNumber()));
         }, 200);

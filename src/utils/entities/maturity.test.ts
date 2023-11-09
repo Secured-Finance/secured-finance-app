@@ -1,4 +1,3 @@
-import { BigNumber } from 'ethers';
 import { Maturity } from './maturity';
 
 describe('Maturity class', () => {
@@ -12,8 +11,8 @@ describe('Maturity class', () => {
         expect(maturity.toNumber()).toBe(1669852800);
     });
 
-    it('should build from a BigNumber', () => {
-        const maturity = new Maturity(BigNumber.from(1669852800));
+    it('should build from a BigInt', () => {
+        const maturity = new Maturity(BigInt(1669852800));
         expect(maturity.toNumber()).toBe(1669852800);
     });
 

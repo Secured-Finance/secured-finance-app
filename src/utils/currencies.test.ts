@@ -1,5 +1,4 @@
 import { WalletSource as Source } from '@secured-finance/sf-client';
-import { BigNumber } from 'ethers';
 import {
     generateWalletInformation,
     generateWalletSourceInformation,
@@ -51,7 +50,7 @@ describe('currencies.generateWalletSourceInformation', () => {
         const options = generateWalletSourceInformation(
             CurrencySymbol.USDC,
             1000,
-            BigNumber.from(500000000)
+            BigInt(500000000)
         );
         expect(options).toHaveLength(2);
         expect(options[0].source).toEqual(Source.METAMASK);

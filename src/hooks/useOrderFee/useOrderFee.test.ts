@@ -1,4 +1,3 @@
-import { BigNumber } from 'ethers';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
 import { CurrencySymbol } from 'src/utils';
@@ -27,7 +26,7 @@ describe('useOrderFee hook', () => {
     });
 
     it('should divide by 100 the returned value', async () => {
-        mock.getOrderFeeRate.mockResolvedValueOnce(BigNumber.from(50));
+        mock.getOrderFeeRate.mockResolvedValueOnce(BigInt(50));
         const { result, waitForNextUpdate } = renderHook(() =>
             useOrderFee(CurrencySymbol.WFIL)
         );

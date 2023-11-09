@@ -1,20 +1,25 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { ContractTransaction } from 'ethers';
 import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { QUERIES_TO_INVALIDATE } from 'src/hooks/queries';
 import { updateLastActionTimestamp } from 'src/store/blockchain';
+import { Hex } from 'viem';
+import { usePublicClient } from 'wagmi';
 
 export const useHandleContractTransaction = () => {
     const dispatch = useDispatch();
     const queryClient = useQueryClient();
+    const publicClient = usePublicClient();
 
     const handleContractTransaction = useCallback(
-        async (tx: ContractTransaction | undefined) => {
+        async (tx: Hex | undefined) => {
             if (!tx) {
                 return false;
             }
-            const contractReceipt = await tx.wait();
+            const contractReceipt =
+                await publicClient.waitForTransactionReceipt({
+                    hash: tx,
+                });
             dispatch(updateLastActionTimestamp());
 
             // Invalidate all queries
@@ -28,7 +33,7 @@ export const useHandleContractTransaction = () => {
             }
             return false;
         },
-        [dispatch, queryClient]
+        [dispatch, publicClient, queryClient]
     );
     return handleContractTransaction;
 };

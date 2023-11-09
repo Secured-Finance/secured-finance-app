@@ -1,6 +1,5 @@
 import { withAssetPrice, withWalletProvider } from '.storybook/decorators';
 import { Meta, StoryFn } from '@storybook/react';
-import { BigNumber } from 'ethers';
 import {
     ethBytes32,
     wbtcBytes32,
@@ -14,15 +13,15 @@ export default {
     args: {
         data: [
             {
-                amount: BigNumber.from('400000000000000000000'),
+                amount: BigInt('400000000000000000000'),
                 currency: wfilBytes32,
             },
             {
-                amount: BigNumber.from('500000000000000000000'),
+                amount: BigInt('500000000000000000000'),
                 currency: ethBytes32,
             },
             {
-                amount: BigNumber.from('50000000'),
+                amount: BigInt('50000000'),
                 currency: wbtcBytes32,
             },
         ],

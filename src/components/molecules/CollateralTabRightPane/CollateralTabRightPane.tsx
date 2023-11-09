@@ -17,7 +17,7 @@ export const CollateralTabRightPane = ({
     const balance = account ? collateralBook.usdCollateral : 0;
 
     const collateralUsagePercent = useMemo(() => {
-        return collateralBook.coverage.toNumber() / 100.0;
+        return collateralBook.coverage / 100.0;
     }, [collateralBook]);
 
     return (

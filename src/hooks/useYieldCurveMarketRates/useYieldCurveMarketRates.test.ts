@@ -1,4 +1,3 @@
-import { BigNumber } from 'ethers';
 import {
     maturitiesMockFromContract,
     wfilBytes32,
@@ -14,19 +13,19 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
 const preOrderMarket = {
     name: 'DEC24-1',
-    maturity: BigNumber.from(new Maturity(1743011200).toString()),
-    openingDate: BigNumber.from('1685587600'),
-    marketUnitPrice: BigNumber.from('9001'),
-    openingUnitPrice: BigNumber.from('9710'),
+    maturity: BigInt(new Maturity(1743011200).toString()),
+    openingDate: BigInt('1685587600'),
+    marketUnitPrice: BigInt('9001'),
+    openingUnitPrice: BigInt('9710'),
     isReady: false,
     isOpened: false,
     isMatured: false,
     isPreOrderPeriod: true,
     isItayosePeriod: false,
-    bestBorrowUnitPrice: BigNumber.from('9615'),
-    bestLendUnitPrice: BigNumber.from('9617'),
-    minBorrowUnitPrice: BigNumber.from('9602'),
-    maxLendUnitPrice: BigNumber.from('9630'),
+    bestBorrowUnitPrice: BigInt('9615'),
+    bestLendUnitPrice: BigInt('9617'),
+    minBorrowUnitPrice: BigInt('9602'),
+    maxLendUnitPrice: BigInt('9630'),
     ccy: wfilBytes32,
 };
 
@@ -37,7 +36,7 @@ const closedMarket = {
 
 const nearMaturityMarket = {
     ...preOrderMarket,
-    maturity: BigNumber.from(new Maturity(1638662400).toString()),
+    maturity: BigInt(new Maturity(1638662400).toString()),
     isReady: true,
     isOpened: true,
     isPreOrderPeriod: false,
@@ -140,9 +139,9 @@ describe('useYieldCurveMarketRates', () => {
         expect(result.current.itayoseMarketIndexSet).toEqual(new Set([8, 9]));
 
         const fwdRate = LoanValue.fromPrice(
-            preOrderMarket.openingUnitPrice.toNumber(),
-            preOrderMarket.maturity.toNumber(),
-            preOrderMarket.openingDate.toNumber()
+            Number(preOrderMarket.openingUnitPrice),
+            Number(preOrderMarket.maturity),
+            Number(preOrderMarket.openingDate)
         ).apr;
         expect(result.current.rates[8].toNormalizedNumber()).toEqual(1.9758);
         expect(result.current.rates[9].toNormalizedNumber()).toEqual(
@@ -210,7 +209,7 @@ describe('useYieldCurveMarketRates', () => {
     });
 
     it('should not change first market yield chart rate if its close to maturity but lesser than maximum rate', async () => {
-        nearMaturityMarket.marketUnitPrice = BigNumber.from('0');
+        nearMaturityMarket.marketUnitPrice = BigInt('0');
         jest.spyOn(mock, 'getOrderBookDetails').mockResolvedValue([
             ...closeToMaturity,
         ]);

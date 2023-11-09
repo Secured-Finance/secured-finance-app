@@ -1,11 +1,10 @@
 import { Token } from '@secured-finance/sf-core';
 import { useQueries } from '@tanstack/react-query';
-import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
 import {
-    ZERO_BN,
+    ZERO_BI,
     amountFormatterFromBase,
     getCurrencyMapAsList,
 } from 'src/utils';
@@ -26,9 +25,9 @@ export const useERC20Balance = (address: string | undefined) => {
                         token.toCurrency() as Token,
                         address ?? ''
                     );
-                    return balance ?? ZERO_BN;
+                    return balance ?? ZERO_BI;
                 },
-                select: (balance: BigNumber) => {
+                select: (balance: bigint) => {
                     return [
                         token.symbol,
                         amountFormatterFromBase[token.symbol](balance),
