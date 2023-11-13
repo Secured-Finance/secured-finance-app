@@ -11,7 +11,6 @@ import {
 import { OrderDetails } from 'src/components/organisms';
 import {
     emptyCollateralBook,
-    useCollateralBook,
     useEtherscanUrl,
     useHandleContractTransaction,
     useMarket,
@@ -22,7 +21,6 @@ import { setLastMessage } from 'src/store/lastError';
 import { RootState } from 'src/store/types';
 import { AddressUtils } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
-import { useAccount } from 'wagmi';
 
 enum Step {
     confirm = 1,
@@ -107,7 +105,6 @@ export const CancelOrderDialog = ({
 } & DialogState) => {
     const etherscanUrl = useEtherscanUrl();
     const handleContractTransaction = useHandleContractTransaction();
-    const { address } = useAccount();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [txHash, setTxHash] = useState<string | undefined>();
     const [errorMessage, setErrorMessage] = useState(
@@ -115,8 +112,6 @@ export const CancelOrderDialog = ({
     );
     const globalDispatch = useDispatch();
 
-    const { data: collateralBook = emptyCollateralBook } =
-        useCollateralBook(address);
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const price = priceList[amount.currency];
 
@@ -198,7 +193,7 @@ export const CancelOrderDialog = ({
                         maturity={maturity}
                         side={side}
                         assetPrice={price}
-                        collateral={collateralBook}
+                        collateral={emptyCollateralBook}
                         loanValue={marketValue}
                         isCancelOrder={true}
                     />

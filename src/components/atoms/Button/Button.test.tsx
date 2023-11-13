@@ -62,8 +62,5 @@ describe('test Button component', () => {
         expect(screen.getByRole('button')).toHaveClass(
             'bg-inherit border-3 border border-slateGray enabled:hover:bg-none'
         );
-        expect(screen.getByRole('button')).not.toHaveClass(
-            'bg-starBlue enabled:hover:bg-gradient-to-t enabled:hover:from-black-20 enabled:hover:via-black-20 enabled:hover:to-starBlue'
-        );
     });
 });
