@@ -19,9 +19,9 @@ import { OrderType, PlaceOrderFunction } from 'src/types';
 import {
     AddressUtils,
     CurrencySymbol,
-    formatAmount,
     OrderEvents,
     OrderProperties,
+    formatAmount,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 

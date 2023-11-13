@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
 import {
-    getLiquidationInformation,
     SectionWithItems,
+    getLiquidationInformation,
 } from 'src/components/atoms';
 import { Tooltip } from 'src/components/templates';
 import { CollateralBook, useOrderEstimation } from 'src/hooks';
 import { formatCollateralRatio, usdFormat } from 'src/utils';
-import { computeAvailableToBorrow, MAX_COVERAGE } from 'src/utils/collateral';
+import { MAX_COVERAGE, computeAvailableToBorrow } from 'src/utils/collateral';
 import { useAccount } from 'wagmi';
 
 const CollateralUsageItem = () => {

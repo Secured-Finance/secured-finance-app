@@ -47,7 +47,7 @@ describe('CancelOrderDialog Component', () => {
         expect(store.getState().blockchain.lastActionTimestamp).toBeTruthy();
     });
 
-    it('should show cancel button and close the dialog when clicked', async () => {
+    it('should show cancel button', async () => {
         render(<Default />);
         expect(
             screen.getByRole('button', { name: 'Cancel' })
