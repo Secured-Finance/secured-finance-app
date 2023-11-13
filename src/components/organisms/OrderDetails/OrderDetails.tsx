@@ -91,17 +91,19 @@ export const OrderDetails = ({
             {!isCancelOrder && (
                 <CollateralSimulationSection collateral={collateral} />
             )}
+            {!isCancelOrder && (
+                <SectionWithItems
+                    itemList={[
+                        [
+                            <FeeItem key={maturity.toString()} />,
+                            prefixTilde(
+                                calculateFee(maturity.toNumber(), orderFee)
+                            ),
+                        ],
+                    ]}
+                />
+            )}
 
-            <SectionWithItems
-                itemList={[
-                    [
-                        <FeeItem key={maturity.toString()} />,
-                        prefixTilde(
-                            calculateFee(maturity.toNumber(), orderFee)
-                        ),
-                    ],
-                ]}
-            />
             {!isCancelOrder && (
                 <Disclosure>
                     {({ open }) => (

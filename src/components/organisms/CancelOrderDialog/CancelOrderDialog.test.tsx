@@ -1,15 +1,15 @@
 import { composeStories } from '@storybook/react';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { render, screen, waitFor } from 'src/test-utils.js';
-import * as stories from './CancelDialog.stories';
+import * as stories from './CancelOrderDialog.stories';
 
 const { Default } = composeStories(stories);
 
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-describe('CancelDialog Component', () => {
-    it('should render a CancelDialog', async () => {
+describe('CancelOrderDialog Component', () => {
+    it('should render a CancelOrderDialog', async () => {
         await waitFor(() => render(<Default />));
     });
 
@@ -37,5 +37,30 @@ describe('CancelDialog Component', () => {
             expect(mockSecuredFinance.cancelLendingOrder).toHaveBeenCalled();
             expect(screen.getByText('Failed!')).toBeInTheDocument();
         });
+    });
+
+    it('should update the lastActionTimestamp in the store when the transaction receipt is received', async () => {
+        const { store } = render(<Default />);
+        expect(store.getState().blockchain.lastActionTimestamp).toEqual(0);
+        screen.getByText('Confirm').click();
+        expect(await screen.findByText('Cancelled!')).toBeInTheDocument();
+        expect(store.getState().blockchain.lastActionTimestamp).toBeTruthy();
+    });
+
+    it('should show cancel button and close the dialog when clicked', async () => {
+        render(<Default />);
+        expect(
+            screen.getByRole('button', { name: 'Cancel' })
+        ).toBeInTheDocument();
+    });
+
+    it('should not show collateral usage, transaction fee and circuit breaker disclaimer', async () => {
+        render(<Default />);
+        expect(screen.queryByText('Collateral Usage')).not.toBeInTheDocument();
+        expect(screen.queryByText('Borrow Remaining')).not.toBeInTheDocument();
+        expect(screen.queryByText('Transaction Fee %')).not.toBeInTheDocument();
+        expect(
+            screen.queryByText('Circuit Breaker Disclaimer')
+        ).not.toBeInTheDocument();
     });
 });

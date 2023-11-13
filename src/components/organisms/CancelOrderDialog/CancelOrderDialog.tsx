@@ -93,7 +93,7 @@ const reducer = (
     }
 };
 
-export const CancelDialog = ({
+export const CancelOrderDialog = ({
     isOpen,
     onClose,
     amount,

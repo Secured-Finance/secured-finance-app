@@ -6,11 +6,11 @@ import { BigNumber } from 'ethers';
 import { dec22Fixture } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
 import { Amount } from 'src/utils/entities';
-import { CancelDialog } from './CancelDialog';
+import { CancelOrderDialog } from './CancelOrderDialog';
 
 export default {
-    title: 'Organism/CancelDialog',
-    component: CancelDialog,
+    title: 'Organism/CancelOrderDialog',
+    component: CancelOrderDialog,
     args: {
         isOpen: true,
         onClose: () => {},
@@ -30,10 +30,10 @@ export default {
         },
         connected: true,
     },
-} as Meta<typeof CancelDialog>;
+} as Meta<typeof CancelOrderDialog>;
 
-const Template: StoryFn<typeof CancelDialog> = args => (
-    <CancelDialog {...args} />
+const Template: StoryFn<typeof CancelOrderDialog> = args => (
+    <CancelOrderDialog {...args} />
 );
 
 export const Default = Template.bind({});
