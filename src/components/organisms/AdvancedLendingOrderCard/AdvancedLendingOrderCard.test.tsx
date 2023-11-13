@@ -128,7 +128,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         screen.getByTestId('place-order-button').click();
         expect(
             screen.getByRole('dialog', {
-                name: 'Confirm Order',
+                name: 'Confirm Borrow',
             })
         ).toBeInTheDocument();
     });

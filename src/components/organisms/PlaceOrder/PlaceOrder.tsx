@@ -2,7 +2,7 @@ import { track } from '@amplitude/analytics-browser';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { getUTCMonthYear } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
-import { useCallback, useReducer, useState } from 'react';
+import { useCallback, useEffect, useReducer, useState } from 'react';
 import { Spinner } from 'src/components/atoms';
 import {
     Dialog,
@@ -72,26 +72,6 @@ const stateRecord: Record<Step, State> = {
     },
 };
 
-const reducer = (
-    state: State,
-    action: {
-        type: string;
-    }
-) => {
-    switch (action.type) {
-        case 'next':
-            return {
-                ...stateRecord[state.nextStep],
-            };
-        case 'error':
-            return { ...stateRecord[Step.error] };
-        default:
-            return {
-                ...stateRecord[Step.orderConfirm],
-            };
-    }
-};
-
 export const PlaceOrder = ({
     isOpen,
     onClose,
@@ -117,6 +97,35 @@ export const PlaceOrder = ({
     walletSource: WalletSource;
     isCurrencyDelisted: boolean;
 } & DialogState) => {
+    const reducer = (
+        state: State,
+        action: {
+            type: string;
+        }
+    ) => {
+        switch (action.type) {
+            case 'next':
+                return {
+                    ...stateRecord[state.nextStep],
+                };
+            case 'error':
+                return { ...stateRecord[Step.error] };
+            case 'updateSide':
+                const title =
+                    side === OrderSide.BORROW
+                        ? 'Confirm Borrow'
+                        : 'Confirm Lend';
+                return {
+                    ...stateRecord[Step.orderConfirm],
+                    title: title,
+                };
+            default:
+                return {
+                    ...stateRecord[Step.orderConfirm],
+                };
+        }
+    };
+
     const etherscanUrl = useEtherscanUrl();
     const handleContractTransaction = useHandleContractTransaction();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
@@ -130,6 +139,10 @@ export const PlaceOrder = ({
         dispatch({ type: 'default' });
         onClose();
     }, [onClose]);
+
+    useEffect(() => {
+        dispatch({ type: 'updateSide' });
+    }, [side]);
 
     const handlePlaceOrder = useCallback(
         async (

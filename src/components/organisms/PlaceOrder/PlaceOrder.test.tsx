@@ -31,7 +31,7 @@ describe('PlaceOrder component', () => {
         render(<Default />);
 
         expect(await screen.getByRole('dialog')).toBeInTheDocument();
-        expect(screen.getByText('Confirm Order')).toBeInTheDocument();
+        expect(screen.getByText('Confirm Borrow')).toBeInTheDocument();
         const button = screen.getByTestId('dialog-action-button');
         expect(button).toHaveTextContent('OK');
     });
@@ -190,5 +190,15 @@ describe('PlaceOrder component', () => {
                 'Please note that USDC will be delisted on Secured Finance.'
             )
         ).not.toBeInTheDocument();
+    });
+
+    it('should show Confirm Borrow as  title when side is BORROW', () => {
+        render(<Default />);
+        expect(screen.getByText('Confirm Borrow')).toBeInTheDocument();
+    });
+
+    it('should show Confirm Lend as  title when side is LEND', () => {
+        render(<Default side={OrderSide.LEND} />);
+        expect(screen.getByText('Confirm Lend')).toBeInTheDocument();
     });
 });

@@ -3,6 +3,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { BigNumber } from 'ethers';
 import { useMemo, useState } from 'react';
 import { CoreTable, TableActionMenu } from 'src/components/molecules';
+import { CancelOrderDialog } from 'src/components/organisms';
 import { Order } from 'src/hooks';
 import { CurrencySymbol, hexToCurrencySymbol } from 'src/utils';
 import { Amount, Maturity } from 'src/utils/entities';
@@ -13,7 +14,6 @@ import {
     loanTypeColumnDefinition,
     priceYieldColumnDefinition,
 } from 'src/utils/tableDefinitions';
-import { CancelDialog } from '../CancelDialog';
 
 type OpenOrder = Order & { calculationDate?: number };
 
@@ -30,7 +30,7 @@ export const OrderTable = ({
     variant?: 'compact' | 'default';
     height?: number;
 }) => {
-    const [cancelDialogData, setCancelDialogData] = useState<{
+    const [CancelOrderDialogData, setCancelOrderDialogData] = useState<{
         orderId: BigNumber;
         currency: CurrencySymbol;
         maturity: Maturity;
@@ -101,7 +101,7 @@ export const OrderTable = ({
                                     {
                                         text: 'Cancel Order',
                                         onClick: () => {
-                                            setCancelDialogData({
+                                            setCancelOrderDialogData({
                                                 orderId:
                                                     info.row.original.orderId,
                                                 currency: ccy,
@@ -144,12 +144,12 @@ export const OrderTable = ({
                     },
                 }}
             />
-            {cancelDialogData && (
-                <CancelDialog
-                    {...cancelDialogData}
+            {CancelOrderDialogData && (
+                <CancelOrderDialog
+                    {...CancelOrderDialogData}
                     onClose={() =>
-                        setCancelDialogData({
-                            ...cancelDialogData,
+                        setCancelOrderDialogData({
+                            ...CancelOrderDialogData,
                             isOpen: false,
                         })
                     }
