@@ -6,7 +6,7 @@ import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { toCurrency } from 'src/utils';
+import { ZERO_BI, toCurrency } from 'src/utils';
 
 export const useOrderEstimation = (account: string | undefined) => {
     const securedFinance = useSF();
@@ -31,7 +31,7 @@ export const useOrderEstimation = (account: string | undefined) => {
     const additionalDepositAmount =
         side === OrderSide.LEND && sourceAccount === WalletSource.METAMASK
             ? amount
-            : 0;
+            : ZERO_BI;
 
     return useQuery({
         queryKey: [
@@ -56,7 +56,7 @@ export const useOrderEstimation = (account: string | undefined) => {
                 additionalDepositAmount,
                 ignoreBorrowedAmount
             );
-            return orderEstimation?.coverage.toNumber();
+            return Number(orderEstimation?.coverage);
         },
         enabled: !!securedFinance && !!account,
     });

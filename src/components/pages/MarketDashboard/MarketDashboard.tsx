@@ -1,5 +1,4 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
-import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -35,6 +34,7 @@ import {
     Environment,
     PREVIOUS_TOTAL_USERS,
     Rate,
+    ZERO_BI,
     computeTotalDailyVolumeInUSD,
     currencyMap,
     getCurrencyMapAsList,
@@ -106,13 +106,13 @@ export const MarketDashboard = () => {
     }, [JSON.stringify(priceList), dailyVolumes.data]);
 
     const totalValueLockedInUSD = useMemo(() => {
-        let val = BigNumber.from(0);
+        let val = ZERO_BI;
         if (!valueLockedByCurrency) {
             return val;
         }
         for (const ccy of getCurrencyMapAsList()) {
             if (!valueLockedByCurrency[ccy.symbol]) continue;
-            val = val.add(
+            val += BigInt(
                 Math.floor(
                     currencyMap[ccy.symbol].fromBaseUnit(
                         valueLockedByCurrency[ccy.symbol]
@@ -180,7 +180,7 @@ export const MarketDashboard = () => {
                             <div className='px-3 py-6'>
                                 <CollateralManagementConciseTab
                                     collateralCoverage={
-                                        collateralBook.coverage.toNumber() / 100
+                                        collateralBook.coverage / 100
                                     }
                                     totalCollateralInUSD={
                                         collateralBook.usdCollateral

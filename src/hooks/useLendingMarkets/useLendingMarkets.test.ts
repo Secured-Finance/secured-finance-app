@@ -1,4 +1,3 @@
-import { BigNumber } from 'ethers';
 import { maturities } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
@@ -41,7 +40,7 @@ describe('useLendingMarkets', () => {
         const lendingMarkets = await mock.getOrderBookDetails();
         mock.getOrderBookDetails.mockResolvedValueOnce([
             ...lendingMarkets,
-            { ...lendingMarkets[0], maturity: BigNumber.from('10000') },
+            { ...lendingMarkets[0], maturity: BigInt('10000') },
         ]);
 
         const { result, waitForNextUpdate } = renderHook(() =>

@@ -9,9 +9,8 @@ export const useMarketTerminationDate = () => {
         queryKey: [QueryKeys.TERMINATION_DATE],
         queryFn: async () => {
             return (
-                (
-                    await securedFinance?.getMarketTerminationDate()
-                )?.toNumber() ?? undefined
+                Number(await securedFinance?.getMarketTerminationDate()) ??
+                undefined
             );
         },
         placeholderData: undefined,

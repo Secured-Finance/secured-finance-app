@@ -5,7 +5,6 @@ import {
     Ether,
 } from '@secured-finance/sf-core';
 import { BigNumber as BigNumberJS } from 'bignumber.js';
-import { BigNumber } from 'ethers';
 import tailwindConfig from 'src/../tailwind.config';
 import BTCIcon from 'src/assets/coins/btc.svg';
 import EthIcon from 'src/assets/coins/eth2.svg';
@@ -13,6 +12,7 @@ import FilIcon from 'src/assets/coins/fil.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
 import { SvgIcon } from 'src/types';
 import { hexToString } from 'viem';
+import { ZERO_BI } from './collateral';
 import { WFIL } from './currencies/filecoin';
 import { USDC } from './currencies/usdc';
 import { WBTC } from './currencies/wbtc';
@@ -42,7 +42,7 @@ export const currencyMap: Readonly<
         isCollateral: true,
         toBaseUnit: (amount: number) =>
             convertToBlockchainUnit(amount, WBTC.onChain()),
-        fromBaseUnit: (amount: BigNumber) =>
+        fromBaseUnit: (amount: bigint) =>
             convertFromBlockchainUnit(amount, WBTC.onChain()),
         toCurrency: () => WBTC.onChain(),
         chartColor: tailwindConfig.theme.colors.chart.btc,
@@ -59,7 +59,7 @@ export const currencyMap: Readonly<
         coinGeckoId: 'ethereum',
         isCollateral: true,
         toBaseUnit: (amount: number) => convertToBlockchainUnit(amount, ETH),
-        fromBaseUnit: (amount: BigNumber) =>
+        fromBaseUnit: (amount: bigint) =>
             convertFromBlockchainUnit(amount, ETH),
         toCurrency: () => ETH,
         chartColor: tailwindConfig.theme.colors.chart.eth,
@@ -76,9 +76,9 @@ export const currencyMap: Readonly<
         isCollateral: false,
         toBaseUnit: (amount: number) => {
             const filAmount = new FilecoinNumber(amount, 'fil');
-            return BigNumber.from(filAmount.toAttoFil());
+            return BigInt(filAmount.toAttoFil());
         },
-        fromBaseUnit: (amount: BigNumber) =>
+        fromBaseUnit: (amount: bigint) =>
             convertFromBlockchainUnit(amount, WFIL.onChain()),
         toCurrency: () => WFIL.onChain(),
         chartColor: tailwindConfig.theme.colors.chart.fil,
@@ -95,7 +95,7 @@ export const currencyMap: Readonly<
         isCollateral: true,
         toBaseUnit: (amount: number) =>
             convertToBlockchainUnit(amount, USDC.onChain()),
-        fromBaseUnit: (amount: BigNumber) =>
+        fromBaseUnit: (amount: bigint) =>
             convertFromBlockchainUnit(amount, USDC.onChain()),
         toCurrency: () => USDC.onChain(),
         chartColor: tailwindConfig.theme.colors.chart.usdc,
@@ -110,23 +110,23 @@ export const getCurrencyMapAsList = () => {
 };
 
 export const amountFormatterToBase = getCurrencyMapAsList().reduce<
-    Record<CurrencySymbol, (value: number) => BigNumber>
+    Record<CurrencySymbol, (value: number) => bigint>
 >(
     (acc, ccy) => ({
         ...acc,
         [ccy.symbol]: ccy.toBaseUnit,
     }),
-    {} as Record<CurrencySymbol, (value: number) => BigNumber>
+    {} as Record<CurrencySymbol, (value: number) => bigint>
 );
 
 export const amountFormatterFromBase = getCurrencyMapAsList().reduce<
-    Record<CurrencySymbol, (value: BigNumber) => number>
+    Record<CurrencySymbol, (value: bigint) => number>
 >(
     (acc, ccy) => ({
         ...acc,
         [ccy.symbol]: ccy.fromBaseUnit,
     }),
-    {} as Record<CurrencySymbol, (value: BigNumber) => number>
+    {} as Record<CurrencySymbol, (value: bigint) => number>
 );
 
 export type CurrencyInfo = {
@@ -136,8 +136,8 @@ export type CurrencyInfo = {
     coinGeckoId: string;
     icon: SvgIcon;
     isCollateral: boolean;
-    toBaseUnit: (amount: number) => BigNumber;
-    fromBaseUnit: (amount: BigNumber) => number;
+    toBaseUnit: (amount: number) => bigint;
+    fromBaseUnit: (amount: bigint) => number;
     toCurrency: () => CurrencyInterface;
     chartColor: string;
     pillColor: string;
@@ -171,12 +171,12 @@ export function hexToCurrencySymbol(hex: string) {
 const convertToBlockchainUnit = (amount: number | string, ccy: Currency) => {
     const value = new BigNumberJS(amount).multipliedBy(10 ** ccy.decimals);
     if (value.isLessThan(new BigNumberJS(1))) {
-        return BigNumber.from(0);
+        return ZERO_BI;
     }
-    return BigNumber.from(value.toString());
+    return BigInt(value.toString());
 };
 
-const convertFromBlockchainUnit = (amount: BigNumber, ccy: Currency) => {
+const convertFromBlockchainUnit = (amount: bigint, ccy: Currency) => {
     const value = new BigNumberJS(amount.toString()).dividedBy(
         10 ** ccy.decimals
     );

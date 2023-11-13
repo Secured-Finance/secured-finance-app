@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
 import {
-    SectionWithItems,
     getLiquidationInformation,
+    SectionWithItems,
 } from 'src/components/atoms';
 import { Tooltip } from 'src/components/templates';
 import { CollateralBook, useOrderEstimation } from 'src/hooks';
 import { formatCollateralRatio, usdFormat } from 'src/utils';
-import { MAX_COVERAGE, computeAvailableToBorrow } from 'src/utils/collateral';
+import { computeAvailableToBorrow, MAX_COVERAGE } from 'src/utils/collateral';
 import { useAccount } from 'wagmi';
 
 const CollateralUsageItem = () => {
@@ -38,7 +38,7 @@ export const CollateralSimulationSection = ({
                 computeAvailableToBorrow(
                     1,
                     collateral.usdCollateral,
-                    (coverage ?? 0) / MAX_COVERAGE,
+                    coverage / MAX_COVERAGE,
                     collateral.collateralThreshold
                 ),
                 2
@@ -50,7 +50,7 @@ export const CollateralSimulationSection = ({
         ['Borrow Remaining', remainingToBorrowText],
         [
             <CollateralUsageItem key={1} />,
-            getCollateralUsage(collateral.coverage.toNumber(), coverage),
+            getCollateralUsage(collateral.coverage, coverage),
         ],
     ];
 

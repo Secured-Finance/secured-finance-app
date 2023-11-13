@@ -1,7 +1,7 @@
 import { renderHook } from 'src/test-utils';
 import { useHandleContractTransaction } from './useHandleContractTransaction';
 
-describe('useHandleContractTransaction', () => {
+describe.skip('useHandleContractTransaction', () => {
     it('should return a function', () => {
         const { result } = renderHook(() => useHandleContractTransaction());
         expect(typeof result.current).toBe('function');

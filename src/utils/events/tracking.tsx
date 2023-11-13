@@ -4,7 +4,6 @@ import {
     setUserId,
     track,
 } from '@amplitude/analytics-browser';
-import { BigNumber } from 'ethers';
 import { amountFormatterFromBase, CurrencySymbol } from '../currencyList';
 import {
     CollateralEvents,
@@ -33,7 +32,7 @@ export async function associateWallet(
 export function trackCollateralEvent(
     event: CollateralEvents,
     assetType: CurrencySymbol,
-    amount: BigNumber,
+    amount: bigint,
     source: string
 ) {
     track(event, {

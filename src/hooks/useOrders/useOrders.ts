@@ -1,5 +1,4 @@
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
-import { BigNumber } from 'ethers';
 import { useCallback } from 'react';
 import { CurrencySymbol, toCurrency } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
@@ -9,17 +8,13 @@ export const useOrders = () => {
     const securedFinance = useSF();
 
     const cancelOrder = useCallback(
-        async (
-            orderId: number | BigNumber,
-            ccy: CurrencySymbol,
-            maturity: Maturity
-        ) => {
+        async (orderId: bigint, ccy: CurrencySymbol, maturity: Maturity) => {
             try {
                 if (!securedFinance) return;
                 const tx = await securedFinance.cancelLendingOrder(
                     toCurrency(ccy),
                     maturity.toNumber(),
-                    orderId
+                    Number(orderId)
                 );
                 return tx;
             } catch (error) {
@@ -34,7 +29,7 @@ export const useOrders = () => {
             ccy: CurrencySymbol,
             maturity: Maturity,
             side: OrderSide,
-            amount: BigNumber,
+            amount: bigint,
             unitPrice: number,
             sourceWallet: WalletSource
         ) => {
@@ -81,7 +76,7 @@ export const useOrders = () => {
             ccy: CurrencySymbol,
             maturity: Maturity,
             side: OrderSide,
-            amount: BigNumber,
+            amount: bigint,
             unitPrice: number,
             sourceWallet: WalletSource
         ) => {

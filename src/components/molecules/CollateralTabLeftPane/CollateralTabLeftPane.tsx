@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
 import {
     AssetInformation,
@@ -10,6 +9,7 @@ import {
 import { CollateralBook } from 'src/hooks';
 import {
     CurrencySymbol,
+    ZERO_BI,
     amountFormatterFromBase,
     getCurrencyMapAsList,
     usdFormat,
@@ -54,7 +54,7 @@ const checkAssetQuantityExist = (
     let exist = false;
     collateralBook &&
         Object.values(collateralBook).forEach(quantity => {
-            if (!quantity.isZero()) {
+            if (quantity !== ZERO_BI) {
                 exist = true;
             }
         });
@@ -135,7 +135,7 @@ export const CollateralTabLeftPane = ({
                         <div className='mx-3 mt-6 flex flex-col gap-3 tablet:hidden'>
                             <CollateralManagementConciseTab
                                 collateralCoverage={
-                                    collateralBook.coverage.toNumber() / 100
+                                    collateralBook.coverage / 100
                                 }
                                 totalCollateralInUSD={
                                     collateralBook.usdCollateral
@@ -150,11 +150,11 @@ export const CollateralTabLeftPane = ({
                                     data={(
                                         Object.entries(
                                             collateralBook.collateral
-                                        ) as [CurrencySymbol, BigNumber][]
+                                        ) as [CurrencySymbol, bigint][]
                                     )
                                         .filter(
                                             ([_asset, quantity]) =>
-                                                !quantity.isZero()
+                                                quantity !== ZERO_BI
                                         )
                                         .map(([asset, quantity]) => {
                                             return {
@@ -173,11 +173,11 @@ export const CollateralTabLeftPane = ({
                                     data={(
                                         Object.entries(
                                             collateralBook.nonCollateral
-                                        ) as [CurrencySymbol, BigNumber][]
+                                        ) as [CurrencySymbol, bigint][]
                                     )
                                         .filter(
                                             ([_asset, quantity]) =>
-                                                !quantity.isZero()
+                                                quantity !== ZERO_BI
                                         )
                                         .map(([asset, quantity]) => {
                                             return {

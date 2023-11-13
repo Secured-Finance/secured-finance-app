@@ -1,5 +1,4 @@
 import { OrderSide } from '@secured-finance/sf-client';
-import { BigNumber } from 'ethers';
 import { useCallback, useMemo, useReducer, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Spinner } from 'src/components/atoms';
@@ -103,7 +102,7 @@ export const CancelOrderDialog = ({
 }: {
     amount: Amount;
     maturity: Maturity;
-    orderId: BigNumber;
+    orderId: bigint;
     side: OrderSide;
 } & DialogState) => {
     const etherscanUrl = useEtherscanUrl();
@@ -150,7 +149,7 @@ export const CancelOrderDialog = ({
             if (!transactionStatus) {
                 dispatch({ type: 'error' });
             } else {
-                setTxHash(tx?.hash);
+                setTxHash(tx);
                 dispatch({ type: 'next' });
             }
         } catch (e) {

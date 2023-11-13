@@ -1,7 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { createColumnHelper } from '@tanstack/react-table';
 import classNames from 'classnames';
-import { BigNumber } from 'ethers';
 import { Fragment, useEffect, useMemo, useReducer, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import ShowFirstIcon from 'src/assets/icons/orderbook-first.svg';
@@ -27,6 +26,7 @@ import { setOrderType, setUnitPrice } from 'src/store/landingOrderForm';
 import { ColorFormat, OrderType } from 'src/types';
 import {
     CurrencySymbol,
+    ZERO_BI,
     currencyMap,
     formatLoanValue,
     getMaxAmount,
@@ -71,11 +71,11 @@ const AmountCell = ({
     value,
     currency,
 }: {
-    value: BigNumber;
+    value: bigint;
     currency: CurrencySymbol;
 }) => (
     <div className='typography-caption-2 flex justify-end pr-[25%] text-neutral-6'>
-        {value.eq(0) ? (
+        {value === ZERO_BI ? (
             <OrderBookCell />
         ) : (
             <OrderBookCell
@@ -98,15 +98,15 @@ const PriceCell = ({
     aggregationFactor,
 }: {
     value: LoanValue;
-    amount: BigNumber;
-    totalAmount: BigNumber;
+    amount: bigint;
+    totalAmount: bigint;
     position: 'borrow' | 'lend';
     align: 'left' | 'right';
     aggregationFactor: AggregationFactorType;
 }) => {
     const color = position === 'borrow' ? 'negative' : 'positive';
     const price = useMemo(() => {
-        if (amount.isZero()) {
+        if (amount === ZERO_BI) {
             return '';
         }
 
@@ -296,7 +296,7 @@ export const OrderBookWidget = ({
                 cell: info => (
                     <AprCell
                         value={info.getValue()}
-                        display={!info.row.original.amount.eq(0)}
+                        display={info.row.original.amount !== ZERO_BI}
                         align='right'
                     />
                 ),
@@ -313,7 +313,7 @@ export const OrderBookWidget = ({
                 cell: info => (
                     <AprCell
                         value={info.getValue()}
-                        display={!info.row.original.amount.eq(0)}
+                        display={info.row.original.amount !== ZERO_BI}
                         align='right'
                     />
                 ),
@@ -363,12 +363,12 @@ export const OrderBookWidget = ({
 
     const handleSellOrdersHoverRow = (rowId: string) => {
         const rowData = lendOrders[parseInt(rowId)];
-        return !rowData.amount.isZero();
+        return rowData.amount !== ZERO_BI;
     };
 
     const handleBuyOrdersHoverRow = (rowId: string) => {
         const rowData = borrowOrders[parseInt(rowId)];
-        return !rowData.amount.isZero();
+        return rowData.amount !== ZERO_BI;
     };
 
     return (

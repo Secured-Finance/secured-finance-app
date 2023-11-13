@@ -1,6 +1,5 @@
 import { withAssetPrice } from '.storybook/decorators';
 import { Meta, StoryFn } from '@storybook/react';
-import { BigNumber } from 'ethers';
 import {
     ethBytes32,
     jun23Fixture,
@@ -16,30 +15,30 @@ export default {
     args: {
         data: [
             {
-                amount: BigNumber.from('400000000000000000000'),
-                forwardValue: BigNumber.from('0'),
+                amount: BigInt('400000000000000000000'),
+                forwardValue: BigInt('0'),
                 currency: wfilBytes32,
                 maturity: 0,
                 type: 'lending-order',
             },
             {
-                amount: BigNumber.from('400000000000000000000'),
-                forwardValue: BigNumber.from('500000000000000000000'),
+                amount: BigInt('400000000000000000000'),
+                forwardValue: BigInt('500000000000000000000'),
                 currency: wfilBytes32,
                 maturity: jun23Fixture.toString(),
                 type: 'position',
             },
             {
-                amount: BigNumber.from('-500000000000000000000'),
+                amount: BigInt('-500000000000000000000'),
                 currency: ethBytes32,
-                forwardValue: BigNumber.from('-1000000000000000000000'),
+                forwardValue: BigInt('-1000000000000000000000'),
                 maturity: mar23Fixture.toString(),
                 type: 'position',
             },
             {
-                amount: BigNumber.from('50000000'),
+                amount: BigInt('50000000'),
                 currency: wbtcBytes32,
-                forwardValue: BigNumber.from('0'),
+                forwardValue: BigInt('0'),
                 maturity: 0,
                 type: 'collateral',
             },

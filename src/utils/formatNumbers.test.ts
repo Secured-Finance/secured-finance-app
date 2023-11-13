@@ -1,4 +1,3 @@
-import { BigNumber } from 'ethers';
 import { LoanValue } from './entities';
 import {
     formatAmount,
@@ -48,14 +47,14 @@ describe('usdFormat', () => {
         expect(result).toBe('$123K');
     });
 
-    it('formats a BigNumber as USD currency with the default parameters', () => {
-        const number = BigNumber.from('123456789123456789');
+    it('formats a bigint as USD currency with the default parameters', () => {
+        const number = BigInt('123456789123456789');
         const result = usdFormat(number);
         expect(result).toBe('$123,456,789,123,456,789');
     });
 
-    it('formats a BigNumber as USD currency with specified number with a compact notation', () => {
-        const number = BigNumber.from('123456789123');
+    it('formats a bigint as USD currency with specified number with a compact notation', () => {
+        const number = BigInt('123456789123');
         const digits = 0;
         const notation = 'compact';
         const result = usdFormat(number, digits, notation);
@@ -77,13 +76,11 @@ describe('ordinaryFormat', () => {
     });
 
     it('should format a BigInt with default decimals and notation', () => {
-        expect(ordinaryFormat(BigNumber.from(123456789))).toEqual(
-            '123,456,789'
-        );
+        expect(ordinaryFormat(BigInt(123456789))).toEqual('123,456,789');
     });
 
-    it('should format a BigNumber with default decimals and notation', () => {
-        expect(ordinaryFormat(BigNumber.from(1234567))).toEqual('1,234,567');
+    it('should format a bigint with default decimals and notation', () => {
+        expect(ordinaryFormat(BigInt(1234567))).toEqual('1,234,567');
     });
 
     it('should format a regular number with min and max decimals', () => {

@@ -1,5 +1,4 @@
 import { createColumnHelper } from '@tanstack/react-table';
-import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
 import { CoreTable, Pagination } from 'src/components/molecules';
 import { useBreakpoint } from 'src/hooks';
@@ -41,15 +40,11 @@ const priceYieldColumnDef = (
     });
 };
 
-const getFVWithFee = (
-    forwardValue: BigNumber,
-    fee: BigNumber,
-    side: number
-) => {
+const getFVWithFee = (forwardValue: bigint, fee: bigint, side: number) => {
     if (side === 0) {
-        return forwardValue.sub(fee);
+        return forwardValue - fee;
     }
-    return forwardValue.add(fee);
+    return forwardValue + fee;
 };
 
 export const MyTransactionsTable = ({
@@ -84,8 +79,8 @@ export const MyTransactionsTable = ({
                 'forwardValue',
                 row =>
                     getFVWithFee(
-                        BigNumber.from(row.forwardValue),
-                        BigNumber.from(row.feeInFV),
+                        BigInt(row.forwardValue),
+                        BigInt(row.feeInFV),
                         row.side
                     ),
                 {
