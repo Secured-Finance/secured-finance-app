@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { BigNumber } from 'ethers';
 import { useEffect, useState } from 'react';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
@@ -9,12 +8,12 @@ import { LoanValue } from 'src/utils/entities';
 const DEFAULT_ORDERBOOK_DEPTH = 26;
 
 interface SmartContractOrderbook {
-    unitPrices: BigNumber[];
-    amounts: BigNumber[];
-    quantities: BigNumber[];
+    unitPrices: bigint[];
+    amounts: bigint[];
+    quantities: bigint[];
 }
 export type OrderBookEntry = {
-    amount: BigNumber;
+    amount: bigint;
     value: LoanValue;
 };
 
@@ -38,7 +37,7 @@ const transformOrderbook = (
     return input.unitPrices.map((unitPrice, index) => ({
         amount: input.amounts[index],
         value: LoanValue.fromPrice(
-            unitPrice.toNumber(),
+            Number(unitPrice),
             maturity,
             calculationDate
         ),
@@ -91,12 +90,12 @@ export const useOrderbook = (
             select: data => {
                 return {
                     borrowOrderbook: transformOrderbook(
-                        data.borrowOrderbook,
+                        data.borrowOrderbook as SmartContractOrderbook,
                         maturity,
                         calculationDate
                     ),
                     lendOrderbook: transformOrderbook(
-                        data.lendOrderbook,
+                        data.lendOrderbook as SmartContractOrderbook,
                         maturity,
                         calculationDate
                     ),

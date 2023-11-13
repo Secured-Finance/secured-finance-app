@@ -1,5 +1,4 @@
 import { OrderSide } from '@secured-finance/sf-client';
-import { BigNumber } from 'ethers';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -180,11 +179,11 @@ export const Itayose = () => {
 
     const handleAssetChange = useCallback(
         (v: CurrencySymbol) => {
-            let formatFrom = (x: BigNumber) => x.toNumber();
+            let formatFrom = (x: bigint) => Number(x);
             if (amountFormatterFromBase && amountFormatterFromBase[currency]) {
                 formatFrom = amountFormatterFromBase[currency];
             }
-            let formatTo = (x: number) => BigNumber.from(x);
+            let formatTo = (x: number) => BigInt(x);
             if (amountFormatterToBase && amountFormatterToBase[v]) {
                 formatTo = amountFormatterToBase[v];
             }
@@ -257,8 +256,7 @@ export const Itayose = () => {
                     }
                     preOrderPosition={
                         filteredOrderList.length > 0
-                            ? filteredOrderList[0].side.toString() ===
-                              OrderSide.BORROW
+                            ? filteredOrderList[0].side === OrderSide.BORROW
                                 ? 'borrow'
                                 : 'lend'
                             : 'none'

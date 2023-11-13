@@ -1,6 +1,5 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { createColumnHelper } from '@tanstack/react-table';
-import { BigNumber } from 'ethers';
 import { useMemo, useState } from 'react';
 import { CoreTable, TableActionMenu } from 'src/components/molecules';
 import { CancelOrderDialog } from 'src/components/organisms';
@@ -31,7 +30,7 @@ export const OrderTable = ({
     height?: number;
 }) => {
     const [CancelOrderDialogData, setCancelOrderDialogData] = useState<{
-        orderId: BigNumber;
+        orderId: bigint;
         currency: CurrencySymbol;
         maturity: Maturity;
         amount: Amount;
@@ -90,9 +89,7 @@ export const OrderTable = ({
                             ? OrderSide.LEND
                             : OrderSide.BORROW;
 
-                    const amount = BigNumber.from(
-                        info.row.original.amount
-                    ).abs();
+                    const amount = BigInt(info.row.original.amount);
 
                     return (
                         <div className='flex justify-center'>

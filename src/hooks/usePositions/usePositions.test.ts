@@ -1,4 +1,3 @@
-import { BigNumber } from 'ethers';
 import {
     ethBytes32,
     usdcBytes32,
@@ -44,17 +43,9 @@ describe('usePositions', () => {
 
         const newValue = result.current;
         expect(newValue.data).toHaveLength(4);
-        expect(newValue.data[0].marketPrice).toStrictEqual(
-            BigNumber.from(9750)
-        );
-        expect(newValue.data[1].marketPrice).toStrictEqual(
-            BigNumber.from(9500)
-        );
-        expect(newValue.data[2].marketPrice).toStrictEqual(
-            BigNumber.from(9750)
-        );
-        expect(newValue.data[3].marketPrice).toStrictEqual(
-            BigNumber.from(9403)
-        );
+        expect(newValue.data[0].marketPrice).toStrictEqual(BigInt(9750));
+        expect(newValue.data[1].marketPrice).toStrictEqual(BigInt(9500));
+        expect(newValue.data[2].marketPrice).toStrictEqual(BigInt(9750));
+        expect(newValue.data[3].marketPrice).toStrictEqual(BigInt(9403));
     });
 });

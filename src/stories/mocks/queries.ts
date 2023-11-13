@@ -1,6 +1,6 @@
+import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
-import { BigNumber, utils } from 'ethers';
-import { TransactionList, OrderType } from 'src/types';
+import { OrderType, TransactionList } from 'src/types';
 import { Maturity } from 'src/utils/entities';
 import {
     dailyVolumes,
@@ -39,14 +39,14 @@ const generateMyOrderHistory = (amount: string) =>
             orderId: index,
             currency: wfilBytes32,
             side: 1,
-            maturity: BigNumber.from(dec22Fixture.toString()),
-            inputUnitPrice: BigNumber.from('9800'),
-            filledAmount: BigNumber.from('0'),
-            inputAmount: BigNumber.from(amount),
+            maturity: BigInt(dec22Fixture.toString()),
+            inputUnitPrice: BigInt('9800'),
+            filledAmount: BigInt('0'),
+            inputAmount: BigInt(amount),
             status: 'Open',
             type: OrderType.LIMIT,
-            createdAt: BigNumber.from('1'),
-            txHash: utils.formatBytes32String('hash'),
+            createdAt: BigInt('1'),
+            txHash: toBytes32('hash'),
             lendingMarket: {
                 id: '1',
                 isActive: true,

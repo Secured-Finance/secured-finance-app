@@ -2,7 +2,6 @@ import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import { withAssetPrice, withWalletProvider } from '.storybook/decorators';
 import { OrderSide } from '@secured-finance/sf-client';
 import type { Meta, StoryFn } from '@storybook/react';
-import { BigNumber } from 'ethers';
 import { dec22Fixture } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
 import { Amount } from 'src/utils/entities';
@@ -14,12 +13,9 @@ export default {
     args: {
         isOpen: true,
         onClose: () => {},
-        orderId: BigNumber.from(1234),
+        orderId: BigInt(1234),
         maturity: dec22Fixture,
-        amount: new Amount(
-            BigNumber.from('100000000000000000000'),
-            CurrencySymbol.WFIL
-        ),
+        amount: new Amount('100000000000000000000', CurrencySymbol.WFIL),
         side: OrderSide.BORROW,
     },
     decorators: [withAssetPrice, withWalletProvider],

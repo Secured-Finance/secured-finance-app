@@ -1,4 +1,3 @@
-import { BigNumber } from 'ethers';
 import { useCallback } from 'react';
 import { InputBase } from 'src/components/atoms';
 import { Tooltip } from 'src/components/templates';
@@ -13,7 +12,7 @@ interface OrderInputBoxProps {
     informationText?: string;
     decimalPlacesAllowed?: number;
     maxLimit?: number;
-    onValueChange?: (v: number | BigNumber | undefined) => void;
+    onValueChange?: (v: number | bigint | undefined) => void;
 }
 
 export const OrderInputBox = ({
@@ -31,9 +30,9 @@ export const OrderInputBox = ({
         (
             amount: number | undefined,
             asset: CurrencySymbol | undefined,
-            onValueChange: (v: number | BigNumber | undefined) => void
+            onValueChange: (v: number | bigint | undefined) => void
         ) => {
-            let format = (x: number) => BigNumber.from(x);
+            let format = (x: number) => BigInt(x);
             if (
                 asset &&
                 amountFormatterToBase &&

@@ -8,8 +8,8 @@ import {
 import { RootState } from 'src/store/types';
 import { DailyVolumes } from 'src/types';
 import {
-    computeTotalDailyVolumeInUSD,
     CurrencySymbol,
+    computeTotalDailyVolumeInUSD,
     formatWithCurrency,
     usdFormat,
 } from 'src/utils';
@@ -56,7 +56,7 @@ export const CurveHeader = ({
                 <CurveHeaderTotal
                     header='Total Volume (USD)'
                     footer={usdFormat(
-                        totalVolume.volumePerCurrency[asset].toNumber() *
+                        Number(totalVolume.volumePerCurrency[asset]) *
                             priceList[asset]
                     )}
                 />

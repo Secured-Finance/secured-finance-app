@@ -5,7 +5,7 @@ import useSF from 'src/hooks/useSecuredFinance';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
 import {
     CurrencySymbol,
-    ZERO_BN,
+    ZERO_BI,
     hexToCurrencySymbol,
     toCurrency,
 } from 'src/utils';
@@ -25,7 +25,7 @@ export const useTerminationPrices = () => {
                     return (
                         (await securedFinance?.getMarketTerminationPrice(
                             toCurrency(ccy)
-                        )) ?? ZERO_BN
+                        )) ?? ZERO_BI
                     );
                 })
             );
