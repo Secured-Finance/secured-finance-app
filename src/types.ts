@@ -3,6 +3,7 @@ import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { Option } from 'src/components/atoms';
 import { Maturity } from 'src/utils/entities';
 import { Hex } from 'viem';
+import { useAccount } from 'wagmi';
 import { CurrencySymbol } from './utils';
 
 export type SvgIcon = React.ForwardRefExoticComponent<
@@ -90,3 +91,5 @@ export const OrderSideMap = Object.freeze({
 });
 
 export type Wallet = 'MetaMask' | 'WalletConnect';
+
+export type UserAccount = ReturnType<typeof useAccount>['address'];

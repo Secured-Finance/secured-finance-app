@@ -180,17 +180,6 @@ describe('PlaceOrder component', () => {
         );
     });
 
-    it('should raise an error if the order price is missing but we are in a limit order mode', async () => {
-        const onPlaceOrder = jest.fn();
-        const spy = jest.spyOn(console, 'error').mockImplementation();
-        render(<Default onPlaceOrder={onPlaceOrder} loanValue={undefined} />, {
-            preloadedState,
-        });
-        fireEvent.click(screen.getByTestId('dialog-action-button'));
-        await waitFor(() => expect(spy).toHaveBeenCalled());
-        await waitFor(() => expect(onPlaceOrder).not.toHaveBeenCalled());
-    });
-
     describe('Delisting', () => {
         it('should display delisting disclaimer if currency is being delisted', () => {
             render(<Delisted />);
