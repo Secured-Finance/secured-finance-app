@@ -48,3 +48,9 @@ export const Delisted = Template.bind({});
 Delisted.args = {
     isCurrencyDelisted: true,
 };
+
+export const UnderMinimumCollateralThreshold = Template.bind({});
+UnderMinimumCollateralThreshold.args = {
+    loanValue: LoanValue.fromPrice(9000, dec22Fixture.toNumber()),
+    orderAmount: new Amount('1000000000000000000000', CurrencySymbol.WFIL),
+};

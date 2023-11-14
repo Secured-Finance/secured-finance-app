@@ -14,6 +14,8 @@ import {
     CollateralBook,
     useEtherscanUrl,
     useHandleContractTransaction,
+    useMarket,
+    usePositions,
 } from 'src/hooks';
 import { OrderType, PlaceOrderFunction } from 'src/types';
 import {
@@ -24,6 +26,7 @@ import {
     formatAmount,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
+import { useAccount } from 'wagmi';
 
 enum Step {
     orderConfirm = 1,
@@ -120,6 +123,20 @@ export const PlaceOrder = ({
     const handleContractTransaction = useHandleContractTransaction();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [txHash, setTxHash] = useState<string | undefined>();
+
+    const { address } = useAccount();
+    const market = useMarket(orderAmount.currency, maturity.toNumber());
+    const { data } = usePositions(address, [orderAmount.currency]);
+
+    const showWarning =
+        market &&
+        loanValue &&
+        !isCurrencyDelisted &&
+        loanValue.price < market.currentMinDebtUnitPrice &&
+        side === OrderSide.BORROW && // only show warning for borrow orders
+        (market.isPreOrderPeriod || // show warning if pre-order period whatever the user position
+            (!market.isPreOrderPeriod &&
+                data?.lendCurrencies.has(orderAmount.currency))); // show warning if the user has a lending position when placing a regular order
 
     const [errorMessage, setErrorMessage] = useState(
         'Your order could not be placed'
@@ -247,6 +264,7 @@ export const PlaceOrder = ({
                                 collateral={collateral}
                                 loanValue={loanValue}
                                 isCurrencyDelisted={isCurrencyDelisted}
+                                showWarning={showWarning}
                             />
                         );
                     case Step.orderProcessing:

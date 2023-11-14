@@ -59,5 +59,5 @@ Delisted.play = async ({ canvasElement }) => {
 
 export const UnderMinimumCollateralThreshold = Template.bind({});
 UnderMinimumCollateralThreshold.args = {
-    loanValue: LoanValue.fromPrice(9410, dec22Fixture.toNumber()),
+    showWarning: true,
 };

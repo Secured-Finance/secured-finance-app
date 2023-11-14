@@ -85,15 +85,9 @@ describe('OrderDetails Component', () => {
         ).not.toBeInTheDocument();
     });
 
-    describe('minimum collateral threshold', () => {
-        it('should display a warning if the order price is lower than the min debt price', async () => {
-            render(<UnderMinimumCollateralThreshold />);
-            expect(await screen.findByRole('alert')).toBeInTheDocument();
-        });
-
-        it('should not display a warning if the order price is higher than the min debt price', () => {
-            render(<Default />);
-            expect(screen.queryByRole('alert')).not.toBeInTheDocument();
-        });
+    it('should display a warning when specified with the market currentMinDebtUnitPrice', async () => {
+        render(<UnderMinimumCollateralThreshold />);
+        expect(await screen.findByRole('alert')).toBeInTheDocument();
+        expect(screen.getByText('95.00')).toBeInTheDocument();
     });
 });

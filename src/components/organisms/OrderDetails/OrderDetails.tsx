@@ -43,6 +43,7 @@ export const OrderDetails = ({
     assetPrice,
     collateral,
     loanValue,
+    showWarning,
     isCurrencyDelisted,
 }: {
     amount: Amount;
@@ -51,6 +52,7 @@ export const OrderDetails = ({
     assetPrice: number;
     collateral: CollateralBook;
     loanValue: LoanValue;
+    showWarning?: boolean;
     isCurrencyDelisted?: boolean;
 }) => {
     const { data: orderFee = 0 } = useOrderFee(amount.currency);
@@ -74,38 +76,33 @@ export const OrderDetails = ({
                     currencies={new Set([amount.currency])}
                 />
             )}
-            {market &&
-                !isCurrencyDelisted &&
-                loanValue.price < market.currentMinDebtUnitPrice && (
-                    <Section variant='warning'>
-                        <p>
-                            Warning: Your order price is currently lower than
-                            minimum collateral base price of{' '}
-                            <span className='font-bold'>
-                                {formatLoanValue(
-                                    LoanValue.fromPrice(
-                                        market.currentMinDebtUnitPrice,
-                                        market.maturity
-                                    ),
-                                    'price'
-                                )}
-                            </span>
-                            . Your adjusted PV will be{' '}
-                            <span>
-                                {formatWithCurrency(
-                                    amount.value,
-                                    amount.currency
-                                )}
-                            </span>
-                            . To place the order you need to deposit sufficient
-                            collateral.{' '}
-                            <TextLink
-                                href='https://docs.secured.finance/technical-overview/risk-management/minimum-collateral'
-                                text='Learn More'
-                            />
-                        </p>
-                    </Section>
-                )}
+            {!isCurrencyDelisted && showWarning && market && (
+                <Section variant='warning'>
+                    <p>
+                        Warning: Your order price is currently lower than
+                        minimum collateral base price of{' '}
+                        <span className='font-bold'>
+                            {formatLoanValue(
+                                LoanValue.fromPrice(
+                                    market.currentMinDebtUnitPrice,
+                                    market.maturity
+                                ),
+                                'price'
+                            )}
+                        </span>
+                        . Your adjusted PV will be{' '}
+                        <span>
+                            {formatWithCurrency(amount.value, amount.currency)}
+                        </span>
+                        . To place the order you need to deposit sufficient
+                        collateral.{' '}
+                        <TextLink
+                            href='https://docs.secured.finance/technical-overview/risk-management/minimum-collateral'
+                            text='Learn More'
+                        />
+                    </p>
+                </Section>
+            )}
             <Section>
                 <AmountCard amount={amount} price={assetPrice} />
             </Section>
