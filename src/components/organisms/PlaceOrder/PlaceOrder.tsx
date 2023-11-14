@@ -124,8 +124,9 @@ export const PlaceOrder = ({
     const [txHash, setTxHash] = useState<string | undefined>();
 
     const { address } = useAccount();
-    const showWarning = useIsUnderCollateralThreshold(
-        address,
+    const isUnderCollateralThreshold = useIsUnderCollateralThreshold(address);
+
+    const showWarning = isUnderCollateralThreshold(
         orderAmount.currency,
         maturity.toNumber(),
         loanValue.price,

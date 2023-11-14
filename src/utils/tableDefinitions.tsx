@@ -9,9 +9,10 @@ import {
 import classNames from 'classnames';
 import { Chip, CurrencyItem, PriceYieldItem } from 'src/components/atoms';
 import { TableContractCell, TableHeader } from 'src/components/molecules';
+import { Tooltip } from 'src/components/templates';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
 import { Alignment, ColorFormat } from 'src/types';
-import { ZERO_BI, formatTimestamp } from 'src/utils';
+import { ZERO_BI, formatTimestamp, formatWithCurrency } from 'src/utils';
 import {
     CurrencySymbol,
     currencyMap,
@@ -60,7 +61,7 @@ type ForwardValueProperty = {
 };
 
 type AmountColumnType = (AmountProperty | SideProperty | ForwardValueProperty) &
-    CurrencyProperty;
+    CurrencyProperty & { underMinimalCollateral?: boolean };
 
 type InputAmountColumnType = InputAmountProperty &
     FilledAmountProperty &
@@ -120,12 +121,12 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
                 // do nothing
             }
 
+            const amount = currencyMap[ccy].fromBaseUnit(value as bigint);
+
             const Component = (
-                <div className='flex justify-end'>
+                <div className='flex items-start justify-end gap-2'>
                     <CurrencyItem
-                        amount={currencyMap[ccy].fromBaseUnit(
-                            info.getValue() as bigint
-                        )}
+                        amount={amount}
                         ccy={ccy}
                         align='right'
                         price={options.priceList?.[ccy]}
@@ -136,6 +137,20 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
                         maxDecimals={currencyMap[ccy].roundingDecimal}
                         showCurrency={options.showCurrency}
                     />
+                    {info.row.original.underMinimalCollateral && (
+                        <Tooltip iconColor='text-yellow mt-1'>
+                            <p>
+                                {`While PV is ${formatWithCurrency(
+                                    amount,
+                                    ccy
+                                )}, your adjusted PV is ${formatWithCurrency(
+                                    amount,
+                                    ccy
+                                )}
+                                due to minimum collateral threshold. `}
+                            </p>
+                        </Tooltip>
+                    )}
                 </div>
             );
             if (align !== 'right') {
