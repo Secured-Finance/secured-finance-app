@@ -1,3 +1,4 @@
+import { OrderSide } from '@secured-finance/sf-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -25,6 +26,7 @@ import {
     useCurrenciesForOrders,
     useCurrencyDelistedStatus,
     useGraphClientHook,
+    useIsUnderCollateralThreshold,
     useLendingMarkets,
     useOrderList,
     usePagination,
@@ -219,6 +221,7 @@ export const PortfolioManagement = () => {
     }
 
     const userDelistedCurrenciesArray = Array.from(userDelistedCurrenciesSet);
+    const isUnderCollateralThreshold = useIsUnderCollateralThreshold(address);
 
     return (
         <Page title='Portfolio Management' name='portfolio-management'>
@@ -292,7 +295,33 @@ export const PortfolioManagement = () => {
                             onTabChange={setSelectedTable}
                         >
                             <ActiveTradeTable
-                                data={positions ? positions.positions : []}
+                                data={
+                                    positions
+                                        ? positions.positions.map(position => {
+                                              const ccy = hexToCurrencySymbol(
+                                                  position.currency
+                                              );
+                                              if (!ccy) return position;
+                                              return {
+                                                  ...position,
+                                                  underMinimalCollateralThreshold:
+                                                      isUnderCollateralThreshold(
+                                                          ccy,
+                                                          Number(
+                                                              position.maturity
+                                                          ),
+                                                          Number(
+                                                              position.marketPrice
+                                                          ),
+                                                          position.forwardValue >
+                                                              0
+                                                              ? OrderSide.LEND
+                                                              : OrderSide.BORROW
+                                                      ),
+                                              };
+                                          })
+                                        : []
+                                }
                                 delistedCurrencySet={delistedCurrencySet}
                             />
                             <OrderTable data={activeOrderList} />
