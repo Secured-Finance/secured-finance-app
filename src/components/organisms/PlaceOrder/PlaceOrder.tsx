@@ -250,6 +250,7 @@ export const PlaceOrder = ({
             title={state.title}
             description={state.description}
             callToAction={state.buttonText}
+            disableActionButton={showWarning}
             onClick={() => onClick(state.currentStep)}
         >
             {(() => {

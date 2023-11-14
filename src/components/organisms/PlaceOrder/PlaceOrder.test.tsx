@@ -302,5 +302,16 @@ describe('PlaceOrder component', () => {
                 });
             });
         });
+
+        it('should disable the place order button if the user is under the minimum collateral threshold', async () => {
+            render(
+                <UnderMinimumCollateralThreshold
+                    side={OrderSide.BORROW}
+                    orderAmount={new Amount('100000000', CurrencySymbol.ETH)}
+                />
+            );
+            expect(await screen.findByRole('alert')).toBeInTheDocument();
+            expect(screen.getByTestId('dialog-action-button')).toBeDisabled();
+        });
     });
 });
