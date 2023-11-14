@@ -27,11 +27,11 @@ describe('usePositions', () => {
         expect(mock.getPositions).toHaveBeenCalledTimes(1);
 
         const newValue = result.current;
-        expect(newValue.data).toHaveLength(4);
-        expect(newValue.data[0].currency).toBe(ethBytes32);
-        expect(newValue.data[1].currency).toBe(ethBytes32);
-        expect(newValue.data[2].currency).toBe(wfilBytes32);
-        expect(newValue.data[3].currency).toBe(usdcBytes32);
+        expect(newValue.data.positions).toHaveLength(4);
+        expect(newValue.data.positions[0].currency).toBe(ethBytes32);
+        expect(newValue.data.positions[1].currency).toBe(ethBytes32);
+        expect(newValue.data.positions[2].currency).toBe(wfilBytes32);
+        expect(newValue.data.positions[3].currency).toBe(usdcBytes32);
         expect(newValue.isLoading).toEqual(false);
     });
 
@@ -42,10 +42,33 @@ describe('usePositions', () => {
         await waitForNextUpdate();
 
         const newValue = result.current;
-        expect(newValue.data).toHaveLength(4);
-        expect(newValue.data[0].marketPrice).toStrictEqual(BigInt(9750));
-        expect(newValue.data[1].marketPrice).toStrictEqual(BigInt(9500));
-        expect(newValue.data[2].marketPrice).toStrictEqual(BigInt(9750));
-        expect(newValue.data[3].marketPrice).toStrictEqual(BigInt(9403));
+        expect(newValue.data.positions).toHaveLength(4);
+        expect(newValue.data.positions[0].marketPrice).toStrictEqual(
+            BigInt(9750)
+        );
+        expect(newValue.data.positions[1].marketPrice).toStrictEqual(
+            BigInt(9500)
+        );
+        expect(newValue.data.positions[2].marketPrice).toStrictEqual(
+            BigInt(9750)
+        );
+        expect(newValue.data.positions[3].marketPrice).toStrictEqual(
+            BigInt(9403)
+        );
+    });
+
+    it('should return a set with the borrow currencies and the lend currencies of the positions', async () => {
+        const { result, waitForNextUpdate } = renderHook(() =>
+            usePositions('0x1', usedCurrencies)
+        );
+        await waitForNextUpdate();
+
+        const newValue = result.current;
+        expect(newValue.data.lendCurrencies).toEqual(
+            new Set([CurrencySymbol.ETH, CurrencySymbol.WFIL])
+        );
+        expect(newValue.data.borrowCurrencies).toEqual(
+            new Set([CurrencySymbol.USDC, CurrencySymbol.ETH])
+        );
     });
 });

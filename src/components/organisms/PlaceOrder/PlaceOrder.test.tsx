@@ -1,13 +1,19 @@
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
-import { dec22Fixture, preloadedAssetPrices } from 'src/stories/mocks/fixtures';
+import {
+    dec22Fixture,
+    dec24Fixture,
+    preloadedAssetPrices,
+} from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
+import { Amount } from 'src/utils/entities';
 import * as stories from './PlaceOrder.stories';
 
-const { Default, Delisted } = composeStories(stories);
+const { Default, Delisted, UnderMinimumCollateralThreshold } =
+    composeStories(stories);
 
 const preloadedState = {
     landingOrderForm: {
@@ -185,21 +191,116 @@ describe('PlaceOrder component', () => {
         await waitFor(() => expect(onPlaceOrder).not.toHaveBeenCalled());
     });
 
-    it('should display delisting disclaimer if currency is being delisted', () => {
-        render(<Delisted />);
-        expect(
-            screen.getByText(
-                'Please note that USDC will be delisted on Secured Finance.'
-            )
-        ).toBeInTheDocument();
+    describe('Delisting', () => {
+        it('should display delisting disclaimer if currency is being delisted', () => {
+            render(<Delisted />);
+            expect(
+                screen.getByText(
+                    'Please note that USDC will be delisted on Secured Finance.'
+                )
+            ).toBeInTheDocument();
+        });
+
+        it('should not display delisting disclaimer if currency is not being delisted', () => {
+            render(<Default />);
+            expect(
+                screen.queryByText(
+                    'Please note that USDC will be delisted on Secured Finance.'
+                )
+            ).not.toBeInTheDocument();
+        });
     });
 
-    it('should not display delisting disclaimer if currency is not being delisted', () => {
-        render(<Default />);
-        expect(
-            screen.queryByText(
-                'Please note that USDC will be delisted on Secured Finance.'
-            )
-        ).not.toBeInTheDocument();
+    describe('Minimum Collateral Threshold', () => {
+        describe('when the order price is lower than the min debt price', () => {
+            describe('when the user place a pre-order', () => {
+                it('should display a warning if the user places a borrow order', async () => {
+                    render(
+                        <UnderMinimumCollateralThreshold
+                            maturity={dec24Fixture}
+                        />
+                    );
+                    expect(
+                        await screen.findByRole('alert')
+                    ).toBeInTheDocument();
+                });
+
+                it('should not display a warning if the user places a lend order', () => {
+                    render(
+                        <UnderMinimumCollateralThreshold
+                            maturity={dec24Fixture}
+                            side={OrderSide.LEND}
+                            orderAmount={
+                                new Amount('100000000', CurrencySymbol.WFIL)
+                            }
+                        />
+                    );
+                    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+                });
+            });
+
+            describe('when the user place a regular order', () => {
+                // in the mock data, the user has a lending position in WFIL, but not in ETH
+                describe('when the user already has a lending position', () => {
+                    it('should display a warning if the user places a borrow order', async () => {
+                        render(
+                            <UnderMinimumCollateralThreshold
+                                side={OrderSide.BORROW}
+                                orderAmount={
+                                    new Amount('100000000', CurrencySymbol.WFIL)
+                                }
+                            />
+                        );
+                        expect(
+                            await screen.findByRole('alert')
+                        ).toBeInTheDocument();
+                    });
+
+                    it('should not display a warning if the user places a lend order', () => {
+                        render(
+                            <UnderMinimumCollateralThreshold
+                                side={OrderSide.LEND}
+                                orderAmount={
+                                    new Amount('100000000', CurrencySymbol.WFIL)
+                                }
+                            />
+                        );
+                        expect(
+                            screen.queryByRole('alert')
+                        ).not.toBeInTheDocument();
+                    });
+                });
+
+                describe('when the user does not have a lending position', () => {
+                    it('should display a warning if the user places a borrow order', async () => {
+                        render(
+                            <UnderMinimumCollateralThreshold
+                                side={OrderSide.BORROW}
+                                orderAmount={
+                                    new Amount('100000000', CurrencySymbol.ETH)
+                                }
+                            />
+                        );
+                        expect(
+                            await screen.findByRole('alert')
+                        ).toBeInTheDocument();
+                    });
+
+                    it('should not display a warning if the user places a lend order', () => {
+                        render(
+                            <UnderMinimumCollateralThreshold
+                                side={OrderSide.BORROW}
+                                orderAmount={
+                                    new Amount('100000000', CurrencySymbol.ETH)
+                                }
+                            />
+                        );
+                        expect(
+                            screen.queryByRole('alert')
+                        ).not.toBeInTheDocument();
+                    });
+                });
+            });
+        });
     });
 });

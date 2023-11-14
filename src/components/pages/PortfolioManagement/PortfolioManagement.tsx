@@ -119,7 +119,7 @@ export const PortfolioManagement = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         JSON.stringify(orderList.activeOrderList),
     ]);
-    const { data: positions = [] } = usePositions(address, usedCurrencies);
+    const { data: positions } = usePositions(address, usedCurrencies);
 
     const paginatedTransactions = usePagination(
         userTransactionHistory.data?.transactions ?? []
@@ -167,14 +167,22 @@ export const PortfolioManagement = () => {
                 netAssetValue: 0,
             };
         }
-        const borrowedPV = computeNetValue(
-            positions.filter(position => position.forwardValue < 0),
-            priceMap
-        );
-        const lentPV = computeNetValue(
-            positions.filter(position => position.forwardValue > 0),
-            priceMap
-        );
+        const borrowedPV = positions
+            ? computeNetValue(
+                  positions.positions.filter(
+                      position => position.forwardValue < 0
+                  ),
+                  priceMap
+              )
+            : 0;
+        const lentPV = positions
+            ? computeNetValue(
+                  positions.positions.filter(
+                      position => position.forwardValue > 0
+                  ),
+                  priceMap
+              )
+            : 0;
         return {
             borrowedPV,
             lentPV,
@@ -201,12 +209,14 @@ export const PortfolioManagement = () => {
 
     const userDelistedCurrenciesSet = new Set<string>();
 
-    positions.forEach(position => {
-        const ccy = hexToCurrencySymbol(position.currency);
-        if (ccy && delistedCurrencySet.has(ccy)) {
-            userDelistedCurrenciesSet.add(ccy);
-        }
-    });
+    if (positions) {
+        positions.positions.forEach(position => {
+            const ccy = hexToCurrencySymbol(position.currency);
+            if (ccy && delistedCurrencySet.has(ccy)) {
+                userDelistedCurrenciesSet.add(ccy);
+            }
+        });
+    }
 
     const userDelistedCurrenciesArray = Array.from(userDelistedCurrenciesSet);
 
@@ -256,7 +266,9 @@ export const PortfolioManagement = () => {
                             },
                             {
                                 name: 'Active Contracts',
-                                value: positions.length.toString(),
+                                value: positions
+                                    ? positions.positions.length.toString()
+                                    : '0',
                             },
                             {
                                 name: 'Lending PV',
@@ -280,7 +292,7 @@ export const PortfolioManagement = () => {
                             onTabChange={setSelectedTable}
                         >
                             <ActiveTradeTable
-                                data={positions}
+                                data={positions ? positions.positions : []}
                                 delistedCurrencySet={delistedCurrencySet}
                             />
                             <OrderTable data={activeOrderList} />
