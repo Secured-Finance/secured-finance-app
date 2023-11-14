@@ -14,8 +14,7 @@ import {
     CollateralBook,
     useEtherscanUrl,
     useHandleContractTransaction,
-    useMarket,
-    usePositions,
+    useIsUnderCollateralThreshold,
 } from 'src/hooks';
 import { OrderType, PlaceOrderFunction } from 'src/types';
 import {
@@ -125,18 +124,13 @@ export const PlaceOrder = ({
     const [txHash, setTxHash] = useState<string | undefined>();
 
     const { address } = useAccount();
-    const market = useMarket(orderAmount.currency, maturity.toNumber());
-    const { data } = usePositions(address, [orderAmount.currency]);
-
-    const showWarning =
-        market &&
-        loanValue &&
-        !isCurrencyDelisted &&
-        loanValue.price < market.currentMinDebtUnitPrice &&
-        side === OrderSide.BORROW && // only show warning for borrow orders
-        (market.isPreOrderPeriod || // show warning if pre-order period whatever the user position
-            (!market.isPreOrderPeriod &&
-                data?.lendCurrencies.has(orderAmount.currency))); // show warning if the user has a lending position when placing a regular order
+    const showWarning = useIsUnderCollateralThreshold(
+        address,
+        orderAmount.currency,
+        maturity.toNumber(),
+        loanValue.price,
+        side
+    );
 
     const [errorMessage, setErrorMessage] = useState(
         'Your order could not be placed'
