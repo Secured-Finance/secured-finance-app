@@ -1,10 +1,13 @@
 import { OrderSide } from '@secured-finance/sf-client';
-import { useMemo } from 'react';
 import {
     SectionWithItems,
     getLiquidationInformation,
 } from 'src/components/atoms';
-import { CollateralBook, useOrderEstimation } from 'src/hooks';
+import {
+    CollateralBook,
+    useBorrowableAmount,
+    useOrderEstimation,
+} from 'src/hooks';
 import {
     formatAmount,
     formatCollateralRatio,
@@ -12,7 +15,6 @@ import {
     prefixTilde,
     usdFormat,
 } from 'src/utils';
-import { MAX_COVERAGE, computeAvailableToBorrow } from 'src/utils/collateral';
 import { Amount, LoanValue } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
@@ -21,28 +23,24 @@ export const CollateralSimulationSection = ({
     tradeAmount,
     side,
     tradeValue,
+    assetPrice,
 }: {
     collateral: CollateralBook;
     tradeAmount: Amount;
     side: OrderSide;
     tradeValue: LoanValue;
+    assetPrice: number;
 }) => {
     const { address } = useAccount();
-
     const { data: coverage = 0 } = useOrderEstimation(address);
+    const { data: availableToBorrow } = useBorrowableAmount(
+        address,
+        tradeAmount.currency
+    );
 
-    const remainingToBorrowText = useMemo(
-        () =>
-            usdFormat(
-                computeAvailableToBorrow(
-                    1,
-                    collateral.usdCollateral,
-                    coverage / MAX_COVERAGE,
-                    collateral.collateralThreshold
-                ),
-                2
-            ),
-        [collateral.usdCollateral, collateral.collateralThreshold, coverage]
+    const remainingToBorrowText = usdFormat(
+        (availableToBorrow - tradeAmount.value) * assetPrice,
+        2
     );
 
     const items: [string, string | React.ReactNode][] =
