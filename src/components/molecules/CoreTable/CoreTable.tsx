@@ -109,7 +109,7 @@ export const CoreTable = <T,>({
         0: 'left-0 tablet:left-auto',
         1: 'left-1/3 tablet:left-auto',
         [lastColumnIndex]:
-            'right-0 tablet:right-auto before:absolute before:-top-0 before:-left-2 before:w-5 before:h-full before:z-10 before:bg-gradient-to-r before:from-black/20 before:to-gunMetal',
+            'right-0 tablet:right-auto before:absolute before:-top-0 before:-left-3 before:w-5 before:h-full before:z-10 before:bg-gradient-to-r before:from-black/20 before:to-gunMetal/20 tablet:before:hidden',
     };
 
     const coreTable = (
