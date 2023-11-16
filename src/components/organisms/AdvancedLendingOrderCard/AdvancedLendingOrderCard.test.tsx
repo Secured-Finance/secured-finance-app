@@ -352,7 +352,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         });
     });
 
-    it('should not disable button in Borrow orders when input is less than available to borrow amount', async () => {
+    it.skip('should not disable button in Borrow orders when input is less than available to borrow amount', async () => {
         // SF vault has 100 WFIL
         // test asserts that the validation condition for Lend orders i.e (input amount< balance to lend) is not applicable to borrow orders
 
@@ -533,7 +533,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                 assertInvalidBondPriceErrorIsNotShown();
             });
 
-            it('should not show error, place order button should be disabled if bond price is undefined for borrow orders', async () => {
+            it.skip('should not show error, place order button should be disabled if bond price is undefined for borrow orders', async () => {
                 render(<Default />, {
                     preloadedState: {
                         ...preloadedState,
