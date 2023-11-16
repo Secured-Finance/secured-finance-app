@@ -459,6 +459,21 @@ export const mockUseSF = () => {
         ),
 
         executeEmergencySettlement: jest.fn(() => Promise.resolve('0x123')),
+
+        getBorrowableAmount: jest.fn((_address, currency: Currency) => {
+            switch (currency.symbol) {
+                case CurrencySymbol.ETH:
+                    return Promise.resolve(BigInt('2600000000000000000'));
+                case CurrencySymbol.WFIL:
+                    return Promise.resolve(BigInt('867190000000000000000'));
+                case CurrencySymbol.USDC:
+                    return Promise.resolve(BigInt('5203150000'));
+                case CurrencySymbol.WBTC:
+                    return Promise.resolve(BigInt('10000000'));
+                default:
+                    throw new Error('Not implemented');
+            }
+        }),
     };
 
     return mockSecuredFinance;
