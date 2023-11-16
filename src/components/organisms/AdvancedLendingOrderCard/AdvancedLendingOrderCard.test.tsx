@@ -352,7 +352,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         });
     });
 
-    it.skip('should not disable button in Borrow orders when input is less than available to borrow amount', async () => {
+    it('should not disable button in Borrow orders when input is less than available to borrow amount', async () => {
         // SF vault has 100 WFIL
         // test asserts that the validation condition for Lend orders i.e (input amount< balance to lend) is not applicable to borrow orders
 
@@ -367,7 +367,10 @@ describe('AdvancedLendingOrderCard Component', () => {
         });
         await waitFor(() => {
             const input = screen.getByRole('textbox', { name: 'Amount' });
-            fireEvent.change(input, { target: { value: '1000' } });
+            fireEvent.change(input, { target: { value: '100' } });
+        });
+        await waitFor(() => {
+            expect(screen.getByText('~ 867.19')).toBeInTheDocument();
         });
 
         await waitFor(() =>
