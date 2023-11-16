@@ -174,7 +174,7 @@ export const MarketLoanWidget = ({
                 id: 'action',
                 cell: info => {
                     return (
-                        <div className='flex justify-end px-1'>
+                        <div className='flex justify-end px-4 laptop:px-1'>
                             <Button onClick={() => handleClick(info)} size='sm'>
                                 {info.row.original.isOpened
                                     ? 'Open Order'
@@ -233,10 +233,10 @@ export const MarketLoanWidget = ({
     }
 
     return (
-        <div className='h-fit rounded-b-2xl border border-white-10 shadow-tab'>
+        <div className='h-fit min-h-[300px] rounded-b-2xl border border-white-10 bg-black-20 shadow-tab'>
             <Tab tabDataArray={tabDataArray}>
                 {!isGlobalItayose && (
-                    <div className='min-h-[300px] rounded-b-2xl bg-black-20 px-7 pb-3'>
+                    <div className='px-2'>
                         <CoreTable
                             columns={columns}
                             data={getFilteredMarkets(openMarkets)}
@@ -247,8 +247,7 @@ export const MarketLoanWidget = ({
                         />
                     </div>
                 )}
-
-                <div className='min-h-[300px] rounded-b-2xl bg-black-20 px-7 pb-3'>
+                <div className='px-2'>
                     <CoreTable
                         columns={columns}
                         data={getFilteredMarkets(filteredItayoseMarkets)}
