@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { CoreTable, TableActionMenu } from 'src/components/molecules';
 import { CancelOrderDialog } from 'src/components/organisms';
 import { Order } from 'src/hooks';
-import { CurrencySymbol, hexToCurrencySymbol } from 'src/utils';
+import { hexToCurrencySymbol } from 'src/utils';
 import { Amount, Maturity } from 'src/utils/entities';
 import {
     amountColumnDefinition,
@@ -29,13 +29,13 @@ export const OrderTable = ({
     variant?: 'compact' | 'default';
     height?: number;
 }) => {
-    const [CancelOrderDialogData, setCancelOrderDialogData] = useState<{
+    const [cancelOrderDialogData, setCancelOrderDialogData] = useState<{
         orderId: bigint;
-        currency: CurrencySymbol;
         maturity: Maturity;
         amount: Amount;
         side: OrderSide;
         isOpen: boolean;
+        orderUnitPrice: number;
     }>();
     const columns = useMemo(
         () => [
@@ -101,13 +101,15 @@ export const OrderTable = ({
                                             setCancelOrderDialogData({
                                                 orderId:
                                                     info.row.original.orderId,
-                                                currency: ccy,
                                                 maturity: new Maturity(
                                                     info.row.original.maturity
                                                 ),
                                                 amount: new Amount(amount, ccy),
                                                 side: side,
                                                 isOpen: true,
+                                                orderUnitPrice: Number(
+                                                    info.row.original.unitPrice
+                                                ),
                                             });
                                         },
                                     },
@@ -141,12 +143,12 @@ export const OrderTable = ({
                     },
                 }}
             />
-            {CancelOrderDialogData && (
+            {cancelOrderDialogData && (
                 <CancelOrderDialog
-                    {...CancelOrderDialogData}
+                    {...cancelOrderDialogData}
                     onClose={() =>
                         setCancelOrderDialogData({
-                            ...CancelOrderDialogData,
+                            ...cancelOrderDialogData,
                             isOpen: false,
                         })
                     }

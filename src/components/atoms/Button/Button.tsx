@@ -44,7 +44,7 @@ export const Button = ({
                     'h-12 px-6 py-4': size === 'md',
                     'w-full': fullWidth,
                     'w-fit': !fullWidth,
-                    'bg-inherit border-3 border border-slateGray enabled:hover:bg-none':
+                    'bg-inherit border border-slateGray enabled:hover:bg-none':
                         variant === 'outlined',
                     'bg-starBlue': variant === 'solid',
                 }

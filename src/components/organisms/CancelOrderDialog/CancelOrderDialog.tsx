@@ -1,6 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
-import { useCallback, useMemo, useReducer, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useCallback, useReducer, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Spinner } from 'src/components/atoms';
 import {
     Dialog,
@@ -13,12 +13,9 @@ import {
     emptyCollateralBook,
     useEtherscanUrl,
     useHandleContractTransaction,
-    useMarket,
     useOrders,
 } from 'src/hooks';
-import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { setLastMessage } from 'src/store/lastError';
-import { RootState } from 'src/store/types';
 import { AddressUtils } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 
@@ -97,38 +94,27 @@ export const CancelOrderDialog = ({
     orderId,
     maturity,
     side,
+    orderUnitPrice,
 }: {
     amount: Amount;
     maturity: Maturity;
     orderId: bigint;
     side: OrderSide;
+    orderUnitPrice: number;
 } & DialogState) => {
     const etherscanUrl = useEtherscanUrl();
     const handleContractTransaction = useHandleContractTransaction();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [txHash, setTxHash] = useState<string | undefined>();
     const [errorMessage, setErrorMessage] = useState(
-        'Your position could not be cancelled.'
+        'Your order could not be cancelled.'
     );
     const globalDispatch = useDispatch();
 
-    const priceList = useSelector((state: RootState) => getPriceMap(state));
-    const price = priceList[amount.currency];
-
-    const market = useMarket(amount.currency, maturity.toNumber());
-
-    const marketValue = useMemo(() => {
-        if (!market) {
-            return LoanValue.ZERO;
-        }
-
-        const unitPrice =
-            side === OrderSide.BORROW
-                ? market.bestBorrowUnitPrice
-                : market.bestLendUnitPrice;
-
-        return LoanValue.fromPrice(unitPrice, maturity.toNumber());
-    }, [market, maturity, side]);
+    const marketValue = LoanValue.fromPrice(
+        orderUnitPrice,
+        maturity.toNumber()
+    );
 
     const { cancelOrder } = useOrders();
 
@@ -148,12 +134,11 @@ export const CancelOrderDialog = ({
                 dispatch({ type: 'next' });
             }
         } catch (e) {
-            console.error(e);
-            dispatch({ type: 'error' });
             if (e instanceof Error) {
                 setErrorMessage(e.message);
                 globalDispatch(setLastMessage(e.message));
             }
+            dispatch({ type: 'error' });
         }
     }, [
         cancelOrder,
@@ -192,7 +177,7 @@ export const CancelOrderDialog = ({
                         amount={amount}
                         maturity={maturity}
                         side={side}
-                        assetPrice={price}
+                        assetPrice={orderUnitPrice}
                         collateral={emptyCollateralBook}
                         loanValue={marketValue}
                         isCancelOrder={true}

@@ -140,8 +140,10 @@ export const PlaceOrder = ({
     }, [onClose]);
 
     useEffect(() => {
-        dispatch({ type: 'updateSide' });
-    }, [side]);
+        if (state.currentStep === Step.orderConfirm) {
+            dispatch({ type: 'updateSide' });
+        }
+    }, [side, state.currentStep, orderType]);
 
     const handlePlaceOrder = useCallback(
         async (
