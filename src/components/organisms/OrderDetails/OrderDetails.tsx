@@ -20,6 +20,7 @@ import {
     divide,
     formatLoanValue,
     formatWithCurrency,
+    multiply,
     prefixTilde,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
@@ -76,7 +77,7 @@ export const OrderDetails = ({
                     currencies={new Set([amount.currency])}
                 />
             )}
-            {!isCurrencyDelisted && showWarning && market && (
+            {showWarning && market && (
                 <Section variant='warning'>
                     <p>
                         Warning: Your order price is currently lower than
@@ -92,7 +93,19 @@ export const OrderDetails = ({
                         </span>
                         . Your adjusted PV will be{' '}
                         <span>
-                            {formatWithCurrency(amount.value, amount.currency)}
+                            {formatWithCurrency(
+                                multiply(
+                                    divide(
+                                        amount.value,
+                                        LoanValue.fromPrice(
+                                            amount.value,
+                                            market.maturity
+                                        ).price
+                                    ),
+                                    market.currentMinDebtUnitPrice
+                                ),
+                                amount.currency
+                            )}
                         </span>
                         . To place the order you need to deposit sufficient
                         collateral.{' '}
