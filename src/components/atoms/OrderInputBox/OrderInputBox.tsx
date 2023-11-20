@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { InputBase } from 'src/components/atoms';
-import { Tooltip } from 'src/components/templates';
+import { InfoToolTip } from 'src/components/molecules';
 import { amountFormatterToBase, CurrencySymbol } from 'src/utils';
 
 interface OrderInputBoxProps {
@@ -61,9 +61,9 @@ export const OrderInputBox = ({
                     {field}
                 </div>
                 {informationText && !disabled && (
-                    <Tooltip align='right' maxWidth='small'>
+                    <InfoToolTip maxWidth='small' align='right'>
                         {informationText}
-                    </Tooltip>
+                    </InfoToolTip>
                 )}
             </div>
             <div className='grid grid-flow-col place-content-end gap-10px'>

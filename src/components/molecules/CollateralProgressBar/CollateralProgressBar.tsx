@@ -1,5 +1,5 @@
 import Tick from 'src/assets/icons/tick.svg';
-import { Tooltip } from 'src/components/templates';
+import { InfoToolTip } from 'src/components/molecules';
 import { percentFormat, usdFormat } from 'src/utils';
 import { computeAvailableToBorrow } from 'src/utils/collateral';
 
@@ -113,14 +113,14 @@ export const CollateralProgressBar = ({
                                 2
                             )} available`}</span>
                         </div>
-                        <Tooltip align='right'>
+                        <InfoToolTip align='right'>
                             {getInformationText(
                                 totalCollateralInUSD,
                                 collateralCoverage,
                                 availableToBorrow,
                                 collateralThreshold
                             )}
-                        </Tooltip>
+                        </InfoToolTip>
                     </div>
                 )}
             </div>

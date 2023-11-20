@@ -1,40 +1,20 @@
 import { Popover } from '@headlessui/react';
-import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 import { cloneElement, useState } from 'react';
 import { Alignment } from 'src/types';
 
-const InformationIcon = (
-    <InformationCircleIcon
-        className='h-4 w-4 cursor-pointer text-slateGray'
-        data-testid='information-circle'
-    />
-);
-
 export const Tooltip = ({
-    iconElement = InformationIcon,
+    iconElement,
     children,
     align = 'center',
     maxWidth = 'large',
-    iconColor,
 }: {
-    iconElement?: React.ReactNode;
+    iconElement: React.ReactNode;
     children: React.ReactNode;
     align?: Alignment;
     maxWidth?: 'small' | 'large';
-    iconColor?: string;
 }) => {
     const [open, setOpen] = useState(false);
-
-    const overrideColor = iconColor
-        ? {
-              className:
-                  `${
-                      (iconElement as React.ReactElement).props.className || ''
-                  }`.replace(/\btext-\S+/g, '') + ` ${iconColor}`,
-          }
-        : {};
-
     return (
         <Popover
             className='pointer-events-auto relative overflow-visible'
@@ -52,7 +32,6 @@ export const Tooltip = ({
                             {
                                 onMouseEnter: () => setOpen(true),
                                 onMouseLeave: () => setOpen(false),
-                                ...overrideColor,
                             }
                         )}
                     </Popover.Button>

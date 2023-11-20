@@ -2,7 +2,7 @@ import { composeStories } from '@storybook/react';
 import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './Tooltip.stories';
 
-const { Default, OverrideIconColor } = composeStories(stories);
+const { Default } = composeStories(stories);
 
 describe('Tooltip Component', () => {
     it('should render a Tooltip', () => {
@@ -35,11 +35,5 @@ describe('Tooltip Component', () => {
             )
         ).not.toBeInTheDocument();
         expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
-    });
-
-    it('should override the color of the icon if specified', () => {
-        render(<OverrideIconColor />);
-        const information = screen.getByTestId('information-circle');
-        expect(information).toHaveClass('text-orange');
     });
 });

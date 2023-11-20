@@ -64,7 +64,6 @@ export const usePositions = (
                 borrowCurrencies,
             };
         },
-        placeholderData: undefined,
         enabled: !!securedFinance && !!account && !!usedCurrencyKey,
     });
 };
