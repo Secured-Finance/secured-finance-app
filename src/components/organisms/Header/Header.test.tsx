@@ -18,6 +18,7 @@ jest.mock(
 
 const preloadedState = {
     blockchain: {
+        chainId: 11155111,
         chainError: false,
     },
 };

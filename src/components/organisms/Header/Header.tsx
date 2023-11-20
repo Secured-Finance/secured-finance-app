@@ -41,6 +41,36 @@ const LINKS = [
     },
 ];
 
+const HeaderMessage = ({
+    chainId,
+    chainError,
+}: {
+    chainId: number;
+    chainError: boolean;
+}) => {
+    const mainnetChainId = getMainnetChainId();
+    const networkNames = getSupportedNetworks().map(
+        name => name.charAt(0).toUpperCase() + name.slice(1)
+    );
+
+    if (chainId) {
+        if (chainError) {
+            return (
+                <div className='typography-caption-2 w-full bg-red/100 p-[1px] text-center text-neutral-8'>
+                    Secured Finance only supported in {networkNames.join(', ')}
+                </div>
+            );
+        } else if (chainId !== mainnetChainId) {
+            return (
+                <div className='typography-caption-2 w-full bg-horizonBlue/100 p-[1px] text-center text-neutral-8'>
+                    You are visiting Secured Finance on testnet
+                </div>
+            );
+        }
+    }
+    return <></>;
+};
+
 export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     const dispatch = useDispatch();
     const { address, isConnected } = useAccount();
@@ -51,25 +81,11 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     const currentChainId = useSelector(
         (state: RootState) => state.blockchain.chainId
     );
-    const networkNames = getSupportedNetworks().map(
-        name => name.charAt(0).toUpperCase() + name.slice(1)
-    );
-    const mainnetChainId = getMainnetChainId();
     const envShort = getEnvShort();
 
     return (
         <div className='relative'>
-            {chainError ? (
-                <div className='typography-caption-2 w-full bg-red/100 p-[1px] text-center text-neutral-8'>
-                    Secured Finance only supported in {networkNames.join(', ')}
-                </div>
-            ) : (
-                currentChainId !== mainnetChainId && (
-                    <div className='typography-caption-2 w-full bg-horizonBlue/100 p-[1px] text-center text-neutral-8'>
-                        You are visiting Secured Finance on testnet
-                    </div>
-                )
-            )}
+            <HeaderMessage chainId={currentChainId} chainError={chainError} />
 
             <nav
                 data-cy='header'
