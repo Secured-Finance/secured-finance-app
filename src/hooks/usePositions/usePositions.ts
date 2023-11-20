@@ -2,7 +2,12 @@ import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
-import { CurrencySymbol, hexToCurrencySymbol, toCurrency } from 'src/utils';
+import {
+    CurrencySymbol,
+    amountFormatterFromBase,
+    hexToCurrencySymbol,
+    toCurrency,
+} from 'src/utils';
 
 export type Position = {
     currency: string;
@@ -33,6 +38,8 @@ export const usePositions = (
             return positions ?? [];
         },
         select: positions => {
+            let totalBorrowPV = 0;
+            let totalLendPV = 0;
             const lendCurrencies: Set<CurrencySymbol> = new Set();
             const borrowCurrencies: Set<CurrencySymbol> = new Set();
             const ret: Position[] = [];
@@ -50,11 +57,14 @@ export const usePositions = (
                 } as Position);
                 const ccy = hexToCurrencySymbol(position.ccy);
                 if (!ccy) return;
+                const pv = amountFormatterFromBase[ccy](position.presentValue);
                 if (position.presentValue >= 0) {
                     lendCurrencies.add(ccy);
+                    totalLendPV += pv;
                 }
                 if (position.presentValue < 0) {
                     borrowCurrencies.add(ccy);
+                    totalBorrowPV += pv;
                 }
             });
 
@@ -62,6 +72,8 @@ export const usePositions = (
                 positions: ret,
                 lendCurrencies,
                 borrowCurrencies,
+                totalBorrowPV,
+                totalLendPV,
             };
         },
         placeholderData: undefined,

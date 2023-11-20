@@ -5,6 +5,7 @@ import {
     getLiquidationInformation,
 } from 'src/components/atoms';
 import { CollateralBook, useOrderEstimation } from 'src/hooks';
+import { useZCUsage } from 'src/hooks/useZCUsage/useZCUsage';
 import {
     formatAmount,
     formatCollateralRatio,
@@ -13,7 +14,7 @@ import {
     usdFormat,
 } from 'src/utils';
 import { MAX_COVERAGE, computeAvailableToBorrow } from 'src/utils/collateral';
-import { Amount, LoanValue } from 'src/utils/entities';
+import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
 export const CollateralSimulationSection = ({
@@ -21,15 +22,28 @@ export const CollateralSimulationSection = ({
     tradeAmount,
     side,
     tradeValue,
+    maturity,
 }: {
     collateral: CollateralBook;
     tradeAmount: Amount;
     side: OrderSide;
     tradeValue: LoanValue;
+    maturity: Maturity;
 }) => {
     const { address } = useAccount();
 
-    const { data: coverage = 0 } = useOrderEstimation(address);
+    const { data: orderEstimationInfo } = useOrderEstimation(address);
+
+    const getZCUsage = useZCUsage(address);
+
+    const zcUsage = formatCollateralRatio(
+        getZCUsage(maturity.toNumber(), tradeAmount.currency, tradeAmount.value)
+    );
+
+    const coverage = useMemo(
+        () => Number(orderEstimationInfo?.coverage) ?? 0,
+        [orderEstimationInfo?.coverage]
+    );
 
     const remainingToBorrowText = useMemo(
         () =>
@@ -55,6 +69,7 @@ export const CollateralSimulationSection = ({
                       }`,
                   ],
                   ['Borrow Remaining', remainingToBorrowText],
+                  ['ZC Usage', zcUsage ?? 0],
                   [
                       'Collateral Usage',
                       getCollateralUsage(collateral.coverage, coverage),

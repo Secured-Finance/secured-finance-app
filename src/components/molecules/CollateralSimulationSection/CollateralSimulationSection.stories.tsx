@@ -16,6 +16,7 @@ export default {
         side: OrderSide.BORROW,
         assetPrice: 10,
         tradeValue: LoanValue.fromPrice(9800, dec22Fixture.toNumber()),
+        maturity: dec22Fixture,
     },
     parameters: {
         connected: true,

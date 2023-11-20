@@ -111,6 +111,7 @@ export const OrderDetails = ({
                 tradeAmount={amount}
                 side={side}
                 tradeValue={loanValue}
+                maturity={maturity}
             />
             <SectionWithItems
                 itemList={[
