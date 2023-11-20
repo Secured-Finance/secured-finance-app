@@ -43,7 +43,7 @@ describe('AmountCard Component', () => {
             />
         );
         expect(screen.getByText('500,000,000')).toHaveClass(
-            'typography-body-1 font-bold text-white'
+            'flex justify-end font-bold text-white typography-body-2'
         );
     });
 

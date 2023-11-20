@@ -17,6 +17,7 @@ export default {
         maturity: dec22Fixture,
         amount: new Amount('100000000000000000000', CurrencySymbol.WFIL),
         side: OrderSide.BORROW,
+        orderUnitPrice: 9814,
     },
     decorators: [withAssetPrice, withWalletProvider],
     parameters: {

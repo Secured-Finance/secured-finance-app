@@ -89,62 +89,62 @@ export const OrderDetails = ({
                 ]}
             />
             {!isCancelOrder && (
-                <CollateralSimulationSection collateral={collateral} />
-            )}
-            {!isCancelOrder && (
-                <SectionWithItems
-                    itemList={[
-                        [
-                            <FeeItem key={maturity.toString()} />,
-                            prefixTilde(
-                                calculateFee(maturity.toNumber(), orderFee)
-                            ),
-                        ],
-                    ]}
-                />
-            )}
-
-            {!isCancelOrder && (
-                <Disclosure>
-                    {({ open }) => (
-                        <>
-                            <div className='relative'>
-                                <Disclosure.Button
-                                    className='flex h-6 w-full flex-row items-center justify-between focus:outline-none'
-                                    data-testid='disclaimer-button'
-                                >
-                                    <h2 className='typography-hairline-2 text-neutral-8'>
-                                        Circuit Breaker Disclaimer
-                                    </h2>
-                                    <ExpandIndicator expanded={open} />
-                                </Disclosure.Button>
-                                <Transition
-                                    show={open}
-                                    enter='transition duration-100 ease-out'
-                                    enterFrom='transform scale-95 opacity-0'
-                                    enterTo='transform scale-100 opacity-100'
-                                >
-                                    <Disclosure.Panel data-testid='disclaimer-text'>
-                                        <div className='typography-caption pt-3 text-secondary7'>
-                                            <span>
-                                                Circuit breaker will be
-                                                triggered if the order is filled
-                                                at over
-                                            </span>
-                                            <span className='font-semibold text-white'>
-                                                {` ${divide(slippage, 100)} `}
-                                            </span>
-                                            <span>
-                                                which is the max slippage level
-                                                at 1 block.
-                                            </span>
-                                        </div>
-                                    </Disclosure.Panel>
-                                </Transition>
-                            </div>
-                        </>
-                    )}
-                </Disclosure>
+                <>
+                    <CollateralSimulationSection collateral={collateral} />
+                    <SectionWithItems
+                        itemList={[
+                            [
+                                <FeeItem key={maturity.toString()} />,
+                                prefixTilde(
+                                    calculateFee(maturity.toNumber(), orderFee)
+                                ),
+                            ],
+                        ]}
+                    />
+                    <Disclosure>
+                        {({ open }) => (
+                            <>
+                                <div className='relative'>
+                                    <Disclosure.Button
+                                        className='flex h-6 w-full flex-row items-center justify-between focus:outline-none'
+                                        data-testid='disclaimer-button'
+                                    >
+                                        <h2 className='typography-hairline-2 text-neutral-8'>
+                                            Circuit Breaker Disclaimer
+                                        </h2>
+                                        <ExpandIndicator expanded={open} />
+                                    </Disclosure.Button>
+                                    <Transition
+                                        show={open}
+                                        enter='transition duration-100 ease-out'
+                                        enterFrom='transform scale-95 opacity-0'
+                                        enterTo='transform scale-100 opacity-100'
+                                    >
+                                        <Disclosure.Panel data-testid='disclaimer-text'>
+                                            <div className='typography-caption pt-3 text-secondary7'>
+                                                <span>
+                                                    Circuit breaker will be
+                                                    triggered if the order is
+                                                    filled at over
+                                                </span>
+                                                <span className='font-semibold text-white'>
+                                                    {` ${divide(
+                                                        slippage,
+                                                        100
+                                                    )} `}
+                                                </span>
+                                                <span>
+                                                    which is the max slippage
+                                                    level at 1 block.
+                                                </span>
+                                            </div>
+                                        </Disclosure.Panel>
+                                    </Transition>
+                                </div>
+                            </>
+                        )}
+                    </Disclosure>
+                </>
             )}
         </div>
     );
