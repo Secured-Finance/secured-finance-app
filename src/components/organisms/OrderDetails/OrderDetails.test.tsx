@@ -85,9 +85,17 @@ describe('OrderDetails Component', () => {
         ).not.toBeInTheDocument();
     });
 
-    it('should display a warning when specified with the market currentMinDebtUnitPrice', async () => {
-        render(<UnderMinimumCollateralThreshold />);
-        expect(await screen.findByRole('alert')).toBeInTheDocument();
-        expect(screen.getByText('95.00')).toBeInTheDocument();
+    describe('Minimum Collateral Threshold', () => {
+        it('should display a warning when specified with the market currentMinDebtUnitPrice', async () => {
+            render(<UnderMinimumCollateralThreshold />);
+            expect(await screen.findByRole('alert')).toBeInTheDocument();
+            expect(screen.getByText('95.00')).toBeInTheDocument();
+        });
+
+        it('should display the adjusted PV', async () => {
+            render(<UnderMinimumCollateralThreshold />);
+            expect(await screen.findByRole('alert')).toBeInTheDocument();
+            expect(screen.getByText('9,500 USDC')).toBeInTheDocument();
+        });
     });
 });
