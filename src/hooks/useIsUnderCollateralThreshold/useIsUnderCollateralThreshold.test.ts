@@ -31,8 +31,8 @@ describe('useIsUnderCollateralThreshold', () => {
         });
     });
 
-    describe('Lend Position', () => {
-        it('return false if the price is higher than currentMinDebtUnitPrice and the position is lend', async () => {
+    describe('When OrderSide is Lend', () => {
+        it('should always return false whatever the price', async () => {
             const { result, waitForNextUpdate } = renderHook(() =>
                 useIsUnderCollateralThreshold('0xff')
             );
@@ -45,13 +45,7 @@ describe('useIsUnderCollateralThreshold', () => {
                     OrderSide.LEND
                 )
             ).toBe(false);
-        });
 
-        it('return false if the price is lower than currentMinDebtUnitPrice and the position is lend', async () => {
-            const { result, waitForNextUpdate } = renderHook(() =>
-                useIsUnderCollateralThreshold('0xff')
-            );
-            await waitForNextUpdate();
             expect(
                 result.current(
                     CurrencySymbol.USDC,
@@ -96,15 +90,17 @@ describe('useIsUnderCollateralThreshold', () => {
         });
     });
 
-    describe('Lend Position', () => {
-        it('return false if the price is higher than currentMinDebtUnitPrice in a currency where the user has an active lend position', async () => {
+    describe('when user has an active lend position', () => {
+        it('returns false when price is higher than currentMinDebtUnitPrice', async () => {
             const { result, waitForNextUpdate } = renderHook(() =>
                 useIsUnderCollateralThreshold('0xff')
             );
             await waitForNextUpdate();
+            await waitForNextUpdate();
+
             expect(
                 result.current(
-                    CurrencySymbol.USDC,
+                    CurrencySymbol.WFIL,
                     dec22Fixture.toNumber(),
                     9800,
                     OrderSide.BORROW
@@ -112,29 +108,36 @@ describe('useIsUnderCollateralThreshold', () => {
             ).toBe(false);
         });
 
-        it('return false if the price is lower than currentMinDebtUnitPrice in a currency where the user has an active lend position', async () => {
+        it('returns false when price is lower than currentMinDebtUnitPrice', async () => {
             const { result, waitForNextUpdate } = renderHook(() =>
                 useIsUnderCollateralThreshold('0xff')
             );
             await waitForNextUpdate();
+            await waitForNextUpdate();
+
             expect(
                 result.current(
-                    CurrencySymbol.USDC,
+                    CurrencySymbol.WFIL,
                     dec22Fixture.toNumber(),
                     9200,
                     OrderSide.BORROW
                 )
-            ).toBe(false);
+            ).toBe(true);
         });
+    });
 
-        it('return false if the price is higher than currentMinDebtUnitPrice in a currency where the user does not have an active lend position', async () => {
+    describe('when user does not have an active lend position', () => {
+        it('returns false when price is higher than currentMinDebtUnitPrice', async () => {
             const { result, waitForNextUpdate } = renderHook(() =>
                 useIsUnderCollateralThreshold('0xff')
             );
+
             await waitForNextUpdate();
+            await waitForNextUpdate();
+
             expect(
                 result.current(
-                    CurrencySymbol.WFIL,
+                    CurrencySymbol.USDC,
                     dec22Fixture.toNumber(),
                     9800,
                     OrderSide.BORROW
@@ -142,14 +145,17 @@ describe('useIsUnderCollateralThreshold', () => {
             ).toBe(false);
         });
 
-        it('return false if the price is lower than currentMinDebtUnitPrice in a currency where the user does not have an active lend position', async () => {
+        it('returns false when price is lower than currentMinDebtUnitPrice', async () => {
             const { result, waitForNextUpdate } = renderHook(() =>
                 useIsUnderCollateralThreshold('0xff')
             );
+
             await waitForNextUpdate();
+            await waitForNextUpdate();
+
             expect(
                 result.current(
-                    CurrencySymbol.WFIL,
+                    CurrencySymbol.USDC,
                     dec22Fixture.toNumber(),
                     9200,
                     OrderSide.BORROW
