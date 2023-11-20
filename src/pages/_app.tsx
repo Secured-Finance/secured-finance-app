@@ -6,18 +6,16 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import 'src/bigIntPatch';
 import { Footer } from 'src/components/atoms';
 import { Header } from 'src/components/organisms';
 import { Layout } from 'src/components/templates';
 import SecuredFinanceProvider from 'src/contexts/SecuredFinanceProvider';
 import store from 'src/store';
-import {
-    getAmplitudeApiKey,
-    getEthereumNetwork,
-    getWalletConnectId,
-} from 'src/utils';
+import { selectNetworkName } from 'src/store/blockchain';
+import { RootState } from 'src/store/types';
+import { getAmplitudeApiKey, getWalletConnectId } from 'src/utils';
 import { WagmiConfig, configureChains, createConfig, sepolia } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
@@ -107,11 +105,13 @@ function App({ Component, pageProps }: AppProps) {
 }
 
 const Providers: React.FC = ({ children }) => {
-    const network = getEthereumNetwork();
+    const currentNetwork = useSelector((state: RootState) =>
+        selectNetworkName(state)
+    );
 
     return (
         <QueryClientProvider client={queryClient}>
-            <GraphClientProvider network={network}>
+            <GraphClientProvider network={currentNetwork}>
                 <WagmiConfig config={config}>
                     <SecuredFinanceProvider>{children}</SecuredFinanceProvider>
                 </WagmiConfig>

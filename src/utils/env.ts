@@ -1,16 +1,22 @@
 import assert from 'assert';
 import { Environment } from './strings';
 
-export const getEthereumNetwork = (): string => {
-    const network = process.env.NEXT_PUBLIC_ETHEREUM_NETWORK;
-    assert(network, 'NEXT_PUBLIC_ETHEREUM_NETWORK is not set');
-    return network;
+export const getMainnetChainId = (): number => {
+    const chainId = process.env.NEXT_PUBLIC_MAINNET_CHAIN_ID;
+    assert(chainId, 'NEXT_PUBLIC_MAINNET_CHAIN_ID is not set');
+    return parseInt(chainId, 10);
 };
 
-export const getEthereumChainId = (): number => {
-    const chainId = process.env.NEXT_PUBLIC_ETHEREUM_CHAIN_ID;
-    assert(chainId, 'NEXT_PUBLIC_ETHEREUM_CHAIN_ID is not set');
-    return parseInt(chainId, 10);
+export const getSupportedNetworks = (): string[] => {
+    const network = process.env.NEXT_PUBLIC_SUPPORTED_NETWORKS;
+    assert(network, 'NEXT_PUBLIC_SUPPORTED_NETWORKS is not set');
+    return network.split(',');
+};
+
+export const getSupportedChainIds = (): number[] => {
+    const network = process.env.NEXT_PUBLIC_SUPPORTED_CHAIN_IDS;
+    assert(network, 'NEXT_PUBLIC_SUPPORTED_CHAIN_IDS is not set');
+    return network.split(',').map(n => parseInt(n, 10));
 };
 
 export const getWalletConnectId = () => {
