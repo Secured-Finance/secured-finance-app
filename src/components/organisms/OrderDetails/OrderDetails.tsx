@@ -12,8 +12,8 @@ import {
     AmountCard,
     CollateralSimulationSection,
     DelistedCurrencyDisclaimer,
+    InfoToolTip,
 } from 'src/components/molecules';
-import { Tooltip } from 'src/components/templates';
 import { CollateralBook, useMarket, useOrderFee } from 'src/hooks';
 import {
     calculateFee,
@@ -28,10 +28,10 @@ const FeeItem = () => {
     return (
         <div className='flex flex-row items-center gap-1'>
             <div className='text-planetaryPurple'>Transaction Fee %</div>
-            <Tooltip>
+            <InfoToolTip>
                 A duration-based transaction fee only for market takers,
                 factored into the bond price, and deducted from its future value
-            </Tooltip>
+            </InfoToolTip>
         </div>
     );
 };
