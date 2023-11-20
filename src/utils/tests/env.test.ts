@@ -3,40 +3,63 @@ import {
     getAmplitudeApiKey,
     getCommitHash,
     getEnvironment,
-    getEthereumChainId,
-    getEthereumNetwork,
+    getMainnetChainId,
+    getSupportedChainIds,
+    getSupportedNetworks,
     getUsePackageVersion,
     getWalletConnectId,
 } from 'src/utils';
 
-describe('getEthereumNetwork', () => {
+describe('getMainnetChainId', () => {
     it('should return the value of the environment variable', () => {
-        process.env.NEXT_PUBLIC_ETHEREUM_NETWORK = 'sepolia';
-        const network = getEthereumNetwork();
-        expect(network).toBe('sepolia');
-        expect(typeof network).toBe('string');
+        process.env.NEXT_PUBLIC_MAINNET_CHAIN_ID = '1';
+        const network = getMainnetChainId();
+        expect(network).toBe(1);
+        expect(typeof network).toBe('number');
     });
 
     it('should throw error if variable is not set', () => {
-        process.env.NEXT_PUBLIC_ETHEREUM_NETWORK = '';
-        expect(() => getEthereumNetwork()).toThrowError(
-            'NEXT_PUBLIC_ETHEREUM_NETWORK is not set'
+        process.env.NEXT_PUBLIC_MAINNET_CHAIN_ID = '';
+        expect(() => getMainnetChainId()).toThrowError(
+            'NEXT_PUBLIC_MAINNET_CHAIN_ID is not set'
         );
     });
 });
 
-describe('getEthereumChainId ', () => {
+describe('getSupportedNetworks', () => {
     it('should return the value of the environment variable', () => {
-        process.env.NEXT_PUBLIC_ETHEREUM_CHAIN_ID = '5';
-        const chainId = getEthereumChainId();
-        expect(chainId).toBe(5);
-        expect(typeof chainId).toBe('number');
+        process.env.NEXT_PUBLIC_SUPPORTED_NETWORKS = 'mainnet,sepolia';
+        const networks = getSupportedNetworks();
+        expect(networks.length).toBe(2);
+        expect(networks[0]).toBe('mainnet');
+        expect(typeof networks[0]).toBe('string');
+        expect(networks[1]).toBe('sepolia');
+        expect(typeof networks[1]).toBe('string');
     });
 
     it('should throw error if variable is not set', () => {
-        process.env.NEXT_PUBLIC_ETHEREUM_CHAIN_ID = '';
-        expect(() => getEthereumChainId()).toThrowError(
-            'NEXT_PUBLIC_ETHEREUM_CHAIN_ID is not set'
+        process.env.NEXT_PUBLIC_SUPPORTED_NETWORKS = '';
+        expect(() => getSupportedNetworks()).toThrowError(
+            'NEXT_PUBLIC_SUPPORTED_NETWORKS is not set'
+        );
+    });
+});
+
+describe('getSupportedChainIds ', () => {
+    it('should return the value of the environment variable', () => {
+        process.env.NEXT_PUBLIC_SUPPORTED_CHAIN_IDS = '5,11155111';
+        const chainIds = getSupportedChainIds();
+        expect(chainIds.length).toBe(2);
+        expect(chainIds[0]).toBe(5);
+        expect(typeof chainIds[0]).toBe('number');
+        expect(chainIds[1]).toBe(11155111);
+        expect(typeof chainIds[1]).toBe('number');
+    });
+
+    it('should throw error if variable is not set', () => {
+        process.env.NEXT_PUBLIC_SUPPORTED_CHAIN_IDS = '';
+        expect(() => getSupportedChainIds()).toThrowError(
+            'NEXT_PUBLIC_SUPPORTED_CHAIN_IDS is not set'
         );
     });
 });
