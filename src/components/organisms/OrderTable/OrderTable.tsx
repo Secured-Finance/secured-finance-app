@@ -2,7 +2,7 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { createColumnHelper } from '@tanstack/react-table';
 import { useMemo, useState } from 'react';
 import { CoreTable, TableActionMenu } from 'src/components/molecules';
-import { CancelOrderDialog } from 'src/components/organisms';
+import { RemoveOrderDialog } from 'src/components/organisms';
 import { Order } from 'src/hooks';
 import { hexToCurrencySymbol } from 'src/utils';
 import { Amount, Maturity } from 'src/utils/entities';
@@ -29,7 +29,7 @@ export const OrderTable = ({
     variant?: 'compact' | 'default';
     height?: number;
 }) => {
-    const [cancelOrderDialogData, setCancelOrderDialogData] = useState<{
+    const [removeOrderDialogData, setRemoveOrderDialogData] = useState<{
         orderId: bigint;
         maturity: Maturity;
         amount: Amount;
@@ -98,7 +98,7 @@ export const OrderTable = ({
                                     {
                                         text: 'Cancel Order',
                                         onClick: () => {
-                                            setCancelOrderDialogData({
+                                            setRemoveOrderDialogData({
                                                 orderId:
                                                     info.row.original.orderId,
                                                 maturity: new Maturity(
@@ -143,12 +143,12 @@ export const OrderTable = ({
                     },
                 }}
             />
-            {cancelOrderDialogData && (
-                <CancelOrderDialog
-                    {...cancelOrderDialogData}
+            {removeOrderDialogData && (
+                <RemoveOrderDialog
+                    {...removeOrderDialogData}
                     onClose={() =>
-                        setCancelOrderDialogData({
-                            ...cancelOrderDialogData,
+                        setRemoveOrderDialogData({
+                            ...removeOrderDialogData,
                             isOpen: false,
                         })
                     }

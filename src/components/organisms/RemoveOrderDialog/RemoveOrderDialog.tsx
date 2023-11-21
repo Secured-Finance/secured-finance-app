@@ -38,22 +38,22 @@ const stateRecord: Record<Step, State> = {
     [Step.confirm]: {
         currentStep: Step.confirm,
         nextStep: Step.processing,
-        title: 'Cancel Order',
+        title: 'Remove Order',
         description: '',
-        buttonText: 'Confirm',
+        buttonText: 'OK',
     },
     [Step.processing]: {
         currentStep: Step.processing,
         nextStep: Step.cancelled,
-        title: 'Cancelling Order...',
+        title: 'Removing Order...',
         description: '',
         buttonText: '',
     },
     [Step.cancelled]: {
         currentStep: Step.cancelled,
         nextStep: Step.confirm,
-        title: 'Cancelled!',
-        description: 'Your order was successfully cancelled.',
+        title: 'Removed!',
+        description: 'Your order was successfully removed.',
         buttonText: 'OK',
     },
     [Step.error]: {
@@ -87,7 +87,7 @@ const reducer = (
     }
 };
 
-export const CancelOrderDialog = ({
+export const RemoveOrderDialog = ({
     isOpen,
     onClose,
     amount,
@@ -107,7 +107,7 @@ export const CancelOrderDialog = ({
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [txHash, setTxHash] = useState<string | undefined>();
     const [errorMessage, setErrorMessage] = useState(
-        'Your order could not be cancelled.'
+        'Your order could not be removed.'
     );
     const globalDispatch = useDispatch();
 

@@ -1,7 +1,6 @@
 export * from './ActiveTradeTable';
 export * from './AdvancedLending';
 export * from './AdvancedLendingOrderCard';
-export * from './CancelOrderDialog';
 export * from './CollateralInput';
 export * from './CollateralOrganism';
 export * from './CollateralTab';
@@ -22,6 +21,7 @@ export * from './OrderDetails';
 export * from './OrderHistoryTable';
 export * from './OrderTable';
 export * from './PlaceOrder';
+export * from './RemoveOrderDialog';
 export * from './UnwindDialog';
 export * from './WalletDialog';
 export * from './WalletPopover';
