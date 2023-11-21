@@ -310,7 +310,7 @@ export const ActiveTradeTable = ({
                 columns={isTablet ? columnsForTabletMobile : columns}
                 options={{
                     name: 'active-trade-table',
-                    stickyColumns: new Set<number>([6]),
+                    stickyFirstColumn: true,
                     pagination: {
                         containerHeight: height || DEFAULT_HEIGHT,
                         getMoreData: () => {},

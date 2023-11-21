@@ -242,7 +242,7 @@ export const MarketLoanWidget = ({
                             data={getFilteredMarkets(openMarkets)}
                             options={{
                                 hideColumnIds: ['openingDate'],
-                                stickyColumns: new Set([3]),
+                                stickyFirstColumn: true,
                             }}
                         />
                     </div>
@@ -253,7 +253,7 @@ export const MarketLoanWidget = ({
                         data={getFilteredMarkets(filteredItayoseMarkets)}
                         options={{
                             hideColumnIds: ['apr'],
-                            stickyColumns: new Set([3]),
+                            stickyFirstColumn: true,
                         }}
                     />
                 </div>

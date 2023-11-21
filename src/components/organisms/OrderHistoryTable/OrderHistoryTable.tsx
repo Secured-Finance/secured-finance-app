@@ -126,7 +126,7 @@ export const OrderHistoryTable = ({
             data={data}
             options={{
                 name: 'order-history-table',
-                stickyColumns: new Set([7]),
+                stickyFirstColumn: true,
                 pagination: pagination,
             }}
         />
