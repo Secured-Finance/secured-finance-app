@@ -10,7 +10,6 @@ import {
 } from 'src/utils';
 import { emptyCollateralBook, useCollateralBook } from '../useCollateralBook';
 import { useCurrenciesForOrders } from '../useCurrenciesForOrders';
-import { useOrderEstimation } from '../useOrderEstimation';
 import { usePositions } from '../usePositions';
 
 export const useZCUsage = (address: UserAccount) => {
@@ -18,20 +17,15 @@ export const useZCUsage = (address: UserAccount) => {
     const { data: position } = usePositions(address, usedCurrencies);
     const { data: collateralBook = emptyCollateralBook } =
         useCollateralBook(address);
-    const { data: orderEstimationInfo } = useOrderEstimation(address);
     const assetPriceMap = useSelector((state: RootState) => getPriceMap(state));
 
     const getZCUsage = (
         maturity: number,
         currency: CurrencySymbol,
-        amount: number
+        filledAmount: number
     ) => {
         let estimatedBorrowPV = 0;
         let estimatedLendPV = 0;
-
-        const filledAmount = amountFormatterFromBase[currency](
-            orderEstimationInfo?.filledAmount ?? BigInt(0)
-        );
 
         if (filledAmount > 0) {
             estimatedLendPV = filledAmount;
@@ -39,31 +33,51 @@ export const useZCUsage = (address: UserAccount) => {
             estimatedBorrowPV = filledAmount;
         }
 
-        const offsetPV = Math.min(getZCOffsetPV(maturity, currency), amount);
+        const offsetPV = Math.min(
+            getPVInMaturity(maturity, currency),
+            filledAmount
+        );
+
+        const denominator =
+            position?.totalLendPV ?? 0 + estimatedLendPV - offsetPV;
+
+        if (denominator === 0) {
+            return 0;
+        }
 
         const usage =
             ((position?.totalBorrowPV ?? 0 + estimatedBorrowPV - offsetPV) *
                 collateralBook.collateralThreshold) /
-            (position?.totalLendPV ?? 0 + estimatedLendPV - offsetPV);
+            denominator;
 
         return usage;
     };
 
-    const getZCOffsetPV = useCallback(
+    const getPVInMaturity = useCallback(
         (maturity: number, currency: CurrencySymbol) => {
-            const offsetPV = position?.positions.reduce((prev, pos) => {
-                if (pos.maturity === maturity.toString()) {
-                    const ccy = hexToCurrencySymbol(pos.currency);
-                    if (ccy) {
-                        prev +=
-                            amountFormatterFromBase[ccy](pos.amount) *
-                            assetPriceMap[ccy];
-                    }
-                }
-                return prev;
-            }, 0);
+            const positionInMaturity = position?.positions.find(
+                pos => pos.maturity === maturity.toString()
+            );
 
-            return (offsetPV ?? 0) / assetPriceMap[currency];
+            if (positionInMaturity) {
+                const formattedAmount = amountFormatterFromBase[currency](
+                    positionInMaturity.amount
+                );
+
+                const positionCcy = hexToCurrencySymbol(
+                    positionInMaturity.currency
+                );
+
+                if (!positionCcy) {
+                    return 0;
+                }
+
+                return (
+                    (formattedAmount * assetPriceMap[positionCcy]) /
+                    assetPriceMap[currency]
+                );
+            }
+            return 0;
         },
         [assetPriceMap, position?.positions]
     );

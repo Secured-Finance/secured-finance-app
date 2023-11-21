@@ -7,6 +7,7 @@ import {
 import { CollateralBook, useOrderEstimation } from 'src/hooks';
 import { useZCUsage } from 'src/hooks/useZCUsage/useZCUsage';
 import {
+    amountFormatterFromBase,
     formatAmount,
     formatCollateralRatio,
     formatLoanValue,
@@ -36,8 +37,12 @@ export const CollateralSimulationSection = ({
 
     const getZCUsage = useZCUsage(address);
 
+    const filledAmount = amountFormatterFromBase[tradeAmount.currency](
+        orderEstimationInfo?.filledAmount ?? BigInt(0)
+    );
+
     const zcUsage = formatCollateralRatio(
-        getZCUsage(maturity.toNumber(), tradeAmount.currency, tradeAmount.value)
+        getZCUsage(maturity.toNumber(), tradeAmount.currency, filledAmount)
     );
 
     const coverage = useMemo(
