@@ -1,5 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
+import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './CollateralSimulationSection.stories';
@@ -54,6 +55,14 @@ describe('CollateralSimulationSection Component', () => {
         await waitFor(() => {
             expect(screen.getByText('55%')).toBeInTheDocument();
             expect(screen.getByText('55%')).toHaveClass('text-progressBarVia');
+        });
+    });
+
+    it('should display ZC usage', async () => {
+        render(<Trade />, { preloadedState: preloadedAssetPrices });
+        expect(screen.getByText('ZC Usage')).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.getByText('-2.96%')).toBeInTheDocument();
         });
     });
 });

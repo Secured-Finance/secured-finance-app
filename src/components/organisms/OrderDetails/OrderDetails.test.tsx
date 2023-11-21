@@ -1,5 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
+import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './OrderDetails.stories';
@@ -89,5 +90,13 @@ describe('OrderDetails Component', () => {
         render(<UnderMinimumCollateralThreshold />);
         expect(await screen.findByRole('alert')).toBeInTheDocument();
         expect(screen.getByText('95.00')).toBeInTheDocument();
+    });
+
+    it('should display ZC usage', async () => {
+        render(<Default />, { preloadedState: preloadedAssetPrices });
+        expect(screen.getByText('ZC Usage')).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.getByText('-2.96%')).toBeInTheDocument();
+        });
     });
 });
