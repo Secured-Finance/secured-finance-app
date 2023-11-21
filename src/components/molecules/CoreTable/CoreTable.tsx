@@ -134,7 +134,7 @@ export const CoreTable = <T,>({
                                     className={classNames(
                                         'whitespace-nowrap py-2 pr-1 text-center font-bold tablet:px-1',
                                         {
-                                            'sticky left-0 z-10 bg-gunMetal/100 after:absolute after:-right-4 after:-top-0 after:z-10 after:h-full after:w-5 after:bg-gradient-to-r after:from-black/20 after:to-gunMetal/20 tablet:relative tablet:left-auto tablet:z-auto tablet:bg-transparent tablet:after:hidden':
+                                            'sticky left-0 z-10 bg-[#161E2E] after:absolute after:-right-4 after:-top-0 after:z-10 after:h-full after:w-5 after:bg-gradient-to-r after:from-black-40 after:to-transparent tablet:relative tablet:left-auto tablet:z-auto tablet:bg-transparent tablet:after:hidden':
                                                 coreTableOptions.responsive &&
                                                 columnIndex === 0 &&
                                                 coreTableOptions?.stickyFirstColumn,
@@ -182,7 +182,7 @@ export const CoreTable = <T,>({
                                 className={classNames(
                                     'min-w-fit whitespace-nowrap pr-1 text-center font-medium tablet:px-1',
                                     {
-                                        'sticky left-0 z-10 bg-gunMetal/100 after:absolute after:-right-4 after:-top-0 after:z-10 after:h-full after:w-5 after:bg-gradient-to-r after:from-black/20 after:to-gunMetal/20 tablet:relative tablet:left-auto tablet:z-auto tablet:bg-transparent tablet:after:hidden':
+                                        'sticky left-0 z-10 bg-[#161E2E] after:absolute after:-right-4 after:-top-0 after:z-10 after:h-full after:w-5 after:bg-gradient-to-r after:from-black-40 after:to-transparent tablet:relative tablet:left-auto tablet:z-auto tablet:bg-transparent tablet:after:hidden':
                                             coreTableOptions.responsive &&
                                             cellIndex === 0 &&
                                             coreTableOptions?.stickyFirstColumn,
