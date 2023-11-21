@@ -5,11 +5,11 @@ import type { Meta, StoryFn } from '@storybook/react';
 import { dec22Fixture } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
 import { Amount } from 'src/utils/entities';
-import { CancelOrderDialog } from './CancelOrderDialog';
+import { RemoveOrderDialog } from './RemoveOrderDialog';
 
 export default {
-    title: 'Organism/CancelOrderDialog',
-    component: CancelOrderDialog,
+    title: 'Organism/RemoveOrderDialog',
+    component: RemoveOrderDialog,
     args: {
         isOpen: true,
         onClose: () => {},
@@ -27,10 +27,10 @@ export default {
         },
         connected: true,
     },
-} as Meta<typeof CancelOrderDialog>;
+} as Meta<typeof RemoveOrderDialog>;
 
-const Template: StoryFn<typeof CancelOrderDialog> = args => (
-    <CancelOrderDialog {...args} />
+const Template: StoryFn<typeof RemoveOrderDialog> = args => (
+    <RemoveOrderDialog {...args} />
 );
 
 export const Default = Template.bind({});

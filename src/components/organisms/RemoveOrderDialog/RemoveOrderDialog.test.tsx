@@ -1,21 +1,21 @@
 import { composeStories } from '@storybook/react';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { render, screen, waitFor } from 'src/test-utils.js';
-import * as stories from './CancelOrderDialog.stories';
+import * as stories from './RemoveOrderDialog.stories';
 
 const { Default } = composeStories(stories);
 
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-describe('CancelOrderDialog Component', () => {
-    it('should render a CancelOrderDialog', async () => {
+describe('RemoveOrderDialog Component', () => {
+    it('should render a RemoveOrderDialog', async () => {
         await waitFor(() => render(<Default />));
     });
 
     it('should call the cancelLendingOrder function when the button is clicked', async () => {
         render(<Default />);
-        screen.getByText('Confirm').click();
+        screen.getByText('OK').click();
         await waitFor(() =>
             expect(mockSecuredFinance.cancelLendingOrder).toHaveBeenCalled()
         );
@@ -28,7 +28,7 @@ describe('CancelOrderDialog Component', () => {
         const spy = jest.spyOn(console, 'error').mockImplementation();
         render(<Default />);
 
-        screen.getByText('Confirm').click();
+        screen.getByText('OK').click();
         await waitFor(() =>
             expect(mockSecuredFinance.cancelLendingOrder).toHaveBeenCalled()
         );
@@ -42,8 +42,8 @@ describe('CancelOrderDialog Component', () => {
     it('should update the lastActionTimestamp in the store when the transaction receipt is received', async () => {
         const { store } = render(<Default />);
         expect(store.getState().blockchain.lastActionTimestamp).toEqual(0);
-        screen.getByText('Confirm').click();
-        expect(await screen.findByText('Cancelled!')).toBeInTheDocument();
+        screen.getByText('OK').click();
+        expect(await screen.findByText('Removed!')).toBeInTheDocument();
         expect(store.getState().blockchain.lastActionTimestamp).toBeTruthy();
     });
 
