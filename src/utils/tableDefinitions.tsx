@@ -8,14 +8,10 @@ import {
 } from '@tanstack/react-table';
 import classNames from 'classnames';
 import { Chip, CurrencyItem, PriceYieldItem } from 'src/components/atoms';
-import {
-    InfoToolTip,
-    TableContractCell,
-    TableHeader,
-} from 'src/components/molecules';
+import { TableContractCell, TableHeader } from 'src/components/molecules';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
 import { Alignment, ColorFormat } from 'src/types';
-import { ZERO_BI, formatTimestamp, formatWithCurrency } from 'src/utils';
+import { ZERO_BI, formatTimestamp } from 'src/utils';
 import {
     CurrencySymbol,
     currencyMap,
@@ -139,21 +135,12 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
                         minDecimals={currencyMap[ccy].roundingDecimal}
                         maxDecimals={currencyMap[ccy].roundingDecimal}
                         showCurrency={options.showCurrency}
+                        warning={
+                            info.row.original.underMinimalCollateral
+                                ? 'Under Minimum Collateral Threshold'
+                                : undefined
+                        }
                     />
-                    {info.row.original.underMinimalCollateral && (
-                        <InfoToolTip iconColor='yellow'>
-                            <p>
-                                {`While PV is ${formatWithCurrency(
-                                    amount,
-                                    ccy
-                                )}, your adjusted PV is ${formatWithCurrency(
-                                    amount,
-                                    ccy
-                                )}
-                                due to minimum collateral threshold. `}
-                            </p>
-                        </InfoToolTip>
-                    )}
                 </div>
             );
             if (align !== 'right') {

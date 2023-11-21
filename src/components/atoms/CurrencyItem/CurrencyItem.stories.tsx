@@ -68,3 +68,12 @@ ShowCurrency.args = {
     align: 'right',
     showCurrency: true,
 };
+
+export const Warning = Template.bind({});
+Warning.args = {
+    amount: 1000,
+    ccy: CurrencySymbol.WFIL,
+    price: 8.2,
+    align: 'right',
+    warning: 'Warning',
+};
