@@ -106,7 +106,7 @@ export const MyTransactionsTable = ({
                 columns={isTablet ? columnsForTabletMobile : columns}
                 options={{
                     name: 'my-transactions-table',
-                    stickyColumns: new Set([0, 1]),
+                    stickyFirstColumn: true,
                     pagination: pagination,
                 }}
             />

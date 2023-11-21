@@ -68,18 +68,16 @@ describe('CoreTable Component', () => {
 
     it('should have a sticky column and background-color if responsive is true', () => {
         render(
-            <Default
-                options={{ responsive: true, stickyColumns: new Set([5]) }}
-            />
+            <Default options={{ responsive: true, stickyFirstColumn: true }} />
         );
-        const header = screen.getAllByTestId('core-table-header-cell')[5];
+        const header = screen.getAllByTestId('core-table-header-cell')[0];
         expect(header).toHaveClass('sticky');
         expect(header).toHaveClass('bg-gunMetal/100');
     });
 
     it('should have not a sticky column if responsive is true', () => {
         render(<NonResponsive />);
-        const header = screen.getAllByTestId('core-table-header-cell')[5];
+        const header = screen.getAllByTestId('core-table-header-cell')[0];
         expect(header).not.toHaveClass('sticky');
         expect(header).not.toHaveClass('bg-gunMetal/100');
     });
