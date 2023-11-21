@@ -22,7 +22,7 @@ import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 enum Step {
     confirm = 1,
     processing,
-    cancelled,
+    removed,
     error,
 }
 
@@ -44,13 +44,13 @@ const stateRecord: Record<Step, State> = {
     },
     [Step.processing]: {
         currentStep: Step.processing,
-        nextStep: Step.cancelled,
+        nextStep: Step.removed,
         title: 'Removing Order...',
         description: '',
         buttonText: '',
     },
-    [Step.cancelled]: {
-        currentStep: Step.cancelled,
+    [Step.removed]: {
+        currentStep: Step.removed,
         nextStep: Step.confirm,
         title: 'Removed!',
         description: 'Your order was successfully removed.',
@@ -158,7 +158,7 @@ export const RemoveOrderDialog = ({
                     break;
                 case Step.processing:
                     break;
-                case Step.cancelled:
+                case Step.removed:
                     handleClose();
                     break;
                 case Step.error:
@@ -180,7 +180,7 @@ export const RemoveOrderDialog = ({
                         assetPrice={orderUnitPrice}
                         collateral={emptyCollateralBook}
                         loanValue={marketValue}
-                        isCancelOrder={true}
+                        isRemoveOrder={true}
                     />
                 );
             case Step.processing:
@@ -189,7 +189,7 @@ export const RemoveOrderDialog = ({
                         <Spinner />
                     </div>
                 );
-            case Step.cancelled:
+            case Step.removed:
                 return (
                     <SuccessPanel
                         itemList={[

@@ -96,7 +96,7 @@ export const OrderTable = ({
                             <TableActionMenu
                                 items={[
                                     {
-                                        text: 'Cancel Order',
+                                        text: 'Remove Order',
                                         onClick: () => {
                                             setRemoveOrderDialogData({
                                                 orderId:

@@ -57,7 +57,7 @@ Delisted.play = async ({ canvasElement }) => {
     await userEvent.click(button);
 };
 
-export const CancelOrder = Template.bind({});
-CancelOrder.args = {
-    isCancelOrder: true,
+export const RemoveOrder = Template.bind({});
+RemoveOrder.args = {
+    isRemoveOrder: true,
 };
