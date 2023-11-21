@@ -21,7 +21,7 @@ describe('useZCUsage', () => {
         await waitFor(() => {
             expect(
                 result.current(dec22Fixture, CurrencySymbol.ETH, 10000)
-            ).toBe(-0.6674396257947266);
+            ).toBe(0);
         });
     });
 
@@ -35,7 +35,7 @@ describe('useZCUsage', () => {
         await waitForNextUpdate();
 
         expect(result.current(dec22Fixture, CurrencySymbol.ETH, -10000)).toBe(
-            -0.5872967667584317
+            0
         );
     });
 

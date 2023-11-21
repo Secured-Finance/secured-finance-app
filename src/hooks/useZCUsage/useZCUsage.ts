@@ -50,7 +50,7 @@ export const useZCUsage = (address: UserAccount) => {
                 collateralBook.collateralThreshold) /
             denominator;
 
-        return usage;
+        return Math.max(usage, 0);
     };
 
     const getPVInMaturity = useCallback(

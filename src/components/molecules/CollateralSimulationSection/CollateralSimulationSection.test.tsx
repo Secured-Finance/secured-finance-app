@@ -62,7 +62,7 @@ describe('CollateralSimulationSection Component', () => {
         render(<Trade />, { preloadedState: preloadedAssetPrices });
         expect(screen.getByText('ZC Usage')).toBeInTheDocument();
         await waitFor(() => {
-            expect(screen.getByText('-2.96%')).toBeInTheDocument();
+            expect(screen.getByText('0%')).toBeInTheDocument();
         });
     });
 });
