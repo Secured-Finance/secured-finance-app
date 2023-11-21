@@ -402,7 +402,10 @@ export const mockUseSF = () => {
         getOrderFeeRate: jest.fn(() => Promise.resolve(BigInt('100'))),
 
         getOrderEstimation: jest.fn(() =>
-            Promise.resolve({ coverage: BigInt(5500) })
+            Promise.resolve({
+                coverage: BigInt(5500),
+                filledAmount: BigInt(5000),
+            })
         ),
 
         currencyExists: jest.fn((currency: Currency) => {

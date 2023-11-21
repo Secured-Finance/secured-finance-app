@@ -39,14 +39,14 @@ export const useZCUsage = (address: UserAccount) => {
         );
 
         const denominator =
-            position?.totalLendPV ?? 0 + estimatedLendPV - offsetPV;
+            (position?.totalLendPV ?? 0) + estimatedLendPV - offsetPV;
 
         if (denominator === 0) {
             return 0;
         }
 
         const usage =
-            ((position?.totalBorrowPV ?? 0 + estimatedBorrowPV - offsetPV) *
+            (((position?.totalBorrowPV ?? 0) + estimatedBorrowPV - offsetPV) *
                 collateralBook.collateralThreshold) /
             denominator;
 
