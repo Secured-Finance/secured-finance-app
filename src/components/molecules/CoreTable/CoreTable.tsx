@@ -114,9 +114,10 @@ export const CoreTable = <T,>({
             {coreTableOptions.showHeaders ? (
                 <thead
                     className={classNames(
-                        'typography-caption-2 inset-0 px-6 text-slateGray',
+                        'typography-caption-2 sticky inset-0 z-10 bg-[#1D2739] px-6 text-slateGray',
                         {
-                            'border-b border-white-10': coreTableOptions.border,
+                            'after:absolute after:bottom-0 after:w-full after:border-b after:border-white-10':
+                                coreTableOptions.border,
                             'h-14 py-4': !coreTableOptions.compact,
                             'h-5 py-1': coreTableOptions.compact,
                         }
