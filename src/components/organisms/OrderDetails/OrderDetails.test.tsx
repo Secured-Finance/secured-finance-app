@@ -3,7 +3,7 @@ import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './OrderDetails.stories';
 
-const { Default, Delisted, CancelOrder } = composeStories(stories);
+const { Default, Delisted, RemoveOrder } = composeStories(stories);
 
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
@@ -70,8 +70,8 @@ describe('OrderDetails Component', () => {
         ).not.toBeInTheDocument();
     });
 
-    it('should not show collateral info when isCancelOrder is true', () => {
-        render(<CancelOrder />);
+    it('should not show collateral info when isRemoveOrder is true', () => {
+        render(<RemoveOrder />);
         expect(screen.queryByText('Collateral Usage')).not.toBeInTheDocument();
         expect(screen.queryByText('Borrow Remaining')).not.toBeInTheDocument();
     });

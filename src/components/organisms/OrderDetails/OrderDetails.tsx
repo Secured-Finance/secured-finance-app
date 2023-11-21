@@ -33,7 +33,7 @@ export const OrderDetails = ({
     collateral,
     loanValue,
     isCurrencyDelisted,
-    isCancelOrder = false,
+    isRemoveOrder = false,
 }: {
     amount: Amount;
     maturity: Maturity;
@@ -42,7 +42,7 @@ export const OrderDetails = ({
     collateral: CollateralBook;
     loanValue: LoanValue;
     isCurrencyDelisted?: boolean;
-    isCancelOrder?: boolean;
+    isRemoveOrder?: boolean;
 }) => {
     const { data: orderFee = 0 } = useOrderFee(amount.currency);
 
@@ -88,7 +88,7 @@ export const OrderDetails = ({
                     ['Maturity Date', formatDate(maturity.toNumber())],
                 ]}
             />
-            {!isCancelOrder && (
+            {!isRemoveOrder && (
                 <>
                     <CollateralSimulationSection collateral={collateral} />
                     <SectionWithItems
