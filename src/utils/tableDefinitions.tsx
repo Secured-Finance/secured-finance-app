@@ -334,7 +334,7 @@ export const contractColumnDefinition = <
                     : OrderSide.LEND;
             return (
                 <div
-                    className={classNames('flex px-3 tablet:px-0', {
+                    className={classNames('flex px-3', {
                         'justify-start': alignCell === 'left',
                         'justify-center': alignCell === 'center',
                         'justify-end': alignCell === 'right',

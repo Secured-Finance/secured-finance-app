@@ -236,27 +236,23 @@ export const MarketLoanWidget = ({
         <div className='h-fit min-h-[300px] rounded-b-2xl border border-white-10 bg-black-20 shadow-tab'>
             <Tab tabDataArray={tabDataArray}>
                 {!isGlobalItayose && (
-                    <div className='px-2'>
-                        <CoreTable
-                            columns={columns}
-                            data={getFilteredMarkets(openMarkets)}
-                            options={{
-                                hideColumnIds: ['openingDate'],
-                                stickyFirstColumn: true,
-                            }}
-                        />
-                    </div>
-                )}
-                <div className='px-2'>
                     <CoreTable
                         columns={columns}
-                        data={getFilteredMarkets(filteredItayoseMarkets)}
+                        data={getFilteredMarkets(openMarkets)}
                         options={{
-                            hideColumnIds: ['apr'],
+                            hideColumnIds: ['openingDate'],
                             stickyFirstColumn: true,
                         }}
                     />
-                </div>
+                )}
+                <CoreTable
+                    columns={columns}
+                    data={getFilteredMarkets(filteredItayoseMarkets)}
+                    options={{
+                        hideColumnIds: ['apr'],
+                        stickyFirstColumn: true,
+                    }}
+                />
             </Tab>
         </div>
     );

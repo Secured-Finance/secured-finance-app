@@ -31,7 +31,7 @@ export const Tab: React.FC<TabProps> = ({ tabDataArray, children }) => {
                 selectedIndex={selectedIndex}
                 onChange={setSelectedIndex}
             >
-                <div className='grid w-full grid-cols-1  border-b border-white-10 tablet:grid-cols-2'>
+                <div className='grid w-full grid-cols-1 border-b border-white-10 tablet:grid-cols-2'>
                     <HeadlessTab.List className='col-span-1 flex h-[60px] w-full'>
                         {tabDataArray.map((tabData, index) => {
                             return (
@@ -54,7 +54,7 @@ export const Tab: React.FC<TabProps> = ({ tabDataArray, children }) => {
                         <div className='col-span-1 h-full w-full'>{util}</div>
                     )}
                 </div>
-                <HeadlessTab.Panels>
+                <HeadlessTab.Panels className='h-full min-h-[25vh] rounded-b-2xl bg-[#161E2E] pb-2'>
                     {arrayChildren[selectedIndex]}
                 </HeadlessTab.Panels>
             </HeadlessTab.Group>
