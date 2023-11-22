@@ -56,3 +56,8 @@ Delisted.play = async ({ canvasElement }) => {
     const button = await canvas.findByTestId('disclaimer-button');
     await userEvent.click(button);
 };
+
+export const RemoveOrder = Template.bind({});
+RemoveOrder.args = {
+    isRemoveOrder: true,
+};
