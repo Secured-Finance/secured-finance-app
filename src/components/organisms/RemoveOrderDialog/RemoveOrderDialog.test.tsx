@@ -1,4 +1,5 @@
 import { composeStories } from '@storybook/react';
+import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './RemoveOrderDialog.stories';
@@ -62,5 +63,12 @@ describe('RemoveOrderDialog Component', () => {
         expect(
             screen.queryByText('Circuit Breaker Disclaimer')
         ).not.toBeInTheDocument();
+    });
+
+    it('should show correct price conversion and amount in USD', async () => {
+        render(<Default />, { preloadedState: preloadedAssetPrices });
+        expect(screen.getByText('WFIL')).toBeInTheDocument();
+        expect(screen.getByText('100')).toBeInTheDocument();
+        expect(screen.getByText('~ $600')).toBeInTheDocument();
     });
 });

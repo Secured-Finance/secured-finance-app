@@ -1,6 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
-import { useCallback, useReducer, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useCallback, useEffect, useReducer, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Spinner } from 'src/components/atoms';
 import {
     Dialog,
@@ -15,12 +15,14 @@ import {
     useHandleContractTransaction,
     useOrders,
 } from 'src/hooks';
+import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { setLastMessage } from 'src/store/lastError';
+import { RootState } from 'src/store/types';
 import { AddressUtils } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 
 enum Step {
-    confirm = 1,
+    remove = 1,
     processing,
     removed,
     error,
@@ -32,59 +34,6 @@ type State = {
     title: string;
     description: string;
     buttonText: string;
-};
-
-const stateRecord: Record<Step, State> = {
-    [Step.confirm]: {
-        currentStep: Step.confirm,
-        nextStep: Step.processing,
-        title: 'Remove Order',
-        description: '',
-        buttonText: 'OK',
-    },
-    [Step.processing]: {
-        currentStep: Step.processing,
-        nextStep: Step.removed,
-        title: 'Removing Order...',
-        description: '',
-        buttonText: '',
-    },
-    [Step.removed]: {
-        currentStep: Step.removed,
-        nextStep: Step.confirm,
-        title: 'Removed!',
-        description: 'Your order was successfully removed.',
-        buttonText: 'OK',
-    },
-    [Step.error]: {
-        currentStep: Step.error,
-        nextStep: Step.confirm,
-        title: 'Failed!',
-        description: '',
-        buttonText: 'OK',
-    },
-};
-
-const reducer = (
-    state: State,
-    action: {
-        type: string;
-    }
-) => {
-    switch (action.type) {
-        case 'next':
-            return {
-                ...stateRecord[state.nextStep],
-            };
-        case 'error':
-            return {
-                ...stateRecord[Step.error],
-            };
-        default:
-            return {
-                ...stateRecord[Step.confirm],
-            };
-    }
 };
 
 export const RemoveOrderDialog = ({
@@ -102,6 +51,66 @@ export const RemoveOrderDialog = ({
     side: OrderSide;
     orderUnitPrice: number;
 } & DialogState) => {
+    const stateRecord: Record<Step, State> = {
+        [Step.remove]: {
+            currentStep: Step.remove,
+            nextStep: Step.processing,
+            title: side === OrderSide.BORROW ? 'Remove Borrow' : 'Remove Lend',
+            description: '',
+            buttonText: 'OK',
+        },
+        [Step.processing]: {
+            currentStep: Step.processing,
+            nextStep: Step.removed,
+            title: 'Removing Order...',
+            description: '',
+            buttonText: '',
+        },
+        [Step.removed]: {
+            currentStep: Step.removed,
+            nextStep: Step.remove,
+            title: 'Removed!',
+            description: 'Your order was successfully removed.',
+            buttonText: 'OK',
+        },
+        [Step.error]: {
+            currentStep: Step.error,
+            nextStep: Step.remove,
+            title: 'Failed!',
+            description: '',
+            buttonText: 'OK',
+        },
+    };
+
+    const reducer = (
+        state: State,
+        action: {
+            type: string;
+        }
+    ) => {
+        switch (action.type) {
+            case 'next':
+                return {
+                    ...stateRecord[state.nextStep],
+                };
+            case 'error':
+                return {
+                    ...stateRecord[Step.error],
+                };
+            case 'updateSide':
+                const title =
+                    side === OrderSide.BORROW ? 'Remove Borrow' : 'Remove Lend';
+                return {
+                    ...stateRecord[Step.remove],
+                    title: title,
+                };
+            default:
+                return {
+                    ...stateRecord[Step.remove],
+                };
+        }
+    };
+
     const etherscanUrl = useEtherscanUrl();
     const handleContractTransaction = useHandleContractTransaction();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
@@ -111,10 +120,19 @@ export const RemoveOrderDialog = ({
     );
     const globalDispatch = useDispatch();
 
+    const priceList = useSelector((state: RootState) => getPriceMap(state));
+    const price = priceList[amount.currency];
+
     const marketValue = LoanValue.fromPrice(
         orderUnitPrice,
         maturity.toNumber()
     );
+
+    useEffect(() => {
+        if (state.currentStep === Step.remove) {
+            dispatch({ type: 'updateSide' });
+        }
+    }, [side, state.currentStep]);
 
     const { cancelOrder } = useOrders();
 
@@ -152,7 +170,7 @@ export const RemoveOrderDialog = ({
     const onClick = useCallback(
         async (currentStep: Step) => {
             switch (currentStep) {
-                case Step.confirm:
+                case Step.remove:
                     dispatch({ type: 'next' });
                     handleCancelOrder();
                     break;
@@ -171,13 +189,13 @@ export const RemoveOrderDialog = ({
 
     const renderSelection = () => {
         switch (state.currentStep) {
-            case Step.confirm:
+            case Step.remove:
                 return (
                     <OrderDetails
                         amount={amount}
                         maturity={maturity}
                         side={side}
-                        assetPrice={orderUnitPrice}
+                        assetPrice={price}
                         collateral={emptyCollateralBook}
                         loanValue={marketValue}
                         isRemoveOrder={true}
@@ -216,7 +234,7 @@ export const RemoveOrderDialog = ({
             onClose={handleClose}
             isOpen={isOpen}
             onClick={() => onClick(state.currentStep)}
-            showCancelButton={state.currentStep === Step.confirm}
+            showCancelButton={state.currentStep === Step.remove}
         >
             {renderSelection()}
         </Dialog>
