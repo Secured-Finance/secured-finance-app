@@ -61,3 +61,8 @@ export const UnderMinimumCollateralThreshold = Template.bind({});
 UnderMinimumCollateralThreshold.args = {
     showWarning: true,
 };
+
+export const RemoveOrder = Template.bind({});
+RemoveOrder.args = {
+    isRemoveOrder: true,
+};

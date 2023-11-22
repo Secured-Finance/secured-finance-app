@@ -46,6 +46,7 @@ export const OrderDetails = ({
     loanValue,
     showWarning,
     isCurrencyDelisted,
+    isRemoveOrder = false,
 }: {
     amount: Amount;
     maturity: Maturity;
@@ -55,6 +56,7 @@ export const OrderDetails = ({
     loanValue: LoanValue;
     showWarning?: boolean;
     isCurrencyDelisted?: boolean;
+    isRemoveOrder?: boolean;
 }) => {
     const { data: orderFee = 0 } = useOrderFee(amount.currency);
 
@@ -116,65 +118,80 @@ export const OrderDetails = ({
                     </p>
                 </Section>
             )}
-            <Section>
-                <AmountCard amount={amount} price={assetPrice} />
-            </Section>
-            <CollateralSimulationSection
-                collateral={collateral}
-                tradeAmount={amount}
-                side={side}
-                tradeValue={loanValue}
-            />
             <SectionWithItems
+                header={<AmountCard amount={amount} price={assetPrice} />}
                 itemList={[
-                    ['Maturity Date', formatDate(maturity.toNumber())],
                     [
-                        <FeeItem key={maturity.toString()} />,
+                        'Bond Price',
                         prefixTilde(
-                            calculateFee(maturity.toNumber(), orderFee)
+                            formatLoanValue(
+                                loanValue ?? LoanValue.ZERO,
+                                'price'
+                            )
                         ),
                     ],
+                    [
+                        'APR',
+                        prefixTilde(
+                            formatLoanValue(loanValue ?? LoanValue.ZERO, 'rate')
+                        ),
+                    ],
+                    ['Maturity Date', formatDate(maturity.toNumber())],
                 ]}
             />
-            <Disclosure>
-                {({ open }) => (
-                    <>
-                        <div className='relative'>
-                            <Disclosure.Button
-                                className='flex h-6 w-full flex-row items-center justify-between focus:outline-none'
-                                data-testid='disclaimer-button'
-                            >
-                                <h2 className='typography-hairline-2 text-neutral-8'>
-                                    Circuit Breaker Disclaimer
-                                </h2>
-                                <ExpandIndicator expanded={open} />
-                            </Disclosure.Button>
-                            <Transition
-                                show={open}
-                                enter='transition duration-100 ease-out'
-                                enterFrom='transform scale-95 opacity-0'
-                                enterTo='transform scale-100 opacity-100'
-                            >
-                                <Disclosure.Panel data-testid='disclaimer-text'>
-                                    <div className='typography-caption pt-3 text-secondary7'>
-                                        <span>
-                                            Circuit breaker will be triggered if
-                                            the order is filled at over
-                                        </span>
-                                        <span className='font-semibold text-white'>
-                                            {` ${divide(slippage, 100)} `}
-                                        </span>
-                                        <span>
-                                            which is the max slippage level at 1
-                                            block.
-                                        </span>
-                                    </div>
-                                </Disclosure.Panel>
-                            </Transition>
-                        </div>
-                    </>
-                )}
-            </Disclosure>
+            {!isRemoveOrder && (
+                <>
+                    <CollateralSimulationSection collateral={collateral} />
+                    <SectionWithItems
+                        itemList={[
+                            [
+                                <FeeItem key={maturity.toString()} />,
+                                prefixTilde(
+                                    calculateFee(maturity.toNumber(), orderFee)
+                                ),
+                            ],
+                        ]}
+                    />
+                    <Disclosure>
+                        {({ open }) => (
+                            <div className='relative'>
+                                <Disclosure.Button
+                                    className='flex h-6 w-full flex-row items-center justify-between focus:outline-none'
+                                    data-testid='disclaimer-button'
+                                >
+                                    <h2 className='typography-hairline-2 text-neutral-8'>
+                                        Circuit Breaker Disclaimer
+                                    </h2>
+                                    <ExpandIndicator expanded={open} />
+                                </Disclosure.Button>
+                                <Transition
+                                    show={open}
+                                    enter='transition duration-100 ease-out'
+                                    enterFrom='transform scale-95 opacity-0'
+                                    enterTo='transform scale-100 opacity-100'
+                                >
+                                    <Disclosure.Panel data-testid='disclaimer-text'>
+                                        <div className='typography-caption pt-3 text-secondary7'>
+                                            <span>
+                                                Circuit breaker will be
+                                                triggered if the order is filled
+                                                at over
+                                            </span>
+                                            <span className='font-semibold text-white'>
+                                                {` ${divide(slippage, 100)} `}
+                                            </span>
+                                            <span>
+                                                which is the max slippage level
+                                                at 1 block.
+                                            </span>
+                                        </div>
+                                    </Disclosure.Panel>
+                                </Transition>
+                            </div>
+                        )}
+                    </Disclosure>
+                </>
+            )}
         </div>
     );
 };

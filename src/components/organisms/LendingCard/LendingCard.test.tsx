@@ -59,7 +59,7 @@ describe('LendingCard Component', () => {
         );
     });
 
-    it('should open confirm order dialog when borrow button is clicked', async () => {
+    it('should open Confirm Borrow dialog when borrow button is clicked', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '10' } });
@@ -67,7 +67,7 @@ describe('LendingCard Component', () => {
             fireEvent.click(screen.getByTestId('place-order-button'));
         });
         expect(screen.getByRole('dialog')).toBeInTheDocument();
-        expect(screen.getByText('Confirm Order')).toBeInTheDocument();
+        expect(screen.getByText('Confirm Borrow')).toBeInTheDocument();
         const button = screen.getByTestId('dialog-action-button');
         expect(button).toHaveTextContent('OK');
     });
@@ -127,14 +127,14 @@ describe('LendingCard Component', () => {
         expect(screen.getByText(dateWithTimezone)).toBeInTheDocument();
     });
 
-    it('should open the confirm order dialog to place a market order when the borrow button is clicked', async () => {
+    it('should open the confirm borrow dialog to place a market order when the borrow button is clicked', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '10' } });
         await waitFor(() => {
             fireEvent.click(screen.getByTestId('place-order-button'));
         });
-        expect(screen.getByText('Confirm Order')).toBeInTheDocument();
+        expect(screen.getByText('Confirm Borrow')).toBeInTheDocument();
     });
 
     it('should support orders with decimal amounts', async () => {

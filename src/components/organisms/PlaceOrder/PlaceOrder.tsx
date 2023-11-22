@@ -1,7 +1,7 @@
 import { track } from '@amplitude/analytics-browser';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { getUTCMonthYear } from '@secured-finance/sf-core';
-import { useCallback, useReducer, useState } from 'react';
+import { useCallback, useEffect, useReducer, useState } from 'react';
 import { Spinner } from 'src/components/atoms';
 import {
     Dialog,
@@ -42,57 +42,6 @@ type State = {
     buttonText: string;
 };
 
-const stateRecord: Record<Step, State> = {
-    [Step.orderConfirm]: {
-        currentStep: Step.orderConfirm,
-        nextStep: Step.orderProcessing,
-        title: 'Confirm Order',
-        description: '',
-        buttonText: 'OK',
-    },
-    [Step.orderProcessing]: {
-        currentStep: Step.orderProcessing,
-        nextStep: Step.orderPlaced,
-        title: 'Placing Order...',
-        description: '',
-        buttonText: '',
-    },
-    [Step.orderPlaced]: {
-        currentStep: Step.orderPlaced,
-        nextStep: Step.orderConfirm,
-        title: 'Success!',
-        description: 'Your transaction request was successful.',
-        buttonText: 'OK',
-    },
-    [Step.error]: {
-        currentStep: Step.error,
-        nextStep: Step.orderConfirm,
-        title: 'Failed!',
-        description: '',
-        buttonText: 'OK',
-    },
-};
-
-const reducer = (
-    state: State,
-    action: {
-        type: string;
-    }
-) => {
-    switch (action.type) {
-        case 'next':
-            return {
-                ...stateRecord[state.nextStep],
-            };
-        case 'error':
-            return { ...stateRecord[Step.error] };
-        default:
-            return {
-                ...stateRecord[Step.orderConfirm],
-            };
-    }
-};
-
 export const PlaceOrder = ({
     isOpen,
     onClose,
@@ -118,6 +67,67 @@ export const PlaceOrder = ({
     walletSource: WalletSource;
     isCurrencyDelisted: boolean;
 } & DialogState) => {
+    const stateRecord: Record<Step, State> = {
+        [Step.orderConfirm]: {
+            currentStep: Step.orderConfirm,
+            nextStep: Step.orderProcessing,
+            title:
+                side === OrderSide.BORROW ? 'Confirm Borrow' : 'Confirm Lend',
+            description: '',
+            buttonText: 'OK',
+        },
+        [Step.orderProcessing]: {
+            currentStep: Step.orderProcessing,
+            nextStep: Step.orderPlaced,
+            title: 'Placing Order...',
+            description: '',
+            buttonText: '',
+        },
+        [Step.orderPlaced]: {
+            currentStep: Step.orderPlaced,
+            nextStep: Step.orderConfirm,
+            title: 'Success!',
+            description: 'Your transaction request was successful.',
+            buttonText: 'OK',
+        },
+        [Step.error]: {
+            currentStep: Step.error,
+            nextStep: Step.orderConfirm,
+            title: 'Failed!',
+            description: '',
+            buttonText: 'OK',
+        },
+    };
+
+    const reducer = (
+        state: State,
+        action: {
+            type: string;
+        }
+    ) => {
+        switch (action.type) {
+            case 'next':
+                return {
+                    ...stateRecord[state.nextStep],
+                };
+            case 'error':
+                return { ...stateRecord[Step.error] };
+            case 'updateSide':
+                const title =
+                    side === OrderSide.BORROW
+                        ? 'Confirm Borrow'
+                        : 'Confirm Lend';
+                return {
+                    ...stateRecord[Step.orderConfirm],
+                    title: title,
+                };
+            default:
+                return {
+                    ...stateRecord[Step.orderConfirm],
+                };
+        }
+    };
+
     const etherscanUrl = useEtherscanUrl();
     const handleContractTransaction = useHandleContractTransaction();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
@@ -141,6 +151,12 @@ export const PlaceOrder = ({
         dispatch({ type: 'default' });
         onClose();
     }, [onClose]);
+
+    useEffect(() => {
+        if (state.currentStep === Step.orderConfirm) {
+            dispatch({ type: 'updateSide' });
+        }
+    }, [side, state.currentStep, orderType]);
 
     const handlePlaceOrder = useCallback(
         async (
