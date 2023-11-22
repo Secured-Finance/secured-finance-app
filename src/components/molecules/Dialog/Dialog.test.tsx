@@ -3,7 +3,7 @@ import { fireEvent, render, screen } from 'src/test-utils.js';
 import { composeStories } from '@storybook/react';
 import * as stories from './Dialog.stories';
 
-const { Default, NoButton } = composeStories(stories);
+const { Default, NoButton, WithCancelButton } = composeStories(stories);
 
 describe('Dialog component', () => {
     it('should render a dialog if isOpen', () => {
@@ -51,5 +51,19 @@ describe('Dialog component', () => {
     it('should not disable the action button if disableActionButton is false', () => {
         render(<Default disableActionButton={false} />);
         expect(screen.getByTestId('dialog-action-button')).not.toBeDisabled();
+    });
+
+    it('should show cancel button when showCancelButton is true', () => {
+        render(<WithCancelButton />);
+        expect(
+            screen.getByRole('button', { name: 'Cancel' })
+        ).toBeInTheDocument();
+    });
+
+    it('should not show cancel button when showCancelButton is false', () => {
+        render(<Default />);
+        expect(
+            screen.queryByRole('button', { name: 'Cancel' })
+        ).not.toBeInTheDocument();
     });
 });
