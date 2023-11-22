@@ -39,13 +39,15 @@ export const OrderTable = ({
     }>();
     const columns = useMemo(
         () => [
-            loanTypeColumnDefinition(columnHelper, 'Type', 'type'),
             contractColumnDefinition(
                 columnHelper,
                 'Contract',
                 'contract',
-                variant === 'default' ? 'compact' : 'contractOnly'
+                variant === 'default' ? 'compact' : 'contractOnly',
+                undefined,
+                'left'
             ),
+            loanTypeColumnDefinition(columnHelper, 'Type', 'type'),
             priceYieldColumnDefinition(
                 columnHelper,
                 'Price',
