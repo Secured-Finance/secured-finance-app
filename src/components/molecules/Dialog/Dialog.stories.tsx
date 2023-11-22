@@ -36,3 +36,8 @@ export const NoButton = Template.bind({});
 NoButton.args = {
     callToAction: '',
 };
+
+export const WithCancelButton = Template.bind({});
+WithCancelButton.args = {
+    showCancelButton: true,
+};
