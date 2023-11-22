@@ -14,7 +14,7 @@ export const AmountCard = ({
     return (
         <div className='mb-3 grid w-full grid-cols-2 justify-around'>
             <div className='col-span-1 grid items-center justify-start'>
-                <span className='text-smd font-semibold text-white'>
+                <span className='typography-button-3 leading-6 text-white'>
                     {amount.currency}
                 </span>
                 <span className='typography-caption-3 text-white-60'>
@@ -27,7 +27,8 @@ export const AmountCard = ({
                         'flex justify-end font-semibold text-white',
                         {
                             'typography-body-2': formattedValue.length > 10,
-                            'text-smd': formattedValue.length <= 10,
+                            'typography-button-3 leading-6':
+                                formattedValue.length <= 10,
                         }
                     )}
                 >
