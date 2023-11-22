@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import {
     AssetInformation,
     Button,
@@ -7,6 +8,7 @@ import {
     CollateralManagementConciseTab,
 } from 'src/components/atoms';
 import { CollateralBook } from 'src/hooks';
+import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
     ZERO_BI,
@@ -66,6 +68,9 @@ export const CollateralTabLeftPane = ({
     onClick,
     collateralBook,
 }: CollateralTabLeftPaneProps) => {
+    const chainError = useSelector(
+        (state: RootState) => state.blockchain.chainError
+    );
     const collateralQuantityExist = useMemo(() => {
         return checkAssetQuantityExist(collateralBook.collateral);
     }, [collateralBook.collateral]);
@@ -206,7 +211,7 @@ export const CollateralTabLeftPane = ({
                 <Button
                     size='sm'
                     onClick={() => onClick('deposit')}
-                    disabled={!account}
+                    disabled={!account || chainError}
                     data-testid='deposit-collateral'
                     fullWidth={true}
                 >
@@ -214,7 +219,7 @@ export const CollateralTabLeftPane = ({
                 </Button>
                 <Button
                     size='sm'
-                    disabled={!account || vaultBalance <= 0}
+                    disabled={!account || vaultBalance <= 0 || chainError}
                     onClick={() => onClick('withdraw')}
                     data-testid='withdraw-collateral'
                     fullWidth={true}

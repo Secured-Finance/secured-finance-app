@@ -28,6 +28,9 @@ const preloadedState = {
         orderType: OrderType.LIMIT,
         sourceAccount: WalletSource.METAMASK,
     },
+    blockchain: {
+        chainError: false,
+    },
     ...preloadedAssetPrices,
 };
 

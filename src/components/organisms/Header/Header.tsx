@@ -56,13 +56,13 @@ const HeaderMessage = ({
     if (chainId) {
         if (chainError) {
             return (
-                <div className='typography-caption-2 w-full bg-red/100 p-[1px] text-center text-neutral-8'>
+                <div className='typography-caption-2 w-full bg-red p-[1px] text-center text-neutral-8'>
                     Secured Finance only supported in {networkNames.join(', ')}
                 </div>
             );
         } else if (chainId !== mainnetChainId) {
             return (
-                <div className='typography-caption-2 w-full bg-horizonBlue/100 p-[1px] text-center text-neutral-8'>
+                <div className='typography-caption-2 w-full bg-horizonBlue p-[1px] text-center text-neutral-8'>
                     You are visiting Secured Finance on testnet
                 </div>
             );
