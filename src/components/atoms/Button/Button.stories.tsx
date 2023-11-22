@@ -60,3 +60,8 @@ WithIcon.args = {
     ...Default.args,
     StartIcon: StarIcon,
 };
+
+export const Outlined = Template.bind({});
+Outlined.args = {
+    variant: 'outlined',
+};

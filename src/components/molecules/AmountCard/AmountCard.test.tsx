@@ -13,7 +13,7 @@ describe('AmountCard Component', () => {
 
     it('should render a AmountCard with the name of the currency', () => {
         render(<Default />);
-        expect(screen.getByText('WFIL')).toBeInTheDocument();
+        expect(screen.getByText('Wrapped Filecoin')).toBeInTheDocument();
     });
 
     it('should render a AmountCard with the amount of the currency', () => {
@@ -43,7 +43,7 @@ describe('AmountCard Component', () => {
             />
         );
         expect(screen.getByText('500,000,000')).toHaveClass(
-            'typography-body-2'
+            'flex justify-end font-semibold text-white typography-body-2'
         );
     });
 
