@@ -69,7 +69,7 @@ describe('OrderAction component', () => {
         await waitFor(() => expect(button).toBeEnabled());
         fireEvent.click(button);
         expect(
-            screen.getByRole('dialog', { name: 'Confirm Order' })
+            screen.getByRole('dialog', { name: 'Confirm Borrow' })
         ).toBeInTheDocument();
     });
 
@@ -93,7 +93,7 @@ describe('OrderAction component', () => {
         expect(screen.getByText('Place Order')).toBeInTheDocument();
     });
 
-    it('should render place order button if orderside is lend', async () => {
+    it('should render place order button if order side is lend', async () => {
         await waitFor(() => {
             render(<NotEnoughCollateral />, {
                 preloadedState: {
@@ -112,7 +112,7 @@ describe('OrderAction component', () => {
         await waitFor(() => expect(button).toBeEnabled());
         fireEvent.click(button);
         expect(
-            screen.getByRole('dialog', { name: 'Confirm Order' })
+            screen.getByRole('dialog', { name: 'Confirm Lend' })
         ).toBeInTheDocument();
     });
 
