@@ -61,6 +61,26 @@ describe('OrderAction component', () => {
         ).toBeInTheDocument();
     });
 
+    it('should render a disabled deposit collateral button when chainError', async () => {
+        await waitFor(() =>
+            render(<NotEnoughCollateral />, {
+                preloadedState: {
+                    ...preloadedState,
+                    blockchain: {
+                        chainError: true,
+                    },
+                },
+            })
+        );
+        expect(
+            await screen.findByTestId('deposit-collateral-button')
+        ).toBeInTheDocument();
+        expect(
+            screen.getByText('Deposit collateral to borrow')
+        ).toBeInTheDocument();
+        expect(screen.getByTestId('deposit-collateral-button')).toBeDisabled();
+    });
+
     it('should render place order button when collateral is sufficient for order', async () => {
         await waitFor(() => {
             render(<EnoughCollateral />, { preloadedState });
@@ -74,6 +94,24 @@ describe('OrderAction component', () => {
         expect(
             screen.getByRole('dialog', { name: 'Confirm Order' })
         ).toBeInTheDocument();
+    });
+
+    it('should render a disabled place order button when chainError', async () => {
+        await waitFor(() => {
+            render(<EnoughCollateral />, {
+                preloadedState: {
+                    ...preloadedState,
+                    blockchain: {
+                        chainError: true,
+                    },
+                },
+            });
+        });
+        expect(
+            await screen.findByTestId('place-order-button')
+        ).toBeInTheDocument();
+        const button = screen.getByTestId('place-order-button');
+        await waitFor(() => expect(button).toBeDisabled());
     });
 
     it('should render order side on the place order button if provided as props', async () => {
