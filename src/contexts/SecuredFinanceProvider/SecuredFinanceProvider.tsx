@@ -65,7 +65,6 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
             dispatch(
                 updateChainError(!getSupportedChainIds().includes(chainId))
             );
-            // dispatch(updateChainError(chainId !== getMainnetChainId()));
             dispatch(updateChainId(chainId));
         },
         [dispatch]

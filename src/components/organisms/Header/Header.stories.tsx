@@ -1,8 +1,5 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
-import {
-    withChainErrorDisabled,
-    withWalletProvider,
-} from '.storybook/decorators';
+import { withWalletProvider } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
 import { Header } from './';
@@ -13,7 +10,7 @@ export default {
     args: {
         showNavigation: true,
     },
-    decorators: [withWalletProvider, withChainErrorDisabled],
+    decorators: [withWalletProvider],
     parameters: {
         ...RESPONSIVE_PARAMETERS,
     },

@@ -2,21 +2,21 @@ import assert from 'assert';
 import { Environment } from './strings';
 
 export const getMainnetChainId = (): number => {
-    const chainId = process.env.NEXT_PUBLIC_MAINNET_CHAIN_ID;
-    assert(chainId, 'NEXT_PUBLIC_MAINNET_CHAIN_ID is not set');
-    return parseInt(chainId, 10);
+    const mainnetChainId = process.env.NEXT_PUBLIC_MAINNET_CHAIN_ID;
+    assert(mainnetChainId, 'NEXT_PUBLIC_MAINNET_CHAIN_ID is not set');
+    return parseInt(mainnetChainId, 10);
 };
 
 export const getSupportedNetworks = (): string[] => {
-    const network = process.env.NEXT_PUBLIC_SUPPORTED_NETWORKS;
-    assert(network, 'NEXT_PUBLIC_SUPPORTED_NETWORKS is not set');
-    return network.split(',');
+    const supportedNetworks = process.env.NEXT_PUBLIC_SUPPORTED_NETWORKS;
+    assert(supportedNetworks, 'NEXT_PUBLIC_SUPPORTED_NETWORKS is not set');
+    return supportedNetworks.split(',');
 };
 
 export const getSupportedChainIds = (): number[] => {
-    const network = process.env.NEXT_PUBLIC_SUPPORTED_CHAIN_IDS;
-    assert(network, 'NEXT_PUBLIC_SUPPORTED_CHAIN_IDS is not set');
-    return network.split(',').map(n => parseInt(n, 10));
+    const supportedChainIds = process.env.NEXT_PUBLIC_SUPPORTED_CHAIN_IDS;
+    assert(supportedChainIds, 'NEXT_PUBLIC_SUPPORTED_CHAIN_IDS is not set');
+    return supportedChainIds.split(',').map(n => parseInt(n, 10));
 };
 
 export const getWalletConnectId = () => {
