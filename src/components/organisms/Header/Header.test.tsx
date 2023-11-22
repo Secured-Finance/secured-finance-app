@@ -16,13 +16,6 @@ jest.mock(
             children
 );
 
-const preloadedState = {
-    blockchain: {
-        chainId: 11155111,
-        chainError: false,
-    },
-};
-
 describe('Header component', () => {
     it('should render the header', () => {
         (useRouter as jest.Mock).mockReturnValue({
@@ -92,7 +85,7 @@ describe('Header component', () => {
             push: jest.fn(),
         }));
 
-        render(<Primary />, { preloadedState });
+        render(<Primary />);
         expect(screen.getByTestId('testnet-info')).toBeInTheDocument();
         expect(
             screen.getByText('You are visiting Secured Finance on testnet')
