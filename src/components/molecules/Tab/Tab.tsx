@@ -26,7 +26,7 @@ export const Tab: React.FC<TabProps> = ({ tabDataArray, children }) => {
     const util = tabDataArray[selectedIndex].util;
 
     return (
-        <div className='h-full w-full rounded-b-2xl border border-white-10 bg-cardBackground/60 shadow-tab'>
+        <div className='h-full w-full min-w-fit rounded-b-2xl border border-white-10 bg-cardBackground/60 shadow-tab'>
             <HeadlessTab.Group
                 selectedIndex={selectedIndex}
                 onChange={setSelectedIndex}
