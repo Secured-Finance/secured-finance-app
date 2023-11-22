@@ -40,37 +40,6 @@ type State = {
     buttonText: string;
 };
 
-const stateRecord: Record<Step, State> = {
-    [Step.orderConfirm]: {
-        currentStep: Step.orderConfirm,
-        nextStep: Step.orderProcessing,
-        title: 'Confirm Order',
-        description: '',
-        buttonText: 'OK',
-    },
-    [Step.orderProcessing]: {
-        currentStep: Step.orderProcessing,
-        nextStep: Step.orderPlaced,
-        title: 'Placing Order...',
-        description: '',
-        buttonText: '',
-    },
-    [Step.orderPlaced]: {
-        currentStep: Step.orderPlaced,
-        nextStep: Step.orderConfirm,
-        title: 'Success!',
-        description: 'Your transaction request was successful.',
-        buttonText: 'OK',
-    },
-    [Step.error]: {
-        currentStep: Step.error,
-        nextStep: Step.orderConfirm,
-        title: 'Failed!',
-        description: '',
-        buttonText: 'OK',
-    },
-};
-
 export const PlaceOrder = ({
     isOpen,
     onClose,
@@ -96,6 +65,38 @@ export const PlaceOrder = ({
     walletSource: WalletSource;
     isCurrencyDelisted: boolean;
 } & DialogState) => {
+    const stateRecord: Record<Step, State> = {
+        [Step.orderConfirm]: {
+            currentStep: Step.orderConfirm,
+            nextStep: Step.orderProcessing,
+            title:
+                side === OrderSide.BORROW ? 'Confirm Borrow' : 'Confirm Lend',
+            description: '',
+            buttonText: 'OK',
+        },
+        [Step.orderProcessing]: {
+            currentStep: Step.orderProcessing,
+            nextStep: Step.orderPlaced,
+            title: 'Placing Order...',
+            description: '',
+            buttonText: '',
+        },
+        [Step.orderPlaced]: {
+            currentStep: Step.orderPlaced,
+            nextStep: Step.orderConfirm,
+            title: 'Success!',
+            description: 'Your transaction request was successful.',
+            buttonText: 'OK',
+        },
+        [Step.error]: {
+            currentStep: Step.error,
+            nextStep: Step.orderConfirm,
+            title: 'Failed!',
+            description: '',
+            buttonText: 'OK',
+        },
+    };
+
     const reducer = (
         state: State,
         action: {
