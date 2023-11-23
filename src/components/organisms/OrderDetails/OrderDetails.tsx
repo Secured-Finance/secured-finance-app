@@ -81,7 +81,7 @@ export const OrderDetails = ({
             )}
             {showWarning && market && (
                 <Section variant='warning'>
-                    <p>
+                    <p className='typography-caption'>
                         Warning: Your order price is currently lower than
                         minimum collateral base price of{' '}
                         <span className='font-bold'>
