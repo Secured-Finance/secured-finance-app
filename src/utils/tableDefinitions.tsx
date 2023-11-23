@@ -60,7 +60,7 @@ type ForwardValueProperty = {
 };
 
 type AmountColumnType = (AmountProperty | SideProperty | ForwardValueProperty) &
-    CurrencyProperty;
+    CurrencyProperty & { underMinimalCollateral?: boolean };
 
 type InputAmountColumnType = InputAmountProperty &
     FilledAmountProperty &
@@ -120,12 +120,12 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
                 // do nothing
             }
 
+            const amount = currencyMap[ccy].fromBaseUnit(value as bigint);
+
             const Component = (
-                <div className='flex justify-end'>
+                <div className='flex items-start justify-end gap-2'>
                     <CurrencyItem
-                        amount={currencyMap[ccy].fromBaseUnit(
-                            info.getValue() as bigint
-                        )}
+                        amount={amount}
                         ccy={ccy}
                         align='right'
                         price={options.priceList?.[ccy]}
@@ -135,6 +135,11 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
                         minDecimals={currencyMap[ccy].roundingDecimal}
                         maxDecimals={currencyMap[ccy].roundingDecimal}
                         showCurrency={options.showCurrency}
+                        warning={
+                            info.row.original.underMinimalCollateral
+                                ? 'Under Minimum Collateral Threshold'
+                                : undefined
+                        }
                     />
                 </div>
             );

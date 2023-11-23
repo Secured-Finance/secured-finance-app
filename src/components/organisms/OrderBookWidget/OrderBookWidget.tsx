@@ -14,8 +14,7 @@ import {
     Option,
     Spinner,
 } from 'src/components/atoms';
-import { CoreTable, TableHeader } from 'src/components/molecules';
-import { Tooltip } from 'src/components/templates';
+import { CoreTable, InfoToolTip, TableHeader } from 'src/components/molecules';
 import {
     AggregationFactorType,
     OrderBookEntry,
@@ -462,14 +461,14 @@ export const OrderBookWidget = ({
                                         {formatLoanValue(marketPrice, 'price')}
                                     </p>
                                     {variant === 'itayose' && (
-                                        <Tooltip>
+                                        <InfoToolTip iconColor='white'>
                                             <p className='text-white'>
                                                 Overlapping orders are
                                                 aggregated to show net amounts.
                                                 The price indicates the
                                                 estimated opening price.
                                             </p>
-                                        </Tooltip>
+                                        </InfoToolTip>
                                     )}
                                 </span>
 

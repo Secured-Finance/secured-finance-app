@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { InfoToolTip } from 'src/components/molecules';
 import { Alignment, ColorFormat } from 'src/types';
 import {
     CurrencySymbol,
@@ -18,6 +19,7 @@ export const CurrencyItem = ({
     minDecimals = 0,
     maxDecimals = 2,
     showCurrency = false,
+    warning,
 }: {
     amount?: number;
     ccy: CurrencySymbol;
@@ -28,6 +30,7 @@ export const CurrencyItem = ({
     minDecimals?: number;
     maxDecimals?: number;
     showCurrency?: boolean;
+    warning?: string;
 } & ColorFormat) => {
     let secondLine: string;
     if (amount !== undefined && price !== undefined) {
@@ -62,9 +65,16 @@ export const CurrencyItem = ({
                     'text-galacticOrange': color === 'negative',
                     'text-nebulaTeal': color === 'positive',
                     'text-neutral-8': color === 'neutral',
+                    'flex flex-row items-center gap-2': warning,
+                    'justify-center': align === 'center' && warning,
+                    'justify-end': align === 'right' && warning,
+                    'justify-start': align === 'left' && warning,
                 })}
             >
-                {firstLine}
+                <span>{firstLine}</span>
+                {warning && (
+                    <InfoToolTip iconColor='yellow'>{warning}</InfoToolTip>
+                )}
             </span>
             {compact === false ? (
                 <span className='typography-caption-2 h-5 text-[#6F74B0]'>

@@ -5,7 +5,12 @@ import {
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import { defaultDelistedStatusSet } from 'src/hooks';
-import { positions, wfilBytes32 } from 'src/stories/mocks/fixtures';
+import {
+    dec22Fixture,
+    positions,
+    usdcBytes32,
+    wfilBytes32,
+} from 'src/stories/mocks/fixtures';
 import { CurrencySymbol, getTimestampRelativeToNow } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import { ActiveTradeTable } from './ActiveTradeTable';
@@ -20,7 +25,7 @@ export default {
     parameters: {
         ...RESPONSIVE_PARAMETERS,
         chromatic: {
-            viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET, VIEWPORTS.LAPTOP],
+            viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
         },
     },
     decorators: [withAssetPrice, withWalletProvider],
@@ -86,4 +91,19 @@ export const Delisted = Template.bind({});
 Delisted.args = {
     delistedCurrencySet: new Set([CurrencySymbol.WFIL]),
     height: 700,
+};
+
+export const UnderMinimumCollateralThreshold = Template.bind({});
+UnderMinimumCollateralThreshold.args = {
+    data: [
+        {
+            amount: BigInt('-500000000'),
+            currency: usdcBytes32,
+            forwardValue: BigInt('-50000000'),
+            maturity: dec22Fixture.toString(),
+            marketPrice: BigInt(5000),
+            underMinimalCollateral: true,
+        },
+        ...positions,
+    ],
 };
