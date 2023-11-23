@@ -6,6 +6,7 @@ import {
 } from 'src/../.storybook/decorators';
 import { defaultDelistedStatusSet } from 'src/hooks';
 import {
+    dec22Fixture,
     positions,
     usdcBytes32,
     wfilBytes32,
@@ -98,9 +99,7 @@ UnderMinimumCollateralThreshold.args = {
             amount: BigInt('-500000000'),
             currency: usdcBytes32,
             forwardValue: BigInt('-50000000'),
-            maturity: new Maturity(
-                getTimestampRelativeToNow(300, true)
-            ).toString(),
+            maturity: dec22Fixture.toString(),
             marketPrice: BigInt(5000),
             underMinimalCollateral: true,
         },
