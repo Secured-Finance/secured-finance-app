@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
-import { CurrencySymbol, toCurrency } from 'src/utils';
+import { CurrencySymbol, hexToCurrencySymbol, toCurrency } from 'src/utils';
 
 export type Position = {
     currency: string;
@@ -32,20 +32,38 @@ export const usePositions = (
             );
             return positions ?? [];
         },
-        select: positions =>
-            positions.map(
-                position =>
-                    ({
-                        currency: position.ccy,
-                        maturity: position.maturity.toString(),
-                        amount: position.presentValue,
-                        forwardValue: position.futureValue,
-                        marketPrice: calculateMarketPrice(
-                            position.presentValue,
-                            position.futureValue
-                        ),
-                    } as Position)
-            ),
+        select: positions => {
+            const lendCurrencies: Set<CurrencySymbol> = new Set();
+            const borrowCurrencies: Set<CurrencySymbol> = new Set();
+            const ret: Position[] = [];
+
+            positions.forEach(position => {
+                ret.push({
+                    currency: position.ccy,
+                    maturity: position.maturity.toString(),
+                    amount: position.presentValue,
+                    forwardValue: position.futureValue,
+                    marketPrice: calculateMarketPrice(
+                        position.presentValue,
+                        position.futureValue
+                    ),
+                } as Position);
+                const ccy = hexToCurrencySymbol(position.ccy);
+                if (!ccy) return;
+                if (position.presentValue >= 0) {
+                    lendCurrencies.add(ccy);
+                }
+                if (position.presentValue < 0) {
+                    borrowCurrencies.add(ccy);
+                }
+            });
+
+            return {
+                positions: ret,
+                lendCurrencies,
+                borrowCurrencies,
+            };
+        },
         enabled: !!securedFinance && !!account && !!usedCurrencyKey,
     });
 };

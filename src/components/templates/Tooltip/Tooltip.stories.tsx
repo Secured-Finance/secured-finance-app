@@ -1,4 +1,7 @@
-import { ChevronDoubleDownIcon } from '@heroicons/react/24/outline';
+import {
+    ChevronDoubleDownIcon,
+    InformationCircleIcon,
+} from '@heroicons/react/24/outline';
 import type { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
 import { Tooltip } from './Tooltip';
@@ -12,6 +15,13 @@ const ButtonIcon = (
     </button>
 );
 
+const InformationIcon = (
+    <InformationCircleIcon
+        className='h-4 w-4 cursor-pointer text-slateGray'
+        data-testid='information-circle'
+    />
+);
+
 const children = (
     <div className='text-white'>
         <p>This is tooltip content. This is tooltip content.</p>
@@ -23,6 +33,7 @@ export default {
     component: Tooltip,
     args: {
         children: children,
+        iconElement: InformationIcon,
     },
 } as Meta<typeof Tooltip>;
 

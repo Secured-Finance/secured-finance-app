@@ -1,31 +1,20 @@
 import { Popover } from '@headlessui/react';
 import classNames from 'classnames';
 import { cloneElement, useState } from 'react';
-import InformationCircle from 'src/assets/icons/information-circle.svg';
 import { Alignment } from 'src/types';
 
-const InformationCircleIcon = (
-    <InformationCircle
-        className='cursor-pointer'
-        data-testid='information-circle'
-        width={12}
-        height={12}
-    />
-);
-
 export const Tooltip = ({
-    iconElement = InformationCircleIcon,
+    iconElement,
     children,
     align = 'center',
     maxWidth = 'large',
 }: {
-    iconElement?: React.ReactNode;
+    iconElement: React.ReactNode;
     children: React.ReactNode;
     align?: Alignment;
     maxWidth?: 'small' | 'large';
 }) => {
     const [open, setOpen] = useState(false);
-
     return (
         <Popover
             className='pointer-events-auto relative overflow-visible'
