@@ -45,7 +45,7 @@ const stateRecord: Record<Step, State> = {
         nextStep: Step.withdrawing,
         title: 'Withdraw Collateral',
         description: '',
-        buttonText: 'Continue',
+        buttonText: 'OK',
     },
     [Step.withdrawing]: {
         currentStep: Step.withdrawing,

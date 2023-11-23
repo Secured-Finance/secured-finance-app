@@ -72,7 +72,7 @@ describe('UnwindDialog Component', () => {
 
     it('should call onClose when cancel button is clicked', () => {
         const onClose = jest.fn();
-        render(<Default onClose={onClose} />, {});
+        render(<Default onClose={onClose} />);
         const cancelButton = screen.getByRole('button', {
             name: 'Cancel',
         });
