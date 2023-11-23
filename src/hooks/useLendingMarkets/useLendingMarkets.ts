@@ -24,6 +24,7 @@ export type LendingMarket = {
     bestLendUnitPrice: number;
     minBorrowUnitPrice: number;
     maxLendUnitPrice: number;
+    currentMinDebtUnitPrice: number;
 };
 
 const baseContract: { 0: LendingMarket } = {
@@ -44,6 +45,7 @@ const baseContract: { 0: LendingMarket } = {
         bestLendUnitPrice: 0,
         minBorrowUnitPrice: 0,
         maxLendUnitPrice: 0,
+        currentMinDebtUnitPrice: 0,
     },
 };
 
@@ -105,7 +107,9 @@ export const useLendingMarkets = () => {
                         minBorrowUnitPrice,
                         maxLendUnitPrice,
                         ccy,
-                    } = market;
+                        currentMinDebtUnitPrice,
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    } = market as any;
                     const currency = fromBytes32(ccy) as CurrencySymbol;
                     let nameToPush = `${ccy}-${name}`;
                     if (names.includes(nameToPush)) {
@@ -137,6 +141,9 @@ export const useLendingMarkets = () => {
                             bestLendUnitPrice: Number(bestLendUnitPrice),
                             minBorrowUnitPrice: Number(minBorrowUnitPrice),
                             maxLendUnitPrice: Number(maxLendUnitPrice),
+                            currentMinDebtUnitPrice: Number(
+                                currentMinDebtUnitPrice
+                            ),
                         },
                     };
                 });
