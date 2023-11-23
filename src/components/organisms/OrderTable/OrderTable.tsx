@@ -1,3 +1,4 @@
+import { XMarkIcon } from '@heroicons/react/24/solid';
 import { OrderSide } from '@secured-finance/sf-client';
 import { createColumnHelper } from '@tanstack/react-table';
 import { useMemo, useState } from 'react';
@@ -95,28 +96,43 @@ export const OrderTable = ({
 
                     return (
                         <div className='flex justify-center'>
-                            <TableActionMenu
-                                items={[
-                                    {
-                                        text: 'Remove Order',
-                                        onClick: () => {
-                                            setRemoveOrderDialogData({
-                                                orderId:
-                                                    info.row.original.orderId,
-                                                maturity: new Maturity(
-                                                    info.row.original.maturity
-                                                ),
-                                                amount: new Amount(amount, ccy),
-                                                side: side,
-                                                isOpen: true,
-                                                orderUnitPrice: Number(
-                                                    info.row.original.unitPrice
-                                                ),
-                                            });
+                            {variant === 'default' && (
+                                <TableActionMenu
+                                    items={[
+                                        {
+                                            text: 'Remove Order',
+                                            onClick: () => {
+                                                setRemoveOrderDialogData({
+                                                    orderId:
+                                                        info.row.original
+                                                            .orderId,
+                                                    maturity: new Maturity(
+                                                        info.row.original.maturity
+                                                    ),
+                                                    amount: new Amount(
+                                                        amount,
+                                                        ccy
+                                                    ),
+                                                    side: side,
+                                                    isOpen: true,
+                                                    orderUnitPrice: Number(
+                                                        info.row.original
+                                                            .unitPrice
+                                                    ),
+                                                });
+                                            },
                                         },
-                                    },
-                                ]}
-                            />
+                                    ]}
+                                />
+                            )}
+                            {variant === 'compact' && (
+                                <button
+                                    className='group h-5 w-5 hover:bg-white-10'
+                                    aria-label='Remove Order'
+                                >
+                                    <XMarkIcon className='h-5 w-5 text-secondary7 group-hover:text-starBlue group-active:text-starBlue' />
+                                </button>
+                            )}
                         </div>
                     );
                 },
