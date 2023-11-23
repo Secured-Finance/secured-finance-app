@@ -66,7 +66,7 @@ export const OrderAction = ({
     const { data: availableToBorrow } = useBorrowableAmount(address, currency);
 
     const canBorrow = useMemo(
-        () => availableToBorrow > amountFormatterFromBase[currency](amount),
+        () => availableToBorrow >= amountFormatterFromBase[currency](amount),
         [amount, availableToBorrow, currency]
     );
 

@@ -1,3 +1,4 @@
+import { OrderSide } from '@secured-finance/sf-client';
 import {
     SectionWithItems,
     getLiquidationInformation,
@@ -30,10 +31,12 @@ export const CollateralSimulationSection = ({
     collateral,
     tradeAmount,
     assetPrice,
+    side,
 }: {
     collateral: CollateralBook;
     tradeAmount: Amount;
     assetPrice: number;
+    side: OrderSide;
 }) => {
     const { address } = useAccount();
     const { data: coverage = 0 } = useOrderEstimation(address);
@@ -42,13 +45,15 @@ export const CollateralSimulationSection = ({
         tradeAmount.currency
     );
 
-    const remainingToBorrowText = usdFormat(
-        (availableToBorrow - tradeAmount.value) * assetPrice,
-        2
+    const remainingToBorrow = Math.max(
+        0,
+        side === OrderSide.BORROW
+            ? availableToBorrow - tradeAmount.value
+            : availableToBorrow
     );
 
     const items: [string | React.ReactNode, string | React.ReactNode][] = [
-        ['Borrow Remaining', remainingToBorrowText],
+        ['Borrow Remaining', usdFormat(remainingToBorrow * assetPrice, 2)],
         [
             <CollateralUsageItem key={1} />,
             getCollateralUsage(collateral.coverage, coverage),

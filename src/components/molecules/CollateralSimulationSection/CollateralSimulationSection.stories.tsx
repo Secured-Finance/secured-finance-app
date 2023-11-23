@@ -1,4 +1,5 @@
 import { withWalletProvider } from '.storybook/decorators';
+import { OrderSide } from '@secured-finance/sf-client';
 import type { Meta, StoryFn } from '@storybook/react';
 import { collateralBook37 } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
@@ -13,6 +14,7 @@ export default {
         collateral: collateralBook37,
         tradeAmount: new Amount('50000000000000000000', CurrencySymbol.WFIL),
         assetPrice: 10,
+        side: OrderSide.BORROW,
     },
     parameters: {
         connected: true,
