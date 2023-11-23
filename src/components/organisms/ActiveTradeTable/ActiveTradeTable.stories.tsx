@@ -85,4 +85,5 @@ export const Default = Template.bind({});
 export const Delisted = Template.bind({});
 Delisted.args = {
     delistedCurrencySet: new Set([CurrencySymbol.WFIL]),
+    height: 700,
 };
