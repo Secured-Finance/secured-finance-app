@@ -200,6 +200,7 @@ export const WithdrawCollateral = ({
             callToAction={state.buttonText}
             onClick={() => onClick(state.currentStep)}
             disableActionButton={isDisabled()}
+            showCancelButton={state.currentStep === Step.withdrawCollateral}
         >
             {(() => {
                 switch (state.currentStep) {

@@ -66,4 +66,15 @@ describe('Wallet Dialog component', () => {
         fireEvent.click(button);
         expect(screen.getAllByRole('radio')).toHaveLength(2);
     });
+
+    it('should display a cancel button when modal is open', () => {
+        render(<Primary />, {
+            preloadedState,
+        });
+        expect(
+            screen.getByRole('button', {
+                name: 'Cancel',
+            })
+        ).toBeInTheDocument();
+    });
 });

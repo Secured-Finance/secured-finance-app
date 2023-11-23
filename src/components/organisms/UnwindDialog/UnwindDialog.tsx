@@ -100,7 +100,7 @@ export const UnwindDialog = ({
             nextStep: Step.processing,
             title: stateMap[type].confirmTitle,
             description: '',
-            buttonText: 'Confirm',
+            buttonText: 'OK',
         },
         [Step.processing]: {
             currentStep: Step.processing,
@@ -258,6 +258,7 @@ export const UnwindDialog = ({
             onClose={handleClose}
             isOpen={isOpen}
             onClick={() => onClick(state.currentStep)}
+            showCancelButton={state.currentStep === Step.confirm}
         >
             {renderSelection()}
         </Dialog>

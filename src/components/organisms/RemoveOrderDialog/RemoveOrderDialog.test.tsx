@@ -1,13 +1,15 @@
 import { composeStories } from '@storybook/react';
 import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { render, screen, waitFor } from 'src/test-utils.js';
+import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './RemoveOrderDialog.stories';
 
 const { Default } = composeStories(stories);
 
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
+
+const preloadedState = preloadedAssetPrices;
 
 describe('RemoveOrderDialog Component', () => {
     it('should render a RemoveOrderDialog', async () => {
@@ -48,13 +50,6 @@ describe('RemoveOrderDialog Component', () => {
         expect(store.getState().blockchain.lastActionTimestamp).toBeTruthy();
     });
 
-    it('should show cancel button', async () => {
-        render(<Default />);
-        expect(
-            screen.getByRole('button', { name: 'Cancel' })
-        ).toBeInTheDocument();
-    });
-
     it('should not show collateral usage, transaction fee and circuit breaker disclaimer', async () => {
         render(<Default />);
         expect(screen.queryByText('Collateral Usage')).not.toBeInTheDocument();
@@ -66,9 +61,35 @@ describe('RemoveOrderDialog Component', () => {
     });
 
     it('should show correct price conversion and amount in USD', async () => {
-        render(<Default />, { preloadedState: preloadedAssetPrices });
+        render(<Default />, { preloadedState });
         expect(screen.getByText('WFIL')).toBeInTheDocument();
         expect(screen.getByText('100')).toBeInTheDocument();
         expect(screen.getByText('~ $600')).toBeInTheDocument();
+    });
+
+    it('should call onClose when cancel button is clicked', () => {
+        const onClose = jest.fn();
+        render(<Default onClose={onClose} />, {
+            preloadedState,
+        });
+        const cancelButton = screen.getByRole('button', {
+            name: 'Cancel',
+        });
+        fireEvent.click(cancelButton);
+        expect(onClose).toHaveBeenCalled();
+    });
+
+    it('should not show cancel button if dialog is not on first step', async () => {
+        render(<Default />, {
+            preloadedState,
+        });
+        const cancelButton = await screen.findByRole('button', {
+            name: 'Cancel',
+        });
+        expect(cancelButton).toBeInTheDocument();
+        waitFor(() => {
+            fireEvent.click(screen.getByTestId('dialog-action-button'));
+        });
+        expect(cancelButton).not.toBeInTheDocument();
     });
 });

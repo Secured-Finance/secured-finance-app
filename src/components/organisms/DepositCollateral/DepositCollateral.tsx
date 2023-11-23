@@ -207,6 +207,7 @@ export const DepositCollateral = ({
             callToAction={state.buttonText}
             onClick={() => onClick(state.currentStep)}
             disableActionButton={isDisabled()}
+            showCancelButton={state.currentStep === Step.depositCollateral}
         >
             {(() => {
                 switch (state.currentStep) {
