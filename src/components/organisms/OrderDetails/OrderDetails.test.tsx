@@ -1,22 +1,19 @@
-import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
 import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './OrderDetails.stories';
 
-const { Default, Delisted, UnderMinimumCollateralThreshold } =
+const { Default, Delisted, RemoveOrder, UnderMinimumCollateralThreshold } =
     composeStories(stories);
 
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('OrderDetails Component', () => {
-    it('should display the borrow remaining and the collateral usage if its a BORROW order', async () => {
+    it('should display the borrow remaining and the collateral usage', async () => {
         render(<Default />);
 
-        expect(screen.getByText('Borrow Amount')).toBeInTheDocument();
-        expect(screen.getByText('100 USDC')).toBeInTheDocument();
         expect(screen.getByText('Borrow Remaining')).toBeInTheDocument();
 
         expect(await screen.findByText('$3,025.09')).toBeInTheDocument();
@@ -26,7 +23,7 @@ describe('OrderDetails Component', () => {
         expect(screen.getByText('~ 4.06%')).toBeInTheDocument();
     });
 
-    it('should render collateral utilization in borrow orders', async () => {
+    it('should render collateral utilization', async () => {
         render(<Default />);
 
         expect(screen.getByText('Collateral Usage')).toBeInTheDocument();
@@ -50,20 +47,6 @@ describe('OrderDetails Component', () => {
                 'Circuit breaker will be triggered if the order is filled at over 96.72 which is the max slippage level at 1 block.'
             )
         );
-    });
-
-    it('should not display the borrow remaining and the collateral usage if its a LEND order', async () => {
-        render(<Default side={OrderSide.LEND} />);
-
-        expect(screen.getByText('Lend Amount')).toBeInTheDocument();
-        expect(screen.getByText('100 USDC')).toBeInTheDocument();
-        expect(screen.queryByText('Borrow Remaining')).not.toBeInTheDocument();
-        expect(screen.queryByText('Collateral Usage')).not.toBeInTheDocument();
-
-        expect(screen.getByText('Bond Price')).toBeInTheDocument();
-        expect(await screen.findByText('~ 96.10')).toBeInTheDocument();
-        expect(screen.getByText('APR')).toBeInTheDocument();
-        expect(screen.getByText('~ 4.06%')).toBeInTheDocument();
     });
 
     it('should display delisting disclaimer if order currency is being delisted', async () => {
@@ -98,5 +81,11 @@ describe('OrderDetails Component', () => {
         await waitFor(() => {
             expect(screen.getByText('0%')).toBeInTheDocument();
         });
+    });
+
+    it('should not show collateral info when isRemoveOrder is true', () => {
+        render(<RemoveOrder />);
+        expect(screen.queryByText('Collateral Usage')).not.toBeInTheDocument();
+        expect(screen.queryByText('Borrow Remaining')).not.toBeInTheDocument();
     });
 });

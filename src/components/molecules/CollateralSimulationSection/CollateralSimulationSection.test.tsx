@@ -1,4 +1,3 @@
-import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
 import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
@@ -15,37 +14,15 @@ describe('CollateralSimulationSection Component', () => {
         render(<Trade />);
     });
 
-    it('should display the borrow remaining and the collateral usage if its a BORROW order', async () => {
-        render(<Trade side={OrderSide.BORROW} />);
-        expect(screen.getByText('Borrow Amount')).toBeInTheDocument();
-        expect(screen.getByText('50 WFIL')).toBeInTheDocument();
+    it('should display the borrow remaining and the collateral usage', async () => {
+        render(<Trade />);
 
         await waitFor(() => {
             expect(screen.getByText('Borrow Remaining')).toBeInTheDocument();
             expect(screen.getByText('$3,025.09')).toBeInTheDocument();
         });
-
         expect(screen.getByText('Collateral Usage')).toBeInTheDocument();
-        expect(screen.getByText('Bond Price')).toBeInTheDocument();
-        expect(screen.getByText('~ 98.00')).toBeInTheDocument();
-    });
-
-    it('should not display the borrow remaining and the collateral usage if its a LEND order', () => {
-        render(<Trade side={OrderSide.LEND} />);
-        expect(screen.getByText('Lend Amount')).toBeInTheDocument();
-        expect(screen.getByText('50 WFIL')).toBeInTheDocument();
-
-        expect(screen.queryByText('Borrow Remaining')).not.toBeInTheDocument();
-        expect(screen.queryByText('Collateral Usage')).not.toBeInTheDocument();
-
-        expect(screen.getByText('Bond Price')).toBeInTheDocument();
-        expect(screen.getByText('~ 98.00')).toBeInTheDocument();
-    });
-
-    it('should display the APR', () => {
-        render(<Trade />);
-        expect(screen.getByText('APR')).toBeInTheDocument();
-        expect(screen.getByText('~ 2.04%')).toBeInTheDocument();
+        expect(screen.getByText('55%')).toBeInTheDocument();
     });
 
     it('should increase the collateral usage when the tradePosition is BORROW', async () => {

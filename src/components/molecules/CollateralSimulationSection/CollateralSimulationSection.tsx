@@ -1,35 +1,41 @@
-import { OrderSide } from '@secured-finance/sf-client';
 import { useMemo } from 'react';
 import {
     SectionWithItems,
     getLiquidationInformation,
 } from 'src/components/atoms';
-import { CollateralBook, useOrderEstimation } from 'src/hooks';
-import { useZCUsage } from 'src/hooks/useZCUsage/useZCUsage';
+import { Tooltip } from 'src/components/templates';
+import { CollateralBook, useOrderEstimation, useZCUsage } from 'src/hooks';
 import {
     amountFormatterFromBase,
-    formatAmount,
     formatCollateralRatio,
-    formatLoanValue,
-    prefixTilde,
     usdFormat,
 } from 'src/utils';
 import { MAX_COVERAGE, computeAvailableToBorrow } from 'src/utils/collateral';
-import { Amount, LoanValue, Maturity } from 'src/utils/entities';
+import { Amount, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
+
+const CollateralUsageItem = () => {
+    return (
+        <div className='flex flex-row items-center gap-1'>
+            <div className='typography-caption text-planetaryPurple'>
+                Collateral Usage
+            </div>
+            <Tooltip>
+                Existing open orders are factored into your collateral usage and
+                may affect remaining borrow capacity
+            </Tooltip>
+        </div>
+    );
+};
 
 export const CollateralSimulationSection = ({
     collateral,
-    tradeAmount,
-    side,
-    tradeValue,
     maturity,
+    tradeAmount,
 }: {
     collateral: CollateralBook;
-    tradeAmount: Amount;
-    side: OrderSide;
-    tradeValue: LoanValue;
     maturity: Maturity;
+    tradeAmount: Amount;
 }) => {
     const { address } = useAccount();
 
@@ -64,47 +70,14 @@ export const CollateralSimulationSection = ({
         [collateral.usdCollateral, collateral.collateralThreshold, coverage]
     );
 
-    const items: [string, string | React.ReactNode][] =
-        side === OrderSide.BORROW
-            ? [
-                  [
-                      'Borrow Amount',
-                      `${formatAmount(tradeAmount.value)} ${
-                          tradeAmount.currency
-                      }`,
-                  ],
-                  ['Borrow Remaining', remainingToBorrowText],
-                  ['ZC Usage', zcUsage ?? 0],
-                  [
-                      'Collateral Usage',
-                      getCollateralUsage(collateral.coverage, coverage),
-                  ],
-                  [
-                      'Bond Price',
-                      prefixTilde(
-                          formatLoanValue(tradeValue ?? LoanValue.ZERO, 'price')
-                      ),
-                  ],
-              ]
-            : [
-                  [
-                      'Lend Amount',
-                      `${formatAmount(tradeAmount.value)} ${
-                          tradeAmount.currency
-                      }`,
-                  ],
-                  [
-                      'Bond Price',
-                      prefixTilde(
-                          formatLoanValue(tradeValue ?? LoanValue.ZERO, 'price')
-                      ),
-                  ],
-              ];
-
-    items.push([
-        'APR',
-        prefixTilde(formatLoanValue(tradeValue ?? LoanValue.ZERO, 'rate')),
-    ]);
+    const items: [string | React.ReactNode, string | React.ReactNode][] = [
+        ['Borrow Remaining', remainingToBorrowText],
+        ['ZC Usage', zcUsage],
+        [
+            <CollateralUsageItem key={1} />,
+            getCollateralUsage(collateral.coverage, coverage),
+        ],
+    ];
 
     return <SectionWithItems itemList={items} />;
 };
