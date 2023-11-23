@@ -165,6 +165,7 @@ export const WalletDialog = () => {
             title={dialogText().title}
             description={dialogText().description}
             callToAction={dialogText().buttonText}
+            showCancelButton={!isConnected && !isLoading && !isError}
             onClick={async () => {
                 if (!isConnected && !isLoading && !isError) {
                     await connectWallet(address);
