@@ -3,7 +3,7 @@ import {
     SectionWithItems,
     getLiquidationInformation,
 } from 'src/components/atoms';
-import { Tooltip } from 'src/components/templates';
+import { InfoToolTip } from 'src/components/molecules';
 import { CollateralBook, useOrderEstimation } from 'src/hooks';
 import { formatCollateralRatio, usdFormat } from 'src/utils';
 import { MAX_COVERAGE, computeAvailableToBorrow } from 'src/utils/collateral';
@@ -15,10 +15,10 @@ const CollateralUsageItem = () => {
             <div className='typography-caption text-planetaryPurple'>
                 Collateral Usage
             </div>
-            <Tooltip>
+            <InfoToolTip>
                 Existing open orders are factored into your collateral usage and
                 may affect remaining borrow capacity
-            </Tooltip>
+            </InfoToolTip>
         </div>
     );
 };

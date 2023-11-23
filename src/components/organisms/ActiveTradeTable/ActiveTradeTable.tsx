@@ -28,7 +28,9 @@ import {
     tableHeaderDefinition,
 } from 'src/utils/tableDefinitions';
 
-const columnHelper = createColumnHelper<Position>();
+const columnHelper = createColumnHelper<
+    Position & { underMinimalCollateral?: boolean }
+>();
 
 const DEFAULT_HEIGHT = 300;
 
@@ -37,7 +39,7 @@ export const ActiveTradeTable = ({
     delistedCurrencySet,
     height,
 }: {
-    data: Position[];
+    data: (Position & { underMinimalCollateral?: boolean })[];
     delistedCurrencySet: Set<CurrencySymbol>;
     height?: number;
 }) => {

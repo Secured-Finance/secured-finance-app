@@ -26,6 +26,7 @@ const noOpenMarkets = [
         bestLendUnitPrice: BigInt('9617'),
         minBorrowUnitPrice: BigInt('9602'),
         maxLendUnitPrice: BigInt('9630'),
+        currentMinDebtUnitPrice: BigInt('9500'),
         ccy: ethBytes32,
     },
     {
@@ -43,6 +44,7 @@ const noOpenMarkets = [
         bestLendUnitPrice: BigInt('9617'),
         minBorrowUnitPrice: BigInt('9602'),
         maxLendUnitPrice: BigInt('9630'),
+        currentMinDebtUnitPrice: BigInt('9500'),
         ccy: ethBytes32,
     },
     {
@@ -60,6 +62,7 @@ const noOpenMarkets = [
         bestLendUnitPrice: BigInt('9617'),
         minBorrowUnitPrice: BigInt('9602'),
         maxLendUnitPrice: BigInt('9630'),
+        currentMinDebtUnitPrice: BigInt('9500'),
         ccy: ethBytes32,
     },
 ];
