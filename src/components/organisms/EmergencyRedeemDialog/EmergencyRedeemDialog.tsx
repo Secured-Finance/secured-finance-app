@@ -204,6 +204,7 @@ export const EmergencyRedeemDialog = ({
                                         <CoreTable
                                             data={data}
                                             columns={columns}
+                                            options={{ stickyHeader: false }}
                                         />
                                         <div className='typography-caption-2 text-center leading-6 text-slateGray'>{`Snapshot as of ${formatTimestamp(
                                             snapshotDate ?? 0

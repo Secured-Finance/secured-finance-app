@@ -28,6 +28,7 @@ type CoreTableOptions = {
     pagination?: Pagination;
     showHeaders?: boolean;
     compact?: boolean;
+    stickyHeader?: boolean;
 };
 
 const DEFAULT_OPTIONS: CoreTableOptions = {
@@ -40,6 +41,7 @@ const DEFAULT_OPTIONS: CoreTableOptions = {
     showHeaders: true,
     compact: false,
     stickyFirstColumn: false,
+    stickyHeader: true,
 };
 
 export const CoreTable = <T,>({
@@ -114,12 +116,18 @@ export const CoreTable = <T,>({
             {coreTableOptions.showHeaders ? (
                 <thead
                     className={classNames(
-                        'typography-caption-2 sticky inset-0 z-20 bg-[#1D2739] px-6 text-slateGray',
+                        'typography-caption-2 px-6 text-slateGray',
                         {
                             'after:absolute after:bottom-0 after:z-20 after:w-full after:border-b after:border-white-10':
-                                coreTableOptions.border,
+                                coreTableOptions.border &&
+                                coreTableOptions.stickyHeader,
                             'h-14 py-4': !coreTableOptions.compact,
                             'h-5 py-1': coreTableOptions.compact,
+                            'sticky z-20 bg-[#1D2739]':
+                                coreTableOptions.stickyHeader,
+                            'border-b border-white-10':
+                                coreTableOptions.border &&
+                                !coreTableOptions.stickyHeader,
                         }
                     )}
                 >
