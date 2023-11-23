@@ -68,9 +68,7 @@ describe('Wallet Dialog component', () => {
     });
 
     it('should display a cancel button when modal is open', () => {
-        render(<Primary />, {
-            preloadedState,
-        });
+        render(<Primary />, { preloadedState });
         expect(
             screen.getByRole('button', {
                 name: 'Cancel',

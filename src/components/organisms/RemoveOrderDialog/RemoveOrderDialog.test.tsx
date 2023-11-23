@@ -9,8 +9,6 @@ const { Default } = composeStories(stories);
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-const preloadedState = preloadedAssetPrices;
-
 describe('RemoveOrderDialog Component', () => {
     it('should render a RemoveOrderDialog', async () => {
         await waitFor(() => render(<Default />));
@@ -61,7 +59,7 @@ describe('RemoveOrderDialog Component', () => {
     });
 
     it('should show correct price conversion and amount in USD', async () => {
-        render(<Default />, { preloadedState });
+        render(<Default />, { preloadedState: preloadedAssetPrices });
         expect(screen.getByText('WFIL')).toBeInTheDocument();
         expect(screen.getByText('100')).toBeInTheDocument();
         expect(screen.getByText('~ $600')).toBeInTheDocument();
@@ -69,9 +67,7 @@ describe('RemoveOrderDialog Component', () => {
 
     it('should call onClose when cancel button is clicked', () => {
         const onClose = jest.fn();
-        render(<Default onClose={onClose} />, {
-            preloadedState,
-        });
+        render(<Default onClose={onClose} />);
         const cancelButton = screen.getByRole('button', {
             name: 'Cancel',
         });
@@ -80,9 +76,7 @@ describe('RemoveOrderDialog Component', () => {
     });
 
     it('should not show cancel button if dialog is not on first step', async () => {
-        render(<Default />, {
-            preloadedState,
-        });
+        render(<Default />);
         const cancelButton = await screen.findByRole('button', {
             name: 'Cancel',
         });

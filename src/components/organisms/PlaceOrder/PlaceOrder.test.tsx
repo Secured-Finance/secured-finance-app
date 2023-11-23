@@ -199,9 +199,7 @@ describe('PlaceOrder component', () => {
 
     it('should call onClose when cancel button is clicked', () => {
         const onClose = jest.fn();
-        render(<Default onClose={onClose} />, {
-            preloadedState,
-        });
+        render(<Default onClose={onClose} />);
         const cancelButton = screen.getByRole('button', {
             name: 'Cancel',
         });
