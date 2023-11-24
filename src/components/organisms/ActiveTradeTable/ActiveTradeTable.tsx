@@ -88,7 +88,7 @@ export const ActiveTradeTable = ({
                 return items;
             }
 
-            let label = 'Unwind Position';
+            let label = 'Unwind';
             let type: UnwindDialogType;
             let disableAction;
 
