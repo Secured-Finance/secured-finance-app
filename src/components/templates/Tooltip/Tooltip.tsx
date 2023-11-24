@@ -38,7 +38,7 @@ export const Tooltip = ({
                     {open && children && (
                         <Popover.Panel
                             className={classNames(
-                                'absolute z-10 mt-2 flex w-screen justify-center',
+                                'absolute z-50 mt-2 flex w-screen justify-center',
                                 {
                                     'max-w-[256px]': maxWidth === 'large',
                                     'max-w-[165px]': maxWidth === 'small',
