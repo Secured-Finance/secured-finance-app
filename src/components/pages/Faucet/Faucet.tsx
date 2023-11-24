@@ -8,6 +8,7 @@ import {
 import { Token } from '@secured-finance/sf-core';
 import classNames from 'classnames';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 import MetaMaskIcon from 'src/assets/img/metamask-fox.svg';
 import { Button, GradientBox, Separator } from 'src/components/atoms';
 import {
@@ -19,6 +20,7 @@ import { MyWalletWidget } from 'src/components/organisms';
 import { Page, Tooltip, TwoColumns } from 'src/components/templates';
 import { useEtherscanUrl, useHandleContractTransaction } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
+import { RootState } from 'src/store/types';
 import {
     AddressUtils,
     CurrencySymbol,
@@ -81,6 +83,9 @@ const MenuAddToken = ({
     );
 };
 export const Faucet = () => {
+    const chainError = useSelector(
+        (state: RootState) => state.blockchain.chainError
+    );
     const etherscanUrl = useEtherscanUrl();
     const handleContractTransaction = useHandleContractTransaction();
     const { address: account } = useAccount();
@@ -267,7 +272,9 @@ export const Faucet = () => {
                             <div className='flex justify-center'>
                                 <Button
                                     onClick={mint}
-                                    disabled={!account || isPending}
+                                    disabled={
+                                        !account || isPending || chainError
+                                    }
                                 >
                                     {isPending ? 'Minting...' : 'Mint tokens'}
                                 </Button>

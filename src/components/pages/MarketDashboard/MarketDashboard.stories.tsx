@@ -4,7 +4,6 @@ import type { Meta, StoryFn } from '@storybook/react';
 import {
     withAppLayout,
     withAssetPrice,
-    withChainErrorDisabled,
     withEthBalance,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
@@ -64,7 +63,6 @@ export default {
         withWalletProvider,
         withEthBalance,
         withAssetPrice,
-        withChainErrorDisabled,
     ],
 } as Meta<typeof MarketDashboard>;
 

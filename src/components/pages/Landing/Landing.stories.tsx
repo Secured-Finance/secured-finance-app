@@ -4,7 +4,6 @@ import { RESPONSIVE_PARAMETERS } from 'src/../.storybook/constants';
 import {
     withAppLayout,
     withAssetPrice,
-    withChainErrorDisabled,
     withEthBalance,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
@@ -24,7 +23,6 @@ export default {
         withAssetPrice,
         withEthBalance,
         withWalletProvider,
-        withChainErrorDisabled,
     ],
     parameters: {
         apolloClient: {
