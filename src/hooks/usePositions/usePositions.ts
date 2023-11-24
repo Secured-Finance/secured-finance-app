@@ -23,6 +23,13 @@ export const usePositions = (
 ) => {
     const securedFinance = useSF();
 
+    const emptyPV = {
+        [CurrencySymbol.ETH]: 0,
+        [CurrencySymbol.WBTC]: 0,
+        [CurrencySymbol.USDC]: 0,
+        [CurrencySymbol.WFIL]: 0,
+    };
+
     const usedCurrencyKey = useMemo(() => {
         return usedCurrencies.sort().join('-');
     }, [usedCurrencies]);
@@ -38,8 +45,8 @@ export const usePositions = (
             return positions ?? [];
         },
         select: positions => {
-            let totalBorrowPV = 0;
-            let totalLendPV = 0;
+            const totalBorrowPV = { ...emptyPV };
+            const totalLendPV = { ...emptyPV };
             const lendCurrencies: Set<CurrencySymbol> = new Set();
             const borrowCurrencies: Set<CurrencySymbol> = new Set();
             const ret: Position[] = [];
@@ -60,11 +67,10 @@ export const usePositions = (
                 const pv = amountFormatterFromBase[ccy](position.presentValue);
                 if (position.presentValue >= 0) {
                     lendCurrencies.add(ccy);
-                    totalLendPV += pv;
-                }
-                if (position.presentValue < 0) {
+                    totalLendPV[ccy] += pv;
+                } else {
                     borrowCurrencies.add(ccy);
-                    totalBorrowPV += pv;
+                    totalBorrowPV[ccy] += Math.abs(pv);
                 }
             });
 

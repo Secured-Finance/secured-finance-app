@@ -21,7 +21,7 @@ describe('useZCUsage', () => {
         await waitFor(() => {
             expect(
                 result.current(dec22Fixture, CurrencySymbol.ETH, 10000)
-            ).toBe(0);
+            ).toBe(0.08438204503992827);
         });
     });
 
@@ -35,11 +35,11 @@ describe('useZCUsage', () => {
         await waitForNextUpdate();
 
         expect(result.current(dec22Fixture, CurrencySymbol.ETH, -10000)).toBe(
-            0
+            159.92526444263518
         );
     });
 
-    it('should return 0 if denominator becomes 0', async () => {
+    it('should return 100 if denominator becomes less than or equal to 0', async () => {
         jest.spyOn(mock, 'getPositions').mockResolvedValueOnce([]);
         const { result, waitForNextUpdate } = renderHook(
             () => useZCUsage('0xff'),
@@ -49,8 +49,6 @@ describe('useZCUsage', () => {
         await waitForNextUpdate();
         await waitForNextUpdate();
 
-        expect(result.current(dec22Fixture, CurrencySymbol.ETH, -10000)).toBe(
-            0
-        );
+        expect(result.current(dec22Fixture, CurrencySymbol.ETH, 10000)).toBe(0);
     });
 });
