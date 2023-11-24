@@ -79,13 +79,13 @@ describe('usePositions', () => {
         await waitForNextUpdate();
 
         const newValue = result.current;
-        expect(newValue.data.totalBorrowPV).toEqual({
+        expect(newValue.data.totalBorrowPVPerCurrency).toEqual({
             ETH: 10.5582556570268,
             USDC: 63,
             WBTC: 0,
             WFIL: 0,
         });
-        expect(newValue.data.totalLendPV).toEqual({
+        expect(newValue.data.totalLendPVPerCurrency).toEqual({
             ETH: 9.95475,
             USDC: 0,
             WBTC: 0,

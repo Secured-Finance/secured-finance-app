@@ -45,8 +45,8 @@ export const usePositions = (
             return positions ?? [];
         },
         select: positions => {
-            const totalBorrowPV = { ...emptyPV };
-            const totalLendPV = { ...emptyPV };
+            const totalBorrowPVPerCurrency = { ...emptyPV };
+            const totalLendPVPerCurrency = { ...emptyPV };
             const lendCurrencies: Set<CurrencySymbol> = new Set();
             const borrowCurrencies: Set<CurrencySymbol> = new Set();
             const ret: Position[] = [];
@@ -67,10 +67,10 @@ export const usePositions = (
                 const pv = amountFormatterFromBase[ccy](position.presentValue);
                 if (position.presentValue >= 0) {
                     lendCurrencies.add(ccy);
-                    totalLendPV[ccy] += pv;
+                    totalLendPVPerCurrency[ccy] += pv;
                 } else {
                     borrowCurrencies.add(ccy);
-                    totalBorrowPV[ccy] += Math.abs(pv);
+                    totalBorrowPVPerCurrency[ccy] += Math.abs(pv);
                 }
             });
 
@@ -78,8 +78,8 @@ export const usePositions = (
                 positions: ret,
                 lendCurrencies,
                 borrowCurrencies,
-                totalBorrowPV,
-                totalLendPV,
+                totalBorrowPVPerCurrency,
+                totalLendPVPerCurrency,
             };
         },
         enabled: !!securedFinance && !!account && !!usedCurrencyKey,
