@@ -43,10 +43,10 @@ export const Dialog = ({
                 >
                     <div
                         ref={refDiv}
-                        className='flex h-full w-full flex-col items-center justify-between space-y-6 tablet:h-fit tablet:justify-center'
+                        className='min-h-2/3 flex h-full w-full flex-col items-center justify-between space-y-6 tablet:h-fit tablet:justify-center'
                     >
-                        <div className='flex w-full flex-col space-y-6'>
-                            <HeadlessDialog.Title className='typography-modal-title w-full text-center text-neutral-8 opacity-80'>
+                        <div className='flex w-full flex-col space-y-7'>
+                            <HeadlessDialog.Title className='typography-modal-title w-full pt-2 text-center text-neutral-8 opacity-80'>
                                 {title}
                             </HeadlessDialog.Title>
                             {description ? (
