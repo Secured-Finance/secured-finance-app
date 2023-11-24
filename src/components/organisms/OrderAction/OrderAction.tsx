@@ -41,6 +41,9 @@ export const OrderAction = ({
     const { address, isConnected } = useAccount();
     const dispatch = useDispatch();
     const { placeOrder, placePreOrder } = useOrders();
+    const chainError = useSelector(
+        (state: RootState) => state.blockchain.chainError
+    );
 
     const [openDepositCollateralDialog, setOpenDepositCollateralDialog] =
         useState(false);
@@ -93,7 +96,7 @@ export const OrderAction = ({
             {isConnected &&
                 (canBorrow || side === OrderSide.LEND ? (
                     <Button
-                        disabled={isPlaceOrderDisabled}
+                        disabled={isPlaceOrderDisabled || chainError}
                         fullWidth
                         onClick={() => {
                             setOpenPlaceOrderDialog(true);
@@ -105,6 +108,7 @@ export const OrderAction = ({
                     </Button>
                 ) : (
                     <Button
+                        disabled={chainError}
                         fullWidth
                         onClick={() => setOpenDepositCollateralDialog(true)}
                         data-testid='deposit-collateral-button'

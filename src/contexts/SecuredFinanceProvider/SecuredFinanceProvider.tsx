@@ -5,8 +5,12 @@ import { createContext, useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { QUERIES_TO_INVALIDATE } from 'src/hooks';
 import { useEthereumWalletStore } from 'src/hooks/useEthWallet';
-import { updateChainError, updateLatestBlock } from 'src/store/blockchain';
-import { getEthereumChainId, readWalletFromStore } from 'src/utils';
+import {
+    updateChainError,
+    updateChainId,
+    updateLatestBlock,
+} from 'src/store/blockchain';
+import { getSupportedChainIds, readWalletFromStore } from 'src/utils';
 import { InterfaceEvents, associateWallet } from 'src/utils/events';
 import { hexToNumber } from 'viem';
 import {
@@ -58,7 +62,10 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
 
     const dispatchChainError = useCallback(
         (chainId: number) => {
-            dispatch(updateChainError(chainId !== getEthereumChainId()));
+            dispatch(
+                updateChainError(!getSupportedChainIds().includes(chainId))
+            );
+            dispatch(updateChainId(chainId));
         },
         [dispatch]
     );

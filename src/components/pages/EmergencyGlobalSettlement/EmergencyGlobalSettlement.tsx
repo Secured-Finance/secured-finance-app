@@ -33,7 +33,7 @@ export const EmergencyGlobalSettlement = () => {
         address,
         usedCurrencies
     );
-    const { data: positions = [] } = usePositions(address, usedCurrencies);
+    const { data: positions } = usePositions(address, usedCurrencies);
     const { data: collateralBook = emptyCollateralBook } =
         useCollateralBook(address);
 
@@ -58,9 +58,11 @@ export const EmergencyGlobalSettlement = () => {
             });
         });
 
+        const userPositions = positions ? positions.positions : [];
+
         return [
             ...lendOrders,
-            ...positions.map(p => ({
+            ...userPositions.map(p => ({
                 ...p,
                 type: 'position' as const,
             })),
