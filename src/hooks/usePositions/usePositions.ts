@@ -23,7 +23,7 @@ export const usePositions = (
 ) => {
     const securedFinance = useSF();
 
-    const emptyPV = {
+    const emptyPVPerCurrency = {
         [CurrencySymbol.ETH]: 0,
         [CurrencySymbol.WBTC]: 0,
         [CurrencySymbol.USDC]: 0,
@@ -45,8 +45,8 @@ export const usePositions = (
             return positions ?? [];
         },
         select: positions => {
-            const totalBorrowPVPerCurrency = { ...emptyPV };
-            const totalLendPVPerCurrency = { ...emptyPV };
+            const totalBorrowPVPerCurrency = { ...emptyPVPerCurrency };
+            const totalLendPVPerCurrency = { ...emptyPVPerCurrency };
             const lendCurrencies: Set<CurrencySymbol> = new Set();
             const borrowCurrencies: Set<CurrencySymbol> = new Set();
             const ret: Position[] = [];
