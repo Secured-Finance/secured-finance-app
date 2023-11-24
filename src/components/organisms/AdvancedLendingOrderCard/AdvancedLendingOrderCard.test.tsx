@@ -39,6 +39,7 @@ const collateralBook0: CollateralBook = {
         WFIL: BigInt('100000000000000000000'),
     },
     usdCollateral: 12100.34,
+    usdUnusedCollateral: 9680.27,
     usdNonCollateral: 600,
     coverage: 0,
     collateralThreshold: 80,
