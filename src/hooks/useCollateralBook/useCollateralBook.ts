@@ -9,6 +9,7 @@ import {
     CurrencySymbol,
     ZERO_BI,
     amountFormatterFromBase,
+    computeAvailableToBorrow,
     currencyMap,
     divide,
     getCurrencyMapAsList,
@@ -20,7 +21,7 @@ export interface CollateralBook {
     nonCollateral: Partial<Record<CurrencySymbol, bigint>>;
     withdrawableCollateral: Partial<Record<CurrencySymbol, bigint>>;
     usdCollateral: number;
-    usdUnusedCollateral: number;
+    usdAvailableToBorrow: number;
     usdNonCollateral: number;
     coverage: number;
     collateralThreshold: number;
@@ -43,7 +44,7 @@ export const emptyCollateralBook: CollateralBook = {
         [CurrencySymbol.WBTC]: ZERO_BI,
     },
     usdCollateral: 0,
-    usdUnusedCollateral: 0,
+    usdAvailableToBorrow: 0,
     usdNonCollateral: 0,
     coverage: 0,
     collateralThreshold: 0,
@@ -124,22 +125,30 @@ export const useCollateralBook = (account: string | undefined) => {
                     ...acc,
                     ...obj,
                 }));
+            const usdCollateral = divide(
+                data.collateralValues.totalCollateralAmount,
+                DIVIDER,
+                8
+            );
+            const usdUnusedCollateral = divide(
+                data.collateralValues.totalUnusedCollateralAmount,
+                DIVIDER,
+                8
+            );
+            const coverage = Number(data.collateralValues.collateralCoverage);
 
             const colBook: CollateralBook = {
                 collateral: collateralBook,
                 nonCollateral: nonCollateralBook,
-                usdCollateral: divide(
-                    data.collateralValues.totalCollateralAmount,
-                    DIVIDER,
-                    8
-                ),
-                usdUnusedCollateral: divide(
-                    data.collateralValues.totalUnusedCollateralAmount,
-                    DIVIDER,
-                    8
+                usdCollateral: usdCollateral,
+                usdAvailableToBorrow: computeAvailableToBorrow(
+                    usdCollateral,
+                    usdUnusedCollateral,
+                    divide(coverage, 100),
+                    collateralThreshold
                 ),
                 usdNonCollateral: usdNonCollateral,
-                coverage: Number(data.collateralValues.collateralCoverage),
+                coverage: coverage,
                 collateralThreshold: collateralThreshold,
                 withdrawableCollateral: withdrawableCollateral,
             };
