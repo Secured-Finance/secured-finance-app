@@ -8,9 +8,6 @@ const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
 describe('useCollateralBook hook', () => {
-    const ETH_PRICE = 2000.34;
-    const USDC_PRICE = 1;
-    const WBTC_PRICE = 50000.0;
     const FIL_PRICE = 6.0;
     const preloadedState = {
         ...preloadedAssetPrices,
@@ -45,6 +42,8 @@ describe('useCollateralBook hook', () => {
             [CurrencySymbol.ETH]: BigInt('1000000000000'),
             [CurrencySymbol.WBTC]: BigInt('1000000000000'),
         });
+        expect(colBook.usdCollateral).toEqual(12100.34);
+        expect(colBook.usdAvailableToBorrow).toBeCloseTo(5203.1462);
         expect(newValue.isLoading).toEqual(false);
     });
 
@@ -52,29 +51,6 @@ describe('useCollateralBook hook', () => {
         const { result } = renderHook(() => useCollateralBook(undefined));
         const colBook = result.current.data as CollateralBook;
         expect(colBook).toEqual(undefined);
-    });
-
-    it('should compute the collaterals in USD', async () => {
-        const { result, waitForNextUpdate } = renderHook(
-            () => useCollateralBook('0x0'),
-            { preloadedState }
-        );
-        await waitForNextUpdate();
-        const colBook = result.current.data as CollateralBook;
-        expect(colBook.usdCollateral).toEqual(
-            amountFormatterFromBase[CurrencySymbol.ETH](
-                colBook.collateral.ETH ?? BigInt(0)
-            ) *
-                ETH_PRICE +
-                amountFormatterFromBase[CurrencySymbol.USDC](
-                    colBook.collateral.USDC ?? BigInt(0)
-                ) *
-                    USDC_PRICE +
-                amountFormatterFromBase[CurrencySymbol.WBTC](
-                    colBook.collateral.WBTC ?? BigInt(0)
-                ) *
-                    WBTC_PRICE
-        );
     });
 
     it('should compute the non collaterals in USD', async () => {
@@ -85,14 +61,9 @@ describe('useCollateralBook hook', () => {
         await waitForNextUpdate();
         const colBook = result.current.data as CollateralBook;
         expect(colBook.usdNonCollateral).toEqual(
-            amountFormatterFromBase[CurrencySymbol.WBTC](
-                colBook.nonCollateral.WBTC ?? BigInt(0)
-            ) *
-                WBTC_PRICE +
-                amountFormatterFromBase[CurrencySymbol.WFIL](
-                    colBook.nonCollateral.WFIL ?? BigInt(0)
-                ) *
-                    FIL_PRICE
+            amountFormatterFromBase[CurrencySymbol.WFIL](
+                colBook.nonCollateral.WFIL ?? BigInt(0)
+            ) * FIL_PRICE
         );
     });
 });
