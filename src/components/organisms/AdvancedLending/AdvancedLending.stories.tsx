@@ -4,7 +4,7 @@ import type { Meta, StoryFn } from '@storybook/react';
 import { within } from '@storybook/testing-library';
 import { defaultDelistedStatusSet } from 'src/hooks';
 import {
-    collateralBook80,
+    collateralBook37,
     maturityOptions,
     yieldCurveRates,
 } from 'src/stories/mocks/fixtures';
@@ -16,7 +16,7 @@ export default {
     title: 'Organism/AdvancedLending',
     component: AdvancedLending,
     args: {
-        collateralBook: collateralBook80,
+        collateralBook: collateralBook37,
         maturitiesOptionList: maturityOptions,
         rates: yieldCurveRates,
         marketPrice: 9917,

@@ -849,7 +849,7 @@ export const collateralBook80: CollateralBook = {
         WFIL: BigInt('100000000000000000000'),
     },
     usdCollateral: 12100.34,
-    usdUnusedCollateral: 9680.27,
+    usdUnusedCollateral: 0,
     usdNonCollateral: 600,
     coverage: 8000, // 80%,
     collateralThreshold: 80,

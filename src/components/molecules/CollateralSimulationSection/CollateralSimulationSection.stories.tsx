@@ -13,7 +13,7 @@ export default {
     args: {
         collateral: collateralBook37,
         tradeAmount: new Amount('50000000000000000000', CurrencySymbol.WFIL),
-        assetPrice: 10,
+        assetPrice: 6.0,
         side: OrderSide.BORROW,
     },
     parameters: {
