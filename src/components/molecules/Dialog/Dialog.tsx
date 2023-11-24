@@ -30,7 +30,7 @@ export const Dialog = ({
         <HeadlessDialog
             open={isOpen}
             onClose={onClose}
-            className='relative z-50'
+            className='relative z-30'
         >
             <div className='fixed inset-0 bg-backgroundBlur backdrop-blur-sm' />
             <div className='fixed inset-0 flex items-center justify-center'>

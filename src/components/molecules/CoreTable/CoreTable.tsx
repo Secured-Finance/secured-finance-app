@@ -123,7 +123,7 @@ export const CoreTable = <T,>({
                                 coreTableOptions.stickyHeader,
                             'h-14 py-4': !coreTableOptions.compact,
                             'h-5 py-1': coreTableOptions.compact,
-                            'sticky z-20 bg-[#1D2739]':
+                            'sticky inset-0 z-20 bg-[#1D2739]':
                                 coreTableOptions.stickyHeader,
                             'border-b border-white-10':
                                 coreTableOptions.border &&
