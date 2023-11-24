@@ -1,18 +1,17 @@
 import Tick from 'src/assets/icons/tick.svg';
 import { Separator } from 'src/components/atoms';
 import { percentFormat, usdFormat } from 'src/utils';
-import { computeAvailableToBorrow } from 'src/utils/collateral';
 
 interface CollateralManagementConciseTabProps {
     collateralCoverage: number;
-    totalCollateralInUSD: number;
+    availableToBorrow: number;
     collateralThreshold: number;
     account: string | undefined;
 }
 
 export const CollateralManagementConciseTab = ({
     collateralCoverage,
-    totalCollateralInUSD,
+    availableToBorrow,
     collateralThreshold,
     account,
 }: CollateralManagementConciseTabProps) => {
@@ -21,12 +20,6 @@ export const CollateralManagementConciseTab = ({
         padding = 1;
     }
     const info = getLiquidationInformation(collateralCoverage);
-    const availableToBorrow = computeAvailableToBorrow(
-        1,
-        totalCollateralInUSD,
-        collateralCoverage / 100.0,
-        collateralThreshold
-    );
 
     return (
         <div className='flex h-fit w-full flex-col rounded-b bg-black-20 pb-4 pt-2'>

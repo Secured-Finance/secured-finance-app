@@ -369,7 +369,7 @@ export function AdvancedLendingOrderCard({
 
                 <CollateralManagementConciseTab
                     collateralCoverage={collateralUsagePercent}
-                    totalCollateralInUSD={collateralBook.usdCollateral}
+                    availableToBorrow={collateralBook.usdUnusedCollateral}
                     collateralThreshold={collateralBook.collateralThreshold}
                     account={address}
                 />

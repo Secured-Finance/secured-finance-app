@@ -182,8 +182,8 @@ export const MarketDashboard = () => {
                                     collateralCoverage={
                                         collateralBook.coverage / 100
                                     }
-                                    totalCollateralInUSD={
-                                        collateralBook.usdCollateral
+                                    availableToBorrow={
+                                        collateralBook.usdUnusedCollateral
                                     }
                                     collateralThreshold={
                                         collateralBook.collateralThreshold

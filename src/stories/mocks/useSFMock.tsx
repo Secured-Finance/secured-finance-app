@@ -163,6 +163,8 @@ export const mockUseSF = () => {
                     ...collateralBook37.nonCollateral,
                 },
                 collateralCoverage: collateralBook37.coverage,
+                totalCollateralAmount: BigInt('1210034000000'),
+                totalUnusedCollateralAmount: BigInt('520314620000'),
             })
         ),
 

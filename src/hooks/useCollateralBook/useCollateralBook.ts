@@ -10,6 +10,7 @@ import {
     ZERO_BI,
     amountFormatterFromBase,
     currencyMap,
+    divide,
     getCurrencyMapAsList,
     toCurrency,
 } from 'src/utils';
@@ -19,10 +20,13 @@ export interface CollateralBook {
     nonCollateral: Partial<Record<CurrencySymbol, bigint>>;
     withdrawableCollateral: Partial<Record<CurrencySymbol, bigint>>;
     usdCollateral: number;
+    usdUnusedCollateral: number;
     usdNonCollateral: number;
     coverage: number;
     collateralThreshold: number;
 }
+
+const DIVIDER = 100000000;
 
 export const emptyCollateralBook: CollateralBook = {
     collateral: {
@@ -39,6 +43,7 @@ export const emptyCollateralBook: CollateralBook = {
         [CurrencySymbol.WBTC]: ZERO_BI,
     },
     usdCollateral: 0,
+    usdUnusedCollateral: 0,
     usdNonCollateral: 0,
     coverage: 0,
     collateralThreshold: 0,
@@ -52,6 +57,8 @@ const emptyCollateralValues = {
         [CurrencySymbol.WFIL]: ZERO_BI,
     },
     collateralCoverage: ZERO_BI,
+    totalCollateralAmount: ZERO_BI,
+    totalUnusedCollateralAmount: ZERO_BI,
 };
 
 const emptyCollateralParameters = {
@@ -101,12 +108,8 @@ export const useCollateralBook = (account: string | undefined) => {
             };
         },
         select: data => {
-            const {
-                collateralBook,
-                nonCollateralBook,
-                usdCollateral,
-                usdNonCollateral,
-            } = formatCollateral(data.collateralValues.collateral, priceList);
+            const { collateralBook, nonCollateralBook, usdNonCollateral } =
+                formatCollateral(data.collateralValues.collateral, priceList);
 
             const liquidationThresholdRate = Number(
                 data.collateralParameters.liquidationThresholdRate
@@ -125,7 +128,16 @@ export const useCollateralBook = (account: string | undefined) => {
             const colBook: CollateralBook = {
                 collateral: collateralBook,
                 nonCollateral: nonCollateralBook,
-                usdCollateral: usdCollateral,
+                usdCollateral: divide(
+                    data.collateralValues.totalCollateralAmount,
+                    DIVIDER,
+                    8
+                ),
+                usdUnusedCollateral: divide(
+                    data.collateralValues.totalUnusedCollateralAmount,
+                    DIVIDER,
+                    8
+                ),
                 usdNonCollateral: usdNonCollateral,
                 coverage: Number(data.collateralValues.collateralCoverage),
                 collateralThreshold: collateralThreshold,
