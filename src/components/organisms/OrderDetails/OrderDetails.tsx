@@ -141,7 +141,11 @@ export const OrderDetails = ({
             />
             {!isRemoveOrder && (
                 <>
-                    <CollateralSimulationSection collateral={collateral} />
+                    <CollateralSimulationSection
+                        collateral={collateral}
+                        maturity={maturity}
+                        tradeAmount={amount}
+                    />
                     <SectionWithItems
                         itemList={[
                             [

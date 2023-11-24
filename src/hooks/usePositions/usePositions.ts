@@ -2,7 +2,12 @@ import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
-import { CurrencySymbol, hexToCurrencySymbol, toCurrency } from 'src/utils';
+import {
+    CurrencySymbol,
+    amountFormatterFromBase,
+    hexToCurrencySymbol,
+    toCurrency,
+} from 'src/utils';
 
 export type Position = {
     currency: string;
@@ -17,6 +22,13 @@ export const usePositions = (
     usedCurrencies: CurrencySymbol[]
 ) => {
     const securedFinance = useSF();
+
+    const emptyPV = {
+        [CurrencySymbol.ETH]: 0,
+        [CurrencySymbol.WBTC]: 0,
+        [CurrencySymbol.USDC]: 0,
+        [CurrencySymbol.WFIL]: 0,
+    };
 
     const usedCurrencyKey = useMemo(() => {
         return usedCurrencies.sort().join('-');
@@ -33,6 +45,8 @@ export const usePositions = (
             return positions ?? [];
         },
         select: positions => {
+            const totalBorrowPV = { ...emptyPV };
+            const totalLendPV = { ...emptyPV };
             const lendCurrencies: Set<CurrencySymbol> = new Set();
             const borrowCurrencies: Set<CurrencySymbol> = new Set();
             const ret: Position[] = [];
@@ -50,11 +64,13 @@ export const usePositions = (
                 } as Position);
                 const ccy = hexToCurrencySymbol(position.ccy);
                 if (!ccy) return;
+                const pv = amountFormatterFromBase[ccy](position.presentValue);
                 if (position.presentValue >= 0) {
                     lendCurrencies.add(ccy);
-                }
-                if (position.presentValue < 0) {
+                    totalLendPV[ccy] += pv;
+                } else {
                     borrowCurrencies.add(ccy);
+                    totalBorrowPV[ccy] += Math.abs(pv);
                 }
             });
 
@@ -62,6 +78,8 @@ export const usePositions = (
                 positions: ret,
                 lendCurrencies,
                 borrowCurrencies,
+                totalBorrowPV,
+                totalLendPV,
             };
         },
         enabled: !!securedFinance && !!account && !!usedCurrencyKey,

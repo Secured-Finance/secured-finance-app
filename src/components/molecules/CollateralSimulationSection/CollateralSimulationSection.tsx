@@ -4,9 +4,14 @@ import {
     getLiquidationInformation,
 } from 'src/components/atoms';
 import { InfoToolTip } from 'src/components/molecules';
-import { CollateralBook, useOrderEstimation } from 'src/hooks';
-import { formatCollateralRatio, usdFormat } from 'src/utils';
+import { CollateralBook, useOrderEstimation, useZCUsage } from 'src/hooks';
+import {
+    amountFormatterFromBase,
+    formatCollateralRatio,
+    usdFormat,
+} from 'src/utils';
 import { MAX_COVERAGE, computeAvailableToBorrow } from 'src/utils/collateral';
+import { Amount, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
 const CollateralUsageItem = () => {
@@ -25,12 +30,31 @@ const CollateralUsageItem = () => {
 
 export const CollateralSimulationSection = ({
     collateral,
+    maturity,
+    tradeAmount,
 }: {
     collateral: CollateralBook;
+    maturity: Maturity;
+    tradeAmount: Amount;
 }) => {
     const { address } = useAccount();
 
-    const { data: coverage = 0 } = useOrderEstimation(address);
+    const { data: orderEstimationInfo } = useOrderEstimation(address);
+
+    const getZCUsage = useZCUsage(address);
+
+    const filledAmount = amountFormatterFromBase[tradeAmount.currency](
+        orderEstimationInfo?.filledAmount ?? BigInt(0)
+    );
+
+    const zcUsage = formatCollateralRatio(
+        getZCUsage(maturity.toNumber(), tradeAmount.currency, filledAmount)
+    );
+
+    const coverage = useMemo(
+        () => Number(orderEstimationInfo?.coverage) ?? 0,
+        [orderEstimationInfo?.coverage]
+    );
 
     const remainingToBorrowText = useMemo(
         () =>
@@ -48,6 +72,7 @@ export const CollateralSimulationSection = ({
 
     const items: [string | React.ReactNode, string | React.ReactNode][] = [
         ['Borrow Remaining', remainingToBorrowText],
+        ['ZC Usage', zcUsage],
         [
             <CollateralUsageItem key={1} />,
             getCollateralUsage(collateral.coverage, coverage),
