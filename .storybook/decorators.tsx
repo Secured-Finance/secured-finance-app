@@ -159,11 +159,11 @@ export const withEthBalance = (Story: StoryFn) => {
     return <Story />;
 };
 
-export const withChainErrorDisabled = (Story: StoryFn) => {
+export const withChainErrorEnabled = (Story: StoryFn) => {
     const dispatch = useDispatch();
     useEffect(() => {
         const timeoutId = setTimeout(() => {
-            dispatch(updateChainError(false));
+            dispatch(updateChainError(true));
         }, 300);
 
         return () => clearTimeout(timeoutId);

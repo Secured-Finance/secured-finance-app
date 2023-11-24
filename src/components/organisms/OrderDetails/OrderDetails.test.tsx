@@ -3,7 +3,8 @@ import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './OrderDetails.stories';
 
-const { Default, Delisted, RemoveOrder } = composeStories(stories);
+const { Default, Delisted, UnderMinimumCollateralThreshold, RemoveOrder } =
+    composeStories(stories);
 
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
@@ -19,9 +20,9 @@ describe('OrderDetails Component', () => {
         });
 
         expect(screen.getByText('Bond Price')).toBeInTheDocument();
-        expect(screen.getByText('~ 94.10')).toBeInTheDocument();
+        expect(screen.getByText('~ 96.10')).toBeInTheDocument();
         expect(screen.getByText('APR')).toBeInTheDocument();
-        expect(screen.getByText('~ 6.28%')).toBeInTheDocument();
+        expect(screen.getByText('~ 4.06%')).toBeInTheDocument();
     });
 
     it('should render collateral utilization', async () => {
@@ -68,6 +69,20 @@ describe('OrderDetails Component', () => {
                 'Please note that USDC will be delisted on Secured Finance.'
             )
         ).not.toBeInTheDocument();
+    });
+
+    describe('Minimum Collateral Threshold', () => {
+        it('should display a warning when specified with the market currentMinDebtUnitPrice', async () => {
+            render(<UnderMinimumCollateralThreshold />);
+            expect(await screen.findByRole('alert')).toBeInTheDocument();
+            expect(screen.getByText('95.00')).toBeInTheDocument();
+        });
+
+        it('should display the adjusted PV', async () => {
+            render(<UnderMinimumCollateralThreshold />);
+            expect(await screen.findByRole('alert')).toBeInTheDocument();
+            expect(screen.getByText('9,500 USDC')).toBeInTheDocument();
+        });
     });
 
     it('should not show collateral info when isRemoveOrder is true', () => {

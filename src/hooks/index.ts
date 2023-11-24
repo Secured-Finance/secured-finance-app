@@ -10,6 +10,7 @@ export * from './useGraphClientHook';
 export * from './useHandleContractTransaction';
 export * from './useIsGlobalItayose';
 export * from './useIsMarketTerminated';
+export * from './useIsUnderCollateralThreshold';
 export * from './useLendingMarkets';
 export * from './useLoanValues';
 export * from './useMarketLists';

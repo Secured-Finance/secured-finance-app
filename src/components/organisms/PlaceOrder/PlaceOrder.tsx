@@ -14,6 +14,7 @@ import {
     CollateralBook,
     useEtherscanUrl,
     useHandleContractTransaction,
+    useIsUnderCollateralThreshold,
 } from 'src/hooks';
 import { OrderType, PlaceOrderFunction } from 'src/types';
 import {
@@ -24,6 +25,7 @@ import {
     formatAmount,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
+import { useAccount } from 'wagmi';
 
 enum Step {
     orderConfirm = 1,
@@ -130,6 +132,16 @@ export const PlaceOrder = ({
     const handleContractTransaction = useHandleContractTransaction();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [txHash, setTxHash] = useState<string | undefined>();
+
+    const { address } = useAccount();
+    const isUnderCollateralThreshold = useIsUnderCollateralThreshold(address);
+
+    const showWarning = isUnderCollateralThreshold(
+        orderAmount.currency,
+        maturity.toNumber(),
+        loanValue.price,
+        side
+    );
 
     const [errorMessage, setErrorMessage] = useState(
         'Your order could not be placed'
@@ -249,6 +261,7 @@ export const PlaceOrder = ({
             title={state.title}
             description={state.description}
             callToAction={state.buttonText}
+            disableActionButton={showWarning}
             onClick={() => onClick(state.currentStep)}
         >
             {(() => {
@@ -263,6 +276,7 @@ export const PlaceOrder = ({
                                 collateral={collateral}
                                 loanValue={loanValue}
                                 isCurrencyDelisted={isCurrencyDelisted}
+                                showWarning={showWarning}
                             />
                         );
                     case Step.orderProcessing:

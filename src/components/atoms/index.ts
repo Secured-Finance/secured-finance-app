@@ -29,6 +29,7 @@ export * from './OrderInputBox';
 export * from './PercentageTab';
 export * from './PriceYieldItem';
 export * from './RadioGroupSelector';
+export * from './Section';
 export * from './SectionWithItems';
 export * from './Separator';
 export * from './SimpleAdvancedSelector';

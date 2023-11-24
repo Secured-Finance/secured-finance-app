@@ -1,4 +1,4 @@
-import { Tooltip } from 'src/components/templates';
+import { InfoToolTip } from 'src/components/molecules';
 
 interface OrderDisplayBoxProps {
     field: string;
@@ -16,9 +16,13 @@ export const OrderDisplayBox = ({
             <div className='flex flex-row items-center gap-2'>
                 <div className='text-slateGray'>{field}</div>
                 {informationText && (
-                    <Tooltip maxWidth='small' align='right'>
+                    <InfoToolTip
+                        maxWidth='small'
+                        align='right'
+                        iconSize='small'
+                    >
                         {informationText}
-                    </Tooltip>
+                    </InfoToolTip>
                 )}
             </div>
             <div className='text-right text-planetaryPurple'>{value}</div>
