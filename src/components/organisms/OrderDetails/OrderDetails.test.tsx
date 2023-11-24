@@ -1,6 +1,8 @@
 import { composeStories } from '@storybook/react';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
+import { CurrencySymbol } from 'src/utils';
+import { Amount } from 'src/utils/entities';
 import * as stories from './OrderDetails.stories';
 
 const { Default, Delisted, UnderMinimumCollateralThreshold, RemoveOrder } =
@@ -86,5 +88,15 @@ describe('OrderDetails Component', () => {
         render(<RemoveOrder />);
         expect(screen.queryByText('Collateral Usage')).not.toBeInTheDocument();
         expect(screen.queryByText('Borrow Remaining')).not.toBeInTheDocument();
+    });
+
+    it('should display ZC usage', async () => {
+        render(
+            <Default amount={new Amount('100000000', CurrencySymbol.ETH)} />
+        );
+        expect(screen.getByText('ZC Usage')).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.getByText('0.85%')).toBeInTheDocument();
+        });
     });
 });
