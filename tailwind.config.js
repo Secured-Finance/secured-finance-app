@@ -107,10 +107,11 @@ module.exports = {
                 '8': '#FCFCFD',
             },
             grayScale: '#FAFAFA',
+
             tabGradient2: 'rgba(106, 118, 177, 0.35)',
             tabGradient1: 'rgba(57, 77, 174, 0)',
             backgroundBlur: 'rgba(35, 43, 56, 0.6)',
-            cardBackground: 'rgb(41, 45, 63)',
+            cardBackground: '#161E2E',
             panelStroke: 'rgb(45, 64, 100)',
 
             progressBarStart: 'rgba(21, 214, 232, 1)',
