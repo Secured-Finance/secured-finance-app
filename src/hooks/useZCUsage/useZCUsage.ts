@@ -1,9 +1,12 @@
 import { useCallback } from 'react';
+import {
+    emptyCollateralBook,
+    useCollateralBook,
+    useCurrenciesForOrders,
+    usePositions,
+} from 'src/hooks';
 import { UserAccount } from 'src/types';
 import { CurrencySymbol, amountFormatterFromBase } from 'src/utils';
-import { emptyCollateralBook, useCollateralBook } from '../useCollateralBook';
-import { useCurrenciesForOrders } from '../useCurrenciesForOrders';
-import { usePositions } from '../usePositions';
 
 export const useZCUsage = (address: UserAccount) => {
     const { data: usedCurrencies = [] } = useCurrenciesForOrders(address);
