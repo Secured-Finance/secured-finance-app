@@ -100,16 +100,14 @@ export const MyTransactionsTable = ({
     ];
 
     return (
-        <div className='pb-2'>
-            <CoreTable
-                data={data}
-                columns={isTablet ? columnsForTabletMobile : columns}
-                options={{
-                    name: 'my-transactions-table',
-                    stickyFirstColumn: true,
-                    pagination: pagination,
-                }}
-            />
-        </div>
+        <CoreTable
+            data={data}
+            columns={isTablet ? columnsForTabletMobile : columns}
+            options={{
+                name: 'my-transactions-table',
+                stickyFirstColumn: true,
+                pagination: pagination,
+            }}
+        />
     );
 };
