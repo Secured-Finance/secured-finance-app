@@ -39,6 +39,8 @@ module.exports = {
                 '1px': '1px',
                 '2px': '2px',
                 '6px': '6px',
+                '70%-gap-3': 'calc(70% - (3/4 * 1rem))',
+                '30%-gap-3': 'calc(30% - (3/4 * 1rem))',
             },
             gap: {
                 '10px': '10px',
