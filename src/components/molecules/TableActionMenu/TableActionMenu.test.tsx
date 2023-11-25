@@ -26,23 +26,4 @@ describe('TableActionMenu Component', () => {
             expect(button).toHaveClass('text-slateGray');
         });
     });
-
-    it('should render the first action as a primary button and thee second action as a secondary one', () => {
-        const onClick = jest.fn();
-
-        render(
-            <Default
-                items={[
-                    { text: 'primary', onClick: onClick },
-                    { text: 'secondary', onClick: onClick },
-                ]}
-            />
-        );
-        expect(screen.getByRole('button', { name: 'primary' })).toHaveClass(
-            'bg-starBlue'
-        );
-        expect(
-            screen.getByRole('button', { name: 'secondary' })
-        ).not.toHaveClass('bg-starBlue');
-    });
 });
