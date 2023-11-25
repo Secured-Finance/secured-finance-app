@@ -95,7 +95,7 @@ export const OrderHistoryTable = ({
                             <TableActionMenu
                                 items={[
                                     {
-                                        text: 'View on Etherscan',
+                                        text: 'View',
                                         onClick: () => {
                                             window.open(
                                                 etherscanLink,
