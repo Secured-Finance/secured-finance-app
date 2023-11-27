@@ -27,6 +27,7 @@ import {
     emptyCollateralBook,
     useCollateralBook,
     useCurrencyDelistedStatus,
+    useLastPrices,
     useLendingMarkets,
     useMarketOrderList,
     useMarketPhase,
@@ -34,7 +35,6 @@ import {
     useOrderbook,
     useYieldCurveMarketRates,
 } from 'src/hooks';
-import { getAssetPrice } from 'src/store/assetPrices/selectors';
 import {
     selectLandingOrderForm,
     setAmount,
@@ -73,9 +73,7 @@ const Toolbar = ({
     handleAssetChange: (v: CurrencySymbol) => void;
     handleTermChange: (v: string) => void;
 }) => {
-    const currencyPrice = useSelector((state: RootState) =>
-        getAssetPrice(currency)(state)
-    );
+    const { data: priceList } = useLastPrices();
 
     return (
         <GradientBox shape='rectangle'>
@@ -97,8 +95,8 @@ const Toolbar = ({
                     </div>
                     <div>
                         <MarketTab
-                            name={`${currency} Price`}
-                            value={usdFormat(currencyPrice, 2)}
+                            name={`${currency} price`}
+                            value={usdFormat(priceList[currency], 2)}
                         />
                     </div>
                 </div>

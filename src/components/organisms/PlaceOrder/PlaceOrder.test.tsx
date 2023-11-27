@@ -1,10 +1,6 @@
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
-import {
-    dec22Fixture,
-    dec24Fixture,
-    preloadedAssetPrices,
-} from 'src/stories/mocks/fixtures';
+import { dec22Fixture, dec24Fixture } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
@@ -25,7 +21,6 @@ const preloadedState = {
         orderType: OrderType.LIMIT,
         sourceAccount: WalletSource.METAMASK,
     },
-    ...preloadedAssetPrices,
 };
 
 const mockSecuredFinance = mockUseSF();

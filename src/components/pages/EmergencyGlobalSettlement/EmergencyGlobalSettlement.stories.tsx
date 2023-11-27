@@ -1,9 +1,5 @@
 import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
-import {
-    withAppLayout,
-    withAssetPrice,
-    withWalletProvider,
-} from '.storybook/decorators';
+import { withAppLayout, withWalletProvider } from '.storybook/decorators';
 import { Meta, StoryFn } from '@storybook/react';
 import { EmergencyGlobalSettlement } from './EmergencyGlobalSettlement';
 
@@ -16,7 +12,7 @@ export default {
         layout: 'fullscreen',
         connected: true,
     },
-    decorators: [withAppLayout, withWalletProvider, withAssetPrice],
+    decorators: [withAppLayout, withWalletProvider],
 } as Meta<typeof EmergencyGlobalSettlement>;
 
 const Template: StoryFn<typeof EmergencyGlobalSettlement> = () => (

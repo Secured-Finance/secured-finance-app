@@ -13,8 +13,12 @@ import {
     WalletSourceSelector,
 } from 'src/components/atoms';
 import { OrderAction } from 'src/components/organisms';
-import { CollateralBook, useBalances, useMarket } from 'src/hooks';
-import { getPriceMap } from 'src/store/assetPrices/selectors';
+import {
+    CollateralBook,
+    useBalances,
+    useLastPrices,
+    useMarket,
+} from 'src/hooks';
 import {
     resetUnitPrice,
     selectLandingOrderForm,
@@ -91,7 +95,7 @@ export function AdvancedLendingOrderCard({
         return collateralBook.coverage / 100.0;
     }, [collateralBook]);
 
-    const priceList = useSelector((state: RootState) => getPriceMap(state));
+    const { data: priceList } = useLastPrices();
     const price = priceList[currency];
 
     const market = useMarket(currency, maturity);

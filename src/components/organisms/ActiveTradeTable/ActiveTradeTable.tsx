@@ -5,13 +5,11 @@ import classNames from 'classnames';
 import * as dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { useCallback, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { CoreTable, TableActionMenu } from 'src/components/molecules';
 import { UnwindDialog, UnwindDialogType } from 'src/components/organisms';
-import { Position, useBreakpoint } from 'src/hooks';
-import { getPriceMap } from 'src/store/assetPrices/selectors';
+import { Position, useBreakpoint, useLastPrices } from 'src/hooks';
 import { setCurrency, setMaturity } from 'src/store/landingOrderForm';
-import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
     hexToCurrencySymbol,
@@ -50,7 +48,7 @@ export const ActiveTradeTable = ({
         show: boolean;
         type: 'UNWIND' | 'REDEEM' | 'REPAY';
     }>();
-    const priceList = useSelector((state: RootState) => getPriceMap(state));
+    const { data: priceList } = useLastPrices();
     const router = useRouter();
     const dispatch = useDispatch();
     const isTablet = useBreakpoint('laptop');
