@@ -60,7 +60,7 @@ describe('test Button component', () => {
     it('should render an outlined button when variant is outlined', async () => {
         render(<Outlined />);
         expect(screen.getByRole('button')).toHaveClass(
-            'bg-inherit border-2 border-slateGray hover:bg-slateGray'
+            'enabled:border-2 enabled:border-slateGray enabled:text-neutral-8 enabled:hover:border-none enabled:hover:bg-neutral-8 enabled:hover:text-neutral-2 disabled:bg-neutral-8 disabled:text-neutral-2'
         );
     });
 });
