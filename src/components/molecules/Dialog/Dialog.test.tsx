@@ -31,13 +31,6 @@ describe('Dialog component', () => {
         );
     });
 
-    it('should call onClose when the close button is clicked', () => {
-        const onClose = jest.fn();
-        render(<Default onClose={onClose} />);
-        fireEvent.click(screen.getByTestId('close-button'));
-        expect(onClose).toHaveBeenCalled();
-    });
-
     it('should not display the button in the modal if callToAction is empty', () => {
         render(<NoButton />);
         expect(screen.queryByTestId('dialog-action-button')).toBeNull();
@@ -65,5 +58,13 @@ describe('Dialog component', () => {
         expect(
             screen.queryByRole('button', { name: 'Cancel' })
         ).not.toBeInTheDocument();
+    });
+
+    it('should call onClose when the cancel button is clicked', () => {
+        const onClose = jest.fn();
+        render(<WithCancelButton onClose={onClose} />);
+        const cancelButton = screen.getByRole('button', { name: 'Cancel' });
+        fireEvent.click(cancelButton);
+        expect(onClose).toHaveBeenCalled();
     });
 });

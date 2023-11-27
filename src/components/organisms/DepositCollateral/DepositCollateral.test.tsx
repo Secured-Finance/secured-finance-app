@@ -21,7 +21,7 @@ describe('DepositCollateral component', () => {
         expect(screen.getByText('Deposit Collateral')).toBeInTheDocument();
 
         const button = screen.getByTestId('dialog-action-button');
-        expect(button).toHaveTextContent('Continue');
+        expect(button).toHaveTextContent('OK');
 
         expect(screen.getByRole('textbox')).toBeInTheDocument();
     });
@@ -147,7 +147,7 @@ describe('DepositCollateral component', () => {
         });
     });
 
-    it('should disable the continue button when collateral amount is greater than available amount', () => {
+    it('should disable the OK button when collateral amount is greater than available amount', () => {
         const onClose = jest.fn();
         render(<Default onClose={onClose} />);
         const input = screen.getByRole('textbox');
@@ -190,5 +190,36 @@ describe('DepositCollateral component', () => {
                 }
             )
         );
+    });
+
+    it('should call onClose when cancel button is clicked', () => {
+        const onClose = jest.fn();
+        render(<Default onClose={onClose} />, {
+            preloadedState,
+        });
+        const cancelButton = screen.getByRole('button', {
+            name: 'Cancel',
+        });
+        fireEvent.click(cancelButton);
+        expect(onClose).toHaveBeenCalled();
+    });
+
+    it('should not show cancel button if dialog is not on first step', async () => {
+        render(<Default />, {
+            preloadedState,
+        });
+        const cancelButton = await screen.findByRole('button', {
+            name: 'Cancel',
+        });
+        expect(cancelButton).toBeInTheDocument();
+        fireEvent.click(screen.getByTestId('collateral-selector-button'));
+        fireEvent.click(screen.getByTestId('option-0'));
+        fireEvent.click(screen.getByTestId(75));
+
+        const button = screen.getByTestId('dialog-action-button');
+        fireEvent.click(button);
+        await waitFor(() => {
+            expect(cancelButton).not.toBeInTheDocument();
+        });
     });
 });
