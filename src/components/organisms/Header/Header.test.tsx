@@ -16,12 +16,6 @@ jest.mock(
             children
 );
 
-const preloadedState = {
-    blockchain: {
-        chainError: false,
-    },
-};
-
 describe('Header component', () => {
     it('should render the header', () => {
         (useRouter as jest.Mock).mockReturnValue({
@@ -85,15 +79,54 @@ describe('Header component', () => {
         );
     });
 
-    it('should render testnet header on chainError false', () => {
+    it('should render testnet info header on chainError false', () => {
         (useRouter as jest.Mock).mockImplementation(() => ({
             pathname: '/',
             push: jest.fn(),
         }));
 
-        render(<Primary />, { preloadedState });
+        render(<Primary />);
+        expect(screen.getByTestId('testnet-info')).toBeInTheDocument();
         expect(
             screen.getByText('You are visiting Secured Finance on testnet')
         ).toBeInTheDocument();
+    });
+
+    it('should render testnet alert header on chainError true', () => {
+        (useRouter as jest.Mock).mockImplementation(() => ({
+            pathname: '/',
+            push: jest.fn(),
+        }));
+
+        render(<Primary />, {
+            preloadedState: {
+                blockchain: {
+                    chainId: 5,
+                    chainError: true,
+                },
+            },
+        });
+        expect(screen.getByTestId('testnet-alert')).toBeInTheDocument();
+        expect(
+            screen.getByText('Secured Finance only supported in Sepolia')
+        ).toBeInTheDocument();
+    });
+
+    it('should not render testnet header if current chain is mainnet', () => {
+        (useRouter as jest.Mock).mockImplementation(() => ({
+            pathname: '/',
+            push: jest.fn(),
+        }));
+
+        render(<Primary />, {
+            preloadedState: {
+                blockchain: {
+                    chainId: 1,
+                    chainError: false,
+                },
+            },
+        });
+        expect(screen.queryByTestId('testnet-info')).not.toBeInTheDocument();
+        expect(screen.queryByTestId('testnet-alert')).not.toBeInTheDocument();
     });
 });

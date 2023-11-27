@@ -19,9 +19,8 @@ import { WBTC } from './currencies/wbtc';
 
 BigNumberJS.set({ EXPONENTIAL_AT: 30 }); // setting to a decent limit
 
-const ETH = Ether.onChain(
-    Number(process.env.NEXT_PUBLIC_ETHEREUM_CHAIN_ID ?? 1)
-);
+// TODO: Remove chainId from currency. It's not used.
+const ETH = Ether.onChain(1);
 
 export enum CurrencySymbol {
     ETH = 'ETH',

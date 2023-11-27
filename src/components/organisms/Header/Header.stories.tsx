@@ -1,6 +1,6 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import {
-    withChainErrorDisabled,
+    withChainErrorEnabled,
     withWalletProvider,
 } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
@@ -13,7 +13,7 @@ export default {
     args: {
         showNavigation: true,
     },
-    decorators: [withWalletProvider, withChainErrorDisabled],
+    decorators: [withWalletProvider],
     parameters: {
         ...RESPONSIVE_PARAMETERS,
     },
@@ -50,3 +50,6 @@ WithoutNavigation.args = {
 WithoutNavigation.parameters = {
     chromatic: { viewports: [VIEWPORTS.LAPTOP] },
 };
+
+export const WithChainError = Template.bind({});
+WithChainError.decorators = [withChainErrorEnabled];
