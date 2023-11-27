@@ -1,10 +1,13 @@
 import { composeStories } from '@storybook/react';
-import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
+import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { render, screen } from 'src/test-utils.js';
 import { CurrencySymbol } from 'src/utils';
 import * as stories from './CollateralUsageSection.stories';
 
 const { Default } = composeStories(stories);
+
+const mockSecuredFinance = mockUseSF();
+jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('CollateralUsageSection Component', () => {
     it('should render a CollateralUsageSection', () => {
@@ -18,7 +21,7 @@ describe('CollateralUsageSection Component', () => {
     });
 
     it('should compute the available to borrow from the collateral', async () => {
-        render(<Default />, { preloadedState: preloadedAssetPrices });
+        render(<Default />);
 
         expect(screen.getByText('Available to borrow')).toBeInTheDocument();
         const available = await screen.findByText('867.19 WFIL');
@@ -26,9 +29,7 @@ describe('CollateralUsageSection Component', () => {
     });
 
     it('should compute the available to borrow in the selected currency', async () => {
-        render(<Default currency={CurrencySymbol.USDC} />, {
-            preloadedState: preloadedAssetPrices,
-        });
+        render(<Default currency={CurrencySymbol.USDC} />);
 
         expect(screen.getByText('Available to borrow')).toBeInTheDocument();
         const available = await screen.findByText('5,203.15 USDC');

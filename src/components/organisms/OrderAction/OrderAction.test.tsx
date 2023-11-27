@@ -1,10 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
-import {
-    dec22Fixture,
-    preloadedAssetPrices,
-    usdcBytes32,
-} from 'src/stories/mocks/fixtures';
+import { dec22Fixture, usdcBytes32 } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
@@ -31,7 +27,6 @@ const preloadedState = {
     blockchain: {
         chainError: false,
     },
-    ...preloadedAssetPrices,
 };
 
 const mockSecuredFinance = mockUseSF();

@@ -1,8 +1,4 @@
-import {
-    withAssetPrice,
-    withEthBalance,
-    withWalletProvider,
-} from '.storybook/decorators';
+import { withEthBalance, withWalletProvider } from '.storybook/decorators';
 import { OrderSide } from '@secured-finance/sf-client';
 import type { Meta, StoryFn } from '@storybook/react';
 import { useEffect } from 'react';
@@ -32,7 +28,7 @@ export default {
         validation: false,
         isCurrencyDelisted: false,
     },
-    decorators: [withEthBalance, withAssetPrice, withWalletProvider],
+    decorators: [withEthBalance, withWalletProvider],
     argTypes: {
         collateralBook: {
             options: [

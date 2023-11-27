@@ -1,6 +1,5 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import {
     CollateralManagementConciseTab,
     GradientBox,
@@ -22,13 +21,12 @@ import {
     useCurrencyDelistedStatus,
     useGraphClientHook,
     useIsGlobalItayose,
+    useLastPrices,
     useLendingMarkets,
     useLoanValues,
     useTotalNumberOfAsset,
     useValueLockedByCurrency,
 } from 'src/hooks';
-import { getPriceMap } from 'src/store/assetPrices/selectors';
-import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
     Environment,
@@ -92,7 +90,7 @@ export const MarketDashboard = () => {
         'dailyVolumes'
     );
 
-    const priceList = useSelector((state: RootState) => getPriceMap(state));
+    const { data: priceList } = useLastPrices();
 
     const totalVolume = useMemo(() => {
         return ordinaryFormat(
@@ -102,8 +100,7 @@ export const MarketDashboard = () => {
             2,
             'compact'
         );
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [JSON.stringify(priceList), dailyVolumes.data]);
+    }, [priceList, dailyVolumes.data]);
 
     const totalValueLockedInUSD = useMemo(() => {
         let val = ZERO_BI;
@@ -122,8 +119,7 @@ export const MarketDashboard = () => {
         }
 
         return val;
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [JSON.stringify(priceList), valueLockedByCurrency]);
+    }, [priceList, valueLockedByCurrency]);
 
     return (
         <Page title='Market Dashboard' name='dashboard-page'>

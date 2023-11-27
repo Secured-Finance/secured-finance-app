@@ -1,6 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { useCallback, useMemo, useReducer, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Spinner } from 'src/components/atoms';
 import {
     Dialog,
@@ -14,12 +14,11 @@ import {
     useCollateralBook,
     useEtherscanUrl,
     useHandleContractTransaction,
+    useLastPrices,
     useMarket,
     useOrders,
 } from 'src/hooks';
-import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { setLastMessage } from 'src/store/lastError';
-import { RootState } from 'src/store/types';
 import { AddressUtils, CurrencySymbol } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
@@ -62,8 +61,7 @@ export const UnwindDialog = ({
 
     const { data: collateralBook = emptyCollateralBook } =
         useCollateralBook(address);
-    const priceList = useSelector((state: RootState) => getPriceMap(state));
-    const price = priceList[amount.currency];
+    const { data: priceList } = useLastPrices();
 
     const { unwindPosition, redeemPosition, repayPosition } = useOrders();
 
@@ -220,7 +218,7 @@ export const UnwindDialog = ({
                         amount={amount}
                         maturity={maturity}
                         side={side}
-                        assetPrice={price}
+                        assetPrice={priceList[amount.currency]}
                         collateral={collateralBook}
                         loanValue={marketValue}
                     />

@@ -1,9 +1,6 @@
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import { getLiquidationInformation } from 'src/components/atoms';
-import { CollateralBook } from 'src/hooks';
-import { getPriceMap } from 'src/store/assetPrices/selectors';
-import { RootState } from 'src/store/types';
+import { CollateralBook, useLastPrices } from 'src/hooks';
 import { CurrencySymbol, formatWithCurrency, percentFormat } from 'src/utils';
 import { computeAvailableToBorrow } from 'src/utils/collateral';
 
@@ -19,7 +16,7 @@ export const CollateralUsageSection = ({
     collateralThreshold: number;
 }) => {
     collateralCoverage = collateralCoverage / 100.0;
-    const assetPriceMap = useSelector((state: RootState) => getPriceMap(state));
+    const { data: assetPriceMap } = useLastPrices();
 
     const collateralUsagePercent = useMemo(() => {
         return percentFormat(collateralCoverage);

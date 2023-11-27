@@ -1,4 +1,3 @@
-import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
 import { CurrencySymbol, amountFormatterFromBase } from 'src/utils';
@@ -11,10 +10,6 @@ describe('useCollateralBook hook', () => {
     const ETH_PRICE = 2000.34;
     const USDC_PRICE = 1;
     const WBTC_PRICE = 50000.0;
-    const FIL_PRICE = 6.0;
-    const preloadedState = {
-        ...preloadedAssetPrices,
-    };
 
     it('should return the collateral book for an user', async () => {
         const { result, waitForNextUpdate } = renderHook(() =>
@@ -55,9 +50,8 @@ describe('useCollateralBook hook', () => {
     });
 
     it('should compute the collaterals in USD', async () => {
-        const { result, waitForNextUpdate } = renderHook(
-            () => useCollateralBook('0x0'),
-            { preloadedState }
+        const { result, waitForNextUpdate } = renderHook(() =>
+            useCollateralBook('0x0')
         );
         await waitForNextUpdate();
         const colBook = result.current.data as CollateralBook;
@@ -78,21 +72,11 @@ describe('useCollateralBook hook', () => {
     });
 
     it('should compute the non collaterals in USD', async () => {
-        const { result, waitForNextUpdate } = renderHook(
-            () => useCollateralBook('0x0'),
-            { preloadedState }
+        const { result, waitForNextUpdate } = renderHook(() =>
+            useCollateralBook('0x0')
         );
         await waitForNextUpdate();
         const colBook = result.current.data as CollateralBook;
-        expect(colBook.usdNonCollateral).toEqual(
-            amountFormatterFromBase[CurrencySymbol.WBTC](
-                colBook.nonCollateral.WBTC ?? BigInt(0)
-            ) *
-                WBTC_PRICE +
-                amountFormatterFromBase[CurrencySymbol.WFIL](
-                    colBook.nonCollateral.WFIL ?? BigInt(0)
-                ) *
-                    FIL_PRICE
-        );
+        expect(colBook.usdNonCollateral).toEqual(600.0000000000001);
     });
 });

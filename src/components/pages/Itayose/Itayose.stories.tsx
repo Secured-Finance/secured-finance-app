@@ -1,8 +1,4 @@
-import {
-    withAppLayout,
-    withAssetPrice,
-    withWalletProvider,
-} from '.storybook/decorators';
+import { withAppLayout, withWalletProvider } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
 import { Itayose } from './Itayose';
 
@@ -14,7 +10,7 @@ export default {
         chromatic: { delay: 2000 },
         connected: true,
     },
-    decorators: [withAppLayout, withAssetPrice, withWalletProvider],
+    decorators: [withAppLayout, withWalletProvider],
 } as Meta<typeof Itayose>;
 
 const Template: StoryFn<typeof Itayose> = () => <Itayose />;

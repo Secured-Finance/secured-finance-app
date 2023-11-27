@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { BigNumber as BigNumberJS } from 'bignumber.js';
 import { QueryKeys } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
-import { AssetPriceMap } from 'src/store/assetPrices/selectors';
+import { AssetPriceMap } from 'src/types';
 import {
     CurrencySymbol,
     ZERO_BI,

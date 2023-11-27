@@ -1,14 +1,11 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import {
     CoreTable,
     Pagination,
     TableActionMenu,
 } from 'src/components/molecules';
-import { useBreakpoint, useEtherscanUrl } from 'src/hooks';
-import { getPriceMap } from 'src/store/assetPrices/selectors';
-import { RootState } from 'src/store/types';
+import { useBreakpoint, useEtherscanUrl, useLastPrices } from 'src/hooks';
 import { Order, OrderHistoryList } from 'src/types';
 import {
     amountColumnDefinition,
@@ -40,7 +37,7 @@ export const OrderHistoryTable = ({
     data: OrderHistoryList;
     pagination?: Pagination;
 }) => {
-    const priceList = useSelector((state: RootState) => getPriceMap(state));
+    const { data: priceList } = useLastPrices();
     const isTablet = useBreakpoint('laptop');
     const etherscanUrl = useEtherscanUrl();
 

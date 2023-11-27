@@ -1,5 +1,4 @@
 import type { Meta, StoryFn } from '@storybook/react';
-import { withAssetPrice } from 'src/../.storybook/decorators';
 import { collateralBook37 } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
 import { CollateralUsageSection } from '.';
@@ -13,7 +12,6 @@ export default {
         currency: CurrencySymbol.WFIL,
         collateralThreshold: 80,
     },
-    decorators: [withAssetPrice],
 } as Meta<typeof CollateralUsageSection>;
 
 const Template: StoryFn<typeof CollateralUsageSection> = args => (

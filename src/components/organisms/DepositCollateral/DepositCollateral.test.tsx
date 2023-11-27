@@ -1,14 +1,11 @@
 import * as analytics from '@amplitude/analytics-browser';
 import { composeStories } from '@storybook/react';
-import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { CollateralEvents, CollateralProperties } from 'src/utils';
 import * as stories from './DepositCollateral.stories';
 
 const { Default } = composeStories(stories);
-
-const preloadedState = { ...preloadedAssetPrices };
 
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
@@ -34,8 +31,8 @@ describe('DepositCollateral component', () => {
         );
     });
 
-    it('should select asset and update amount', () => {
-        render(<Default />, { preloadedState });
+    it('should select asset and update amount', async () => {
+        render(<Default />);
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
         fireEvent.click(screen.getByTestId('option-0'));
         expect(screen.getByText('USDC')).toBeInTheDocument();
@@ -43,17 +40,17 @@ describe('DepositCollateral component', () => {
 
         const tab = screen.getByTestId(75);
         fireEvent.click(tab);
-        expect(screen.getByText('$37.50')).toBeInTheDocument();
+        expect(await screen.findByText('$37.50')).toBeInTheDocument();
     });
 
-    it('should reset amount to zero when asset is changed in collateral selector', () => {
-        render(<Default />, { preloadedState });
+    it('should reset amount to zero when asset is changed in collateral selector', async () => {
+        render(<Default />);
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
         fireEvent.click(screen.getByTestId('option-0'));
 
         const tab = screen.getByTestId(75);
         fireEvent.click(tab);
-        expect(screen.getByText('$37.50')).toBeInTheDocument();
+        expect(await screen.findByText('$37.50')).toBeInTheDocument();
         expect(screen.getByRole('textbox').getAttribute('value')).toBe('37.5');
 
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
@@ -65,7 +62,7 @@ describe('DepositCollateral component', () => {
     });
 
     it('should update the lastActionTimestamp in the store when the transaction receipt is received', async () => {
-        const { store } = render(<Default />, { preloadedState });
+        const { store } = render(<Default />);
         expect(store.getState().blockchain.lastActionTimestamp).toEqual(0);
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
         fireEvent.click(screen.getByTestId('option-0'));
@@ -77,7 +74,7 @@ describe('DepositCollateral component', () => {
 
     it('should reach success screen when transaction receipt is received', async () => {
         const onClose = jest.fn();
-        render(<Default onClose={onClose} />, { preloadedState });
+        render(<Default onClose={onClose} />);
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
         fireEvent.click(screen.getByTestId('option-0'));
         expect(screen.getByText('USDC')).toBeInTheDocument();
@@ -85,7 +82,7 @@ describe('DepositCollateral component', () => {
 
         const tab = screen.getByTestId(75);
         fireEvent.click(tab);
-        expect(screen.getByText('$37.50')).toBeInTheDocument();
+        expect(await screen.findByText('$37.50')).toBeInTheDocument();
 
         const button = screen.getByTestId('dialog-action-button');
         fireEvent.click(button);
@@ -113,7 +110,7 @@ describe('DepositCollateral component', () => {
     });
 
     it('should open with USDC as default currency', () => {
-        render(<Default />, { preloadedState });
+        render(<Default />);
         expect(screen.getByText('USDC')).toBeInTheDocument();
         expect(screen.getByText('50 USDC Available')).toBeInTheDocument();
         expect(screen.queryByText('ETH')).not.toBeInTheDocument();
@@ -129,7 +126,7 @@ describe('DepositCollateral component', () => {
             new Error('error')
         );
         const onClose = jest.fn();
-        render(<Default onClose={onClose} />, { preloadedState });
+        render(<Default onClose={onClose} />);
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
         fireEvent.click(screen.getByTestId('option-0'));
         expect(screen.getByText('USDC')).toBeInTheDocument();
@@ -137,7 +134,7 @@ describe('DepositCollateral component', () => {
 
         const tab = screen.getByTestId(75);
         fireEvent.click(tab);
-        expect(screen.getByText('$37.50')).toBeInTheDocument();
+        expect(await screen.findByText('$37.50')).toBeInTheDocument();
 
         const button = screen.getByTestId('dialog-action-button');
         fireEvent.click(button);
@@ -171,9 +168,7 @@ describe('DepositCollateral component', () => {
     it('should track the deposit collateral', async () => {
         const track = jest.spyOn(analytics, 'track');
         const onClose = jest.fn();
-        render(<Default onClose={onClose} source='Source Of Deposit' />, {
-            preloadedState,
-        });
+        render(<Default onClose={onClose} source='Source Of Deposit' />);
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
         fireEvent.click(screen.getByTestId('option-0'));
         fireEvent.click(screen.getByTestId(75));

@@ -5,6 +5,7 @@ import {
     ZERO_BI,
     currencyMap,
     hexToCurrencySymbol,
+    toCurrencySymbol,
 } from 'src/utils';
 import {
     collateralBook37,
@@ -459,6 +460,18 @@ export const mockUseSF = () => {
         ),
 
         executeEmergencySettlement: jest.fn(() => Promise.resolve('0x123')),
+
+        getLastPrice: jest.fn((ccy: Currency) => {
+            const ccyMap = {
+                [CurrencySymbol.ETH]: BigInt('200034000000'),
+                [CurrencySymbol.WFIL]: BigInt('600000000000000000000000000'),
+                [CurrencySymbol.USDC]: BigInt('100000000'),
+                [CurrencySymbol.WBTC]: BigInt('5000000000000'),
+            };
+            return Promise.resolve(
+                ccyMap[toCurrencySymbol(ccy.symbol) ?? CurrencySymbol.WFIL]
+            );
+        }),
     };
 
     return mockSecuredFinance;

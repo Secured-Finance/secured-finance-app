@@ -1,10 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useLastPrices } from 'src/hooks';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
-import { AssetPriceMap, getPriceMap } from 'src/store/assetPrices/selectors';
-import { RootState } from 'src/store/types';
+import { AssetPriceMap } from 'src/types';
 import {
     CurrencySymbol,
     ZERO_BI,
@@ -68,7 +67,8 @@ export const useCollateralBook = (account: string | undefined) => {
         []
     );
 
-    const priceList = useSelector((state: RootState) => getPriceMap(state));
+    // TODO: replace this with the calculation done by the smart contract
+    const { data: priceList } = useLastPrices();
 
     return useQuery({
         queryKey: [QueryKeys.COLLATERAL_BOOK, account],
