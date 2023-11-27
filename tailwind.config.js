@@ -9,6 +9,11 @@ module.exports = {
     ],
     theme: {
         extend: {
+            gridTemplateColumns: {
+                '1-actions': 'repeat(1, minmax(95px, 1fr))',
+                '2-actions': 'repeat(2, minmax(95px, 1fr))',
+                '3-actions': 'repeat(3, minmax(95px, 1fr))',
+            },
             boxShadow: {
                 deep: '0px 34px 64px 0px rgba(0, 0, 0, 0.45)',
                 dropdown: '0px 16px 64px -48px rgba(31, 47, 70, 0.4)',

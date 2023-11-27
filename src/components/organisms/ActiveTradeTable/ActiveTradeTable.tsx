@@ -277,16 +277,14 @@ export const ActiveTradeTable = ({
                     if (!ccy) return null;
 
                     return (
-                        <div className='flex justify-center'>
-                            <TableActionMenu
-                                items={getTableActionMenu(
-                                    maturity,
-                                    absAmount,
-                                    ccy,
-                                    side
-                                )}
-                            />
-                        </div>
+                        <TableActionMenu
+                            items={getTableActionMenu(
+                                maturity,
+                                absAmount,
+                                ccy,
+                                side
+                            )}
+                        />
                     );
                 },
                 header: () => <div className='p-2'>Actions</div>,
