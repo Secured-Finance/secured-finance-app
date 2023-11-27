@@ -93,6 +93,16 @@ export const OrderTable = ({
                             : OrderSide.BORROW;
 
                     const amount = BigInt(info.row.original.amount);
+                    const removeOrder = () => {
+                        setRemoveOrderDialogData({
+                            orderId: info.row.original.orderId,
+                            maturity: new Maturity(info.row.original.maturity),
+                            amount: new Amount(amount, ccy),
+                            side: side,
+                            isOpen: true,
+                            orderUnitPrice: Number(info.row.original.unitPrice),
+                        });
+                    };
 
                     return (
                         <div className='flex justify-center'>
@@ -101,26 +111,7 @@ export const OrderTable = ({
                                     items={[
                                         {
                                             text: 'Remove Order',
-                                            onClick: () => {
-                                                setRemoveOrderDialogData({
-                                                    orderId:
-                                                        info.row.original
-                                                            .orderId,
-                                                    maturity: new Maturity(
-                                                        info.row.original.maturity
-                                                    ),
-                                                    amount: new Amount(
-                                                        amount,
-                                                        ccy
-                                                    ),
-                                                    side: side,
-                                                    isOpen: true,
-                                                    orderUnitPrice: Number(
-                                                        info.row.original
-                                                            .unitPrice
-                                                    ),
-                                                });
-                                            },
+                                            onClick: removeOrder,
                                         },
                                     ]}
                                 />
@@ -129,6 +120,7 @@ export const OrderTable = ({
                                 <button
                                     className='group h-5 w-5 hover:bg-white-10'
                                     aria-label='Remove Order'
+                                    onClick={removeOrder}
                                 >
                                     <XMarkIcon className='h-5 w-5 text-secondary7 group-hover:text-starBlue group-active:text-starBlue' />
                                 </button>
