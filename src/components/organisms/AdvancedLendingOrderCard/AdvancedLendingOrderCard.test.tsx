@@ -23,6 +23,9 @@ const preloadedState = {
     wallet: {
         address: '0x1',
     },
+    blockchain: {
+        chainError: false,
+    },
     ...preloadedAssetPrices,
 };
 

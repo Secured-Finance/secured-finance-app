@@ -9,7 +9,11 @@ import { WalletDialog, WalletPopover } from 'src/components/organisms';
 import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
-import { getEnvShort } from 'src/utils';
+import {
+    getEnvShort,
+    getMainnetChainId,
+    getSupportedNetworks,
+} from 'src/utils';
 import { AddressUtils } from 'src/utils/address';
 import { useAccount } from 'wagmi';
 
@@ -37,6 +41,42 @@ const LINKS = [
     },
 ];
 
+const HeaderMessage = ({
+    chainId,
+    chainError,
+}: {
+    chainId: number;
+    chainError: boolean;
+}) => {
+    const mainnetChainId = getMainnetChainId();
+    const networkNames = getSupportedNetworks().map(
+        name => name.charAt(0).toUpperCase() + name.slice(1)
+    );
+
+    if (chainId) {
+        if (chainError) {
+            return (
+                <div
+                    className='typography-caption-2 w-full bg-red p-[1px] text-center text-neutral-8'
+                    data-testid='testnet-alert'
+                >
+                    Secured Finance only supported in {networkNames.join(', ')}
+                </div>
+            );
+        } else if (chainId !== mainnetChainId) {
+            return (
+                <div
+                    className='typography-caption-2 w-full bg-horizonBlue p-[1px] text-center text-neutral-8'
+                    data-testid='testnet-info'
+                >
+                    You are visiting Secured Finance on testnet
+                </div>
+            );
+        }
+    }
+    return <></>;
+};
+
 export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     const dispatch = useDispatch();
     const { address, isConnected } = useAccount();
@@ -44,15 +84,14 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     const chainError = useSelector(
         (state: RootState) => state.blockchain.chainError
     );
+    const currentChainId = useSelector(
+        (state: RootState) => state.blockchain.chainId
+    );
     const envShort = getEnvShort();
 
     return (
         <div className='relative'>
-            {!chainError && (
-                <div className='typography-caption-2 w-full bg-horizonBlue/100 p-[1px] text-center text-neutral-8'>
-                    You are visiting Secured Finance on testnet
-                </div>
-            )}
+            <HeaderMessage chainId={currentChainId} chainError={chainError} />
 
             <nav
                 data-cy='header'
