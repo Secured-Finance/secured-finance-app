@@ -37,16 +37,16 @@ export const Button = ({
             aria-label={label}
             className={classNames(
                 `flex items-center justify-center rounded-xl ${props?.className}`,
-                'enabled:hover:bg-gradient-to-t enabled:hover:from-black-20 enabled:hover:via-black-20 enabled:hover:to-starBlue',
                 'disabled:bg-gradient-to-t disabled:from-black/25 disabled:via-black/25 disabled:to-starBlue disabled:opacity-50',
                 {
                     'h-10 px-4 py-3': size === 'sm',
                     'h-12 px-6 py-4': size === 'md',
                     'w-full': fullWidth,
                     'w-fit': !fullWidth,
-                    'bg-inherit border-2 border-slateGray enabled:hover:bg-none':
+                    'bg-inherit border-2 border-slateGray hover:bg-slateGray':
                         variant === 'outlined',
-                    'bg-starBlue': variant === 'solid',
+                    'bg-starBlue enabled:hover:bg-gradient-to-t enabled:hover:from-black-20 enabled:hover:via-black-20 enabled:hover:to-starBlue':
+                        variant === 'solid',
                 }
             )}
         >
