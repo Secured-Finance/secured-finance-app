@@ -11,7 +11,7 @@ const MenuItem = ({ text, onClick, disabled = false }: MenuItem) => {
 };
 export const TableActionMenu = ({ items }: { items: MenuItem[] }) => {
     return (
-        <div className={`grid grid-cols-${items.length} gap-x-2`}>
+        <div className={`grid grid-cols-${items.length}-actions gap-x-2`}>
             {items.map((item, index) => (
                 <MenuItem
                     key={index}

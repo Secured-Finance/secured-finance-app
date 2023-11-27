@@ -36,7 +36,7 @@ export const Button = ({
             {...tagProps}
             aria-label={label}
             className={classNames(
-                `flex items-center justify-center rounded-xl ${props?.className}`,
+                `flex items-center justify-center rounded-xl ${props?.className} min-w-fit`,
                 'enabled:hover:bg-gradient-to-t enabled:hover:from-black-20 enabled:hover:via-black-20 enabled:hover:to-starBlue',
                 'disabled:bg-gradient-to-t disabled:from-black/25 disabled:via-black/25 disabled:to-starBlue disabled:opacity-50',
                 {
