@@ -2,6 +2,11 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
     content: ['./src/**/*.{ts,tsx,js,jsx}', './public/index.html'],
+    safelist: [
+        {
+            pattern: /grid-cols-./,
+        },
+    ],
     theme: {
         extend: {
             boxShadow: {

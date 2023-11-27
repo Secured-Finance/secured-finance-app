@@ -106,6 +106,7 @@ export const ActiveTradeTable = ({
             }
 
             return [
+                { ...items[0], disabled: true },
                 {
                     text: label,
                     onClick: (): void => {
