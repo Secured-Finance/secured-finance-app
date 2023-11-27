@@ -55,8 +55,9 @@ export const Button = ({
                 </span>
             )}
             <p
-                className={classNames('typography-button-2 whitespace-nowrap', {
-                    'text-base': size === 'md',
+                className={classNames('whitespace-nowrap', {
+                    'typography-button-2': size === 'sm',
+                    'typography-button-1': size === 'md',
                 })}
             >
                 {children}
