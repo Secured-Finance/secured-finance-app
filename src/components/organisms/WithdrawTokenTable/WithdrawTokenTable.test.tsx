@@ -20,7 +20,7 @@ describe('WithdrawTokenTable Component', () => {
         screen.getAllByRole('button', { name: 'Withdraw' })[0].click();
         expect(screen.getByText('400 Filecoin Available')).toBeInTheDocument();
 
-        screen.getByRole('button', { name: 'Close' }).click();
+        screen.getByRole('button', { name: 'Cancel' }).click();
         screen.getAllByRole('button', { name: 'Withdraw' })[1].click();
         expect(screen.getByText('500 Ether Available')).toBeInTheDocument();
     });
