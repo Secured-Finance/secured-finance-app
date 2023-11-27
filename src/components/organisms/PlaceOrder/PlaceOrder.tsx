@@ -263,6 +263,7 @@ export const PlaceOrder = ({
             callToAction={state.buttonText}
             disableActionButton={showWarning}
             onClick={() => onClick(state.currentStep)}
+            showCancelButton={state.currentStep === Step.orderConfirm}
         >
             {(() => {
                 switch (state.currentStep) {
