@@ -46,7 +46,7 @@ const stateRecord: Record<Step, State> = {
         nextStep: Step.withdrawing,
         title: 'Withdraw Collateral',
         description: '',
-        buttonText: 'Continue',
+        buttonText: 'OK',
     },
     [Step.withdrawing]: {
         currentStep: Step.withdrawing,
@@ -201,6 +201,7 @@ export const WithdrawCollateral = ({
             callToAction={state.buttonText}
             onClick={() => onClick(state.currentStep)}
             disableActionButton={isDisabled()}
+            showCancelButton={state.currentStep === Step.withdrawCollateral}
         >
             {(() => {
                 switch (state.currentStep) {

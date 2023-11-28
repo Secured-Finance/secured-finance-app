@@ -292,4 +292,26 @@ describe('PlaceOrder component', () => {
         render(<Default side={OrderSide.LEND} />);
         expect(screen.getByText('Confirm Lend')).toBeInTheDocument();
     });
+
+    it('should call onClose when cancel button is clicked', () => {
+        const onClose = jest.fn();
+        render(<Default onClose={onClose} />);
+        const cancelButton = screen.getByRole('button', {
+            name: 'Cancel',
+        });
+        fireEvent.click(cancelButton);
+        expect(onClose).toHaveBeenCalled();
+    });
+
+    it('should not show cancel button if dialog is not on first step', async () => {
+        render(<Default />, {
+            preloadedState,
+        });
+        const cancelButton = await screen.findByRole('button', {
+            name: 'Cancel',
+        });
+        expect(cancelButton).toBeInTheDocument();
+        fireEvent.click(screen.getByTestId('dialog-action-button'));
+        expect(cancelButton).not.toBeInTheDocument();
+    });
 });

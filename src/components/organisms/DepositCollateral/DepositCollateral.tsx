@@ -46,7 +46,7 @@ const stateRecord: Record<Step, State> = {
         nextStep: Step.depositing,
         title: 'Deposit Collateral',
         description: '',
-        buttonText: 'Continue',
+        buttonText: 'OK',
     },
     [Step.depositing]: {
         currentStep: Step.depositing,
@@ -208,6 +208,7 @@ export const DepositCollateral = ({
             callToAction={state.buttonText}
             onClick={() => onClick(state.currentStep)}
             disableActionButton={isDisabled()}
+            showCancelButton={state.currentStep === Step.depositCollateral}
         >
             {(() => {
                 switch (state.currentStep) {
