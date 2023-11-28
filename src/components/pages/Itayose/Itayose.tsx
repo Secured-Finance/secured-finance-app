@@ -95,7 +95,7 @@ const Toolbar = ({
                     </div>
                     <div>
                         <MarketTab
-                            name={`${currency} price`}
+                            name={`${currency} Price`}
                             value={usdFormat(priceList[currency], 2)}
                         />
                     </div>
