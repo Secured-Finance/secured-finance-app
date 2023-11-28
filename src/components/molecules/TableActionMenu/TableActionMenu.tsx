@@ -4,7 +4,13 @@ type MenuItem = { text: string; onClick: () => void; disabled?: boolean };
 
 const MenuItem = ({ text, onClick, disabled = false }: MenuItem) => {
     return (
-        <Button onClick={onClick} disabled={disabled} size='xs' fullWidth>
+        <Button
+            onClick={onClick}
+            disabled={disabled}
+            size='xs'
+            fullWidth
+            className='min-w-fit'
+        >
             {text}
         </Button>
     );
