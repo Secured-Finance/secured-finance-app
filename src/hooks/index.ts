@@ -1,5 +1,6 @@
 export * from './queries';
 export * from './useBalances';
+export * from './useBorrowableAmount';
 export * from './useBreakpoint';
 export * from './useCollateralBook';
 export * from './useCurrenciesForOrders';
