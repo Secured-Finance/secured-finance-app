@@ -1,15 +1,8 @@
 import { useMemo } from 'react';
-import {
-    SectionWithItems,
-    getLiquidationInformation,
-} from 'src/components/atoms';
+import { FormatCollateralUsage, SectionWithItems } from 'src/components/atoms';
 import { InfoToolTip } from 'src/components/molecules';
 import { CollateralBook, useOrderEstimation, useZCUsage } from 'src/hooks';
-import {
-    amountFormatterFromBase,
-    formatCollateralRatio,
-    usdFormat,
-} from 'src/utils';
+import { amountFormatterFromBase, usdFormat } from 'src/utils';
 import { MAX_COVERAGE, computeAvailableToBorrow } from 'src/utils/collateral';
 import { Amount, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
@@ -47,8 +40,16 @@ export const CollateralSimulationSection = ({
         orderEstimationInfo?.filledAmount ?? BigInt(0)
     );
 
-    const zcUsage = formatCollateralRatio(
-        getZCUsage(maturity.toNumber(), tradeAmount.currency, filledAmount)
+    const zcUsage = getZCUsage(
+        maturity.toNumber(),
+        tradeAmount.currency,
+        filledAmount
+    );
+
+    const initialZCUsage = getZCUsage(
+        maturity.toNumber(),
+        tradeAmount.currency,
+        0
     );
 
     const coverage = useMemo(
@@ -72,28 +73,24 @@ export const CollateralSimulationSection = ({
 
     const items: [string | React.ReactNode, string | React.ReactNode][] = [
         ['Borrow Remaining', remainingToBorrowText],
-        ['ZC Usage', zcUsage],
+        [
+            'ZC Usage',
+            <FormatCollateralUsage
+                key='ZCUsage'
+                initialValue={initialZCUsage}
+                finalValue={zcUsage}
+                maxValue={coverage}
+            />,
+        ],
         [
             <CollateralUsageItem key={1} />,
-            getCollateralUsage(collateral.coverage, coverage),
+            <FormatCollateralUsage
+                key='collateralUsage'
+                initialValue={collateral.coverage}
+                finalValue={coverage}
+            />,
         ],
     ];
 
     return <SectionWithItems itemList={items} />;
-};
-
-const getCollateralUsage = (initial: number, final: number) => {
-    const initialColor = getLiquidationInformation(initial / 100).color;
-    const finalColor = getLiquidationInformation(final / 100).color;
-    return (
-        <div className='flex flex-row gap-1'>
-            <span className={`${initialColor}`}>
-                {formatCollateralRatio(initial)}
-            </span>
-            <span className='text-neutral-8'>&#8594;</span>
-            <span className={`${finalColor}`}>
-                {formatCollateralRatio(final)}
-            </span>
-        </div>
-    );
 };

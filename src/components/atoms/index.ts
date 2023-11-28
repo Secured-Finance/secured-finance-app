@@ -17,6 +17,7 @@ export * from './DropdownSelector';
 export * from './ErrorInfo';
 export * from './ExpandIndicator';
 export * from './Footer';
+export * from './FormatCollateralUsage';
 export * from './GradientBox';
 export * from './HighlightChip';
 export * from './HorizontalListItem';
