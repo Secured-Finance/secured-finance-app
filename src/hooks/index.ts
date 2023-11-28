@@ -23,6 +23,7 @@ export * from './useOrders';
 export * from './usePagination';
 export * from './usePositions';
 export * from './usePrepareOrderbookData';
+export * from './usePreventPageScroll';
 export * from './useTotalNumberOfAsset';
 export * from './useValueLockedByCurrency';
 export * from './useYieldCurveMarketRates';
