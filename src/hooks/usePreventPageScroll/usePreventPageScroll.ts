@@ -10,7 +10,8 @@ export function usePreventPageScroll<T extends HTMLElement>(
         const handlePointerDown = (e: PointerEvent) => {
             if (ref.current && ref.current.contains(e.target as Node)) {
                 isDragging.current = true;
-                e.preventDefault();
+                // !!dont need to prevent default here, as it will be prevented the normal click event
+                // e.preventDefault();
             }
         };
 
