@@ -464,9 +464,21 @@ export const mockUseSF = () => {
         getLastPrice: jest.fn((ccy: Currency) => {
             const ccyMap = {
                 [CurrencySymbol.ETH]: BigInt('200034000000'),
-                [CurrencySymbol.WFIL]: BigInt('600000000000000000000000000'),
+                [CurrencySymbol.WFIL]: BigInt('600000000'),
                 [CurrencySymbol.USDC]: BigInt('100000000'),
                 [CurrencySymbol.WBTC]: BigInt('5000000000000'),
+            };
+            return Promise.resolve(
+                ccyMap[toCurrencySymbol(ccy.symbol) ?? CurrencySymbol.WFIL]
+            );
+        }),
+
+        getDecimals: jest.fn((ccy: Currency) => {
+            const ccyMap = {
+                [CurrencySymbol.ETH]: 8,
+                [CurrencySymbol.WFIL]: 26,
+                [CurrencySymbol.USDC]: 8,
+                [CurrencySymbol.WBTC]: 8,
             };
             return Promise.resolve(
                 ccyMap[toCurrencySymbol(ccy.symbol) ?? CurrencySymbol.WFIL]

@@ -4,6 +4,7 @@ export * from './useBreakpoint';
 export * from './useCollateralBook';
 export * from './useCurrenciesForOrders';
 export * from './useCurrencyDelistedStatus';
+export * from './useDecimals';
 export * from './useEtherscanUrl';
 export * from './useGraphClientHook';
 export * from './useHandleContractTransaction';

@@ -10,6 +10,7 @@ describe('useCollateralBook hook', () => {
     const ETH_PRICE = 2000.34;
     const USDC_PRICE = 1;
     const WBTC_PRICE = 50000.0;
+    const FIL_PRICE = 6.0;
 
     it('should return the collateral book for an user', async () => {
         const { result, waitForNextUpdate } = renderHook(() =>
@@ -77,6 +78,15 @@ describe('useCollateralBook hook', () => {
         );
         await waitForNextUpdate();
         const colBook = result.current.data as CollateralBook;
-        expect(colBook.usdNonCollateral).toBeCloseTo(600);
+        expect(colBook.usdNonCollateral).toEqual(
+            amountFormatterFromBase[CurrencySymbol.WBTC](
+                colBook.nonCollateral.WBTC ?? BigInt(0)
+            ) *
+                WBTC_PRICE +
+                amountFormatterFromBase[CurrencySymbol.WFIL](
+                    colBook.nonCollateral.WFIL ?? BigInt(0)
+                ) *
+                    FIL_PRICE
+        );
     });
 });
