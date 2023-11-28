@@ -189,9 +189,7 @@ describe('DepositCollateral component', () => {
 
     it('should call onClose when cancel button is clicked', () => {
         const onClose = jest.fn();
-        render(<Default onClose={onClose} />, {
-            preloadedState,
-        });
+        render(<Default onClose={onClose} />);
         const cancelButton = screen.getByRole('button', {
             name: 'Cancel',
         });
@@ -200,9 +198,7 @@ describe('DepositCollateral component', () => {
     });
 
     it('should not show cancel button if dialog is not on first step', async () => {
-        render(<Default />, {
-            preloadedState,
-        });
+        render(<Default />);
         const cancelButton = await screen.findByRole('button', {
             name: 'Cancel',
         });
