@@ -1,6 +1,6 @@
 import SliderUnstyled from '@mui/base/SliderUnstyled';
 import { useCallback, useRef } from 'react';
-import { usePreventPageScroll } from 'src/hooks/usePreventPageScroll';
+import { usePreventPageScroll } from 'src/hooks';
 
 const marks = [
     { value: 0 },
