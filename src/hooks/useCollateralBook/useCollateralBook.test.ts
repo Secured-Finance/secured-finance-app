@@ -77,6 +77,6 @@ describe('useCollateralBook hook', () => {
         );
         await waitForNextUpdate();
         const colBook = result.current.data as CollateralBook;
-        expect(colBook.usdNonCollateral).toEqual(600.0000000000001);
+        expect(colBook.usdNonCollateral).toBeCloseTo(600);
     });
 });

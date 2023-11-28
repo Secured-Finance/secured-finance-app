@@ -42,7 +42,5 @@ export const useLastPrices = () => {
             ] as [CurrencySymbol, bigint][],
 
         enabled: !!securedFinance,
-        staleTime: 0,
-        cacheTime: Infinity,
     });
 };
