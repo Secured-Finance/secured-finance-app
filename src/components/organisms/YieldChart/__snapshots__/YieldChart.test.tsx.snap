@@ -33,20 +33,11 @@ exports[`YieldChart Component should render YieldChart 1`] = `
               >
                 Filecoin
               </span>
-              <div
-                class="flex h-6 w-full flex-row items-center justify-between gap-3"
+              <span
+                class="typography-caption flex h-full items-center text-neutral-8"
               >
-                <span
-                  class="typography-caption flex h-full items-center text-neutral-8"
-                >
-                  $6.00
-                </span>
-                <span
-                  class="typography-caption flex h-full items-center text-galacticOrange"
-                >
-                  0%
-                </span>
-              </div>
+                $6.00
+              </span>
             </div>
           </div>
           <div
