@@ -142,8 +142,8 @@ export const CollateralTabLeftPane = ({
                                 collateralCoverage={
                                     collateralBook.coverage / 100
                                 }
-                                totalCollateralInUSD={
-                                    collateralBook.usdCollateral
+                                availableToBorrow={
+                                    collateralBook.usdAvailableToBorrow
                                 }
                                 collateralThreshold={
                                     collateralBook.collateralThreshold

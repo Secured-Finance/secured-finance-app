@@ -1,12 +1,12 @@
 import Tick from 'src/assets/icons/tick.svg';
 import { InfoToolTip } from 'src/components/molecules';
 import { percentFormat, usdFormat } from 'src/utils';
-import { computeAvailableToBorrow } from 'src/utils/collateral';
 
 interface CollateralProgressBarProps {
     collateralCoverage: number;
     totalCollateralInUSD: number;
     collateralThreshold: number;
+    availableToBorrow: number;
     account: string | undefined;
 }
 
@@ -53,16 +53,10 @@ export const CollateralProgressBar = ({
     collateralCoverage = 0,
     totalCollateralInUSD = 0,
     collateralThreshold = 0,
+    availableToBorrow,
     account,
 }: CollateralProgressBarProps) => {
     collateralCoverage /= 100.0;
-
-    const availableToBorrow = computeAvailableToBorrow(
-        1,
-        totalCollateralInUSD,
-        collateralCoverage,
-        collateralThreshold
-    );
 
     const barWidth = Math.min(1, collateralCoverage);
 
