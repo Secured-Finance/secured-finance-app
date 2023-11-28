@@ -4,6 +4,8 @@ import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
 import { CurrencySymbol, ZERO_BI, toCurrency } from 'src/utils';
 
+const DECIMALS = 8;
+
 export const useLastPrices = () => {
     const securedFinance = useSF();
 
@@ -24,7 +26,7 @@ export const useLastPrices = () => {
             return data.reduce((acc, [ccy, price]) => {
                 try {
                     acc[ccy] = new BigNumberJS(price.toString())
-                        .dividedBy(10 ** (ccy === CurrencySymbol.WFIL ? 26 : 8))
+                        .dividedBy(10 ** DECIMALS)
                         .toNumber();
                 } catch (e) {
                     acc[ccy] = 0;

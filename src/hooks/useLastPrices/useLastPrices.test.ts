@@ -14,7 +14,7 @@ describe('useLastPrices', () => {
 
         expect(result.current.data).toEqual({
             [CurrencySymbol.ETH]: 2000.34,
-            [CurrencySymbol.WFIL]: 6.000000000000001,
+            [CurrencySymbol.WFIL]: 6,
             [CurrencySymbol.USDC]: 1,
             [CurrencySymbol.WBTC]: 50000,
         });
