@@ -33,7 +33,6 @@ export const CurveHeader = ({
             <CurveHeaderAsset
                 ccy={asset}
                 value={priceList[asset]}
-                fluctuation={0}
             ></CurveHeaderAsset>
             <div className='flex flex-row gap-2'>
                 <CurveHeaderTotal
