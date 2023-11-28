@@ -15,4 +15,5 @@ export const Default = Template.bind({});
 export const Connected = Template.bind({});
 Connected.parameters = {
     connected: true,
+    chromatic: { delay: 500 },
 };
