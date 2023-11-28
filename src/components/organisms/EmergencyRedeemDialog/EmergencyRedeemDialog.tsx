@@ -187,6 +187,7 @@ export const EmergencyRedeemDialog = ({
             description={state.description}
             callToAction={state.buttonText}
             onClick={() => onClick(state.currentStep)}
+            showCancelButton={state.currentStep === Step.settlement}
         >
             {(() => {
                 switch (state.currentStep) {
