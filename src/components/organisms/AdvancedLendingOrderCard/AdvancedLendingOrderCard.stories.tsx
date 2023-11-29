@@ -1,8 +1,4 @@
-import {
-    withAssetPrice,
-    withLendingOrderForm,
-    withWalletProvider,
-} from '.storybook/decorators';
+import { withAssetPrice, withWalletProvider } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
 import { defaultDelistedStatusSet } from 'src/hooks';
@@ -20,7 +16,7 @@ export default {
     parameters: {
         connected: true,
     },
-    decorators: [withLendingOrderForm, withAssetPrice, withWalletProvider],
+    decorators: [withAssetPrice, withWalletProvider],
 } as Meta<typeof AdvancedLendingOrderCard>;
 
 const Template: StoryFn<typeof AdvancedLendingOrderCard> = args => {
