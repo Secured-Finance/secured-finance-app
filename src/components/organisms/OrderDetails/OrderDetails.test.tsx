@@ -15,7 +15,10 @@ describe('OrderDetails Component', () => {
 
         expect(screen.getByText('Borrow Remaining')).toBeInTheDocument();
 
-        expect(await screen.findByText('$3,025.09')).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.getByText('$5,103.15')).toBeInTheDocument();
+        });
+
         expect(screen.getByText('Bond Price')).toBeInTheDocument();
         expect(screen.getByText('~ 96.10')).toBeInTheDocument();
         expect(screen.getByText('APR')).toBeInTheDocument();

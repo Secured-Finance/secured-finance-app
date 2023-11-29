@@ -164,6 +164,8 @@ export const mockUseSF = () => {
                     ...collateralBook37.nonCollateral,
                 },
                 collateralCoverage: collateralBook37.coverage,
+                totalCollateralAmount: BigInt('1210034000000'),
+                totalUnusedCollateralAmount: BigInt('762321420000'),
             })
         ),
 
@@ -483,6 +485,21 @@ export const mockUseSF = () => {
             return Promise.resolve(
                 ccyMap[toCurrencySymbol(ccy.symbol) ?? CurrencySymbol.WFIL]
             );
+        }),
+
+        getBorrowableAmount: jest.fn((_address, currency: Currency) => {
+            switch (currency.symbol) {
+                case CurrencySymbol.ETH:
+                    return Promise.resolve(BigInt('2600000000000000000'));
+                case CurrencySymbol.WFIL:
+                    return Promise.resolve(BigInt('867190000000000000000'));
+                case CurrencySymbol.USDC:
+                    return Promise.resolve(BigInt('5203150000'));
+                case CurrencySymbol.WBTC:
+                    return Promise.resolve(BigInt('10000000'));
+                default:
+                    throw new Error('Not implemented');
+            }
         }),
     };
 

@@ -41,7 +41,15 @@ describe('OrderAction component', () => {
 
     it('should render deposit collateral button when collateral is not sufficient', async () => {
         await waitFor(() =>
-            render(<NotEnoughCollateral />, { preloadedState })
+            render(<NotEnoughCollateral />, {
+                preloadedState: {
+                    ...preloadedState,
+                    landingOrderForm: {
+                        ...preloadedState.landingOrderForm,
+                        amount: '6000000000',
+                    },
+                },
+            })
         );
         expect(
             await screen.findByTestId('deposit-collateral-button')
@@ -61,6 +69,10 @@ describe('OrderAction component', () => {
             render(<NotEnoughCollateral />, {
                 preloadedState: {
                     ...preloadedState,
+                    landingOrderForm: {
+                        ...preloadedState.landingOrderForm,
+                        amount: '6000000000',
+                    },
                     blockchain: {
                         chainError: true,
                     },

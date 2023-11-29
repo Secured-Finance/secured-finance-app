@@ -38,6 +38,7 @@ const collateralBook0: CollateralBook = {
         WFIL: BigInt('100000000000000000000'),
     },
     usdCollateral: 12100.34,
+    usdAvailableToBorrow: 9680.27,
     usdNonCollateral: 600,
     coverage: 0,
     collateralThreshold: 80,
@@ -369,7 +370,10 @@ describe('AdvancedLendingOrderCard Component', () => {
         });
         await waitFor(() => {
             const input = screen.getByRole('textbox', { name: 'Amount' });
-            fireEvent.change(input, { target: { value: '1000' } });
+            fireEvent.change(input, { target: { value: '100' } });
+        });
+        await waitFor(() => {
+            expect(screen.getByText('~ 867.19')).toBeInTheDocument();
         });
 
         await waitFor(() =>

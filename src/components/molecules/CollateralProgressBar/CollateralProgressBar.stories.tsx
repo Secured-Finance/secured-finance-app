@@ -9,6 +9,7 @@ export default {
         collateralCoverage: 0,
         totalCollateralInUSD: 0,
         collateralThreshold: 0,
+        availableToBorrow: 0,
         account: undefined,
     },
     parameters: {
@@ -29,6 +30,7 @@ export const ZeroCollateral = Template.bind({});
 ZeroCollateral.args = {
     collateralCoverage: 0,
     totalCollateralInUSD: 0,
+    availableToBorrow: 0,
     collateralThreshold: 80,
     account: '0x123',
 };
@@ -37,6 +39,7 @@ export const CollateralDepositedZeroCoverage = Template.bind({});
 CollateralDepositedZeroCoverage.args = {
     collateralCoverage: 0,
     totalCollateralInUSD: 100,
+    availableToBorrow: 80,
     collateralThreshold: 80,
     account: '0x123',
 };
@@ -45,6 +48,7 @@ export const CollateralDepositedWithCoverage = Template.bind({});
 CollateralDepositedWithCoverage.args = {
     collateralCoverage: 37,
     totalCollateralInUSD: 100,
+    availableToBorrow: 43,
     collateralThreshold: 80,
     account: '0x123',
 };

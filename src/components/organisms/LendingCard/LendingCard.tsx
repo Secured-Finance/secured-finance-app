@@ -12,7 +12,12 @@ import {
     TermSelector,
 } from 'src/components/molecules';
 import { OrderAction } from 'src/components/organisms';
-import { CollateralBook, useBalances, useLastPrices } from 'src/hooks';
+import {
+    CollateralBook,
+    useBalances,
+    useBorrowableAmount,
+    useLastPrices,
+} from 'src/hooks';
 import {
     selectLandingOrderForm,
     setAmount,
@@ -147,6 +152,8 @@ export const LendingCard = ({
         dispatch(setAmount(inputAmount));
     };
 
+    const { data: availableToBorrow } = useBorrowableAmount(address, currency);
+
     const orderAmount =
         amount > ZERO_BI
             ? amountFormatterFromBase[currency](amount)
@@ -236,12 +243,9 @@ export const LendingCard = ({
                     {side === OrderSide.BORROW && (
                         <div className='px-2'>
                             <CollateralUsageSection
-                                usdCollateral={collateralBook.usdCollateral}
                                 collateralCoverage={collateralBook.coverage}
                                 currency={currency}
-                                collateralThreshold={
-                                    collateralBook.collateralThreshold
-                                }
+                                availableToBorrow={availableToBorrow}
                             />
                         </div>
                     )}

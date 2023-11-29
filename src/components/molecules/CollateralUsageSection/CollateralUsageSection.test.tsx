@@ -29,7 +29,12 @@ describe('CollateralUsageSection Component', () => {
     });
 
     it('should compute the available to borrow in the selected currency', async () => {
-        render(<Default currency={CurrencySymbol.USDC} />);
+        render(
+            <Default
+                currency={CurrencySymbol.USDC}
+                availableToBorrow={5203.154}
+            />
+        );
 
         expect(screen.getByText('Available to borrow')).toBeInTheDocument();
         const available = await screen.findByText('5,203.15 USDC');

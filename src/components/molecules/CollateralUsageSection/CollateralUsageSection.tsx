@@ -1,45 +1,21 @@
 import { useMemo } from 'react';
 import { getLiquidationInformation } from 'src/components/atoms';
-import { CollateralBook, useLastPrices } from 'src/hooks';
 import { CurrencySymbol, formatWithCurrency, percentFormat } from 'src/utils';
-import { computeAvailableToBorrow } from 'src/utils/collateral';
 
 export const CollateralUsageSection = ({
-    usdCollateral,
     collateralCoverage,
     currency,
-    collateralThreshold,
+    availableToBorrow,
 }: {
-    usdCollateral: CollateralBook['usdCollateral'];
     collateralCoverage: number;
     currency: CurrencySymbol;
-    collateralThreshold: number;
+    availableToBorrow: number;
 }) => {
     collateralCoverage = collateralCoverage / 100.0;
-    const { data: assetPriceMap } = useLastPrices();
 
     const collateralUsagePercent = useMemo(() => {
         return percentFormat(collateralCoverage);
     }, [collateralCoverage]);
-
-    const availableToBorrow = useMemo(() => {
-        let result = 0;
-        if (currency && assetPriceMap) {
-            result = computeAvailableToBorrow(
-                assetPriceMap[currency],
-                usdCollateral,
-                collateralCoverage / 100.0,
-                collateralThreshold
-            );
-        }
-        return formatWithCurrency(isNaN(result) ? 0 : result, currency);
-    }, [
-        assetPriceMap,
-        collateralCoverage,
-        collateralThreshold,
-        currency,
-        usdCollateral,
-    ]);
 
     const info = getLiquidationInformation(collateralCoverage);
 
@@ -50,7 +26,7 @@ export const CollateralUsageSection = ({
                     Available to borrow
                 </h3>
                 <p className='typography-caption font-bold text-white'>
-                    {availableToBorrow}
+                    {formatWithCurrency(availableToBorrow, currency)}
                 </p>
             </div>
             <div className='flex-col'>
