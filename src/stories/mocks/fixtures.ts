@@ -849,6 +849,7 @@ export const collateralBook80: CollateralBook = {
         WFIL: BigInt('100000000000000000000'),
     },
     usdCollateral: 12100.34,
+    usdAvailableToBorrow: 0,
     usdNonCollateral: 600,
     coverage: 8000, // 80%,
     collateralThreshold: 80,
@@ -869,8 +870,9 @@ export const collateralBook37: CollateralBook = {
         WFIL: BigInt('100000000000000000000'),
     },
     usdCollateral: 12100.34,
+    usdAvailableToBorrow: 5203.1462,
     usdNonCollateral: 600,
-    coverage: 3700,
+    coverage: 3700, // 37%
     collateralThreshold: 80,
     withdrawableCollateral: {
         [CurrencySymbol.USDC]: BigInt(100000),
@@ -889,6 +891,7 @@ export const emptyUSDCollateral: CollateralBook = {
         WFIL: BigInt('100000000000000000000'),
     },
     usdCollateral: 0,
+    usdAvailableToBorrow: 0,
     usdNonCollateral: 600,
     coverage: 0, // 0%
     collateralThreshold: 80,

@@ -13,7 +13,12 @@ import {
     WalletSourceSelector,
 } from 'src/components/atoms';
 import { OrderAction } from 'src/components/organisms';
-import { CollateralBook, useBalances, useMarket } from 'src/hooks';
+import {
+    CollateralBook,
+    useBalances,
+    useBorrowableAmount,
+    useMarket,
+} from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import {
     resetUnitPrice,
@@ -28,11 +33,9 @@ import { RootState } from 'src/store/types';
 import { OrderSideMap, OrderType, OrderTypeOptions } from 'src/types';
 import {
     CurrencySymbol,
-    MAX_COVERAGE,
     ZERO_BI,
     amountFormatterFromBase,
     amountFormatterToBase,
-    computeAvailableToBorrow,
     divide,
     formatLoanValue,
     generateWalletSourceInformation,
@@ -108,22 +111,7 @@ export function AdvancedLendingOrderCard({
 
     const orderAmount = amount > 0 ? new Amount(amount, currency) : undefined;
 
-    const availableToBorrow = useMemo(() => {
-        return currency && price
-            ? computeAvailableToBorrow(
-                  price,
-                  collateralBook.usdCollateral,
-                  collateralBook.coverage / MAX_COVERAGE,
-                  collateralBook.collateralThreshold
-              )
-            : 0;
-    }, [
-        collateralBook.collateralThreshold,
-        collateralBook.coverage,
-        collateralBook.usdCollateral,
-        currency,
-        price,
-    ]);
+    const { data: availableToBorrow } = useBorrowableAmount(address, currency);
 
     const walletSourceList = useMemo(() => {
         return generateWalletSourceInformation(
@@ -381,7 +369,7 @@ export function AdvancedLendingOrderCard({
 
                 <CollateralManagementConciseTab
                     collateralCoverage={collateralUsagePercent}
-                    totalCollateralInUSD={collateralBook.usdCollateral}
+                    availableToBorrow={collateralBook.usdAvailableToBorrow}
                     collateralThreshold={collateralBook.collateralThreshold}
                     account={address}
                 />
