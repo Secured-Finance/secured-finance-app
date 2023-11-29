@@ -55,7 +55,7 @@ const Container = ({
         <div
             data-testid='table-header-wrapper'
             className={classNames('flex px-3', {
-                'justify-start ': align === 'left',
+                'justify-start': align === 'left',
                 'justify-center': align === 'center',
                 'justify-end': align === 'right',
             })}
