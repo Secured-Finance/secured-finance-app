@@ -441,6 +441,7 @@ export const OrderBookWidget = ({
                                     onLineClick: handleBuyOrdersClick,
                                     hoverRow: handleBuyOrdersHoverRow,
                                     compact: true,
+                                    stickyHeader: false,
                                 }}
                             />
                         </div>
@@ -494,6 +495,7 @@ export const OrderBookWidget = ({
                                     hoverRow: handleSellOrdersHoverRow,
                                     showHeaders: false,
                                     compact: true,
+                                    stickyHeader: false,
                                 }}
                             />
                         </div>

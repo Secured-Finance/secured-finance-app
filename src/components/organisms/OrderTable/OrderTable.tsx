@@ -1,3 +1,4 @@
+import { XMarkIcon } from '@heroicons/react/24/solid';
 import { OrderSide } from '@secured-finance/sf-client';
 import { createColumnHelper } from '@tanstack/react-table';
 import { useMemo, useState } from 'react';
@@ -39,13 +40,15 @@ export const OrderTable = ({
     }>();
     const columns = useMemo(
         () => [
-            loanTypeColumnDefinition(columnHelper, 'Type', 'type'),
             contractColumnDefinition(
                 columnHelper,
                 'Contract',
                 'contract',
-                variant === 'default' ? 'compact' : 'contractOnly'
+                variant === 'default' ? 'compact' : 'contractOnly',
+                undefined,
+                'left'
             ),
+            loanTypeColumnDefinition(columnHelper, 'Type', 'type'),
             priceYieldColumnDefinition(
                 columnHelper,
                 'Price',
@@ -90,31 +93,38 @@ export const OrderTable = ({
                             : OrderSide.BORROW;
 
                     const amount = BigInt(info.row.original.amount);
+                    const removeOrder = () => {
+                        setRemoveOrderDialogData({
+                            orderId: info.row.original.orderId,
+                            maturity: new Maturity(info.row.original.maturity),
+                            amount: new Amount(amount, ccy),
+                            side: side,
+                            isOpen: true,
+                            orderUnitPrice: Number(info.row.original.unitPrice),
+                        });
+                    };
 
                     return (
                         <div className='flex justify-center'>
-                            <TableActionMenu
-                                items={[
-                                    {
-                                        text: 'Remove Order',
-                                        onClick: () => {
-                                            setRemoveOrderDialogData({
-                                                orderId:
-                                                    info.row.original.orderId,
-                                                maturity: new Maturity(
-                                                    info.row.original.maturity
-                                                ),
-                                                amount: new Amount(amount, ccy),
-                                                side: side,
-                                                isOpen: true,
-                                                orderUnitPrice: Number(
-                                                    info.row.original.unitPrice
-                                                ),
-                                            });
+                            {variant === 'default' && (
+                                <TableActionMenu
+                                    items={[
+                                        {
+                                            text: 'Remove Order',
+                                            onClick: removeOrder,
                                         },
-                                    },
-                                ]}
-                            />
+                                    ]}
+                                />
+                            )}
+                            {variant === 'compact' && (
+                                <button
+                                    className='group h-5 w-5 hover:bg-white-10'
+                                    aria-label='Remove Order'
+                                    onClick={removeOrder}
+                                >
+                                    <XMarkIcon className='h-5 w-5 text-secondary7 group-hover:text-starBlue group-active:text-starBlue' />
+                                </button>
+                            )}
                         </div>
                     );
                 },
@@ -135,7 +145,7 @@ export const OrderTable = ({
                 data={data}
                 options={{
                     name: 'open-order-table',
-                    stickyColumns: new Set([6]),
+                    stickyFirstColumn: true,
                     pagination: {
                         containerHeight: height || DEFAULT_HEIGHT,
                         getMoreData: () => {},

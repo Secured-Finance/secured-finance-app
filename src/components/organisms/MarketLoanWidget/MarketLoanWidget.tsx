@@ -174,7 +174,7 @@ export const MarketLoanWidget = ({
                 id: 'action',
                 cell: info => {
                     return (
-                        <div className='flex justify-end px-1'>
+                        <div className='flex justify-end px-4 laptop:px-1'>
                             <Button onClick={() => handleClick(info)} size='sm'>
                                 {info.row.original.isOpened
                                     ? 'Open Order'
@@ -196,7 +196,7 @@ export const MarketLoanWidget = ({
     };
 
     const openMarketUtil = (
-        <div className=' flex flex-row items-center justify-center gap-4 px-3 py-2 tablet:justify-end'>
+        <div className=' flex flex-row items-center justify-end gap-4 px-3 py-2 tablet:justify-end'>
             <AssetDropdown
                 handleSelectedCurrency={(ccy: CurrencySymbol | undefined) =>
                     setSelectedCurrency(ccy)
@@ -233,31 +233,26 @@ export const MarketLoanWidget = ({
     }
 
     return (
-        <div className='h-fit rounded-b-2xl border border-white-10 shadow-tab'>
+        <div className='h-fit min-h-[300px] rounded-b-2xl border border-white-10 bg-black-20 shadow-tab'>
             <Tab tabDataArray={tabDataArray}>
                 {!isGlobalItayose && (
-                    <div className='min-h-[300px] rounded-b-2xl bg-black-20 px-7 pb-3'>
-                        <CoreTable
-                            columns={columns}
-                            data={getFilteredMarkets(openMarkets)}
-                            options={{
-                                hideColumnIds: ['openingDate'],
-                                stickyColumns: new Set([3]),
-                            }}
-                        />
-                    </div>
-                )}
-
-                <div className='min-h-[300px] rounded-b-2xl bg-black-20 px-7 pb-3'>
                     <CoreTable
                         columns={columns}
-                        data={getFilteredMarkets(filteredItayoseMarkets)}
+                        data={getFilteredMarkets(openMarkets)}
                         options={{
-                            hideColumnIds: ['apr'],
-                            stickyColumns: new Set([3]),
+                            hideColumnIds: ['openingDate'],
+                            stickyFirstColumn: true,
                         }}
                     />
-                </div>
+                )}
+                <CoreTable
+                    columns={columns}
+                    data={getFilteredMarkets(filteredItayoseMarkets)}
+                    options={{
+                        hideColumnIds: ['apr'],
+                        stickyFirstColumn: true,
+                    }}
+                />
             </Tab>
         </div>
     );
