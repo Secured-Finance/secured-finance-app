@@ -50,9 +50,11 @@ const getFVWithFee = (forwardValue: bigint, fee: bigint, side: number) => {
 export const MyTransactionsTable = ({
     data,
     pagination,
+    variant = 'default',
 }: {
     data: TradeHistory;
     pagination?: Pagination;
+    variant?: 'compact' | 'default';
 }) => {
     const isTablet = useBreakpoint('laptop');
     const columns = useMemo(
@@ -62,7 +64,7 @@ export const MyTransactionsTable = ({
                 columnHelper,
                 'Contract',
                 'contract',
-                'compact'
+                variant === 'default' ? 'compact' : 'contractOnly'
             ),
             amountColumnDefinition(
                 columnHelper,
@@ -90,7 +92,7 @@ export const MyTransactionsTable = ({
                 }
             ),
         ],
-        []
+        [variant]
     );
 
     const columnsForTabletMobile = [

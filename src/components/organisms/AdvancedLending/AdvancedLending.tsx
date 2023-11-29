@@ -1,3 +1,4 @@
+import { OrderSide } from '@secured-finance/sf-client';
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -8,17 +9,25 @@ import {
     Tab,
 } from 'src/components/molecules';
 import {
+    ActiveTradeTable,
     AdvancedLendingOrderCard,
     LineChartTab,
+    MyTransactionsTable,
     OrderBookWidget,
+    OrderHistoryTable,
     OrderTable,
 } from 'src/components/organisms';
+import { TabSpinner, TableType } from 'src/components/pages';
 import { ThreeColumnsWithTopBar } from 'src/components/templates';
 import {
     CollateralBook,
+    emptyOrderList,
     useGraphClientHook,
+    useIsUnderCollateralThreshold,
     useMarket,
     useMarketOrderList,
+    useOrderList,
+    usePositions,
     useYieldCurveMarketRates,
 } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
@@ -37,10 +46,14 @@ import {
     ZERO_BI,
     amountFormatterFromBase,
     amountFormatterToBase,
+    checkOrderIsFilled,
     currencyMap,
     formatLoanValue,
+    formatOrders,
     getCurrencyMapAsOptions,
+    hexToCurrencySymbol,
     ordinaryFormat,
+    sortOrders,
     usdFormat,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
@@ -96,6 +109,7 @@ export const AdvancedLending = ({
     const currencyPrice = useSelector((state: RootState) =>
         getAssetPrice(currency)(state)
     );
+    const [selectedTable, setSelectedTable] = useState(TableType.ORDER_HISTORY);
 
     const { address } = useAccount();
     const dispatch = useDispatch();
@@ -105,6 +119,74 @@ export const AdvancedLending = ({
     useEffect(() => {
         setTimestamp(Math.round(new Date().getTime() / 1000));
     }, []);
+
+    const { data: orderList = emptyOrderList } = useOrderList(address, [
+        currency,
+    ]);
+    const filteredInactiveOrderList = useMemo(
+        () =>
+            orderList.inactiveOrderList.filter(
+                order => order.maturity === maturity.toString()
+            ),
+        [maturity, orderList.inactiveOrderList]
+    );
+    const { data: positions } = usePositions(address, [currency]);
+    const isUnderCollateralThreshold = useIsUnderCollateralThreshold(address);
+
+    const userOrderHistory = useGraphClientHook(
+        {
+            address: address?.toLowerCase() ?? '',
+            currency: toBytes32(currency),
+            maturity: maturity,
+        },
+        queries.FilteredUserOrderHistoryDocument,
+        'user',
+        selectedTable !== TableType.ORDER_HISTORY
+    );
+
+    const userTransactionHistory = useGraphClientHook(
+        {
+            address: address?.toLowerCase() ?? '',
+            currency: toBytes32(currency),
+            maturity: maturity,
+        },
+        queries.FilteredUserTransactionHistoryDocument,
+        'user',
+        selectedTable !== TableType.MY_TRANSACTIONS
+    );
+
+    const sortedOrderHistory = useMemo(() => {
+        return (userOrderHistory.data?.orders || [])
+            .map(order => {
+                if (checkOrderIsFilled(order, filteredInactiveOrderList)) {
+                    return {
+                        ...order,
+                        status: 'Filled' as const,
+                        filledAmount: order.inputAmount,
+                    };
+                } else if (
+                    !order.lendingMarket.isActive &&
+                    (order.status === 'Open' ||
+                        order.status === 'PartiallyFilled')
+                ) {
+                    return {
+                        ...order,
+                        status: 'Expired' as const,
+                    };
+                } else {
+                    return order;
+                }
+            })
+            .sort((a, b) => sortOrders(a, b));
+    }, [filteredInactiveOrderList, userOrderHistory.data?.orders]);
+
+    const myTransactions = useMemo(() => {
+        const tradesFromCon = formatOrders(filteredInactiveOrderList);
+        return [
+            ...tradesFromCon,
+            ...(userTransactionHistory.data?.transactions || []),
+        ];
+    }, [filteredInactiveOrderList, userTransactionHistory.data?.transactions]);
 
     const selectedTerm = useMemo(() => {
         return (
@@ -257,12 +339,80 @@ export const AdvancedLending = ({
                         />
                     </div>
                 </Tab>
-                <HorizontalTab tabTitles={['Open Orders']}>
+                <HorizontalTab
+                    tabTitles={[
+                        'Active Positions',
+                        'Open Orders',
+                        'Order History',
+                        'My Transactions',
+                    ]}
+                    onTabChange={setSelectedTable}
+                >
+                    <ActiveTradeTable
+                        data={
+                            positions
+                                ? positions.positions
+                                      .filter(
+                                          position =>
+                                              position.maturity ===
+                                              maturity.toString()
+                                      )
+                                      .map(position => {
+                                          const ccy = hexToCurrencySymbol(
+                                              position.currency
+                                          );
+                                          if (!ccy) return position;
+                                          return {
+                                              ...position,
+                                              underMinimalCollateralThreshold:
+                                                  isUnderCollateralThreshold(
+                                                      ccy,
+                                                      Number(position.maturity),
+                                                      Number(
+                                                          position.marketPrice
+                                                      ),
+                                                      position.forwardValue > 0
+                                                          ? OrderSide.LEND
+                                                          : OrderSide.BORROW
+                                                  ),
+                                          };
+                                      })
+                                : []
+                        }
+                        delistedCurrencySet={delistedCurrencySet}
+                        variant='compact'
+                    />
                     <OrderTable
                         data={filteredOrderList}
                         variant='compact'
                         height={350}
                     />
+                    {userOrderHistory.loading ? (
+                        <TabSpinner />
+                    ) : (
+                        <OrderHistoryTable
+                            data={sortedOrderHistory}
+                            pagination={{
+                                totalData: sortedOrderHistory.length,
+                                getMoreData: () => {},
+                                containerHeight: 350,
+                            }}
+                            variant='compact'
+                        />
+                    )}
+                    {userTransactionHistory.loading ? (
+                        <TabSpinner />
+                    ) : (
+                        <MyTransactionsTable
+                            data={myTransactions}
+                            pagination={{
+                                totalData: myTransactions.length,
+                                getMoreData: () => {},
+                                containerHeight: 350,
+                            }}
+                            variant='compact'
+                        />
+                    )}
                 </HorizontalTab>
             </div>
         </ThreeColumnsWithTopBar>

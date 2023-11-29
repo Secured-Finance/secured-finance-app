@@ -1,14 +1,18 @@
 import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
 import { withAssetPrice, withWalletProvider } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
-import { within } from '@storybook/testing-library';
+import { userEvent, within } from '@storybook/testing-library';
 import { defaultDelistedStatusSet, emptyCollateralBook } from 'src/hooks';
 import {
     collateralBook37,
     maturityOptions,
     yieldCurveRates,
 } from 'src/stories/mocks/fixtures';
-import { mockTrades } from 'src/stories/mocks/queries';
+import {
+    mockFilteredUserOrderHistory,
+    mockFilteredUserTransactionHistory,
+    mockTrades,
+} from 'src/stories/mocks/queries';
 import { CurrencySymbol } from 'src/utils';
 import { AdvancedLending } from './AdvancedLending';
 
@@ -24,7 +28,11 @@ export default {
     },
     parameters: {
         apolloClient: {
-            mocks: [...mockTrades],
+            mocks: [
+                ...mockTrades,
+                ...mockFilteredUserTransactionHistory,
+                ...mockFilteredUserOrderHistory,
+            ],
         },
         ...RESPONSIVE_PARAMETERS,
         chromatic: {
@@ -55,6 +63,8 @@ OpenOrdersConnectedToWallet.parameters = {
 };
 OpenOrdersConnectedToWallet.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    const openOrdersTab = canvas.getByTestId('Open Orders');
+    await userEvent.click(openOrdersTab);
     canvas.getByRole('button', { name: 'DEC22' }).click();
     canvas.getByRole('menuitem', { name: 'JUN23' }).click();
 };

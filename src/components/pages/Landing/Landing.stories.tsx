@@ -9,6 +9,8 @@ import {
 } from 'src/../.storybook/decorators';
 import {
     mockDailyVolumes,
+    mockFilteredUserOrderHistory,
+    mockFilteredUserTransactionHistory,
     mockTrades,
     mockUserOrderHistory,
     mockUserTransactionHistory,
@@ -31,6 +33,8 @@ export default {
                 ...mockUserOrderHistory,
                 ...mockTrades,
                 ...mockDailyVolumes,
+                ...mockFilteredUserOrderHistory,
+                ...mockFilteredUserTransactionHistory,
             ],
         },
         ...RESPONSIVE_PARAMETERS,

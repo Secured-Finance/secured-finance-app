@@ -7,10 +7,8 @@ import { Footer } from 'src/components/atoms';
 import { Header } from 'src/components/organisms';
 import { Layout } from 'src/components/templates';
 import { updateChainError, updateLatestBlock } from 'src/store/blockchain';
-import { setMaturity } from 'src/store/landingOrderForm';
 import { connectEthWallet, updateEthBalance } from 'src/store/wallet';
 import AxiosMock from 'src/stories/mocks/AxiosMock';
-import { dec22Fixture } from 'src/stories/mocks/fixtures';
 import { coingeckoApi } from 'src/utils/coinGeckoApi';
 import timemachine from 'timemachine';
 import {
@@ -165,20 +163,6 @@ export const withChainErrorEnabled = (Story: StoryFn) => {
         const timeoutId = setTimeout(() => {
             dispatch(updateChainError(true));
         }, 300);
-
-        return () => clearTimeout(timeoutId);
-    }, [dispatch]);
-
-    return <Story />;
-};
-
-export const withLendingOrderForm = (Story: StoryFn) => {
-    const dispatch = useDispatch();
-    useEffect(() => {
-        const timeoutId = setTimeout(() => {
-            setMaturity(dec22Fixture.toNumber());
-            // Add other needed values
-        }, 100);
 
         return () => clearTimeout(timeoutId);
     }, [dispatch]);

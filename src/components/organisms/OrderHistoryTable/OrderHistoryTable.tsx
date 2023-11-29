@@ -36,9 +36,11 @@ const getStatus = (status: string) => {
 export const OrderHistoryTable = ({
     data,
     pagination,
+    variant = 'default',
 }: {
     data: OrderHistoryList;
     pagination?: Pagination;
+    variant?: 'compact' | 'default';
 }) => {
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const isTablet = useBreakpoint('laptop');
@@ -47,7 +49,12 @@ export const OrderHistoryTable = ({
     const columns = useMemo(
         () => [
             loanTypeColumnDefinition(columnHelper, 'Type', 'type'),
-            contractColumnDefinition(columnHelper, 'Contract', 'contract'),
+            contractColumnDefinition(
+                columnHelper,
+                'Contract',
+                'contract',
+                variant === 'default' ? 'compact' : 'contractOnly'
+            ),
             inputPriceYieldColumnDefinition(
                 columnHelper,
                 'Price',
@@ -111,7 +118,7 @@ export const OrderHistoryTable = ({
                 header: () => <div className='p-2'>Actions</div>,
             }),
         ],
-        [etherscanUrl, priceList]
+        [etherscanUrl, priceList, variant]
     );
 
     const columnsForTabletMobile = [

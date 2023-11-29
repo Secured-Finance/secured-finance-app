@@ -38,10 +38,12 @@ export const ActiveTradeTable = ({
     data,
     delistedCurrencySet,
     height,
+    variant = 'default',
 }: {
     data: (Position & { underMinimalCollateral?: boolean })[];
     delistedCurrencySet: Set<CurrencySymbol>;
     height?: number;
+    variant?: 'compact' | 'default';
 }) => {
     const [unwindDialogData, setUnwindDialogData] = useState<{
         maturity: Maturity;
@@ -186,7 +188,7 @@ export const ActiveTradeTable = ({
                 columnHelper,
                 'Contract',
                 'contract',
-                'default',
+                variant === 'default' ? 'compact' : 'contractOnly',
                 delistedCurrencySet
             ),
             columnHelper.accessor('maturity', {
@@ -295,6 +297,7 @@ export const ActiveTradeTable = ({
             getMaturityDisplayValue,
             getTableActionMenu,
             priceList,
+            variant,
         ]
     );
 
