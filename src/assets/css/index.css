@@ -84,7 +84,12 @@
   }
 
   .scrollbar-table::-webkit-scrollbar {
+    height: 6px;
     width: 6px;
+  }
+
+  .scrollbar-table::-webkit-scrollbar-corner {
+    background: transparent;
   }
 
   .scrollbar-table::-webkit-scrollbar-thumb {

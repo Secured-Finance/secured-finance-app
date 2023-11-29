@@ -282,82 +282,75 @@ export const PortfolioManagement = () => {
                         ]}
                     />
                     <CollateralOrganism collateralBook={collateralBook} />
-                    <div>
-                        <HorizontalTab
-                            tabTitles={[
-                                'Active Positions',
-                                'Open Orders',
-                                'Order History',
-                                'My Transactions',
-                            ]}
-                            onTabChange={setSelectedTable}
-                        >
-                            <ActiveTradeTable
-                                data={
-                                    positions
-                                        ? positions.positions.map(position => {
-                                              const ccy = hexToCurrencySymbol(
-                                                  position.currency
-                                              );
-                                              if (!ccy) return position;
-                                              return {
-                                                  ...position,
-                                                  underMinimalCollateralThreshold:
-                                                      isUnderCollateralThreshold(
-                                                          ccy,
-                                                          Number(
-                                                              position.maturity
-                                                          ),
-                                                          Number(
-                                                              position.marketPrice
-                                                          ),
-                                                          position.forwardValue >
-                                                              0
-                                                              ? OrderSide.LEND
-                                                              : OrderSide.BORROW
+                    <HorizontalTab
+                        tabTitles={[
+                            'Active Positions',
+                            'Open Orders',
+                            'Order History',
+                            'My Transactions',
+                        ]}
+                        onTabChange={setSelectedTable}
+                    >
+                        <ActiveTradeTable
+                            data={
+                                positions
+                                    ? positions.positions.map(position => {
+                                          const ccy = hexToCurrencySymbol(
+                                              position.currency
+                                          );
+                                          if (!ccy) return position;
+                                          return {
+                                              ...position,
+                                              underMinimalCollateralThreshold:
+                                                  isUnderCollateralThreshold(
+                                                      ccy,
+                                                      Number(position.maturity),
+                                                      Number(
+                                                          position.marketPrice
                                                       ),
-                                              };
-                                          })
-                                        : []
-                                }
-                                delistedCurrencySet={delistedCurrencySet}
-                            />
-                            <OrderTable data={activeOrderList} />
+                                                      position.forwardValue > 0
+                                                          ? OrderSide.LEND
+                                                          : OrderSide.BORROW
+                                                  ),
+                                          };
+                                      })
+                                    : []
+                            }
+                            delistedCurrencySet={delistedCurrencySet}
+                        />
+                        <OrderTable data={activeOrderList} />
 
-                            {userOrderHistory.loading ? (
-                                <TabSpinner />
-                            ) : (
-                                <OrderHistoryTable
-                                    data={sortedOrderHistory}
-                                    pagination={{
-                                        totalData: parseInt(
-                                            userOrderHistory.data?.orderCount
+                        {userOrderHistory.loading ? (
+                            <TabSpinner />
+                        ) : (
+                            <OrderHistoryTable
+                                data={sortedOrderHistory}
+                                pagination={{
+                                    totalData: parseInt(
+                                        userOrderHistory.data?.orderCount
+                                    ),
+                                    getMoreData: () =>
+                                        setOffsetOrders(offsetOrders + offset),
+                                    containerHeight: 300,
+                                }}
+                            />
+                        )}
+                        {userTransactionHistory.loading ? (
+                            <TabSpinner />
+                        ) : (
+                            <MyTransactionsTable
+                                data={myTransactions}
+                                pagination={{
+                                    totalData: myTransactionsDataCount,
+                                    getMoreData: () =>
+                                        setOffsetTransactions(
+                                            offsetTransactions + offset
                                         ),
-                                        getMoreData: () =>
-                                            setOffsetOrders(
-                                                offsetOrders + offset
-                                            ),
-                                        containerHeight: 300,
-                                    }}
-                                />
-                            )}
-                            {userTransactionHistory.loading ? (
-                                <TabSpinner />
-                            ) : (
-                                <MyTransactionsTable
-                                    data={myTransactions}
-                                    pagination={{
-                                        totalData: myTransactionsDataCount,
-                                        getMoreData: () =>
-                                            setOffsetTransactions(
-                                                offsetTransactions + offset
-                                            ),
-                                        containerHeight: 300,
-                                    }}
-                                />
-                            )}
-                        </HorizontalTab>
-                    </div>
+                                    containerHeight: 300,
+                                }}
+                            />
+                        )}
+                    </HorizontalTab>
                     <Disclaimer
                         showDelistedCurrencyDisclaimer={
                             userDelistedCurrenciesArray.length > 0
