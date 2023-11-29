@@ -182,14 +182,26 @@ const convertFromBlockchainUnit = (amount: bigint, ccy: Currency) => {
     return value.toNumber();
 };
 
-export const multiply = (valueA: number, valueB: number, precision = 2) => {
+export const multiply = (
+    valueA: number | bigint,
+    valueB: number | bigint,
+    precision = 2
+) => {
     return parseFloat(
-        new BigNumberJS(valueA).multipliedBy(valueB).toFixed(precision)
+        new BigNumberJS(valueA.toString())
+            .multipliedBy(valueB.toString())
+            .toFixed(precision)
     );
 };
 
-export const divide = (valueA: number, valueB: number, precision = 2) => {
+export const divide = (
+    valueA: number | bigint,
+    valueB: number | bigint,
+    precision = 2
+) => {
     return parseFloat(
-        new BigNumberJS(valueA).dividedBy(valueB).toFixed(precision)
+        new BigNumberJS(valueA.toString())
+            .dividedBy(valueB.toString())
+            .toFixed(precision)
     );
 };

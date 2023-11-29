@@ -252,10 +252,20 @@ describe('hexToCurrencySymbol', () => {
     });
 });
 
-describe('multiple', () => {
+describe('multiply', () => {
     it('should multiply two numbers with precision', () => {
         expect(multiply(80.6, 100)).toEqual(8060);
         expect(multiply(80.612, 99.12345, 4)).toEqual(7990.5396);
+    });
+
+    it('should multiply two bigints with precision', () => {
+        expect(multiply(BigInt(806), BigInt(100))).toEqual(80600);
+        expect(multiply(BigInt(8012), BigInt(9912), 4)).toEqual(79414944);
+    });
+
+    it('should multiply bigint and a number with precision', () => {
+        expect(multiply(80.6, BigInt(100))).toEqual(8060);
+        expect(multiply(8012, BigInt(9912), 4)).toEqual(79414944);
     });
 });
 
@@ -263,5 +273,15 @@ describe('divide', () => {
     it('should divide two numbers with precision', () => {
         expect(divide(8060, 100)).toEqual(80.6);
         expect(divide(80.612, 99.12345, 4)).toEqual(0.8132);
+    });
+
+    it('should divide two bigints with precision', () => {
+        expect(divide(BigInt(8060), BigInt(100))).toEqual(80.6);
+        expect(divide(BigInt(80612), BigInt(99123), 4)).toEqual(0.8133);
+    });
+
+    it('should divide bigint and a number with precision', () => {
+        expect(divide(8060, BigInt(100))).toEqual(80.6);
+        expect(divide(BigInt(80612), 99123, 4)).toEqual(0.8133);
     });
 });
