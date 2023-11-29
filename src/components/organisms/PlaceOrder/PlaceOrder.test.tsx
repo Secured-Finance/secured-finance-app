@@ -41,7 +41,7 @@ describe('PlaceOrder component', () => {
 
         expect(screen.getByText('Borrow Remaining')).toBeInTheDocument();
         await waitFor(() => {
-            expect(screen.getByText('$3,025.09')).toBeInTheDocument();
+            expect(screen.getByText('$5,103.15')).toBeInTheDocument();
         });
 
         expect(screen.getByText('Bond Price')).toBeInTheDocument();

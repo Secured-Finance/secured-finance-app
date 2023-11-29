@@ -60,6 +60,21 @@ const Template: StoryFn<typeof OrderAction> = args => {
     return <OrderAction {...args} />;
 };
 
+const NotEnoughCollateralTemplate: StoryFn<typeof OrderAction> = args => {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        const timerId = setTimeout(() => {
+            dispatch(setCurrency(CurrencySymbol.USDC));
+            dispatch(setAmount(BigInt(6000000000)));
+            dispatch(setSide(OrderSide.BORROW));
+            dispatch(setMaturity(dec22Fixture.toNumber()));
+        }, 200);
+
+        return () => clearTimeout(timerId);
+    }, [dispatch]);
+    return <OrderAction {...args} />;
+};
+
 export const Primary = Template.bind({});
 export const EnoughCollateral = Template.bind({});
 EnoughCollateral.parameters = {
@@ -69,9 +84,9 @@ EnoughCollateral.args = {
     collateralBook: collateralBook37,
 };
 
-export const NotEnoughCollateral = Template.bind({});
+export const NotEnoughCollateral = NotEnoughCollateralTemplate.bind({});
 NotEnoughCollateral.args = {
-    collateralBook: collateralBook80,
+    collateralBook: collateralBook37,
 };
 NotEnoughCollateral.parameters = {
     connected: true,

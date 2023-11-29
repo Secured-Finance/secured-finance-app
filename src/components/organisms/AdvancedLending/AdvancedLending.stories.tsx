@@ -2,9 +2,9 @@ import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
 import { withWalletProvider } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
 import { within } from '@storybook/testing-library';
-import { defaultDelistedStatusSet } from 'src/hooks';
+import { defaultDelistedStatusSet, emptyCollateralBook } from 'src/hooks';
 import {
-    collateralBook80,
+    collateralBook37,
     maturityOptions,
     yieldCurveRates,
 } from 'src/stories/mocks/fixtures';
@@ -16,7 +16,7 @@ export default {
     title: 'Organism/AdvancedLending',
     component: AdvancedLending,
     args: {
-        collateralBook: collateralBook80,
+        collateralBook: emptyCollateralBook,
         maturitiesOptionList: maturityOptions,
         rates: yieldCurveRates,
         marketPrice: 9917,
@@ -45,6 +45,9 @@ export const ConnectedToWallet = Template.bind({});
 ConnectedToWallet.parameters = {
     connected: true,
 };
+ConnectedToWallet.args = {
+    collateralBook: collateralBook37,
+};
 
 export const OpenOrdersConnectedToWallet = Template.bind({});
 OpenOrdersConnectedToWallet.parameters = {
@@ -55,8 +58,15 @@ OpenOrdersConnectedToWallet.play = async ({ canvasElement }) => {
     canvas.getByRole('button', { name: 'DEC22' }).click();
     canvas.getByRole('menuitem', { name: 'JUN23' }).click();
 };
+OpenOrdersConnectedToWallet.args = {
+    collateralBook: collateralBook37,
+};
 
 export const Delisted = Template.bind({});
+Delisted.parameters = {
+    connected: true,
+};
 Delisted.args = {
+    collateralBook: collateralBook37,
     delistedCurrencySet: new Set([CurrencySymbol.WFIL]),
 };

@@ -7,10 +7,9 @@ export default {
     title: 'Molecules/CollateralUsageSection',
     component: CollateralUsageSection,
     args: {
-        usdCollateral: collateralBook37.usdCollateral,
         collateralCoverage: collateralBook37.coverage,
         currency: CurrencySymbol.WFIL,
-        collateralThreshold: 80,
+        availableToBorrow: 867.192,
     },
 } as Meta<typeof CollateralUsageSection>;
 

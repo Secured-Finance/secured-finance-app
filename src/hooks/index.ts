@@ -1,5 +1,6 @@
 export * from './queries';
 export * from './useBalances';
+export * from './useBorrowableAmount';
 export * from './useBreakpoint';
 export * from './useCollateralBook';
 export * from './useCurrenciesForOrders';
@@ -25,6 +26,7 @@ export * from './useOrders';
 export * from './usePagination';
 export * from './usePositions';
 export * from './usePrepareOrderbookData';
+export * from './usePreventPageScroll';
 export * from './useTotalNumberOfAsset';
 export * from './useValueLockedByCurrency';
 export * from './useYieldCurveMarketRates';

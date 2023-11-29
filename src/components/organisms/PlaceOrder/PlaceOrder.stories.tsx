@@ -24,7 +24,7 @@ export default {
         maturity: dec22Fixture,
         orderType: OrderType.LIMIT,
         side: OrderSide.BORROW,
-        assetPrice: 6.12,
+        assetPrice: 1,
         walletSource: WalletSource.METAMASK,
         maturitiesOptionList: maturityOptions,
     },
@@ -52,5 +52,6 @@ Delisted.args = {
 export const UnderMinimumCollateralThreshold = Template.bind({});
 UnderMinimumCollateralThreshold.args = {
     loanValue: LoanValue.fromPrice(9000, dec22Fixture.toNumber()),
-    orderAmount: new Amount('1000000000000000000000', CurrencySymbol.WFIL),
+    orderAmount: new Amount('100000000000000000000', CurrencySymbol.WFIL),
+    assetPrice: 6,
 };
