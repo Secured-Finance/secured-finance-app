@@ -18,6 +18,7 @@ import {
     WalletClient,
     useAccount,
     useConnect,
+    useNetwork,
     usePublicClient,
     useWalletClient,
 } from 'wagmi';
@@ -41,6 +42,7 @@ export const Context = createContext<SFContext>({
 
 const SecuredFinanceProvider: React.FC = ({ children }) => {
     const { address, isConnected } = useAccount();
+    const { chain } = useNetwork();
     const { connect, connectors } = useConnect();
     const { data: client } = useWalletClient();
     const publicClient = usePublicClient();
@@ -93,6 +95,12 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
             window.ethereum?.removeListener('chainChanged', handleChainChanged);
         };
     }, [dispatchChainError, handleChainChanged]);
+
+    useEffect(() => {
+        if (chain) {
+            dispatchChainError(chain.id);
+        }
+    }, [chain, dispatchChainError]);
 
     useEffect(() => {
         const connectSFClient = async (
