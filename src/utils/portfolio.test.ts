@@ -261,6 +261,9 @@ describe('checkOrderIsFilled', () => {
                 id: '1',
                 isActive: true,
             },
+            maker: {
+                id: '0x1',
+            },
         };
 
         expect(checkOrderIsFilled(order, orders)).toEqual(true);
@@ -282,6 +285,9 @@ describe('checkOrderIsFilled', () => {
             lendingMarket: {
                 id: '1',
                 isActive: true,
+            },
+            maker: {
+                id: '0x1',
             },
         };
 
