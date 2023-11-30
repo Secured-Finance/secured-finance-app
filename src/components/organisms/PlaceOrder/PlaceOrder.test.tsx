@@ -46,7 +46,7 @@ describe('PlaceOrder component', () => {
 
         expect(screen.getByText('Borrow Remaining')).toBeInTheDocument();
         await waitFor(() => {
-            expect(screen.getByText('$3,025.09')).toBeInTheDocument();
+            expect(screen.getByText('$5,103.15')).toBeInTheDocument();
         });
 
         expect(screen.getByText('Bond Price')).toBeInTheDocument();
@@ -296,5 +296,27 @@ describe('PlaceOrder component', () => {
     it('should show Confirm Lend as  title when side is LEND', () => {
         render(<Default side={OrderSide.LEND} />);
         expect(screen.getByText('Confirm Lend')).toBeInTheDocument();
+    });
+
+    it('should call onClose when cancel button is clicked', () => {
+        const onClose = jest.fn();
+        render(<Default onClose={onClose} />);
+        const cancelButton = screen.getByRole('button', {
+            name: 'Cancel',
+        });
+        fireEvent.click(cancelButton);
+        expect(onClose).toHaveBeenCalled();
+    });
+
+    it('should not show cancel button if dialog is not on first step', async () => {
+        render(<Default />, {
+            preloadedState,
+        });
+        const cancelButton = await screen.findByRole('button', {
+            name: 'Cancel',
+        });
+        expect(cancelButton).toBeInTheDocument();
+        fireEvent.click(screen.getByTestId('dialog-action-button'));
+        expect(cancelButton).not.toBeInTheDocument();
     });
 });

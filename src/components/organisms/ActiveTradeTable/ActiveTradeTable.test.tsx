@@ -1,7 +1,7 @@
 import { composeStories } from '@storybook/react';
 import { userEvent } from '@storybook/testing-library';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
+import { fireEvent, render, screen, waitFor, within } from 'src/test-utils.js';
 import timemachine from 'timemachine';
 import * as stories from './ActiveTradeTable.stories';
 
@@ -79,28 +79,16 @@ describe('ActiveTradeTable Component', () => {
         expect(firstSpan?.classList).toContain('text-nebulaTeal');
     });
 
-    it('should display more options when clicking on the ... button', () => {
+    it('should display buttons with the user options', () => {
         render(<Default />);
-        expect(screen.queryByRole('menu')).not.toBeInTheDocument();
-        const moreOptionsButton = screen.getAllByRole('button', {
-            name: 'More options',
-        });
-        expect(moreOptionsButton).toHaveLength(10);
-        fireEvent.click(moreOptionsButton[0]);
-        expect(screen.getByRole('menu')).toBeInTheDocument();
-        expect(screen.getByText('Add/Reduce Position')).toBeInTheDocument();
-        expect(screen.getByText('Unwind Position')).toBeInTheDocument();
+        expect(screen.getAllByText('Add/Reduce')[0]).toBeInTheDocument();
+        expect(screen.getAllByText('Unwind')[0]).toBeInTheDocument();
     });
 
     it('should display the unwind dialog when clicking on the Unwind Position button', () => {
         render(<Default />);
-        expect(screen.queryByText('Unwind Position')).not.toBeInTheDocument();
-        const moreOptionsButton = screen.getAllByRole('button', {
-            name: 'More options',
-        });
         expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-        fireEvent.click(moreOptionsButton[0]);
-        fireEvent.click(screen.getByText('Unwind Position'));
+        fireEvent.click(screen.getAllByRole('button', { name: 'Unwind' })[0]);
         expect(screen.getByRole('dialog')).toBeInTheDocument();
     });
 
@@ -166,68 +154,64 @@ describe('ActiveTradeTable Component', () => {
             expect(rows[15]).toHaveValue(undefined);
         });
 
-        it('should display unwind position till maturity', async () => {
+        it('should display unwind position till maturity', () => {
             render(<Delisted />);
-            const closeToMaturityRow = await screen.getAllByRole('row')[5];
+            const closeToMaturityRow = screen.getAllByRole('row')[5];
             expect(closeToMaturityRow).toHaveTextContent('Feb 2, 2022');
             expect(closeToMaturityRow).toHaveTextContent('22h');
-            const moreOptionsButton = screen.getAllByRole('button', {
-                name: 'More options',
-            });
-            fireEvent.click(moreOptionsButton[4]);
-            fireEvent.click(screen.getByText('Unwind Position'));
+
+            const unwindButton = within(closeToMaturityRow).getByRole(
+                'button',
+                { name: 'Unwind' }
+            );
+            expect(unwindButton).toBeInTheDocument();
+            fireEvent.click(unwindButton);
             expect(screen.getByRole('dialog')).toBeInTheDocument();
         });
 
-        it('should display a disabled redeem position button for lend orders post maturity but before redemption period', async () => {
+        it('should display a disabled redeem position button for lend orders post maturity but before redemption period', () => {
             render(<Delisted />);
             const closeToMaturityRow = screen.getAllByRole('row')[9];
             expect(closeToMaturityRow).toHaveTextContent('1d to redeem');
-            const moreOptionsButton = screen.getAllByRole('button', {
-                name: 'More options',
-            });
-            fireEvent.click(moreOptionsButton[8]);
-            const redeemButton = await screen.getByText('Redeem Position');
-            expect(redeemButton.parentElement).toBeDisabled();
-            expect(redeemButton).toHaveClass('text-slateGray');
+            const redeemButton = within(closeToMaturityRow).getByRole(
+                'button',
+                { name: 'Redeem' }
+            );
+            expect(redeemButton).toBeDisabled();
         });
 
-        it('should display an enabled redeem position button for lend orders post redemption period', async () => {
+        it('should display an enabled redeem position button for lend orders post redemption period', () => {
             render(<Delisted />);
             const closeToMaturityRow = screen.getAllByRole('row')[10];
             expect(closeToMaturityRow).toHaveTextContent('Redeemable');
-            const moreOptionsButton = screen.getAllByRole('button', {
-                name: 'More options',
-            });
-            fireEvent.click(moreOptionsButton[9]);
-            const redeemButton = screen.getByText('Redeem Position');
+            const redeemButton = within(closeToMaturityRow).getByRole(
+                'button',
+                { name: 'Redeem' }
+            );
             expect(redeemButton).not.toBeDisabled();
-            expect(redeemButton).not.toHaveClass('text-slateGray');
             fireEvent.click(redeemButton);
             expect(screen.getByRole('dialog')).toBeInTheDocument();
         });
 
-        it('should display repay position if within 7 days post maturity for borrow orders', async () => {
+        it('should display repay position if within 7 days post maturity for borrow orders', () => {
             render(<Delisted />);
             const postMaturity = screen.getAllByRole('row')[7];
             expect(postMaturity).toHaveTextContent('2d left to repay');
-            const moreOptionsButton = screen.getAllByRole('button', {
-                name: 'More options',
+            const repayButton = within(postMaturity).getByRole('button', {
+                name: 'Repay',
             });
-            fireEvent.click(moreOptionsButton[6]);
-            fireEvent.click(screen.getByText('Repay Position'));
+            fireEvent.click(repayButton);
             expect(screen.getByRole('dialog')).toBeInTheDocument();
         });
 
-        it('should display repay position post repayment period for borrow orders', async () => {
+        it('should display repay position post repayment period for borrow orders', () => {
             render(<Delisted />);
             const postMaturity = screen.getAllByRole('row')[8];
             expect(postMaturity).toHaveTextContent('Repay');
-            const moreOptionsButton = screen.getAllByRole('button', {
-                name: 'More options',
+            const repayButton = within(postMaturity).getByRole('button', {
+                name: 'Repay',
             });
-            fireEvent.click(moreOptionsButton[7]);
-            fireEvent.click(await screen.getByText('Repay Position'));
+            fireEvent.click(repayButton);
             expect(screen.getByRole('dialog')).toBeInTheDocument();
         });
     });

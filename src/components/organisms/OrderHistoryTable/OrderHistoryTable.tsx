@@ -95,7 +95,7 @@ export const OrderHistoryTable = ({
                             <TableActionMenu
                                 items={[
                                     {
-                                        text: 'View on Etherscan',
+                                        text: 'View',
                                         onClick: () => {
                                             window.open(
                                                 etherscanLink,
@@ -126,7 +126,7 @@ export const OrderHistoryTable = ({
             data={data}
             options={{
                 name: 'order-history-table',
-                stickyColumns: new Set([7]),
+                stickyFirstColumn: true,
                 pagination: pagination,
             }}
         />

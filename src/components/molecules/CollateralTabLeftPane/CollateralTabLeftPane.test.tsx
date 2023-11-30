@@ -27,6 +27,18 @@ describe('CollateralTabLeftPane component', () => {
         expect(screen.getByTestId('withdraw-collateral')).toBeDisabled();
     });
 
+    it('should render disabled buttons when chainError', () => {
+        render(<Default />, {
+            preloadedState: {
+                blockchain: {
+                    chainError: true,
+                },
+            },
+        });
+        expect(screen.getByTestId('deposit-collateral')).toBeDisabled();
+        expect(screen.getByTestId('withdraw-collateral')).toBeDisabled();
+    });
+
     it('should render balance when wallet is connected and collateral is deposited', () => {
         render(<Default />);
         expect(screen.getByText('$12,700.34')).toBeInTheDocument();

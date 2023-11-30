@@ -1,4 +1,5 @@
 import { withWalletProvider } from '.storybook/decorators';
+import { OrderSide } from '@secured-finance/sf-client';
 import type { Meta, StoryFn } from '@storybook/react';
 import { collateralBook37, dec22Fixture } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
@@ -11,8 +12,10 @@ export default {
     decorators: [withWalletProvider],
     args: {
         collateral: collateralBook37,
+        tradeAmount: new Amount('50000000000000000000', CurrencySymbol.WFIL),
+        assetPrice: 6.0,
+        side: OrderSide.BORROW,
         maturity: dec22Fixture,
-        tradeAmount: new Amount(1000, CurrencySymbol.ETH),
     },
     parameters: {
         connected: true,

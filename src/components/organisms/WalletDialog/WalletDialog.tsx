@@ -19,7 +19,7 @@ import {
     InterfaceEvents,
     InterfaceProperties,
     WalletConnectionResult,
-    getEthereumChainId,
+    getSupportedChainIds,
     writeWalletInStore,
 } from 'src/utils';
 import { associateWallet } from 'src/utils/events';
@@ -103,12 +103,13 @@ export const WalletDialog = () => {
             }
 
             if (!account) {
+                const supportedChainId = getSupportedChainIds();
                 if (
                     provider === 'MetaMask' &&
                     hasMetaMask() &&
-                    (await connector.getChainId()) !== getEthereumChainId()
+                    !supportedChainId.includes(await connector.getChainId())
                 ) {
-                    await connector.switchChain?.(getEthereumChainId());
+                    await connector.switchChain?.(supportedChainId[0]);
                 }
                 connect({ connector: connector });
                 writeWalletInStore(provider);
@@ -165,6 +166,7 @@ export const WalletDialog = () => {
             title={dialogText().title}
             description={dialogText().description}
             callToAction={dialogText().buttonText}
+            showCancelButton={!isConnected && !isLoading && !isError}
             onClick={async () => {
                 if (!isConnected && !isLoading && !isError) {
                     await connectWallet(address);

@@ -7,6 +7,11 @@ import { CurrencySymbol } from 'src/utils';
 
 export const initialStore = {
     ...store.getState(),
+    blockchain: {
+        ...store.getState().blockchain,
+        chainId: 11155111,
+        chainError: false,
+    },
     landingOrderForm: {
         currency: CurrencySymbol.WFIL,
         maturity: 0,

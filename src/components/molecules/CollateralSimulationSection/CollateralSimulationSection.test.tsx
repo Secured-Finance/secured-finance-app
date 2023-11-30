@@ -19,7 +19,7 @@ describe('CollateralSimulationSection Component', () => {
 
         await waitFor(() => {
             expect(screen.getByText('Borrow Remaining')).toBeInTheDocument();
-            expect(screen.getByText('$3,025.09')).toBeInTheDocument();
+            expect(screen.getByText('$4,903.14')).toBeInTheDocument();
         });
         expect(screen.getByText('Collateral Usage')).toBeInTheDocument();
         expect(screen.getByText('55%')).toBeInTheDocument();
@@ -39,7 +39,7 @@ describe('CollateralSimulationSection Component', () => {
         render(<Trade />, { preloadedState: preloadedAssetPrices });
         expect(screen.getByText('ZC Usage')).toBeInTheDocument();
         await waitFor(() => {
-            expect(screen.getByText('0.85%')).toBeInTheDocument();
+            expect(screen.getByText('1.44%')).toBeInTheDocument();
         });
     });
 });

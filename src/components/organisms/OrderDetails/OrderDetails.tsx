@@ -145,6 +145,8 @@ export const OrderDetails = ({
                         collateral={collateral}
                         maturity={maturity}
                         tradeAmount={amount}
+                        assetPrice={assetPrice}
+                        side={side}
                     />
                     <SectionWithItems
                         itemList={[

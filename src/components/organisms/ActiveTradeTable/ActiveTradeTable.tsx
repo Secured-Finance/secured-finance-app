@@ -64,7 +64,7 @@ export const ActiveTradeTable = ({
         ) => {
             const items = [
                 {
-                    text: 'Add/Reduce Position',
+                    text: 'Add/Reduce',
                     onClick: (): void => {
                         dispatch(setMaturity(maturity));
                         dispatch(setCurrency(ccy));
@@ -72,7 +72,7 @@ export const ActiveTradeTable = ({
                     },
                 },
                 {
-                    text: 'Unwind Position',
+                    text: 'Unwind',
                     onClick: (): void => {
                         setUnwindDialogData({
                             maturity: new Maturity(maturity),
@@ -88,16 +88,16 @@ export const ActiveTradeTable = ({
                 return items;
             }
 
-            let label = 'Unwind Position';
+            let label = 'Unwind';
             let type: UnwindDialogType;
             let disableAction;
 
             if (delistedCurrencySet.has(ccy)) {
                 if (side === OrderSide.LEND) {
-                    label = 'Repay Position';
+                    label = 'Repay';
                     type = 'REPAY';
                 } else {
-                    label = 'Redeem Position';
+                    label = 'Redeem';
                     type = 'REDEEM';
                     if (!isMaturityPastDays(maturity, 7)) {
                         disableAction = true;
@@ -106,6 +106,7 @@ export const ActiveTradeTable = ({
             }
 
             return [
+                { ...items[0], disabled: true },
                 {
                     text: label,
                     onClick: (): void => {
@@ -276,16 +277,14 @@ export const ActiveTradeTable = ({
                     if (!ccy) return null;
 
                     return (
-                        <div className='flex justify-center'>
-                            <TableActionMenu
-                                items={getTableActionMenu(
-                                    maturity,
-                                    absAmount,
-                                    ccy,
-                                    side
-                                )}
-                            />
-                        </div>
+                        <TableActionMenu
+                            items={getTableActionMenu(
+                                maturity,
+                                absAmount,
+                                ccy,
+                                side
+                            )}
+                        />
                     );
                 },
                 header: () => <div className='p-2'>Actions</div>,
@@ -312,7 +311,7 @@ export const ActiveTradeTable = ({
                 columns={isTablet ? columnsForTabletMobile : columns}
                 options={{
                     name: 'active-trade-table',
-                    stickyColumns: new Set<number>([6]),
+                    stickyFirstColumn: true,
                     pagination: {
                         containerHeight: height || DEFAULT_HEIGHT,
                         getMoreData: () => {},

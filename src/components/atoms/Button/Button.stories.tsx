@@ -29,9 +29,13 @@ const Template: StoryFn<typeof Button> = args => (
 export const Primary = () => {
     return (
         <div className='grid gap-4'>
+            <Button size='xs'>Unwind</Button>
             <Button size='sm'>Deposit</Button>
             <Button size='md'>Connect Wallet</Button>
             <Button disabled>Disabled</Button>
+            <Button disabled variant='outlined'>
+                Disabled
+            </Button>
             <Button size='md' fullWidth>
                 Full Width
             </Button>
