@@ -13,7 +13,9 @@ export const Layout = ({
             data-testid='wrapper-div'
         >
             <div className='w-full'>
-                <header className='w-full'>{navBar}</header>
+                <header className='sticky top-0 z-50 w-full bg-universeBlue'>
+                    {navBar}
+                </header>
                 <main className='w-full'>{children}</main>
             </div>
             <footer className='w-full'>{footer}</footer>
