@@ -25,7 +25,7 @@ export const Layout = ({
     const marginTop = isShowHeaderMessage ? 'mt-header-top' : 'mt-26';
     return (
         <div
-            className='flex h-screen w-screen flex-col justify-between gap-8'
+            className='flex h-screen w-full flex-col justify-between gap-8'
             data-testid='wrapper-div'
         >
             <div className='w-full'>
