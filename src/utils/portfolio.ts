@@ -70,7 +70,7 @@ export const formatOrders = (orders: OrderList): TradeHistory => {
         averagePrice: calculateAveragePrice(order.unitPrice),
         feeInFV: ZERO_BI,
         taker: {
-            id: '0x1',
+            id: order.maker ?? '',
         },
     }));
 };

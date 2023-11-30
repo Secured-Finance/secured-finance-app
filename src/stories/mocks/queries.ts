@@ -28,7 +28,7 @@ const generateMyTransactions = (amount: string) => {
             currency: wfilBytes32,
             maturity: mar23Fixture.toString(),
             taker: {
-                id: '0x1',
+                id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
             },
         });
     }
@@ -55,7 +55,7 @@ const generateMyOrderHistory = (amount: string) =>
                 isActive: true,
             },
             maker: {
-                id: '0x1',
+                id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
             },
         }));
 
