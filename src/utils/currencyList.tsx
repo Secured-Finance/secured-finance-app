@@ -19,9 +19,8 @@ import { WBTC } from './currencies/wbtc';
 
 BigNumberJS.set({ EXPONENTIAL_AT: 30 }); // setting to a decent limit
 
-const ETH = Ether.onChain(
-    Number(process.env.NEXT_PUBLIC_ETHEREUM_CHAIN_ID ?? 1)
-);
+// TODO: Remove chainId from currency. It's not used.
+const ETH = Ether.onChain(1);
 
 export enum CurrencySymbol {
     ETH = 'ETH',
@@ -183,14 +182,26 @@ const convertFromBlockchainUnit = (amount: bigint, ccy: Currency) => {
     return value.toNumber();
 };
 
-export const multiply = (valueA: number, valueB: number, precision = 2) => {
+export const multiply = (
+    valueA: number | bigint,
+    valueB: number | bigint,
+    precision = 2
+) => {
     return parseFloat(
-        new BigNumberJS(valueA).multipliedBy(valueB).toFixed(precision)
+        new BigNumberJS(valueA.toString())
+            .multipliedBy(valueB.toString())
+            .toFixed(precision)
     );
 };
 
-export const divide = (valueA: number, valueB: number, precision = 2) => {
+export const divide = (
+    valueA: number | bigint,
+    valueB: number | bigint,
+    precision = 2
+) => {
     return parseFloat(
-        new BigNumberJS(valueA).dividedBy(valueB).toFixed(precision)
+        new BigNumberJS(valueA.toString())
+            .dividedBy(valueB.toString())
+            .toFixed(precision)
     );
 };

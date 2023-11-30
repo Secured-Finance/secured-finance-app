@@ -47,7 +47,7 @@ export const HorizontalTab = ({
             selectedIndex={selectedIndex}
             onChange={onChange}
             as='div'
-            className='flex h-full flex-col rounded-b-2xl border border-white-10 bg-cardBackground/60 shadow-tab'
+            className='flex h-full flex-col rounded-b-2xl border border-white-10 bg-gunMetal/40 shadow-tab'
         >
             <HeadlessTab.List className='h-16 justify-start border-b border-white-10 p-3'>
                 <div className='w-full tablet:hidden'>
@@ -84,7 +84,7 @@ export const HorizontalTab = ({
                     })}
                 </div>
             </HeadlessTab.List>
-            <HeadlessTab.Panels className='h-full min-h-[25vh] rounded-b-2xl bg-black-20 px-2 pb-2'>
+            <HeadlessTab.Panels className='h-full min-h-[25vh] rounded-b-2xl bg-cardBackground pb-2'>
                 {arrayChildren[selectedIndex]}
             </HeadlessTab.Panels>
         </HeadlessTab.Group>

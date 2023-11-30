@@ -4,7 +4,6 @@ import { within } from '@storybook/testing-library';
 import {
     withAppLayout,
     withAssetPrice,
-    withChainErrorDisabled,
     withEthBalance,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
@@ -23,7 +22,6 @@ export default {
         withAssetPrice,
         withAppLayout,
         withWalletProvider,
-        withChainErrorDisabled,
     ],
     parameters: {
         apolloClient: {

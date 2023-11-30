@@ -10,6 +10,7 @@ import {
 import {
     CollateralBook,
     MarketPhase,
+    useBorrowableAmount,
     useMarketPhase,
     useOrders,
 } from 'src/hooks';
@@ -19,7 +20,6 @@ import { setWalletDialogOpen } from 'src/store/interactions';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { amountFormatterFromBase } from 'src/utils';
-import { MAX_COVERAGE, computeAvailableToBorrow } from 'src/utils/collateral';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
@@ -38,9 +38,12 @@ export const OrderAction = ({
     validation,
     isCurrencyDelisted,
 }: OrderActionProps) => {
-    const { isConnected } = useAccount();
+    const { address, isConnected } = useAccount();
     const dispatch = useDispatch();
     const { placeOrder, placePreOrder } = useOrders();
+    const chainError = useSelector(
+        (state: RootState) => state.blockchain.chainError
+    );
 
     const [openDepositCollateralDialog, setOpenDepositCollateralDialog] =
         useState(false);
@@ -63,25 +66,10 @@ export const OrderAction = ({
         [collateralBalances]
     );
 
-    const availableToBorrow = useMemo(() => {
-        return currency && price
-            ? computeAvailableToBorrow(
-                  price,
-                  collateralBook.usdCollateral,
-                  collateralBook.coverage / MAX_COVERAGE,
-                  collateralBook.collateralThreshold
-              )
-            : 0;
-    }, [
-        price,
-        collateralBook.coverage,
-        collateralBook.usdCollateral,
-        collateralBook.collateralThreshold,
-        currency,
-    ]);
+    const { data: availableToBorrow } = useBorrowableAmount(address, currency);
 
     const canBorrow = useMemo(
-        () => availableToBorrow > amountFormatterFromBase[currency](amount),
+        () => availableToBorrow >= amountFormatterFromBase[currency](amount),
         [amount, availableToBorrow, currency]
     );
 
@@ -108,7 +96,7 @@ export const OrderAction = ({
             {isConnected &&
                 (canBorrow || side === OrderSide.LEND ? (
                     <Button
-                        disabled={isPlaceOrderDisabled}
+                        disabled={isPlaceOrderDisabled || chainError}
                         fullWidth
                         onClick={() => {
                             setOpenPlaceOrderDialog(true);
@@ -120,6 +108,7 @@ export const OrderAction = ({
                     </Button>
                 ) : (
                     <Button
+                        disabled={chainError}
                         fullWidth
                         onClick={() => setOpenDepositCollateralDialog(true)}
                         data-testid='deposit-collateral-button'

@@ -2,8 +2,18 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
     content: ['./src/**/*.{ts,tsx,js,jsx}', './public/index.html'],
+    safelist: [
+        {
+            pattern: /grid-cols-./,
+        },
+    ],
     theme: {
         extend: {
+            gridTemplateColumns: {
+                '1-actions': 'repeat(1, minmax(95px, 1fr))',
+                '2-actions': 'repeat(2, minmax(95px, 1fr))',
+                '3-actions': 'repeat(3, minmax(95px, 1fr))',
+            },
             boxShadow: {
                 deep: '0px 34px 64px 0px rgba(0, 0, 0, 0.45)',
                 dropdown: '0px 16px 64px -48px rgba(31, 47, 70, 0.4)',
@@ -39,6 +49,8 @@ module.exports = {
                 '1px': '1px',
                 '2px': '2px',
                 '6px': '6px',
+                '70%-gap-3': 'calc(70% - (3/4 * 1rem))',
+                '30%-gap-3': 'calc(30% - (3/4 * 1rem))',
             },
             gap: {
                 '10px': '10px',
@@ -107,10 +119,11 @@ module.exports = {
                 '8': '#FCFCFD',
             },
             grayScale: '#FAFAFA',
+
             tabGradient2: 'rgba(106, 118, 177, 0.35)',
             tabGradient1: 'rgba(57, 77, 174, 0)',
             backgroundBlur: 'rgba(35, 43, 56, 0.6)',
-            cardBackground: 'rgb(41, 45, 63)',
+            cardBackground: '#161E2E',
             panelStroke: 'rgb(45, 64, 100)',
 
             progressBarStart: 'rgba(21, 214, 232, 1)',

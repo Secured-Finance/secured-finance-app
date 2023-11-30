@@ -187,6 +187,7 @@ export const EmergencyRedeemDialog = ({
             description={state.description}
             callToAction={state.buttonText}
             onClick={() => onClick(state.currentStep)}
+            showCancelButton={state.currentStep === Step.settlement}
         >
             {(() => {
                 switch (state.currentStep) {
@@ -204,6 +205,7 @@ export const EmergencyRedeemDialog = ({
                                         <CoreTable
                                             data={data}
                                             columns={columns}
+                                            options={{ stickyHeader: false }}
                                         />
                                         <div className='typography-caption-2 text-center leading-6 text-slateGray'>{`Snapshot as of ${formatTimestamp(
                                             snapshotDate ?? 0

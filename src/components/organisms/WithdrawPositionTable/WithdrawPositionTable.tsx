@@ -70,6 +70,7 @@ export const WithdrawPositionTable = ({
                             options={{
                                 name: 'emergency-step-1',
                                 responsive: false,
+                                stickyHeader: false,
                             }}
                         />
                     </div>

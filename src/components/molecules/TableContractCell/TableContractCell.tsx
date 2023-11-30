@@ -65,7 +65,8 @@ export const TableContractCell = ({
         <div className='flex flex-col'>
             <div
                 className={classNames('flex h-6 flex-row justify-start gap-2', {
-                    'w-40': variant !== 'contractOnly',
+                    'tablet:w-32':
+                        variant !== 'contractOnly' && variant !== 'compact',
                 })}
             >
                 {variant !== 'contractOnly' ? (

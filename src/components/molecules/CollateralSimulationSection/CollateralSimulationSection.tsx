@@ -1,9 +1,14 @@
+import { OrderSide } from '@secured-finance/sf-client';
 import { useMemo } from 'react';
 import { FormatCollateralUsage, SectionWithItems } from 'src/components/atoms';
 import { InfoToolTip } from 'src/components/molecules';
-import { CollateralBook, useOrderEstimation, useZCUsage } from 'src/hooks';
+import {
+    CollateralBook,
+    useBorrowableAmount,
+    useOrderEstimation,
+    useZCUsage,
+} from 'src/hooks';
 import { amountFormatterFromBase, usdFormat } from 'src/utils';
-import { MAX_COVERAGE, computeAvailableToBorrow } from 'src/utils/collateral';
 import { Amount, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
@@ -25,14 +30,23 @@ export const CollateralSimulationSection = ({
     collateral,
     maturity,
     tradeAmount,
+    assetPrice,
+    side,
 }: {
     collateral: CollateralBook;
     maturity: Maturity;
     tradeAmount: Amount;
+    assetPrice: number;
+    side: OrderSide;
 }) => {
     const { address } = useAccount();
 
     const { data: orderEstimationInfo } = useOrderEstimation(address);
+
+    const { data: availableToBorrow } = useBorrowableAmount(
+        address,
+        tradeAmount.currency
+    );
 
     const getZCUsage = useZCUsage(address);
 
@@ -57,22 +71,15 @@ export const CollateralSimulationSection = ({
         [orderEstimationInfo?.coverage]
     );
 
-    const remainingToBorrowText = useMemo(
-        () =>
-            usdFormat(
-                computeAvailableToBorrow(
-                    1,
-                    collateral.usdCollateral,
-                    coverage / MAX_COVERAGE,
-                    collateral.collateralThreshold
-                ),
-                2
-            ),
-        [collateral.usdCollateral, collateral.collateralThreshold, coverage]
+    const remainingToBorrow = Math.max(
+        0,
+        side === OrderSide.BORROW
+            ? availableToBorrow - tradeAmount.value
+            : availableToBorrow
     );
 
     const items: [string | React.ReactNode, string | React.ReactNode][] = [
-        ['Borrow Remaining', remainingToBorrowText],
+        ['Borrow Remaining', usdFormat(remainingToBorrow * assetPrice, 2)],
         [
             'ZC Usage',
             <FormatCollateralUsage

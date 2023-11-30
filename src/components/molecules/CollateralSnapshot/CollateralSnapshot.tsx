@@ -126,6 +126,9 @@ export const CollateralSnapshot = ({
                                     currencyMap[b.currency].index
                             ),
                         ]}
+                        options={{
+                            stickyHeader: false,
+                        }}
                     />
                 </section>
                 <section className='typography-caption-2 text-center leading-6 text-slateGray'>

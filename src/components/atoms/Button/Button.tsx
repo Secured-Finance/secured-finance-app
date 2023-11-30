@@ -14,7 +14,7 @@ export const Button = ({
     React.AnchorHTMLAttributes<HTMLAnchorElement> & {
         fullWidth?: boolean;
         href?: string;
-        size?: 'sm' | 'md';
+        size?: 'xs' | 'sm' | 'md';
         variant?: 'solid' | 'outlined';
     } & {
         StartIcon?: SvgIcon;
@@ -37,16 +37,16 @@ export const Button = ({
             aria-label={label}
             className={classNames(
                 `flex items-center justify-center rounded-xl ${props?.className}`,
-                'enabled:hover:bg-gradient-to-t enabled:hover:from-black-20 enabled:hover:via-black-20 enabled:hover:to-starBlue',
-                'disabled:bg-gradient-to-t disabled:from-black/25 disabled:via-black/25 disabled:to-starBlue disabled:opacity-50',
                 {
+                    'h-8 px-3 py-2': size === 'xs',
                     'h-10 px-4 py-3': size === 'sm',
                     'h-12 px-6 py-4': size === 'md',
                     'w-full': fullWidth,
                     'w-fit': !fullWidth,
-                    'bg-inherit border-2 border-slateGray enabled:hover:bg-none':
+                    'enabled:border-2 enabled:border-slateGray enabled:text-neutral-8 enabled:hover:border-none enabled:hover:bg-neutral-8 enabled:hover:text-neutral-2 disabled:bg-neutral-8 disabled:text-neutral-2':
                         variant === 'outlined',
-                    'bg-starBlue': variant === 'solid',
+                    'bg-starBlue text-neutral-8 enabled:hover:bg-gradient-to-t enabled:hover:from-black-20 enabled:hover:via-black-20 enabled:hover:to-starBlue disabled:bg-gradient-to-t disabled:from-black/25 disabled:via-black/25 disabled:to-starBlue disabled:opacity-50':
+                        variant === 'solid',
                 }
             )}
         >
@@ -56,7 +56,8 @@ export const Button = ({
                 </span>
             )}
             <p
-                className={classNames('whitespace-nowrap text-neutral-8', {
+                className={classNames('whitespace-nowrap', {
+                    'typography-button-2 text-xs': size === 'xs',
                     'typography-button-2': size === 'sm',
                     'typography-button-1': size === 'md',
                 })}

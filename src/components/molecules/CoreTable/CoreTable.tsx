@@ -24,10 +24,11 @@ type CoreTableOptions = {
     hoverRow?: (rowId: string) => boolean;
     hideColumnIds?: string[];
     responsive: boolean;
-    stickyColumns?: Set<number>;
+    stickyFirstColumn?: boolean;
     pagination?: Pagination;
     showHeaders?: boolean;
     compact?: boolean;
+    stickyHeader?: boolean;
 };
 
 const DEFAULT_OPTIONS: CoreTableOptions = {
@@ -39,6 +40,8 @@ const DEFAULT_OPTIONS: CoreTableOptions = {
     responsive: true,
     showHeaders: true,
     compact: false,
+    stickyFirstColumn: false,
+    stickyHeader: true,
 };
 
 export const CoreTable = <T,>({
@@ -103,14 +106,6 @@ export const CoreTable = <T,>({
 
     const table = useReactTable<T>(configuration);
 
-    const lastColumnIndex = filteredColumns.length - 1;
-
-    const stickyClass: Record<number, string> = {
-        0: 'left-0 tablet:left-auto',
-        1: 'left-1/3 tablet:left-auto',
-        [lastColumnIndex]: 'right-0 tablet:right-auto',
-    };
-
     const coreTable = (
         <table
             className={classNames('w-full', {
@@ -123,9 +118,16 @@ export const CoreTable = <T,>({
                     className={classNames(
                         'typography-caption-2 px-6 text-slateGray',
                         {
-                            'border-b border-white-10': coreTableOptions.border,
+                            'after:absolute after:bottom-0 after:z-20 after:w-full after:border-b after:border-white-10':
+                                coreTableOptions.border &&
+                                coreTableOptions.stickyHeader,
                             'h-14 py-4': !coreTableOptions.compact,
                             'h-5 py-1': coreTableOptions.compact,
+                            'sticky inset-0 z-20 bg-[#1D2739]':
+                                coreTableOptions.stickyHeader,
+                            'border-b border-white-10':
+                                coreTableOptions.border &&
+                                !coreTableOptions.stickyHeader,
                         }
                     )}
                 >
@@ -141,16 +143,10 @@ export const CoreTable = <T,>({
                                     className={classNames(
                                         'whitespace-nowrap py-2 pr-1 text-center font-bold tablet:px-1',
                                         {
-                                            'sticky z-10 bg-gunMetal/100 tablet:relative tablet:bg-transparent':
+                                            'sticky left-0 z-10 bg-[#161E2E] after:absolute after:-right-4 after:-top-0 after:z-10 after:h-full after:w-5 after:bg-gradient-to-r after:from-black-40 after:to-transparent tablet:relative tablet:left-auto tablet:z-auto tablet:bg-transparent tablet:after:hidden':
                                                 coreTableOptions.responsive &&
-                                                coreTableOptions?.stickyColumns?.has(
-                                                    columnIndex
-                                                ),
-                                            [stickyClass[columnIndex]]:
-                                                coreTableOptions.responsive &&
-                                                coreTableOptions.stickyColumns?.has(
-                                                    columnIndex
-                                                ),
+                                                columnIndex === 0 &&
+                                                coreTableOptions?.stickyFirstColumn,
                                         }
                                     )}
                                 >
@@ -195,16 +191,10 @@ export const CoreTable = <T,>({
                                 className={classNames(
                                     'min-w-fit whitespace-nowrap pr-1 text-center font-medium tablet:px-1',
                                     {
-                                        'sticky z-10 bg-gunMetal/100 tablet:relative tablet:z-auto tablet:bg-transparent':
+                                        'sticky left-0 z-10 bg-[#161E2E] after:absolute after:-right-4 after:-top-0 after:z-10 after:h-full after:w-5 after:bg-gradient-to-r after:from-black-40 after:to-transparent tablet:relative tablet:left-auto tablet:z-auto tablet:bg-transparent tablet:after:hidden':
                                             coreTableOptions.responsive &&
-                                            coreTableOptions?.stickyColumns?.has(
-                                                cellIndex
-                                            ),
-                                        [stickyClass[cellIndex]]:
-                                            coreTableOptions.responsive &&
-                                            coreTableOptions.stickyColumns?.has(
-                                                cellIndex
-                                            ),
+                                            cellIndex === 0 &&
+                                            coreTableOptions?.stickyFirstColumn,
                                         'py-2': !coreTableOptions.compact,
                                         'py-1': coreTableOptions.compact,
                                     }

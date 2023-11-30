@@ -3,7 +3,6 @@ import type { Meta, StoryFn } from '@storybook/react';
 import {
     withAppLayout,
     withAssetPrice,
-    withChainErrorDisabled,
     withEthBalance,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
@@ -18,7 +17,6 @@ export default {
         withEthBalance,
         withAssetPrice,
         withWalletProvider,
-        withChainErrorDisabled,
     ],
     parameters: {
         ...RESPONSIVE_PARAMETERS,

@@ -120,7 +120,10 @@ export const WithdrawTokenTable = ({ data }: { data: TokenPosition[] }) => {
                                 };
                             })}
                             columns={columns}
-                            options={{ name: 'emergency-step-2' }}
+                            options={{
+                                name: 'emergency-step-2',
+                                stickyHeader: false,
+                            }}
                         />
                     </div>
                 )}
