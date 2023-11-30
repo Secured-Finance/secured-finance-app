@@ -1,8 +1,5 @@
 import type { Meta, StoryFn } from '@storybook/react';
-import {
-    withAssetPrice,
-    withWalletProvider,
-} from 'src/../.storybook/decorators';
+import { withWalletProvider } from 'src/../.storybook/decorators';
 import { yieldCurveRates } from 'src/stories/mocks/fixtures';
 import { Rate } from 'src/utils';
 import { LineChartTab } from './LineChartTab';
@@ -29,7 +26,7 @@ export default {
         marketCloseToMaturityOriginalRate: 0,
     },
     chromatic: { pauseAnimationAtEnd: true },
-    decorators: [withWalletProvider, withAssetPrice],
+    decorators: [withWalletProvider],
 } as Meta<typeof LineChartTab>;
 
 const Template: StoryFn<typeof LineChartTab> = args => {

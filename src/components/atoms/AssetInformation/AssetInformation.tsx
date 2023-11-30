@@ -1,9 +1,6 @@
-import { useSelector } from 'react-redux';
 import { CurrencyIcon, CurrencyItem } from 'src/components/atoms';
 import { InfoToolTip } from 'src/components/molecules';
-import { CollateralBook } from 'src/hooks';
-import { getPriceMap } from 'src/store/assetPrices/selectors';
-import { RootState } from 'src/store/types';
+import { CollateralBook, useLastPrices } from 'src/hooks';
 import {
     CurrencySymbol,
     ZERO_BI,
@@ -22,7 +19,8 @@ export const AssetInformation = ({
     informationText,
     collateralBook,
 }: AssetInformationProps) => {
-    const priceList = useSelector((state: RootState) => getPriceMap(state));
+    const { data: priceList } = useLastPrices();
+
     return (
         collateralBook && (
             <div className='flex h-fit w-full flex-col gap-2'>

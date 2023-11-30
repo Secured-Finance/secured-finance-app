@@ -1,9 +1,6 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import type { Meta, StoryFn } from '@storybook/react';
-import {
-    withAssetPrice,
-    withWalletProvider,
-} from 'src/../.storybook/decorators';
+import { withWalletProvider } from 'src/../.storybook/decorators';
 import { emptyCollateralBook } from 'src/hooks';
 import { collateralBook37 } from 'src/stories/mocks/fixtures';
 import { CollateralTabRightPane } from './CollateralTabRightPane';
@@ -21,7 +18,7 @@ export default {
             viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
         },
     },
-    decorators: [withAssetPrice, withWalletProvider],
+    decorators: [withWalletProvider],
 } as Meta<typeof CollateralTabRightPane>;
 
 const Template: StoryFn<typeof CollateralTabRightPane> = args => {

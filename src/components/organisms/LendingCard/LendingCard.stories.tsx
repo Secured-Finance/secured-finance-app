@@ -1,9 +1,6 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
-import {
-    withAssetPrice,
-    withWalletProvider,
-} from 'src/../.storybook/decorators';
+import { withWalletProvider } from 'src/../.storybook/decorators';
 import { defaultDelistedStatusSet } from 'src/hooks';
 import { collateralBook37, maturityOptions } from 'src/stories/mocks/fixtures';
 import { LendingCard } from './LendingCard';
@@ -17,7 +14,7 @@ export default {
         marketPrice: 9917,
         delistedCurrencySet: defaultDelistedStatusSet,
     },
-    decorators: [withAssetPrice, withWalletProvider],
+    decorators: [withWalletProvider],
     parameters: {
         connected: true,
     },

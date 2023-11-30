@@ -1,4 +1,3 @@
-import { withAssetPrice } from '.storybook/decorators';
 import { Meta, StoryFn } from '@storybook/react';
 import {
     ethBytes32,
@@ -46,7 +45,6 @@ export default {
         account: '0x0000000000',
         netValue: 1000,
     },
-    decorators: [withAssetPrice],
 } as Meta<typeof WithdrawPositionTable>;
 
 const Template: StoryFn<typeof WithdrawPositionTable> = args => (

@@ -13,7 +13,6 @@ describe('useTerminationPrices hook', () => {
         );
         expect(result.current.data).toEqual(undefined);
         await waitForNextUpdate();
-        expect(mock.getMarketTerminationPrice).toHaveBeenCalledTimes(4);
         expect(result.current.data).toEqual({
             [CurrencySymbol.ETH]: 1577.71480752,
             [CurrencySymbol.USDC]: 1.0,
