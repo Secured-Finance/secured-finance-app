@@ -31,8 +31,6 @@ module.exports = {
             margin: {
                 '0.5': '0.125rem',
                 '10px': '10px',
-                '26': '6.5rem',
-                'header-top': '7.875rem',
             },
             transitionProperty: {
                 width: 'width',
