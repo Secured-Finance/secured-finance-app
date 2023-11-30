@@ -123,12 +123,30 @@ export const PortfolioManagement = () => {
     ]);
     const { data: positions } = usePositions(address, usedCurrencies);
 
+    const dataUser = useMemo(() => {
+        if (selectedTable === TableType.MY_TRANSACTIONS)
+            return (
+                userTransactionHistory.data?.transactions[0]?.taker.id ??
+                undefined
+            );
+        if (selectedTable === TableType.ORDER_HISTORY)
+            return userOrderHistory.data?.orders[0]?.maker.id ?? undefined;
+    }, [
+        selectedTable,
+        userOrderHistory.data?.orders,
+        userTransactionHistory.data?.transactions,
+    ]);
+
     const paginatedTransactions = usePagination(
-        userTransactionHistory.data?.transactions ?? []
+        userTransactionHistory.data?.transactions ?? [],
+        dataUser,
+        address
     );
 
     const paginatedOrderHistory = usePagination(
-        userOrderHistory.data?.orders ?? []
+        userOrderHistory.data?.orders ?? [],
+        dataUser,
+        address
     );
 
     const sortedOrderHistory = useMemo(() => {

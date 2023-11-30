@@ -1,10 +1,10 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
-import { useState } from 'react';
 import type { Meta, StoryFn } from '@storybook/react';
+import { useState } from 'react';
 import {
-    wfilBytes32,
     jun23Fixture,
     transactions,
+    wfilBytes32,
 } from 'src/stories/mocks/fixtures';
 import { MyTransactionsTable } from './MyTransactionsTable';
 
@@ -41,6 +41,9 @@ const PaginationTemplate: StoryFn<typeof MyTransactionsTable> = args => {
             forwardValue: '1020000000000000000000',
             currency: wfilBytes32,
             maturity: jun23Fixture.toString(),
+            taker: {
+                id: '0x1',
+            },
         }));
     const [data, setData] = useState(initialData);
 
@@ -64,6 +67,9 @@ const PaginationTemplate: StoryFn<typeof MyTransactionsTable> = args => {
                                 forwardValue: '1020000000000000000000',
                                 currency: wfilBytes32,
                                 maturity: jun23Fixture.toString(),
+                                taker: {
+                                    id: '0x1',
+                                },
                             }));
 
                         const updatedData = [...data, ...newData];

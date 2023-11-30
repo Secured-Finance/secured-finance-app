@@ -49,6 +49,9 @@ const PaginatedTemplate: StoryFn<typeof OrderHistoryTable> = args => {
                 id: '1',
                 isActive: true,
             },
+            maker: {
+                id: '0x1',
+            },
         }));
     const [data, setData] = useState<OrderHistoryList>(initialData);
 
@@ -76,6 +79,9 @@ const PaginatedTemplate: StoryFn<typeof OrderHistoryTable> = args => {
                             lendingMarket: {
                                 id: '1',
                                 isActive: true,
+                            },
+                            maker: {
+                                id: '0x1',
                             },
                         }));
 
