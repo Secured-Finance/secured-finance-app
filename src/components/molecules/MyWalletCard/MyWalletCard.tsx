@@ -1,4 +1,6 @@
-import { useMemo } from 'react';
+import { SquidWidget } from '@0xsquid/widget';
+import { Dialog } from '@headlessui/react';
+import { useMemo, useRef, useState } from 'react';
 import AxelarFil from 'src/assets/coins/axelarfil.svg';
 import Filecoin from 'src/assets/coins/fil.svg';
 import AxelarLogo from 'src/assets/img/axelar.svg';
@@ -14,6 +16,93 @@ import {
     WalletSource,
     generateWalletInformation,
 } from 'src/utils';
+
+const BridgeDialog = ({
+    isOpen,
+    onClose,
+}: {
+    isOpen: boolean;
+    onClose: () => void;
+}) => {
+    const refDiv = useRef(null); // Dialog needs a focusable element. There are no focus elements in the dialog if its rendered without a button.
+
+    return (
+        <Dialog
+            open={isOpen}
+            onClose={onClose}
+            className='relative z-30'
+            initialFocus={refDiv}
+        >
+            <div className='fixed inset-0 bg-backgroundBlur backdrop-blur-sm' />
+            <div className='fixed inset-0 flex items-center justify-center'>
+                <Dialog.Panel
+                    className='h-screen w-full overflow-y-auto rounded-xl bg-universeBlue p-6 shadow-deep tablet:h-fit tablet:w-fit'
+                    data-cy='modal'
+                >
+                    <div
+                        ref={refDiv}
+                        className='min-h-2/3 flex h-full w-full flex-col items-center justify-between space-y-6 tablet:h-fit tablet:justify-center'
+                    >
+                        <SquidWidget
+                            config={{
+                                integratorId: 'squid-swap-widget',
+                                companyName: 'Squid',
+                                style: {
+                                    neutralContent: '#d3d0e7',
+                                    baseContent: '#ffffff',
+                                    base100: '#0f1419',
+                                    base200: '#2a2e3d',
+                                    base300: '#2a2e3d',
+                                    error: '#ED6A5E',
+                                    warning: '#FFB155',
+                                    success: '#2EAEB0',
+                                    primary: '#5562f6',
+                                    secondary: '#F89CC3',
+                                    secondaryContent: '#2a2e3d',
+                                    neutral: '#002133',
+                                    roundedBtn: '26px',
+                                    roundedCornerBtn: '999px',
+                                    roundedBox: '1rem',
+                                    roundedDropDown: '20rem',
+                                },
+                                slippage: 1.5,
+                                infiniteApproval: false,
+                                enableExpress: true,
+                                apiUrl: 'https://api.squidrouter.com',
+                                comingSoonChainIds: [],
+                                titles: {
+                                    swap: 'Swap',
+                                    settings: 'Settings',
+                                    wallets: 'Wallets',
+                                    tokens: 'Select Token',
+                                    chains: 'Select Chain',
+                                    history: 'History',
+                                    transaction: 'Transaction',
+                                    allTokens: 'Select Token',
+                                    destination: 'Destination address',
+                                },
+                                priceImpactWarnings: {
+                                    warning: 3,
+                                    critical: 5,
+                                },
+                                showOnRampLink: true,
+                                initialFromChainId: 314,
+                                initialToChainId: 1,
+                                defaultTokens: [
+                                    {
+                                        address:
+                                            '0x6A7b717aE5Ed65F85BA25403D5063D368239828e',
+                                        chainId: 1,
+                                    },
+                                ],
+                            }}
+                        />
+                    </div>
+                </Dialog.Panel>
+            </div>
+        </Dialog>
+    );
+};
 export const MyWalletCard = ({
     addressRecord,
     information,
@@ -22,6 +111,7 @@ export const MyWalletCard = ({
     information?: Partial<Record<WalletSource, CurrencySymbol[]>>;
 }) => {
     const balanceRecord = useBalances();
+    const [isOpen, setIsOpen] = useState(false);
 
     const assetMap: AssetDisclosureProps[] = useMemo(
         () =>
@@ -60,7 +150,9 @@ export const MyWalletCard = ({
                                     <Filecoin className='h-10 w-10' />
                                     <AxelarFil className='-ml-3 h-10 w-10' />
                                 </div>
-                                <Button>Bridge</Button>
+                                <Button onClick={() => setIsOpen(true)}>
+                                    Bridge
+                                </Button>
                             </div>
                             <div className='typography-nav-menu-default flex flex-col gap-4 text-secondary7'>
                                 <p className='typography-nav-menu-default text-[13px]'>
@@ -79,6 +171,7 @@ export const MyWalletCard = ({
                     </div>
                 </div>
             </GradientBox>
+            <BridgeDialog isOpen={isOpen} onClose={() => setIsOpen(false)} />
         </div>
     );
 };

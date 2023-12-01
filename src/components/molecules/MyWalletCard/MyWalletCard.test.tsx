@@ -10,4 +10,10 @@ describe('test MyWalletCard component', () => {
         expect(screen.getByText('My Wallet')).toBeInTheDocument();
         expect(screen.getByText('de926d...aa4f')).toBeInTheDocument();
     });
+
+    it('should show bridge dialog', async () => {
+        await waitFor(() => render(<Default />));
+        screen.getByRole('button', { name: 'Bridge' }).click();
+        expect(await screen.findByRole('dialog')).toBeInTheDocument();
+    });
 });
