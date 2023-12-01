@@ -1,5 +1,4 @@
 import { OrderSide } from '@secured-finance/sf-client';
-import { useMemo } from 'react';
 import { FormatCollateralUsage, SectionWithItems } from 'src/components/atoms';
 import { InfoToolTip } from 'src/components/molecules';
 import {
@@ -66,10 +65,7 @@ export const CollateralSimulationSection = ({
         0
     );
 
-    const coverage = useMemo(
-        () => Number(orderEstimationInfo?.coverage) ?? 0,
-        [orderEstimationInfo?.coverage]
-    );
+    const coverage = Number(orderEstimationInfo?.coverage) ?? 0;
 
     const remainingToBorrow = Math.max(
         0,

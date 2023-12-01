@@ -43,6 +43,7 @@ describe('useOrderEstimation', () => {
         );
         const value = result.current.data;
         expect(value.coverage).toEqual(BigInt(5500));
+        expect(value.filledAmount).toEqual(BigInt('-90000000000000000000'));
     });
 
     it('should be called with truthy ignoreBorrowedAmount if isBorrowedCollateral is true', async () => {
@@ -73,6 +74,7 @@ describe('useOrderEstimation', () => {
         );
         const value = result.current.data;
         expect(value.coverage).toEqual(BigInt(5500));
+        expect(value.filledAmount).toEqual(BigInt('-90000000000000000000'));
     });
 
     it('should be called without ignoreBorrowedAmount in lend orders', async () => {
@@ -105,6 +107,7 @@ describe('useOrderEstimation', () => {
         );
         const value = result.current.data;
         expect(value.coverage).toEqual(BigInt(5500));
+        expect(value.filledAmount).toEqual(BigInt('-90000000000000000000'));
     });
 
     it('should be called with additionalDepositAmount in LEND orders if wallet source is not SF Vault', async () => {
@@ -135,6 +138,7 @@ describe('useOrderEstimation', () => {
         );
         const value = result.current.data;
         expect(value.coverage).toEqual(BigInt(5500));
+        expect(value.filledAmount).toEqual(BigInt('-90000000000000000000'));
     });
 
     it('should be called with 0 additionalDepositAmount in LEND orders if wallet source is SF Vault', async () => {
@@ -166,6 +170,7 @@ describe('useOrderEstimation', () => {
         );
         const value = result.current.data;
         expect(value.coverage).toEqual(BigInt(5500));
+        expect(value.filledAmount).toEqual(BigInt('-90000000000000000000'));
     });
 
     it('should be called with 0 additionalDepositAmount in Borrow orders', async () => {
@@ -188,5 +193,6 @@ describe('useOrderEstimation', () => {
         );
         const value = result.current.data;
         expect(value.coverage).toEqual(BigInt(5500));
+        expect(value.filledAmount).toEqual(BigInt('-90000000000000000000'));
     });
 });
