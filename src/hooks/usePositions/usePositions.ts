@@ -17,18 +17,18 @@ export type Position = {
     marketPrice: bigint;
 };
 
+const emptyPVPerCurrency = {
+    [CurrencySymbol.ETH]: 0,
+    [CurrencySymbol.WBTC]: 0,
+    [CurrencySymbol.USDC]: 0,
+    [CurrencySymbol.WFIL]: 0,
+};
+
 export const usePositions = (
     account: string | undefined,
     usedCurrencies: CurrencySymbol[]
 ) => {
     const securedFinance = useSF();
-
-    const emptyPVPerCurrency = {
-        [CurrencySymbol.ETH]: 0,
-        [CurrencySymbol.WBTC]: 0,
-        [CurrencySymbol.USDC]: 0,
-        [CurrencySymbol.WFIL]: 0,
-    };
 
     const usedCurrencyKey = useMemo(() => {
         return usedCurrencies.sort().join('-');
@@ -64,13 +64,15 @@ export const usePositions = (
                 } as Position);
                 const ccy = hexToCurrencySymbol(position.ccy);
                 if (!ccy) return;
-                const pv = amountFormatterFromBase[ccy](position.presentValue);
+                const presentValue = amountFormatterFromBase[ccy](
+                    position.presentValue
+                );
                 if (position.presentValue >= 0) {
                     lendCurrencies.add(ccy);
-                    totalLendPVPerCurrency[ccy] += pv;
+                    totalLendPVPerCurrency[ccy] += presentValue;
                 } else {
                     borrowCurrencies.add(ccy);
-                    totalBorrowPVPerCurrency[ccy] += Math.abs(pv);
+                    totalBorrowPVPerCurrency[ccy] += Math.abs(presentValue);
                 }
             });
 

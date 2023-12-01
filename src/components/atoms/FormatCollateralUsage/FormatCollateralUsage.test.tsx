@@ -12,14 +12,14 @@ describe('FormatCollateralUsage Component', () => {
         expect(screen.getByText('67%')).toHaveClass('text-progressBarEnd');
     });
 
-    it('should render color of final usage according to max value if max value is greater than final', () => {
+    it('should render color of final usage according to max value if max value is lesser than final', () => {
         render(<WithMaxValue />);
         expect(screen.getByText('50%')).toBeInTheDocument();
         expect(screen.getByText('67%')).toBeInTheDocument();
         expect(screen.getByText('67%')).toHaveClass('text-progressBarVia');
     });
 
-    it('should not  render color of final usage according to max value if max value is lesser than final', () => {
+    it('should not render color of final usage according to max value if max value is greater than final', () => {
         render(<WithMaxValue maxValue={9900} />);
         expect(screen.getByText('50%')).toBeInTheDocument();
         expect(screen.getByText('67%')).toBeInTheDocument();
