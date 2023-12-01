@@ -137,5 +137,11 @@
   },
   "resolutions": {
     "webpack": "^5"
+  },
+  "nextBundleAnalysis": {
+    "budget": null,
+    "budgetPercentIncreaseRed": 20,
+    "minimumChangeThreshold": 0,
+    "showDetails": true
   }
 }
