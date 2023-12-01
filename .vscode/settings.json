@@ -16,6 +16,7 @@
   "prettier.prettierPath": "node_modules/prettier",
   "cSpell.words": [
     "attofil",
+    "Axelar",
     "bigint",
     "chartjs",
     "chromaui",
