@@ -53,8 +53,8 @@ export const MyWalletCard = ({
                             })}
                         </div>
                     )}
-                    <div className='rounded border border-white-20 bg-wrap'>
-                        <div className='grid grid-rows-2 gap-y-[18px] px-5 pb-5 pt-6'>
+                    <div className='rounded-[3px] border border-white-20'>
+                        <div className='grid grid-rows-2 gap-y-[18px] rounded-sm bg-wrap px-5 pb-5 pt-6'>
                             <div className='flex flex-row items-center justify-between'>
                                 <div className='flex flex-row'>
                                     <Filecoin className='h-10 w-10' />
