@@ -11,11 +11,11 @@ import {
     CollateralBook,
     MarketPhase,
     useBorrowableAmount,
+    useLastPrices,
     useMarketPhase,
     useOrders,
 } from 'src/hooks';
 import { useCollateralBalances } from 'src/hooks/useBalances';
-import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
@@ -58,8 +58,8 @@ export const OrderAction = ({
 
     const collateralBalances = useCollateralBalances();
 
-    const assetPriceMap = useSelector((state: RootState) => getPriceMap(state));
-    const price = assetPriceMap[currency];
+    const { data: priceList } = useLastPrices();
+    const price = priceList[currency];
 
     const depositCollateralList = useMemo(
         () => generateCollateralList(collateralBalances, false),

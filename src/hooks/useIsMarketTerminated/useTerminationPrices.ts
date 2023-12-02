@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { BigNumber as BigNumberJS } from 'bignumber.js';
-import { QueryKeys } from 'src/hooks';
+import { QueryKeys, useDecimals } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
-import { AssetPriceMap } from 'src/store/assetPrices/selectors';
+import { AssetPriceMap } from 'src/types';
 import {
     CurrencySymbol,
     ZERO_BI,
@@ -10,11 +10,12 @@ import {
     toCurrency,
 } from 'src/utils';
 
-//TODO: replace hardcoded division by CurrencyController#getDecimals
 export const useTerminationPrices = () => {
     const securedFinance = useSF();
+    const { data: decimals } = useDecimals();
+
     return useQuery({
-        queryKey: [QueryKeys.TERMINATION_PRICES],
+        queryKey: [QueryKeys.TERMINATION_PRICES, decimals],
         queryFn: async () => {
             const currencies = (await securedFinance?.getCurrencies()) ?? [];
             const currencyList = currencies
@@ -32,12 +33,11 @@ export const useTerminationPrices = () => {
 
             const assetPriceMap: AssetPriceMap = currencyList.reduce(
                 (acc, ccy, index) => {
+                    if (decimals === undefined) return acc;
                     return {
                         ...acc,
                         [ccy]: new BigNumberJS(prices[index].toString())
-                            .dividedBy(
-                                10 ** (ccy === CurrencySymbol.WFIL ? 26 : 8)
-                            )
+                            .dividedBy(10 ** decimals[ccy])
                             .toNumber(),
                     };
                 },

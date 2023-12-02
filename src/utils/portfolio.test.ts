@@ -1,5 +1,4 @@
 import { toBytes32 } from '@secured-finance/sf-graph-client';
-import { AssetPriceMap } from 'src/store/assetPrices/selectors';
 import {
     dec22Fixture,
     ethBytes32,
@@ -7,7 +6,7 @@ import {
     wbtcBytes32,
     wfilBytes32,
 } from 'src/stories/mocks/fixtures';
-import { OrderType, TradeHistory } from 'src/types';
+import { AssetPriceMap, OrderType, TradeHistory } from 'src/types';
 import timemachine from 'timemachine';
 import { CurrencySymbol } from './currencyList';
 import {

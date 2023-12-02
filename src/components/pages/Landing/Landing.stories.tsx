@@ -3,7 +3,6 @@ import { within } from '@storybook/testing-library';
 import { RESPONSIVE_PARAMETERS } from 'src/../.storybook/constants';
 import {
     withAppLayout,
-    withAssetPrice,
     withEthBalance,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
@@ -20,12 +19,7 @@ import { Landing } from './Landing';
 export default {
     title: 'Pages/Landing',
     component: Landing,
-    decorators: [
-        withAppLayout,
-        withAssetPrice,
-        withEthBalance,
-        withWalletProvider,
-    ],
+    decorators: [withAppLayout, withEthBalance, withWalletProvider],
     parameters: {
         apolloClient: {
             mocks: [

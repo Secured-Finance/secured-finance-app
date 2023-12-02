@@ -1,5 +1,4 @@
 import type { Meta, StoryFn } from '@storybook/react';
-import { withAssetPrice } from 'src/../.storybook/decorators';
 import { CurrencySymbol, WalletSource } from 'src/utils';
 import { AssetDisclosure } from './AssetDisclosure';
 
@@ -14,7 +13,6 @@ export default {
         walletSource: WalletSource.METAMASK,
         account: 'de926db3012af759b4f24b5a51ef6afa397f04670f634aa4f',
     },
-    decorators: [withAssetPrice],
 } as Meta<typeof AssetDisclosure>;
 
 const Template: StoryFn<typeof AssetDisclosure> = args => {

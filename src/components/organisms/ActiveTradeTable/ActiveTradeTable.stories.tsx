@@ -1,9 +1,6 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import type { Meta, StoryFn } from '@storybook/react';
-import {
-    withAssetPrice,
-    withWalletProvider,
-} from 'src/../.storybook/decorators';
+import { withWalletProvider } from 'src/../.storybook/decorators';
 import { defaultDelistedStatusSet } from 'src/hooks';
 import {
     dec22Fixture,
@@ -28,7 +25,7 @@ export default {
             viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
         },
     },
-    decorators: [withAssetPrice, withWalletProvider],
+    decorators: [withWalletProvider],
 } as Meta<typeof ActiveTradeTable>;
 
 const Template: StoryFn<typeof ActiveTradeTable> = args => {

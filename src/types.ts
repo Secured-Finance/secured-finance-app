@@ -93,3 +93,4 @@ export const OrderSideMap = Object.freeze({
 export type Wallet = 'MetaMask' | 'WalletConnect';
 
 export type UserAccount = ReturnType<typeof useAccount>['address'];
+export type AssetPriceMap = Record<CurrencySymbol, number>;

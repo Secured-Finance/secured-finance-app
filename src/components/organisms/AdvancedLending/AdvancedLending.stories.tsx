@@ -1,5 +1,5 @@
 import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
-import { withAssetPrice, withWalletProvider } from '.storybook/decorators';
+import { withWalletProvider } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
 import { defaultDelistedStatusSet, emptyCollateralBook } from 'src/hooks';
@@ -40,7 +40,7 @@ export default {
             delay: 5000,
         },
     },
-    decorators: [withAssetPrice, withWalletProvider],
+    decorators: [withWalletProvider],
 } as Meta<typeof AdvancedLending>;
 
 const Template: StoryFn<typeof AdvancedLending> = args => {

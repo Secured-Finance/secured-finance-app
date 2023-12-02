@@ -1,6 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { useCallback, useEffect, useReducer, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Spinner } from 'src/components/atoms';
 import {
     Dialog,
@@ -13,11 +13,10 @@ import {
     emptyCollateralBook,
     useEtherscanUrl,
     useHandleContractTransaction,
+    useLastPrices,
     useOrders,
 } from 'src/hooks';
-import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { setLastMessage } from 'src/store/lastError';
-import { RootState } from 'src/store/types';
 import { AddressUtils } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 
@@ -120,7 +119,7 @@ export const RemoveOrderDialog = ({
     );
     const globalDispatch = useDispatch();
 
-    const priceList = useSelector((state: RootState) => getPriceMap(state));
+    const { data: priceList } = useLastPrices();
     const price = priceList[amount.currency];
 
     const marketValue = LoanValue.fromPrice(
