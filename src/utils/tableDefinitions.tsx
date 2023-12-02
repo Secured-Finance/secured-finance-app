@@ -9,8 +9,7 @@ import {
 import classNames from 'classnames';
 import { Chip, CurrencyItem, PriceYieldItem } from 'src/components/atoms';
 import { TableContractCell, TableHeader } from 'src/components/molecules';
-import { AssetPriceMap } from 'src/store/assetPrices/selectors';
-import { Alignment, ColorFormat } from 'src/types';
+import { Alignment, AssetPriceMap, ColorFormat } from 'src/types';
 import { ZERO_BI, formatTimestamp } from 'src/utils';
 import {
     CurrencySymbol,

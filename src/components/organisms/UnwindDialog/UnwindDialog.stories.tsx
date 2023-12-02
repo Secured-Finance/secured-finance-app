@@ -1,5 +1,5 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
-import { withAssetPrice, withWalletProvider } from '.storybook/decorators';
+import { withWalletProvider } from '.storybook/decorators';
 import { OrderSide } from '@secured-finance/sf-client';
 import type { Meta, StoryFn } from '@storybook/react';
 import { dec22Fixture } from 'src/stories/mocks/fixtures';
@@ -20,7 +20,7 @@ export default {
         ),
         side: OrderSide.BORROW,
     },
-    decorators: [withAssetPrice, withWalletProvider],
+    decorators: [withWalletProvider],
     parameters: {
         ...RESPONSIVE_PARAMETERS,
         chromatic: {

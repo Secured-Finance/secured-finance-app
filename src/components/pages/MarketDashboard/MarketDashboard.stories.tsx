@@ -3,7 +3,6 @@ import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import type { Meta, StoryFn } from '@storybook/react';
 import {
     withAppLayout,
-    withAssetPrice,
     withEthBalance,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
@@ -58,12 +57,7 @@ export default {
         },
         layout: 'fullscreen',
     },
-    decorators: [
-        withAppLayout,
-        withWalletProvider,
-        withEthBalance,
-        withAssetPrice,
-    ],
+    decorators: [withAppLayout, withWalletProvider, withEthBalance],
 } as Meta<typeof MarketDashboard>;
 
 const Template: StoryFn<typeof MarketDashboard> = () => {

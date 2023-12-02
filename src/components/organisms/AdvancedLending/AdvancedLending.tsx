@@ -24,6 +24,7 @@ import {
     emptyOrderList,
     useGraphClientHook,
     useIsUnderCollateralThreshold,
+    useLastPrices,
     useMarket,
     useMarketOrderList,
     useOrderList,
@@ -31,7 +32,6 @@ import {
     useYieldCurveMarketRates,
 } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
-import { getAssetPrice } from 'src/store/assetPrices/selectors';
 import {
     resetUnitPrice,
     selectLandingOrderForm,
@@ -106,9 +106,8 @@ export const AdvancedLending = ({
         selectLandingOrderForm(state.landingOrderForm)
     );
 
-    const currencyPrice = useSelector((state: RootState) =>
-        getAssetPrice(currency)(state)
-    );
+    const { data: priceList } = useLastPrices();
+    const currencyPrice = priceList[currency];
     const [selectedTable, setSelectedTable] = useState(TableType.ORDER_HISTORY);
 
     const { address } = useAccount();

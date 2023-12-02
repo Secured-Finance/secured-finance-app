@@ -22,6 +22,7 @@ export const NotConnectedToWallet = Template.bind({});
 export const ConnectedToWallet = Template.bind({});
 ConnectedToWallet.parameters = {
     connected: true,
+    chromatic: { delay: 500 },
 };
 ConnectedToWallet.args = {
     collateralBook: collateralBook37,

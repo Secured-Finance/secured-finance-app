@@ -3,7 +3,7 @@ import SFLogoSmall from 'src/assets/img/logo-small.svg';
 import { ExpandIndicator } from 'src/components/atoms';
 import { CurveHeader } from 'src/components/molecules';
 import { LineChartTab } from 'src/components/organisms';
-import { useYieldCurveMarketRates } from 'src/hooks';
+import { useLastPrices, useYieldCurveMarketRates } from 'src/hooks';
 import { DailyVolumes } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
 
@@ -16,6 +16,8 @@ export const YieldChart = ({
     asset,
     dailyVolumes,
 }: YieldChartProps): JSX.Element => {
+    const { data: priceList } = useLastPrices();
+
     const [show, setShow] = useState(true);
 
     const {
@@ -38,6 +40,7 @@ export const YieldChart = ({
                     <CurveHeader
                         asset={asset}
                         dailyVolumes={dailyVolumes}
+                        priceList={priceList}
                     ></CurveHeader>
                 </div>
                 <div className='flex w-full flex-grow items-center pl-[35px]'>
