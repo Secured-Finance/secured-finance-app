@@ -4,6 +4,7 @@ import { getEnvironment } from './env';
 export enum Environment {
     DEVELOPMENT = 'development',
     STAGING = 'staging',
+    PRODUCTION = 'production',
 }
 
 export const formatDataCy = (str: string): string => {
@@ -21,16 +22,23 @@ export function getTransformMaturityOption(options: Option[]) {
     };
 }
 
-export const getEnvShort = () => {
+export const getEnvShort = (): 'dev' | 'stg' | 'prod' | '' => {
     const env = getEnvironment();
     switch (env.toLowerCase()) {
         case Environment.DEVELOPMENT:
             return 'dev';
         case Environment.STAGING:
             return 'stg';
+        case Environment.PRODUCTION:
+            return 'prod';
         default:
             return '';
     }
+};
+
+export const isProdEnv = (): boolean => {
+    const envShort = getEnvShort();
+    return envShort === 'prod';
 };
 
 export const prefixTilde = (value: string): string => {
