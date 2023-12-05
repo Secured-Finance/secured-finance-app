@@ -39,7 +39,7 @@ beforeAll(() => {
     });
 });
 
-describe.skip('Landing Component', () => {
+describe('Landing Component', () => {
     const clickAdvancedButton = () => {
         fireEvent.click(screen.getByText('Advanced'));
     };
