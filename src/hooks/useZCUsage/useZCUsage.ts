@@ -28,10 +28,20 @@ export const useZCUsage = (address: UserAccount) => {
             estimatedBorrowPV = Math.abs(filledAmount);
         }
 
-        const offsetPV = Math.min(
-            getPVInMaturity(maturity, currency),
-            filledAmount
+        const pvOfActivePositionsInOrderMaturity = getPVInMaturity(
+            maturity,
+            currency
         );
+
+        const offsetPV =
+            pvOfActivePositionsInOrderMaturity * filledAmount < 0
+                ? Math.min(
+                      Math.abs(pvOfActivePositionsInOrderMaturity),
+                      Math.abs(filledAmount)
+                  ) *
+                  (pvOfActivePositionsInOrderMaturity /
+                      Math.abs(pvOfActivePositionsInOrderMaturity))
+                : 0;
 
         const denominator =
             (position?.totalLendPVPerCurrency[currency] ?? 0) +
@@ -49,7 +59,7 @@ export const useZCUsage = (address: UserAccount) => {
                 collateralBook.collateralThreshold) /
             denominator;
 
-        return Math.max(usage, 0);
+        return usage;
     };
 
     const getPVInMaturity = useCallback(

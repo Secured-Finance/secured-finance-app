@@ -40,7 +40,7 @@ describe('CollateralSimulationSection Component', () => {
         expect(screen.getByText('ZC Usage')).toBeInTheDocument();
         await waitFor(() => {
             expect(screen.getByText('0%')).toBeInTheDocument();
-            expect(screen.getByText('1.44%')).toBeInTheDocument();
+            expect(screen.getByText('7.23%')).toBeInTheDocument();
         });
     });
 });
