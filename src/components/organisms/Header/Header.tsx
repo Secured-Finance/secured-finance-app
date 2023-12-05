@@ -1,15 +1,26 @@
+import {
+    ArrowUpRightIcon,
+    EllipsisHorizontalIcon,
+} from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import SFLogo from 'src/assets/img/logo.svg';
 import SFLogoSmall from 'src/assets/img/small-logo.svg';
-import { Button, HighlightChip, NavTab } from 'src/components/atoms';
+import {
+    Button,
+    HighlightChip,
+    MenuItemWithLink,
+    NavTab,
+    Separator,
+} from 'src/components/atoms';
 import { HamburgerMenu, MenuPopover } from 'src/components/molecules';
 import { WalletDialog, WalletPopover } from 'src/components/organisms';
 import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
 import {
+    LinkList,
     getEnvShort,
     getMainnetChainId,
     getSupportedNetworks,
@@ -89,6 +100,31 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     );
     const envShort = getEnvShort();
 
+    const linkMenuButton = (
+        <>
+            <p>More</p>
+            <EllipsisHorizontalIcon className='ml-1 h-5 w-5' />
+        </>
+    );
+
+    const linkMenuContent: React.ReactNode = LinkList.map((link, index) => {
+        return (
+            <div key={index} role='menuitem'>
+                <MenuItemWithLink
+                    text={link.text}
+                    icon={link.icon}
+                    link={link.href}
+                    badge={<ExternalIcon />}
+                />
+                {index !== LinkList.length - 1 && (
+                    <div className='py-2'>
+                        <Separator />
+                    </div>
+                )}
+            </div>
+        );
+    });
+
     return (
         <div className='relative'>
             <HeaderMessage chainId={currentChainId} chainError={chainError} />
@@ -124,7 +160,10 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                             </div>
                         ))}
                         <div className='hidden laptop:inline'>
-                            <MenuPopover />
+                            <MenuPopover
+                                menuButton={linkMenuButton}
+                                menuContent={linkMenuContent}
+                            />
                         </div>
                     </>
                 )}
@@ -187,3 +226,5 @@ const ItemLink = ({
         </Link>
     );
 };
+
+const ExternalIcon = () => <ArrowUpRightIcon className='h-4 w-4 text-white' />;

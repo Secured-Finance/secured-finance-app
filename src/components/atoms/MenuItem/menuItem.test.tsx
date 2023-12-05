@@ -9,13 +9,4 @@ describe('MenuItem component', () => {
         render(<Default />);
         expect(screen.getByText('Example')).toBeInTheDocument();
     });
-
-    it('should have the correct href attribute', async () => {
-        render(<Default />);
-        expect(screen.getByText('Example')).toBeInTheDocument();
-        expect(screen.getByRole('link')).toHaveAttribute(
-            'href',
-            'https://secured.finance/'
-        );
-    });
 });

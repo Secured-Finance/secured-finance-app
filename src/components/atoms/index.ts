@@ -23,6 +23,7 @@ export * from './HorizontalListItem';
 export * from './InputBase';
 export * from './MarketTab';
 export * from './MenuItem';
+export * from './MenuItemWithLink';
 export * from './NavTab';
 export * from './OrderDisplayBox';
 export * from './OrderInputBox';

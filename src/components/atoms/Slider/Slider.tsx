@@ -1,4 +1,4 @@
-import SliderUnstyled from '@mui/base/SliderUnstyled';
+import { Slider as SliderUnstyled } from '@mui/base/Slider';
 import { useCallback, useRef } from 'react';
 import { usePreventPageScroll } from 'src/hooks';
 
@@ -32,7 +32,7 @@ export const Slider = ({
                 value={value}
                 marks={marks}
                 onChange={handleChange}
-                classes={{ markActive: 'slider-markActive' }}
+                // classes={{ markActive: 'slider-markActive' }}
                 slotProps={{
                     thumb: {
                         className:
