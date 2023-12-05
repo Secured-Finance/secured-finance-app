@@ -72,6 +72,32 @@ OpenOrdersConnectedToWallet.args = {
     collateralBook: collateralBook37,
 };
 
+export const OrderHistoryConnectedToWallet = Template.bind({});
+OrderHistoryConnectedToWallet.parameters = {
+    connected: true,
+};
+OrderHistoryConnectedToWallet.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const orderHistoryTab = canvas.getByTestId('Order History');
+    await userEvent.click(orderHistoryTab);
+};
+OrderHistoryConnectedToWallet.args = {
+    collateralBook: collateralBook37,
+};
+
+export const MyTransactionsConnectedToWallet = Template.bind({});
+MyTransactionsConnectedToWallet.parameters = {
+    connected: true,
+};
+MyTransactionsConnectedToWallet.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const orderHistoryTab = canvas.getByTestId('My Transactions');
+    await userEvent.click(orderHistoryTab);
+};
+MyTransactionsConnectedToWallet.args = {
+    collateralBook: collateralBook37,
+};
+
 export const Delisted = Template.bind({});
 Delisted.parameters = {
     connected: true,

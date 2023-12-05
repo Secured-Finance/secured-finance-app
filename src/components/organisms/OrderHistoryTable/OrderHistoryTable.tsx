@@ -37,7 +37,7 @@ export const OrderHistoryTable = ({
 }: {
     data: OrderHistoryList;
     pagination?: Pagination;
-    variant?: 'compact' | 'default';
+    variant?: 'contractOnly' | 'default';
 }) => {
     const { data: priceList } = useLastPrices();
     const isTablet = useBreakpoint('laptop');
@@ -50,7 +50,7 @@ export const OrderHistoryTable = ({
                 columnHelper,
                 'Contract',
                 'contract',
-                variant === 'default' ? 'compact' : 'contractOnly'
+                variant
             ),
             inputPriceYieldColumnDefinition(
                 columnHelper,

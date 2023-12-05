@@ -105,23 +105,26 @@ export const AdvancedLending = ({
     const { amount, currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
+    const [timestamp, setTimestamp] = useState<number>(1643713200);
+    const [selectedTable, setSelectedTable] = useState(
+        TableType.ACTIVE_POSITION
+    );
 
-    const { data: priceList } = useLastPrices();
-    const currencyPrice = priceList[currency];
-    const [selectedTable, setSelectedTable] = useState(TableType.ORDER_HISTORY);
-
-    const { address } = useAccount();
     const dispatch = useDispatch();
+    const { address } = useAccount();
+    const { data: priceList } = useLastPrices();
+    const { data: orderList = emptyOrderList } = useOrderList(address, [
+        currency,
+    ]);
+    const { data: positions } = usePositions(address, [currency]);
+
+    const currencyPrice = priceList[currency];
     const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
 
-    const [timestamp, setTimestamp] = useState<number>(1643713200);
     useEffect(() => {
         setTimestamp(Math.round(new Date().getTime() / 1000));
     }, []);
 
-    const { data: orderList = emptyOrderList } = useOrderList(address, [
-        currency,
-    ]);
     const filteredInactiveOrderList = useMemo(
         () =>
             orderList.inactiveOrderList.filter(
@@ -129,7 +132,6 @@ export const AdvancedLending = ({
             ),
         [maturity, orderList.inactiveOrderList]
     );
-    const { data: positions } = usePositions(address, [currency]);
     const isUnderCollateralThreshold = useIsUnderCollateralThreshold(address);
 
     const userOrderHistory = useGraphClientHook(
@@ -378,8 +380,9 @@ export const AdvancedLending = ({
                                       })
                                 : []
                         }
+                        height={350}
                         delistedCurrencySet={delistedCurrencySet}
-                        variant='compact'
+                        variant='contractOnly'
                     />
                     <OrderTable
                         data={filteredOrderList}
@@ -396,7 +399,7 @@ export const AdvancedLending = ({
                                 getMoreData: () => {},
                                 containerHeight: 350,
                             }}
-                            variant='compact'
+                            variant='contractOnly'
                         />
                     )}
                     {userTransactionHistory.loading ? (
@@ -409,7 +412,7 @@ export const AdvancedLending = ({
                                 getMoreData: () => {},
                                 containerHeight: 350,
                             }}
-                            variant='compact'
+                            variant='contractOnly'
                         />
                     )}
                 </HorizontalTab>

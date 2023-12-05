@@ -15,6 +15,13 @@ export const rootReducers = {
 
 const store = configureStore({
     reducer: rootReducers,
+    middleware: getDefaultMiddleware =>
+        getDefaultMiddleware({
+            serializableCheck: {
+                // Ignore these action types
+                ignoredActions: ['landingOrderForm/setAmount'],
+            },
+        }),
 });
 export default store;
 export type AppDispatch = typeof store.dispatch;

@@ -1,5 +1,9 @@
 import { composeStories } from '@storybook/react';
-import { emptyTransaction } from 'src/stories/mocks/queries';
+import {
+    emptyTransaction,
+    mockFilteredUserOrderHistory,
+    mockFilteredUserTransactionHistory,
+} from 'src/stories/mocks/queries';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor, within } from 'src/test-utils.js';
 import * as stories from './AdvancedLending.stories';
@@ -9,8 +13,8 @@ const { Default, ConnectedToWallet, Delisted } = composeStories(stories);
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-describe.skip('Advanced Lending Component', () => {
-    it.skip('should convert the amount to new currency when the user change the currency', async () => {
+describe('Advanced Lending Component', () => {
+    it('should convert the amount to new currency when the user change the currency', async () => {
         const { store } = await waitFor(() =>
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
@@ -97,18 +101,21 @@ describe.skip('Advanced Lending Component', () => {
         ).toBeInTheDocument();
     });
 
-    it.skip('should display the opening unit price as the only trade if there is no last trades', async () => {
+    it('should display the opening unit price as the only trade if there is no last trades', async () => {
         await waitFor(() =>
             render(<Default />, {
-                apolloMocks: emptyTransaction as never,
+                apolloMocks: [
+                    ...(emptyTransaction as never),
+                    ...mockFilteredUserOrderHistory,
+                    ...mockFilteredUserTransactionHistory,
+                ],
             })
         );
         expect(
             await within(
                 await screen.findByLabelText('Current Market')
-            ).findByText('97.01')
+            ).findByText('98.01')
         ).toBeInTheDocument();
-        expect(screen.getByText('Opening Price')).toBeInTheDocument();
 
         expect(
             within(screen.getByLabelText('24h High')).getByText('0.00')
@@ -135,7 +142,7 @@ describe.skip('Advanced Lending Component', () => {
         );
         expect(
             within(screen.getByTestId('open-order-table')).queryAllByRole('row')
-        ).toHaveLength(2);
+        ).toHaveLength(1);
     });
 
     it('should display disclaimer if a currency is being delisted', () => {

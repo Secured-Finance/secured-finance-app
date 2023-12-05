@@ -54,7 +54,7 @@ export const MyTransactionsTable = ({
 }: {
     data: TradeHistory;
     pagination?: Pagination;
-    variant?: 'compact' | 'default';
+    variant?: 'contractOnly' | 'default';
 }) => {
     const isTablet = useBreakpoint('laptop');
     const columns = useMemo(
@@ -64,7 +64,7 @@ export const MyTransactionsTable = ({
                 columnHelper,
                 'Contract',
                 'contract',
-                variant === 'default' ? 'compact' : 'contractOnly'
+                variant
             ),
             amountColumnDefinition(
                 columnHelper,
