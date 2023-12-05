@@ -9,7 +9,6 @@
     "@headlessui/react": "^1.7.15",
     "@heroicons/react": "^2.0.18",
     "@mui/base": "^5.0.0-alpha.106",
-    "@mui/material": "^5.14.19",
     "@reduxjs/toolkit": "^1.8.1",
     "@secured-finance/sf-client": "0.2.0-beta.122",
     "@secured-finance/sf-core": "0.2.0-beta.108",
@@ -57,7 +56,11 @@
     "cypress:run": "cypress run"
   },
   "browserslist": {
-    "production": [">0.2%", "not dead", "not op_mini all"],
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",

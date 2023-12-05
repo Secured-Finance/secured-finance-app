@@ -1,6 +1,5 @@
-import Badge from '@mui/material/Badge';
 import NotificationIcon from 'src/assets/icons/notification-icon.svg';
-import { MenuItem, Separator } from 'src/components/atoms';
+import { Badge, MenuItem, Separator } from 'src/components/atoms';
 import { MenuPopover } from '../MenuPopover';
 
 export const NotificationMenu = ({
@@ -9,7 +8,7 @@ export const NotificationMenu = ({
     notifications: string[];
 }) => {
     const notificationIcon = (
-        <Badge badgeContent={notifications.length} color='primary'>
+        <Badge badgeCount={notifications.length}>
             <NotificationIcon className='h-5 w-5' />
         </Badge>
     );
