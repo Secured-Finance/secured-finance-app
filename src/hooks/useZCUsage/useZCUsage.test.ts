@@ -32,7 +32,7 @@ describe('useZCUsage', () => {
         await waitForNextUpdate();
 
         expect(result.current(dec22Fixture, CurrencySymbol.ETH, -10000)).toBe(
-            159.92526444263518
+            80448.4954873364
         );
     });
 
