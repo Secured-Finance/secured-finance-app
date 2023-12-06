@@ -38,9 +38,7 @@ export const useZCUsage = (address: UserAccount) => {
                 ? Math.min(
                       Math.abs(pvOfActivePositionsInOrderMaturity),
                       Math.abs(filledAmount)
-                  ) *
-                  (pvOfActivePositionsInOrderMaturity /
-                      Math.abs(pvOfActivePositionsInOrderMaturity))
+                  )
                 : 0;
 
         const denominator =
