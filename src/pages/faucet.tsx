@@ -4,12 +4,13 @@ import { useIsMarketTerminated } from 'src/hooks';
 import { isProdEnv } from 'src/utils';
 
 const Faucet = () => {
-    const { data: isTerminated, isLoading: isLoadingMarketTerminated } =
-        useIsMarketTerminated();
-
-    if (isProdEnv()) {
+    if (!isProdEnv()) {
         return null;
     }
+
+    const { data: isTerminated, isLoading: isLoadingMarketTerminated } =
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        useIsMarketTerminated();
 
     if (isLoadingMarketTerminated) {
         return null;
