@@ -1,5 +1,5 @@
-import { SquidWidget } from '@0xsquid/widget';
 import { Dialog } from '@headlessui/react';
+import dynamic from 'next/dynamic';
 import { useMemo, useRef, useState } from 'react';
 import AxelarFil from 'src/assets/coins/axelarfil.svg';
 import Filecoin from 'src/assets/coins/fil.svg';
@@ -16,6 +16,10 @@ import {
     WalletSource,
     generateWalletInformation,
 } from 'src/utils';
+
+const SquidWidget = dynamic(() =>
+    import('@0xsquid/widget').then(mod => mod.SquidWidget)
+);
 
 const BridgeDialog = ({
     isOpen,
