@@ -1,5 +1,4 @@
 import type { Meta, StoryFn } from '@storybook/react';
-import { within } from '@storybook/testing-library';
 import {
     withEthBalance,
     withWalletProvider,
@@ -37,11 +36,7 @@ Custom.args = {
     },
 };
 
-export const WithBridge = Template.bind({});
-WithBridge.play = async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    canvas.getByRole('button', { name: 'Bridge' }).click();
-};
-WithBridge.parameters = {
-    chromatic: { delay: 3000 },
+export const HideBridge = Template.bind({});
+HideBridge.args = {
+    hideBridge: true,
 };

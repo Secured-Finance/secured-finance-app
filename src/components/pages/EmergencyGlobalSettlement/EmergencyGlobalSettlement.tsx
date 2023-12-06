@@ -170,7 +170,7 @@ export const EmergencyGlobalSettlement = () => {
                         data={snapshotWithPrice}
                         snapshotDate={snapshotDate}
                     />
-                    <MyWalletWidget />
+                    <MyWalletWidget hideBridge />
                 </section>
             </TwoColumns>
             <EmergencyRedeemDialog
