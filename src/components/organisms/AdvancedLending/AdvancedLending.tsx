@@ -17,12 +17,12 @@ import { ThreeColumnsWithTopBar } from 'src/components/templates';
 import {
     CollateralBook,
     useGraphClientHook,
+    useLastPrices,
     useMarket,
     useMarketOrderList,
     useYieldCurveMarketRates,
 } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
-import { getAssetPrice } from 'src/store/assetPrices/selectors';
 import {
     resetUnitPrice,
     selectLandingOrderForm,
@@ -93,9 +93,8 @@ export const AdvancedLending = ({
         selectLandingOrderForm(state.landingOrderForm)
     );
 
-    const currencyPrice = useSelector((state: RootState) =>
-        getAssetPrice(currency)(state)
-    );
+    const { data: priceList } = useLastPrices();
+    const currencyPrice = priceList[currency];
 
     const { address } = useAccount();
     const dispatch = useDispatch();

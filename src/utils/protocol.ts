@@ -1,9 +1,8 @@
-import { AssetPriceMap } from 'src/store/assetPrices/selectors';
-import { DailyVolumes } from 'src/types';
+import { AssetPriceMap, DailyVolumes } from 'src/types';
 import { ZERO_BI } from './collateral';
 import {
-    currencyMap,
     CurrencySymbol,
+    currencyMap,
     hexToCurrencySymbol,
 } from './currencyList';
 

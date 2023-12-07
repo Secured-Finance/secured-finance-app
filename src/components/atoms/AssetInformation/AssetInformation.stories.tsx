@@ -1,5 +1,4 @@
 import type { Meta, StoryFn } from '@storybook/react';
-import { withAssetPrice } from 'src/../.storybook/decorators';
 import { AssetInformation } from '.';
 
 export default {
@@ -13,7 +12,6 @@ export default {
         },
         informationText: 'Only USDC and ETH are eligible as collateral.',
     },
-    decorators: [withAssetPrice],
 } as Meta<typeof AssetInformation>;
 
 const Template: StoryFn<typeof AssetInformation> = args => {

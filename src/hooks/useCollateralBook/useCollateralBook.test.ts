@@ -1,4 +1,3 @@
-import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
 import { CurrencySymbol, amountFormatterFromBase } from 'src/utils';
@@ -9,9 +8,6 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
 describe('useCollateralBook hook', () => {
     const FIL_PRICE = 6.0;
-    const preloadedState = {
-        ...preloadedAssetPrices,
-    };
 
     it('should return the collateral book for an user', async () => {
         const { result, waitForNextUpdate } = renderHook(() =>
@@ -54,9 +50,8 @@ describe('useCollateralBook hook', () => {
     });
 
     it('should compute the non collaterals in USD', async () => {
-        const { result, waitForNextUpdate } = renderHook(
-            () => useCollateralBook('0x0'),
-            { preloadedState }
+        const { result, waitForNextUpdate } = renderHook(() =>
+            useCollateralBook('0x0')
         );
         await waitForNextUpdate();
         const colBook = result.current.data as CollateralBook;

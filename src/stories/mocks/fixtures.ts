@@ -9,7 +9,6 @@ import MetamaskIcon from 'src/assets/img/metamask-fox.svg';
 import { Option, WalletSourceOption } from 'src/components/atoms';
 import { CurrencyOption } from 'src/components/molecules';
 import { CollateralBook, Order, Position } from 'src/hooks';
-import { AssetPrices } from 'src/store/assetPrices';
 import {
     DailyVolumes,
     MaturityOptionList,
@@ -25,28 +24,6 @@ export const wfilBytes32 = toBytes32('WFIL'); // 0x5746494c000000000000000000000
 export const ethBytes32 = toBytes32('ETH'); // 0x455448000000000000000000000000000000000000000000000000000000000
 export const wbtcBytes32 = toBytes32('WBTC'); // 0x5742544300000000000000000000000000000000000000000000000000000000
 export const usdcBytes32 = toBytes32('USDC'); // 0x5553444300000000000000000000000000000000000000000000000000000000
-
-export const preloadedAssetPrices: { assetPrices: AssetPrices } = {
-    assetPrices: {
-        WFIL: {
-            price: 6.0,
-            change: -8.208519783216566,
-        },
-        ETH: {
-            price: 2000.34,
-            change: 0.5162466489453748,
-        },
-        USDC: {
-            price: 1.0,
-            change: 0.042530768538486696,
-        },
-        WBTC: {
-            price: 50000.0,
-            change: 0.0,
-        },
-        isLoading: false,
-    },
-};
 
 export const assetPriceMap = {
     WFIL: 6.0,
