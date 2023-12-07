@@ -348,6 +348,7 @@ export const AdvancedLending = ({
                         'My Transactions',
                     ]}
                     onTabChange={setSelectedTable}
+                    useCustomBreakpoint={true}
                 >
                     <ActiveTradeTable
                         data={

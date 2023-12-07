@@ -50,11 +50,11 @@ const getFVWithFee = (forwardValue: bigint, fee: bigint, side: number) => {
 export const MyTransactionsTable = ({
     data,
     pagination,
-    variant = 'default',
+    variant = 'compact',
 }: {
     data: TradeHistory;
     pagination?: Pagination;
-    variant?: 'contractOnly' | 'default';
+    variant?: 'contractOnly' | 'compact';
 }) => {
     const isTablet = useBreakpoint('laptop');
     const columns = useMemo(
