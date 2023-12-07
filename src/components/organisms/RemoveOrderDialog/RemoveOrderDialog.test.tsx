@@ -1,5 +1,4 @@
 import { composeStories } from '@storybook/react';
-import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './RemoveOrderDialog.stories';
@@ -59,10 +58,10 @@ describe('RemoveOrderDialog Component', () => {
     });
 
     it('should show correct price conversion and amount in USD', async () => {
-        render(<Default />, { preloadedState: preloadedAssetPrices });
+        render(<Default />);
         expect(screen.getByText('WFIL')).toBeInTheDocument();
         expect(screen.getByText('100')).toBeInTheDocument();
-        expect(screen.getByText('~ $600')).toBeInTheDocument();
+        expect(await screen.findByText('~ $600')).toBeInTheDocument();
     });
 
     it('should call onClose when cancel button is clicked', () => {

@@ -1,7 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import store, { rootReducers } from 'src/store';
-import { listenerMiddleware } from 'src/store/blockchain/reducer';
 import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
 
@@ -31,5 +30,5 @@ export const mockStore = configureStore({
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware({
             serializableCheck: false,
-        }).prepend(listenerMiddleware.middleware),
+        }),
 });

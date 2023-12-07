@@ -2,7 +2,6 @@ import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import type { Meta, StoryFn } from '@storybook/react';
 import { useState } from 'react';
-import { withAssetPrice } from 'src/../.storybook/decorators';
 import {
     dec22Fixture,
     orderHistoryList,
@@ -23,7 +22,6 @@ export default {
             viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET, VIEWPORTS.LAPTOP],
         },
     },
-    decorators: [withAssetPrice],
 } as Meta<typeof OrderHistoryTable>;
 
 const Template: StoryFn<typeof OrderHistoryTable> = args => (

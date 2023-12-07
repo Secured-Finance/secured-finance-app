@@ -1,5 +1,4 @@
 import { useCallback, useReducer, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { CollateralSelector, Spinner } from 'src/components/atoms';
 import {
     Dialog,
@@ -8,10 +7,12 @@ import {
     SuccessPanel,
 } from 'src/components/molecules';
 import { CollateralInput } from 'src/components/organisms';
-import { useEtherscanUrl, useHandleContractTransaction } from 'src/hooks';
+import {
+    useEtherscanUrl,
+    useHandleContractTransaction,
+    useLastPrices,
+} from 'src/hooks';
 import { useWithdrawCollateral } from 'src/hooks/useDepositCollateral';
-import { getPriceMap } from 'src/store/assetPrices/selectors';
-import { RootState } from 'src/store/types';
 import {
     AddressUtils,
     CollateralInfo,
@@ -114,7 +115,7 @@ export const WithdrawCollateral = ({
         'Your withdrawal transaction has failed.'
     );
 
-    const priceList = useSelector((state: RootState) => getPriceMap(state));
+    const { data: priceList } = useLastPrices();
     const { onWithdrawCollateral } = useWithdrawCollateral(
         asset,
         collateral ?? ZERO_BI

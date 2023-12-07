@@ -1,7 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Spinner } from 'src/components/atoms';
 import {
     Alert,
@@ -27,13 +26,12 @@ import {
     useCurrencyDelistedStatus,
     useGraphClientHook,
     useIsUnderCollateralThreshold,
+    useLastPrices,
     useLendingMarkets,
     useOrderList,
     usePagination,
     usePositions,
 } from 'src/hooks';
-import { getPriceMap } from 'src/store/assetPrices/selectors';
-import { RootState } from 'src/store/types';
 import { TradeHistory } from 'src/types';
 import {
     checkOrderIsFilled,
@@ -174,7 +172,7 @@ export const PortfolioManagement = () => {
             .sort((a, b) => sortOrders(a, b));
     }, [orderList.inactiveOrderList, paginatedOrderHistory]);
 
-    const priceMap = useSelector((state: RootState) => getPriceMap(state));
+    const { data: priceMap } = useLastPrices();
 
     const { data: collateralBook = emptyCollateralBook, isLoading } =
         useCollateralBook(address);

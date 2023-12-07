@@ -1,5 +1,4 @@
 import {
-    withAssetPrice,
     withLendingOrderForm,
     withWalletProvider,
 } from '.storybook/decorators';
@@ -20,7 +19,7 @@ export default {
     parameters: {
         connected: true,
     },
-    decorators: [withLendingOrderForm, withAssetPrice, withWalletProvider],
+    decorators: [withLendingOrderForm, withWalletProvider],
 } as Meta<typeof AdvancedLendingOrderCard>;
 
 const Template: StoryFn<typeof AdvancedLendingOrderCard> = args => {
