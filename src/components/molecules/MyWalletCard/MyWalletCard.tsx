@@ -2,8 +2,8 @@ import { Dialog } from '@headlessui/react';
 import classNames from 'classnames';
 import dynamic from 'next/dynamic';
 import { useMemo, useRef, useState } from 'react';
-import AxelarFil from 'src/assets/coins/axelarfil.svg';
 import Filecoin from 'src/assets/coins/fil.svg';
+import AxelarFil from 'src/assets/coins/wfil.svg';
 import AxelarSquid from 'src/assets/img/squid+axelar.svg';
 import { Button, GradientBox, Separator } from 'src/components/atoms';
 import {
