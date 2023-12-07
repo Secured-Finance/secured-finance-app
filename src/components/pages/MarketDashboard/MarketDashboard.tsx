@@ -189,7 +189,7 @@ export const MarketDashboard = () => {
                             </div>
                         </GradientBox>
                     )}
-                    <MyWalletWidget />
+                    <MyWalletWidget hideBridge />
                 </section>
             </TwoColumns>
         </Page>

@@ -328,7 +328,7 @@ export const Faucet = () => {
                         </div>
                     </div>
                 </GradientBox>
-                <MyWalletWidget />
+                <MyWalletWidget hideBridge />
             </TwoColumns>
             <Dialog
                 isOpen={isOpen}
