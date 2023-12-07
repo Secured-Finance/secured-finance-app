@@ -1,6 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Spinner } from 'src/components/atoms';
 import {
@@ -240,6 +240,11 @@ export const PortfolioManagement = () => {
 
     const userDelistedCurrenciesArray = Array.from(userDelistedCurrenciesSet);
     const isUnderCollateralThreshold = useIsUnderCollateralThreshold(address);
+
+    useEffect(() => {
+        setOffsetOrders(0);
+        setOffsetTransactions(0);
+    }, [address]);
 
     return (
         <Page title='Portfolio Management' name='portfolio-management'>
