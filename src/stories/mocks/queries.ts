@@ -27,6 +27,9 @@ const generateMyTransactions = (amount: string) => {
             forwardValue: '520000000000000000000',
             currency: wfilBytes32,
             maturity: mar23Fixture.toString(),
+            taker: {
+                id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+            },
         });
     }
     return myTransactions;
@@ -50,6 +53,9 @@ const generateMyOrderHistory = (amount: string) =>
             lendingMarket: {
                 id: '1',
                 isActive: true,
+            },
+            maker: {
+                id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
             },
         }));
 
