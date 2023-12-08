@@ -155,6 +155,7 @@ describe('formatOrders', () => {
                 unitPrice: BigInt('9000'),
                 amount: BigInt('900'),
                 createdAt: BigInt('1609295092'),
+                maker: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
             },
             {
                 orderId: BigInt(2),
@@ -177,6 +178,7 @@ describe('formatOrders', () => {
                 forwardValue: BigInt(1000),
                 averagePrice: 0.9,
                 feeInFV: BigInt(0),
+                taker: { id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D' },
             },
             {
                 amount: BigInt('10000'),
@@ -188,6 +190,7 @@ describe('formatOrders', () => {
                 forwardValue: BigInt(12500),
                 averagePrice: 0.8,
                 feeInFV: BigInt(0),
+                taker: { id: '' },
             },
         ];
 
@@ -260,6 +263,9 @@ describe('checkOrderIsFilled', () => {
                 id: '1',
                 isActive: true,
             },
+            maker: {
+                id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+            },
         };
 
         expect(checkOrderIsFilled(order, orders)).toEqual(true);
@@ -281,6 +287,9 @@ describe('checkOrderIsFilled', () => {
             lendingMarket: {
                 id: '1',
                 isActive: true,
+            },
+            maker: {
+                id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
             },
         };
 

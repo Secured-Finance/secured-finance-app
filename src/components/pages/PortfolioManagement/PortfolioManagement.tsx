@@ -1,6 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Spinner } from 'src/components/atoms';
 import {
     Alert,
@@ -121,12 +121,30 @@ export const PortfolioManagement = () => {
     ]);
     const { data: positions } = usePositions(address, usedCurrencies);
 
+    const dataUser = useMemo(() => {
+        if (selectedTable === TableType.MY_TRANSACTIONS)
+            return (
+                userTransactionHistory.data?.transactions[0]?.taker.id ??
+                undefined
+            );
+        if (selectedTable === TableType.ORDER_HISTORY)
+            return userOrderHistory.data?.orders[0]?.maker.id ?? undefined;
+    }, [
+        selectedTable,
+        userOrderHistory.data?.orders,
+        userTransactionHistory.data?.transactions,
+    ]);
+
     const paginatedTransactions = usePagination(
-        userTransactionHistory.data?.transactions ?? []
+        userTransactionHistory.data?.transactions ?? [],
+        dataUser,
+        address
     );
 
     const paginatedOrderHistory = usePagination(
-        userOrderHistory.data?.orders ?? []
+        userOrderHistory.data?.orders ?? [],
+        dataUser,
+        address
     );
 
     const sortedOrderHistory = useMemo(() => {
@@ -220,6 +238,11 @@ export const PortfolioManagement = () => {
 
     const userDelistedCurrenciesArray = Array.from(userDelistedCurrenciesSet);
     const isUnderCollateralThreshold = useIsUnderCollateralThreshold(address);
+
+    useEffect(() => {
+        setOffsetOrders(0);
+        setOffsetTransactions(0);
+    }, [address]);
 
     return (
         <Page title='Portfolio Management' name='portfolio-management'>
