@@ -213,7 +213,9 @@ export const CoreTable = <T,>({
     );
 
     const fetchMoreData = () => {
-        coreTableOptions?.pagination?.getMoreData();
+        if (data.length > 0) {
+            coreTableOptions?.pagination?.getMoreData();
+        }
     };
 
     return (
