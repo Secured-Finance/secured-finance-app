@@ -13,9 +13,9 @@ import {
     getEnvShort,
     getMainnetChainId,
     getSupportedNetworks,
-    isProdEnv,
 } from 'src/utils';
 import { AddressUtils } from 'src/utils/address';
+import { isChipVisibleForEnv, isProdEnv } from 'src/utils/displayUtils';
 import { useAccount } from 'wagmi';
 
 const PRODUCTION_LINKS = [
@@ -110,7 +110,7 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                             <SFLogoSmall className='inline h-7 w-7 tablet:hidden' />
                         </a>
                     </Link>
-                    {envShort && !isProdEnv() && (
+                    {isChipVisibleForEnv() && (
                         <HighlightChip text={envShort.toUpperCase()} />
                     )}
                 </div>
