@@ -537,6 +537,9 @@ export const orderHistoryList: OrderHistoryList = [
             id: '1',
             isActive: true,
         },
+        maker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+        },
     },
     {
         orderId: 2,
@@ -553,6 +556,9 @@ export const orderHistoryList: OrderHistoryList = [
         lendingMarket: {
             id: '1',
             isActive: true,
+        },
+        maker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
         },
     },
     {
@@ -571,6 +577,9 @@ export const orderHistoryList: OrderHistoryList = [
             id: '1',
             isActive: true,
         },
+        maker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+        },
     },
     {
         orderId: 1,
@@ -587,6 +596,9 @@ export const orderHistoryList: OrderHistoryList = [
         lendingMarket: {
             id: '1',
             isActive: true,
+        },
+        maker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
         },
     },
     {
@@ -605,6 +617,9 @@ export const orderHistoryList: OrderHistoryList = [
             id: '1',
             isActive: false,
         },
+        maker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+        },
     },
     {
         orderId: 2,
@@ -621,6 +636,9 @@ export const orderHistoryList: OrderHistoryList = [
         lendingMarket: {
             id: '1',
             isActive: true,
+        },
+        maker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
         },
     },
     {
@@ -639,6 +657,9 @@ export const orderHistoryList: OrderHistoryList = [
             id: '1',
             isActive: true,
         },
+        maker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+        },
     },
     {
         orderId: 1,
@@ -655,6 +676,9 @@ export const orderHistoryList: OrderHistoryList = [
         lendingMarket: {
             id: '1',
             isActive: true,
+        },
+        maker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
         },
     },
     {
@@ -673,6 +697,9 @@ export const orderHistoryList: OrderHistoryList = [
             id: '1',
             isActive: false,
         },
+        maker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+        },
     },
     {
         orderId: 3,
@@ -689,6 +716,9 @@ export const orderHistoryList: OrderHistoryList = [
         lendingMarket: {
             id: '1',
             isActive: true,
+        },
+        maker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
         },
     },
     {
@@ -707,6 +737,9 @@ export const orderHistoryList: OrderHistoryList = [
             id: '1',
             isActive: true,
         },
+        maker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+        },
     },
     {
         orderId: 6,
@@ -724,6 +757,9 @@ export const orderHistoryList: OrderHistoryList = [
             id: '1',
             isActive: true,
         },
+        maker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+        },
     },
 ];
 
@@ -738,6 +774,9 @@ export const transactions: TradeHistory = [
         forwardValue: '1020000000000000000000',
         currency: wfilBytes32,
         maturity: jun23Fixture.toString(),
+        taker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+        },
     },
     {
         amount: '500000000000000000000',
@@ -749,6 +788,9 @@ export const transactions: TradeHistory = [
         forwardValue: '520000000000000000000',
         currency: wfilBytes32,
         maturity: jun23Fixture.toString(),
+        taker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+        },
     },
     {
         amount: '500000000000000000000',
@@ -760,6 +802,9 @@ export const transactions: TradeHistory = [
         forwardValue: '520000000000000000000',
         currency: wfilBytes32,
         maturity: mar23Fixture.toString(),
+        taker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+        },
     },
     {
         amount: '1000000000',
@@ -771,6 +816,9 @@ export const transactions: TradeHistory = [
         forwardValue: '1040000000',
         currency: wbtcBytes32,
         maturity: jun23Fixture.toString(),
+        taker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+        },
     },
     {
         amount: '500000000',
@@ -782,6 +830,9 @@ export const transactions: TradeHistory = [
         forwardValue: '505000000',
         currency: wbtcBytes32,
         maturity: dec22Fixture.toString(),
+        taker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+        },
     },
 ];
 

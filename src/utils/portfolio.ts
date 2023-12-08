@@ -68,6 +68,9 @@ export const formatOrders = (orders: OrderList): TradeHistory => {
         forwardValue: calculateForwardValue(order.amount, order.unitPrice),
         averagePrice: calculateAveragePrice(order.unitPrice),
         feeInFV: ZERO_BI,
+        taker: {
+            id: order.maker ?? '',
+        },
     }));
 };
 

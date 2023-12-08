@@ -2,10 +2,23 @@ import { act, renderHook } from '@testing-library/react-hooks';
 import { usePagination } from './usePagination';
 
 describe('usePagination', () => {
+    it('should return an empty array when current and data user do not match', () => {
+        const { result } = renderHook(
+            props => usePagination(props, '0x', '0x1'),
+            {
+                initialProps: ['A', 'B'],
+            }
+        );
+        expect(result.current).toEqual([]);
+    });
+
     it('should return the complete array when data changes', () => {
-        const { result, rerender } = renderHook(props => usePagination(props), {
-            initialProps: ['A', 'B'],
-        });
+        const { result, rerender } = renderHook(
+            props => usePagination(props, '0x1', '0x1'),
+            {
+                initialProps: ['A', 'B'],
+            }
+        );
         expect(result.current).toEqual(['A', 'B']);
 
         act(() => {
@@ -16,9 +29,12 @@ describe('usePagination', () => {
     });
 
     it('should not update the array when data remains the same', () => {
-        const { result, rerender } = renderHook(props => usePagination(props), {
-            initialProps: ['A', 'B'],
-        });
+        const { result, rerender } = renderHook(
+            props => usePagination(props, '0x1', '0x1'),
+            {
+                initialProps: ['A', 'B'],
+            }
+        );
         expect(result.current).toEqual(['A', 'B']);
 
         act(() => {
@@ -39,9 +55,12 @@ describe('usePagination', () => {
                 science: 95,
                 history: 60,
             }));
-        const { result, rerender } = renderHook(props => usePagination(props), {
-            initialProps: initialProps,
-        });
+        const { result, rerender } = renderHook(
+            props => usePagination(props, '0x1', '0x1'),
+            {
+                initialProps: initialProps,
+            }
+        );
         expect(result.current).toEqual(initialProps);
 
         act(() => {
