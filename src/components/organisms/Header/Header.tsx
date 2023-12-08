@@ -110,7 +110,7 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                             <SFLogoSmall className='inline h-7 w-7 tablet:hidden' />
                         </a>
                     </Link>
-                    {!isProdEnv() && (
+                    {envShort && !isProdEnv() && (
                         <HighlightChip text={envShort.toUpperCase()} />
                     )}
                 </div>

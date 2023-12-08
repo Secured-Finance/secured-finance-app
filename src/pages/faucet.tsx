@@ -4,7 +4,7 @@ import { useIsMarketTerminated } from 'src/hooks';
 import { isProdEnv } from 'src/utils';
 
 const Faucet = () => {
-    if (!isProdEnv()) {
+    if (isProdEnv()) {
         return null;
     }
 
