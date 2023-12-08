@@ -1,5 +1,3 @@
-// 在 uiHelpers.js 或者类似文件中
-
 import { getEnvShort } from './strings';
 
 export const isProdEnv = (): boolean => {
