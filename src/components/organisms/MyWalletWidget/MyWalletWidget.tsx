@@ -3,7 +3,11 @@ import { ConnectWalletCard } from 'src/components/organisms';
 import { WalletSource } from 'src/utils';
 import { useAccount } from 'wagmi';
 
-export const MyWalletWidget = () => {
+export const MyWalletWidget = ({
+    hideBridge = false,
+}: {
+    hideBridge?: boolean;
+}) => {
     const { address, isConnected } = useAccount();
 
     if (!isConnected) return <ConnectWalletCard />;
@@ -13,6 +17,7 @@ export const MyWalletWidget = () => {
             addressRecord={{
                 [WalletSource.METAMASK]: address,
             }}
+            hideBridge={hideBridge}
         />
     );
 };

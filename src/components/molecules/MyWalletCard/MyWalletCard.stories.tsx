@@ -35,3 +35,8 @@ Custom.args = {
         [WalletSource.METAMASK]: [CurrencySymbol.ETH, CurrencySymbol.USDC],
     },
 };
+
+export const HideBridge = Template.bind({});
+HideBridge.args = {
+    hideBridge: true,
+};
