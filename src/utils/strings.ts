@@ -36,11 +36,6 @@ export const getEnvShort = (): 'dev' | 'stg' | 'prod' | '' => {
     }
 };
 
-export const isProdEnv = (): boolean => {
-    const envShort = getEnvShort();
-    return envShort === 'prod';
-};
-
 export const prefixTilde = (value: string): string => {
     return value ? `~ ${value}` : '';
 };
