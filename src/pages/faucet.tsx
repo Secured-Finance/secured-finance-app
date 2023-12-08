@@ -1,7 +1,7 @@
 import Router from 'next/router';
 import { Faucet as FaucetComponent } from 'src/components/pages';
 import { useIsMarketTerminated } from 'src/hooks';
-import { isProdEnv } from 'src/utils';
+import { isProdEnv } from 'src/utils/displayUtils';
 
 const Faucet = () => {
     if (isProdEnv()) {

@@ -1,10 +1,6 @@
 import packageJson from 'package.json';
-import {
-    getCommitHash,
-    getEnvShort,
-    getUsePackageVersion,
-    isProdEnv,
-} from 'src/utils';
+import { getCommitHash, getEnvShort, getUsePackageVersion } from 'src/utils';
+import { isChipVisibleForEnv } from 'src/utils/displayUtils';
 
 const getVersion = () => {
     if (getUsePackageVersion() && getCommitHash() !== '.storybook') {
@@ -22,7 +18,7 @@ export const Footer = () => {
             <span className='h-6px w-6px rounded-full bg-green'></span>
             <div className='typography-caption-2 text-planetaryPurple'>
                 <span>{`Secured Finance v${getVersion()} `}</span>
-                {getEnvShort() && !isProdEnv() && (
+                {isChipVisibleForEnv() && (
                     <span className='capitalize'>{`(${getEnvShort()})`}</span>
                 )}
             </div>
