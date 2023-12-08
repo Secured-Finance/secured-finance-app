@@ -365,10 +365,13 @@ export const PortfolioManagement = () => {
                                 data={myTransactions}
                                 pagination={{
                                     totalData: myTransactionsDataCount,
-                                    getMoreData: () =>
-                                        setOffsetTransactions(
-                                            offsetTransactions + offset
-                                        ),
+                                    getMoreData: () => {
+                                        if (myTransactions.length >= offset) {
+                                            setOffsetTransactions(
+                                                offsetTransactions + offset
+                                            );
+                                        }
+                                    },
                                     containerHeight: 300,
                                 }}
                             />
