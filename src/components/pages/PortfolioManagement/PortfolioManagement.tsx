@@ -45,14 +45,14 @@ import { useAccount } from 'wagmi';
 
 export type Trade = TradeHistory[0];
 
-enum TableType {
+export enum TableType {
     ACTIVE_POSITION = 0,
     OPEN_ORDERS,
     ORDER_HISTORY,
     MY_TRANSACTIONS,
 }
 
-const TabSpinner = () => (
+export const TabSpinner = () => (
     <div className='flex h-full w-full items-center justify-center pt-10'>
         <Spinner />
     </div>

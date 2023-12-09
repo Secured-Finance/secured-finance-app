@@ -14,7 +14,7 @@ import {
     wfilBytes32,
 } from './fixtures';
 
-const generateMyTransactions = (amount: string) => {
+const generateMyTransactions = (amount: string, maturity = mar23Fixture) => {
     const myTransactions = [];
     for (let i = 0; i < 20; i++) {
         myTransactions.push({
@@ -26,7 +26,7 @@ const generateMyTransactions = (amount: string) => {
             feeInFV: '3213742117859654893',
             forwardValue: '520000000000000000000',
             currency: wfilBytes32,
-            maturity: mar23Fixture.toString(),
+            maturity: maturity.toString(),
             taker: {
                 id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
             },
@@ -35,14 +35,14 @@ const generateMyTransactions = (amount: string) => {
     return myTransactions;
 };
 
-const generateMyOrderHistory = (amount: string) =>
+const generateMyOrderHistory = (amount: string, maturity = dec22Fixture) =>
     Array(20)
         .fill(null)
         .map((_, index) => ({
             orderId: index,
             currency: wfilBytes32,
             side: 1,
-            maturity: BigInt(dec22Fixture.toString()),
+            maturity: maturity.toString(),
             inputUnitPrice: BigInt('9800'),
             filledAmount: BigInt('0'),
             inputAmount: BigInt(amount),
@@ -275,6 +275,145 @@ export const mockUserTransactionHistory = [
                         transactions: generateMyTransactions(
                             '800000000000000000000'
                         ),
+                    },
+                },
+            };
+        },
+    },
+];
+
+export const mockFilteredUserTransactionHistory = [
+    {
+        request: {
+            query: queries.FilteredUserTransactionHistoryDocument,
+            variables: {
+                address: '',
+                currency: wfilBytes32,
+                maturity: dec22Fixture.toNumber(),
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    transactions: [],
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        transactions: [],
+                    },
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.FilteredUserTransactionHistoryDocument,
+            variables: {
+                address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                currency: wfilBytes32,
+                maturity: dec22Fixture.toNumber(),
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    transactions: generateMyTransactions(
+                        '800000000000000000000',
+                        dec22Fixture
+                    ),
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        transactions: generateMyTransactions(
+                            '800000000000000000000',
+                            dec22Fixture
+                        ),
+                    },
+                },
+            };
+        },
+    },
+];
+
+export const mockFilteredUserOrderHistory = [
+    {
+        request: {
+            query: queries.FilteredUserOrderHistoryDocument,
+            variables: {
+                address: '',
+                currency: wfilBytes32,
+                maturity: dec22Fixture.toNumber(),
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: null,
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: null,
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.FilteredUserOrderHistoryDocument,
+            variables: {
+                address: '',
+                currency: wfilBytes32,
+                maturity: 0,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: null,
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: null,
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.FilteredUserOrderHistoryDocument,
+            variables: {
+                address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                currency: wfilBytes32,
+                maturity: dec22Fixture.toNumber(),
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    orders: generateMyOrderHistory('800000000000000000000'),
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        orders: generateMyOrderHistory('800000000000000000000'),
                     },
                 },
             };

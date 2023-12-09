@@ -29,10 +29,12 @@ export const HorizontalTab = ({
     tabTitles,
     children,
     onTabChange,
+    useCustomBreakpoint = false,
 }: {
     tabTitles: string[];
     children?: React.ReactNode;
     onTabChange?: (v: number) => void;
+    useCustomBreakpoint?: boolean;
 }) => {
     const arrayChildren = Children.toArray(children);
     const [selectedIndex, setSelectedIndex] = useState(0);
@@ -50,7 +52,12 @@ export const HorizontalTab = ({
             className='flex h-full flex-col rounded-b-2xl border border-white-10 bg-gunMetal/40 shadow-tab'
         >
             <HeadlessTab.List className='h-16 justify-start border-b border-white-10 p-3'>
-                <div className='w-full tablet:hidden'>
+                <div
+                    className={classNames('w-full', {
+                        'horizontalTab:hidden': useCustomBreakpoint,
+                        'tablet:hidden': !useCustomBreakpoint,
+                    })}
+                >
                     <DropdownSelector
                         optionList={tabTitles.map((title, index) => ({
                             label: title,
@@ -66,7 +73,12 @@ export const HorizontalTab = ({
                         variant='fullWidth'
                     />
                 </div>
-                <div className='hidden tablet:block'>
+                <div
+                    className={classNames('hidden', {
+                        'horizontalTab:block': useCustomBreakpoint,
+                        'tablet:block': !useCustomBreakpoint,
+                    })}
+                >
                     {tabTitles.map((title, index) => {
                         return (
                             <HeadlessTab

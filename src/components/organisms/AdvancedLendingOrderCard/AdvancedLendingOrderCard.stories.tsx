@@ -1,7 +1,4 @@
-import {
-    withLendingOrderForm,
-    withWalletProvider,
-} from '.storybook/decorators';
+import { withWalletProvider } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
 import { defaultDelistedStatusSet } from 'src/hooks';
@@ -19,7 +16,7 @@ export default {
     parameters: {
         connected: true,
     },
-    decorators: [withLendingOrderForm, withWalletProvider],
+    decorators: [withWalletProvider],
 } as Meta<typeof AdvancedLendingOrderCard>;
 
 const Template: StoryFn<typeof AdvancedLendingOrderCard> = args => {
@@ -53,15 +50,20 @@ FailedAmountValidation.play = async ({ canvasElement }) => {
 
 export const BondPriceFailedValidation = Template.bind({});
 BondPriceFailedValidation.args = {
-    isItayose: true,
     preOrderPosition: 'none',
 };
 BondPriceFailedValidation.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    const limitTab = canvas.getByRole('radio', { name: 'Limit' });
+    await userEvent.click(limitTab);
     const input = canvas.getByRole('textbox', { name: 'Bond Price' });
+    await userEvent.clear(input);
     await userEvent.type(input, '0', {
         delay: 100,
     });
+};
+BondPriceFailedValidation.parameters = {
+    chromatic: { delay: 3000 },
 };
 
 export const ItayoseWithPreOrders = Template.bind({});
