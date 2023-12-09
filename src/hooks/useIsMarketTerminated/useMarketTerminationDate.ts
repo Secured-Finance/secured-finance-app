@@ -16,6 +16,5 @@ export const useMarketTerminationDate = () => {
         placeholderData: undefined,
         enabled: !!securedFinance,
         staleTime: Infinity,
-        refetchOnWindowFocus: true,
     });
 };
