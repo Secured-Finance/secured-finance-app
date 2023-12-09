@@ -15,9 +15,10 @@ import {
     getSupportedNetworks,
 } from 'src/utils';
 import { AddressUtils } from 'src/utils/address';
+import { isChipVisibleForEnv, isProdEnv } from 'src/utils/displayUtils';
 import { useAccount } from 'wagmi';
 
-const LINKS = [
+const PRODUCTION_LINKS = [
     {
         text: 'OTC Lending',
         link: '/',
@@ -34,6 +35,10 @@ const LINKS = [
         link: '/portfolio',
         dataCy: 'history',
     },
+];
+
+const DEV_LINKS = [
+    ...PRODUCTION_LINKS,
     {
         text: 'Faucet',
         link: '/faucet',
@@ -88,6 +93,7 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
         (state: RootState) => state.blockchain.chainId
     );
     const envShort = getEnvShort();
+    const LINKS = isProdEnv() ? PRODUCTION_LINKS : DEV_LINKS;
 
     return (
         <div className='relative'>
@@ -104,7 +110,7 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                             <SFLogoSmall className='inline h-7 w-7 tablet:hidden' />
                         </a>
                     </Link>
-                    {envShort && (
+                    {isChipVisibleForEnv() && (
                         <HighlightChip text={envShort.toUpperCase()} />
                     )}
                 </div>

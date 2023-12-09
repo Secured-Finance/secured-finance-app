@@ -34,6 +34,8 @@ describe('getEnvShort', () => {
         expect(getEnvShort()).toEqual('dev');
         process.env.SF_ENV = Environment.STAGING;
         expect(getEnvShort()).toEqual('stg');
+        process.env.SF_ENV = Environment.PRODUCTION;
+        expect(getEnvShort()).toEqual('prod');
         process.env.SF_ENV = 'random';
         expect(getEnvShort()).toEqual('');
     });
