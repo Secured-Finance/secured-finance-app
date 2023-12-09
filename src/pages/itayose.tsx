@@ -1,4 +1,3 @@
-import ErrorPage from 'next/error';
 import Router from 'next/router';
 import { Itayose as ItayoseComponent } from 'src/components/pages';
 import {
@@ -35,7 +34,8 @@ const Itayose = () => {
         }
     }
 
-    return <ErrorPage statusCode={404} />;
+    Router.push('/');
+    return null;
 };
 
 export default Itayose;

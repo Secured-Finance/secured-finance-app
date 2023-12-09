@@ -48,6 +48,5 @@ export const useTerminationPrices = () => {
         },
         enabled: !!securedFinance,
         staleTime: Infinity,
-        refetchOnWindowFocus: true,
     });
 };
