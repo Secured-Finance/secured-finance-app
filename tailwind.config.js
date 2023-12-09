@@ -72,6 +72,7 @@ module.exports = {
             tablet: '768px',
             laptop: '1024px',
             desktop: '1440px',
+            horizontalTab: '1120px',
         },
 
         fontSize: {
