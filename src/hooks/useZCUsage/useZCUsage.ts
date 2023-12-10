@@ -1,3 +1,4 @@
+import { OrderSide } from '@secured-finance/sf-client';
 import { useCallback } from 'react';
 import {
     emptyCollateralBook,
@@ -6,9 +7,13 @@ import {
     usePositions,
 } from 'src/hooks';
 import { UserAccount } from 'src/types';
-import { CurrencySymbol, amountFormatterFromBase } from 'src/utils';
+import {
+    CurrencySymbol,
+    amountFormatterFromBase,
+    hexToCurrencySymbol,
+} from 'src/utils';
 
-export const useZCUsage = (address: UserAccount) => {
+export const useZCUsage = (address: UserAccount, side: OrderSide) => {
     const { data: usedCurrencies = [] } = useCurrenciesForOrders(address);
     const { data: position } = usePositions(address, usedCurrencies);
     const { data: collateralBook = emptyCollateralBook } =
@@ -22,10 +27,10 @@ export const useZCUsage = (address: UserAccount) => {
         let estimatedBorrowPV = 0;
         let estimatedLendPV = 0;
 
-        if (filledAmount > 0) {
+        if (side === OrderSide.LEND) {
             estimatedLendPV = filledAmount;
         } else {
-            estimatedBorrowPV = Math.abs(filledAmount);
+            estimatedBorrowPV = filledAmount;
         }
 
         const pvOfActivePositionsInOrderMaturity = getPVInMaturity(
@@ -34,10 +39,12 @@ export const useZCUsage = (address: UserAccount) => {
         );
 
         const offsetPV =
-            pvOfActivePositionsInOrderMaturity * filledAmount < 0
+            (pvOfActivePositionsInOrderMaturity > 0 &&
+                side === OrderSide.BORROW) ||
+            (pvOfActivePositionsInOrderMaturity < 0 && side === OrderSide.LEND)
                 ? Math.min(
                       Math.abs(pvOfActivePositionsInOrderMaturity),
-                      Math.abs(filledAmount)
+                      filledAmount
                   )
                 : 0;
 
@@ -57,7 +64,7 @@ export const useZCUsage = (address: UserAccount) => {
                 collateralBook.collateralThreshold) /
             denominator;
 
-        return usage;
+        return Math.min(usage * 100, 8000);
     };
 
     const getPVInMaturity = useCallback(
@@ -65,7 +72,7 @@ export const useZCUsage = (address: UserAccount) => {
             const positionInMaturity = position?.positions.find(
                 pos =>
                     pos.maturity === maturity.toString() &&
-                    pos.currency === currency
+                    hexToCurrencySymbol(pos.currency) === currency
             );
 
             return amountFormatterFromBase[currency](

@@ -67,7 +67,7 @@ export const usePositions = (
                 const presentValue = amountFormatterFromBase[ccy](
                     position.presentValue
                 );
-                if (position.presentValue >= 0) {
+                if (presentValue >= 0) {
                     lendCurrencies.add(ccy);
                     totalLendPVPerCurrency[ccy] += presentValue;
                 } else {
