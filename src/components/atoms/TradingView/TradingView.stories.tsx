@@ -858,7 +858,7 @@ export default {
     title: 'Atoms/TradingView',
     component: TradingView,
     args: {
-        className: 'font-bold',
+        className: 'font-bold w-[800px]',
         data: renderData,
     },
 } as Meta<typeof TradingView>;
