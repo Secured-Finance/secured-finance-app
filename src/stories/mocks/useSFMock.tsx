@@ -406,7 +406,7 @@ export const mockUseSF = () => {
         getOrderEstimation: jest.fn(() =>
             Promise.resolve({
                 coverage: BigInt(5500),
-                filledAmount: BigInt('-90000000000000000000'),
+                filledAmount: BigInt('90000000000000000000'),
             })
         ),
 

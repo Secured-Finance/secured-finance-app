@@ -47,7 +47,7 @@ export const CollateralSimulationSection = ({
         tradeAmount.currency
     );
 
-    const getZCUsage = useZCUsage(address);
+    const getZCUsage = useZCUsage(address, side);
 
     const filledAmount = amountFormatterFromBase[tradeAmount.currency](
         orderEstimationInfo?.filledAmount ?? BigInt(0)
