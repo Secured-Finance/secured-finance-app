@@ -19,9 +19,13 @@ describe('useCollateralBook hook', () => {
         expect(value.isLoading).toEqual(true);
 
         await waitForNextUpdate();
-        expect(mock.getCollateralBook).toHaveBeenCalledTimes(1);
-        expect(mock.getCollateralParameters).toHaveBeenCalledTimes(1);
-        expect(mock.getWithdrawableCollateral).toHaveBeenCalledTimes(3);
+        expect(mock.tokenVault.getCollateralBook).toHaveBeenCalledTimes(1);
+        expect(mock.tokenVault.getCollateralParameters).toHaveBeenCalledTimes(
+            1
+        );
+        expect(mock.tokenVault.getWithdrawableCollateral).toHaveBeenCalledTimes(
+            3
+        );
 
         const newValue = result.current;
         const colBook = newValue.data as CollateralBook;

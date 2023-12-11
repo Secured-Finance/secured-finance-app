@@ -88,7 +88,9 @@ describe('WithdrawCollateral component', () => {
     });
 
     it('should proceed to failure screen and call onclose when block number is undefined', async () => {
-        mockSecuredFinance.withdrawCollateral.mockResolvedValueOnce('');
+        mockSecuredFinance.tokenVault.withdrawCollateral.mockResolvedValueOnce(
+            ''
+        );
         const onClose = jest.fn();
         render(<Default onClose={onClose} />);
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
