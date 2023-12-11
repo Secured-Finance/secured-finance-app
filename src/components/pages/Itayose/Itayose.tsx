@@ -148,6 +148,15 @@ export const Itayose = () => {
         [delistedCurrencySet]
     );
 
+    const estimatedOpeningUnitPrice = lendingMarkets[currency][maturity]
+        ?.openingUnitPrice
+        ? LoanValue.fromPrice(
+              lendingMarkets[currency][maturity]?.openingUnitPrice ?? 0,
+              maturity,
+              lendingContracts[selectedTerm.value.toNumber()]?.utcOpeningDate
+          )
+        : undefined;
+
     const selectedAsset = useMemo(() => {
         return assetList.find(option => option.value === currency);
     }, [currency, assetList]);
@@ -155,7 +164,8 @@ export const Itayose = () => {
     const [orderBook, setMultiplier, setIsShowingAll] = useOrderbook(
         currency,
         maturity,
-        lendingContracts[selectedTerm.value.toNumber()]?.utcOpeningDate
+        lendingContracts[selectedTerm.value.toNumber()]?.utcOpeningDate,
+        estimatedOpeningUnitPrice?.price
     );
 
     const { data: collateralBook = emptyCollateralBook } =
@@ -190,15 +200,6 @@ export const Itayose = () => {
         },
         [amount, currency, dispatch]
     );
-
-    const estimatedOpeningUnitPrice = lendingMarkets[currency][maturity]
-        ?.openingUnitPrice
-        ? LoanValue.fromPrice(
-              lendingMarkets[currency][maturity]?.openingUnitPrice ?? 0,
-              maturity,
-              lendingContracts[selectedTerm.value.toNumber()]?.utcOpeningDate
-          )
-        : undefined;
 
     return (
         <Page title='Pre-Open Order Book'>
