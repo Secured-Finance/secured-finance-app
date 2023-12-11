@@ -85,6 +85,7 @@ describe('Itayose Component', () => {
             ).toHaveBeenLastCalledWith(
                 expect.anything(),
                 expect.anything(),
+                expect.anything(),
                 13
             );
             await waitFor(() =>
@@ -100,6 +101,7 @@ describe('Itayose Component', () => {
                 ).toHaveBeenLastCalledWith(
                     expect.anything(),
                     expect.anything(),
+                    expect.anything(),
                     26
                 )
             );
@@ -112,6 +114,7 @@ describe('Itayose Component', () => {
             ).toHaveBeenLastCalledWith(
                 expect.anything(),
                 expect.anything(),
+                expect.anything(),
                 13
             );
             await waitFor(() => {
@@ -122,6 +125,7 @@ describe('Itayose Component', () => {
                 expect(
                     mockSecuredFinance.getLendOrderBook
                 ).toHaveBeenLastCalledWith(
+                    expect.anything(),
                     expect.anything(),
                     expect.anything(),
                     1300

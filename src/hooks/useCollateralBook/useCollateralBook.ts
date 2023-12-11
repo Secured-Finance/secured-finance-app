@@ -86,13 +86,13 @@ export const useCollateralBook = (account: string | undefined) => {
                 collateralParameters,
                 withdrawableCollateral,
             ] = await Promise.all([
-                securedFinance?.getCollateralBook(account ?? ''),
-                securedFinance?.getCollateralParameters(),
+                securedFinance?.tokenVault.getCollateralBook(account ?? ''),
+                securedFinance?.tokenVault.getCollateralParameters(),
                 await Promise.all(
                     collateralCurrencyList.map(async currencyInfo => {
                         const ccy = currencyInfo.symbol;
                         const withdrawableCollateral =
-                            await securedFinance?.getWithdrawableCollateral(
+                            await securedFinance?.tokenVault.getWithdrawableCollateral(
                                 toCurrency(ccy),
                                 account ?? ''
                             );

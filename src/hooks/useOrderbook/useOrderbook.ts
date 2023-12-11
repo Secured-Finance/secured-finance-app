@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
-import { CurrencySymbol, toCurrency } from 'src/utils';
+import { CurrencySymbol, ZERO_BI, toCurrency } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 
 const DEFAULT_ORDERBOOK_DEPTH = 26;
@@ -11,6 +11,7 @@ interface SmartContractOrderbook {
     unitPrices: bigint[];
     amounts: bigint[];
     quantities: bigint[];
+    next: bigint;
 }
 export type OrderBookEntry = {
     amount: bigint;
@@ -69,9 +70,15 @@ export const useOrderbook = (
                     securedFinance?.getBorrowOrderBook(
                         currency,
                         maturity,
+                        0,
                         depth
                     ),
-                    securedFinance?.getLendOrderBook(currency, maturity, depth),
+                    securedFinance?.getLendOrderBook(
+                        currency,
+                        maturity,
+                        0,
+                        depth
+                    ),
                 ]);
 
                 return {
@@ -79,11 +86,13 @@ export const useOrderbook = (
                         unitPrices: lendOrderbook?.unitPrices ?? [],
                         amounts: lendOrderbook?.amounts ?? [],
                         quantities: lendOrderbook?.quantities ?? [],
+                        next: lendOrderbook?.next ?? ZERO_BI,
                     },
                     borrowOrderbook: {
                         unitPrices: borrowOrderbook?.unitPrices ?? [],
                         amounts: borrowOrderbook?.amounts ?? [],
                         quantities: borrowOrderbook?.quantities ?? [],
+                        next: borrowOrderbook?.next ?? ZERO_BI,
                     },
                 };
             },
