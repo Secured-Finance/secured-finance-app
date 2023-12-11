@@ -173,6 +173,7 @@ describe('Advanced Lending Component', () => {
             ).toHaveBeenLastCalledWith(
                 expect.anything(),
                 expect.anything(),
+                expect.anything(),
                 13
             );
             await waitFor(() =>
@@ -185,6 +186,7 @@ describe('Advanced Lending Component', () => {
             expect(
                 mockSecuredFinance.getBorrowOrderBook
             ).toHaveBeenLastCalledWith(
+                expect.anything(),
                 expect.anything(),
                 expect.anything(),
                 26
@@ -202,6 +204,7 @@ describe('Advanced Lending Component', () => {
             ).toHaveBeenLastCalledWith(
                 expect.anything(),
                 expect.anything(),
+                expect.anything(),
                 13
             );
             await waitFor(() => {
@@ -212,6 +215,7 @@ describe('Advanced Lending Component', () => {
                 expect(
                     mockSecuredFinance.getLendOrderBook
                 ).toHaveBeenLastCalledWith(
+                    expect.anything(),
                     expect.anything(),
                     expect.anything(),
                     1300

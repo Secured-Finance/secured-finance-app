@@ -17,7 +17,7 @@ export const useBorrowableAmount = (
     return useQuery({
         queryKey: [QueryKeys.BORROWABLE_AMOUNT, address, ccy],
         queryFn: async () => {
-            const amount = await securedFinance?.getBorrowableAmount(
+            const amount = await securedFinance?.tokenVault.getBorrowableAmount(
                 address ?? '',
                 toCurrency(ccy)
             );
