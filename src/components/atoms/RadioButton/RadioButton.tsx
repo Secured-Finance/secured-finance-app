@@ -6,7 +6,7 @@ interface ButtonSelectProps {
     onChange: (value: string) => void;
 }
 
-function ButtonSelect({ options, value, onChange }: ButtonSelectProps) {
+export function RadioButton({ options, value, onChange }: ButtonSelectProps) {
     return (
         <div className='flex gap-2'>
             {' '}
@@ -32,5 +32,3 @@ function ButtonSelect({ options, value, onChange }: ButtonSelectProps) {
         </div>
     );
 }
-
-export default ButtonSelect;

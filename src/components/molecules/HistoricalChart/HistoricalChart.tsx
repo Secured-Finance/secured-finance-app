@@ -11,8 +11,7 @@ import {
     WhitespaceData,
 } from 'lightweight-charts';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import ButtonSelect from './ButtonSelect';
-import { createCanlestickChart, createVolumeChart } from './utils';
+import { createCanlestickChart, createVolumeChart } from 'src/utils/charts';
 
 export interface TradingData {
     time: number;
@@ -23,7 +22,7 @@ export interface TradingData {
     vol: number;
 }
 
-export interface TradingviewProps {
+export interface HistoricalChartProps {
     data: TradingData[];
     className?: string;
 }
@@ -60,7 +59,7 @@ function syncCrosshair(
     chart.clearCrosshairPosition();
 }
 
-export function TradingView({ data, className }: TradingviewProps) {
+export function HistoricalChart({ data, className }: HistoricalChartProps) {
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const secondContianerRef = useRef<HTMLDivElement>(null);
     const [hoverTime, setHoverTime] = useState('');
@@ -261,58 +260,12 @@ export function TradingView({ data, className }: TradingviewProps) {
     const titleOfChartClass =
         'absolute left-4 top-4 z-50 flex gap-4 text-2xs text-neutral-4 font-medium leading-4';
 
-    const options = [
-        {
-            label: '1M',
-            value: '1m',
-        },
-        {
-            label: '15M',
-            value: '15M',
-        },
-        {
-            label: '1H',
-            value: '1H',
-        },
-        {
-            label: '4H',
-            value: '4H',
-        },
-        {
-            label: '1D',
-            value: '1D',
-        },
-        {
-            label: '1W',
-            value: '1W',
-        },
-        {
-            label: '1M',
-            value: '1M',
-        },
-    ];
-
-    const graphOptions = [
-        {
-            label: 'MACD',
-            value: 'MACD',
-        },
-        {
-            label: 'VOL',
-            value: 'VOL',
-        },
-        {
-            label: 'KDL',
-            value: 'KDL',
-        },
-    ];
-
-    const [time, setTime] = useState('4H');
-    const [graph, setGraph] = useState('VOL');
+    // const [time, setTime] = useState('4H');
+    // const [graph, setGraph] = useState('VOL');
 
     return (
         <div className={classNames(className)}>
-            <div className='flex justify-between border-b border-t border-neutral-2 bg-[#292D3F99] p-4'>
+            {/* <div className='flex justify-between border-b border-t border-neutral-2 bg-[#292D3F99] p-4'>
                 <ButtonSelect
                     options={options}
                     value={time}
@@ -323,7 +276,7 @@ export function TradingView({ data, className }: TradingviewProps) {
                     value={graph}
                     onChange={v => setGraph(v)}
                 />
-            </div>
+            </div> */}
             <div ref={chartContainerRef} className='relative h-full w-full'>
                 <div className={titleOfChartClass}>
                     <div>{hoverTime}</div>

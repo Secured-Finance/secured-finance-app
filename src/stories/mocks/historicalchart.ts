@@ -1,7 +1,50 @@
-import type { Meta, StoryFn } from '@storybook/react';
-import { TradingView } from './';
+export const timeScales = [
+    {
+        label: '1m',
+        value: '1m',
+    },
+    {
+        label: '15m',
+        value: '15M',
+    },
+    {
+        label: '1H',
+        value: '1H',
+    },
+    {
+        label: '4H',
+        value: '4H',
+    },
+    {
+        label: '1D',
+        value: '1D',
+    },
+    {
+        label: '1W',
+        value: '1W',
+    },
+    {
+        label: '1M',
+        value: '1M',
+    },
+];
 
-const tradingData = [
+export const graphTypeOptions = [
+    {
+        label: 'MACD',
+        value: 'MACD',
+    },
+    {
+        label: 'VOL',
+        value: 'VOL',
+    },
+    {
+        label: 'KDL',
+        value: 'KDL',
+    },
+];
+
+export const tradingData = [
     [
         1696550400000,
         '27410.39000000',
@@ -843,26 +886,3 @@ const tradingData = [
         '0',
     ],
 ];
-const renderData = tradingData.map(item => {
-    return {
-        time: item[0],
-        open: item[1],
-        high: item[2],
-        low: item[3],
-        close: item[4],
-        vol: item[5],
-    };
-});
-
-export default {
-    title: 'Atoms/TradingView',
-    component: TradingView,
-    args: {
-        className: 'font-bold w-[800px]',
-        data: renderData,
-    },
-} as Meta<typeof TradingView>;
-
-const Template: StoryFn<typeof TradingView> = args => <TradingView {...args} />;
-
-export const Default = Template.bind({});
