@@ -10,9 +10,7 @@ export const useIsMarketTerminated = () => {
         queryFn: async () => {
             return securedFinance?.isTerminated() ?? false;
         },
-        placeholderData: false,
         enabled: !!securedFinance,
         staleTime: Infinity,
-        refetchOnWindowFocus: true,
     });
 };
