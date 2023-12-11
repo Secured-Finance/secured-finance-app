@@ -115,6 +115,7 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                     icon={link.icon}
                     link={link.href}
                     badge={<ExternalIcon />}
+                    internal={link.internal}
                 />
                 {index !== LinkList.length - 1 && (
                     <div className='py-2'>

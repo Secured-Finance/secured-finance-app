@@ -1,4 +1,5 @@
 import SF from 'src/assets/icons/SF-KO.svg';
+import Bridge from 'src/assets/icons/bridge-icon.svg';
 import Discord from 'src/assets/icons/discord.svg';
 import GitBook from 'src/assets/icons/gitbook.svg';
 import Medium from 'src/assets/icons/medium.svg';
@@ -8,6 +9,7 @@ type ExternalLink = {
     text: string;
     href: string;
     icon: React.ReactNode;
+    internal?: boolean;
 };
 
 export const LinkList: ExternalLink[] = [
@@ -35,5 +37,11 @@ export const LinkList: ExternalLink[] = [
         text: 'Join us on Discord',
         href: 'https://discord.com/invite/FqrdfQgmjT',
         icon: <Discord className='h-5 w-5 text-white' />,
+    },
+    {
+        text: 'Bridge',
+        href: './bridge',
+        icon: <Bridge className='h-4 w-4 text-white' />,
+        internal: true,
     },
 ];

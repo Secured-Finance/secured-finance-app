@@ -7,11 +7,13 @@ export const MenuItemWithLink = ({
     icon,
     link,
     badge,
+    internal = false,
 }: {
     text: string;
     link: string;
     icon?: React.ReactNode;
     badge?: React.ReactNode;
+    internal?: boolean;
 }) => {
     return (
         <div
@@ -23,7 +25,7 @@ export const MenuItemWithLink = ({
                     href={link}
                     className='h-full w-full'
                     aria-label='Menu Item'
-                    target='_blank'
+                    target={internal ? '_self' : '_blank'}
                     rel='noopener noreferrer'
                 >
                     <MenuItem text={text} icon={icon} badge={badge} />
