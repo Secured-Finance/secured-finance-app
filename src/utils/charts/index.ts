@@ -84,6 +84,9 @@ export const createVolumeChart = (ref: HTMLDivElement) => {
                 bottom: 0,
             },
         },
+        timeScale: {
+            ticksVisible: true,
+        },
     });
     const volumeSeries = chart.addHistogramSeries({
         color: '#26a69a',

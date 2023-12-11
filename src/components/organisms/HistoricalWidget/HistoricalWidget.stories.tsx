@@ -1,19 +1,31 @@
 import type { Meta, StoryFn } from '@storybook/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
     graphTypeOptions,
     timeScales,
-    tradingData,
 } from 'src/stories/mocks/historicalchart';
 import { HistoricalWidget } from './HistoricalWidget';
 
 export default {
-    title: 'Organisms/HistoricalWidget',
+    title: 'Organism/HistoricalWidget',
     component: HistoricalWidget,
     args: {
         timeScales: timeScales,
         chartType: graphTypeOptions,
-        data: tradingData.map(item => {
+        data: [],
+    },
+    argTypes: {},
+} as Meta<typeof HistoricalWidget>;
+
+const Template: StoryFn<typeof HistoricalWidget> = args => {
+    const [time, setTime] = useState('4h');
+    const [graph, setGraph] = useState('VOL');
+    const [data, setData] = useState([]);
+    const getBSCData = async (time: string, limit = 1000) => {
+        const data = await fetch(
+            `https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=${time}&limit=${limit}`
+        ).then(res => res.json());
+        const result = data.map((item: Record<string, string>) => {
             return {
                 time: item[0],
                 open: item[1],
@@ -22,26 +34,29 @@ export default {
                 close: item[4],
                 vol: item[5],
             };
-        }),
-    },
-    argTypes: {},
-} as Meta<typeof HistoricalWidget>;
+        });
+        setData(result);
+    };
 
-const Template: StoryFn<typeof HistoricalWidget> = args => {
-    const [time, setTime] = useState('4H');
-    const [graph, setGraph] = useState('VOL');
+    useEffect(() => {
+        getBSCData(time);
+    }, [time]);
+
     return (
-        <HistoricalWidget
-            {...args}
-            selectChartType={graph}
-            selectTimeScale={time}
-            onChartTypeChange={(_: string, type: string) => {
-                setGraph(type);
-            }}
-            onTimeScanleChange={(value: string) => {
-                setTime(value);
-            }}
-        />
+        <div className='w-[800px]'>
+            <HistoricalWidget
+                {...args}
+                data={data}
+                selectChartType={graph}
+                selectTimeScale={time}
+                onChartTypeChange={(_: string, type: string) => {
+                    setGraph(type);
+                }}
+                onTimeScanleChange={async (value: string) => {
+                    setTime(value);
+                }}
+            />
+        </div>
     );
 };
 

@@ -190,8 +190,8 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
             volumeSeries
         );
 
-        volumeChart.timeScale().fitContent();
-        candleStickChart.timeScale().fitContent();
+        volumeChart.timeScale();
+        candleStickChart.timeScale();
 
         const updateTitleData = (
             param: MouseEventParams<Time>,
