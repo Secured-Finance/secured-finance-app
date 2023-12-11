@@ -48,7 +48,8 @@ const transformOrderbook = (
 export const useOrderbook = (
     ccy: CurrencySymbol,
     maturity: number,
-    calculationDate?: number
+    calculationDate?: number,
+    startPrice = 0
 ) => {
     const securedFinance = useSF();
     const [depth, setDepth] = useState(DEFAULT_ORDERBOOK_DEPTH);
@@ -63,20 +64,20 @@ export const useOrderbook = (
 
     return [
         useQuery({
-            queryKey: [QueryKeys.ORDER_BOOK, ccy, maturity, depth],
+            queryKey: [QueryKeys.ORDER_BOOK, ccy, maturity, depth, startPrice],
             queryFn: async () => {
                 const currency = toCurrency(ccy);
                 const [borrowOrderbook, lendOrderbook] = await Promise.all([
                     securedFinance?.getBorrowOrderBook(
                         currency,
                         maturity,
-                        0,
+                        startPrice,
                         depth
                     ),
                     securedFinance?.getLendOrderBook(
                         currency,
                         maturity,
-                        0,
+                        startPrice,
                         depth
                     ),
                 ]);
