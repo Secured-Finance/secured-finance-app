@@ -26,7 +26,7 @@ export const useWithdrawCollateral = (ccy: CurrencySymbol, amount: bigint) => {
         if (!securedFinance) {
             return;
         }
-        const tx = await securedFinance.withdrawCollateral(
+        const tx = await securedFinance.tokenVault.withdrawCollateral(
             toCurrency(ccy),
             amount
         );

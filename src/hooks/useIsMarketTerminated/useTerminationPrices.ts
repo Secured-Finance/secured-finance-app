@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { BigNumber as BigNumberJS } from 'bignumber.js';
-import { QueryKeys, useDecimals } from 'src/hooks';
+import { QueryKeys } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { AssetPriceMap } from 'src/types';
 import {
@@ -12,32 +12,37 @@ import {
 
 export const useTerminationPrices = () => {
     const securedFinance = useSF();
-    const { data: decimals } = useDecimals();
 
     return useQuery({
-        queryKey: [QueryKeys.TERMINATION_PRICES, decimals],
+        queryKey: [QueryKeys.TERMINATION_PRICES],
         queryFn: async () => {
             const currencies = (await securedFinance?.getCurrencies()) ?? [];
             const currencyList = currencies
                 .map(ccy => hexToCurrencySymbol(ccy))
                 .filter((ccy): ccy is CurrencySymbol => ccy !== undefined);
-            const prices = await Promise.all(
+            const marketTerminationArray = await Promise.all(
                 currencyList.map(async ccy => {
                     return (
-                        (await securedFinance?.getMarketTerminationPrice(
+                        (await securedFinance?.getMarketTerminationPriceAndDecimals(
                             toCurrency(ccy)
-                        )) ?? ZERO_BI
+                        )) ?? {
+                            price: ZERO_BI,
+                            decimals: 0,
+                        }
                     );
                 })
             );
 
             const assetPriceMap: AssetPriceMap = currencyList.reduce(
                 (acc, ccy, index) => {
-                    if (decimals === undefined) return acc;
                     return {
                         ...acc,
-                        [ccy]: new BigNumberJS(prices[index].toString())
-                            .dividedBy(10 ** decimals[ccy])
+                        [ccy]: new BigNumberJS(
+                            marketTerminationArray[index].price.toString()
+                        )
+                            .dividedBy(
+                                10 ** marketTerminationArray[index].decimals
+                            )
                             .toNumber(),
                     };
                 },

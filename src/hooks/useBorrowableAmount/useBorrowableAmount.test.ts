@@ -16,7 +16,7 @@ describe('useBorrowableAmount', () => {
         expect(value.data).toEqual(0);
 
         await waitForNextUpdate();
-        expect(mock.getBorrowableAmount).toHaveBeenCalledTimes(1);
+        expect(mock.tokenVault.getBorrowableAmount).toHaveBeenCalledTimes(1);
 
         const newValue = result.current;
         expect(newValue.data).toEqual(0.1);
