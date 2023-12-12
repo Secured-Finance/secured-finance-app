@@ -146,13 +146,13 @@ export const Faucet = () => {
             client.watchAsset({
                 type: 'ERC20',
                 options: {
-                    address: token.address,
+                    address: address,
                     symbol: token.symbol,
                     decimals: token.decimals,
                 },
             });
         },
-        [client]
+        [address, client]
     );
 
     useEffect(() => {

@@ -15,8 +15,12 @@ import SecuredFinanceProvider from 'src/contexts/SecuredFinanceProvider';
 import store from 'src/store';
 import { selectNetworkName } from 'src/store/blockchain';
 import { RootState } from 'src/store/types';
-import { getAmplitudeApiKey, getWalletConnectId } from 'src/utils';
-import { WagmiConfig, configureChains, createConfig, sepolia } from 'wagmi';
+import {
+    getAmplitudeApiKey,
+    getSupportedChains,
+    getWalletConnectId,
+} from 'src/utils';
+import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
@@ -33,15 +37,12 @@ init(getAmplitudeApiKey(), undefined, {
     logLevel: LogLevel.None,
 });
 
-const { chains, publicClient } = configureChains(
-    [sepolia],
-    [
-        alchemyProvider({
-            apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ?? '',
-        }),
-        publicProvider(),
-    ]
-);
+const { chains, publicClient } = configureChains(getSupportedChains(), [
+    alchemyProvider({
+        apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ?? '',
+    }),
+    publicProvider(),
+]);
 
 const config = createConfig({
     autoConnect: false,

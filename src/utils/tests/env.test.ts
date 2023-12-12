@@ -3,47 +3,12 @@ import {
     getAmplitudeApiKey,
     getCommitHash,
     getEnvironment,
-    getMainnetChainId,
     getSupportedChainIds,
-    getSupportedNetworks,
+    getSupportedChains,
     getUsePackageVersion,
     getWalletConnectId,
 } from 'src/utils';
-
-describe('getMainnetChainId', () => {
-    it('should return the value of the environment variable', () => {
-        process.env.NEXT_PUBLIC_MAINNET_CHAIN_ID = '1';
-        const network = getMainnetChainId();
-        expect(network).toBe(1);
-        expect(typeof network).toBe('number');
-    });
-
-    it('should throw error if variable is not set', () => {
-        process.env.NEXT_PUBLIC_MAINNET_CHAIN_ID = '';
-        expect(() => getMainnetChainId()).toThrowError(
-            'NEXT_PUBLIC_MAINNET_CHAIN_ID is not set'
-        );
-    });
-});
-
-describe('getSupportedNetworks', () => {
-    it('should return the value of the environment variable', () => {
-        process.env.NEXT_PUBLIC_SUPPORTED_NETWORKS = 'mainnet,sepolia';
-        const networks = getSupportedNetworks();
-        expect(networks.length).toBe(2);
-        expect(networks[0]).toBe('mainnet');
-        expect(typeof networks[0]).toBe('string');
-        expect(networks[1]).toBe('sepolia');
-        expect(typeof networks[1]).toBe('string');
-    });
-
-    it('should throw error if variable is not set', () => {
-        process.env.NEXT_PUBLIC_SUPPORTED_NETWORKS = '';
-        expect(() => getSupportedNetworks()).toThrowError(
-            'NEXT_PUBLIC_SUPPORTED_NETWORKS is not set'
-        );
-    });
-});
+import { mainnet, sepolia } from 'wagmi';
 
 describe('getSupportedChainIds ', () => {
     it('should return the value of the environment variable', () => {
@@ -149,5 +114,22 @@ describe('getCommitHash', () => {
         expect(commitHash).toBe('');
         expect(typeof commitHash).toBe('string');
         expect(spy).toHaveBeenCalled();
+    });
+});
+
+describe('getSupportedChains', () => {
+    it('should return only supported chains', () => {
+        process.env.NEXT_PUBLIC_SUPPORTED_CHAIN_IDS = '11155111';
+        expect(getSupportedChains()).toEqual([sepolia]);
+    });
+
+    it('should return all chains if all are supported', () => {
+        process.env.NEXT_PUBLIC_SUPPORTED_CHAIN_IDS = '1,11155111';
+        expect(getSupportedChains()).toEqual([sepolia, mainnet]);
+    });
+
+    it('should return an empty array if no chains are supported', () => {
+        process.env.NEXT_PUBLIC_SUPPORTED_CHAIN_IDS = '5,10';
+        expect(getSupportedChains()).toEqual([]);
     });
 });
