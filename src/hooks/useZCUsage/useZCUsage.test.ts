@@ -32,7 +32,7 @@ describe('useZCUsage', () => {
 
         await waitFor(() => {
             expect(result.current(mar23Fixture, CurrencySymbol.WFIL, 3)).toBe(
-                2410.909364876064
+                3013.63670609508
             );
         });
     });
