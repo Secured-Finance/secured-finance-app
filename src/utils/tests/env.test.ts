@@ -4,11 +4,9 @@ import {
     getCommitHash,
     getEnvironment,
     getSupportedChainIds,
-    getSupportedChains,
     getUsePackageVersion,
     getWalletConnectId,
 } from 'src/utils';
-import { mainnet, sepolia } from 'wagmi';
 
 describe('getSupportedChainIds ', () => {
     it('should return the value of the environment variable', () => {
@@ -114,22 +112,5 @@ describe('getCommitHash', () => {
         expect(commitHash).toBe('');
         expect(typeof commitHash).toBe('string');
         expect(spy).toHaveBeenCalled();
-    });
-});
-
-describe('getSupportedChains', () => {
-    it('should return only supported chains', () => {
-        process.env.NEXT_PUBLIC_SUPPORTED_CHAIN_IDS = '11155111';
-        expect(getSupportedChains()).toEqual([sepolia]);
-    });
-
-    it('should return all chains if all are supported', () => {
-        process.env.NEXT_PUBLIC_SUPPORTED_CHAIN_IDS = '1,11155111';
-        expect(getSupportedChains()).toEqual([sepolia, mainnet]);
-    });
-
-    it('should return an empty array if no chains are supported', () => {
-        process.env.NEXT_PUBLIC_SUPPORTED_CHAIN_IDS = '5,10';
-        expect(getSupportedChains()).toEqual([]);
     });
 });

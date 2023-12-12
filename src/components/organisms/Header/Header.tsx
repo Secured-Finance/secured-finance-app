@@ -9,10 +9,10 @@ import { WalletDialog, WalletPopover } from 'src/components/organisms';
 import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
-import { getEnvShort, getSupportedChains } from 'src/utils';
+import { getEnvShort, getSupportedChainIds } from 'src/utils';
 import { AddressUtils } from 'src/utils/address';
 import { isChipVisibleForEnv, isProdEnv } from 'src/utils/displayUtils';
-import { mainnet, useAccount } from 'wagmi';
+import { mainnet, sepolia, useAccount } from 'wagmi';
 
 const PRODUCTION_LINKS = [
     {
@@ -49,7 +49,10 @@ const HeaderMessage = ({
     chainId: number;
     chainError: boolean;
 }) => {
-    const networkNames = getSupportedChains().map(chain => chain.name);
+    const chainIds = getSupportedChainIds();
+    const networkNames = [sepolia, mainnet]
+        .filter(chain => chainIds.includes(chain.id))
+        .map(chain => chain.name);
 
     if (chainId) {
         if (chainError) {
