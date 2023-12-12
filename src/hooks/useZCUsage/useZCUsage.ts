@@ -1,11 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { useCallback } from 'react';
-import {
-    emptyCollateralBook,
-    useCollateralBook,
-    useCurrenciesForOrders,
-    usePositions,
-} from 'src/hooks';
+import { useCurrenciesForOrders, usePositions } from 'src/hooks';
 import { UserAccount } from 'src/types';
 import {
     CurrencySymbol,
@@ -16,8 +11,6 @@ import {
 export const useZCUsage = (address: UserAccount, side: OrderSide) => {
     const { data: usedCurrencies = [] } = useCurrenciesForOrders(address);
     const { data: position } = usePositions(address, usedCurrencies);
-    const { data: collateralBook = emptyCollateralBook } =
-        useCollateralBook(address);
 
     const getZCUsage = (
         maturity: number,
@@ -58,13 +51,12 @@ export const useZCUsage = (address: UserAccount, side: OrderSide) => {
         }
 
         const usage =
-            (((position?.totalBorrowPVPerCurrency[currency] ?? 0) +
+            ((position?.totalBorrowPVPerCurrency[currency] ?? 0) +
                 estimatedBorrowPV -
-                offsetPV) *
-                collateralBook.collateralThreshold) /
+                offsetPV) /
             denominator;
 
-        return Math.min(usage * 100, 8000);
+        return Math.min(usage * 10000, 8000);
     };
 
     const getPVInMaturity = useCallback(
