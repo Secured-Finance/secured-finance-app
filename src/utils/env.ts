@@ -1,5 +1,4 @@
 import assert from 'assert';
-import { mainnet, sepolia } from 'wagmi';
 import { Environment } from './strings';
 
 export const getSupportedChainIds = (): number[] => {
@@ -62,8 +61,7 @@ export const getCommitHash = () => {
     return NEXT_PUBLIC_COMMIT_HASH;
 };
 
-export const getSupportedChains = () => {
-    return [sepolia, mainnet].filter(chain =>
-        getSupportedChainIds().includes(chain.id)
-    );
-};
+// export const getSupportedChains = () => {
+//     const chainIds = getSupportedChainIds();
+//     return [sepolia, mainnet].filter(chain => chainIds.includes(chain.id));
+// };

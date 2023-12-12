@@ -17,10 +17,16 @@ import { selectNetworkName } from 'src/store/blockchain';
 import { RootState } from 'src/store/types';
 import {
     getAmplitudeApiKey,
-    getSupportedChains,
+    getSupportedChainIds,
     getWalletConnectId,
 } from 'src/utils';
-import { WagmiConfig, configureChains, createConfig } from 'wagmi';
+import {
+    WagmiConfig,
+    configureChains,
+    createConfig,
+    mainnet,
+    sepolia,
+} from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
@@ -37,7 +43,12 @@ init(getAmplitudeApiKey(), undefined, {
     logLevel: LogLevel.None,
 });
 
-const { chains, publicClient } = configureChains(getSupportedChains(), [
+const chainIds = getSupportedChainIds();
+const networks = [sepolia, mainnet].filter(chain =>
+    chainIds.includes(chain.id)
+);
+
+const { chains, publicClient } = configureChains(networks, [
     alchemyProvider({
         apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ?? '',
     }),
