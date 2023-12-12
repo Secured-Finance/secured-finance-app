@@ -152,7 +152,7 @@ export const Faucet = () => {
                 },
             });
         },
-        [address, client]
+        [client, address]
     );
 
     useEffect(() => {
