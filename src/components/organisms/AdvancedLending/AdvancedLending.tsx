@@ -316,6 +316,7 @@ export const AdvancedLending = ({
 
             <OrderBookWidget
                 orderbook={orderBook}
+                maturity={maturity}
                 currency={currency}
                 marketPrice={currentMarket?.value}
                 isCurrencyDelisted={delistedCurrencySet.has(currency)}

@@ -49,7 +49,8 @@ export const useOrderbook = (
     ccy: CurrencySymbol,
     maturity: number,
     calculationDate?: number,
-    startPrice = 0
+    borrowStartPrice = 0,
+    lendStartPrice = 0
 ) => {
     const securedFinance = useSF();
     const [depth, setDepth] = useState(DEFAULT_ORDERBOOK_DEPTH);
@@ -64,20 +65,27 @@ export const useOrderbook = (
 
     return [
         useQuery({
-            queryKey: [QueryKeys.ORDER_BOOK, ccy, maturity, depth, startPrice],
+            queryKey: [
+                QueryKeys.ORDER_BOOK,
+                ccy,
+                maturity,
+                depth,
+                borrowStartPrice,
+                lendStartPrice,
+            ],
             queryFn: async () => {
                 const currency = toCurrency(ccy);
                 const [borrowOrderbook, lendOrderbook] = await Promise.all([
                     securedFinance?.getBorrowOrderBook(
                         currency,
                         maturity,
-                        startPrice,
+                        borrowStartPrice,
                         depth
                     ),
                     securedFinance?.getLendOrderBook(
                         currency,
                         maturity,
-                        startPrice,
+                        lendStartPrice,
                         depth
                     ),
                 ]);
@@ -116,4 +124,112 @@ export const useOrderbook = (
         setMultiplier,
         setIsShowingAll,
     ] as const;
+};
+
+export const useBorrowOrderBook = (
+    ccy: CurrencySymbol,
+    maturity: number,
+    lastBorrowPrice: number
+) => {
+    const securedFinance = useSF();
+
+    return useQuery({
+        queryKey: [QueryKeys.BORROW_ORDER_BOOK, ccy, maturity, lastBorrowPrice],
+        queryFn: async () => {
+            let res = ZERO_BI;
+            let lastUnitPrice = ZERO_BI;
+            const currency = toCurrency(ccy);
+            let borrowOrderBook: SmartContractOrderbook = {
+                unitPrices: [],
+                amounts: [],
+                quantities: [],
+                next: ZERO_BI,
+            };
+            do {
+                const orderBook = (await securedFinance?.getBorrowOrderBook(
+                    currency,
+                    maturity,
+                    Number(borrowOrderBook.next),
+                    1000
+                )) as SmartContractOrderbook;
+                borrowOrderBook = {
+                    unitPrices: borrowOrderBook.unitPrices.concat(
+                        orderBook.unitPrices
+                    ),
+                    amounts: borrowOrderBook.amounts.concat(orderBook.amounts),
+                    quantities: borrowOrderBook.quantities.concat(
+                        orderBook.quantities
+                    ),
+                    next: orderBook.next,
+                };
+                lastUnitPrice =
+                    orderBook.unitPrices[orderBook.unitPrices.length - 1];
+            } while (
+                borrowOrderBook.next !== ZERO_BI &&
+                lastBorrowPrice >= lastUnitPrice
+            );
+
+            borrowOrderBook.unitPrices.forEach((unitPrice, index) => {
+                if (unitPrice <= lastBorrowPrice) {
+                    res += borrowOrderBook.amounts[index];
+                }
+            });
+            return res;
+        },
+        enabled: !!securedFinance && !!ccy && !!maturity && !!lastBorrowPrice,
+    });
+};
+
+export const useLendOrderBook = (
+    ccy: CurrencySymbol,
+    maturity: number,
+    lastLendPrice: number
+) => {
+    const securedFinance = useSF();
+
+    return useQuery({
+        queryKey: [QueryKeys.LEND_ORDER_BOOK, ccy, maturity, lastLendPrice],
+        queryFn: async () => {
+            let res = ZERO_BI;
+            let lastUnitPrice = ZERO_BI;
+            const currency = toCurrency(ccy);
+            let lendOrderBook: SmartContractOrderbook = {
+                unitPrices: [],
+                amounts: [],
+                quantities: [],
+                next: ZERO_BI,
+            };
+            do {
+                const orderBook = (await securedFinance?.getLendOrderBook(
+                    currency,
+                    maturity,
+                    Number(lendOrderBook.next),
+                    1000
+                )) as SmartContractOrderbook;
+                lendOrderBook = {
+                    unitPrices: lendOrderBook.unitPrices.concat(
+                        orderBook.unitPrices
+                    ),
+                    amounts: lendOrderBook.amounts.concat(orderBook.amounts),
+                    quantities: lendOrderBook.quantities.concat(
+                        orderBook.quantities
+                    ),
+                    next: orderBook.next,
+                };
+                lastUnitPrice =
+                    orderBook.unitPrices[orderBook.unitPrices.length - 1];
+            } while (
+                lendOrderBook.next !== ZERO_BI &&
+                lastUnitPrice >= lastLendPrice
+            );
+
+            lendOrderBook.unitPrices.forEach((unitPrice, index) => {
+                if (unitPrice >= lastLendPrice) {
+                    res += lendOrderBook.amounts[index];
+                }
+            });
+            return res;
+        },
+        enabled: !!securedFinance && !!ccy && !!maturity && !!lastLendPrice,
+    });
 };

@@ -27,6 +27,7 @@ import {
     emptyCollateralBook,
     useCollateralBook,
     useCurrencyDelistedStatus,
+    useItayoseEstimation,
     useLastPrices,
     useLendingMarkets,
     useMarketOrderList,
@@ -44,6 +45,7 @@ import {
 import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
+    ZERO_BI,
     amountFormatterFromBase,
     amountFormatterToBase,
     getCurrencyMapAsOptions,
@@ -115,6 +117,10 @@ export const Itayose = () => {
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
 
     const { data: lendingMarkets = baseContracts } = useLendingMarkets();
+    const { data: itayoseEstimation } = useItayoseEstimation(
+        currency,
+        maturity
+    );
     const lendingContracts = lendingMarkets[currency];
 
     const marketPhase = useMarketPhase(currency, maturity);
@@ -165,7 +171,8 @@ export const Itayose = () => {
         currency,
         maturity,
         lendingContracts[selectedTerm.value.toNumber()]?.utcOpeningDate,
-        estimatedOpeningUnitPrice?.price
+        Number(itayoseEstimation?.lastBorrowUnitPrice ?? ZERO_BI),
+        Number(itayoseEstimation?.lastLendUnitPrice ?? ZERO_BI)
     );
 
     const { data: collateralBook = emptyCollateralBook } =
@@ -265,6 +272,7 @@ export const Itayose = () => {
 
                 <OrderBookWidget
                     currency={currency}
+                    maturity={maturity}
                     orderbook={orderBook}
                     variant='itayose'
                     marketPrice={estimatedOpeningUnitPrice}
@@ -273,6 +281,7 @@ export const Itayose = () => {
                     }
                     onAggregationChange={setMultiplier}
                     isCurrencyDelisted={delistedCurrencySet.has(currency)}
+                    itayoseEstimation={itayoseEstimation}
                 />
 
                 <div className='flex h-full flex-col items-stretch justify-stretch gap-6'>

@@ -29,6 +29,8 @@ type CoreTableOptions = {
     showHeaders?: boolean;
     compact?: boolean;
     stickyHeader?: boolean;
+    isFirstRowLoading?: boolean;
+    isLastRowLoading?: boolean;
 };
 
 const DEFAULT_OPTIONS: CoreTableOptions = {
