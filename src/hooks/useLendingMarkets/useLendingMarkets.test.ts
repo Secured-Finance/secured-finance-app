@@ -24,6 +24,7 @@ describe('useLendingMarkets', () => {
         expect(value.isLoading).toEqual(true);
 
         await waitForNextUpdate();
+        await waitForNextUpdate();
 
         expect(mock.getOrderBookDetails).toHaveBeenCalledTimes(1);
         const newValue = result.current;
@@ -32,6 +33,8 @@ describe('useLendingMarkets', () => {
             USDC: maturities,
             WBTC: maturities,
             WFIL: maturities,
+            aUSDC: {},
+            axlFIL: {},
         });
         expect(newValue.isLoading).toEqual(false);
     });
@@ -46,6 +49,7 @@ describe('useLendingMarkets', () => {
         const { result, waitForNextUpdate } = renderHook(() =>
             useLendingMarkets()
         );
+        await waitForNextUpdate();
         await waitForNextUpdate();
         const newValue = result.current;
 

@@ -3,17 +3,20 @@ import { BigNumber as BigNumberJS } from 'bignumber.js';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
 import { CurrencySymbol, ZERO_BI, toCurrency } from 'src/utils';
+import { useCurrencies } from '../useCurrencies';
 
 const DECIMALS = 8;
 
 export const useLastPrices = () => {
     const securedFinance = useSF();
+    const { data: currencies } = useCurrencies();
 
     return useQuery({
-        queryKey: [QueryKeys.LAST_PRICES],
+        queryKey: [QueryKeys.LAST_PRICES, currencies],
         queryFn: async () => {
+            if (!currencies) return [];
             return await Promise.all(
-                Object.values(CurrencySymbol).map(async ccy => {
+                currencies.map(async ccy => {
                     return [
                         ccy,
                         (await securedFinance?.getLastPrice(toCurrency(ccy))) ??
@@ -41,6 +44,8 @@ export const useLastPrices = () => {
                 [CurrencySymbol.ETH, ZERO_BI],
                 [CurrencySymbol.USDC, ZERO_BI],
                 [CurrencySymbol.WFIL, ZERO_BI],
+                [CurrencySymbol.aUSDC, ZERO_BI],
+                [CurrencySymbol.axlFIL, ZERO_BI],
             ] as [CurrencySymbol, bigint][],
 
         enabled: !!securedFinance,

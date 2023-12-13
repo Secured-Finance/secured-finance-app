@@ -15,13 +15,10 @@ describe('useCollateralBalances', () => {
             { preloadedState: preloadedState }
         );
 
-        expect(result.current).toEqual({
-            [CurrencySymbol.ETH]: 0,
-            [CurrencySymbol.WBTC]: 0,
-            [CurrencySymbol.USDC]: 0,
-        });
+        expect(result.current).toEqual({});
         await waitForNextUpdate();
-        expect(result.current).toStrictEqual({
+        await waitForNextUpdate();
+        expect(result.current).toEqual({
             [CurrencySymbol.ETH]: 0,
             [CurrencySymbol.WBTC]: 300,
             [CurrencySymbol.USDC]: 4000,

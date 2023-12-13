@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { sepolia } from 'wagmi';
 import { Blockchain } from './type';
 
 const initialState: Blockchain = {
     latestBlock: 0,
-    chainId: 0,
+    chainId: sepolia.id,
     chainError: true,
     lastActionTimestamp: 0,
 };

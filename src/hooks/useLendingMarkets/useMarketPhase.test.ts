@@ -19,6 +19,7 @@ describe('useMarket', () => {
         expect(value).toEqual('Not Found');
 
         await waitForNextUpdate();
+        await waitForNextUpdate();
 
         expect(mock.getOrderBookDetails).toHaveBeenCalledTimes(1);
         const newValue = result.current;
@@ -33,6 +34,7 @@ describe('useMarket', () => {
         const value = result.current;
         expect(value).toEqual('Not Found');
 
+        await waitForNextUpdate();
         await waitForNextUpdate();
 
         expect(mock.getOrderBookDetails).toHaveBeenCalledTimes(1);
