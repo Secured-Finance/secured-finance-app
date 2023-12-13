@@ -17,7 +17,10 @@ import {
 import { CoreTable, InfoToolTip, TableHeader } from 'src/components/molecules';
 import {
     AggregationFactorType,
+    ItayoseEstimation,
     OrderBookEntry,
+    useBorrowOrderBook,
+    useLendOrderBook,
     useOrderbook,
     usePrepareOrderbookData,
 } from 'src/hooks';
@@ -209,19 +212,23 @@ const reducer = (
 export const OrderBookWidget = ({
     orderbook,
     currency,
+    maturity,
     marketPrice,
     onFilterChange,
     onAggregationChange,
     variant = 'default',
     isCurrencyDelisted,
+    itayoseEstimation,
 }: {
     orderbook: Pick<ReturnType<typeof useOrderbook>[0], 'data' | 'isLoading'>;
     currency: CurrencySymbol;
+    maturity: number;
     marketPrice?: LoanValue;
     onFilterChange?: (filter: VisibilityState) => void;
     onAggregationChange?: (multiplier: number) => void;
     variant?: 'default' | 'itayose';
     isCurrencyDelisted: boolean;
+    itayoseEstimation?: ItayoseEstimation;
 }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
     useEffect(() => {
@@ -259,6 +266,24 @@ export const OrderBookWidget = ({
         limit,
         aggregationFactor
     );
+
+    const { data: borrowAmount, isLoading: borrowLoading } = useBorrowOrderBook(
+        currency,
+        maturity,
+        Number(itayoseEstimation?.lastBorrowUnitPrice ?? ZERO_BI)
+    );
+
+    const { data: lendAmount, isLoading: lendLoading } = useLendOrderBook(
+        currency,
+        maturity,
+        Number(itayoseEstimation?.lastLendUnitPrice ?? ZERO_BI)
+    );
+    if (borrowAmount && borrowOrders && borrowOrders.length > 0) {
+        borrowOrders[borrowOrders.length - 1].amount = borrowAmount;
+    }
+    if (lendAmount && lendOrders && lendOrders.length > 0) {
+        lendOrders[0].amount = lendAmount;
+    }
 
     const maxBorrowAmount = useMemo(
         () => getMaxAmount(borrowOrders),
@@ -442,6 +467,7 @@ export const OrderBookWidget = ({
                                     hoverRow: handleBuyOrdersHoverRow,
                                     compact: true,
                                     stickyHeader: false,
+                                    isLastRowLoading: borrowLoading,
                                 }}
                             />
                         </div>
@@ -496,6 +522,7 @@ export const OrderBookWidget = ({
                                     showHeaders: false,
                                     compact: true,
                                     stickyHeader: false,
+                                    isFirstRowLoading: lendLoading,
                                 }}
                             />
                         </div>

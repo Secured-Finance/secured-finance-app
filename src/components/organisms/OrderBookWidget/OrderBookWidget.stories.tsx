@@ -118,6 +118,7 @@ export default {
         marketPrice: LoanValue.fromPrice(9300, maturityMar23.toNumber()),
         currency: CurrencySymbol.WFIL,
         isCurrencyDelisted: false,
+        maturity: maturityMar23.toNumber(),
     },
 } as Meta<typeof OrderBookWidget>;
 

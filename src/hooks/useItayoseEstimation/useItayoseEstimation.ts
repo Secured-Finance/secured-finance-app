@@ -3,7 +3,14 @@ import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
 import { CurrencySymbol, ZERO_BI, toCurrency } from 'src/utils';
 
-export const emptyOrderEstimation = {
+export interface ItayoseEstimation {
+    openingUnitPrice: bigint;
+    lastLendUnitPrice: bigint;
+    lastBorrowUnitPrice: bigint;
+    totalOffsetAmount: bigint;
+}
+
+export const emptyOrderEstimation: ItayoseEstimation = {
     openingUnitPrice: ZERO_BI,
     lastLendUnitPrice: ZERO_BI,
     lastBorrowUnitPrice: ZERO_BI,
