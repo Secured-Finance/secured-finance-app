@@ -25,10 +25,12 @@ import {
     MarketPhase,
     baseContracts,
     emptyCollateralBook,
+    useBorrowOrderBook,
     useCollateralBook,
     useCurrencyDelistedStatus,
     useItayoseEstimation,
     useLastPrices,
+    useLendOrderBook,
     useLendingMarkets,
     useMarketOrderList,
     useMarketPhase,
@@ -167,12 +169,26 @@ export const Itayose = () => {
         return assetList.find(option => option.value === currency);
     }, [currency, assetList]);
 
+    const { data: borrowAmount } = useBorrowOrderBook(
+        currency,
+        maturity,
+        Number(itayoseEstimation?.lastBorrowUnitPrice ?? ZERO_BI)
+    );
+
+    const { data: lendAmount } = useLendOrderBook(
+        currency,
+        maturity,
+        Number(itayoseEstimation?.lastLendUnitPrice ?? ZERO_BI)
+    );
+
     const [orderBook, setMultiplier, setIsShowingAll] = useOrderbook(
         currency,
         maturity,
         lendingContracts[selectedTerm.value.toNumber()]?.utcOpeningDate,
-        Number(itayoseEstimation?.lastBorrowUnitPrice ?? ZERO_BI),
-        Number(itayoseEstimation?.lastLendUnitPrice ?? ZERO_BI)
+        itayoseEstimation?.lastBorrowUnitPrice,
+        borrowAmount,
+        itayoseEstimation?.lastLendUnitPrice,
+        lendAmount
     );
 
     const { data: collateralBook = emptyCollateralBook } =
@@ -272,7 +288,6 @@ export const Itayose = () => {
 
                 <OrderBookWidget
                     currency={currency}
-                    maturity={maturity}
                     orderbook={orderBook}
                     variant='itayose'
                     marketPrice={estimatedOpeningUnitPrice}
@@ -281,7 +296,6 @@ export const Itayose = () => {
                     }
                     onAggregationChange={setMultiplier}
                     isCurrencyDelisted={delistedCurrencySet.has(currency)}
-                    itayoseEstimation={itayoseEstimation}
                 />
 
                 <div className='flex h-full flex-col items-stretch justify-stretch gap-6'>

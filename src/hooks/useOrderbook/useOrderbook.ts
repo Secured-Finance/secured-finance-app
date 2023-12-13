@@ -33,24 +33,33 @@ export const sortOrders = (
 const transformOrderbook = (
     input: SmartContractOrderbook,
     maturity: number,
-    calculationDate: number | undefined
+    calculationDate: number | undefined,
+    startPrice?: bigint,
+    amount?: bigint
 ): OrderBook => {
-    return input.unitPrices.map((unitPrice, index) => ({
-        amount: input.amounts[index],
-        value: LoanValue.fromPrice(
-            Number(unitPrice),
-            maturity,
-            calculationDate
-        ),
-    }));
+    return input.unitPrices.map((unitPrice, index) => {
+        return {
+            amount:
+                startPrice && amount && unitPrice === startPrice
+                    ? amount
+                    : input.amounts[index],
+            value: LoanValue.fromPrice(
+                Number(unitPrice),
+                maturity,
+                calculationDate
+            ),
+        };
+    });
 };
 
 export const useOrderbook = (
     ccy: CurrencySymbol,
     maturity: number,
     calculationDate?: number,
-    borrowStartPrice = 0,
-    lendStartPrice = 0
+    borrowStartPrice?: bigint,
+    borrowAmount?: bigint,
+    lendStartPrice?: bigint,
+    lendAmount?: bigint
 ) => {
     const securedFinance = useSF();
     const [depth, setDepth] = useState(DEFAULT_ORDERBOOK_DEPTH);
@@ -79,13 +88,13 @@ export const useOrderbook = (
                     securedFinance?.getBorrowOrderBook(
                         currency,
                         maturity,
-                        borrowStartPrice,
+                        Number(borrowStartPrice ?? ZERO_BI),
                         depth
                     ),
                     securedFinance?.getLendOrderBook(
                         currency,
                         maturity,
-                        lendStartPrice,
+                        Number(lendStartPrice ?? ZERO_BI),
                         depth
                     ),
                 ]);
@@ -110,12 +119,16 @@ export const useOrderbook = (
                     borrowOrderbook: transformOrderbook(
                         data.borrowOrderbook as SmartContractOrderbook,
                         maturity,
-                        calculationDate
+                        calculationDate,
+                        borrowStartPrice,
+                        borrowAmount
                     ),
                     lendOrderbook: transformOrderbook(
                         data.lendOrderbook as SmartContractOrderbook,
                         maturity,
-                        calculationDate
+                        calculationDate,
+                        lendStartPrice,
+                        lendAmount
                     ),
                 };
             },
@@ -137,7 +150,6 @@ export const useBorrowOrderBook = (
         queryKey: [QueryKeys.BORROW_ORDER_BOOK, ccy, maturity, lastBorrowPrice],
         queryFn: async () => {
             let res = ZERO_BI;
-            let lastUnitPrice = ZERO_BI;
             const currency = toCurrency(ccy);
             let borrowOrderBook: SmartContractOrderbook = {
                 unitPrices: [],
@@ -162,15 +174,13 @@ export const useBorrowOrderBook = (
                     ),
                     next: orderBook.next,
                 };
-                lastUnitPrice =
-                    orderBook.unitPrices[orderBook.unitPrices.length - 1];
             } while (
                 borrowOrderBook.next !== ZERO_BI &&
-                lastBorrowPrice >= lastUnitPrice
+                lastBorrowPrice >= borrowOrderBook.next
             );
 
             borrowOrderBook.unitPrices.forEach((unitPrice, index) => {
-                if (unitPrice <= lastBorrowPrice) {
+                if (lastBorrowPrice >= unitPrice) {
                     res += borrowOrderBook.amounts[index];
                 }
             });
@@ -191,7 +201,6 @@ export const useLendOrderBook = (
         queryKey: [QueryKeys.LEND_ORDER_BOOK, ccy, maturity, lastLendPrice],
         queryFn: async () => {
             let res = ZERO_BI;
-            let lastUnitPrice = ZERO_BI;
             const currency = toCurrency(ccy);
             let lendOrderBook: SmartContractOrderbook = {
                 unitPrices: [],
@@ -216,11 +225,9 @@ export const useLendOrderBook = (
                     ),
                     next: orderBook.next,
                 };
-                lastUnitPrice =
-                    orderBook.unitPrices[orderBook.unitPrices.length - 1];
             } while (
                 lendOrderBook.next !== ZERO_BI &&
-                lastUnitPrice >= lastLendPrice
+                lendOrderBook.next >= lastLendPrice
             );
 
             lendOrderBook.unitPrices.forEach((unitPrice, index) => {
