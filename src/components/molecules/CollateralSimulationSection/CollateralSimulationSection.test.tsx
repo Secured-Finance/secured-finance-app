@@ -1,5 +1,4 @@
 import { composeStories } from '@storybook/react';
-import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './CollateralSimulationSection.stories';
@@ -36,7 +35,7 @@ describe('CollateralSimulationSection Component', () => {
     });
 
     it('should display ZC usage', async () => {
-        render(<Trade />, { preloadedState: preloadedAssetPrices });
+        render(<Trade />);
         expect(screen.getByText('ZC Usage')).toBeInTheDocument();
         await waitFor(() => {
             expect(screen.getByText('0%')).toBeInTheDocument();
