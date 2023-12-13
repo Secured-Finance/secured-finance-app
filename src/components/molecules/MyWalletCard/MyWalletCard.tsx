@@ -61,7 +61,7 @@ export const MyWalletCard = ({
     hideBridge = false,
 }: {
     addressRecord: Partial<Record<WalletSource, string>>;
-    information?: Partial<Record<WalletSource, CurrencySymbol[]>>;
+    information: Partial<Record<WalletSource, CurrencySymbol[]>>;
     hideBridge?: boolean;
 }) => {
     const balanceRecord = useBalances();

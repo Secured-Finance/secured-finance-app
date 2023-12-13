@@ -7,13 +7,12 @@ import {
     CollateralInformationTable,
     CollateralManagementConciseTab,
 } from 'src/components/atoms';
-import { CollateralBook } from 'src/hooks';
+import { CollateralBook, useCollateralCurrencies } from 'src/hooks';
 import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
     ZERO_BI,
     amountFormatterFromBase,
-    getCurrencyMapAsList,
     usdFormat,
 } from 'src/utils';
 
@@ -23,12 +22,9 @@ interface CollateralTabLeftPaneProps {
     collateralBook: CollateralBook;
 }
 
-const getInformationText = () => {
+const getInformationText = (collateralCurrencies: CurrencySymbol[]) => {
     let article = '';
     let currencyString = '';
-    const collateralCurrencies = getCurrencyMapAsList()
-        .filter(ccy => ccy.isCollateral)
-        .map(ccy => ccy.symbol);
 
     const length = collateralCurrencies.length;
 
@@ -71,6 +67,9 @@ export const CollateralTabLeftPane = ({
     const chainError = useSelector(
         (state: RootState) => state.blockchain.chainError
     );
+
+    const { data: collateralCurrencies = [] } = useCollateralCurrencies();
+
     const collateralQuantityExist = useMemo(() => {
         return checkAssetQuantityExist(collateralBook.collateral);
     }, [collateralBook.collateral]);
@@ -116,7 +115,9 @@ export const CollateralTabLeftPane = ({
                             {collateralQuantityExist && (
                                 <AssetInformation
                                     header='Collateral Assets'
-                                    informationText={getInformationText()}
+                                    informationText={getInformationText(
+                                        collateralCurrencies
+                                    )}
                                     collateralBook={collateralBook.collateral}
                                 ></AssetInformation>
                             )}

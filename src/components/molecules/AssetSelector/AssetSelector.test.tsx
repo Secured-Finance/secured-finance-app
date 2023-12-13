@@ -11,6 +11,8 @@ describe('AssetSelector Component', () => {
         [CurrencySymbol.ETH]: (amount: number) => BigInt(amount * 1000),
         [CurrencySymbol.WFIL]: (amount: number) => BigInt(amount * 10000),
         [CurrencySymbol.USDC]: (amount: number) => BigInt(amount * 100000),
+        [CurrencySymbol.aUSDC]: (amount: number) => BigInt(amount * 1000000),
+        [CurrencySymbol.axlFIL]: (amount: number) => BigInt(amount * 10000000),
     };
 
     it('should render a AssetSelector', () => {

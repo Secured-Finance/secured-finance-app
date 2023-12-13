@@ -3,6 +3,7 @@ export * from './useBalances';
 export * from './useBorrowableAmount';
 export * from './useBreakpoint';
 export * from './useCollateralBook';
+export * from './useCurrencies';
 export * from './useCurrenciesForOrders';
 export * from './useCurrencyDelistedStatus';
 export * from './useDecimals';

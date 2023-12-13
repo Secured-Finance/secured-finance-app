@@ -1,18 +1,15 @@
 import { useMemo } from 'react';
-import { CurrencySymbol, getCurrencyMapAsList } from 'src/utils';
-import { useBalances } from './useBalances';
+import { useBalances, useCollateralCurrencies } from 'src/hooks';
+import { CurrencySymbol } from 'src/utils';
 
 export const useCollateralBalances = () => {
-    const result: Partial<Record<CurrencySymbol, number>> = {};
     const balances = useBalances();
+    const { data: collateralCurrencies } = useCollateralCurrencies();
 
-    const collateralCurrencies = useMemo(
-        () => getCurrencyMapAsList().filter(ccy => ccy.isCollateral),
-        []
-    );
-    collateralCurrencies.forEach(
-        ccy => (result[ccy.symbol] = balances[ccy.symbol])
-    );
+    return useMemo(() => {
+        const result: Partial<Record<CurrencySymbol, number>> = {};
+        collateralCurrencies?.forEach(ccy => (result[ccy] = balances[ccy]));
 
-    return result;
+        return result;
+    }, [balances, collateralCurrencies]);
 };

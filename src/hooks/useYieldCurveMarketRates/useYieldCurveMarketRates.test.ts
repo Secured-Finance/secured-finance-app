@@ -74,6 +74,7 @@ describe('useYieldCurveMarketRates', () => {
         );
 
         await waitForNextUpdate();
+        await waitForNextUpdate();
         expect(result.current.rates).toHaveLength(8);
         expect(result.current.maturityList).toHaveLength(8);
         expect(result.current.itayoseMarketIndexSet).toEqual(new Set());
@@ -84,6 +85,7 @@ describe('useYieldCurveMarketRates', () => {
             useYieldCurveMarketRates()
         );
 
+        await waitForNextUpdate();
         await waitForNextUpdate();
         expect(result.current.rates).toHaveLength(9);
         expect(result.current.maturityList).toHaveLength(9);
@@ -97,6 +99,7 @@ describe('useYieldCurveMarketRates', () => {
         const { result, waitForNextUpdate } = renderHook(() =>
             useYieldCurveMarketRates()
         );
+        await waitForNextUpdate();
         await waitForNextUpdate();
         expect(result.current.rates).toHaveLength(10);
         expect(result.current.maturityList).toHaveLength(10);
@@ -122,6 +125,7 @@ describe('useYieldCurveMarketRates', () => {
             useYieldCurveMarketRates()
         );
         await waitForNextUpdate();
+        await waitForNextUpdate();
         expect(result.current.rates).toHaveLength(9);
         expect(result.current.maturityList).toHaveLength(9);
         expect(result.current.itayoseMarketIndexSet).toEqual(new Set([8]));
@@ -134,6 +138,7 @@ describe('useYieldCurveMarketRates', () => {
         const { result, waitForNextUpdate } = renderHook(() =>
             useYieldCurveMarketRates()
         );
+        await waitForNextUpdate();
         await waitForNextUpdate();
         expect(result.current.rates).toHaveLength(10);
         expect(result.current.maturityList).toHaveLength(10);
@@ -155,6 +160,7 @@ describe('useYieldCurveMarketRates', () => {
             useYieldCurveMarketRates()
         );
         await waitForNextUpdate();
+        await waitForNextUpdate();
         expect(result.current.maximumRate).toEqual(Number.MAX_VALUE);
     });
 
@@ -171,6 +177,7 @@ describe('useYieldCurveMarketRates', () => {
             useYieldCurveMarketRates()
         );
         await waitForNextUpdate();
+        await waitForNextUpdate();
         expect(result.current.rates[0]).toEqual(new Rate(20329));
     });
 
@@ -182,6 +189,7 @@ describe('useYieldCurveMarketRates', () => {
             useYieldCurveMarketRates()
         );
         await waitForNextUpdate();
+        await waitForNextUpdate();
         expect(result.current.maximumRate).toEqual(34820);
     });
 
@@ -192,6 +200,7 @@ describe('useYieldCurveMarketRates', () => {
         const { result, waitForNextUpdate } = renderHook(() =>
             useYieldCurveMarketRates()
         );
+        await waitForNextUpdate();
         await waitForNextUpdate();
         expect(result.current.marketCloseToMaturityOriginalRate).toEqual(
             10000000
@@ -206,6 +215,7 @@ describe('useYieldCurveMarketRates', () => {
             useYieldCurveMarketRates()
         );
         await waitForNextUpdate();
+        await waitForNextUpdate();
         expect(result.current.rates[0]).toEqual(new Rate(43525));
     });
 
@@ -217,6 +227,7 @@ describe('useYieldCurveMarketRates', () => {
         const { result, waitForNextUpdate } = renderHook(() =>
             useYieldCurveMarketRates()
         );
+        await waitForNextUpdate();
         await waitForNextUpdate();
         expect(result.current.rates[0]).toEqual(new Rate(0));
     });

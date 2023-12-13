@@ -17,13 +17,14 @@ import {
     baseContracts,
     emptyCollateralBook,
     emptyValueLockedBook,
+    getLoanValues,
     useCollateralBook,
+    useCurrencies,
     useCurrencyDelistedStatus,
     useGraphClientHook,
     useIsGlobalItayose,
     useLastPrices,
     useLendingMarkets,
-    useLoanValues,
     useTotalNumberOfAsset,
     useValueLockedByCurrency,
 } from 'src/hooks';
@@ -35,7 +36,6 @@ import {
     ZERO_BI,
     computeTotalDailyVolumeInUSD,
     currencyMap,
-    getCurrencyMapAsList,
     getEnvironment,
     ordinaryFormat,
     usdFormat,
@@ -60,19 +60,17 @@ export const MarketDashboard = () => {
 
     const curves: Record<string, Rate[]> = {};
     const { data: lendingContracts = baseContracts } = useLendingMarkets();
-
+    const { data: isGlobalItayose } = useIsGlobalItayose();
+    const { data: currencies = [] } = useCurrencies();
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
 
-    const { data: isGlobalItayose } = useIsGlobalItayose();
-
-    getCurrencyMapAsList().forEach(ccy => {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const unitPrices = useLoanValues(
-            lendingContracts[ccy.symbol],
+    currencies.forEach(ccy => {
+        const unitPrices = getLoanValues(
+            lendingContracts[ccy],
             RateType.Market,
             market => market.isReady && !market.isMatured
         );
-        curves[ccy.symbol] = Array.from(unitPrices.values()).map(r => r.apr);
+        curves[ccy] = Array.from(unitPrices.values()).map(r => r.apr);
     });
 
     const { data: totalNumberOfAsset = 0 } = useTotalNumberOfAsset();
@@ -107,19 +105,18 @@ export const MarketDashboard = () => {
         if (!valueLockedByCurrency) {
             return val;
         }
-        for (const ccy of getCurrencyMapAsList()) {
-            if (!valueLockedByCurrency[ccy.symbol]) continue;
+        for (const ccy of currencies ?? []) {
+            if (!valueLockedByCurrency[ccy]) continue;
             val += BigInt(
                 Math.floor(
-                    currencyMap[ccy.symbol].fromBaseUnit(
-                        valueLockedByCurrency[ccy.symbol]
-                    ) * priceList[ccy.symbol]
+                    currencyMap[ccy].fromBaseUnit(valueLockedByCurrency[ccy]) *
+                        priceList[ccy]
                 )
             );
         }
 
         return val;
-    }, [priceList, valueLockedByCurrency]);
+    }, [currencies, priceList, valueLockedByCurrency]);
 
     return (
         <Page title='Market Dashboard' name='dashboard-page'>

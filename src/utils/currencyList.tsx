@@ -27,6 +27,8 @@ export enum CurrencySymbol {
     WFIL = 'WFIL',
     USDC = 'USDC',
     WBTC = 'WBTC',
+    aUSDC = 'aUSDC',
+    axlFIL = 'axlFIL',
 }
 
 export const currencyMap: Readonly<
@@ -102,9 +104,43 @@ export const currencyMap: Readonly<
         roundingDecimal: 0,
         longName: 'USD Coin',
     },
+    [CurrencySymbol.aUSDC]: {
+        index: 4,
+        symbol: CurrencySymbol.aUSDC,
+        name: 'aUSDC',
+        icon: UsdcIcon,
+        coinGeckoId: 'usd-coin',
+        isCollateral: true,
+        toBaseUnit: (amount: number) =>
+            convertToBlockchainUnit(amount, USDC.onChain()),
+        fromBaseUnit: (amount: bigint) =>
+            convertFromBlockchainUnit(amount, USDC.onChain()),
+        toCurrency: () => USDC.onChain(),
+        chartColor: tailwindConfig.theme.colors.chart.usdc,
+        pillColor: tailwindConfig.theme.colors.pill.usdc,
+        roundingDecimal: 0,
+        longName: 'USD Coin',
+    },
+    [CurrencySymbol.axlFIL]: {
+        index: 5,
+        symbol: CurrencySymbol.axlFIL,
+        name: 'axlFIL',
+        icon: UsdcIcon,
+        coinGeckoId: 'usd-coin',
+        isCollateral: true,
+        toBaseUnit: (amount: number) =>
+            convertToBlockchainUnit(amount, USDC.onChain()),
+        fromBaseUnit: (amount: bigint) =>
+            convertFromBlockchainUnit(amount, USDC.onChain()),
+        toCurrency: () => USDC.onChain(),
+        chartColor: tailwindConfig.theme.colors.chart.usdc,
+        pillColor: tailwindConfig.theme.colors.pill.usdc,
+        roundingDecimal: 0,
+        longName: 'Axelar FIL',
+    },
 };
 
-export const getCurrencyMapAsList = () => {
+const getCurrencyMapAsList = () => {
     return Object.values(currencyMap).sort((a, b) => a.index - b.index);
 };
 
@@ -158,6 +194,10 @@ export function toCurrencySymbol(ccy: string) {
             return CurrencySymbol.USDC;
         case CurrencySymbol.WBTC:
             return CurrencySymbol.WBTC;
+        case CurrencySymbol.aUSDC:
+            return CurrencySymbol.aUSDC;
+        case CurrencySymbol.axlFIL:
+            return CurrencySymbol.axlFIL;
         default:
             return undefined;
     }

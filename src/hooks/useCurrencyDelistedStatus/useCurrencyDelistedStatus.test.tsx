@@ -13,6 +13,7 @@ describe('useCurrencyDelistedStatus hook', () => {
         );
 
         await waitForNextUpdate();
+        await waitForNextUpdate();
 
         const delistedCurrencySet = new Set([CurrencySymbol.USDC]);
 

@@ -79,6 +79,7 @@ describe('useIsUnderCollateralThreshold', () => {
                 useIsUnderCollateralThreshold('0xff')
             );
             await waitForNextUpdate();
+            await waitForNextUpdate();
             expect(
                 result.current(
                     CurrencySymbol.USDC,
