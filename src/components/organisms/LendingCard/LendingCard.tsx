@@ -16,6 +16,7 @@ import {
     CollateralBook,
     useBalances,
     useBorrowableAmount,
+    useCurrencies,
     useLastPrices,
 } from 'src/hooks';
 import {
@@ -36,8 +37,8 @@ import {
     formatLoanValue,
     generateWalletSourceInformation,
     getAmountValidation,
-    getCurrencyMapAsOptions,
     getTransformMaturityOption,
+    toOptions,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
@@ -61,7 +62,8 @@ export const LendingCard = ({
     const { address } = useAccount();
 
     const { data: assetPriceMap } = useLastPrices();
-    const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
+    const { data: currencies } = useCurrencies();
+    const assetList = toOptions(currencies, currency);
 
     const balanceRecord = useBalances();
 

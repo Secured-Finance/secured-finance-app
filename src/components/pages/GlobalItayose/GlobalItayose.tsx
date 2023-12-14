@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, TextLink, Timer } from 'src/components/atoms';
 import { CurrencyDropdown } from 'src/components/molecules';
 import { GlobalItayoseMultiCurveChart } from 'src/components/organisms';
-import { baseContracts, useLendingMarkets } from 'src/hooks';
+import { baseContracts, useCurrencies, useLendingMarkets } from 'src/hooks';
 import {
     resetUnitPrice,
     selectLandingOrderForm,
@@ -16,13 +16,15 @@ import {
     CurrencySymbol,
     amountFormatterFromBase,
     amountFormatterToBase,
-    getCurrencyMapAsOptions,
+    toOptions,
 } from 'src/utils';
 
 export const GlobalItayose = () => {
     const dispatch = useDispatch();
     const router = useRouter();
-    const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
+    const { data: currencies } = useCurrencies();
+    const assetList = toOptions(currencies, CurrencySymbol.WBTC);
+
     const { currency, amount } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );

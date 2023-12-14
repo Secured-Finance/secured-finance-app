@@ -1,5 +1,5 @@
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { renderHook } from 'src/test-utils';
+import { renderHook, waitFor } from 'src/test-utils';
 import { CurrencySymbol } from 'src/utils';
 import { useCollateralBalances } from './useCollateralBalances';
 
@@ -10,18 +10,15 @@ const preloadedState = { wallet: { address: '0x1', ethBalance: 0 } };
 
 describe('useCollateralBalances', () => {
     it('should return balances of only collateral currencies', async () => {
-        const { result, waitForNextUpdate } = renderHook(
-            () => useCollateralBalances(),
-            { preloadedState: preloadedState }
-        );
-
-        expect(result.current).toEqual({
-            [CurrencySymbol.ETH]: 0,
-            [CurrencySymbol.WBTC]: 0,
-            [CurrencySymbol.USDC]: 0,
+        const { result } = renderHook(() => useCollateralBalances(), {
+            preloadedState: preloadedState,
         });
-        await waitForNextUpdate();
-        expect(result.current).toStrictEqual({
+
+        expect(result.current).toEqual({});
+        await waitFor(() =>
+            expect(mock.getERC20Balance).toHaveBeenCalledTimes(3)
+        );
+        expect(result.current).toEqual({
             [CurrencySymbol.ETH]: 0,
             [CurrencySymbol.WBTC]: 300,
             [CurrencySymbol.USDC]: 4000,
