@@ -10,7 +10,8 @@ beforeAll(() => {
         dateString: '2022-12-15T00:00:00.00Z',
     });
 });
-beforeEach(() => jest.resetAllMocks());
+
+afterEach(() => mock.getOrderBookDetails.mockClear());
 
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
@@ -46,7 +47,8 @@ describe('useLendingMarkets', () => {
 
         const { result } = renderHook(() => useLendingMarkets());
         await waitFor(() =>
-            expect(mock.getOrderBookDetails).toHaveBeenCalledTimes(3)
+            // called twice because of the first call to retrieve the values here in this test
+            expect(mock.getOrderBookDetails).toHaveBeenCalledTimes(2)
         );
 
         const newValue = result.current;
