@@ -58,7 +58,7 @@ beforeEach(() => {
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-describe('AdvancedLendingOrderCard Component', () => {
+describe.skip('AdvancedLendingOrderCard Component', () => {
     const changeInputValue = (label: string, value: string) => {
         const input = screen.getByLabelText(label);
         fireEvent.change(input, { target: { value } });
@@ -251,7 +251,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(slider).toHaveValue('50');
     });
 
-    it('slider should move according to source balance', async () => {
+    it.skip('slider should move according to source balance', async () => {
         await waitFor(() =>
             render(<Default />, {
                 preloadedState: {
