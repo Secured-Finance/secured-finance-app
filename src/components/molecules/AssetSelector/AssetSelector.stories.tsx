@@ -9,6 +9,8 @@ const priceList: Record<CurrencySymbol, number> = {
     ETH: 1012,
     WFIL: 4.85,
     USDC: 1.0,
+    aUSDC: 0,
+    axlFIL: 0,
 };
 
 export default {

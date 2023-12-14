@@ -10,6 +10,8 @@ export const emptyValueLockedBook: ValueLockedBook = {
     [CurrencySymbol.USDC]: ZERO_BI,
     [CurrencySymbol.WFIL]: ZERO_BI,
     [CurrencySymbol.WBTC]: ZERO_BI,
+    [CurrencySymbol.aUSDC]: ZERO_BI,
+    [CurrencySymbol.axlFIL]: ZERO_BI,
 };
 
 export const useValueLockedByCurrency = () => {

@@ -14,6 +14,14 @@ export default {
             [WalletSource.METAMASK]:
                 'de926db3012af759b4f24b5a51ef6afa397f04670f634aa4f',
         },
+        information: {
+            [WalletSource.METAMASK]: [
+                CurrencySymbol.WBTC,
+                CurrencySymbol.ETH,
+                CurrencySymbol.WFIL,
+                CurrencySymbol.USDC,
+            ],
+        },
     },
     decorators: [withEthBalance, withWalletProvider],
 } as Meta<typeof MyWalletCard>;

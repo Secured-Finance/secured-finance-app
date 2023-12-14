@@ -10,7 +10,6 @@ import {
     amountFormatterToBase,
     currencyMap,
     divide,
-    getCurrencyMapAsList,
     hexToCurrencySymbol,
     multiply,
     toCurrency,
@@ -20,18 +19,6 @@ import {
 const wfil = currencyMap.WFIL;
 const eth = currencyMap.ETH;
 const wbtc = currencyMap.WBTC;
-
-describe('currencyList.getCurrencyMapAsOptions', () => {
-    it('should return the getCurrencyMapAsOptions as a list ordered by index', () => {
-        const options = getCurrencyMapAsList();
-        expect(options).toHaveLength(4);
-
-        expect(options[currencyMap.WFIL.index]).toEqual(currencyMap.WFIL);
-        expect(options[currencyMap.WBTC.index]).toEqual(currencyMap.WBTC);
-        expect(options[currencyMap.ETH.index]).toEqual(currencyMap.ETH);
-        expect(options[currencyMap.USDC.index]).toEqual(currencyMap.USDC);
-    });
-});
 
 describe('currencyList toBaseUnit', () => {
     it('should return the value in wei for ETH', () => {

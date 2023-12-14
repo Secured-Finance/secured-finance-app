@@ -51,7 +51,8 @@ export const AdvancedView = Template.bind({});
 AdvancedView.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     canvas.getByText('Advanced').click();
-    canvas.getByRole('button', { name: 'DEC22' }).click();
+    const button = await canvas.findByRole('button', { name: 'DEC22' });
+    button.click();
     canvas.getByRole('menuitem', { name: 'JUN23' }).click();
 };
 AdvancedView.parameters = {

@@ -3,11 +3,7 @@ import SFLogoSmall from 'src/assets/img/logo-small.svg';
 import MetamaskIcon from 'src/assets/img/metamask-fox.svg';
 import { WalletSourceOption } from 'src/components/atoms';
 import { AssetDisclosureProps } from 'src/components/molecules';
-import {
-    amountFormatterFromBase,
-    CurrencySymbol,
-    getCurrencyMapAsList,
-} from './currencyList';
+import { amountFormatterFromBase, CurrencySymbol } from './currencyList';
 
 export enum WalletSource {
     METAMASK = 'METAMASK',
@@ -20,19 +16,13 @@ export type CollateralInfo = {
     available: number;
 };
 
-export const walletInformation: Partial<
-    Record<WalletSource, CurrencySymbol[]>
-> = {
-    [WalletSource.METAMASK]: getCurrencyMapAsList().map(({ symbol }) => symbol),
-};
-
 export const generateWalletInformation = (
     accounts: Partial<Record<WalletSource, string>>,
     balance: Record<string, number>,
-    information?: Partial<Record<WalletSource, CurrencySymbol[]>>
+    information: Partial<Record<WalletSource, CurrencySymbol[]>>
 ): AssetDisclosureProps[] => {
     const collateralRecords = [];
-    const walletConfiguration = information ?? walletInformation;
+    const walletConfiguration = information;
     const walletsArray = Object.keys(walletConfiguration) as WalletSource[];
     for (let i = 0; i < walletsArray.length; i++) {
         const wallet = walletsArray[i];

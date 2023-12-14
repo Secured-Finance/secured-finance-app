@@ -22,6 +22,7 @@ import { ThreeColumnsWithTopBar } from 'src/components/templates';
 import {
     CollateralBook,
     emptyOrderList,
+    useCurrencies,
     useGraphClientHook,
     useIsUnderCollateralThreshold,
     useLastPrices,
@@ -50,10 +51,10 @@ import {
     currencyMap,
     formatLoanValue,
     formatOrders,
-    getCurrencyMapAsOptions,
     hexToCurrencySymbol,
     ordinaryFormat,
     sortOrders,
+    toOptions,
     usdFormat,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
@@ -119,7 +120,8 @@ export const AdvancedLending = ({
     const { data: positions } = usePositions(address, [currency]);
 
     const currencyPrice = priceList[currency];
-    const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
+    const { data: currencies } = useCurrencies();
+    const assetList = toOptions(currencies, currency);
 
     useEffect(() => {
         setTimestamp(Math.round(new Date().getTime() / 1000));

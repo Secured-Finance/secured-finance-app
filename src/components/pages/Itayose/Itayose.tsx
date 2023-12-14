@@ -26,6 +26,7 @@ import {
     baseContracts,
     emptyCollateralBook,
     useCollateralBook,
+    useCurrencies,
     useCurrencyDelistedStatus,
     useLastPrices,
     useLendingMarkets,
@@ -46,7 +47,7 @@ import {
     CurrencySymbol,
     amountFormatterFromBase,
     amountFormatterToBase,
-    getCurrencyMapAsOptions,
+    toOptions,
     usdFormat,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
@@ -140,12 +141,13 @@ export const Itayose = () => {
         );
     }, [maturity, maturityOptionList]);
 
+    const { data: currencies } = useCurrencies();
     const assetList = useMemo(
         () =>
-            getCurrencyMapAsOptions().filter(
+            toOptions(currencies, currency).filter(
                 ccy => !delistedCurrencySet.has(ccy.label as CurrencySymbol)
             ),
-        [delistedCurrencySet]
+        [currencies, currency, delistedCurrencySet]
     );
 
     const selectedAsset = useMemo(() => {

@@ -30,6 +30,8 @@ export const assetPriceMap = {
     ETH: 2000.34,
     USDC: 1.0,
     WBTC: 50000.0,
+    aUSDC: 1.0,
+    axlFIL: 6.0,
 };
 
 export const preloadedEthBalance = {

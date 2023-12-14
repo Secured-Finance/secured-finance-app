@@ -101,7 +101,7 @@ export const WithdrawCollateral = ({
     selected,
     source,
 }: {
-    collateralList: Record<CurrencySymbol, CollateralInfo>;
+    collateralList: Partial<Record<CurrencySymbol, CollateralInfo>>;
     selected?: CurrencySymbol;
 } & DialogState) => {
     const etherscanUrl = useEtherscanUrl();
@@ -225,7 +225,7 @@ export const WithdrawCollateral = ({
                                         setCollateral(v)
                                     }
                                     availableAmount={
-                                        collateralList[asset]?.available
+                                        collateralList[asset]?.available ?? 0
                                     }
                                     amount={
                                         collateral

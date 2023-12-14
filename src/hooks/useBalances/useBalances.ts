@@ -8,10 +8,14 @@ export const zeroBalances = {
     [CurrencySymbol.WFIL]: 0,
     [CurrencySymbol.USDC]: 0,
     [CurrencySymbol.WBTC]: 0,
+    [CurrencySymbol.aUSDC]: 0,
+    [CurrencySymbol.axlFIL]: 0,
 };
 
 export const useBalances = () => {
-    const balances: Record<CurrencySymbol, number> = { ...zeroBalances };
+    const balances: Record<CurrencySymbol, number> = {
+        ...zeroBalances,
+    };
 
     const { address, ethBalance } = useSelector(
         (state: RootState) => state.wallet

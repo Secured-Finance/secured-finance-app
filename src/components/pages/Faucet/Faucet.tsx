@@ -18,15 +18,19 @@ import {
 } from 'src/components/molecules';
 import { MyWalletWidget } from 'src/components/organisms';
 import { Page, Tooltip, TwoColumns } from 'src/components/templates';
-import { useEtherscanUrl, useHandleContractTransaction } from 'src/hooks';
+import {
+    useCurrencies,
+    useEtherscanUrl,
+    useHandleContractTransaction,
+} from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { RootState } from 'src/store/types';
 import {
     AddressUtils,
     CurrencySymbol,
-    getCurrencyMapAsList,
-    getCurrencyMapAsOptions,
+    currencyMap,
     toCurrency,
+    toOptions,
 } from 'src/utils';
 import { useAccount, useWalletClient } from 'wagmi';
 
@@ -86,18 +90,16 @@ export const Faucet = () => {
     const chainError = useSelector(
         (state: RootState) => state.blockchain.chainError
     );
+
     const etherscanUrl = useEtherscanUrl();
     const handleContractTransaction = useHandleContractTransaction();
     const { address: account } = useAccount();
     const { data: client } = useWalletClient();
     const sf = useSF();
 
-    const assetList = useMemo(
-        () =>
-            getCurrencyMapAsOptions().filter(
-                option => toCurrency(option.value).isToken
-            ),
-        []
+    const { data: currencies } = useCurrencies();
+    const assetList = toOptions(currencies, CurrencySymbol.WBTC).filter(
+        ccy => currencyMap[ccy.value].toCurrency().isToken
     );
 
     const [ccy, setCcy] = useState<CurrencySymbol | null>(null);
@@ -182,10 +184,8 @@ export const Faucet = () => {
                                     selected={assetList[0]}
                                     onChange={ccy => {
                                         if (
-                                            getCurrencyMapAsList()
-                                                .map(item =>
-                                                    item.symbol.toString()
-                                                )
+                                            assetList
+                                                .map(item => item.label)
                                                 .includes(ccy)
                                         ) {
                                             setCcy(ccy as CurrencySymbol);
