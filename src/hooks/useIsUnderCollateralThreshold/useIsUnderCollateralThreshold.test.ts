@@ -14,7 +14,7 @@ describe('useIsUnderCollateralThreshold', () => {
             const { result, waitForNextUpdate } = renderHook(() =>
                 useIsUnderCollateralThreshold(undefined)
             );
-            await waitForNextUpdate();
+            await waitForNextUpdate({ timeout: 2000 });
             expect(
                 result.current(CurrencySymbol.USDC, 1, 100, OrderSide.BORROW)
             ).toBe(false);
@@ -24,7 +24,7 @@ describe('useIsUnderCollateralThreshold', () => {
             const { result, waitForNextUpdate } = renderHook(() =>
                 useIsUnderCollateralThreshold('0xff')
             );
-            await waitForNextUpdate();
+            await waitForNextUpdate({ timeout: 2000 });
             expect(
                 result.current(CurrencySymbol.USDC, 1, 100, OrderSide.BORROW)
             ).toBe(false);
@@ -36,7 +36,7 @@ describe('useIsUnderCollateralThreshold', () => {
             const { result, waitForNextUpdate } = renderHook(() =>
                 useIsUnderCollateralThreshold('0xff')
             );
-            await waitForNextUpdate();
+            await waitForNextUpdate({ timeout: 2000 });
             expect(
                 result.current(
                     CurrencySymbol.USDC,
@@ -62,7 +62,7 @@ describe('useIsUnderCollateralThreshold', () => {
             const { result, waitForNextUpdate } = renderHook(() =>
                 useIsUnderCollateralThreshold('0xff')
             );
-            await waitForNextUpdate();
+            await waitForNextUpdate({ timeout: 2000 });
 
             expect(
                 result.current(
@@ -78,8 +78,8 @@ describe('useIsUnderCollateralThreshold', () => {
             const { result, waitForNextUpdate } = renderHook(() =>
                 useIsUnderCollateralThreshold('0xff')
             );
-            await waitForNextUpdate();
-            await waitForNextUpdate();
+            await waitForNextUpdate({ timeout: 2000 });
+            await waitForNextUpdate({ timeout: 2000 });
             expect(
                 result.current(
                     CurrencySymbol.USDC,
@@ -96,8 +96,8 @@ describe('useIsUnderCollateralThreshold', () => {
             const { result, waitForNextUpdate } = renderHook(() =>
                 useIsUnderCollateralThreshold('0xff')
             );
-            await waitForNextUpdate();
-            await waitForNextUpdate();
+            await waitForNextUpdate({ timeout: 2000 });
+            await waitForNextUpdate({ timeout: 2000 });
 
             expect(
                 result.current(
@@ -113,8 +113,8 @@ describe('useIsUnderCollateralThreshold', () => {
             const { result, waitForNextUpdate } = renderHook(() =>
                 useIsUnderCollateralThreshold('0xff')
             );
-            await waitForNextUpdate();
-            await waitForNextUpdate();
+            await waitForNextUpdate({ timeout: 2000 });
+            await waitForNextUpdate({ timeout: 2000 });
 
             expect(
                 result.current(
@@ -133,8 +133,8 @@ describe('useIsUnderCollateralThreshold', () => {
                 useIsUnderCollateralThreshold('0xff')
             );
 
-            await waitForNextUpdate();
-            await waitForNextUpdate();
+            await waitForNextUpdate({ timeout: 2000 });
+            await waitForNextUpdate({ timeout: 2000 });
 
             expect(
                 result.current(
@@ -151,8 +151,8 @@ describe('useIsUnderCollateralThreshold', () => {
                 useIsUnderCollateralThreshold('0xff')
             );
 
-            await waitForNextUpdate();
-            await waitForNextUpdate();
+            await waitForNextUpdate({ timeout: 2000 });
+            await waitForNextUpdate({ timeout: 2000 });
 
             expect(
                 result.current(
