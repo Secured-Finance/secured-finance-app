@@ -126,7 +126,7 @@ export const currencyMap: Readonly<
     [CurrencySymbol.axlFIL]: {
         index: 3,
         symbol: CurrencySymbol.axlFIL,
-        name: 'Axelar Wrapped FIL',
+        name: 'Axelar WFIL',
         icon: FilIcon,
         coinGeckoId: 'filecoin',
         isCollateral: false,
