@@ -162,7 +162,7 @@ export const useBorrowOrderBook = (
                     currency,
                     maturity,
                     Number(borrowOrderBook.next),
-                    1000
+                    1
                 )) as SmartContractOrderbook;
                 borrowOrderBook = {
                     unitPrices: borrowOrderBook.unitPrices.concat(
@@ -213,7 +213,7 @@ export const useLendOrderBook = (
                     currency,
                     maturity,
                     Number(lendOrderBook.next),
-                    1000
+                    1
                 )) as SmartContractOrderbook;
                 lendOrderBook = {
                     unitPrices: lendOrderBook.unitPrices.concat(
