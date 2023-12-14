@@ -169,13 +169,14 @@ export const Itayose = () => {
         return assetList.find(option => option.value === currency);
     }, [currency, assetList]);
 
-    const { data: borrowAmount } = useBorrowOrderBook(
-        currency,
-        maturity,
-        Number(itayoseEstimation?.lastBorrowUnitPrice ?? ZERO_BI)
-    );
+    const { data: borrowAmount, isLoading: isLoadingBorrow } =
+        useBorrowOrderBook(
+            currency,
+            maturity,
+            Number(itayoseEstimation?.lastBorrowUnitPrice ?? ZERO_BI)
+        );
 
-    const { data: lendAmount } = useLendOrderBook(
+    const { data: lendAmount, isLoading: isLoadingLend } = useLendOrderBook(
         currency,
         maturity,
         Number(itayoseEstimation?.lastLendUnitPrice ?? ZERO_BI)
@@ -223,6 +224,11 @@ export const Itayose = () => {
         },
         [amount, currency, dispatch]
     );
+
+    const isLoadingMap = {
+        [OrderSide.BORROW]: isLoadingBorrow,
+        [OrderSide.LEND]: isLoadingLend,
+    };
 
     return (
         <Page title='Pre-Open Order Book'>
@@ -294,6 +300,7 @@ export const Itayose = () => {
                     onFilterChange={state =>
                         setIsShowingAll(state.showBorrow && state.showLend)
                     }
+                    isLoadingMap={isLoadingMap}
                     onAggregationChange={setMultiplier}
                     isCurrencyDelisted={delistedCurrencySet.has(currency)}
                 />
