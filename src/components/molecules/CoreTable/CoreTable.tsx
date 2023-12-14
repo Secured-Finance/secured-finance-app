@@ -108,9 +108,11 @@ export const CoreTable = <T,>({
 
     const table = useReactTable<T>(configuration);
 
-    const isLoading = (rowIndex: number) =>
+    const rows = table.getRowModel().rows;
+
+    const isLoading = (rowIndex: number, dataRows: number) =>
         (options.isFirstRowLoading && rowIndex === 0) ||
-        (options.isLastRowLoading && rowIndex === data.length - 1);
+        (options.isLastRowLoading && rowIndex === dataRows - 1);
 
     const coreTable = (
         <table
@@ -170,11 +172,11 @@ export const CoreTable = <T,>({
             ) : null}
 
             <tbody>
-                {table.getRowModel().rows.map((row, rowIndex) =>
-                    isLoading(rowIndex) ? (
+                {rows.map((row, rowIndex) =>
+                    isLoading(rowIndex, rows.length) ? (
                         <tr key={rowIndex} className='animate-pulse'>
                             <td colSpan={row.getVisibleCells().length}>
-                                <div className='h-[26px] min-w-fit bg-[#808080]/20'></div>
+                                <div className='h-7 min-w-fit bg-[#808080]/20'></div>
                             </td>
                         </tr>
                     ) : (
