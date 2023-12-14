@@ -1,22 +1,29 @@
 import { useRouter } from 'next/router';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, TextLink, Timer } from 'src/components/atoms';
 import { CurrencyDropdown } from 'src/components/molecules';
 import { GlobalItayoseMultiCurveChart } from 'src/components/organisms';
 import { baseContracts, useLendingMarkets } from 'src/hooks';
 import {
+    resetUnitPrice,
     selectLandingOrderForm,
+    setAmount,
     setCurrency,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { getCurrencyMapAsOptions } from 'src/utils';
+import {
+    CurrencySymbol,
+    amountFormatterFromBase,
+    amountFormatterToBase,
+    getCurrencyMapAsOptions,
+} from 'src/utils';
 
 export const GlobalItayose = () => {
     const dispatch = useDispatch();
     const router = useRouter();
     const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
-    const { currency } = useSelector((state: RootState) =>
+    const { currency, amount } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
 
@@ -34,6 +41,23 @@ export const GlobalItayose = () => {
 
         return time;
     }, [lendingContracts, currency]);
+
+    const handleCurrencyChange = useCallback(
+        (v: CurrencySymbol) => {
+            let formatFrom = (x: bigint) => Number(x);
+            if (amountFormatterFromBase && amountFormatterFromBase[currency]) {
+                formatFrom = amountFormatterFromBase[currency];
+            }
+            let formatTo = (x: number) => BigInt(x);
+            if (amountFormatterToBase && amountFormatterToBase[v]) {
+                formatTo = amountFormatterToBase[v];
+            }
+            dispatch(setAmount(formatTo(formatFrom(amount))));
+            dispatch(setCurrency(v));
+            dispatch(resetUnitPrice());
+        },
+        [amount, currency, dispatch]
+    );
 
     return (
         <div className='grid grid-flow-row justify-items-center gap-y-8 text-center'>
@@ -54,7 +78,7 @@ export const GlobalItayose = () => {
                     <CurrencyDropdown
                         currencyOptionList={assetList}
                         selected={assetList[0]}
-                        onChange={value => dispatch(setCurrency(value))}
+                        onChange={handleCurrencyChange}
                     />
                     <Button
                         size='md'
