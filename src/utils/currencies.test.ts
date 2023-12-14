@@ -18,7 +18,18 @@ describe('currencies.generateWalletInformation', () => {
             [CurrencySymbol.USDC]: 150,
         };
 
-        const options = generateWalletInformation(addressRecord, balanceRecord);
+        const options = generateWalletInformation(
+            addressRecord,
+            balanceRecord,
+            {
+                [WalletSource.METAMASK]: [
+                    CurrencySymbol.WBTC,
+                    CurrencySymbol.ETH,
+                    CurrencySymbol.WFIL,
+                    CurrencySymbol.USDC,
+                ],
+            }
+        );
         expect(options).toHaveLength(1);
         expect(options[0]).toEqual({
             account: 'ethAccount',

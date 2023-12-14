@@ -1,6 +1,6 @@
 import { maturities } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { renderHook } from 'src/test-utils';
+import { renderHook, waitFor } from 'src/test-utils';
 import timemachine from 'timemachine';
 import { useLendingMarkets } from './useLendingMarkets';
 
@@ -11,27 +11,29 @@ beforeAll(() => {
     });
 });
 
+afterEach(() => mock.getOrderBookDetails.mockClear());
+
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
 describe('useLendingMarkets', () => {
     it('should return a function to fetch the lending markets', async () => {
-        const { result, waitForNextUpdate } = renderHook(() =>
-            useLendingMarkets()
-        );
+        const { result } = renderHook(() => useLendingMarkets());
         const value = result.current;
         expect(value.data).toEqual(undefined);
         expect(value.isLoading).toEqual(true);
 
-        await waitForNextUpdate();
-
-        expect(mock.getOrderBookDetails).toHaveBeenCalledTimes(1);
+        await waitFor(() =>
+            expect(mock.getOrderBookDetails).toHaveBeenCalledTimes(1)
+        );
         const newValue = result.current;
         expect(newValue.data).toEqual({
             ETH: maturities,
             USDC: maturities,
             WBTC: maturities,
             WFIL: maturities,
+            aUSDC: {},
+            axlFIL: {},
         });
         expect(newValue.isLoading).toEqual(false);
     });
@@ -43,10 +45,12 @@ describe('useLendingMarkets', () => {
             { ...lendingMarkets[0], maturity: BigInt('10000') },
         ]);
 
-        const { result, waitForNextUpdate } = renderHook(() =>
-            useLendingMarkets()
+        const { result } = renderHook(() => useLendingMarkets());
+        await waitFor(() =>
+            // called twice because of the first call to retrieve the values here in this test
+            expect(mock.getOrderBookDetails).toHaveBeenCalledTimes(2)
         );
-        await waitForNextUpdate();
+
         const newValue = result.current;
 
         expect(newValue.data.ETH[10000].name).toEqual('DEC22-1');

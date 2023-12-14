@@ -11,6 +11,7 @@ import {
     CollateralBook,
     MarketPhase,
     useBorrowableAmount,
+    useCollateralCurrencies,
     useLastPrices,
     useMarketPhase,
     useOrders,
@@ -59,11 +60,17 @@ export const OrderAction = ({
     const collateralBalances = useCollateralBalances();
 
     const { data: priceList } = useLastPrices();
+    const { data: collateralCurrencies = [] } = useCollateralCurrencies();
     const price = priceList[currency];
 
     const depositCollateralList = useMemo(
-        () => generateCollateralList(collateralBalances, false),
-        [collateralBalances]
+        () =>
+            generateCollateralList(
+                collateralBalances,
+                false,
+                collateralCurrencies
+            ),
+        [collateralBalances, collateralCurrencies]
     );
 
     const { data: availableToBorrow } = useBorrowableAmount(address, currency);

@@ -109,7 +109,7 @@ export const options: ChartOptions<'line'> = {
 };
 
 const getData = (
-    curves: Record<CurrencySymbol, Rate[]>,
+    curves: Partial<Record<CurrencySymbol, Rate[]>>,
     currencies: Set<CurrencySymbol>,
     labels: string[],
     isGlobalItayose?: boolean
@@ -125,7 +125,7 @@ const getData = (
             return {
                 label: key,
                 data: currencies.has(ccy)
-                    ? curves[ccy].map(r => r.toNormalizedNumber())
+                    ? curves[ccy]?.map(r => r.toNormalizedNumber())
                     : [],
                 borderColor: currencyMap[ccy].chartColor,
                 backgroundColor: currencyMap[ccy].chartColor,
@@ -172,7 +172,7 @@ export const MultiCurveChart = ({
     isGlobalItayose = false,
 }: {
     title: string;
-    curves: Record<CurrencySymbol, Rate[]>;
+    curves: Partial<Record<CurrencySymbol, Rate[]>>;
     labels: string[];
     isGlobalItayose?: boolean;
 }) => {
@@ -264,7 +264,7 @@ export const MultiCurveChart = ({
             .filter(curr => activeCurrencies.has(curr as CurrencySymbol))
             .reduce((result, curr) => {
                 const currency = curr as CurrencySymbol;
-                const currencyRate = curves[currency][tooltipIndex];
+                const currencyRate = curves[currency]?.[tooltipIndex];
                 if (currencyRate) {
                     result[currency] = currencyRate;
                 }

@@ -11,6 +11,7 @@ describe('useLastPrices', () => {
         const { result, waitForNextUpdate } = renderHook(() => useLastPrices());
 
         await waitForNextUpdate();
+        await waitForNextUpdate();
 
         expect(result.current.data).toEqual({
             [CurrencySymbol.ETH]: 2000.34,

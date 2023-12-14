@@ -83,6 +83,7 @@ describe('useIsGlobalItayose', () => {
             useIsGlobalItayose()
         );
         await waitForNextUpdate();
+        await waitForNextUpdate();
         expect(result.current.data).toEqual(true);
     });
 

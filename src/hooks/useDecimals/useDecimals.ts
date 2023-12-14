@@ -2,15 +2,18 @@ import { useQuery } from '@tanstack/react-query';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
 import { CurrencySymbol, toCurrency } from 'src/utils';
+import { useCurrencies } from '../useCurrencies';
 
 export const useDecimals = () => {
     const securedFinance = useSF();
+    const { data: currencies } = useCurrencies();
 
     return useQuery({
-        queryKey: [QueryKeys.PRICE_DECIMALS],
+        queryKey: [QueryKeys.PRICE_DECIMALS, currencies],
         queryFn: async () => {
+            if (!currencies) return [];
             return await Promise.all(
-                Object.values(CurrencySymbol).map(async ccy => {
+                currencies.map(async ccy => {
                     return [
                         ccy,
                         (await securedFinance?.getDecimals(toCurrency(ccy))) ??
