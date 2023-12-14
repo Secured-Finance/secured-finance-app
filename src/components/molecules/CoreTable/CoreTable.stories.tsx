@@ -135,3 +135,11 @@ HideHeader.args = {
         showHeaders: false,
     },
 };
+
+export const SkeletonRows = Template.bind({});
+SkeletonRows.args = {
+    options: {
+        isLastRowLoading: true,
+        isFirstRowLoading: true,
+    },
+};
