@@ -25,10 +25,13 @@ import {
     MarketPhase,
     baseContracts,
     emptyCollateralBook,
+    useBorrowOrderBook,
     useCollateralBook,
     useCurrencies,
     useCurrencyDelistedStatus,
+    useItayoseEstimation,
     useLastPrices,
+    useLendOrderBook,
     useLendingMarkets,
     useMarketOrderList,
     useMarketPhase,
@@ -45,6 +48,7 @@ import {
 import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
+    ZERO_BI,
     amountFormatterFromBase,
     amountFormatterToBase,
     toOptions,
@@ -116,6 +120,10 @@ export const Itayose = () => {
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
 
     const { data: lendingMarkets = baseContracts } = useLendingMarkets();
+    const { data: itayoseEstimation } = useItayoseEstimation(
+        currency,
+        maturity
+    );
     const lendingContracts = lendingMarkets[currency];
 
     const marketPhase = useMarketPhase(currency, maturity);
@@ -150,14 +158,47 @@ export const Itayose = () => {
         [currencies, currency, delistedCurrencySet]
     );
 
+    const estimatedOpeningUnitPrice = lendingMarkets[currency][maturity]
+        ?.openingUnitPrice
+        ? LoanValue.fromPrice(
+              lendingMarkets[currency][maturity]?.openingUnitPrice ?? 0,
+              maturity,
+              lendingContracts[selectedTerm.value.toNumber()]?.utcOpeningDate
+          )
+        : undefined;
+
     const selectedAsset = useMemo(() => {
         return assetList.find(option => option.value === currency);
     }, [currency, assetList]);
 
+    const {
+        data: borrowAmount,
+        isLoading: isLoadingBorrow,
+        fetchStatus: borrowFetchStatus,
+    } = useBorrowOrderBook(
+        currency,
+        maturity,
+        Number(itayoseEstimation?.lastBorrowUnitPrice ?? ZERO_BI)
+    );
+
+    const {
+        data: lendAmount,
+        isLoading: isLoadingLend,
+        fetchStatus: lendFetchStatus,
+    } = useLendOrderBook(
+        currency,
+        maturity,
+        Number(itayoseEstimation?.lastLendUnitPrice ?? ZERO_BI)
+    );
+
     const [orderBook, setMultiplier, setIsShowingAll] = useOrderbook(
         currency,
         maturity,
-        lendingContracts[selectedTerm.value.toNumber()]?.utcOpeningDate
+        lendingContracts[selectedTerm.value.toNumber()]?.utcOpeningDate,
+        itayoseEstimation?.lastBorrowUnitPrice,
+        borrowAmount,
+        itayoseEstimation?.lastLendUnitPrice,
+        lendAmount
     );
 
     const { data: collateralBook = emptyCollateralBook } =
@@ -193,14 +234,10 @@ export const Itayose = () => {
         [amount, currency, dispatch]
     );
 
-    const estimatedOpeningUnitPrice = lendingMarkets[currency][maturity]
-        ?.openingUnitPrice
-        ? LoanValue.fromPrice(
-              lendingMarkets[currency][maturity]?.openingUnitPrice ?? 0,
-              maturity,
-              lendingContracts[selectedTerm.value.toNumber()]?.utcOpeningDate
-          )
-        : undefined;
+    const isLoadingMap = {
+        [OrderSide.BORROW]: isLoadingBorrow && borrowFetchStatus !== 'idle',
+        [OrderSide.LEND]: isLoadingLend && lendFetchStatus !== 'idle',
+    };
 
     return (
         <Page title='Pre-Open Order Book'>
@@ -272,6 +309,7 @@ export const Itayose = () => {
                     onFilterChange={state =>
                         setIsShowingAll(state.showBorrow && state.showLend)
                     }
+                    isLoadingMap={isLoadingMap}
                     onAggregationChange={setMultiplier}
                     isCurrencyDelisted={delistedCurrencySet.has(currency)}
                 />
