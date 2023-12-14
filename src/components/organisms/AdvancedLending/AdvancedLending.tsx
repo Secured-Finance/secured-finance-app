@@ -11,6 +11,7 @@ import {
 import {
     ActiveTradeTable,
     AdvancedLendingOrderCard,
+    HistoricalWidget,
     LineChartTab,
     MyTransactionsTable,
     OrderBookWidget,
@@ -23,6 +24,7 @@ import {
     CollateralBook,
     emptyOrderList,
     useGraphClientHook,
+    useHistoricalChartData,
     useIsUnderCollateralThreshold,
     useLastPrices,
     useMarket,
@@ -58,6 +60,7 @@ import {
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
+import { graphTypeOptions, timeScales } from '../HistoricalWidget/constants';
 
 const useTradeHistoryDetails = (
     transactions: TransactionList,
@@ -116,6 +119,9 @@ export const AdvancedLending = ({
     const { data: orderList = emptyOrderList } = useOrderList(address, [
         currency,
     ]);
+
+    const dataSet = useHistoricalChartData();
+
     const { data: positions } = usePositions(address, [currency]);
 
     const currencyPrice = priceList[currency];
@@ -326,7 +332,12 @@ export const AdvancedLending = ({
             />
 
             <div className='flex h-full flex-grow flex-col gap-4'>
-                <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
+                <Tab
+                    tabDataArray={[
+                        { text: 'Yield Curve' },
+                        { text: 'Historcial Chart' },
+                    ]}
+                >
                     <div className='h-[410px] w-full px-2 py-4'>
                         <LineChartTab
                             rates={rates}
@@ -337,6 +348,13 @@ export const AdvancedLending = ({
                             marketCloseToMaturityOriginalRate={
                                 marketCloseToMaturityOriginalRate
                             }
+                        />
+                    </div>
+                    <div>
+                        <HistoricalWidget
+                            timeScales={timeScales}
+                            chartType={graphTypeOptions}
+                            {...dataSet}
                         />
                     </div>
                 </Tab>

@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { RadioButton } from 'src/components/atoms';
 import {
     HistoricalChart,
-    TradingData,
+    ITradingData,
 } from 'src/components/molecules/HistoricalChart';
 
 type TOpions = { label: string; value: string };
@@ -11,10 +11,10 @@ interface THistoricalWidgetProps {
     className?: string;
     timeScales: TOpions[];
     chartType: TOpions[];
-    data: TradingData[];
+    data: ITradingData[];
     selectTimeScale: string;
     selectChartType: string;
-    onTimeScanleChange: (value: string, type: string) => void;
+    onTimeScaleChange: (value: string, type: string) => void;
     onChartTypeChange: (value: string, type: string) => void;
 }
 
@@ -25,7 +25,7 @@ export const HistoricalWidget = ({
     chartType,
     data,
     selectChartType,
-    onTimeScanleChange,
+    onTimeScaleChange,
     onChartTypeChange,
 }: THistoricalWidgetProps) => {
     return (
@@ -39,7 +39,7 @@ export const HistoricalWidget = ({
                     options={timeScales}
                     value={selectTimeScale}
                     onChange={(time: string) =>
-                        onTimeScanleChange(time, selectChartType)
+                        onTimeScaleChange(time, selectChartType)
                     }
                 />
                 <RadioButton

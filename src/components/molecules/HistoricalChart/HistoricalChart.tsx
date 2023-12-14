@@ -13,7 +13,7 @@ import {
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createCanlestickChart, createVolumeChart } from 'src/utils/charts';
 
-export interface TradingData {
+export interface ITradingData {
     time: number;
     open: number;
     high: number;
@@ -23,7 +23,7 @@ export interface TradingData {
 }
 
 export interface HistoricalChartProps {
-    data: TradingData[];
+    data: ITradingData[];
     className?: string;
 }
 
@@ -119,7 +119,7 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
             const mergeData = {
                 ...candleData,
                 ...volumeData,
-            } as Omit<TradingData, 'vol'> & { value: number };
+            } as Omit<ITradingData, 'vol'> & { value: number };
 
             const date = new Date(Number(candleData?.time) * 1000);
             const formattedDate =
@@ -219,7 +219,7 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
             const mergeData = {
                 ...candleData,
                 ...volumeData,
-            } as Omit<TradingData, 'vol'> & { value: number };
+            } as Omit<ITradingData, 'vol'> & { value: number };
 
             const date = new Date(Number(candleData?.time) * 1000);
             const formattedDate =
