@@ -6,7 +6,7 @@ import { CollateralBook, useCollateralBook } from './';
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
-afterEach(() => jest.clearAllMocks());
+afterEach(() => mock.tokenVault.getCollateralBook.mockClear());
 
 describe('useCollateralBook hook', () => {
     const FIL_PRICE = 6.0;
@@ -58,7 +58,7 @@ describe('useCollateralBook hook', () => {
         const { result } = renderHook(() => useCollateralBook('0x0'));
 
         await waitFor(() =>
-            expect(mock.tokenVault.getCollateralBook).toHaveBeenCalledTimes(2)
+            expect(mock.tokenVault.getCollateralBook).toHaveBeenCalledTimes(1)
         );
         const colBook = result.current.data as CollateralBook;
         expect(colBook.usdNonCollateral).toEqual(
