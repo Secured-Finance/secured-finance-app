@@ -13,6 +13,7 @@ export * from './useHandleContractTransaction';
 export * from './useIsGlobalItayose';
 export * from './useIsMarketTerminated';
 export * from './useIsUnderCollateralThreshold';
+export * from './useItayoseEstimation';
 export * from './useLastPrices';
 export * from './useLendingMarkets';
 export * from './useLoanValues';

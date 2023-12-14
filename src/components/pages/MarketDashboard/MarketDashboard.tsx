@@ -47,9 +47,9 @@ const computeTotalUsers = (users: string) => {
         return '0';
     }
     const totalUsers =
-        getEnvironment().toLowerCase() === Environment.DEVELOPMENT
-            ? +users
-            : +users + PREVIOUS_TOTAL_USERS;
+        getEnvironment().toLowerCase() === Environment.STAGING
+            ? +users + PREVIOUS_TOTAL_USERS
+            : +users;
     return ordinaryFormat(totalUsers ?? 0, 0, 2, 'compact');
 };
 
