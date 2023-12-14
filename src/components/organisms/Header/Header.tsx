@@ -9,14 +9,10 @@ import { WalletDialog, WalletPopover } from 'src/components/organisms';
 import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
-import {
-    getEnvShort,
-    getMainnetChainId,
-    getSupportedNetworks,
-} from 'src/utils';
+import { getEnvShort, getSupportedChainIds } from 'src/utils';
 import { AddressUtils } from 'src/utils/address';
 import { isChipVisibleForEnv, isProdEnv } from 'src/utils/displayUtils';
-import { useAccount } from 'wagmi';
+import { mainnet, sepolia, useAccount } from 'wagmi';
 
 const PRODUCTION_LINKS = [
     {
@@ -53,10 +49,10 @@ const HeaderMessage = ({
     chainId: number;
     chainError: boolean;
 }) => {
-    const mainnetChainId = getMainnetChainId();
-    const networkNames = getSupportedNetworks().map(
-        name => name.charAt(0).toUpperCase() + name.slice(1)
-    );
+    const chainIds = getSupportedChainIds();
+    const networkNames = [sepolia, mainnet]
+        .filter(chain => chainIds.includes(chain.id))
+        .map(chain => chain.name);
 
     if (chainId) {
         if (chainError) {
@@ -65,10 +61,15 @@ const HeaderMessage = ({
                     className='typography-caption-2 w-full bg-red p-[1px] text-center text-neutral-8'
                     data-testid='testnet-alert'
                 >
-                    Secured Finance only supported in {networkNames.join(', ')}
+                    Secured Finance only supported in{' '}
+                    <span className='capitalize'>
+                        {networkNames.length === 2
+                            ? networkNames.join(' and ')
+                            : networkNames.join(', ')}
+                    </span>
                 </div>
             );
-        } else if (chainId !== mainnetChainId) {
+        } else if (chainId !== mainnet.id) {
             return (
                 <div
                     className='typography-caption-2 w-full bg-horizonBlue p-[1px] text-center text-neutral-8'

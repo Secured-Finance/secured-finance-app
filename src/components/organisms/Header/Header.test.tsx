@@ -108,8 +108,9 @@ describe('Header component', () => {
         });
         expect(screen.getByTestId('testnet-alert')).toBeInTheDocument();
         expect(
-            screen.getByText('Secured Finance only supported in Sepolia')
+            screen.getByText('Secured Finance only supported in')
         ).toBeInTheDocument();
+        expect(screen.getByText('Sepolia')).toBeInTheDocument();
     });
 
     it('should not render testnet header if current chain is mainnet', () => {
