@@ -3,18 +3,20 @@ import { useQueries } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
-import {
-    ZERO_BI,
-    amountFormatterFromBase,
-    getCurrencyMapAsList,
-} from 'src/utils';
+import { ZERO_BI, amountFormatterFromBase, currencyMap } from 'src/utils';
+import { useCurrencies } from '../useCurrencies';
 
 export const useERC20Balance = (address: string | undefined) => {
     const securedFinance = useSF();
-    const tokens = useMemo(
-        () => getCurrencyMapAsList().filter(ccy => ccy.toCurrency().isToken),
-        []
-    );
+    const { data } = useCurrencies();
+
+    const tokens = useMemo(() => {
+        return (
+            data
+                ?.filter(ccy => currencyMap[ccy].toCurrency().isToken)
+                ?.map(ccy => currencyMap[ccy]) ?? []
+        );
+    }, [data]);
 
     return useQueries({
         queries: tokens.map(token => {
@@ -33,7 +35,7 @@ export const useERC20Balance = (address: string | undefined) => {
                         amountFormatterFromBase[token.symbol](balance),
                     ];
                 },
-                enabled: !!securedFinance && !!address,
+                enabled: !!securedFinance && !!address && tokens.length > 0,
             };
         }),
     });

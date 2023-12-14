@@ -11,6 +11,7 @@ describe('useDecimals', () => {
         const { result, waitForNextUpdate } = renderHook(() => useDecimals());
 
         await waitForNextUpdate();
+        await waitForNextUpdate();
 
         expect(result.current.data).toEqual({
             [CurrencySymbol.ETH]: 8,

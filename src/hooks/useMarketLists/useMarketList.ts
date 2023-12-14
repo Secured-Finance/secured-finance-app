@@ -1,18 +1,24 @@
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import { useMemo } from 'react';
-import { LendingMarket, baseContracts, useLendingMarkets } from 'src/hooks';
-import { CurrencySymbol, getCurrencyMapAsList } from 'src/utils';
+import {
+    LendingMarket,
+    baseContracts,
+    useCurrencies,
+    useLendingMarkets,
+} from 'src/hooks';
+import { CurrencySymbol } from 'src/utils';
 
 export const useMarketLists = () => {
     const { data: lendingContracts = baseContracts } = useLendingMarkets();
+    const { data: currencies = [] } = useCurrencies();
 
     const marketLists = useMemo(() => {
         const openMarkets: Market[] = [];
         const itayoseMarkets: Market[] = [];
 
-        for (const ccy of getCurrencyMapAsList()) {
-            for (const maturity of Object.keys(lendingContracts[ccy.symbol])) {
-                const contract = lendingContracts[ccy.symbol][Number(maturity)];
+        for (const ccy of currencies) {
+            for (const maturity of Object.keys(lendingContracts[ccy])) {
+                const contract = lendingContracts[ccy][Number(maturity)];
                 if (contract.isMatured) continue;
 
                 const isItayoseOrPreOrder =
@@ -20,8 +26,8 @@ export const useMarketLists = () => {
 
                 const market = {
                     ...contract,
-                    ccy: ccy.symbol,
-                    currency: toBytes32(ccy.symbol),
+                    ccy: ccy,
+                    currency: toBytes32(ccy),
                 };
 
                 if (isItayoseOrPreOrder) {

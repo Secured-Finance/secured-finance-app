@@ -13,6 +13,8 @@ import FilIcon from 'src/assets/coins/wfil.svg';
 import { SvgIcon } from 'src/types';
 import { hexToString } from 'viem';
 import { ZERO_BI } from './collateral';
+import { AUSDC } from './currencies/ausdc';
+import { AXLFIL } from './currencies/axlfil';
 import { WFIL } from './currencies/filecoin';
 import { USDC } from './currencies/usdc';
 import { WBTC } from './currencies/wbtc';
@@ -27,6 +29,8 @@ export enum CurrencySymbol {
     WFIL = 'WFIL',
     USDC = 'USDC',
     WBTC = 'WBTC',
+    aUSDC = 'aUSDC',
+    axlFIL = 'axlFIL',
 }
 
 export const currencyMap: Readonly<
@@ -86,7 +90,7 @@ export const currencyMap: Readonly<
         longName: 'Wrapped Filecoin',
     },
     [CurrencySymbol.USDC]: {
-        index: 3,
+        index: 4,
         symbol: CurrencySymbol.USDC,
         name: USDC.onChain().name,
         icon: UsdcIcon,
@@ -102,9 +106,43 @@ export const currencyMap: Readonly<
         roundingDecimal: 0,
         longName: 'USD Coin',
     },
+    [CurrencySymbol.aUSDC]: {
+        index: 5,
+        symbol: CurrencySymbol.aUSDC,
+        name: 'aUSDC',
+        icon: UsdcIcon,
+        coinGeckoId: 'usd-coin',
+        isCollateral: true,
+        toBaseUnit: (amount: number) =>
+            convertToBlockchainUnit(amount, AUSDC.onChain()),
+        fromBaseUnit: (amount: bigint) =>
+            convertFromBlockchainUnit(amount, AUSDC.onChain()),
+        toCurrency: () => AUSDC.onChain(),
+        chartColor: tailwindConfig.theme.colors.chart.usdc,
+        pillColor: tailwindConfig.theme.colors.pill.usdc,
+        roundingDecimal: 0,
+        longName: 'USD Coin',
+    },
+    [CurrencySymbol.axlFIL]: {
+        index: 3,
+        symbol: CurrencySymbol.axlFIL,
+        name: 'axlFIL',
+        icon: FilIcon,
+        coinGeckoId: 'filecoin',
+        isCollateral: false,
+        toBaseUnit: (amount: number) =>
+            convertToBlockchainUnit(amount, AXLFIL.onChain()),
+        fromBaseUnit: (amount: bigint) =>
+            convertFromBlockchainUnit(amount, AXLFIL.onChain()),
+        toCurrency: () => AXLFIL.onChain(),
+        chartColor: tailwindConfig.theme.colors.chart.fil,
+        pillColor: tailwindConfig.theme.colors.pill.fil,
+        roundingDecimal: 0,
+        longName: 'Axelar FIL',
+    },
 };
 
-export const getCurrencyMapAsList = () => {
+const getCurrencyMapAsList = () => {
     return Object.values(currencyMap).sort((a, b) => a.index - b.index);
 };
 
@@ -158,6 +196,10 @@ export function toCurrencySymbol(ccy: string) {
             return CurrencySymbol.USDC;
         case CurrencySymbol.WBTC:
             return CurrencySymbol.WBTC;
+        case CurrencySymbol.aUSDC:
+            return CurrencySymbol.aUSDC;
+        case CurrencySymbol.axlFIL:
+            return CurrencySymbol.axlFIL;
         default:
             return undefined;
     }

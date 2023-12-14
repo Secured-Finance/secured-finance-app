@@ -62,6 +62,8 @@ describe('computeNetValue', () => {
         [CurrencySymbol.WFIL]: 6,
         [CurrencySymbol.USDC]: 1,
         [CurrencySymbol.WBTC]: 30000,
+        [CurrencySymbol.aUSDC]: 1,
+        [CurrencySymbol.axlFIL]: 1,
     };
     it('should return the net value', () => {
         const positions = [

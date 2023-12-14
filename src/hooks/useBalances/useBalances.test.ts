@@ -21,6 +21,8 @@ describe('useBalances', () => {
             [CurrencySymbol.WFIL]: 10000,
             [CurrencySymbol.WBTC]: 300,
             [CurrencySymbol.USDC]: 4000,
+            [CurrencySymbol.aUSDC]: 0,
+            [CurrencySymbol.axlFIL]: 0,
         });
     });
 });

@@ -13,6 +13,7 @@ import {
 } from 'src/components/molecules';
 import {
     Market,
+    useCurrencies,
     useCurrencyDelistedStatus,
     useMarketLists,
     useMaturityOptions,
@@ -29,8 +30,8 @@ import {
     amountFormatterFromBase,
     amountFormatterToBase,
     formatLoanValue,
-    getCurrencyMapAsOptions,
     toCurrencySymbol,
+    toOptions,
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import {
@@ -293,12 +294,14 @@ const AssetDropdown = ({
 }: {
     handleSelectedCurrency: (ccy: CurrencySymbol | undefined) => void;
 }) => {
+    const { data: currencies } = useCurrencies();
+    const assetList = toOptions(currencies, CurrencySymbol.WBTC);
     return (
         <DropdownSelector<string>
             optionList={[
                 { label: 'All Assets', value: '' },
                 //TODO: add delisting
-                ...getCurrencyMapAsOptions(),
+                ...assetList,
             ]}
             onChange={v => handleSelectedCurrency(toCurrencySymbol(v))}
         />
