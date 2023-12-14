@@ -25,7 +25,13 @@ import {
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { RootState } from 'src/store/types';
-import { AddressUtils, CurrencySymbol, toCurrency, toOptions } from 'src/utils';
+import {
+    AddressUtils,
+    CurrencySymbol,
+    currencyMap,
+    toCurrency,
+    toOptions,
+} from 'src/utils';
 import { useAccount, useWalletClient } from 'wagmi';
 
 const MenuAddToken = ({
@@ -92,7 +98,9 @@ export const Faucet = () => {
     const sf = useSF();
 
     const { data: currencies } = useCurrencies();
-    const assetList = toOptions(currencies, CurrencySymbol.WBTC);
+    const assetList = toOptions(currencies, CurrencySymbol.WBTC).filter(
+        ccy => currencyMap[ccy.value].toCurrency().isToken
+    );
 
     const [ccy, setCcy] = useState<CurrencySymbol | null>(null);
     const [address, setAddress] = useState<string>('');

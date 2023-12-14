@@ -90,7 +90,7 @@ export const currencyMap: Readonly<
         longName: 'Wrapped Filecoin',
     },
     [CurrencySymbol.USDC]: {
-        index: 3,
+        index: 4,
         symbol: CurrencySymbol.USDC,
         name: USDC.onChain().name,
         icon: UsdcIcon,
@@ -124,7 +124,7 @@ export const currencyMap: Readonly<
         longName: 'USD Coin',
     },
     [CurrencySymbol.axlFIL]: {
-        index: 4,
+        index: 3,
         symbol: CurrencySymbol.axlFIL,
         name: 'axlFIL',
         icon: FilIcon,
@@ -134,7 +134,7 @@ export const currencyMap: Readonly<
             convertToBlockchainUnit(amount, AXLFIL.onChain()),
         fromBaseUnit: (amount: bigint) =>
             convertFromBlockchainUnit(amount, AXLFIL.onChain()),
-        toCurrency: () => USDC.onChain(),
+        toCurrency: () => AXLFIL.onChain(),
         chartColor: tailwindConfig.theme.colors.chart.fil,
         pillColor: tailwindConfig.theme.colors.pill.fil,
         roundingDecimal: 0,
