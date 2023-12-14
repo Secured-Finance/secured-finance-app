@@ -13,6 +13,8 @@ import FilIcon from 'src/assets/coins/wfil.svg';
 import { SvgIcon } from 'src/types';
 import { hexToString } from 'viem';
 import { ZERO_BI } from './collateral';
+import { AUSDC } from './currencies/ausdc';
+import { AXLFIL } from './currencies/axlfil';
 import { WFIL } from './currencies/filecoin';
 import { USDC } from './currencies/usdc';
 import { WBTC } from './currencies/wbtc';
@@ -105,36 +107,36 @@ export const currencyMap: Readonly<
         longName: 'USD Coin',
     },
     [CurrencySymbol.aUSDC]: {
-        index: 4,
+        index: 5,
         symbol: CurrencySymbol.aUSDC,
         name: 'aUSDC',
         icon: UsdcIcon,
         coinGeckoId: 'usd-coin',
         isCollateral: true,
         toBaseUnit: (amount: number) =>
-            convertToBlockchainUnit(amount, USDC.onChain()),
+            convertToBlockchainUnit(amount, AUSDC.onChain()),
         fromBaseUnit: (amount: bigint) =>
-            convertFromBlockchainUnit(amount, USDC.onChain()),
-        toCurrency: () => USDC.onChain(),
+            convertFromBlockchainUnit(amount, AUSDC.onChain()),
+        toCurrency: () => AUSDC.onChain(),
         chartColor: tailwindConfig.theme.colors.chart.usdc,
         pillColor: tailwindConfig.theme.colors.pill.usdc,
         roundingDecimal: 0,
         longName: 'USD Coin',
     },
     [CurrencySymbol.axlFIL]: {
-        index: 5,
+        index: 4,
         symbol: CurrencySymbol.axlFIL,
         name: 'axlFIL',
-        icon: UsdcIcon,
-        coinGeckoId: 'usd-coin',
-        isCollateral: true,
+        icon: FilIcon,
+        coinGeckoId: 'filecoin',
+        isCollateral: false,
         toBaseUnit: (amount: number) =>
-            convertToBlockchainUnit(amount, USDC.onChain()),
+            convertToBlockchainUnit(amount, AXLFIL.onChain()),
         fromBaseUnit: (amount: bigint) =>
-            convertFromBlockchainUnit(amount, USDC.onChain()),
+            convertFromBlockchainUnit(amount, AXLFIL.onChain()),
         toCurrency: () => USDC.onChain(),
-        chartColor: tailwindConfig.theme.colors.chart.usdc,
-        pillColor: tailwindConfig.theme.colors.pill.usdc,
+        chartColor: tailwindConfig.theme.colors.chart.fil,
+        pillColor: tailwindConfig.theme.colors.pill.fil,
         roundingDecimal: 0,
         longName: 'Axelar FIL',
     },
