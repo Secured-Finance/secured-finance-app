@@ -84,6 +84,6 @@ export const generateWalletSourceInformation = (
 };
 
 // NOTE: Here are the user counts for previous versions of the app
-// till Sepolia v0.0.9: 19446
-export const PREVIOUS_TOTAL_USERS = 19446;
+// till Sepolia v0.0.10: 21118
+export const PREVIOUS_TOTAL_USERS = 21118;
 export const COIN_GECKO_SOURCE = 'https://www.coingecko.com/en/coins/';
