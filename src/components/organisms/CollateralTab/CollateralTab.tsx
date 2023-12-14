@@ -11,6 +11,7 @@ import {
     CollateralBook,
     useCollateralBalances,
     useCollateralCurrencies,
+    useCurrencies,
 } from 'src/hooks';
 import {
     CollateralInfo,
@@ -23,10 +24,10 @@ import { useAccount } from 'wagmi';
 export const generateCollateralList = (
     balance: Partial<Record<CurrencySymbol, number | bigint>>,
     useAllCurrencies: boolean,
-    collateralCurrencies: CurrencySymbol[]
+    currencies: CurrencySymbol[]
 ): Record<CurrencySymbol, CollateralInfo> => {
     let collateralRecords: Record<string, CollateralInfo> = {};
-    collateralCurrencies
+    currencies
         ?.map(ccy => currencyMap[ccy])
         .filter(ccy => ccy.isCollateral || useAllCurrencies)
         .forEach(currencyInfo => {
@@ -60,6 +61,7 @@ export const CollateralTab = ({
 
     const collateralBalances = useCollateralBalances();
     const { data: collateralCurrencies = [] } = useCollateralCurrencies();
+    const { data: currencies = [] } = useCurrencies();
 
     const depositCollateralList = useMemo(
         () =>
@@ -79,12 +81,12 @@ export const CollateralTab = ({
                     ...collateralBook.nonCollateral,
                 },
                 true,
-                collateralCurrencies
+                currencies
             ),
         [
             collateralBook.nonCollateral,
             collateralBook.withdrawableCollateral,
-            collateralCurrencies,
+            currencies,
         ]
     );
 
