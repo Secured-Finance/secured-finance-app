@@ -5,13 +5,22 @@ import classNames from 'classnames';
 import * as dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { useCallback, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { CoreTable, TableActionMenu } from 'src/components/molecules';
 import { UnwindDialog, UnwindDialogType } from 'src/components/organisms';
 import { Position, useBreakpoint, useLastPrices } from 'src/hooks';
-import { setCurrency, setMaturity } from 'src/store/landingOrderForm';
+import {
+    resetUnitPrice,
+    selectLandingOrderForm,
+    setAmount,
+    setCurrency,
+    setMaturity,
+} from 'src/store/landingOrderForm';
+import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
+    amountFormatterFromBase,
+    amountFormatterToBase,
     hexToCurrencySymbol,
     isMaturityPastDays,
     isPastDate,
@@ -55,6 +64,27 @@ export const ActiveTradeTable = ({
     const dispatch = useDispatch();
     const isTablet = useBreakpoint('laptop');
 
+    const { amount, currency } = useSelector((state: RootState) =>
+        selectLandingOrderForm(state.landingOrderForm)
+    );
+
+    const handleCurrencyChange = useCallback(
+        (v: CurrencySymbol) => {
+            let formatFrom = (x: bigint) => Number(x);
+            if (amountFormatterFromBase && amountFormatterFromBase[currency]) {
+                formatFrom = amountFormatterFromBase[currency];
+            }
+            let formatTo = (x: number) => BigInt(x);
+            if (amountFormatterToBase && amountFormatterToBase[v]) {
+                formatTo = amountFormatterToBase[v];
+            }
+            dispatch(setAmount(formatTo(formatFrom(amount))));
+            dispatch(setCurrency(v));
+            dispatch(resetUnitPrice());
+        },
+        [amount, currency, dispatch]
+    );
+
     const getTableActionMenu = useCallback(
         (
             maturity: number,
@@ -67,7 +97,7 @@ export const ActiveTradeTable = ({
                     text: 'Add/Reduce',
                     onClick: (): void => {
                         dispatch(setMaturity(maturity));
-                        dispatch(setCurrency(ccy));
+                        handleCurrencyChange(ccy);
                         router.push('/advanced/');
                     },
                 },
@@ -122,7 +152,7 @@ export const ActiveTradeTable = ({
                 },
             ];
         },
-        [delistedCurrencySet, dispatch, router]
+        [delistedCurrencySet, dispatch, handleCurrencyChange, router]
     );
 
     const getMaturityDisplayValue = useCallback(
