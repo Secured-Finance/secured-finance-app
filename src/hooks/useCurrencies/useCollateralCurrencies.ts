@@ -15,7 +15,7 @@ export const useCollateralCurrencies = () => {
             return currencies ?? [];
         },
         select: currencies =>
-            currencies
+            [...currencies]
                 .map(hexToCurrencySymbol)
                 .filter((ccy): ccy is CurrencySymbol => ccy !== undefined)
                 .sort((a, b) => currencyMap[a].index - currencyMap[b].index),
