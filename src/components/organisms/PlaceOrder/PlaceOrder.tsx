@@ -168,6 +168,7 @@ export const PlaceOrder = ({
             walletSource: WalletSource
         ) => {
             try {
+                debugger;
                 const tx = await onPlaceOrder(
                     ccy,
                     maturity,
