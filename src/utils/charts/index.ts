@@ -17,17 +17,18 @@ const commonOptions = {
     },
     grid: {
         vertLines: {
-            color: '#23262F', // 将垂直线颜色设置为完全透明
+            color: '#23262F',
+            visible: false,
         },
         horzLines: {
-            color: '#23262F', // 将水平线颜色设置为完全透明
+            color: '#334155',
         },
     },
     rightPriceScale: {
         textColor: 'rgba(177, 181, 195, 1)',
         borderColor: 'rgba(119, 126, 144, 1)',
-        borderVisible: true,
-        minimumWidth: 100,
+        borderVisible: false,
+        // minimumWidth: 140,
     },
     crosshair: {
         mode: 1,
@@ -50,22 +51,22 @@ export const createCanlestickChart = (ref: HTMLDivElement) => {
         rightPriceScale: {
             ...commonOptions.rightPriceScale,
             scaleMargins: {
-                top: 0.1,
+                top: 0.2,
                 bottom: 0.12,
             },
         },
     });
     if (ref.querySelector('canvas')) {
         (ref.querySelector('canvas') as HTMLCanvasElement).style.borderBottom =
-            '1px solid #353945'; // 可以调整为所需的样式
+            '2px solid #334155';
     }
 
     const candlestickSeries = chart.addCandlestickSeries({
-        upColor: 'rgba(21, 214, 232, 1)',
-        downColor: 'rgba(255, 159, 174, 1)',
+        upColor: '#15D6E8',
+        downColor: '#FF9FAE',
         borderVisible: false,
-        wickUpColor: 'rgba(21, 214, 232, 1)',
-        wickDownColor: 'rgba(255, 159, 174, 1)',
+        wickUpColor: '#15D6E8',
+        wickDownColor: '#FF9FAE',
         priceFormat: {
             type: 'volume',
         },
@@ -76,6 +77,15 @@ export const createCanlestickChart = (ref: HTMLDivElement) => {
 export const createVolumeChart = (ref: HTMLDivElement) => {
     const chart = createChart(ref, {
         ...commonOptions,
+        grid: {
+            ...commonOptions.grid,
+            vertLines: {
+                visible: false,
+            },
+            horzLines: {
+                visible: false,
+            },
+        },
         height: 170,
         rightPriceScale: {
             ...commonOptions.rightPriceScale,
@@ -89,7 +99,7 @@ export const createVolumeChart = (ref: HTMLDivElement) => {
         },
     });
     const volumeSeries = chart.addHistogramSeries({
-        color: '#26a69a',
+        color: '#09A8B7',
         priceLineWidth: 1,
         priceLineVisible: true,
         priceFormat: {

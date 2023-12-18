@@ -87,7 +87,7 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
             const volumeData = data.map(item => ({
                 time: Math.floor(item.time / 1000) as UTCTimestamp,
                 value: Number(item.vol),
-                color: item.open > item.close ? '#74474E' : '#005962',
+                color: item.open > item.close ? '#FF9FAE' : '#09A8B7',
             }));
 
             candlestickSeries.setData(candleData);
@@ -143,7 +143,6 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
             });
         };
 
-        // crosshair sync , topMove , bottomMove
         candleStickChart.subscribeCrosshairMove(function (param) {
             const dataPoint = getCrosshairDataPoint(candlestickSeries, param);
             syncCrosshair(volumeChart, volumeSeries, dataPoint);
@@ -156,7 +155,6 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
             updateLegendData(param);
         });
 
-        // time scale sync
         candleStickChart
             .timeScale()
             .subscribeVisibleLogicalRangeChange(range => {
@@ -210,7 +208,6 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
 
             const candleData = candlestickSeries.dataByIndex(index);
             const volumeData = volumeSeries.dataByIndex(index);
-            // const volumeData = param.seriesData.get(volumeSeries);
             if (sourceChart === 'candlestick') {
                 syncCrosshair(volumeChart, volumeSeries, candleData);
             } else if (sourceChart === 'volume') {
@@ -260,30 +257,15 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
     const titleOfChartClass =
         'absolute left-4 top-4 z-50 flex gap-4 text-2xs text-neutral-4 font-medium leading-4';
 
-    // const [time, setTime] = useState('4H');
-    // const [graph, setGraph] = useState('VOL');
-
     return (
         <div className={classNames(className)}>
-            {/* <div className='flex justify-between border-b border-t border-neutral-2 bg-[#292D3F99] p-4'>
-                <ButtonSelect
-                    options={options}
-                    value={time}
-                    onChange={v => setTime(v)}
-                />
-                <ButtonSelect
-                    options={graphOptions}
-                    value={graph}
-                    onChange={v => setGraph(v)}
-                />
-            </div> */}
             <div ref={chartContainerRef} className='relative h-full w-full'>
-                <div className={titleOfChartClass}>
+                <div className={classNames(titleOfChartClass, 'relative mb-2')}>
                     <div>{hoverTime}</div>
                     {Object.entries(legendData)
                         .filter(([key, _]) =>
                             ['O', 'H', 'L', 'C', 'Change'].includes(key)
-                        ) // 过滤出需要的键
+                        )
                         .map(([key, value]) => (
                             <div key={key} className='flex gap-1'>
                                 <div>{key}</div>
