@@ -9,7 +9,7 @@ const DECIMALS = 8;
 
 export const useLastPrices = () => {
     const securedFinance = useSF();
-    const { data: currencies } = useCurrencies();
+    const { data: currencies, isSuccess: isCurrencySuccess } = useCurrencies();
 
     return useQuery({
         queryKey: [QueryKeys.LAST_PRICES, currencies],
@@ -48,6 +48,6 @@ export const useLastPrices = () => {
                 [CurrencySymbol.axlFIL, ZERO_BI],
             ] as [CurrencySymbol, bigint][],
 
-        enabled: !!securedFinance,
+        enabled: !!securedFinance && isCurrencySuccess,
     });
 };
