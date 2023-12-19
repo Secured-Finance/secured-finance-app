@@ -6,12 +6,8 @@ import 'src/bigIntPatch';
 import { Footer } from 'src/components/atoms';
 import { Header } from 'src/components/organisms';
 import { Layout } from 'src/components/templates';
-import { updateChainError, updateLatestBlock } from 'src/store/blockchain';
-import { setMaturity } from 'src/store/landingOrderForm';
+import { updateChainError } from 'src/store/blockchain';
 import { connectEthWallet, updateEthBalance } from 'src/store/wallet';
-import AxiosMock from 'src/stories/mocks/AxiosMock';
-import { dec22Fixture } from 'src/stories/mocks/fixtures';
-import { coingeckoApi } from 'src/utils/coinGeckoApi';
 import timemachine from 'timemachine';
 import {
     Chain,
@@ -19,7 +15,7 @@ import {
     WaitForTransactionReceiptParameters,
     createPublicClient,
     createWalletClient,
-    http
+    http,
 } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 import { WagmiConfig, createConfig, sepolia } from 'wagmi';
@@ -89,46 +85,6 @@ export const withWalletProvider = (Story: StoryFn, Context: StoryContext) => {
     );
 };
 
-export const withAssetPrice = (Story: StoryFn) => {
-    const dispatch = useDispatch();
-    useEffect(() => {
-        const timeoutId = setTimeout(
-            () => dispatch(updateLatestBlock(12345)),
-            100
-        );
-
-        return () => clearTimeout(timeoutId);
-    }, [dispatch]);
-
-    return (
-        <AxiosMock
-            api={coingeckoApi}
-            mock={adapter =>
-                adapter.onGet('/simple/price').reply(200, {
-                    ethereum: {
-                        usd: 2000.34,
-                        usd_24h_change: 0.5162466489453748,
-                    },
-                    filecoin: {
-                        usd: 6.0,
-                        usd_24h_change: -8.208519783216566,
-                    },
-                    'usd-coin': {
-                        usd: 1.0,
-                        usd_24h_change: 0.042530768538486696,
-                    },
-                    'wrapped-bitcoin': {
-                        usd: 50000.0,
-                        usd_24h_change: 0.12,
-                    },
-                })
-            }
-        >
-            <Story />
-        </AxiosMock>
-    );
-};
-
 export const WithGraphClient = (Story: StoryFn) => (
     <GraphClientProvider network='sepolia'>
         <Story />
@@ -165,20 +121,6 @@ export const withChainErrorEnabled = (Story: StoryFn) => {
         const timeoutId = setTimeout(() => {
             dispatch(updateChainError(true));
         }, 300);
-
-        return () => clearTimeout(timeoutId);
-    }, [dispatch]);
-
-    return <Story />;
-};
-
-export const withLendingOrderForm = (Story: StoryFn) => {
-    const dispatch = useDispatch();
-    useEffect(() => {
-        const timeoutId = setTimeout(() => {
-            setMaturity(dec22Fixture.toNumber());
-            // Add other needed values
-        }, 100);
 
         return () => clearTimeout(timeoutId);
     }, [dispatch]);

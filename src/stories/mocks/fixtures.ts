@@ -9,7 +9,6 @@ import MetamaskIcon from 'src/assets/img/metamask-fox.svg';
 import { Option, WalletSourceOption } from 'src/components/atoms';
 import { CurrencyOption } from 'src/components/molecules';
 import { CollateralBook, Order, Position } from 'src/hooks';
-import { AssetPrices } from 'src/store/assetPrices';
 import {
     DailyVolumes,
     MaturityOptionList,
@@ -26,33 +25,13 @@ export const ethBytes32 = toBytes32('ETH'); // 0x4554480000000000000000000000000
 export const wbtcBytes32 = toBytes32('WBTC'); // 0x5742544300000000000000000000000000000000000000000000000000000000
 export const usdcBytes32 = toBytes32('USDC'); // 0x5553444300000000000000000000000000000000000000000000000000000000
 
-export const preloadedAssetPrices: { assetPrices: AssetPrices } = {
-    assetPrices: {
-        WFIL: {
-            price: 6.0,
-            change: -8.208519783216566,
-        },
-        ETH: {
-            price: 2000.34,
-            change: 0.5162466489453748,
-        },
-        USDC: {
-            price: 1.0,
-            change: 0.042530768538486696,
-        },
-        WBTC: {
-            price: 50000.0,
-            change: 0.0,
-        },
-        isLoading: false,
-    },
-};
-
 export const assetPriceMap = {
     WFIL: 6.0,
     ETH: 2000.34,
     USDC: 1.0,
     WBTC: 50000.0,
+    aUSDC: 1.0,
+    axlFIL: 6.0,
 };
 
 export const preloadedEthBalance = {
@@ -560,6 +539,9 @@ export const orderHistoryList: OrderHistoryList = [
             id: '1',
             isActive: true,
         },
+        maker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+        },
     },
     {
         orderId: 2,
@@ -576,6 +558,9 @@ export const orderHistoryList: OrderHistoryList = [
         lendingMarket: {
             id: '1',
             isActive: true,
+        },
+        maker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
         },
     },
     {
@@ -594,6 +579,9 @@ export const orderHistoryList: OrderHistoryList = [
             id: '1',
             isActive: true,
         },
+        maker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+        },
     },
     {
         orderId: 1,
@@ -610,6 +598,9 @@ export const orderHistoryList: OrderHistoryList = [
         lendingMarket: {
             id: '1',
             isActive: true,
+        },
+        maker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
         },
     },
     {
@@ -628,6 +619,9 @@ export const orderHistoryList: OrderHistoryList = [
             id: '1',
             isActive: false,
         },
+        maker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+        },
     },
     {
         orderId: 2,
@@ -644,6 +638,9 @@ export const orderHistoryList: OrderHistoryList = [
         lendingMarket: {
             id: '1',
             isActive: true,
+        },
+        maker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
         },
     },
     {
@@ -662,6 +659,9 @@ export const orderHistoryList: OrderHistoryList = [
             id: '1',
             isActive: true,
         },
+        maker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+        },
     },
     {
         orderId: 1,
@@ -678,6 +678,9 @@ export const orderHistoryList: OrderHistoryList = [
         lendingMarket: {
             id: '1',
             isActive: true,
+        },
+        maker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
         },
     },
     {
@@ -696,6 +699,9 @@ export const orderHistoryList: OrderHistoryList = [
             id: '1',
             isActive: false,
         },
+        maker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+        },
     },
     {
         orderId: 3,
@@ -712,6 +718,9 @@ export const orderHistoryList: OrderHistoryList = [
         lendingMarket: {
             id: '1',
             isActive: true,
+        },
+        maker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
         },
     },
     {
@@ -730,6 +739,9 @@ export const orderHistoryList: OrderHistoryList = [
             id: '1',
             isActive: true,
         },
+        maker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+        },
     },
     {
         orderId: 6,
@@ -747,6 +759,9 @@ export const orderHistoryList: OrderHistoryList = [
             id: '1',
             isActive: true,
         },
+        maker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+        },
     },
 ];
 
@@ -761,6 +776,9 @@ export const transactions: TradeHistory = [
         forwardValue: '1020000000000000000000',
         currency: wfilBytes32,
         maturity: jun23Fixture.toString(),
+        taker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+        },
     },
     {
         amount: '500000000000000000000',
@@ -772,6 +790,9 @@ export const transactions: TradeHistory = [
         forwardValue: '520000000000000000000',
         currency: wfilBytes32,
         maturity: jun23Fixture.toString(),
+        taker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+        },
     },
     {
         amount: '500000000000000000000',
@@ -783,6 +804,9 @@ export const transactions: TradeHistory = [
         forwardValue: '520000000000000000000',
         currency: wfilBytes32,
         maturity: mar23Fixture.toString(),
+        taker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+        },
     },
     {
         amount: '1000000000',
@@ -794,6 +818,9 @@ export const transactions: TradeHistory = [
         forwardValue: '1040000000',
         currency: wbtcBytes32,
         maturity: jun23Fixture.toString(),
+        taker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+        },
     },
     {
         amount: '500000000',
@@ -805,6 +832,9 @@ export const transactions: TradeHistory = [
         forwardValue: '505000000',
         currency: wbtcBytes32,
         maturity: dec22Fixture.toString(),
+        taker: {
+            id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+        },
     },
 ];
 

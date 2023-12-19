@@ -1,4 +1,4 @@
-import { withAssetPrice, withWalletProvider } from '.storybook/decorators';
+import { withWalletProvider } from '.storybook/decorators';
 import { Meta, StoryFn } from '@storybook/react';
 import {
     ethBytes32,
@@ -26,7 +26,7 @@ export default {
             },
         ],
     },
-    decorators: [withAssetPrice, withWalletProvider],
+    decorators: [withWalletProvider],
 } as Meta<typeof WithdrawTokenTable>;
 
 const Template: StoryFn<typeof WithdrawTokenTable> = args => (

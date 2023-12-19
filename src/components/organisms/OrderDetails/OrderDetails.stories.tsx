@@ -1,4 +1,4 @@
-import { withAssetPrice, withWalletProvider } from '.storybook/decorators';
+import { withWalletProvider } from '.storybook/decorators';
 import { OrderSide } from '@secured-finance/sf-client';
 import { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
@@ -20,7 +20,7 @@ export default {
         isCurrencyDelisted: false,
     },
     chromatic: { delay: 1000 },
-    decorators: [withAssetPrice, withWalletProvider],
+    decorators: [withWalletProvider],
     parameters: {
         connected: true,
     },

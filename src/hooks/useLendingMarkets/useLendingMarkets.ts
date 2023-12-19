@@ -1,11 +1,11 @@
 import { fromBytes32 } from '@secured-finance/sf-graph-client';
 import { useQuery } from '@tanstack/react-query';
-import { useMemo } from 'react';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
-import { CurrencySymbol, getCurrencyMapAsList, isPastDate } from 'src/utils';
+import { CurrencySymbol, currencyMap, isPastDate } from 'src/utils';
+import { useCurrencies } from '../useCurrencies';
 
-const PRE_OPEN_TIME = 60 * 60 * 24 * 7; // 7 days in seconds
+const PRE_OPEN_TIME = 60 * 60 * 24 * 14; // 7 days in seconds
 
 export type LendingMarket = {
     name: string;
@@ -54,6 +54,8 @@ export const baseContracts: AvailableContracts = {
     [CurrencySymbol.WFIL]: baseContract,
     [CurrencySymbol.USDC]: baseContract,
     [CurrencySymbol.WBTC]: baseContract,
+    [CurrencySymbol.aUSDC]: baseContract,
+    [CurrencySymbol.axlFIL]: baseContract,
 };
 
 const emptyContracts: AvailableContracts = {
@@ -61,6 +63,8 @@ const emptyContracts: AvailableContracts = {
     [CurrencySymbol.WFIL]: {},
     [CurrencySymbol.USDC]: {},
     [CurrencySymbol.WBTC]: {},
+    [CurrencySymbol.aUSDC]: {},
+    [CurrencySymbol.axlFIL]: {},
 };
 
 export type ContractMap = Record<number, LendingMarket>;
@@ -68,20 +72,13 @@ export type AvailableContracts = Record<CurrencySymbol, ContractMap>;
 
 export const useLendingMarkets = () => {
     const securedFinance = useSF();
-    const currencies = useMemo(
-        () => getCurrencyMapAsList().map(currency => currency.toCurrency()),
-        []
-    );
-    const currencyKey = useMemo(() => {
-        return currencies.map(ccy => ccy.symbol).join('-');
-    }, [currencies]);
+    const { data: currencies } = useCurrencies();
 
     return useQuery({
-        // eslint-disable-next-line @tanstack/query/exhaustive-deps
-        queryKey: [QueryKeys.LENDING_MARKETS, currencyKey],
+        queryKey: [QueryKeys.LENDING_MARKETS, currencies],
         queryFn: async () => {
             const lendingMarkets = await securedFinance?.getOrderBookDetails(
-                currencies
+                currencies?.map(ccy => currencyMap[ccy].toCurrency()) ?? []
             );
             return lendingMarkets ?? [];
         },
@@ -150,6 +147,6 @@ export const useLendingMarkets = () => {
             }
             return availableContracts;
         },
-        enabled: !!securedFinance,
+        enabled: !!securedFinance && !!currencies,
     });
 };

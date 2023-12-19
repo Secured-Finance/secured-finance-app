@@ -29,6 +29,8 @@ type CoreTableOptions = {
     showHeaders?: boolean;
     compact?: boolean;
     stickyHeader?: boolean;
+    isFirstRowLoading?: boolean;
+    isLastRowLoading?: boolean;
 };
 
 const DEFAULT_OPTIONS: CoreTableOptions = {
@@ -106,6 +108,12 @@ export const CoreTable = <T,>({
 
     const table = useReactTable<T>(configuration);
 
+    const rows = table.getRowModel().rows;
+
+    const isLoading = (rowIndex: number, dataRows: number) =>
+        (options.isFirstRowLoading && rowIndex === 0) ||
+        (options.isLastRowLoading && rowIndex === dataRows - 1);
+
     const coreTable = (
         <table
             className={classNames('w-full', {
@@ -164,56 +172,65 @@ export const CoreTable = <T,>({
             ) : null}
 
             <tbody>
-                {table.getRowModel().rows.map((row, rowIndex) => (
-                    <tr
-                        key={row.id}
-                        className={classNames('h-7', {
-                            'cursor-pointer': coreTableOptions.hoverRow?.(
-                                row.id
-                            ),
-                            'hover:bg-black-30': coreTableOptions.hoverRow?.(
-                                row.id
-                            ),
-                            'border-b border-white-10':
-                                coreTableOptions.border &&
-                                rowIndex !==
-                                    table.getRowModel().rows.length - 1,
-                        })}
-                        onClick={() =>
-                            coreTableOptions.hoverRow?.(row.id) &&
-                            coreTableOptions.onLineClick?.(row.id)
-                        }
-                        data-testid={`${coreTableOptions.name}-row`}
-                    >
-                        {row.getVisibleCells().map((cell, cellIndex) => (
-                            <td
-                                key={cell.id}
-                                className={classNames(
-                                    'min-w-fit whitespace-nowrap pr-1 text-center font-medium tablet:px-1',
-                                    {
-                                        'sticky left-0 z-10 bg-[#161E2E] after:absolute after:-right-4 after:-top-0 after:z-10 after:h-full after:w-5 after:bg-gradient-to-r after:from-black-40 after:to-transparent tablet:relative tablet:left-auto tablet:z-auto tablet:bg-transparent tablet:after:hidden':
-                                            coreTableOptions.responsive &&
-                                            cellIndex === 0 &&
-                                            coreTableOptions?.stickyFirstColumn,
-                                        'py-2': !coreTableOptions.compact,
-                                        'py-1': coreTableOptions.compact,
-                                    }
-                                )}
-                            >
-                                {flexRender(
-                                    cell.column.columnDef.cell,
-                                    cell.getContext()
-                                )}
+                {rows.map((row, rowIndex) =>
+                    isLoading(rowIndex, rows.length) ? (
+                        <tr key={rowIndex} className='animate-pulse'>
+                            <td colSpan={row.getVisibleCells().length}>
+                                <div className='h-7 min-w-fit bg-[#808080]/20'></div>
                             </td>
-                        ))}
-                    </tr>
-                ))}
+                        </tr>
+                    ) : (
+                        <tr
+                            key={row.id}
+                            className={classNames('h-7', {
+                                'cursor-pointer': coreTableOptions.hoverRow?.(
+                                    row.id
+                                ),
+                                'hover:bg-black-30':
+                                    coreTableOptions.hoverRow?.(row.id),
+                                'border-b border-white-10':
+                                    coreTableOptions.border &&
+                                    rowIndex !==
+                                        table.getRowModel().rows.length - 1,
+                            })}
+                            onClick={() =>
+                                coreTableOptions.hoverRow?.(row.id) &&
+                                coreTableOptions.onLineClick?.(row.id)
+                            }
+                            data-testid={`${coreTableOptions.name}-row`}
+                        >
+                            {row.getVisibleCells().map((cell, cellIndex) => (
+                                <td
+                                    key={cell.id}
+                                    className={classNames(
+                                        'min-w-fit whitespace-nowrap pr-1 text-center font-medium tablet:px-1',
+                                        {
+                                            'sticky left-0 z-10 bg-[#161E2E] after:absolute after:-right-4 after:-top-0 after:z-10 after:h-full after:w-5 after:bg-gradient-to-r after:from-black-40 after:to-transparent tablet:relative tablet:left-auto tablet:z-auto tablet:bg-transparent tablet:after:hidden':
+                                                coreTableOptions.responsive &&
+                                                cellIndex === 0 &&
+                                                coreTableOptions?.stickyFirstColumn,
+                                            'py-2': !coreTableOptions.compact,
+                                            'py-1': coreTableOptions.compact,
+                                        }
+                                    )}
+                                >
+                                    {flexRender(
+                                        cell.column.columnDef.cell,
+                                        cell.getContext()
+                                    )}
+                                </td>
+                            ))}
+                        </tr>
+                    )
+                )}
             </tbody>
         </table>
     );
 
     const fetchMoreData = () => {
-        coreTableOptions?.pagination?.getMoreData();
+        if (data.length > 0) {
+            coreTableOptions?.pagination?.getMoreData();
+        }
     };
 
     return (

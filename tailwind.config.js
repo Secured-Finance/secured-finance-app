@@ -25,6 +25,9 @@ module.exports = {
             borderWidth: {
                 '0.5': '0.5px',
             },
+            backgroundImage: {
+                wrap: 'linear-gradient(0deg, rgba(0, 0, 0, 0.40) 0%, rgba(0, 0, 0, 0.40) 100%), linear-gradient(114deg, #0090FF -9.78%, rgba(0, 144, 255, 0.00) 65.39%)',
+            },
             dropShadow: {
                 tab: '0px 46px 64px rgba(31, 47, 70, 0.4)',
             },
@@ -69,6 +72,7 @@ module.exports = {
             tablet: '768px',
             laptop: '1024px',
             desktop: '1440px',
+            horizontalTab: '1120px',
         },
 
         fontSize: {

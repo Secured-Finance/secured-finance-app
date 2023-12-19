@@ -1,9 +1,13 @@
 import { composeStories } from '@storybook/react';
+import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { render, screen } from 'src/test-utils.js';
 import { CurrencySymbol } from 'src/utils';
 import * as stories from './CollateralUsageSection.stories';
 
 const { Default } = composeStories(stories);
+
+const mockSecuredFinance = mockUseSF();
+jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('CollateralUsageSection Component', () => {
     it('should render a CollateralUsageSection', () => {

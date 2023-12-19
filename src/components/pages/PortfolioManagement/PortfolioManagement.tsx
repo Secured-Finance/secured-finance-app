@@ -1,7 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
-import { useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useMemo, useState } from 'react';
 import { Spinner } from 'src/components/atoms';
 import {
     Alert,
@@ -27,13 +26,12 @@ import {
     useCurrencyDelistedStatus,
     useGraphClientHook,
     useIsUnderCollateralThreshold,
+    useLastPrices,
     useLendingMarkets,
     useOrderList,
     usePagination,
     usePositions,
 } from 'src/hooks';
-import { getPriceMap } from 'src/store/assetPrices/selectors';
-import { RootState } from 'src/store/types';
 import { TradeHistory } from 'src/types';
 import {
     checkOrderIsFilled,
@@ -47,14 +45,14 @@ import { useAccount } from 'wagmi';
 
 export type Trade = TradeHistory[0];
 
-enum TableType {
+export enum TableType {
     ACTIVE_POSITION = 0,
     OPEN_ORDERS,
     ORDER_HISTORY,
     MY_TRANSACTIONS,
 }
 
-const TabSpinner = () => (
+export const TabSpinner = () => (
     <div className='flex h-full w-full items-center justify-center pt-10'>
         <Spinner />
     </div>
@@ -123,12 +121,30 @@ export const PortfolioManagement = () => {
     ]);
     const { data: positions } = usePositions(address, usedCurrencies);
 
+    const dataUser = useMemo(() => {
+        if (selectedTable === TableType.MY_TRANSACTIONS)
+            return (
+                userTransactionHistory.data?.transactions[0]?.taker.id ??
+                undefined
+            );
+        if (selectedTable === TableType.ORDER_HISTORY)
+            return userOrderHistory.data?.orders[0]?.maker.id ?? undefined;
+    }, [
+        selectedTable,
+        userOrderHistory.data?.orders,
+        userTransactionHistory.data?.transactions,
+    ]);
+
     const paginatedTransactions = usePagination(
-        userTransactionHistory.data?.transactions ?? []
+        userTransactionHistory.data?.transactions ?? [],
+        dataUser,
+        address
     );
 
     const paginatedOrderHistory = usePagination(
-        userOrderHistory.data?.orders ?? []
+        userOrderHistory.data?.orders ?? [],
+        dataUser,
+        address
     );
 
     const sortedOrderHistory = useMemo(() => {
@@ -156,7 +172,7 @@ export const PortfolioManagement = () => {
             .sort((a, b) => sortOrders(a, b));
     }, [orderList.inactiveOrderList, paginatedOrderHistory]);
 
-    const priceMap = useSelector((state: RootState) => getPriceMap(state));
+    const { data: priceMap } = useLastPrices();
 
     const { data: collateralBook = emptyCollateralBook, isLoading } =
         useCollateralBook(address);
@@ -222,6 +238,11 @@ export const PortfolioManagement = () => {
 
     const userDelistedCurrenciesArray = Array.from(userDelistedCurrenciesSet);
     const isUnderCollateralThreshold = useIsUnderCollateralThreshold(address);
+
+    useEffect(() => {
+        setOffsetOrders(0);
+        setOffsetTransactions(0);
+    }, [address]);
 
     return (
         <Page title='Portfolio Management' name='portfolio-management'>
@@ -344,10 +365,13 @@ export const PortfolioManagement = () => {
                                 data={myTransactions}
                                 pagination={{
                                     totalData: myTransactionsDataCount,
-                                    getMoreData: () =>
-                                        setOffsetTransactions(
-                                            offsetTransactions + offset
-                                        ),
+                                    getMoreData: () => {
+                                        if (myTransactions.length >= offset) {
+                                            setOffsetTransactions(
+                                                offsetTransactions + offset
+                                            );
+                                        }
+                                    },
                                     containerHeight: 300,
                                 }}
                             />

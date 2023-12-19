@@ -1,14 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
-import assetPrices from './assetPrices';
 import blockchain from './blockchain';
-import { listenerMiddleware } from './blockchain/reducer';
 import interactions from './interactions';
 import landingOrderForm from './landingOrderForm';
 import lastError from './lastError';
 import wallet from './wallet';
 
 export const rootReducers = {
-    assetPrices,
     blockchain,
     interactions,
     landingOrderForm,
@@ -18,11 +15,13 @@ export const rootReducers = {
 
 const store = configureStore({
     reducer: rootReducers,
-    // This setting reproduce the behavior without redux-toolkit.
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware({
-            serializableCheck: false,
-        }).prepend(listenerMiddleware.middleware),
+            serializableCheck: {
+                // Ignore these action types
+                ignoredActions: ['landingOrderForm/setAmount'],
+            },
+        }),
 });
 export default store;
 export type AppDispatch = typeof store.dispatch;

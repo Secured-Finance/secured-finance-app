@@ -1,8 +1,5 @@
 import { composeStories } from '@storybook/react';
-import {
-    preloadedAssetPrices,
-    preloadedEthBalance,
-} from 'src/stories/mocks/fixtures';
+import { preloadedEthBalance } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './MarketDashboard.stories';
@@ -32,7 +29,6 @@ const renderDefault = async () => {
             apolloMocks: Default.parameters?.apolloClient.mocks,
             preloadedState: {
                 ...preloadedEthBalance,
-                ...preloadedAssetPrices,
             },
         })
     );
@@ -44,7 +40,6 @@ const renderConnected = async () => {
             apolloMocks: ConnectedToWallet.parameters?.apolloClient.mocks,
             preloadedState: {
                 ...preloadedEthBalance,
-                ...preloadedAssetPrices,
             },
         })
     );

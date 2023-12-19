@@ -1,7 +1,5 @@
-import { useSelector } from 'react-redux';
 import { CurrencyIcon, CurrencyItem } from 'src/components/atoms';
-import { getPriceMap } from 'src/store/assetPrices/selectors';
-import { RootState } from 'src/store/types';
+import { useLastPrices } from 'src/hooks';
 import { CurrencySymbol, currencyMap } from 'src/utils';
 
 export interface CollateralInformationProps {
@@ -13,8 +11,7 @@ export const CollateralInformation = ({
     asset,
     quantity,
 }: CollateralInformationProps) => {
-    const priceList = useSelector((state: RootState) => getPriceMap(state));
-    const price = priceList[asset];
+    const { data: priceList } = useLastPrices();
 
     return (
         <div className='flex h-11 w-full flex-row gap-5'>
@@ -24,7 +21,7 @@ export const CollateralInformation = ({
                 <CurrencyItem
                     amount={quantity}
                     ccy={asset}
-                    price={price}
+                    price={priceList[asset]}
                     align='right'
                     minDecimals={currencyMap[asset].roundingDecimal}
                     maxDecimals={currencyMap[asset].roundingDecimal}

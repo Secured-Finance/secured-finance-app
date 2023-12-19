@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAsset } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
     connectEthWallet,
@@ -20,9 +19,6 @@ export const useEthereumWalletStore = () => {
     const ethBalance = amountFormatterFromBase[CurrencySymbol.ETH](
         balance?.value ?? ZERO_BI
     );
-    const { price } = useSelector((state: RootState) =>
-        getAsset(CurrencySymbol.ETH)(state)
-    );
     const block = useSelector(
         (state: RootState) => state.blockchain.latestBlock
     );
@@ -39,5 +35,5 @@ export const useEthereumWalletStore = () => {
         if (isConnected && address) {
             dispatch(updateEthBalance(ethBalance));
         }
-    }, [address, dispatch, isConnected, price, ethBalance, block]);
+    }, [address, dispatch, isConnected, ethBalance, block]);
 };

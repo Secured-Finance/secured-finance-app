@@ -1,9 +1,6 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import { screen, userEvent } from '@storybook/testing-library';
-import {
-    withAssetPrice,
-    withWalletProvider,
-} from 'src/../.storybook/decorators';
+import { withWalletProvider } from 'src/../.storybook/decorators';
 import { CurrencySymbol } from 'src/utils';
 import { DepositCollateral } from './DepositCollateral';
 
@@ -26,7 +23,7 @@ export default {
             },
         },
     },
-    decorators: [withAssetPrice, withWalletProvider],
+    decorators: [withWalletProvider],
 } as Meta<typeof DepositCollateral>;
 
 const Template: StoryFn<typeof DepositCollateral> = args => {

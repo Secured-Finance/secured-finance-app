@@ -138,7 +138,7 @@ export const WalletPopover = ({
                                                     <AlertTriangle data-testid='network-alert-triangle' />
                                                 }
                                             >
-                                                Currently only Sepolia is
+                                                Currently only Ethereum is
                                                 supported.
                                             </Tooltip>
                                         ) : (

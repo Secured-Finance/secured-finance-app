@@ -1,14 +1,11 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import {
     CoreTable,
     Pagination,
     TableActionMenu,
 } from 'src/components/molecules';
-import { useBreakpoint, useEtherscanUrl } from 'src/hooks';
-import { getPriceMap } from 'src/store/assetPrices/selectors';
-import { RootState } from 'src/store/types';
+import { useBreakpoint, useEtherscanUrl, useLastPrices } from 'src/hooks';
 import { Order, OrderHistoryList } from 'src/types';
 import {
     amountColumnDefinition,
@@ -36,18 +33,25 @@ const getStatus = (status: string) => {
 export const OrderHistoryTable = ({
     data,
     pagination,
+    variant = 'default',
 }: {
     data: OrderHistoryList;
     pagination?: Pagination;
+    variant?: 'contractOnly' | 'default';
 }) => {
-    const priceList = useSelector((state: RootState) => getPriceMap(state));
+    const { data: priceList } = useLastPrices();
     const isTablet = useBreakpoint('laptop');
     const etherscanUrl = useEtherscanUrl();
 
     const columns = useMemo(
         () => [
             loanTypeColumnDefinition(columnHelper, 'Type', 'type'),
-            contractColumnDefinition(columnHelper, 'Contract', 'contract'),
+            contractColumnDefinition(
+                columnHelper,
+                'Contract',
+                'contract',
+                variant
+            ),
             inputPriceYieldColumnDefinition(
                 columnHelper,
                 'Price',
@@ -111,7 +115,7 @@ export const OrderHistoryTable = ({
                 header: () => <div className='p-2'>Actions</div>,
             }),
         ],
-        [etherscanUrl, priceList]
+        [etherscanUrl, priceList, variant]
     );
 
     const columnsForTabletMobile = [

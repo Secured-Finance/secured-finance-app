@@ -13,8 +13,10 @@ describe('useIsMarketTerminated hook', () => {
         const { result, waitForNextUpdate } = renderHook(() =>
             useIsMarketTerminated()
         );
+        expect(result.current.isLoading).toEqual(true);
         await waitForNextUpdate();
         expect(mock.isTerminated).toHaveBeenCalledTimes(1);
+        expect(result.current.isLoading).toEqual(false);
         expect(result.current.data).toEqual(true);
     });
 
@@ -23,8 +25,10 @@ describe('useIsMarketTerminated hook', () => {
         const { result, waitForNextUpdate } = renderHook(() =>
             useIsMarketTerminated()
         );
+        expect(result.current.isLoading).toEqual(true);
         await waitForNextUpdate();
         expect(mock.isTerminated).toHaveBeenCalledTimes(1);
+        expect(result.current.isLoading).toEqual(false);
         expect(result.current.data).toEqual(false);
     });
 });

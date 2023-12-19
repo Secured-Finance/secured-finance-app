@@ -1,21 +1,23 @@
 {
   "name": "secured-finance-web",
-  "version": "0.6.0",
+  "version": "1.0.0",
   "private": true,
   "homepage": ".",
   "dependencies": {
+    "@0xsquid/widget": "^1.6.20",
     "@amplitude/analytics-browser": "^1.7.0",
     "@glif/filecoin-number": "^1.1.0-beta.11",
     "@headlessui/react": "^1.7.15",
     "@heroicons/react": "^2.0.18",
     "@mui/base": "^5.0.0-alpha.106",
     "@reduxjs/toolkit": "^1.8.1",
-    "@secured-finance/sf-client": "0.2.0-beta.122",
-    "@secured-finance/sf-core": "0.2.0-beta.108",
-    "@secured-finance/sf-graph-client": "0.2.0-beta.117",
+    "@secured-finance/sf-client": "0.2.0-beta.137",
+    "@secured-finance/sf-core": "0.2.0-beta.130",
+    "@secured-finance/sf-graph-client": "0.2.0-beta.136",
     "@svgr/webpack": "^6.2.1",
     "@tanstack/react-query": "^4.32.0",
     "@tanstack/react-table": "^8.5.13",
+    "@wagmi/connectors": "^3.1.5",
     "axios": "^0.21.1",
     "bignumber.js": "^9.0.1",
     "chart.js": "^3.8.0",
@@ -56,11 +58,7 @@
     "cypress:run": "cypress run"
   },
   "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
+    "production": [">0.2%", "not dead", "not op_mini all"],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
@@ -118,6 +116,7 @@
     "jest-canvas-mock": "^2.4.0",
     "jest-environment-jsdom": "^29.1.2",
     "jest-fail-on-console": "^3.0.1",
+    "next-transpile-modules": "^10.0.1",
     "os-browserify": "^0.3.0",
     "postcss": "^8.4.14",
     "postcss-import": "^14.1.0",

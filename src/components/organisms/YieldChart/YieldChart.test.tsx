@@ -1,29 +1,18 @@
 import { composeStories } from '@storybook/react';
-import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
-import {
-    fireEvent,
-    queries,
-    render,
-    RenderResult,
-    screen,
-    waitFor,
-} from 'src/test-utils.js';
+import { mockUseSF } from 'src/stories/mocks/useSFMock';
+import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './YieldChart.stories';
 
 const { Default, Loading } = composeStories(stories);
 
+const mockSecuredFinance = mockUseSF();
+jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
+
 describe('YieldChart Component', () => {
-    it.skip('should render YieldChart', async () => {
-        let ag: RenderResult<typeof queries, HTMLElement>;
-        await waitFor(() => {
-            ag = render(<Default />, {
-                preloadedState: {
-                    ...preloadedAssetPrices,
-                },
-            });
-        }).then(() => {
-            expect(ag.baseElement).toMatchSnapshot();
-        });
+    it('should render YieldChart', async () => {
+        const { container } = render(<Default />);
+        expect(await screen.findByText('$6.00')).toBeInTheDocument();
+        expect(container).toMatchSnapshot();
     });
 
     it('should close and open YieldChart on button click', async () => {

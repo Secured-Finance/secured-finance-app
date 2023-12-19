@@ -1,12 +1,6 @@
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import { CurveHeaderAsset, CurveHeaderTotal } from 'src/components/atoms';
-import {
-    getPriceChangeMap,
-    getPriceMap,
-} from 'src/store/assetPrices/selectors';
-import { RootState } from 'src/store/types';
-import { DailyVolumes } from 'src/types';
+import { AssetPriceMap, DailyVolumes } from 'src/types';
 import {
     CurrencySymbol,
     computeTotalDailyVolumeInUSD,
@@ -16,18 +10,15 @@ import {
 
 interface CurveHeaderProps {
     asset: CurrencySymbol;
+    priceList: AssetPriceMap;
     dailyVolumes: DailyVolumes;
 }
 
 export const CurveHeader = ({
-    asset = CurrencySymbol.WFIL,
+    asset = CurrencySymbol.WBTC,
+    priceList,
     dailyVolumes,
 }: CurveHeaderProps): JSX.Element => {
-    const priceList = useSelector((state: RootState) => getPriceMap(state));
-    const priceChangeList = useSelector((state: RootState) =>
-        getPriceChangeMap(state)
-    );
-
     const totalVolume = useMemo(() => {
         const { volumePerCurrency } = computeTotalDailyVolumeInUSD(
             dailyVolumes,
@@ -42,7 +33,6 @@ export const CurveHeader = ({
             <CurveHeaderAsset
                 ccy={asset}
                 value={priceList[asset]}
-                fluctuation={priceChangeList[asset]}
             ></CurveHeaderAsset>
             <div className='flex flex-row gap-2'>
                 <CurveHeaderTotal

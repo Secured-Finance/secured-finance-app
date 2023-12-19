@@ -1,9 +1,8 @@
-import { AssetPriceMap } from 'src/store/assetPrices/selectors';
-import { DailyVolumes } from 'src/types';
+import { AssetPriceMap, DailyVolumes } from 'src/types';
 import { ZERO_BI } from './collateral';
 import {
-    currencyMap,
     CurrencySymbol,
+    currencyMap,
     hexToCurrencySymbol,
 } from './currencyList';
 
@@ -19,6 +18,8 @@ export function computeTotalDailyVolumeInUSD(
         [CurrencySymbol.WFIL]: ZERO_BI,
         [CurrencySymbol.USDC]: ZERO_BI,
         [CurrencySymbol.WBTC]: ZERO_BI,
+        [CurrencySymbol.aUSDC]: ZERO_BI,
+        [CurrencySymbol.axlFIL]: ZERO_BI,
     };
 
     let totalVolumeUSD = ZERO_BI;
