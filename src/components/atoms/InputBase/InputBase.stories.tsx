@@ -15,7 +15,7 @@ export default {
 
 const Template: StoryFn<typeof InputBase> = args => {
     const [value, setValue] = useState(args.value);
-    const handleChange = (newValue: number | undefined) => {
+    const handleChange = (newValue: string | undefined) => {
         setValue(newValue);
         args.onValueChange(newValue);
     };
@@ -25,7 +25,7 @@ const Template: StoryFn<typeof InputBase> = args => {
 export const Default = Template.bind({});
 export const WithValue = Template.bind({});
 WithValue.args = {
-    value: 50,
+    value: '50',
 };
 
 export const DecimalPlacesAllowed = Template.bind({});

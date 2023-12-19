@@ -2,19 +2,20 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { ViewType } from 'src/components/atoms';
 import { OrderType } from 'src/types';
-import { CurrencySymbol } from 'src/utils';
+import { amountFormatterToBase, CurrencySymbol } from 'src/utils';
 
 type LandingOrderFormStore = {
     currency: CurrencySymbol;
     maturity: number;
     side: OrderSide;
     amount: string;
-    unitPrice: number | undefined;
+    unitPrice: string | undefined;
     orderType: OrderType;
     lastView: ViewType;
     sourceAccount: WalletSource;
     isBorrowedCollateral: boolean;
 };
+
 const initialStore: LandingOrderFormStore = {
     currency: CurrencySymbol.WBTC,
     maturity: 0,
@@ -40,10 +41,10 @@ const landingOrderFormSlice = createSlice({
         setSide: (state, action: PayloadAction<OrderSide>) => {
             state.side = action.payload;
         },
-        setAmount: (state, action: PayloadAction<bigint>) => {
-            state.amount = action.payload.toString();
+        setAmount: (state, action: PayloadAction<string>) => {
+            state.amount = action.payload;
         },
-        setUnitPrice: (state, action: PayloadAction<number | undefined>) => {
+        setUnitPrice: (state, action: PayloadAction<string | undefined>) => {
             state.unitPrice = action.payload;
         },
         resetUnitPrice: state => {
@@ -67,7 +68,7 @@ const landingOrderFormSlice = createSlice({
 export const selectLandingOrderForm = (state: LandingOrderFormStore) => {
     return {
         ...state,
-        amount: BigInt(state.amount),
+        amount: amountFormatterToBase[state.currency](Number(state.amount)),
     };
 };
 

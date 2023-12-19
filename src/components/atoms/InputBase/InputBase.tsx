@@ -11,13 +11,14 @@ export type SizeDependentStylesConfig = Record<
 
 interface InputBaseProps {
     className?: string;
-    value?: number;
-    onValueChange: (v: number | undefined) => void;
+    value?: string;
+    onValueChange: (v: string | undefined) => void;
     label?: string;
     decimalPlacesAllowed?: number;
     maxLimit?: number;
     sizeDependentStyles?: SizeDependentStylesConfig;
 }
+
 export const InputBase = ({
     className,
     value,
@@ -31,7 +32,7 @@ export const InputBase = ({
         values: NumberFormatValues,
         _sourceInfo: SourceInfo
     ) => {
-        const value = values.floatValue;
+        const value = values.value;
         if (onValueChange) {
             onValueChange(value);
         }

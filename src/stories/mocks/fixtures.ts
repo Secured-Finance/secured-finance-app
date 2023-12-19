@@ -54,7 +54,7 @@ export const dec24Fixture = new Maturity(1733011200);
 
 const openingDateTimestamp = 1638316800;
 const openingDate = BigInt(openingDateTimestamp);
-const preOpenDateTimestamp = 1637712000;
+const preOpenDateTimestamp = 1637107200;
 
 export const maturitiesMockFromContract = (ccy: string) => [
     {
@@ -380,7 +380,7 @@ export const maturities = {
         isActive: false,
         utcOpeningDate: 1685577600,
         marketUnitPrice: 9001,
-        preOpenDate: 1684972800,
+        preOpenDate: 1684368000,
         openingUnitPrice: 9710,
         isReady: false,
         isOpened: false,

@@ -17,7 +17,6 @@ import {
     AddressUtils,
     CollateralInfo,
     CurrencySymbol,
-    ZERO_BI,
     amountFormatterFromBase,
     amountFormatterToBase,
     formatAmount,
@@ -109,16 +108,19 @@ export const WithdrawCollateral = ({
     const { address } = useAccount();
     const [asset, setAsset] = useState(CurrencySymbol.ETH);
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
-    const [collateral, setCollateral] = useState<bigint>();
+    const [collateral, setCollateral] = useState<string>();
     const [txHash, setTxHash] = useState<string | undefined>();
     const [errorMessage, setErrorMessage] = useState(
         'Your withdrawal transaction has failed.'
+    );
+    const collateralBigInt = amountFormatterToBase[asset](
+        Number(collateral ?? '')
     );
 
     const { data: priceList } = useLastPrices();
     const { onWithdrawCollateral } = useWithdrawCollateral(
         asset,
-        collateral ?? ZERO_BI
+        collateralBigInt
     );
 
     const handleClose = useCallback(() => {
@@ -130,12 +132,18 @@ export const WithdrawCollateral = ({
         return (
             state.currentStep === Step.withdrawCollateral &&
             (!collateral ||
-                collateral >
+                collateralBigInt >
                     amountFormatterToBase[asset](
                         collateralList[asset]?.available ?? 0
                     ))
         );
-    }, [collateralList, asset, collateral, state.currentStep]);
+    }, [
+        state.currentStep,
+        collateral,
+        collateralBigInt,
+        asset,
+        collateralList,
+    ]);
 
     const handleWithdrawCollateral = useCallback(async () => {
         try {
@@ -147,7 +155,7 @@ export const WithdrawCollateral = ({
                 trackCollateralEvent(
                     CollateralEvents.WITHDRAW_COLLATERAL,
                     asset,
-                    collateral ?? ZERO_BI,
+                    collateralBigInt,
                     source ?? ''
                 );
                 setTxHash(tx);
@@ -161,7 +169,7 @@ export const WithdrawCollateral = ({
         }
     }, [
         asset,
-        collateral,
+        collateralBigInt,
         handleContractTransaction,
         onWithdrawCollateral,
         source,
@@ -221,19 +229,13 @@ export const WithdrawCollateral = ({
                                 <CollateralInput
                                     price={priceList[asset]}
                                     asset={asset}
-                                    onAmountChange={(v: bigint | undefined) =>
+                                    onAmountChange={(v: string | undefined) =>
                                         setCollateral(v)
                                     }
                                     availableAmount={
                                         collateralList[asset]?.available ?? 0
                                     }
-                                    amount={
-                                        collateral
-                                            ? amountFormatterFromBase[asset](
-                                                  collateral
-                                              )
-                                            : undefined
-                                    }
+                                    amount={collateral}
                                 />
                                 <div className='typography-caption-2 h-fit rounded-xl border border-red px-3 py-2 text-slateGray'>
                                     Please note that withdrawal will impact the
@@ -263,7 +265,7 @@ export const WithdrawCollateral = ({
                                         'Amount',
                                         `${formatAmount(
                                             amountFormatterFromBase[asset](
-                                                collateral ?? ZERO_BI
+                                                collateralBigInt
                                             )
                                         )} ${asset}`,
                                     ],

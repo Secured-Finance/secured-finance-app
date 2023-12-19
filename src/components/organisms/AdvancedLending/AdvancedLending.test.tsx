@@ -26,13 +26,11 @@ describe('Advanced Lending Component', () => {
                 target: { value: '1' },
             })
         );
-        expect(store.getState().landingOrderForm.amount).toEqual(
-            '1000000000000000000'
-        );
+        expect(store.getState().landingOrderForm.amount).toEqual('1');
         fireEvent.click(screen.getByRole('button', { name: 'WFIL' }));
         fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
         await waitFor(() => {
-            expect(store.getState().landingOrderForm.amount).toEqual('1000000');
+            expect(store.getState().landingOrderForm.amount).toEqual('1');
             expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
                 '1'
             );
@@ -51,15 +49,11 @@ describe('Advanced Lending Component', () => {
                 target: { value: '1' },
             })
         );
-        expect(store.getState().landingOrderForm.amount).toEqual(
-            '1000000000000000000'
-        );
+        expect(store.getState().landingOrderForm.amount).toEqual('1');
         fireEvent.click(screen.getByRole('button', { name: 'DEC22' }));
         fireEvent.click(screen.getByText('MAR23'));
         await waitFor(() => {
-            expect(store.getState().landingOrderForm.amount).toEqual(
-                '1000000000000000000'
-            );
+            expect(store.getState().landingOrderForm.amount).toEqual('1');
             expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
                 '1'
             );
