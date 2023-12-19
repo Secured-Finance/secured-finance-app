@@ -1,6 +1,5 @@
 import * as analytics from '@amplitude/analytics-browser';
 import { composeStories } from '@storybook/react';
-import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import {
@@ -11,10 +10,6 @@ import {
 import * as stories from './WithdrawCollateral.stories';
 
 const { Default } = composeStories(stories);
-
-const preloadedState = {
-    ...preloadedAssetPrices,
-};
 
 beforeEach(() => jest.clearAllMocks());
 
@@ -50,8 +45,8 @@ describe('WithdrawCollateral component', () => {
         expect(button).toBeDisabled();
     });
 
-    it('should select asset and update amount', () => {
-        render(<Default />, { preloadedState });
+    it('should select asset and update amount', async () => {
+        render(<Default />);
 
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
         fireEvent.click(screen.getByTestId('option-2'));
@@ -60,17 +55,17 @@ describe('WithdrawCollateral component', () => {
 
         const tab = screen.getByTestId(100);
         fireEvent.click(tab);
-        expect(screen.getByText('$50.00')).toBeInTheDocument();
+        expect(await screen.findByText('$50.00')).toBeInTheDocument();
     });
 
-    it('should reset amount to zero when asset is changed in collateral selector', () => {
-        render(<Default />, { preloadedState });
+    it('should reset amount to zero when asset is changed in collateral selector', async () => {
+        render(<Default />);
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
         fireEvent.click(screen.getByTestId('option-2'));
 
         const tab = screen.getByTestId(100);
         fireEvent.click(tab);
-        expect(screen.getByText('$50.00')).toBeInTheDocument();
+        expect(await screen.findByText('$50.00')).toBeInTheDocument();
         expect(screen.getByRole('textbox').getAttribute('value')).toBe('50');
 
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
@@ -82,7 +77,7 @@ describe('WithdrawCollateral component', () => {
     });
 
     it('should update the lastActionTimestamp in the store when the transaction receipt is received', async () => {
-        const { store } = render(<Default />, { preloadedState });
+        const { store } = render(<Default />);
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
         fireEvent.click(screen.getByTestId('option-2'));
         fireEvent.click(screen.getByTestId(75));
@@ -93,9 +88,11 @@ describe('WithdrawCollateral component', () => {
     });
 
     it('should proceed to failure screen and call onclose when block number is undefined', async () => {
-        mockSecuredFinance.withdrawCollateral.mockResolvedValueOnce('');
+        mockSecuredFinance.tokenVault.withdrawCollateral.mockResolvedValueOnce(
+            ''
+        );
         const onClose = jest.fn();
-        render(<Default onClose={onClose} />, { preloadedState });
+        render(<Default onClose={onClose} />);
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
         fireEvent.click(screen.getByTestId('option-2'));
         expect(screen.getByText('USDC')).toBeInTheDocument();
@@ -103,7 +100,7 @@ describe('WithdrawCollateral component', () => {
 
         const tab = screen.getByTestId(75);
         fireEvent.click(tab);
-        expect(screen.getByText('$37.50')).toBeInTheDocument();
+        expect(await screen.findByText('$37.50')).toBeInTheDocument();
 
         const button = screen.getByTestId('dialog-action-button');
         fireEvent.click(button);
@@ -136,9 +133,7 @@ describe('WithdrawCollateral component', () => {
     it('should track the withdrawing of collateral', async () => {
         const track = jest.spyOn(analytics, 'track');
         const onClose = jest.fn();
-        render(<Default onClose={onClose} source='Source of Withdrawal' />, {
-            preloadedState,
-        });
+        render(<Default onClose={onClose} source='Source of Withdrawal' />);
 
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
         fireEvent.click(screen.getByTestId('option-2'));
@@ -160,9 +155,7 @@ describe('WithdrawCollateral component', () => {
 
     it('should reach success screen when transaction receipt is received', async () => {
         const onClose = jest.fn();
-        render(<Default onClose={onClose} source='Source of Withdrawal' />, {
-            preloadedState,
-        });
+        render(<Default onClose={onClose} source='Source of Withdrawal' />);
 
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
         fireEvent.click(screen.getByTestId('option-2'));
@@ -193,9 +186,7 @@ describe('WithdrawCollateral component', () => {
 
     it('should withdraw whole amount when 100% is clicked', async () => {
         const track = jest.spyOn(analytics, 'track');
-        render(<Default source='Source of Withdrawal' />, {
-            preloadedState,
-        });
+        render(<Default source='Source of Withdrawal' />);
 
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
         fireEvent.click(screen.getByTestId('option-3'));
@@ -224,7 +215,7 @@ describe('WithdrawCollateral component', () => {
     });
 
     it('should open the modal with the selected asset if currency is passed as argument', () => {
-        render(<Default selected={CurrencySymbol.USDC} />, { preloadedState });
+        render(<Default selected={CurrencySymbol.USDC} />);
         expect(screen.getByText('USDC')).toBeInTheDocument();
         expect(screen.getByText('50 USDC Available')).toBeInTheDocument();
     });

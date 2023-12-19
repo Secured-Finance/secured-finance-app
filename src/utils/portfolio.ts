@@ -1,6 +1,5 @@
 import { OrderList, Position } from 'src/hooks';
-import { AssetPriceMap } from 'src/store/assetPrices/selectors';
-import { Order, TradeHistory } from 'src/types';
+import { AssetPriceMap, Order, TradeHistory } from 'src/types';
 import { ZERO_BI } from './collateral';
 import { currencyMap, hexToCurrencySymbol } from './currencyList';
 import { LoanValue } from './entities';
@@ -69,6 +68,9 @@ export const formatOrders = (orders: OrderList): TradeHistory => {
         forwardValue: calculateForwardValue(order.amount, order.unitPrice),
         averagePrice: calculateAveragePrice(order.unitPrice),
         feeInFV: ZERO_BI,
+        taker: {
+            id: order.maker ?? '',
+        },
     }));
 };
 

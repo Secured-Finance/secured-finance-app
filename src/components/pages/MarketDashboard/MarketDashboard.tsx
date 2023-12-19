@@ -1,6 +1,5 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import {
     CollateralManagementConciseTab,
     GradientBox,
@@ -18,17 +17,17 @@ import {
     baseContracts,
     emptyCollateralBook,
     emptyValueLockedBook,
+    getLoanValues,
     useCollateralBook,
+    useCurrencies,
     useCurrencyDelistedStatus,
     useGraphClientHook,
     useIsGlobalItayose,
+    useLastPrices,
     useLendingMarkets,
-    useLoanValues,
     useTotalNumberOfAsset,
     useValueLockedByCurrency,
 } from 'src/hooks';
-import { getPriceMap } from 'src/store/assetPrices/selectors';
-import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
     Environment,
@@ -37,7 +36,6 @@ import {
     ZERO_BI,
     computeTotalDailyVolumeInUSD,
     currencyMap,
-    getCurrencyMapAsList,
     getEnvironment,
     ordinaryFormat,
     usdFormat,
@@ -49,9 +47,9 @@ const computeTotalUsers = (users: string) => {
         return '0';
     }
     const totalUsers =
-        getEnvironment().toLowerCase() === Environment.DEVELOPMENT
-            ? +users
-            : +users + PREVIOUS_TOTAL_USERS;
+        getEnvironment().toLowerCase() === Environment.STAGING
+            ? +users + PREVIOUS_TOTAL_USERS
+            : +users;
     return ordinaryFormat(totalUsers ?? 0, 0, 2, 'compact');
 };
 
@@ -62,19 +60,17 @@ export const MarketDashboard = () => {
 
     const curves: Record<string, Rate[]> = {};
     const { data: lendingContracts = baseContracts } = useLendingMarkets();
-
+    const { data: isGlobalItayose } = useIsGlobalItayose();
+    const { data: currencies = [] } = useCurrencies();
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
 
-    const { data: isGlobalItayose } = useIsGlobalItayose();
-
-    getCurrencyMapAsList().forEach(ccy => {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const unitPrices = useLoanValues(
-            lendingContracts[ccy.symbol],
+    currencies.forEach(ccy => {
+        const unitPrices = getLoanValues(
+            lendingContracts[ccy],
             RateType.Market,
             market => market.isReady && !market.isMatured
         );
-        curves[ccy.symbol] = Array.from(unitPrices.values()).map(r => r.apr);
+        curves[ccy] = Array.from(unitPrices.values()).map(r => r.apr);
     });
 
     const { data: totalNumberOfAsset = 0 } = useTotalNumberOfAsset();
@@ -92,7 +88,7 @@ export const MarketDashboard = () => {
         'dailyVolumes'
     );
 
-    const priceList = useSelector((state: RootState) => getPriceMap(state));
+    const { data: priceList } = useLastPrices();
 
     const totalVolume = useMemo(() => {
         return ordinaryFormat(
@@ -102,28 +98,25 @@ export const MarketDashboard = () => {
             2,
             'compact'
         );
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [JSON.stringify(priceList), dailyVolumes.data]);
+    }, [priceList, dailyVolumes.data]);
 
     const totalValueLockedInUSD = useMemo(() => {
         let val = ZERO_BI;
         if (!valueLockedByCurrency) {
             return val;
         }
-        for (const ccy of getCurrencyMapAsList()) {
-            if (!valueLockedByCurrency[ccy.symbol]) continue;
+        for (const ccy of currencies ?? []) {
+            if (!valueLockedByCurrency[ccy]) continue;
             val += BigInt(
                 Math.floor(
-                    currencyMap[ccy.symbol].fromBaseUnit(
-                        valueLockedByCurrency[ccy.symbol]
-                    ) * priceList[ccy.symbol]
+                    currencyMap[ccy].fromBaseUnit(valueLockedByCurrency[ccy]) *
+                        priceList[ccy]
                 )
             );
         }
 
         return val;
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [JSON.stringify(priceList), valueLockedByCurrency]);
+    }, [currencies, priceList, valueLockedByCurrency]);
 
     return (
         <Page title='Market Dashboard' name='dashboard-page'>
@@ -163,7 +156,7 @@ export const MarketDashboard = () => {
                                 title='Yield Curve'
                                 curves={curves}
                                 labels={Object.values(
-                                    lendingContracts[CurrencySymbol.WFIL]
+                                    lendingContracts[CurrencySymbol.WBTC]
                                 )
                                     .filter(o => o.isReady && !o.isMatured)
                                     .map(o => o.name)}
@@ -193,7 +186,7 @@ export const MarketDashboard = () => {
                             </div>
                         </GradientBox>
                     )}
-                    <MyWalletWidget />
+                    <MyWalletWidget hideBridge />
                 </section>
             </TwoColumns>
         </Page>

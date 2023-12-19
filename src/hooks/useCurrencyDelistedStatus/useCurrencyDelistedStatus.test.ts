@@ -1,5 +1,5 @@
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { renderHook } from 'src/test-utils';
+import { renderHook, waitFor } from 'src/test-utils';
 import { CurrencySymbol } from 'src/utils';
 import { useCurrencyDelistedStatus } from './useCurrencyDelistedStatus';
 
@@ -8,15 +8,13 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
 describe('useCurrencyDelistedStatus hook', () => {
     it('should return a set of delisted currencies', async () => {
-        const { result, waitForNextUpdate } = renderHook(() =>
-            useCurrencyDelistedStatus()
-        );
-
-        await waitForNextUpdate();
+        const { result } = renderHook(() => useCurrencyDelistedStatus());
 
         const delistedCurrencySet = new Set([CurrencySymbol.USDC]);
 
-        expect(mock.currencyExists).toHaveBeenCalledTimes(4);
+        await waitFor(() =>
+            expect(mock.currencyExists).toHaveBeenCalledTimes(4)
+        );
         const newValue = result.current;
         expect(newValue.data).toEqual(delistedCurrencySet);
     });

@@ -1,14 +1,18 @@
 import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
-import { withAssetPrice, withWalletProvider } from '.storybook/decorators';
+import { withWalletProvider } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
-import { within } from '@storybook/testing-library';
+import { userEvent, within } from '@storybook/testing-library';
 import { defaultDelistedStatusSet, emptyCollateralBook } from 'src/hooks';
 import {
     collateralBook37,
     maturityOptions,
     yieldCurveRates,
 } from 'src/stories/mocks/fixtures';
-import { mockTrades } from 'src/stories/mocks/queries';
+import {
+    mockFilteredUserOrderHistory,
+    mockFilteredUserTransactionHistory,
+    mockTrades,
+} from 'src/stories/mocks/queries';
 import { CurrencySymbol } from 'src/utils';
 import { AdvancedLending } from './AdvancedLending';
 
@@ -24,7 +28,11 @@ export default {
     },
     parameters: {
         apolloClient: {
-            mocks: [...mockTrades],
+            mocks: [
+                ...mockTrades,
+                ...mockFilteredUserTransactionHistory,
+                ...mockFilteredUserOrderHistory,
+            ],
         },
         ...RESPONSIVE_PARAMETERS,
         chromatic: {
@@ -32,7 +40,7 @@ export default {
             delay: 5000,
         },
     },
-    decorators: [withAssetPrice, withWalletProvider],
+    decorators: [withWalletProvider],
 } as Meta<typeof AdvancedLending>;
 
 const Template: StoryFn<typeof AdvancedLending> = args => {
@@ -55,10 +63,38 @@ OpenOrdersConnectedToWallet.parameters = {
 };
 OpenOrdersConnectedToWallet.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    const openOrdersTab = canvas.getByTestId('Open Orders');
+    await userEvent.click(openOrdersTab);
     canvas.getByRole('button', { name: 'DEC22' }).click();
     canvas.getByRole('menuitem', { name: 'JUN23' }).click();
 };
 OpenOrdersConnectedToWallet.args = {
+    collateralBook: collateralBook37,
+};
+
+export const OrderHistoryConnectedToWallet = Template.bind({});
+OrderHistoryConnectedToWallet.parameters = {
+    connected: true,
+};
+OrderHistoryConnectedToWallet.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const orderHistoryTab = canvas.getByTestId('Order History');
+    await userEvent.click(orderHistoryTab);
+};
+OrderHistoryConnectedToWallet.args = {
+    collateralBook: collateralBook37,
+};
+
+export const MyTransactionsConnectedToWallet = Template.bind({});
+MyTransactionsConnectedToWallet.parameters = {
+    connected: true,
+};
+MyTransactionsConnectedToWallet.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const orderHistoryTab = canvas.getByTestId('My Transactions');
+    await userEvent.click(orderHistoryTab);
+};
+MyTransactionsConnectedToWallet.args = {
     collateralBook: collateralBook37,
 };
 

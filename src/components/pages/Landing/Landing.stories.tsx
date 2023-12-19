@@ -3,12 +3,13 @@ import { within } from '@storybook/testing-library';
 import { RESPONSIVE_PARAMETERS } from 'src/../.storybook/constants';
 import {
     withAppLayout,
-    withAssetPrice,
     withEthBalance,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import {
     mockDailyVolumes,
+    mockFilteredUserOrderHistory,
+    mockFilteredUserTransactionHistory,
     mockTrades,
     mockUserOrderHistory,
     mockUserTransactionHistory,
@@ -18,12 +19,7 @@ import { Landing } from './Landing';
 export default {
     title: 'Pages/Landing',
     component: Landing,
-    decorators: [
-        withAppLayout,
-        withAssetPrice,
-        withEthBalance,
-        withWalletProvider,
-    ],
+    decorators: [withAppLayout, withEthBalance, withWalletProvider],
     parameters: {
         apolloClient: {
             mocks: [
@@ -31,6 +27,8 @@ export default {
                 ...mockUserOrderHistory,
                 ...mockTrades,
                 ...mockDailyVolumes,
+                ...mockFilteredUserOrderHistory,
+                ...mockFilteredUserTransactionHistory,
             ],
         },
         ...RESPONSIVE_PARAMETERS,
@@ -53,7 +51,8 @@ export const AdvancedView = Template.bind({});
 AdvancedView.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     canvas.getByText('Advanced').click();
-    canvas.getByRole('button', { name: 'DEC22' }).click();
+    const button = await canvas.findByRole('button', { name: 'DEC22' });
+    button.click();
     canvas.getByRole('menuitem', { name: 'JUN23' }).click();
 };
 AdvancedView.parameters = {

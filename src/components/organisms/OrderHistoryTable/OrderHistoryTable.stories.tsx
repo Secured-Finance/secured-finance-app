@@ -2,7 +2,6 @@ import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import type { Meta, StoryFn } from '@storybook/react';
 import { useState } from 'react';
-import { withAssetPrice } from 'src/../.storybook/decorators';
 import {
     dec22Fixture,
     orderHistoryList,
@@ -23,7 +22,6 @@ export default {
             viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET, VIEWPORTS.LAPTOP],
         },
     },
-    decorators: [withAssetPrice],
 } as Meta<typeof OrderHistoryTable>;
 
 const Template: StoryFn<typeof OrderHistoryTable> = args => (
@@ -48,6 +46,9 @@ const PaginatedTemplate: StoryFn<typeof OrderHistoryTable> = args => {
             lendingMarket: {
                 id: '1',
                 isActive: true,
+            },
+            maker: {
+                id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
             },
         }));
     const [data, setData] = useState<OrderHistoryList>(initialData);
@@ -76,6 +77,9 @@ const PaginatedTemplate: StoryFn<typeof OrderHistoryTable> = args => {
                             lendingMarket: {
                                 id: '1',
                                 isActive: true,
+                            },
+                            maker: {
+                                id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
                             },
                         }));
 

@@ -10,13 +10,15 @@
   "[javascriptreact][javascript][typescriptreact][typescript][json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.codeActionsOnSave": {
-      "source.organizeImports": true
+      "source.organizeImports": "explicit"
     }
   },
   "prettier.prettierPath": "node_modules/prettier",
   "cSpell.words": [
     "attofil",
+    "Axelar",
     "bigint",
+    "bignumber",
     "chartjs",
     "chromaui",
     "CODECOV",
@@ -27,6 +29,7 @@
     "EFIL",
     "FLEEK",
     "graphclient",
+    "graphclients",
     "headlessui",
     "heroicons",
     "Itayose",

@@ -3,7 +3,6 @@ import type { Meta, StoryFn } from '@storybook/react';
 import { within } from '@storybook/testing-library';
 import {
     withAppLayout,
-    withAssetPrice,
     withEthBalance,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
@@ -17,12 +16,7 @@ export default {
     title: 'Pages/PortfolioManagement',
     component: PortfolioManagement,
     args: {},
-    decorators: [
-        withEthBalance,
-        withAssetPrice,
-        withAppLayout,
-        withWalletProvider,
-    ],
+    decorators: [withEthBalance, withAppLayout, withWalletProvider],
     parameters: {
         apolloClient: {
             mocks: [...mockUserTransactionHistory, ...mockUserOrderHistory],

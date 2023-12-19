@@ -1,6 +1,5 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import {
-    withAssetPrice,
     withEthBalance,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
@@ -15,8 +14,16 @@ export default {
             [WalletSource.METAMASK]:
                 'de926db3012af759b4f24b5a51ef6afa397f04670f634aa4f',
         },
+        information: {
+            [WalletSource.METAMASK]: [
+                CurrencySymbol.WBTC,
+                CurrencySymbol.ETH,
+                CurrencySymbol.WFIL,
+                CurrencySymbol.USDC,
+            ],
+        },
     },
-    decorators: [withEthBalance, withWalletProvider, withAssetPrice],
+    decorators: [withEthBalance, withWalletProvider],
 } as Meta<typeof MyWalletCard>;
 
 const Template: StoryFn<typeof MyWalletCard> = args => (
@@ -35,4 +42,9 @@ Custom.args = {
     information: {
         [WalletSource.METAMASK]: [CurrencySymbol.ETH, CurrencySymbol.USDC],
     },
+};
+
+export const HideBridge = Template.bind({});
+HideBridge.args = {
+    hideBridge: true,
 };

@@ -12,8 +12,13 @@ import {
     TermSelector,
 } from 'src/components/molecules';
 import { OrderAction } from 'src/components/organisms';
-import { CollateralBook, useBalances, useBorrowableAmount } from 'src/hooks';
-import { getPriceMap } from 'src/store/assetPrices/selectors';
+import {
+    CollateralBook,
+    useBalances,
+    useBorrowableAmount,
+    useCurrencies,
+    useLastPrices,
+} from 'src/hooks';
 import {
     selectLandingOrderForm,
     setAmount,
@@ -32,8 +37,8 @@ import {
     formatLoanValue,
     generateWalletSourceInformation,
     getAmountValidation,
-    getCurrencyMapAsOptions,
     getTransformMaturityOption,
+    toOptions,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
@@ -56,9 +61,9 @@ export const LendingCard = ({
     const dispatch = useDispatch();
     const { address } = useAccount();
 
-    const assetPriceMap = useSelector((state: RootState) => getPriceMap(state));
-
-    const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
+    const { data: assetPriceMap } = useLastPrices();
+    const { data: currencies } = useCurrencies();
+    const assetList = toOptions(currencies, currency);
 
     const balanceRecord = useBalances();
 

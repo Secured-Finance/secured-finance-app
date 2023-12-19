@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { BigNumber as BigNumberJS } from 'bignumber.js';
 import { QueryKeys } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
-import { AssetPriceMap } from 'src/store/assetPrices/selectors';
+import { AssetPriceMap } from 'src/types';
 import {
     CurrencySymbol,
     ZERO_BI,
@@ -10,9 +10,9 @@ import {
     toCurrency,
 } from 'src/utils';
 
-//TODO: replace hardcoded division by CurrencyController#getDecimals
 export const useTerminationPrices = () => {
     const securedFinance = useSF();
+
     return useQuery({
         queryKey: [QueryKeys.TERMINATION_PRICES],
         queryFn: async () => {
@@ -20,12 +20,15 @@ export const useTerminationPrices = () => {
             const currencyList = currencies
                 .map(ccy => hexToCurrencySymbol(ccy))
                 .filter((ccy): ccy is CurrencySymbol => ccy !== undefined);
-            const prices = await Promise.all(
+            const marketTerminationArray = await Promise.all(
                 currencyList.map(async ccy => {
                     return (
-                        (await securedFinance?.getMarketTerminationPrice(
+                        (await securedFinance?.getMarketTerminationPriceAndDecimals(
                             toCurrency(ccy)
-                        )) ?? ZERO_BI
+                        )) ?? {
+                            price: ZERO_BI,
+                            decimals: 0,
+                        }
                     );
                 })
             );
@@ -34,9 +37,11 @@ export const useTerminationPrices = () => {
                 (acc, ccy, index) => {
                     return {
                         ...acc,
-                        [ccy]: new BigNumberJS(prices[index].toString())
+                        [ccy]: new BigNumberJS(
+                            marketTerminationArray[index].price.toString()
+                        )
                             .dividedBy(
-                                10 ** (ccy === CurrencySymbol.WFIL ? 26 : 8)
+                                10 ** marketTerminationArray[index].decimals
                             )
                             .toNumber(),
                     };
@@ -48,6 +53,5 @@ export const useTerminationPrices = () => {
         },
         enabled: !!securedFinance,
         staleTime: Infinity,
-        refetchOnWindowFocus: true,
     });
 };

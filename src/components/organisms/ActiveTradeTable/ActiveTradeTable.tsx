@@ -8,12 +8,19 @@ import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CoreTable, TableActionMenu } from 'src/components/molecules';
 import { UnwindDialog, UnwindDialogType } from 'src/components/organisms';
-import { Position, useBreakpoint } from 'src/hooks';
-import { getPriceMap } from 'src/store/assetPrices/selectors';
-import { setCurrency, setMaturity } from 'src/store/landingOrderForm';
+import { Position, useBreakpoint, useLastPrices } from 'src/hooks';
+import {
+    resetUnitPrice,
+    selectLandingOrderForm,
+    setAmount,
+    setCurrency,
+    setMaturity,
+} from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
+    amountFormatterFromBase,
+    amountFormatterToBase,
     hexToCurrencySymbol,
     isMaturityPastDays,
     isPastDate,
@@ -38,10 +45,12 @@ export const ActiveTradeTable = ({
     data,
     delistedCurrencySet,
     height,
+    variant = 'default',
 }: {
     data: (Position & { underMinimalCollateral?: boolean })[];
     delistedCurrencySet: Set<CurrencySymbol>;
     height?: number;
+    variant?: 'contractOnly' | 'default';
 }) => {
     const [unwindDialogData, setUnwindDialogData] = useState<{
         maturity: Maturity;
@@ -50,10 +59,31 @@ export const ActiveTradeTable = ({
         show: boolean;
         type: 'UNWIND' | 'REDEEM' | 'REPAY';
     }>();
-    const priceList = useSelector((state: RootState) => getPriceMap(state));
+    const { data: priceList } = useLastPrices();
     const router = useRouter();
     const dispatch = useDispatch();
     const isTablet = useBreakpoint('laptop');
+
+    const { amount, currency } = useSelector((state: RootState) =>
+        selectLandingOrderForm(state.landingOrderForm)
+    );
+
+    const handleCurrencyChange = useCallback(
+        (v: CurrencySymbol) => {
+            let formatFrom = (x: bigint) => Number(x);
+            if (amountFormatterFromBase && amountFormatterFromBase[currency]) {
+                formatFrom = amountFormatterFromBase[currency];
+            }
+            let formatTo = (x: number) => BigInt(x);
+            if (amountFormatterToBase && amountFormatterToBase[v]) {
+                formatTo = amountFormatterToBase[v];
+            }
+            dispatch(setAmount(formatTo(formatFrom(amount))));
+            dispatch(setCurrency(v));
+            dispatch(resetUnitPrice());
+        },
+        [amount, currency, dispatch]
+    );
 
     const getTableActionMenu = useCallback(
         (
@@ -67,7 +97,7 @@ export const ActiveTradeTable = ({
                     text: 'Add/Reduce',
                     onClick: (): void => {
                         dispatch(setMaturity(maturity));
-                        dispatch(setCurrency(ccy));
+                        handleCurrencyChange(ccy);
                         router.push('/advanced/');
                     },
                 },
@@ -122,7 +152,7 @@ export const ActiveTradeTable = ({
                 },
             ];
         },
-        [delistedCurrencySet, dispatch, router]
+        [delistedCurrencySet, dispatch, handleCurrencyChange, router]
     );
 
     const getMaturityDisplayValue = useCallback(
@@ -186,7 +216,7 @@ export const ActiveTradeTable = ({
                 columnHelper,
                 'Contract',
                 'contract',
-                'default',
+                variant,
                 delistedCurrencySet
             ),
             columnHelper.accessor('maturity', {
@@ -295,6 +325,7 @@ export const ActiveTradeTable = ({
             getMaturityDisplayValue,
             getTableActionMenu,
             priceList,
+            variant,
         ]
     );
 

@@ -1,20 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
-import { useMemo } from 'react';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
-import { CurrencySymbol, getCurrencyMapAsList, toCurrency } from 'src/utils';
+import { CurrencySymbol, toCurrency } from 'src/utils';
+import { useCurrencies } from '../useCurrencies';
 
 export const defaultDelistedStatusSet: Set<CurrencySymbol> = new Set();
 
 export const useCurrencyDelistedStatus = () => {
     const securedFinance = useSF();
-    const currencies = useMemo(
-        () => getCurrencyMapAsList().map(c => c.symbol),
-        []
-    );
+    const { data: currencies = [] } = useCurrencies();
 
     return useQuery({
-        queryKey: [QueryKeys.CURRENCY_EXISTS],
+        queryKey: [QueryKeys.CURRENCY_EXISTS, currencies],
         queryFn: async () => {
             const currencyExistList = await Promise.all(
                 currencies.map(symbol =>
@@ -33,6 +30,6 @@ export const useCurrencyDelistedStatus = () => {
             return delistedStatusSet;
         },
         initialData: defaultDelistedStatusSet,
-        enabled: !!securedFinance,
+        enabled: !!securedFinance && currencies.length > 0,
     });
 };

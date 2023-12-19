@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import store, { rootReducers } from 'src/store';
-import { listenerMiddleware } from 'src/store/blockchain/reducer';
 import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
+import { dec22Fixture } from './fixtures';
 
 export const initialStore = {
     ...store.getState(),
@@ -14,7 +14,7 @@ export const initialStore = {
     },
     landingOrderForm: {
         currency: CurrencySymbol.WFIL,
-        maturity: 0,
+        maturity: dec22Fixture.toNumber(),
         side: OrderSide.BORROW,
         amount: '0',
         unitPrice: undefined,
@@ -31,5 +31,5 @@ export const mockStore = configureStore({
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware({
             serializableCheck: false,
-        }).prepend(listenerMiddleware.middleware),
+        }),
 });

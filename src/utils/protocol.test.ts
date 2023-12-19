@@ -18,6 +18,8 @@ describe('computeTotalDailyVolumeInUSD', () => {
                 [CurrencySymbol.ETH]: ZERO_BI,
                 [CurrencySymbol.WFIL]: ZERO_BI,
                 [CurrencySymbol.WBTC]: ZERO_BI,
+                [CurrencySymbol.aUSDC]: ZERO_BI,
+                [CurrencySymbol.axlFIL]: ZERO_BI,
             },
         });
     });
@@ -40,6 +42,8 @@ describe('computeTotalDailyVolumeInUSD', () => {
                 [CurrencySymbol.ETH]: ZERO_BI,
                 [CurrencySymbol.WFIL]: BigInt(657000),
                 [CurrencySymbol.WBTC]: ZERO_BI,
+                [CurrencySymbol.aUSDC]: ZERO_BI,
+                [CurrencySymbol.axlFIL]: ZERO_BI,
             },
         });
     });

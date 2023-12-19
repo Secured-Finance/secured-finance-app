@@ -9,15 +9,12 @@ import { WalletDialog, WalletPopover } from 'src/components/organisms';
 import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
-import {
-    getEnvShort,
-    getMainnetChainId,
-    getSupportedNetworks,
-} from 'src/utils';
+import { getEnvShort, getSupportedChainIds } from 'src/utils';
 import { AddressUtils } from 'src/utils/address';
-import { useAccount } from 'wagmi';
+import { isChipVisibleForEnv, isProdEnv } from 'src/utils/displayUtils';
+import { mainnet, sepolia, useAccount } from 'wagmi';
 
-const LINKS = [
+const PRODUCTION_LINKS = [
     {
         text: 'OTC Lending',
         link: '/',
@@ -34,6 +31,10 @@ const LINKS = [
         link: '/portfolio',
         dataCy: 'history',
     },
+];
+
+const DEV_LINKS = [
+    ...PRODUCTION_LINKS,
     {
         text: 'Faucet',
         link: '/faucet',
@@ -48,10 +49,11 @@ const HeaderMessage = ({
     chainId: number;
     chainError: boolean;
 }) => {
-    const mainnetChainId = getMainnetChainId();
-    const networkNames = getSupportedNetworks().map(
-        name => name.charAt(0).toUpperCase() + name.slice(1)
-    );
+    const chainIds = getSupportedChainIds();
+    const networkNames = [sepolia, mainnet]
+        .filter(chain => chainIds.includes(chain.id))
+        .map(chain => chain.name)
+        .map(name => (name === 'Ethereum' ? 'Mainnet' : name));
 
     if (chainId) {
         if (chainError) {
@@ -60,10 +62,16 @@ const HeaderMessage = ({
                     className='typography-caption-2 w-full bg-red p-[1px] text-center text-neutral-8'
                     data-testid='testnet-alert'
                 >
-                    Secured Finance only supported in {networkNames.join(', ')}
+                    Secured Finance only supported on{' '}
+                    <span className='capitalize'>
+                        {networkNames.length === 2
+                            ? networkNames.join(' and ')
+                            : networkNames.join(', ')}
+                    </span>{' '}
+                    in Ethereum
                 </div>
             );
-        } else if (chainId !== mainnetChainId) {
+        } else if (chainId !== mainnet.id) {
             return (
                 <div
                     className='typography-caption-2 w-full bg-horizonBlue p-[1px] text-center text-neutral-8'
@@ -88,6 +96,7 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
         (state: RootState) => state.blockchain.chainId
     );
     const envShort = getEnvShort();
+    const LINKS = isProdEnv() ? PRODUCTION_LINKS : DEV_LINKS;
 
     return (
         <div className='relative'>
@@ -104,7 +113,7 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                             <SFLogoSmall className='inline h-7 w-7 tablet:hidden' />
                         </a>
                     </Link>
-                    {envShort && (
+                    {isChipVisibleForEnv() && (
                         <HighlightChip text={envShort.toUpperCase()} />
                     )}
                 </div>

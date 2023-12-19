@@ -1,10 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useCollateralCurrencies, useLastPrices } from 'src/hooks';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
-import { AssetPriceMap, getPriceMap } from 'src/store/assetPrices/selectors';
-import { RootState } from 'src/store/types';
+import { AssetPriceMap } from 'src/types';
 import {
     CurrencySymbol,
     ZERO_BI,
@@ -12,7 +10,6 @@ import {
     computeAvailableToBorrow,
     currencyMap,
     divide,
-    getCurrencyMapAsList,
     toCurrency,
 } from 'src/utils';
 
@@ -37,6 +34,7 @@ export const emptyCollateralBook: CollateralBook = {
     },
     nonCollateral: {
         [CurrencySymbol.WFIL]: ZERO_BI,
+        [CurrencySymbol.axlFIL]: ZERO_BI,
     },
     withdrawableCollateral: {
         [CurrencySymbol.USDC]: ZERO_BI,
@@ -56,6 +54,7 @@ const emptyCollateralValues = {
         [CurrencySymbol.USDC]: ZERO_BI,
         [CurrencySymbol.WBTC]: ZERO_BI,
         [CurrencySymbol.WFIL]: ZERO_BI,
+        [CurrencySymbol.axlFIL]: ZERO_BI,
     },
     collateralCoverage: ZERO_BI,
     totalCollateralAmount: ZERO_BI,
@@ -71,32 +70,29 @@ const emptyCollateralParameters = {
 export const useCollateralBook = (account: string | undefined) => {
     const securedFinance = useSF();
 
-    const collateralCurrencyList = useMemo(
-        () => getCurrencyMapAsList().filter(ccy => ccy.isCollateral),
-        []
-    );
-
-    const priceList = useSelector((state: RootState) => getPriceMap(state));
+    const { data: collateralCurrencyList = [] } = useCollateralCurrencies();
+    const { data: priceList } = useLastPrices();
 
     return useQuery({
-        queryKey: [QueryKeys.COLLATERAL_BOOK, account],
+        queryKey: [QueryKeys.COLLATERAL_BOOK, account, collateralCurrencyList],
         queryFn: async () => {
             const [
                 collateralValues,
                 collateralParameters,
                 withdrawableCollateral,
             ] = await Promise.all([
-                securedFinance?.getCollateralBook(account ?? ''),
-                securedFinance?.getCollateralParameters(),
+                securedFinance?.tokenVault.getCollateralBook(account ?? ''),
+                securedFinance?.tokenVault.getCollateralParameters(),
                 await Promise.all(
-                    collateralCurrencyList.map(async currencyInfo => {
-                        const ccy = currencyInfo.symbol;
+                    collateralCurrencyList.map(async ccy => {
                         const withdrawableCollateral =
-                            await securedFinance?.getWithdrawableCollateral(
+                            await securedFinance?.tokenVault.getWithdrawableCollateral(
                                 toCurrency(ccy),
                                 account ?? ''
                             );
-                        return { [ccy]: withdrawableCollateral ?? ZERO_BI };
+                        return {
+                            [ccy]: withdrawableCollateral ?? ZERO_BI,
+                        };
                     })
                 ),
             ]);
@@ -155,7 +151,8 @@ export const useCollateralBook = (account: string | undefined) => {
 
             return colBook;
         },
-        enabled: !!securedFinance && !!account,
+        enabled:
+            !!securedFinance && !!account && collateralCurrencyList.length > 0,
     });
 };
 
