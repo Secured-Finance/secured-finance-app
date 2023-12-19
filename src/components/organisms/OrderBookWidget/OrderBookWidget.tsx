@@ -351,7 +351,7 @@ export const OrderBookWidget = ({
                 ? lendOrders[parseInt(rowId)]
                 : borrowOrders[parseInt(rowId)];
         globalDispatch(setOrderType(OrderType.LIMIT));
-        globalDispatch(setUnitPrice(rowData.value.price));
+        globalDispatch(setUnitPrice(rowData.value.price.toString()));
     };
 
     const handleSellOrdersClick = (rowId: string) => {

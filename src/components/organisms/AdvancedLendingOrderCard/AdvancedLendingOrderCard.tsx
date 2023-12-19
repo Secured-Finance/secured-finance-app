@@ -40,7 +40,6 @@ import {
     formatLoanValue,
     generateWalletSourceInformation,
     getAmountValidation,
-    multiply,
     ordinaryFormat,
     prefixTilde,
     usdFormat,
@@ -74,6 +73,11 @@ export function AdvancedLendingOrderCard({
     } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
+
+    const amountInput = useSelector(
+        (state: RootState) => state.landingOrderForm.amount
+    );
+
     const [sliderValue, setSliderValue] = useState(0.0);
 
     const balanceRecord = useBalances();
@@ -81,11 +85,24 @@ export function AdvancedLendingOrderCard({
     const loanValue = useMemo(() => {
         if (!maturity) return LoanValue.ZERO;
         if (unitPrice !== undefined) {
-            return LoanValue.fromPrice(unitPrice, maturity, calculationDate);
+            return LoanValue.fromPrice(
+                Number(unitPrice),
+                maturity,
+                calculationDate
+            );
         }
         if (!marketPrice) return LoanValue.ZERO;
         return LoanValue.fromPrice(marketPrice, maturity, calculationDate);
     }, [maturity, unitPrice, marketPrice, calculationDate]);
+
+    const unitPriceValue = useMemo(() => {
+        if (!maturity) return undefined;
+        if (unitPrice !== undefined) {
+            return unitPrice;
+        }
+        if (!marketPrice) return undefined;
+        return (marketPrice / 100.0).toString();
+    }, [maturity, unitPrice, marketPrice]);
 
     const dispatch = useDispatch();
     const { address } = useAccount();
@@ -154,25 +171,21 @@ export function AdvancedLendingOrderCard({
         const available =
             side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
         dispatch(
-            setAmount(
-                amountFormatterToBase[currency](
-                    Math.floor(percentage * available) / 100.0
-                )
-            )
+            setAmount((Math.floor(percentage * available) / 100.0).toString())
         );
         setSliderValue(percentage);
     };
 
-    const handleInputChange = (v: bigint) => {
+    const handleInputChange = (v: string) => {
         dispatch(setAmount(v));
-
         const available =
             side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
-        const inputValue = amountFormatterFromBase[currency](v);
+        const inputValue = Number(v);
         available > 0
             ? setSliderValue(Math.min(100.0, (inputValue * 100.0) / available))
             : setSliderValue(0.0);
     };
+
     useEffect(() => {
         if (isItayose) {
             dispatch(setOrderType(OrderType.LIMIT));
@@ -193,7 +206,7 @@ export function AdvancedLendingOrderCard({
             amount > amountFormatterToBase[currency](available)
                 ? amountFormatterToBase[currency](available)
                 : amount;
-        dispatch(setAmount(inputAmount));
+        dispatch(setAmount(inputAmount.toString()));
         available
             ? setSliderValue(
                   Math.min(
@@ -205,7 +218,8 @@ export function AdvancedLendingOrderCard({
             : setSliderValue(0.0);
     };
 
-    const isInvalidBondPrice = unitPrice === 0 && orderType === OrderType.LIMIT;
+    const isInvalidBondPrice =
+        unitPrice === '0' && orderType === OrderType.LIMIT;
 
     const showPreOrderError =
         isItayose &&
@@ -273,17 +287,11 @@ export function AdvancedLendingOrderCard({
                     <OrderInputBox
                         field='Bond Price'
                         disabled={orderType === OrderType.MARKET}
-                        initialValue={
-                            loanValue.price > 0
-                                ? divide(loanValue.price, 100)
-                                : undefined
-                        }
+                        initialValue={unitPriceValue}
                         onValueChange={v => {
                             v !== undefined
-                                ? dispatch(
-                                      setUnitPrice(multiply(v as number, 100))
-                                  )
-                                : dispatch(setUnitPrice(0));
+                                ? dispatch(setUnitPrice(v.toString()))
+                                : dispatch(setUnitPrice(''));
                         }}
                         informationText='Input value greater than or equal to 0.01 and up to and including 100.'
                         decimalPlacesAllowed={2}
@@ -323,9 +331,8 @@ export function AdvancedLendingOrderCard({
                 <OrderInputBox
                     field='Amount'
                     unit={currency}
-                    asset={currency}
-                    initialValue={orderAmount?.value}
-                    onValueChange={v => handleInputChange(BigInt(v ?? 0))}
+                    initialValue={amountInput}
+                    onValueChange={v => handleInputChange((v as string) ?? '0')}
                 />
                 <div className='mx-10px flex flex-col gap-6'>
                     <OrderDisplayBox

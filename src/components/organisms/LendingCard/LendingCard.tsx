@@ -57,6 +57,9 @@ export const LendingCard = ({
     const { currency, maturity, side, sourceAccount, amount } = useSelector(
         (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
     );
+    const amountInput = useSelector(
+        (state: RootState) => state.landingOrderForm.amount
+    );
 
     const dispatch = useDispatch();
     const { address } = useAccount();
@@ -123,18 +126,9 @@ export const LendingCard = ({
 
     const handleCurrencyChange = useCallback(
         (v: CurrencySymbol) => {
-            let formatFrom = (x: bigint) => Number(x);
-            if (amountFormatterFromBase && amountFormatterFromBase[currency]) {
-                formatFrom = amountFormatterFromBase[currency];
-            }
-            let formatTo = (x: number) => BigInt(x);
-            if (amountFormatterToBase && amountFormatterToBase[v]) {
-                formatTo = amountFormatterToBase[v];
-            }
-            dispatch(setAmount(formatTo(formatFrom(amount))));
             dispatch(setCurrency(v));
         },
-        [amount, currency, dispatch]
+        [dispatch]
     );
 
     const handleWalletSourceChange = (source: WalletSource) => {
@@ -151,15 +145,15 @@ export const LendingCard = ({
             amount > amountFormatterToBase[currency](available)
                 ? amountFormatterToBase[currency](available)
                 : amount;
-        dispatch(setAmount(inputAmount));
+        dispatch(setAmount(inputAmount.toString()));
     };
 
     const { data: availableToBorrow } = useBorrowableAmount(address, currency);
 
-    const orderAmount =
-        amount > ZERO_BI
-            ? amountFormatterFromBase[currency](amount)
-            : undefined;
+    // const orderAmount =
+    //     amount > ZERO_BI
+    //         ? amountFormatterFromBase[currency](amount)
+    //         : undefined;
 
     return (
         <div className='w-[345px] flex-shrink-0 space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-7 shadow-deep'>
@@ -199,8 +193,7 @@ export const LendingCard = ({
                             selected={selectedAsset}
                             priceList={assetPriceMap}
                             onAmountChange={v => dispatch(setAmount(v))}
-                            initialValue={orderAmount}
-                            amountFormatterMap={amountFormatterToBase}
+                            initialValue={amountInput}
                             onAssetChange={handleCurrencyChange}
                         />
                         {side === OrderSide.LEND && (

@@ -23,7 +23,7 @@ describe('test InputBase component', () => {
         expect(input.getAttribute('value')).toBe('50');
         await userEvent.clear(input);
         await userEvent.type(input, '100');
-        expect(onValueChange).toHaveBeenCalledWith(100);
+        expect(onValueChange).toHaveBeenCalledWith('100');
         expect(input.getAttribute('value')).toBe('100');
     });
 

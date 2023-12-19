@@ -1,7 +1,7 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import { screen, userEvent } from '@storybook/testing-library';
 import { useState } from 'react';
-import { CurrencySymbol, amountFormatterFromBase } from 'src/utils';
+import { CurrencySymbol } from 'src/utils';
 import { CollateralInput } from './CollateralInput';
 
 const asset = CurrencySymbol.ETH;
@@ -18,10 +18,8 @@ export default {
 
 const Template: StoryFn<typeof CollateralInput> = args => {
     const [value, setValue] = useState(args.amount);
-    const handleAmountChange = (newValue: bigint | undefined) => {
-        setValue(
-            newValue ? amountFormatterFromBase[asset](newValue) : undefined
-        );
+    const handleAmountChange = (newValue: string | undefined) => {
+        setValue(newValue);
     };
     return (
         <CollateralInput
