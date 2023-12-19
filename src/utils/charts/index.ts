@@ -12,7 +12,7 @@ const commonOptions = {
     // width: 800,
     height: 400,
     layout: {
-        background: { color: '#18202a' },
+        background: { color: '#052132' },
         textColor: 'rgba(119, 126, 144, 1)',
     },
     grid: {
@@ -28,7 +28,6 @@ const commonOptions = {
         textColor: 'rgba(177, 181, 195, 1)',
         borderColor: 'rgba(119, 126, 144, 1)',
         borderVisible: false,
-        // minimumWidth: 140,
     },
     crosshair: {
         mode: 1,
