@@ -19,7 +19,11 @@ export const CollateralInput = ({
 }: CollateralInputProps) => {
     const handleAmountChange = useCallback(
         (inputAmount: string | undefined) => {
-            if (amount !== undefined) {
+            if (
+                amount !== undefined &&
+                Number(inputAmount) ===
+                    Math.floor(Number(amount) * 10000) / 10000.0
+            ) {
                 return;
             }
             if (onAmountChange) {

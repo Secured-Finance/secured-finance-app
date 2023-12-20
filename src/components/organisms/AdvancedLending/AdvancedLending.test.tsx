@@ -20,7 +20,7 @@ describe('Advanced Lending Component', () => {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
             })
         );
-        expect(store.getState().landingOrderForm.amount).toEqual('0');
+        expect(store.getState().landingOrderForm.amount).toEqual('');
         await waitFor(() =>
             fireEvent.input(screen.getByRole('textbox', { name: 'Amount' }), {
                 target: { value: '1' },
@@ -43,7 +43,7 @@ describe('Advanced Lending Component', () => {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
             })
         );
-        expect(store.getState().landingOrderForm.amount).toEqual('0');
+        expect(store.getState().landingOrderForm.amount).toEqual('');
         await waitFor(() =>
             fireEvent.input(screen.getByRole('textbox', { name: 'Amount' }), {
                 target: { value: '1' },
