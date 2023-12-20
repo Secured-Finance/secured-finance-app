@@ -34,6 +34,7 @@ export const emptyCollateralBook: CollateralBook = {
     },
     nonCollateral: {
         [CurrencySymbol.WFIL]: ZERO_BI,
+        [CurrencySymbol.axlFIL]: ZERO_BI,
     },
     withdrawableCollateral: {
         [CurrencySymbol.USDC]: ZERO_BI,
@@ -53,6 +54,7 @@ const emptyCollateralValues = {
         [CurrencySymbol.USDC]: ZERO_BI,
         [CurrencySymbol.WBTC]: ZERO_BI,
         [CurrencySymbol.WFIL]: ZERO_BI,
+        [CurrencySymbol.axlFIL]: ZERO_BI,
     },
     collateralCoverage: ZERO_BI,
     totalCollateralAmount: ZERO_BI,

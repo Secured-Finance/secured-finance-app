@@ -72,7 +72,7 @@ export type AvailableContracts = Record<CurrencySymbol, ContractMap>;
 
 export const useLendingMarkets = () => {
     const securedFinance = useSF();
-    const { data: currencies } = useCurrencies();
+    const { data: currencies, isSuccess: isCurrencySuccess } = useCurrencies();
 
     return useQuery({
         queryKey: [QueryKeys.LENDING_MARKETS, currencies],
@@ -147,6 +147,6 @@ export const useLendingMarkets = () => {
             }
             return availableContracts;
         },
-        enabled: !!securedFinance && !!currencies,
+        enabled: !!securedFinance && isCurrencySuccess,
     });
 };

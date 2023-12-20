@@ -126,7 +126,7 @@ export const currencyMap: Readonly<
     [CurrencySymbol.axlFIL]: {
         index: 3,
         symbol: CurrencySymbol.axlFIL,
-        name: 'axlFIL',
+        name: 'Axelar Wrapped FIL',
         icon: FilIcon,
         coinGeckoId: 'filecoin',
         isCollateral: false,
@@ -138,7 +138,7 @@ export const currencyMap: Readonly<
         chartColor: tailwindConfig.theme.colors.chart.fil,
         pillColor: tailwindConfig.theme.colors.pill.fil,
         roundingDecimal: 0,
-        longName: 'Axelar FIL',
+        longName: 'Axelar Wrapped FIL',
     },
 };
 
