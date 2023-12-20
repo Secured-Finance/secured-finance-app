@@ -69,6 +69,16 @@ export const selectLandingOrderForm = (state: LandingOrderFormStore) => {
     return {
         ...state,
         amount: amountFormatterToBase[state.currency](Number(state.amount)),
+        unitPrice: state.unitPrice
+            ? Number(state.unitPrice) * 100.0
+            : undefined,
+    };
+};
+
+export const selectLandingOrderInputs = (state: LandingOrderFormStore) => {
+    return {
+        amountInput: state.amount,
+        unitPriceInput: state.unitPrice,
     };
 };
 

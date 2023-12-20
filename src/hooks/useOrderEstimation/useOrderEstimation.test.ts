@@ -16,7 +16,7 @@ const preloadedState = {
         side: OrderSide.BORROW,
         maturity: dec22Fixture.toNumber(),
         amount: '5',
-        unitPrice: 9800,
+        unitPrice: '98',
         isBorrowedCollateral: false,
         sourceAccount: WalletSource.METAMASK,
     },
