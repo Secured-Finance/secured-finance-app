@@ -79,8 +79,6 @@ export function AdvancedLendingOrderCard({
         selectLandingOrderInputs(state.landingOrderForm)
     );
 
-    console.log('amount', amount);
-
     const [sliderValue, setSliderValue] = useState(0.0);
 
     const balanceRecord = useBalances();

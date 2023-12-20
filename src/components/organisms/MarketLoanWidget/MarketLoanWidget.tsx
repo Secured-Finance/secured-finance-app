@@ -38,9 +38,6 @@ export const MarketLoanWidget = ({
 }: {
     isGlobalItayose: boolean;
 }) => {
-    // const { currency, amount } = useSelector((state: RootState) =>
-    //     selectLandingOrderForm(state.landingOrderForm)
-    // );
     const dispatch = useDispatch();
     const router = useRouter();
 
@@ -86,11 +83,8 @@ export const MarketLoanWidget = ({
     const handleClick = useCallback(
         (info: CellContext<Market, string>) => {
             const ccy = fromBytes32(info.getValue()) as CurrencySymbol;
-            // const fromAmount = amountFormatterFromBase[currency](amount);
-            // const toAmount = amountFormatterToBase[ccy](fromAmount);
             dispatch(setMaturity(Number(info.row.original.maturity)));
             dispatch(setCurrency(ccy));
-            // dispatch(setAmount(toAmount));
 
             info.row.original.isOpened
                 ? router.push('/advanced/')
