@@ -11,9 +11,9 @@
     "@heroicons/react": "^2.0.18",
     "@mui/base": "^5.0.0-alpha.106",
     "@reduxjs/toolkit": "^1.8.1",
-    "@secured-finance/sf-client": "0.2.0-beta.134",
+    "@secured-finance/sf-client": "0.2.0-beta.137",
     "@secured-finance/sf-core": "0.2.0-beta.130",
-    "@secured-finance/sf-graph-client": "0.2.0-beta.135",
+    "@secured-finance/sf-graph-client": "0.2.0-beta.136",
     "@svgr/webpack": "^6.2.1",
     "@tanstack/react-query": "^4.32.0",
     "@tanstack/react-table": "^8.5.13",
@@ -58,11 +58,7 @@
     "cypress:run": "cypress run"
   },
   "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
+    "production": [">0.2%", "not dead", "not op_mini all"],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",

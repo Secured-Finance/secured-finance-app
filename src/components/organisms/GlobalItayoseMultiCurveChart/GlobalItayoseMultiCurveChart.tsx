@@ -36,7 +36,7 @@ export const GlobalItayoseMultiCurveChart = () => {
             <MultiCurveChart
                 title='Yield Curve'
                 curves={curves}
-                labels={Object.values(lendingContracts[CurrencySymbol.WFIL])
+                labels={Object.values(lendingContracts[CurrencySymbol.WBTC])
                     .filter(o => o.isPreOrderPeriod || o.isItayosePeriod)
                     .map(o => o.name)}
                 isGlobalItayose={true}
