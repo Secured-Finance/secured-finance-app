@@ -52,7 +52,7 @@ export const useOrderEstimation = (account: string | undefined) => {
                 account ?? '',
                 side,
                 amount,
-                Number(unitPrice ?? 0),
+                unitPrice ?? 0,
                 additionalDepositAmount,
                 ignoreBorrowedAmount
             );
