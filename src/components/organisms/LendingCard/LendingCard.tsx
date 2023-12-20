@@ -21,6 +21,7 @@ import {
 } from 'src/hooks';
 import {
     selectLandingOrderForm,
+    selectLandingOrderInputs,
     setAmount,
     setCurrency,
     setMaturity,
@@ -57,8 +58,8 @@ export const LendingCard = ({
     const { currency, maturity, side, sourceAccount, amount } = useSelector(
         (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
     );
-    const amountInput = useSelector(
-        (state: RootState) => state.landingOrderForm.amount
+    const { amountInput } = useSelector((state: RootState) =>
+        selectLandingOrderInputs(state.landingOrderForm)
     );
 
     const dispatch = useDispatch();
@@ -143,17 +144,12 @@ export const LendingCard = ({
                   );
         const inputAmount =
             amount > amountFormatterToBase[currency](available)
-                ? amountFormatterToBase[currency](available)
-                : amount;
+                ? available
+                : amountFormatterFromBase[currency](amount);
         dispatch(setAmount(inputAmount.toString()));
     };
 
     const { data: availableToBorrow } = useBorrowableAmount(address, currency);
-
-    // const orderAmount =
-    //     amount > ZERO_BI
-    //         ? amountFormatterFromBase[currency](amount)
-    //         : undefined;
 
     return (
         <div className='w-[345px] flex-shrink-0 space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-7 shadow-deep'>

@@ -23,6 +23,7 @@ import {
 import {
     resetUnitPrice,
     selectLandingOrderForm,
+    selectLandingOrderInputs,
     setAmount,
     setOrderType,
     setSide,
@@ -74,9 +75,11 @@ export function AdvancedLendingOrderCard({
         selectLandingOrderForm(state.landingOrderForm)
     );
 
-    const amountInput = useSelector(
-        (state: RootState) => state.landingOrderForm.amount
+    const { amountInput, unitPriceInput } = useSelector((state: RootState) =>
+        selectLandingOrderInputs(state.landingOrderForm)
     );
+
+    console.log('amount', amount);
 
     const [sliderValue, setSliderValue] = useState(0.0);
 
@@ -97,12 +100,12 @@ export function AdvancedLendingOrderCard({
 
     const unitPriceValue = useMemo(() => {
         if (!maturity) return undefined;
-        if (unitPrice !== undefined) {
-            return unitPrice;
+        if (unitPriceInput !== undefined) {
+            return unitPriceInput;
         }
         if (!marketPrice) return undefined;
         return (marketPrice / 100.0).toString();
-    }, [maturity, unitPrice, marketPrice]);
+    }, [maturity, marketPrice, unitPriceInput]);
 
     const dispatch = useDispatch();
     const { address } = useAccount();
@@ -204,22 +207,16 @@ export function AdvancedLendingOrderCard({
                   );
         const inputAmount =
             amount > amountFormatterToBase[currency](available)
-                ? amountFormatterToBase[currency](available)
-                : amount;
+                ? available
+                : amountFormatterFromBase[currency](amount);
+
         dispatch(setAmount(inputAmount.toString()));
         available
-            ? setSliderValue(
-                  Math.min(
-                      100.0,
-                      (amountFormatterFromBase[currency](inputAmount) * 100.0) /
-                          available
-                  )
-              )
+            ? setSliderValue(Math.min(100.0, (inputAmount * 100.0) / available))
             : setSliderValue(0.0);
     };
 
-    const isInvalidBondPrice =
-        unitPrice === '0' && orderType === OrderType.LIMIT;
+    const isInvalidBondPrice = unitPrice === 0 && orderType === OrderType.LIMIT;
 
     const showPreOrderError =
         isItayose &&
@@ -332,7 +329,7 @@ export function AdvancedLendingOrderCard({
                     field='Amount'
                     unit={currency}
                     initialValue={amountInput}
-                    onValueChange={v => handleInputChange((v as string) ?? '0')}
+                    onValueChange={v => handleInputChange((v as string) ?? '')}
                 />
                 <div className='mx-10px flex flex-col gap-6'>
                     <OrderDisplayBox
