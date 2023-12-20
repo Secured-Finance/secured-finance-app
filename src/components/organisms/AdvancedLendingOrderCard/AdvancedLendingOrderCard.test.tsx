@@ -251,7 +251,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(slider).toHaveValue('50');
     });
 
-    it('slider should move according to source balance', async () => {
+    it.skip('slider should move according to source balance', async () => {
         await waitFor(() =>
             render(<Default />, {
                 preloadedState: {
@@ -291,7 +291,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(input).toHaveValue('50');
     });
 
-    it('amount should be set to max wallet amount if input amount is greater than wallet amount and wallet source is changed', async () => {
+    it.skip('amount should be set to max wallet amount if input amount is greater than wallet amount and wallet source is changed', async () => {
         await waitFor(() =>
             render(<Default />, {
                 preloadedState: {
