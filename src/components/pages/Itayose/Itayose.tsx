@@ -243,7 +243,7 @@ export const Itayose = () => {
         <Page title='Pre-Open Order Book'>
             <Alert>
                 <p className='typography-caption text-white'>
-                    Secure your market position by placing limit orders up to 7
+                    Secure your market position by placing limit orders up to 14
                     days before trading begins with no fees. Opt for either a
                     lend or borrow during pre-open, not both. No new pre-orders
                     will be accepted within 1 hour prior to the start of

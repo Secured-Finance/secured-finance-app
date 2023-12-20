@@ -52,7 +52,8 @@ const HeaderMessage = ({
     const chainIds = getSupportedChainIds();
     const networkNames = [sepolia, mainnet]
         .filter(chain => chainIds.includes(chain.id))
-        .map(chain => chain.name);
+        .map(chain => chain.name)
+        .map(name => (name === 'Ethereum' ? 'Mainnet' : name));
 
     if (chainId) {
         if (chainError) {
@@ -61,12 +62,13 @@ const HeaderMessage = ({
                     className='typography-caption-2 w-full bg-red p-[1px] text-center text-neutral-8'
                     data-testid='testnet-alert'
                 >
-                    Secured Finance only supported in{' '}
+                    Secured Finance only supported on{' '}
                     <span className='capitalize'>
                         {networkNames.length === 2
                             ? networkNames.join(' and ')
                             : networkNames.join(', ')}
-                    </span>
+                    </span>{' '}
+                    in Ethereum
                 </div>
             );
         } else if (chainId !== mainnet.id) {
