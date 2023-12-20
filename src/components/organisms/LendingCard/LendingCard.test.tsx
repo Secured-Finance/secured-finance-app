@@ -72,7 +72,7 @@ describe('LendingCard Component', () => {
     });
 
     it('should let the user choose between ETH, Filecoin and USDC when clicking on the asset selector', async () => {
-        render(<Default />);
+        await waitFor(() => render(<Default />, { preloadedState }));
 
         expect(
             await screen.findByText(DEFAULT_CHOICE.symbol)

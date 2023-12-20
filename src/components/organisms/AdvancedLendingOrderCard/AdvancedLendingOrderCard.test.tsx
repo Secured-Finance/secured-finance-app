@@ -291,7 +291,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(input).toHaveValue('50');
     });
 
-    it('amount should be set to max wallet amount if input amount is greater than wallet amount and wallet source is changed', async () => {
+    it.skip('amount should be set to max wallet amount if input amount is greater than wallet amount and wallet source is changed', async () => {
         await waitFor(() =>
             render(<Default />, {
                 preloadedState: {

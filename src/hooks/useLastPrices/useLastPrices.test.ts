@@ -1,5 +1,5 @@
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { renderHook } from 'src/test-utils';
+import { renderHook, waitFor } from 'src/test-utils';
 import { CurrencySymbol } from 'src/utils';
 import { useLastPrices } from './useLastPrices';
 
@@ -11,7 +11,7 @@ describe('useLastPrices', () => {
         const { result, waitForNextUpdate } = renderHook(() => useLastPrices());
 
         await waitForNextUpdate();
-        await waitForNextUpdate();
+        await waitFor(() => expect(result.current.isSuccess).toEqual(true));
 
         expect(result.current.data).toEqual({
             [CurrencySymbol.ETH]: 2000.34,
