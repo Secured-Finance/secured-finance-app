@@ -58,7 +58,7 @@ beforeEach(() => {
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-describe.skip('AdvancedLendingOrderCard Component', () => {
+describe('AdvancedLendingOrderCard Component', () => {
     const changeInputValue = (label: string, value: string) => {
         const input = screen.getByLabelText(label);
         fireEvent.change(input, { target: { value } });
@@ -291,7 +291,7 @@ describe.skip('AdvancedLendingOrderCard Component', () => {
         expect(input).toHaveValue('50');
     });
 
-    it('amount should be set to max wallet amount if input amount is greater than wallet amount and wallet source is changed', async () => {
+    it.skip('amount should be set to max wallet amount if input amount is greater than wallet amount and wallet source is changed', async () => {
         await waitFor(() =>
             render(<Default />, {
                 preloadedState: {

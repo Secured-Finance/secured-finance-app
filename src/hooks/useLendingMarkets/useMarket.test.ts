@@ -1,6 +1,6 @@
 import { dec22Fixture, maturities } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { renderHook } from 'src/test-utils';
+import { renderHook, waitFor } from 'src/test-utils';
 import { CurrencySymbol } from 'src/utils';
 import { useMarket } from './useMarket';
 
@@ -17,9 +17,10 @@ describe('useMarket', () => {
         expect(value).toEqual(undefined);
 
         await waitForNextUpdate();
-        await waitForNextUpdate();
 
-        expect(mock.getOrderBookDetails).toHaveBeenCalledTimes(1);
+        await waitFor(() =>
+            expect(mock.getOrderBookDetails).toHaveBeenCalledTimes(1)
+        );
         const newValue = result.current;
         expect(newValue).toEqual(maturities[maturity]);
     });

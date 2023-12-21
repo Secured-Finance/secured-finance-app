@@ -5,7 +5,7 @@ import useSF from 'src/hooks/useSecuredFinance';
 import { CurrencySymbol, currencyMap, isPastDate } from 'src/utils';
 import { useCurrencies } from '../useCurrencies';
 
-const PRE_OPEN_TIME = 60 * 60 * 24 * 14; // 7 days in seconds
+const PRE_OPEN_TIME = 60 * 60 * 24 * 7; // 7 days in seconds
 
 export type LendingMarket = {
     name: string;
@@ -72,7 +72,7 @@ export type AvailableContracts = Record<CurrencySymbol, ContractMap>;
 
 export const useLendingMarkets = () => {
     const securedFinance = useSF();
-    const { data: currencies } = useCurrencies();
+    const { data: currencies, isSuccess: isCurrencySuccess } = useCurrencies();
 
     return useQuery({
         queryKey: [QueryKeys.LENDING_MARKETS, currencies],
@@ -147,6 +147,6 @@ export const useLendingMarkets = () => {
             }
             return availableContracts;
         },
-        enabled: !!securedFinance && !!currencies,
+        enabled: !!securedFinance && isCurrencySuccess,
     });
 };
