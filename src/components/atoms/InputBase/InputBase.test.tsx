@@ -156,4 +156,13 @@ describe('test InputBase component', () => {
         fireEvent.input(input, { target: { value: '12345' } });
         expect(input).toHaveClass('text-xl');
     });
+
+    it('should prefix 0 at start if user enters a decimal point', async () => {
+        render(<Default />);
+
+        const input = screen.getByRole('textbox');
+        await userEvent.clear(input);
+        await userEvent.type(input, '.');
+        expect(input.getAttribute('value')).toBe('0.');
+    });
 });

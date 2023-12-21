@@ -53,3 +53,12 @@ LongInput.play = async ({ canvasElement }) => {
         delay: 100,
     });
 };
+
+export const DecimalInput = Template.bind({});
+DecimalInput.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const input = canvas.getByRole('textbox');
+    await userEvent.type(input, '.', {
+        delay: 100,
+    });
+};

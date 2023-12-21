@@ -32,8 +32,9 @@ export const InputBase = ({
         values: NumberFormatValues,
         _sourceInfo: SourceInfo
     ) => {
-        const value = values.value;
+        let value = values.value;
         if (onValueChange) {
+            value = value === '.' ? '0'.concat(value) : value;
             onValueChange(value);
         }
     };
@@ -80,6 +81,7 @@ export const InputBase = ({
                 return floatValue <= maxLimit;
             }}
             inputMode='decimal'
+            allowLeadingZeros={false}
         />
     );
 };
