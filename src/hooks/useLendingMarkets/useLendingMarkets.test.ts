@@ -23,9 +23,7 @@ describe('useLendingMarkets', () => {
         expect(value.data).toEqual(undefined);
         expect(value.isLoading).toEqual(true);
 
-        await waitFor(() =>
-            expect(mock.getOrderBookDetails).toHaveBeenCalledTimes(1)
-        );
+        await waitFor(() => expect(result.current.isSuccess).toEqual(true));
         const newValue = result.current;
         expect(newValue.data).toEqual({
             ETH: maturities,
@@ -46,10 +44,7 @@ describe('useLendingMarkets', () => {
         ]);
 
         const { result } = renderHook(() => useLendingMarkets());
-        await waitFor(() =>
-            // called twice because of the first call to retrieve the values here in this test
-            expect(mock.getOrderBookDetails).toHaveBeenCalledTimes(2)
-        );
+        await waitFor(() => expect(result.current.isSuccess).toEqual(true));
 
         const newValue = result.current;
 

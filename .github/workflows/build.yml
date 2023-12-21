@@ -52,6 +52,7 @@ jobs:
           NEXT_PUBLIC_AMPLITUDE_API_KEY=${{ secrets.AMPLITUDE_API_KEY }}
           SF_ENV=${{ vars.SF_ENV }}
           NEXT_PUBLIC_USE_PACKAGE_VERSION=${{ vars.USE_PACKAGE_VERSION }}
+          NEXT_PUBLIC_SUPPORTED_CHAIN_IDS=${{ vars.SUPPORTED_CHAIN_IDS }}
           EOF
 
       - name: Check Syntax with Prettier
