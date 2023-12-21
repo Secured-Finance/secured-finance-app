@@ -20,8 +20,10 @@ export type Position = {
 const emptyPVPerCurrency = {
     [CurrencySymbol.ETH]: 0,
     [CurrencySymbol.WBTC]: 0,
-    [CurrencySymbol.USDC]: 0,
     [CurrencySymbol.WFIL]: 0,
+    [CurrencySymbol.USDC]: 0,
+    [CurrencySymbol.aUSDC]: 0,
+    [CurrencySymbol.axlFIL]: 0,
 };
 
 export const usePositions = (
