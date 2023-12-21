@@ -37,6 +37,7 @@ export * from './Slider';
 export * from './SortArrows';
 export * from './Spinner';
 export * from './StatsBox';
+export * from './SupportedNetworks';
 export * from './TextLink';
 export * from './Timer';
 export * from './Toggle';
