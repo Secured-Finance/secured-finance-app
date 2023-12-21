@@ -111,12 +111,9 @@ export const WalletSourceSelector = ({
                                     <div className='typography-caption w-fit max-w-[200px] text-white-60'>
                                         {account
                                             ? ordinaryFormat(
-                                                  Math.floor(
-                                                      selectedOption.available *
-                                                          100
-                                                  ) / 100,
+                                                  selectedOption.available,
                                                   0,
-                                                  4
+                                                  6
                                               )
                                             : '--'}
                                     </div>

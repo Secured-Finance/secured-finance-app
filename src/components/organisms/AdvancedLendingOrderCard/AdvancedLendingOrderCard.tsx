@@ -150,13 +150,13 @@ export function AdvancedLendingOrderCard({
         selectedWalletSource.source,
     ]);
 
-    const handleAmountChange = (percentage: number) => {
+    const handleSliderChange = (percentage: number) => {
         const available =
             side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
         dispatch(
             setAmount(
                 amountFormatterToBase[currency](
-                    Math.floor(percentage * available) / 100.0
+                    (percentage * available) / 100.0
                 )
             )
         );
@@ -310,13 +310,15 @@ export function AdvancedLendingOrderCard({
                     </div>
                 </div>
                 <div className='mx-10px'>
-                    <Slider onChange={handleAmountChange} value={sliderValue} />
+                    <Slider onChange={handleSliderChange} value={sliderValue} />
                 </div>
                 {side === OrderSide.BORROW && (
                     <div className='typography-caption mx-10px flex flex-row justify-between'>
                         <div className='text-slateGray'>{`Available To Borrow (${currency.toString()})`}</div>
                         <div className='text-right text-planetaryPurple'>
-                            {prefixTilde(ordinaryFormat(availableToBorrow))}
+                            {prefixTilde(
+                                ordinaryFormat(availableToBorrow, 0, 6)
+                            )}
                         </div>
                     </div>
                 )}
