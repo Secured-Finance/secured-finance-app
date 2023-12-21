@@ -84,12 +84,16 @@ describe('usePositions', () => {
             USDC: 63,
             WBTC: 0,
             WFIL: 0,
+            axlFIL: 0,
+            aUSDC: 0,
         });
         expect(newValue.data.totalLendPVPerCurrency).toEqual({
             ETH: 9.95475,
             USDC: 0,
             WBTC: 0,
             WFIL: 9.95475,
+            axlFIL: 0,
+            aUSDC: 0,
         });
     });
 });
