@@ -107,9 +107,6 @@ describe('Header component', () => {
             },
         });
         expect(screen.getByTestId('testnet-alert')).toBeInTheDocument();
-        expect(
-            screen.getByText('Secured Finance only supported in')
-        ).toBeInTheDocument();
         expect(screen.getByText('Sepolia')).toBeInTheDocument();
     });
 

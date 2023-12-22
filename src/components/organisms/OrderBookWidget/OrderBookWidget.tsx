@@ -214,6 +214,7 @@ export const OrderBookWidget = ({
     onAggregationChange,
     variant = 'default',
     isCurrencyDelisted,
+    isLoadingMap,
 }: {
     orderbook: Pick<ReturnType<typeof useOrderbook>[0], 'data' | 'isLoading'>;
     currency: CurrencySymbol;
@@ -222,6 +223,7 @@ export const OrderBookWidget = ({
     onAggregationChange?: (multiplier: number) => void;
     variant?: 'default' | 'itayose';
     isCurrencyDelisted: boolean;
+    isLoadingMap?: Record<OrderSide, boolean>;
 }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
     useEffect(() => {
@@ -442,6 +444,10 @@ export const OrderBookWidget = ({
                                     hoverRow: handleBuyOrdersHoverRow,
                                     compact: true,
                                     stickyHeader: false,
+                                    isLastRowLoading:
+                                        isLoadingMap !== undefined
+                                            ? isLoadingMap[OrderSide.BORROW]
+                                            : false,
                                 }}
                             />
                         </div>
@@ -496,6 +502,10 @@ export const OrderBookWidget = ({
                                     showHeaders: false,
                                     compact: true,
                                     stickyHeader: false,
+                                    isFirstRowLoading:
+                                        isLoadingMap !== undefined
+                                            ? isLoadingMap[OrderSide.LEND]
+                                            : false,
                                 }}
                             />
                         </div>

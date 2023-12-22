@@ -6,7 +6,11 @@ import { Fragment, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AlertTriangle from 'src/assets/icons/alert-triangle.svg';
 import MetamaskLogo from 'src/assets/img/metamask-fox.svg';
-import { ExpandIndicator, Separator } from 'src/components/atoms';
+import {
+    ExpandIndicator,
+    Separator,
+    SupportedNetworks,
+} from 'src/components/atoms';
 import { Tooltip } from 'src/components/templates';
 import { RootState } from 'src/store/types';
 import { resetEthWallet } from 'src/store/wallet';
@@ -138,8 +142,7 @@ export const WalletPopover = ({
                                                     <AlertTriangle data-testid='network-alert-triangle' />
                                                 }
                                             >
-                                                Currently only Sepolia is
-                                                supported.
+                                                <SupportedNetworks />
                                             </Tooltip>
                                         ) : (
                                             <div className='h-2 w-2 rounded-full bg-green' />

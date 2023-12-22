@@ -477,6 +477,15 @@ export const mockUseSF = () => {
             );
         }),
 
+        getItayoseEstimation: jest.fn(() =>
+            Promise.resolve({
+                openingUnitPrice: BigInt(9970),
+                lastLendUnitPrice: BigInt(9975),
+                lastBorrowUnitPrice: BigInt(9970),
+                totalOffsetAmount: BigInt(40000000),
+            })
+        ),
+
         tokenVault: {
             getBorrowableAmount: jest.fn((_address, currency: Currency) => {
                 switch (currency.symbol) {

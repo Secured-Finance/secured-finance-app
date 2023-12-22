@@ -1,5 +1,5 @@
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { renderHook } from 'src/test-utils';
+import { renderHook, waitFor } from 'src/test-utils';
 import { CurrencySymbol } from 'src/utils';
 import { useBalances, zeroBalances } from './useBalances';
 
@@ -16,13 +16,15 @@ describe('useBalances', () => {
 
         expect(result.current).toEqual(zeroBalances);
         await waitForNextUpdate();
-        expect(result.current).toEqual({
-            [CurrencySymbol.ETH]: 0,
-            [CurrencySymbol.WFIL]: 10000,
-            [CurrencySymbol.WBTC]: 300,
-            [CurrencySymbol.USDC]: 4000,
-            [CurrencySymbol.aUSDC]: 0,
-            [CurrencySymbol.axlFIL]: 0,
-        });
+        await waitFor(() =>
+            expect(result.current).toEqual({
+                [CurrencySymbol.ETH]: 0,
+                [CurrencySymbol.WFIL]: 10000,
+                [CurrencySymbol.WBTC]: 300,
+                [CurrencySymbol.USDC]: 4000,
+                [CurrencySymbol.aUSDC]: 0,
+                [CurrencySymbol.axlFIL]: 0,
+            })
+        );
     });
 });

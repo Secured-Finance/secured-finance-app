@@ -47,9 +47,9 @@ const computeTotalUsers = (users: string) => {
         return '0';
     }
     const totalUsers =
-        getEnvironment().toLowerCase() === Environment.DEVELOPMENT
-            ? +users
-            : +users + PREVIOUS_TOTAL_USERS;
+        getEnvironment().toLowerCase() === Environment.STAGING
+            ? +users + PREVIOUS_TOTAL_USERS
+            : +users;
     return ordinaryFormat(totalUsers ?? 0, 0, 2, 'compact');
 };
 
@@ -156,7 +156,7 @@ export const MarketDashboard = () => {
                                 title='Yield Curve'
                                 curves={curves}
                                 labels={Object.values(
-                                    lendingContracts[CurrencySymbol.WFIL]
+                                    lendingContracts[CurrencySymbol.WBTC]
                                 )
                                     .filter(o => o.isReady && !o.isMatured)
                                     .map(o => o.name)}

@@ -5,8 +5,6 @@ import useSF from 'src/hooks/useSecuredFinance';
 import { CurrencySymbol, currencyMap, isPastDate } from 'src/utils';
 import { useCurrencies } from '../useCurrencies';
 
-const PRE_OPEN_TIME = 60 * 60 * 24 * 7; // 7 days in seconds
-
 export type LendingMarket = {
     name: string;
     maturity: number;
@@ -72,7 +70,7 @@ export type AvailableContracts = Record<CurrencySymbol, ContractMap>;
 
 export const useLendingMarkets = () => {
     const securedFinance = useSF();
-    const { data: currencies } = useCurrencies();
+    const { data: currencies, isSuccess: isCurrencySuccess } = useCurrencies();
 
     return useQuery({
         queryKey: [QueryKeys.LENDING_MARKETS, currencies],
@@ -105,6 +103,7 @@ export const useLendingMarkets = () => {
                         maxLendUnitPrice,
                         ccy,
                         currentMinDebtUnitPrice,
+                        preOpenDate,
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     } = market as any;
                     const currency = fromBytes32(ccy) as CurrencySymbol;
@@ -128,7 +127,7 @@ export const useLendingMarkets = () => {
                             isActive: isPastDate(Number(openingDate)),
                             marketUnitPrice: Number(marketUnitPrice),
                             openingUnitPrice: Number(openingUnitPrice),
-                            preOpenDate: Number(openingDate) - PRE_OPEN_TIME,
+                            preOpenDate: Number(preOpenDate),
                             isReady,
                             isOpened,
                             isMatured,
@@ -147,6 +146,6 @@ export const useLendingMarkets = () => {
             }
             return availableContracts;
         },
-        enabled: !!securedFinance && !!currencies,
+        enabled: !!securedFinance && isCurrencySuccess,
     });
 };

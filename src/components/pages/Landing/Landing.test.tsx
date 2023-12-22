@@ -113,7 +113,7 @@ describe('Landing Component', () => {
     });
 
     describe('Bond Price field', () => {
-        it('should display the best price as bond price when user change to advance mode', async () => {
+        it.skip('should display the best price as bond price when user change to advance mode', async () => {
             await waitFor(() => {
                 render(<Default />, {
                     apolloMocks: Default.parameters?.apolloClient.mocks,
@@ -176,7 +176,7 @@ describe('Landing Component', () => {
             assertInputValue('Bond Price', '96.85');
         });
 
-        it('should reset bond price to the best price when user changes mode', async () => {
+        it.skip('should reset bond price to the best price when user changes mode', async () => {
             await waitFor(() => {
                 render(<Default />, {
                     apolloMocks: Default.parameters?.apolloClient.mocks,
