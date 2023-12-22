@@ -28,6 +28,7 @@ const preOrderMarket = {
     maxLendUnitPrice: BigInt('9630'),
     currentMinDebtUnitPrice: BigInt('9500'),
     ccy: wfilBytes32,
+    preOpenDate: BigInt('1684982800'),
 };
 
 const closedMarket = {
