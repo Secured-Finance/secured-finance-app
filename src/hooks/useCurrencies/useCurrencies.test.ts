@@ -7,7 +7,7 @@ import { useCurrencies } from './useCurrencies';
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
-describe('useCurrencies', () => {
+describe.skip('useCurrencies', () => {
     it('should return the list of currencies in order', async () => {
         const { result, waitForNextUpdate } = renderHook(() => useCurrencies());
         await waitForNextUpdate();

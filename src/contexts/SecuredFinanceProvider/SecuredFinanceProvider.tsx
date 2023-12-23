@@ -3,7 +3,7 @@ import { SecuredFinanceClient } from '@secured-finance/sf-client';
 import { useQueryClient } from '@tanstack/react-query';
 import { createContext, useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { QUERIES_TO_INVALIDATE, QueryKeys } from 'src/hooks';
+import { QUERIES_TO_INVALIDATE } from 'src/hooks';
 import { useEthereumWalletStore } from 'src/hooks/useEthWallet';
 import {
     updateChainError,
@@ -75,20 +75,10 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
     const handleChainChanged = useCallback(
         (chainId: string) => {
             dispatchChainError(hexToNumber(chainId as `0x${string}`));
-            // Invalidate all queries
-            Promise.all(
-                [
-                    ...QUERIES_TO_INVALIDATE,
-                    QueryKeys.CURRENCIES,
-                    QueryKeys.COLLATERAL_CURRENCIES,
-                ].map(queryKey =>
-                    queryClient.cancelQueries({
-                        queryKey: [queryKey],
-                    })
-                )
-            );
+            // Set window.location to trigger a page reload
+            window.location.href = '/';
         },
-        [dispatchChainError, queryClient]
+        [dispatchChainError]
     );
 
     useEffect(() => {
