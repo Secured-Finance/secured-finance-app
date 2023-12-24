@@ -11,6 +11,7 @@ import {
 } from 'src/components/atoms';
 import { HamburgerMenu, MenuPopover } from 'src/components/molecules';
 import { WalletDialog, WalletPopover } from 'src/components/organisms';
+import { useIsGlobalItayose } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
@@ -23,7 +24,7 @@ const PRODUCTION_LINKS = [
     {
         text: 'OTC Lending',
         link: '/',
-        alternateLinks: ['/advanced', '/global-itayose'],
+        alternateLinks: ['/advanced', '/global-itayose', '/itayose'],
         dataCy: 'lending',
     },
     {
@@ -88,6 +89,18 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     const currentChainId = useSelector(
         (state: RootState) => state.blockchain.chainId
     );
+
+    const { data: isGlobalItayose } = useIsGlobalItayose();
+
+    if (isGlobalItayose) {
+        const landingPage = PRODUCTION_LINKS.find(
+            obj => obj.dataCy === 'lending'
+        );
+        if (landingPage) {
+            landingPage.link = '/itayose';
+        }
+    }
+
     const envShort = getEnvShort();
     const LINKS = isProdEnv() ? PRODUCTION_LINKS : DEV_LINKS;
 
