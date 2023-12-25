@@ -47,7 +47,7 @@ export const OrderDetails = ({
     showWarning,
     isCurrencyDelisted,
     isRemoveOrder = false,
-    isRepayOrRedeem = false,
+    showZCUsage = true,
 }: {
     amount: Amount;
     maturity: Maturity;
@@ -58,7 +58,7 @@ export const OrderDetails = ({
     showWarning?: boolean;
     isCurrencyDelisted?: boolean;
     isRemoveOrder?: boolean;
-    isRepayOrRedeem?: boolean;
+    showZCUsage?: boolean;
 }) => {
     const { data: orderFee = 0 } = useOrderFee(amount.currency);
 
@@ -149,7 +149,7 @@ export const OrderDetails = ({
                         tradeAmount={amount}
                         assetPrice={assetPrice}
                         side={side}
-                        isRepayOrRedeem={isRepayOrRedeem}
+                        showZCUsage={showZCUsage}
                     />
                     <SectionWithItems
                         itemList={[

@@ -221,7 +221,7 @@ export const UnwindDialog = ({
                         assetPrice={priceList[amount.currency]}
                         collateral={collateralBook}
                         loanValue={marketValue}
-                        isRepayOrRedeem={['REPAY', 'REDEEM'].includes(type)}
+                        showZCUsage={['UNWIND'].includes(type)}
                     />
                 );
             case Step.processing:
