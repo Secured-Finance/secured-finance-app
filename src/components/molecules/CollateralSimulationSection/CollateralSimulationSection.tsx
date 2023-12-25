@@ -31,14 +31,14 @@ export const CollateralSimulationSection = ({
     tradeAmount,
     assetPrice,
     side,
-    isRepayOrRedeem = false,
+    showZCUsage = true,
 }: {
     collateral: CollateralBook;
     maturity: Maturity;
     tradeAmount: Amount;
     assetPrice: number;
     side: OrderSide;
-    isRepayOrRedeem?: boolean;
+    showZCUsage?: boolean;
 }) => {
     const { address } = useAccount();
 
@@ -79,6 +79,15 @@ export const CollateralSimulationSection = ({
     const items: [string | React.ReactNode, string | React.ReactNode][] = [
         ['Borrow Remaining', usdFormat(remainingToBorrow * assetPrice, 2)],
         [
+            'ZC Usage',
+            <FormatCollateralUsage
+                key='ZCUsage'
+                initialValue={initialZCUsage}
+                finalValue={zcUsage}
+                maxValue={coverage}
+            />,
+        ],
+        [
             <CollateralUsageItem key={1} />,
             <FormatCollateralUsage
                 key='collateralUsage'
@@ -88,20 +97,8 @@ export const CollateralSimulationSection = ({
         ],
     ];
 
-    if (!isRepayOrRedeem) {
-        const zcUsageItem: [
-            string | React.ReactNode,
-            string | React.ReactNode
-        ] = [
-            'ZC Usage',
-            <FormatCollateralUsage
-                key='ZCUsage'
-                initialValue={initialZCUsage}
-                finalValue={zcUsage}
-                maxValue={coverage}
-            />,
-        ];
-        items.splice(1, 0, zcUsageItem);
+    if (!showZCUsage) {
+        items.splice(1, 1);
     }
 
     return <SectionWithItems itemList={items} />;

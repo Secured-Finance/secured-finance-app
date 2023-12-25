@@ -17,15 +17,6 @@ export type Position = {
     marketPrice: bigint;
 };
 
-const emptyPVPerCurrency = {
-    [CurrencySymbol.ETH]: 0,
-    [CurrencySymbol.WBTC]: 0,
-    [CurrencySymbol.WFIL]: 0,
-    [CurrencySymbol.USDC]: 0,
-    [CurrencySymbol.aUSDC]: 0,
-    [CurrencySymbol.axlFIL]: 0,
-};
-
 export const usePositions = (
     account: string | undefined,
     usedCurrencies: CurrencySymbol[]
@@ -47,8 +38,12 @@ export const usePositions = (
             return positions ?? [];
         },
         select: positions => {
-            const totalBorrowPVPerCurrency = { ...emptyPVPerCurrency };
-            const totalLendPVPerCurrency = { ...emptyPVPerCurrency };
+            const totalBorrowPVPerCurrency: Partial<
+                Record<CurrencySymbol, number>
+            > = {};
+            const totalLendPVPerCurrency: Partial<
+                Record<CurrencySymbol, number>
+            > = {};
             const lendCurrencies: Set<CurrencySymbol> = new Set();
             const borrowCurrencies: Set<CurrencySymbol> = new Set();
             const ret: Position[] = [];
@@ -71,10 +66,13 @@ export const usePositions = (
                 );
                 if (presentValue >= 0) {
                     lendCurrencies.add(ccy);
-                    totalLendPVPerCurrency[ccy] += presentValue;
+                    totalLendPVPerCurrency[ccy] =
+                        (totalLendPVPerCurrency[ccy] ?? 0) + presentValue;
                 } else {
                     borrowCurrencies.add(ccy);
-                    totalBorrowPVPerCurrency[ccy] += Math.abs(presentValue);
+                    totalBorrowPVPerCurrency[ccy] =
+                        (totalBorrowPVPerCurrency[ccy] ?? 0) +
+                        Math.abs(presentValue);
                 }
             });
 
