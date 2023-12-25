@@ -33,4 +33,13 @@ describe('CollateralSimulationSection Component', () => {
             expect(screen.getByText('55%')).toHaveClass('text-progressBarVia');
         });
     });
+
+    it('should display ZC usage', async () => {
+        render(<Trade />);
+        expect(screen.getByText('ZC Usage')).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.getByText('0%')).toBeInTheDocument();
+            expect(screen.getByText('80%')).toBeInTheDocument();
+        });
+    });
 });
