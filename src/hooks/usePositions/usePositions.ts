@@ -2,7 +2,12 @@ import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
-import { CurrencySymbol, hexToCurrencySymbol, toCurrency } from 'src/utils';
+import {
+    CurrencySymbol,
+    amountFormatterFromBase,
+    hexToCurrencySymbol,
+    toCurrency,
+} from 'src/utils';
 
 export type Position = {
     currency: string;
@@ -33,6 +38,12 @@ export const usePositions = (
             return positions ?? [];
         },
         select: positions => {
+            const totalBorrowPVPerCurrency: Partial<
+                Record<CurrencySymbol, number>
+            > = {};
+            const totalLendPVPerCurrency: Partial<
+                Record<CurrencySymbol, number>
+            > = {};
             const lendCurrencies: Set<CurrencySymbol> = new Set();
             const borrowCurrencies: Set<CurrencySymbol> = new Set();
             const ret: Position[] = [];
@@ -50,11 +61,18 @@ export const usePositions = (
                 } as Position);
                 const ccy = hexToCurrencySymbol(position.ccy);
                 if (!ccy) return;
-                if (position.presentValue >= 0) {
+                const presentValue = amountFormatterFromBase[ccy](
+                    position.presentValue
+                );
+                if (presentValue >= 0) {
                     lendCurrencies.add(ccy);
-                }
-                if (position.presentValue < 0) {
+                    totalLendPVPerCurrency[ccy] =
+                        (totalLendPVPerCurrency[ccy] ?? 0) + presentValue;
+                } else {
                     borrowCurrencies.add(ccy);
+                    totalBorrowPVPerCurrency[ccy] =
+                        (totalBorrowPVPerCurrency[ccy] ?? 0) +
+                        Math.abs(presentValue);
                 }
             });
 
@@ -62,6 +80,8 @@ export const usePositions = (
                 positions: ret,
                 lendCurrencies,
                 borrowCurrencies,
+                totalBorrowPVPerCurrency,
+                totalLendPVPerCurrency,
             };
         },
         enabled: !!securedFinance && !!account && !!usedCurrencyKey,

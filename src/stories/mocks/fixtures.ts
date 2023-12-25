@@ -54,7 +54,8 @@ export const dec24Fixture = new Maturity(1733011200);
 
 const openingDateTimestamp = 1638316800;
 const openingDate = BigInt(openingDateTimestamp);
-const preOpenDateTimestamp = 1637107200;
+const preOpenDateTimestamp = 1637712000;
+const preOpenDate = BigInt(preOpenDateTimestamp);
 
 export const maturitiesMockFromContract = (ccy: string) => [
     {
@@ -74,6 +75,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         maxLendUnitPrice: BigInt('9700'),
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
+        preOpenDate: preOpenDate,
     },
     {
         name: 'MAR23',
@@ -92,6 +94,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         maxLendUnitPrice: BigInt('9698'),
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
+        preOpenDate: preOpenDate,
     },
     {
         name: 'JUN23',
@@ -110,6 +113,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         maxLendUnitPrice: BigInt('9692'),
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
+        preOpenDate: preOpenDate,
     },
     {
         name: 'SEP23',
@@ -128,6 +132,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         maxLendUnitPrice: BigInt('9687'),
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
+        preOpenDate: preOpenDate,
     },
     {
         name: 'DEC23',
@@ -146,6 +151,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         maxLendUnitPrice: BigInt('9666'),
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
+        preOpenDate: preOpenDate,
     },
     {
         name: 'MAR24',
@@ -164,6 +170,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         maxLendUnitPrice: BigInt('9656'),
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
+        preOpenDate: preOpenDate,
     },
     {
         name: 'JUN24',
@@ -182,6 +189,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         maxLendUnitPrice: BigInt('9640'),
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
+        preOpenDate: preOpenDate,
     },
     {
         name: 'SEP24',
@@ -200,6 +208,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         maxLendUnitPrice: BigInt('9630'),
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
+        preOpenDate: preOpenDate,
     },
     {
         name: 'DEC24',
@@ -218,6 +227,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         maxLendUnitPrice: BigInt('9630'),
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
+        preOpenDate: BigInt(1684972800),
     },
 ];
 
@@ -380,7 +390,7 @@ export const maturities = {
         isActive: false,
         utcOpeningDate: 1685577600,
         marketUnitPrice: 9001,
-        preOpenDate: 1684368000,
+        preOpenDate: 1684972800,
         openingUnitPrice: 9710,
         isReady: false,
         isOpened: false,

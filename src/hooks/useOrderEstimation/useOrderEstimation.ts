@@ -56,7 +56,7 @@ export const useOrderEstimation = (account: string | undefined) => {
                 additionalDepositAmount,
                 ignoreBorrowedAmount
             );
-            return Number(orderEstimation?.coverage);
+            return orderEstimation;
         },
         enabled: !!securedFinance && !!account,
     });

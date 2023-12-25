@@ -71,4 +71,21 @@ describe('usePositions', () => {
             new Set([CurrencySymbol.USDC, CurrencySymbol.ETH])
         );
     });
+
+    it('should return total borrow and total lend amount', async () => {
+        const { result, waitForNextUpdate } = renderHook(() =>
+            usePositions('0x1', usedCurrencies)
+        );
+        await waitForNextUpdate();
+
+        const newValue = result.current;
+        expect(newValue.data.totalBorrowPVPerCurrency).toEqual({
+            ETH: 10.5582556570268,
+            USDC: 63,
+        });
+        expect(newValue.data.totalLendPVPerCurrency).toEqual({
+            ETH: 9.95475,
+            WFIL: 9.95475,
+        });
+    });
 });
