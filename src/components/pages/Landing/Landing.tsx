@@ -23,6 +23,7 @@ import {
     useLendingMarkets,
     useLoanValues,
     useMaturityOptions,
+    useOrderEstimation,
 } from 'src/hooks';
 import {
     resetUnitPrice,
@@ -46,7 +47,7 @@ export const emptyOptionList = [
 export const Landing = ({ view }: { view?: ViewType }) => {
     const { address } = useAccount();
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
-    const { currency, side, maturity, lastView } = useSelector(
+    const { currency, side, maturity, lastView, amount } = useSelector(
         (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
     );
     const { data: lendingMarkets = baseContracts } = useLendingMarkets();
@@ -71,12 +72,16 @@ export const Landing = ({ view }: { view?: ViewType }) => {
         market => market.isOpened
     );
 
+    const { data: orderEstimationInfo } = useOrderEstimation(address);
+
     const marketPrice = useMemo(() => {
-        if (unitPrices) {
+        if (unitPrices && !amount) {
             return unitPrices.get(maturity)?.price;
+        } else if (orderEstimationInfo?.lastUnitPrice) {
+            return Number(orderEstimationInfo.lastUnitPrice);
         }
         return undefined;
-    }, [unitPrices, maturity]);
+    }, [unitPrices, amount, orderEstimationInfo?.lastUnitPrice, maturity]);
 
     const dailyVolumes = useGraphClientHook(
         {}, // no variables

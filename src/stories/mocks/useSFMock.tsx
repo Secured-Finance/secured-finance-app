@@ -384,6 +384,7 @@ export const mockUseSF = () => {
             Promise.resolve({
                 coverage: BigInt(5500),
                 filledAmount: BigInt('90000000000000000000'),
+                lastUnitPrice: BigInt(9685),
             })
         ),
 
