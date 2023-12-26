@@ -8,18 +8,16 @@ import { Header } from 'src/components/organisms';
 import { Layout } from 'src/components/templates';
 import { updateChainError } from 'src/store/blockchain';
 import { connectEthWallet, updateEthBalance } from 'src/store/wallet';
+import { account, connector, publicClient } from 'src/stories/mocks/mockWallet';
 import timemachine from 'timemachine';
 import {
     Chain,
     TransactionReceipt,
     WaitForTransactionReceiptParameters,
     createPublicClient,
-    createWalletClient,
     http,
 } from 'viem';
-import { privateKeyToAccount } from 'viem/accounts';
 import { WagmiConfig, createConfig, sepolia } from 'wagmi';
-import { MockConnector } from 'wagmi/connectors/mock';
 
 export const withAppLayout = (Story: StoryFn) => {
     return (
@@ -29,16 +27,6 @@ export const withAppLayout = (Story: StoryFn) => {
     );
 };
 
-const privateKey =
-    '0xde926db3012af759b4f24b5a51ef6afa397f04670f634aa4f48d4480417007f3';
-
-const account = privateKeyToAccount(privateKey);
-
-const publicClient = createPublicClient({
-    chain: sepolia,
-    transport: http(),
-});
-
 publicClient.waitForTransactionReceipt = async (
     args: WaitForTransactionReceiptParameters<Chain>
 ) => {
@@ -46,21 +34,6 @@ publicClient.waitForTransactionReceipt = async (
         blockNumber: args.hash ? BigInt('123') : BigInt('0'),
     } as unknown as TransactionReceipt;
 };
-
-const walletClient = createWalletClient({
-    account: account,
-    chain: sepolia,
-    transport: http(),
-});
-
-const connector = new MockConnector({
-    chains: [sepolia],
-    options: {
-        chainId: sepolia.id,
-        walletClient: walletClient,
-        flags: { isAuthorized: true },
-    },
-});
 
 export const withWalletProvider = (Story: StoryFn, Context: StoryContext) => {
     const dispatch = useDispatch();
