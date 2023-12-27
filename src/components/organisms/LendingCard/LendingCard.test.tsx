@@ -22,7 +22,7 @@ beforeAll(() => {
     });
 });
 
-describe.skip('LendingCard Component', () => {
+describe('LendingCard Component', () => {
     const preloadedState = {
         ...initialStore,
         wallet: {
@@ -72,7 +72,7 @@ describe.skip('LendingCard Component', () => {
     });
 
     it('should let the user choose between ETH, Filecoin and USDC when clicking on the asset selector', async () => {
-        render(<Default />);
+        await waitFor(() => render(<Default />, { preloadedState }));
 
         expect(
             await screen.findByText(DEFAULT_CHOICE.symbol)
@@ -102,12 +102,12 @@ describe.skip('LendingCard Component', () => {
         expect(screen.getByText('ETH')).toBeInTheDocument();
     });
 
-    it.skip('should display the amount inputted by the user in USD', async () => {
+    it('should display the amount inputted by the user in USD', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '10' } });
 
-        expect(screen.getByText(`~ $${6 * 10}`)).toBeInTheDocument();
+        expect(await screen.findByText(`~ $${6 * 10}`)).toBeInTheDocument();
     });
 
     it('should transform the contract label to a date', async () => {
@@ -132,11 +132,11 @@ describe.skip('LendingCard Component', () => {
         });
     });
 
-    it.skip('should support orders with decimal amounts', async () => {
+    it('should support orders with decimal amounts', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '10.5' } });
-        expect(screen.getByText(`~ $${6 * 10.5}`)).toBeInTheDocument();
+        expect(await screen.findByText(`~ $${6 * 10.5}`)).toBeInTheDocument();
     });
 
     it('should render a disabled button if amount is undefined or zero', async () => {

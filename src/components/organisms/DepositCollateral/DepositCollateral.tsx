@@ -18,7 +18,6 @@ import {
     CollateralEvents,
     CollateralInfo,
     CurrencySymbol,
-    ZERO_BI,
     amountFormatterFromBase,
     amountFormatterToBase,
     formatAmount,
@@ -104,17 +103,20 @@ export const DepositCollateral = ({
 } & DialogState) => {
     const etherscanUrl = useEtherscanUrl();
     const [asset, setAsset] = useState(CurrencySymbol.USDC);
-    const [collateral, setCollateral] = useState<bigint>();
+    const [collateral, setCollateral] = useState<string>();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [errorMessage, setErrorMessage] = useState(
         'Your deposit transaction has failed.'
     );
     const [txHash, setTxHash] = useState<string | undefined>();
+    const collateralBigInt = amountFormatterToBase[asset](
+        Number(collateral ?? '')
+    );
 
     const { data: priceList } = useLastPrices();
     const { onDepositCollateral } = useDepositCollateral(
         asset,
-        collateral ?? ZERO_BI
+        collateralBigInt
     );
     const handleContractTransaction = useHandleContractTransaction();
 
@@ -136,12 +138,18 @@ export const DepositCollateral = ({
         return (
             state.currentStep === Step.depositCollateral &&
             (!collateral ||
-                collateral >
+                collateralBigInt >
                     amountFormatterToBase[asset](
                         collateralList[asset]?.available ?? 0
                     ))
         );
-    }, [asset, collateral, collateralList, state.currentStep]);
+    }, [
+        asset,
+        collateral,
+        collateralBigInt,
+        collateralList,
+        state.currentStep,
+    ]);
 
     const handleDepositCollateral = useCallback(async () => {
         try {
@@ -154,7 +162,7 @@ export const DepositCollateral = ({
                 trackCollateralEvent(
                     CollateralEvents.DEPOSIT_COLLATERAL,
                     asset,
-                    collateral ?? ZERO_BI,
+                    collateralBigInt,
                     source ?? ''
                 );
                 dispatch({ type: 'next' });
@@ -168,7 +176,7 @@ export const DepositCollateral = ({
         }
     }, [
         asset,
-        collateral,
+        collateralBigInt,
         handleContractTransaction,
         onDepositCollateral,
         source,
@@ -223,19 +231,11 @@ export const DepositCollateral = ({
                                 <CollateralInput
                                     price={priceList[asset]}
                                     asset={asset}
-                                    onAmountChange={(v: bigint | undefined) =>
-                                        setCollateral(v)
-                                    }
+                                    onAmountChange={setCollateral}
                                     availableAmount={
                                         collateralList[asset]?.available ?? 0
                                     }
-                                    amount={
-                                        collateral
-                                            ? amountFormatterFromBase[asset](
-                                                  collateral
-                                              )
-                                            : undefined
-                                    }
+                                    amount={collateral}
                                 />
                             </div>
                         );
@@ -259,7 +259,7 @@ export const DepositCollateral = ({
                                         'Amount',
                                         `${formatAmount(
                                             amountFormatterFromBase[asset](
-                                                collateral ?? ZERO_BI
+                                                collateralBigInt
                                             )
                                         )} ${asset}`,
                                     ],

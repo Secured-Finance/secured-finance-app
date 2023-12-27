@@ -48,14 +48,12 @@ describe('Itayose Component', () => {
         fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
             target: { value: '1' },
         });
-        expect(store.getState().landingOrderForm.amount).toEqual('100000000');
+        expect(store.getState().landingOrderForm.amount).toEqual('1');
         await waitFor(() => {
             fireEvent.click(screen.getByRole('button', { name: 'WBTC' }));
             fireEvent.click(screen.getByRole('menuitem', { name: 'WFIL' }));
         });
-        expect(store.getState().landingOrderForm.amount).toEqual(
-            '1000000000000000000'
-        );
+        expect(store.getState().landingOrderForm.amount).toEqual('1');
         expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
             '1'
         );

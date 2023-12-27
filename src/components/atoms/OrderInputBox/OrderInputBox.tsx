@@ -1,57 +1,35 @@
 import { useCallback } from 'react';
 import { InputBase } from 'src/components/atoms';
 import { InfoToolTip } from 'src/components/molecules';
-import { amountFormatterToBase, CurrencySymbol } from 'src/utils';
 
 interface OrderInputBoxProps {
     field: string;
     unit?: string;
-    initialValue?: number | string | undefined;
-    asset?: CurrencySymbol;
+    initialValue?: string | undefined;
     disabled?: boolean;
     informationText?: string;
     decimalPlacesAllowed?: number;
     maxLimit?: number;
-    onValueChange?: (v: number | bigint | undefined) => void;
+    onValueChange?: (v: string | undefined) => void;
 }
 
 export const OrderInputBox = ({
     field,
     unit,
     initialValue,
-    asset,
     disabled = false,
     informationText,
     decimalPlacesAllowed,
     maxLimit,
     onValueChange,
 }: OrderInputBoxProps) => {
-    const handleInputChange = useCallback(
-        (
-            amount: number | undefined,
-            asset: CurrencySymbol | undefined,
-            onValueChange: (v: number | bigint | undefined) => void
-        ) => {
-            let format = (x: number) => BigInt(x);
-            if (
-                asset &&
-                amountFormatterToBase &&
-                amountFormatterToBase[asset]
-            ) {
-                format = amountFormatterToBase[asset];
-            }
-            asset ? onValueChange(format(amount ?? 0)) : onValueChange(amount);
-        },
-        []
-    );
-
     const handleAmountChange = useCallback(
-        (amount: number | undefined) => {
+        (amount: string | undefined) => {
             if (onValueChange) {
-                handleInputChange(amount, asset, onValueChange);
+                onValueChange(amount);
             }
         },
-        [onValueChange, handleInputChange, asset]
+        [onValueChange]
     );
 
     return (
@@ -73,7 +51,7 @@ export const OrderInputBox = ({
                     </span>
                 ) : (
                     <InputBase
-                        value={initialValue as number}
+                        value={initialValue}
                         className='col col-span-2 flex text-right text-[18px] font-semibold leading-6 text-neutral-8'
                         label={field}
                         onValueChange={handleAmountChange}

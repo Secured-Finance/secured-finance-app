@@ -27,6 +27,7 @@ import {
     CurrencySymbol,
     ZERO_BI,
     currencyMap,
+    divide,
     formatLoanValue,
     getMaxAmount,
     ordinaryFormat,
@@ -351,7 +352,9 @@ export const OrderBookWidget = ({
                 ? lendOrders[parseInt(rowId)]
                 : borrowOrders[parseInt(rowId)];
         globalDispatch(setOrderType(OrderType.LIMIT));
-        globalDispatch(setUnitPrice(rowData.value.price));
+        globalDispatch(
+            setUnitPrice(divide(rowData.value.price, 100).toString())
+        );
     };
 
     const handleSellOrdersClick = (rowId: string) => {

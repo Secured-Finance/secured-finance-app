@@ -23,7 +23,7 @@ describe('test InputBase component', () => {
         expect(input.getAttribute('value')).toBe('50');
         await userEvent.clear(input);
         await userEvent.type(input, '100');
-        expect(onValueChange).toHaveBeenCalledWith(100);
+        expect(onValueChange).toHaveBeenCalledWith('100');
         expect(input.getAttribute('value')).toBe('100');
     });
 
@@ -155,5 +155,14 @@ describe('test InputBase component', () => {
         expect(input).toHaveClass('text-xl');
         fireEvent.input(input, { target: { value: '12345' } });
         expect(input).toHaveClass('text-xl');
+    });
+
+    it('should prefix 0 at start if user enters a decimal point', async () => {
+        render(<Default />);
+
+        const input = screen.getByRole('textbox');
+        await userEvent.clear(input);
+        await userEvent.type(input, '.');
+        expect(input.getAttribute('value')).toBe('0.');
     });
 });
