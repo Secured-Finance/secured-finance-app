@@ -16,8 +16,8 @@ const preloadedState = {
         currency: CurrencySymbol.USDC,
         maturity: dec22Fixture,
         side: OrderSide.BORROW,
-        amount: '500000000',
-        unitPrice: 9500,
+        amount: '500',
+        unitPrice: '95',
         orderType: OrderType.LIMIT,
     },
     wallet: {
@@ -251,7 +251,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(slider).toHaveValue('50');
     });
 
-    it.skip('slider should move according to source balance', async () => {
+    it('slider should move according to source balance', async () => {
         await waitFor(() =>
             render(<Default />, {
                 preloadedState: {
@@ -269,7 +269,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         const input = screen.getByRole('textbox', { name: 'Amount' });
 
         expect(await screen.findByText('0xB98b...Fd6D')).toBeInTheDocument();
-        expect(input).toHaveValue('0.0000');
+        expect(input).toHaveValue('500');
         fireEvent.change(slider, { target: { value: 100 } });
         expect(input).toHaveValue('10,000');
         fireEvent.change(slider, { target: { value: 1 } });
@@ -309,7 +309,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         const input = screen.getByRole('textbox', { name: 'Amount' });
 
         expect(await screen.findByText('0xB98b...Fd6D')).toBeInTheDocument();
-        expect(input).toHaveValue('0.0000');
+        expect(input).toHaveValue('500');
         fireEvent.change(slider, { target: { value: 100 } });
         expect(input).toHaveValue('10,000');
 
@@ -683,7 +683,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                     landingOrderForm: {
                         ...preloadedState.landingOrderForm,
                         orderType: OrderType.LIMIT,
-                        unitPrice: 9200,
+                        unitPrice: '92',
                     },
                 },
             });
@@ -697,7 +697,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                     landingOrderForm: {
                         ...preloadedState.landingOrderForm,
                         orderType: OrderType.LIMIT,
-                        unitPrice: 9200,
+                        unitPrice: '92',
                     },
                 },
             });

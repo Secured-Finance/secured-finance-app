@@ -36,7 +36,6 @@ import { useOrderbook } from 'src/hooks/useOrderbook';
 import {
     resetUnitPrice,
     selectLandingOrderForm,
-    setAmount,
     setCurrency,
     setMaturity,
 } from 'src/store/landingOrderForm';
@@ -45,8 +44,6 @@ import { MaturityOptionList, TransactionList } from 'src/types';
 import {
     CurrencySymbol,
     ZERO_BI,
-    amountFormatterFromBase,
-    amountFormatterToBase,
     checkOrderIsFilled,
     currencyMap,
     formatLoanValue,
@@ -103,7 +100,7 @@ export const AdvancedLending = ({
     marketPrice: number | undefined;
     delistedCurrencySet: Set<CurrencySymbol>;
 }) => {
-    const { amount, currency, maturity } = useSelector((state: RootState) =>
+    const { currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
     const [timestamp, setTimestamp] = useState<number>(1643713200);
@@ -258,19 +255,10 @@ export const AdvancedLending = ({
 
     const handleCurrencyChange = useCallback(
         (v: CurrencySymbol) => {
-            let formatFrom = (x: bigint) => Number(x);
-            if (amountFormatterFromBase && amountFormatterFromBase[currency]) {
-                formatFrom = amountFormatterFromBase[currency];
-            }
-            let formatTo = (x: number) => BigInt(x);
-            if (amountFormatterToBase && amountFormatterToBase[v]) {
-                formatTo = amountFormatterToBase[v];
-            }
-            dispatch(setAmount(formatTo(formatFrom(amount))));
             dispatch(setCurrency(v));
             dispatch(resetUnitPrice());
         },
-        [amount, currency, dispatch]
+        [dispatch]
     );
 
     const handleTermChange = useCallback(

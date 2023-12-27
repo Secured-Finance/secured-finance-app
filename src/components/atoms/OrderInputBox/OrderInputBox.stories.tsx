@@ -9,7 +9,7 @@ export default {
         field: 'Fixed Rate',
         unit: '%',
         disabled: true,
-        initialValue: 1000,
+        initialValue: '1000',
     },
 } as Meta<typeof OrderInputBox>;
 
@@ -23,9 +23,8 @@ export const Amount = Template.bind({});
 Amount.args = {
     field: 'Amount',
     unit: CurrencySymbol.WFIL,
-    asset: CurrencySymbol.WFIL,
     disabled: false,
-    initialValue: 10,
+    initialValue: '10',
 };
 
 export const Total = Template.bind({});

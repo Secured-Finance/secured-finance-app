@@ -41,19 +41,11 @@ import {
 } from 'src/hooks';
 import {
     selectLandingOrderForm,
-    setAmount,
     setCurrency,
     setMaturity,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import {
-    CurrencySymbol,
-    ZERO_BI,
-    amountFormatterFromBase,
-    amountFormatterToBase,
-    toOptions,
-    usdFormat,
-} from 'src/utils';
+import { CurrencySymbol, ZERO_BI, toOptions, usdFormat } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
@@ -113,7 +105,7 @@ const Toolbar = ({
 export const Itayose = () => {
     const { address } = useAccount();
 
-    const { amount, currency, maturity } = useSelector((state: RootState) =>
+    const { currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
 
@@ -220,18 +212,9 @@ export const Itayose = () => {
 
     const handleAssetChange = useCallback(
         (v: CurrencySymbol) => {
-            let formatFrom = (x: bigint) => Number(x);
-            if (amountFormatterFromBase && amountFormatterFromBase[currency]) {
-                formatFrom = amountFormatterFromBase[currency];
-            }
-            let formatTo = (x: number) => BigInt(x);
-            if (amountFormatterToBase && amountFormatterToBase[v]) {
-                formatTo = amountFormatterToBase[v];
-            }
-            dispatch(setAmount(formatTo(formatFrom(amount))));
             dispatch(setCurrency(v));
         },
-        [amount, currency, dispatch]
+        [dispatch]
     );
 
     const isLoadingMap = {
