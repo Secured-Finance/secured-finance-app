@@ -1,15 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/store/types';
 import { CurrencySymbol, currencyMap, hexToCurrencySymbol } from 'src/utils';
-import { useNetwork } from 'wagmi';
 import { QueryKeys } from '../queries';
 import useSF from '../useSecuredFinance';
 
 export const useCurrencies = () => {
     const securedFinance = useSF();
-    const { chain } = useNetwork();
-
+    const chain = useSelector((state: RootState) => state.blockchain.chainId);
     return useQuery({
-        queryKey: [QueryKeys.CURRENCIES, chain?.id],
+        queryKey: [QueryKeys.CURRENCIES, chain],
         queryFn: async () => {
             const currencies = await securedFinance?.getCurrencies();
             return currencies ?? [];

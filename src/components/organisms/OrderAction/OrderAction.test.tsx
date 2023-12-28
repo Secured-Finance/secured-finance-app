@@ -25,6 +25,7 @@ const preloadedState = {
         sourceAccount: WalletSource.METAMASK,
     },
     blockchain: {
+        chainId: 11155111,
         chainError: false,
     },
 };
@@ -74,6 +75,7 @@ describe('OrderAction component', () => {
                         amount: '6000000000',
                     },
                     blockchain: {
+                        chainId: 11155111,
                         chainError: true,
                     },
                 },
@@ -109,6 +111,7 @@ describe('OrderAction component', () => {
                 preloadedState: {
                     ...preloadedState,
                     blockchain: {
+                        chainId: 11155111,
                         chainError: true,
                     },
                 },

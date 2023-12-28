@@ -18,6 +18,7 @@ describe('WalletPopover component', () => {
     it('should render an alert if current chain is not supported', async () => {
         const preloadedState = {
             blockchain: {
+                chainId: 11155111,
                 chainError: true,
             },
         };

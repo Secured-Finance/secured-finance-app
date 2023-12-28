@@ -31,6 +31,7 @@ describe('CollateralTabLeftPane component', () => {
         render(<Default />, {
             preloadedState: {
                 blockchain: {
+                    chainId: 11155111,
                     chainError: true,
                 },
             },
