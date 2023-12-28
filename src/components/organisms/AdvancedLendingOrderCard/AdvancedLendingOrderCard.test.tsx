@@ -24,6 +24,7 @@ const preloadedState = {
         address: '0x1',
     },
     blockchain: {
+        chainId: 11155111,
         chainError: false,
     },
 };

@@ -10,6 +10,7 @@ const preloadedState = {
         walletDialogOpen: true,
     },
     blockchain: {
+        chainId: 11155111,
         chainError: false,
     },
 };

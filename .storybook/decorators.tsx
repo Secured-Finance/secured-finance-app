@@ -14,10 +14,8 @@ import {
     Chain,
     TransactionReceipt,
     WaitForTransactionReceiptParameters,
-    createPublicClient,
-    http,
 } from 'viem';
-import { WagmiConfig, createConfig, sepolia } from 'wagmi';
+import { WagmiConfig, createConfig } from 'wagmi';
 
 export const withAppLayout = (Story: StoryFn) => {
     return (
