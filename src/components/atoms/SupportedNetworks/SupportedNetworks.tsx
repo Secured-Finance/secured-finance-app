@@ -1,9 +1,8 @@
-import { getSupportedChainIds } from 'src/utils';
-import { mainnet, sepolia } from 'wagmi';
+import { getSupportedChainIds, supportedNetworks } from 'src/utils';
 
 export const SupportedNetworks = () => {
     const chainIds = getSupportedChainIds();
-    const networkNames = [sepolia, mainnet]
+    const networkNames = supportedNetworks
         .filter(chain => chainIds.includes(chain.id))
         .map(chain => chain.name)
         .map(name => (name === 'Ethereum' ? 'Mainnet' : name));
@@ -15,8 +14,7 @@ export const SupportedNetworks = () => {
                 {networkNames.length === 2
                     ? networkNames.join(' and ')
                     : networkNames.join(', ')}
-            </span>{' '}
-            in Ethereum
+            </span>
         </>
     );
 };
