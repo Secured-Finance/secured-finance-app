@@ -2,7 +2,7 @@ import { reset, track } from '@amplitude/analytics-browser';
 import { SecuredFinanceClient } from '@secured-finance/sf-client';
 import { useQueryClient } from '@tanstack/react-query';
 import { createContext, useCallback, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { QUERIES_TO_INVALIDATE } from 'src/hooks';
 import { useEthereumWalletStore } from 'src/hooks/useEthWallet';
 import {
@@ -10,6 +10,7 @@ import {
     updateChainId,
     updateLatestBlock,
 } from 'src/store/blockchain';
+import { RootState } from 'src/store/types';
 import { getSupportedChainIds, readWalletFromStore } from 'src/utils';
 import { InterfaceEvents, associateWallet } from 'src/utils/events';
 import { hexToNumber } from 'viem';
@@ -43,9 +44,12 @@ export const Context = createContext<SFContext>({
 const SecuredFinanceProvider: React.FC = ({ children }) => {
     const { address, isConnected } = useAccount();
     const { chain } = useNetwork();
+    const chainId = useSelector((state: RootState) => state.blockchain.chainId);
     const { connect, connectors } = useConnect();
     const { data: client } = useWalletClient();
-    const publicClient = usePublicClient();
+    const publicClient = usePublicClient({
+        chainId: chainId,
+    });
     const queryClient = useQueryClient();
 
     const [securedFinance, setSecuredFinance] =
@@ -114,6 +118,13 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
 
             setSecuredFinance(previous => {
                 if (!previous) {
+                    return securedFinanceLib;
+                }
+
+                if (
+                    previous.config.chain.id !==
+                    securedFinanceLib.config.chain.id
+                ) {
                     return securedFinanceLib;
                 }
 
