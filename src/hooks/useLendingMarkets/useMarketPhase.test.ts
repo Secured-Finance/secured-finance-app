@@ -1,6 +1,6 @@
 import { dec22Fixture, dec24Fixture } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { renderHook } from 'src/test-utils';
+import { renderHook, waitFor } from 'src/test-utils';
 import { CurrencySymbol } from 'src/utils';
 import { useMarketPhase } from './useMarketPhase';
 
@@ -9,21 +9,20 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
 beforeEach(() => mock.getOrderBookDetails.mockClear());
 
-describe('useMarket', () => {
+describe('useMarketPhase', () => {
     it('should return the market phase as Open', async () => {
         const maturity = dec22Fixture.toNumber();
-        const { result, waitForNextUpdate } = renderHook(() =>
+        const { result } = renderHook(() =>
             useMarketPhase(CurrencySymbol.ETH, maturity)
         );
         const value = result.current;
         expect(value).toEqual('Not Found');
 
-        await waitForNextUpdate();
-        await waitForNextUpdate();
-
-        expect(mock.getOrderBookDetails).toHaveBeenCalledTimes(1);
+        await waitFor(() =>
+            expect(mock.getOrderBookDetails).toHaveBeenCalledTimes(1)
+        );
         const newValue = result.current;
-        expect(newValue).toEqual('Open');
+        await waitFor(() => expect(newValue).toEqual('Open'));
     });
 
     it('should return the market phase as Pre Order', async () => {
@@ -35,10 +34,10 @@ describe('useMarket', () => {
         expect(value).toEqual('Not Found');
 
         await waitForNextUpdate();
-        await waitForNextUpdate();
 
-        expect(mock.getOrderBookDetails).toHaveBeenCalledTimes(1);
-        const newValue = result.current;
-        expect(newValue).toEqual('Pre Order');
+        await waitFor(() =>
+            expect(mock.getOrderBookDetails).toHaveBeenCalledTimes(1)
+        );
+        await waitFor(() => expect(result.current).toEqual('Pre Order'));
     });
 });
