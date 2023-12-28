@@ -79,6 +79,9 @@ export const mockUseSF = () => {
     const mockSecuredFinance = {
         config: {
             network: 'sepolia',
+            chain: {
+                id: 5,
+            },
         },
         placeOrder: jest.fn(),
         placePreOrder: jest.fn(),
