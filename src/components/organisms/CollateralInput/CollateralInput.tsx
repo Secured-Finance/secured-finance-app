@@ -1,52 +1,36 @@
 import { useCallback } from 'react';
 import { InputBase, SizeDependentStylesConfig } from 'src/components/atoms';
 import { PercentageSelector } from 'src/components/molecules';
-import { CurrencySymbol, amountFormatterToBase, usdFormat } from 'src/utils';
+import { CurrencySymbol, usdFormat } from 'src/utils';
 
 interface CollateralInputProps {
     price: number;
     availableAmount: number;
     asset: CurrencySymbol;
-    onAmountChange?: (v: bigint | undefined) => void;
-    amount: number | undefined;
+    onAmountChange?: (v: string | undefined) => void;
+    amount: string | undefined;
 }
 
 export const CollateralInput = ({
     price,
     availableAmount,
-    asset,
     onAmountChange,
     amount,
 }: CollateralInputProps) => {
-    const handleInputChange = useCallback(
-        (
-            amount: number | undefined,
-            asset: CurrencySymbol,
-            onAmountChange: (v: bigint | undefined) => void
-        ) => {
-            let format = (x: number) => BigInt(x);
-            if (amountFormatterToBase && amountFormatterToBase[asset]) {
-                format = amountFormatterToBase[asset];
-            }
-
-            onAmountChange(amount !== undefined ? format(amount) : undefined);
-        },
-        []
-    );
-
     const handleAmountChange = useCallback(
-        (inputAmount: number | undefined) => {
+        (inputAmount: string | undefined) => {
             if (
                 amount !== undefined &&
-                inputAmount === Math.round(amount * 10000) / 10000.0
+                Number(inputAmount) ===
+                    Math.floor(Number(amount) * 10000) / 10000.0
             ) {
                 return;
             }
             if (onAmountChange) {
-                handleInputChange(inputAmount, asset, onAmountChange);
+                onAmountChange(inputAmount);
             }
         },
-        [amount, asset, handleInputChange, onAmountChange]
+        [amount, onAmountChange]
     );
 
     const handleClick = useCallback(
@@ -57,10 +41,10 @@ export const CollateralInput = ({
                     : Math.floor(percentage * availableAmount * 10000) /
                       10000.0;
             if (onAmountChange) {
-                handleInputChange(amount, asset, onAmountChange);
+                onAmountChange(amount.toString());
             }
         },
-        [availableAmount, onAmountChange, handleInputChange, asset]
+        [availableAmount, onAmountChange]
     );
 
     return (
@@ -77,7 +61,7 @@ export const CollateralInput = ({
                 />
                 <div className='typography-body-2'>
                     <span className='text-center text-neutral-8'>
-                        {usdFormat(price * (amount ?? 0), 2)}
+                        {usdFormat(price * Number(amount ?? ''), 2)}
                     </span>
                     <span className='pl-2 text-center text-neutral-4'>USD</span>
                 </div>

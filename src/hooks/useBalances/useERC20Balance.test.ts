@@ -13,7 +13,7 @@ const balanceArray = [
     [CurrencySymbol.USDC, 4000],
 ];
 
-describe.skip('useERC20Balance', () => {
+describe('useERC20Balance', () => {
     it('should fetch token balance', async () => {
         const { result, waitForNextUpdate } = renderHook(() =>
             useERC20Balance('0x1')

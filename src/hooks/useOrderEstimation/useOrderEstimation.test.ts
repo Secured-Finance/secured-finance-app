@@ -15,8 +15,8 @@ const preloadedState = {
         currency: CurrencySymbol.USDC,
         side: OrderSide.BORROW,
         maturity: dec22Fixture.toNumber(),
-        amount: BigInt('5000000'),
-        unitPrice: 9800,
+        amount: '5',
+        unitPrice: '98',
         isBorrowedCollateral: false,
         sourceAccount: WalletSource.METAMASK,
     },
@@ -42,7 +42,8 @@ describe('useOrderEstimation', () => {
             false
         );
         const value = result.current.data;
-        expect(value).toEqual(5500);
+        expect(value.coverage).toEqual(BigInt(5500));
+        expect(value.filledAmount).toEqual(BigInt('90000000000000000000'));
     });
 
     it('should be called with truthy ignoreBorrowedAmount if isBorrowedCollateral is true', async () => {
@@ -72,7 +73,8 @@ describe('useOrderEstimation', () => {
             true
         );
         const value = result.current.data;
-        expect(value).toEqual(5500);
+        expect(value.coverage).toEqual(BigInt(5500));
+        expect(value.filledAmount).toEqual(BigInt('90000000000000000000'));
     });
 
     it('should be called without ignoreBorrowedAmount in lend orders', async () => {
@@ -104,7 +106,8 @@ describe('useOrderEstimation', () => {
             false
         );
         const value = result.current.data;
-        expect(value).toEqual(5500);
+        expect(value.coverage).toEqual(BigInt(5500));
+        expect(value.filledAmount).toEqual(BigInt('90000000000000000000'));
     });
 
     it('should be called with additionalDepositAmount in LEND orders if wallet source is not SF Vault', async () => {
@@ -134,7 +137,8 @@ describe('useOrderEstimation', () => {
             false
         );
         const value = result.current.data;
-        expect(value).toEqual(5500);
+        expect(value.coverage).toEqual(BigInt(5500));
+        expect(value.filledAmount).toEqual(BigInt('90000000000000000000'));
     });
 
     it('should be called with 0 additionalDepositAmount in LEND orders if wallet source is SF Vault', async () => {
@@ -165,7 +169,8 @@ describe('useOrderEstimation', () => {
             false
         );
         const value = result.current.data;
-        expect(value).toEqual(5500);
+        expect(value.coverage).toEqual(BigInt(5500));
+        expect(value.filledAmount).toEqual(BigInt('90000000000000000000'));
     });
 
     it('should be called with 0 additionalDepositAmount in Borrow orders', async () => {
@@ -187,6 +192,7 @@ describe('useOrderEstimation', () => {
             false
         );
         const value = result.current.data;
-        expect(value).toEqual(5500);
+        expect(value.coverage).toEqual(BigInt(5500));
+        expect(value.filledAmount).toEqual(BigInt('90000000000000000000'));
     });
 });
