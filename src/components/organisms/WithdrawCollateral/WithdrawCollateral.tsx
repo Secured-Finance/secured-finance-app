@@ -131,19 +131,13 @@ export const WithdrawCollateral = ({
     const isDisabled = useCallback(() => {
         return (
             state.currentStep === Step.withdrawCollateral &&
-            (!collateral ||
+            (!collateralBigInt ||
                 collateralBigInt >
                     amountFormatterToBase[asset](
                         collateralList[asset]?.available ?? 0
                     ))
         );
-    }, [
-        state.currentStep,
-        collateral,
-        collateralBigInt,
-        asset,
-        collateralList,
-    ]);
+    }, [state.currentStep, collateralBigInt, asset, collateralList]);
 
     const handleWithdrawCollateral = useCallback(async () => {
         try {
