@@ -898,6 +898,7 @@ export const collateralBook80: CollateralBook = {
         [CurrencySymbol.ETH]: BigInt(100000),
         [CurrencySymbol.WBTC]: BigInt(100000),
     },
+    totalPresentValue: 2500,
 };
 
 export const collateralBook37: CollateralBook = {
@@ -919,6 +920,7 @@ export const collateralBook37: CollateralBook = {
         [CurrencySymbol.ETH]: BigInt(100000),
         [CurrencySymbol.WBTC]: BigInt(100000),
     },
+    totalPresentValue: 2500,
 };
 
 export const emptyUSDCollateral: CollateralBook = {
@@ -940,6 +942,7 @@ export const emptyUSDCollateral: CollateralBook = {
         [CurrencySymbol.ETH]: BigInt(0),
         [CurrencySymbol.WBTC]: BigInt(0),
     },
+    totalPresentValue: 0,
 };
 
 function generateDailyVolumes(days: number) {
