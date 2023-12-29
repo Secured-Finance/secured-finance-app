@@ -45,6 +45,7 @@ describe('useCollateralBook hook', () => {
         });
         expect(colBook.usdCollateral).toEqual(12100.34);
         expect(colBook.usdAvailableToBorrow).toBeCloseTo(5203.1462);
+        expect(colBook.totalPresentValue).toEqual(2500);
         expect(newValue.isLoading).toEqual(false);
     });
 

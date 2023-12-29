@@ -77,7 +77,9 @@ export const CollateralTabLeftPane = ({
         return checkAssetQuantityExist(collateralBook.nonCollateral);
     }, [collateralBook.nonCollateral]);
     const vaultBalance = account
-        ? collateralBook.usdCollateral + collateralBook.usdNonCollateral
+        ? collateralBook.usdCollateral +
+          collateralBook.totalPresentValue +
+          collateralBook.usdNonCollateral
         : 0;
 
     return (

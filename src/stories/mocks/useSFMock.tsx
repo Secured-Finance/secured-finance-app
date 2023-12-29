@@ -489,6 +489,10 @@ export const mockUseSF = () => {
             })
         ),
 
+        getTotalPresentValueInBaseCurrency: jest.fn(() =>
+            Promise.resolve(BigInt(250000000000))
+        ),
+
         tokenVault: {
             getBorrowableAmount: jest.fn((_address, currency: Currency) => {
                 switch (currency.symbol) {
