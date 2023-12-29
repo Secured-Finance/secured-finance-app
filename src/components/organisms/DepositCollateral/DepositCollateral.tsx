@@ -137,19 +137,13 @@ export const DepositCollateral = ({
     const isDisabled = useCallback(() => {
         return (
             state.currentStep === Step.depositCollateral &&
-            (!collateral ||
+            (!collateralBigInt ||
                 collateralBigInt >
                     amountFormatterToBase[asset](
                         collateralList[asset]?.available ?? 0
                     ))
         );
-    }, [
-        asset,
-        collateral,
-        collateralBigInt,
-        collateralList,
-        state.currentStep,
-    ]);
+    }, [asset, collateralBigInt, collateralList, state.currentStep]);
 
     const handleDepositCollateral = useCallback(async () => {
         try {

@@ -21,6 +21,7 @@ export const CollateralInput = ({
         (inputAmount: string | undefined) => {
             if (
                 amount !== undefined &&
+                Number(amount) !== 0 &&
                 Number(inputAmount) ===
                     Math.floor(Number(amount) * 10000) / 10000.0
             ) {
