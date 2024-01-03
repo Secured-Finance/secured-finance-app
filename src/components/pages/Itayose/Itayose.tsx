@@ -29,6 +29,7 @@ import {
     useCollateralBook,
     useCurrencies,
     useCurrencyDelistedStatus,
+    useIsGlobalItayose,
     useItayoseEstimation,
     useLastPrices,
     useLendOrderBook,
@@ -222,15 +223,18 @@ export const Itayose = () => {
         [OrderSide.LEND]: isLoadingLend && lendFetchStatus !== 'idle',
     };
 
+    const { data: isGlobalItayose } = useIsGlobalItayose();
+    const preOrderPeriod = isGlobalItayose ? 14 : 7;
+
     return (
         <Page title='Pre-Open Order Book'>
             <Alert>
                 <p className='typography-caption text-white'>
-                    Secure your market position by placing limit orders up to 14
-                    days before trading begins with no fees. Opt for either a
-                    lend or borrow during pre-open, not both. No new pre-orders
-                    will be accepted within 1 hour prior to the start of
-                    trading. Learn more at&nbsp;
+                    Secure your market position by placing limit orders up to{' '}
+                    {preOrderPeriod} days before trading begins with no fees.
+                    Opt for either a lend or borrow during pre-open, not both.
+                    No new pre-orders will be accepted within 1 hour prior to
+                    the start of trading. Learn more at&nbsp;
                     <TextLink
                         href='https://docs.secured.finance/platform-guide/unique-features/fair-price-discovery/'
                         text='Secured Finance Docs'
