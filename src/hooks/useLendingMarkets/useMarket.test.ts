@@ -21,7 +21,9 @@ describe('useMarket', () => {
         await waitFor(() =>
             expect(mock.getOrderBookDetails).toHaveBeenCalledTimes(1)
         );
-        const newValue = result.current;
-        expect(newValue).toEqual(maturities[maturity]);
+
+        await waitFor(() =>
+            expect(result.current).toEqual(maturities[maturity])
+        );
     });
 });
