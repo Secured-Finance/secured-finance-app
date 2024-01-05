@@ -43,7 +43,8 @@ export const LineChartTab = ({
                 ...options.scales?.y,
                 position: 'right',
                 max:
-                    marketCloseToMaturityOriginalRate > maximumRate
+                    marketCloseToMaturityOriginalRate > maximumRate &&
+                    maximumRate > 0
                         ? Math.floor((maximumRate * 1.2) / ONE_PERCENT)
                         : undefined,
             },
