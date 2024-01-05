@@ -12,8 +12,8 @@ export const useEtherscanUrl = () => {
         }
         const network = securedFinance.config?.network ?? 'unknown';
         const baseUrl =
-            supportedNetworks.find(n => n.name === network)?.blockExplorers
-                ?.etherscan?.url || 'https://etherscan.io';
+            supportedNetworks.find(n => n.name.toLocaleLowerCase() === network)
+                ?.blockExplorers?.etherscan?.url || 'https://etherscan.io';
 
         setEtherscanUrl(baseUrl);
     }, [securedFinance, securedFinance?.config?.network]);
