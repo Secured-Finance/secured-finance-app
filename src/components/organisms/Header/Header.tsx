@@ -15,10 +15,10 @@ import { useIsGlobalItayose } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
-import { getEnvShort } from 'src/utils';
+import { getEnvShort, supportedNetworks } from 'src/utils';
 import { AddressUtils } from 'src/utils/address';
 import { isChipVisibleForEnv, isProdEnv } from 'src/utils/displayUtils';
-import { mainnet, useAccount } from 'wagmi';
+import { useAccount } from 'wagmi';
 
 const PRODUCTION_LINKS = [
     {
@@ -65,7 +65,7 @@ const HeaderMessage = ({
                     <SupportedNetworks />
                 </div>
             );
-        } else if (chainId !== mainnet.id) {
+        } else if (supportedNetworks.find(n => n.id === chainId)?.testnet) {
             return (
                 <div
                     className='typography-caption-2 w-full bg-horizonBlue p-[1px] text-center text-neutral-8'
