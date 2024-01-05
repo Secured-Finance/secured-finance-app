@@ -391,7 +391,7 @@ describe('AdvancedLendingOrderCard Component', () => {
             screen.getByText('Available To Borrow (WFIL)')
         ).toBeInTheDocument();
         await waitFor(() => {
-            expect(screen.getByText('~ 867.19')).toBeInTheDocument();
+            expect(screen.getByText('~ 867.191033')).toBeInTheDocument();
         });
     });
 

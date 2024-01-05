@@ -1,6 +1,8 @@
 import { BigNumber, BigNumberish } from 'ethers';
 import { CurrencyInfo, CurrencySymbol, currencyMap } from '../currencyList';
 
+export const AMOUNT_PRECISION = 10000;
+
 export class Amount {
     private readonly _baseValue: BigNumber;
     private readonly _formatterFromBase: CurrencyInfo['fromBaseUnit'];

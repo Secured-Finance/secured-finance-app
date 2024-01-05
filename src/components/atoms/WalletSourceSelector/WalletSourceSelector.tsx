@@ -5,6 +5,7 @@ import { Fragment, useMemo } from 'react';
 import { ExpandIndicator, Separator } from 'src/components/atoms';
 import { SvgIcon } from 'src/types';
 import { AddressUtils, CurrencySymbol, ordinaryFormat } from 'src/utils';
+import { AMOUNT_PRECISION } from 'src/utils/entities';
 
 interface WalletSourceSelectorProps {
     optionList: WalletSourceOption[];
@@ -113,10 +114,10 @@ export const WalletSourceSelector = ({
                                             ? ordinaryFormat(
                                                   Math.floor(
                                                       selectedOption.available *
-                                                          100
-                                                  ) / 100,
+                                                          AMOUNT_PRECISION
+                                                  ) / AMOUNT_PRECISION,
                                                   0,
-                                                  4
+                                                  6
                                               )
                                             : '--'}
                                     </div>
