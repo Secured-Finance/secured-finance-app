@@ -3,7 +3,7 @@ import { CurrencySymbol } from '../currencyList';
 
 export class WBTC extends Token {
     private constructor() {
-        super(1, 8, CurrencySymbol.WBTC, 'Bitcoin');
+        super(8, CurrencySymbol.WBTC, 'Bitcoin');
     }
 
     private static instance: WBTC;
