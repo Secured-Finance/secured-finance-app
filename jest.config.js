@@ -41,7 +41,7 @@ const asyncConfig = createJestConfig(customJestConfig);
 module.exports = async () => {
     const config = await asyncConfig();
     config.transformIgnorePatterns = [
-        'node_modules/(?!(wagmi|@wagmi|@web3modal|@0xsquid)/)',
+        'node_modules/(?!(wagmi|@wagmi|@web3modal|@0xsquid|isows)/)',
     ];
     return config;
 };
