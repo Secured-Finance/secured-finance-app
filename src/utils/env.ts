@@ -60,8 +60,3 @@ export const getCommitHash = () => {
 
     return NEXT_PUBLIC_COMMIT_HASH;
 };
-
-// export const getSupportedChains = () => {
-//     const chainIds = getSupportedChainIds();
-//     return [sepolia, mainnet].filter(chain => chainIds.includes(chain.id));
-// };
