@@ -6,7 +6,7 @@ import useSF from '../useSecuredFinance';
 export const useCurrencies = () => {
     const securedFinance = useSF();
     return useQuery({
-        queryKey: [QueryKeys.CURRENCIES],
+        queryKey: [QueryKeys.CURRENCIES, securedFinance?.config.chain.id],
         queryFn: async () => {
             const currencies = await securedFinance?.getCurrencies();
             return currencies ?? [];

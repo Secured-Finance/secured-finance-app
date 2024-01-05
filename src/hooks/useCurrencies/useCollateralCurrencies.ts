@@ -5,9 +5,11 @@ import useSF from '../useSecuredFinance';
 
 export const useCollateralCurrencies = () => {
     const securedFinance = useSF();
-
     return useQuery({
-        queryKey: [QueryKeys.COLLATERAL_CURRENCIES],
+        queryKey: [
+            QueryKeys.COLLATERAL_CURRENCIES,
+            securedFinance?.config.chain.id,
+        ],
         queryFn: async () => {
             const currencies = await securedFinance?.getCollateralCurrencies();
             return currencies ?? [];
@@ -16,9 +18,7 @@ export const useCollateralCurrencies = () => {
             currencies
                 .map(hexToCurrencySymbol)
                 .filter((ccy): ccy is CurrencySymbol => ccy !== undefined)
-                .map(ccy => currencyMap[ccy])
-                .sort((a, b) => a.index - b.index)
-                .map(ccy => ccy.symbol),
+                .sort((a, b) => currencyMap[a].index - currencyMap[b].index),
         enabled: !!securedFinance,
         staleTime: Infinity,
     });
