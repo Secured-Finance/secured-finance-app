@@ -108,7 +108,7 @@ export const useCollateralBook = (account: string | undefined) => {
                 collateralParameters:
                     collateralParameters ?? emptyCollateralParameters,
                 withdrawableCollateral: withdrawableCollateral,
-                totalPresentValue: Number(totalPresentValue),
+                totalPresentValue: totalPresentValue ?? 0,
             };
         },
         select: data => {
