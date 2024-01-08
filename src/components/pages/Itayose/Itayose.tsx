@@ -48,6 +48,7 @@ import { RootState } from 'src/store/types';
 import { CurrencySymbol, ZERO_BI, toOptions, usdFormat } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
+import * as dayjs from 'dayjs';
 
 const Toolbar = ({
     selectedAsset,
@@ -223,10 +224,12 @@ export const Itayose = () => {
     };
 
     const preOrderDays = useMemo(() => {
-        const difference =
-            lendingContracts[selectedTerm.value.toNumber()]?.utcOpeningDate -
-            lendingContracts[selectedTerm.value.toNumber()]?.preOpeningDate;
-        return difference / 86400;
+        const contract = lendingContracts[selectedTerm.value.toNumber()];
+        const openingDate = contract?.utcOpeningDate;
+        const preOpeningDate = contract?.preOpeningDate;
+        return openingDate && preOpeningDate
+            ? dayjs.unix(openingDate).diff(preOpeningDate * 1000, 'days')
+            : 7;
     }, [lendingContracts, selectedTerm.value]);
 
     return (
