@@ -225,7 +225,7 @@ export const Itayose = () => {
     const preOrderDays = useMemo(() => {
         const difference =
             lendingContracts[selectedTerm.value.toNumber()]?.utcOpeningDate -
-            lendingContracts[selectedTerm.value.toNumber()]?.preOpenDate;
+            lendingContracts[selectedTerm.value.toNumber()]?.preOpeningDate;
         return difference / 86400;
     }, [lendingContracts, selectedTerm.value]);
 
