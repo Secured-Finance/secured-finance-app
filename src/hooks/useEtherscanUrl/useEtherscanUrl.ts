@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import useSF from 'src/hooks/useSecuredFinance';
+import { supportedNetworks } from 'src/utils';
 
 export const useEtherscanUrl = () => {
     const securedFinance = useSF();
@@ -11,9 +12,8 @@ export const useEtherscanUrl = () => {
         }
         const network = securedFinance.config?.network ?? 'unknown';
         const baseUrl =
-            network === 'mainnet'
-                ? 'https://etherscan.io'
-                : `https://${network}.etherscan.io`;
+            supportedNetworks.find(n => n.name.toLocaleLowerCase() === network)
+                ?.blockExplorers?.etherscan?.url || 'https://etherscan.io';
 
         setEtherscanUrl(baseUrl);
     }, [securedFinance, securedFinance?.config?.network]);

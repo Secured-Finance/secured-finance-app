@@ -73,7 +73,11 @@ export const useLendingMarkets = () => {
     const { data: currencies, isSuccess: isCurrencySuccess } = useCurrencies();
 
     return useQuery({
-        queryKey: [QueryKeys.LENDING_MARKETS, currencies],
+        queryKey: [
+            QueryKeys.LENDING_MARKETS,
+            currencies,
+            securedFinance?.config.chain.id,
+        ],
         queryFn: async () => {
             const lendingMarkets = await securedFinance?.getOrderBookDetails(
                 currencies?.map(ccy => currencyMap[ccy].toCurrency()) ?? []
@@ -84,7 +88,7 @@ export const useLendingMarkets = () => {
             const names: string[] = [];
             let availableContracts: AvailableContracts = baseContracts;
             if (markets && markets.length > 0) {
-                availableContracts = emptyContracts;
+                availableContracts = JSON.parse(JSON.stringify(emptyContracts));
                 markets.forEach(market => {
                     let name = market.name;
                     const {

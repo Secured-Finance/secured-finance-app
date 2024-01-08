@@ -28,6 +28,10 @@ describe('LendingCard Component', () => {
         wallet: {
             address: '0x1',
         },
+        blockchain: {
+            chainId: 11155111,
+            chainError: false,
+        },
     };
 
     const selectEthereum = async () => {
