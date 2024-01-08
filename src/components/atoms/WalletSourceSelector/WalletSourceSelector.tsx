@@ -23,9 +23,9 @@ export type WalletSourceOption = {
 
 const formatOption = (available: number, asset: CurrencySymbol) => {
     return `${ordinaryFormat(
-        Math.floor(available * 100) / 100,
+        Math.floor(available * AMOUNT_PRECISION) / AMOUNT_PRECISION,
         0,
-        4
+        6
     )} ${asset}`;
 };
 
