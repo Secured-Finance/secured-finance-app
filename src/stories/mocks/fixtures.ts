@@ -54,8 +54,8 @@ export const dec24Fixture = new Maturity(1733011200);
 
 const openingDateTimestamp = 1638316800;
 const openingDate = BigInt(openingDateTimestamp);
-const preOpenDateTimestamp = 1637712000;
-const preOpenDate = BigInt(preOpenDateTimestamp);
+const preOpeningDateTimestamp = 1637712000;
+const preOpeningDate = BigInt(preOpeningDateTimestamp);
 
 export const maturitiesMockFromContract = (ccy: string) => [
     {
@@ -75,7 +75,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         maxLendUnitPrice: BigInt('9700'),
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
-        preOpenDate: preOpenDate,
+        preOpeningDate: preOpeningDate,
     },
     {
         name: 'MAR23',
@@ -94,7 +94,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         maxLendUnitPrice: BigInt('9698'),
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
-        preOpenDate: preOpenDate,
+        preOpeningDate: preOpeningDate,
     },
     {
         name: 'JUN23',
@@ -113,7 +113,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         maxLendUnitPrice: BigInt('9692'),
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
-        preOpenDate: preOpenDate,
+        preOpeningDate: preOpeningDate,
     },
     {
         name: 'SEP23',
@@ -132,7 +132,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         maxLendUnitPrice: BigInt('9687'),
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
-        preOpenDate: preOpenDate,
+        preOpeningDate: preOpeningDate,
     },
     {
         name: 'DEC23',
@@ -151,7 +151,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         maxLendUnitPrice: BigInt('9666'),
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
-        preOpenDate: preOpenDate,
+        preOpeningDate: preOpeningDate,
     },
     {
         name: 'MAR24',
@@ -170,7 +170,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         maxLendUnitPrice: BigInt('9656'),
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
-        preOpenDate: preOpenDate,
+        preOpeningDate: preOpeningDate,
     },
     {
         name: 'JUN24',
@@ -189,7 +189,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         maxLendUnitPrice: BigInt('9640'),
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
-        preOpenDate: preOpenDate,
+        preOpeningDate: preOpeningDate,
     },
     {
         name: 'SEP24',
@@ -208,7 +208,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         maxLendUnitPrice: BigInt('9630'),
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
-        preOpenDate: preOpenDate,
+        preOpeningDate: preOpeningDate,
     },
     {
         name: 'DEC24',
@@ -227,7 +227,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         maxLendUnitPrice: BigInt('9630'),
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
-        preOpenDate: BigInt(1684972800),
+        preOpeningDate: BigInt(1684972800),
     },
 ];
 
@@ -238,7 +238,7 @@ export const maturities = {
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
         marketUnitPrice: 9801,
-        preOpenDate: preOpenDateTimestamp,
+        preOpeningDate: preOpeningDateTimestamp,
         openingUnitPrice: 9710,
         isReady: true,
         isOpened: true,
@@ -257,7 +257,7 @@ export const maturities = {
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
         marketUnitPrice: 9701,
-        preOpenDate: preOpenDateTimestamp,
+        preOpeningDate: preOpeningDateTimestamp,
         openingUnitPrice: 9710,
         isReady: true,
         isOpened: true,
@@ -276,7 +276,7 @@ export const maturities = {
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
         marketUnitPrice: 9601,
-        preOpenDate: preOpenDateTimestamp,
+        preOpeningDate: preOpeningDateTimestamp,
         openingUnitPrice: 9710,
         isReady: true,
         isOpened: true,
@@ -295,7 +295,7 @@ export const maturities = {
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
         marketUnitPrice: 9501,
-        preOpenDate: preOpenDateTimestamp,
+        preOpeningDate: preOpeningDateTimestamp,
         openingUnitPrice: 9710,
         isReady: true,
         isOpened: true,
@@ -314,7 +314,7 @@ export const maturities = {
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
         marketUnitPrice: 9401,
-        preOpenDate: preOpenDateTimestamp,
+        preOpeningDate: preOpeningDateTimestamp,
         openingUnitPrice: 9710,
         isReady: true,
         isOpened: true,
@@ -333,7 +333,7 @@ export const maturities = {
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
         marketUnitPrice: 9301,
-        preOpenDate: preOpenDateTimestamp,
+        preOpeningDate: preOpeningDateTimestamp,
         openingUnitPrice: 9710,
         isReady: true,
         isOpened: true,
@@ -352,7 +352,7 @@ export const maturities = {
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
         marketUnitPrice: 9201,
-        preOpenDate: preOpenDateTimestamp,
+        preOpeningDate: preOpeningDateTimestamp,
         openingUnitPrice: 9710,
         isReady: true,
         isOpened: true,
@@ -371,7 +371,7 @@ export const maturities = {
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
         marketUnitPrice: 9101,
-        preOpenDate: preOpenDateTimestamp,
+        preOpeningDate: preOpeningDateTimestamp,
         openingUnitPrice: 9710,
         isReady: true,
         isOpened: true,
@@ -390,7 +390,7 @@ export const maturities = {
         isActive: false,
         utcOpeningDate: 1685577600,
         marketUnitPrice: 9001,
-        preOpenDate: 1684972800,
+        preOpeningDate: 1684972800,
         openingUnitPrice: 9710,
         isReady: false,
         isOpened: false,
