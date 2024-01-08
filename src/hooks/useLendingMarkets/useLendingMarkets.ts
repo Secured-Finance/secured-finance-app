@@ -11,7 +11,7 @@ export type LendingMarket = {
     isActive: boolean;
     utcOpeningDate: number;
     marketUnitPrice: number;
-    preOpenDate: number;
+    preOpeningDate: number;
     openingUnitPrice: number;
     isReady: boolean;
     isOpened: boolean;
@@ -32,7 +32,7 @@ const baseContract: { 0: LendingMarket } = {
         isActive: false,
         utcOpeningDate: 0,
         marketUnitPrice: 0,
-        preOpenDate: 0,
+        preOpeningDate: 0,
         openingUnitPrice: 0,
         isReady: false,
         isOpened: false,
@@ -103,7 +103,7 @@ export const useLendingMarkets = () => {
                         maxLendUnitPrice,
                         ccy,
                         currentMinDebtUnitPrice,
-                        preOpenDate,
+                        preOpeningDate,
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     } = market as any;
                     const currency = fromBytes32(ccy) as CurrencySymbol;
@@ -127,7 +127,7 @@ export const useLendingMarkets = () => {
                             isActive: isPastDate(Number(openingDate)),
                             marketUnitPrice: Number(marketUnitPrice),
                             openingUnitPrice: Number(openingUnitPrice),
-                            preOpenDate: Number(preOpenDate),
+                            preOpeningDate: Number(preOpeningDate),
                             isReady,
                             isOpened,
                             isMatured,
