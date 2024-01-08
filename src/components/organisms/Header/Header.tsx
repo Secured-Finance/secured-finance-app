@@ -11,19 +11,20 @@ import {
 } from 'src/components/atoms';
 import { HamburgerMenu, MenuPopover } from 'src/components/molecules';
 import { WalletDialog, WalletPopover } from 'src/components/organisms';
+import { useIsGlobalItayose } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
-import { getEnvShort } from 'src/utils';
+import { getEnvShort, supportedNetworks } from 'src/utils';
 import { AddressUtils } from 'src/utils/address';
 import { isChipVisibleForEnv, isProdEnv } from 'src/utils/displayUtils';
-import { mainnet, useAccount } from 'wagmi';
+import { useAccount } from 'wagmi';
 
 const PRODUCTION_LINKS = [
     {
         text: 'OTC Lending',
         link: '/',
-        alternateLinks: ['/advanced', '/global-itayose'],
+        alternateLinks: ['/advanced', '/global-itayose', '/itayose'],
         dataCy: 'lending',
     },
     {
@@ -64,7 +65,7 @@ const HeaderMessage = ({
                     <SupportedNetworks />
                 </div>
             );
-        } else if (chainId !== mainnet.id) {
+        } else if (supportedNetworks.find(n => n.id === chainId)?.testnet) {
             return (
                 <div
                     className='typography-caption-2 w-full bg-horizonBlue p-[1px] text-center text-neutral-8'
@@ -88,6 +89,18 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     const currentChainId = useSelector(
         (state: RootState) => state.blockchain.chainId
     );
+
+    const { data: isGlobalItayose } = useIsGlobalItayose();
+
+    if (isGlobalItayose) {
+        const landingPage = PRODUCTION_LINKS.find(
+            obj => obj.dataCy === 'lending'
+        );
+        if (landingPage) {
+            landingPage.link = '/itayose';
+        }
+    }
+
     const envShort = getEnvShort();
     const LINKS = isProdEnv() ? PRODUCTION_LINKS : DEV_LINKS;
 
