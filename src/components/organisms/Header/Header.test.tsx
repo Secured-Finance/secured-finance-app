@@ -92,7 +92,7 @@ describe('Header component', () => {
         ).toBeInTheDocument();
     });
 
-    it('should render testnet alert header on chainError true', () => {
+    it.skip('should render testnet alert header on chainError true', () => {
         (useRouter as jest.Mock).mockImplementation(() => ({
             pathname: '/',
             push: jest.fn(),

@@ -3,13 +3,10 @@ import { InputBase } from 'src/components/atoms';
 import { CurrencyDropdown, CurrencyOption } from 'src/components/molecules';
 import { CurrencySymbol, prefixTilde } from 'src/utils';
 
-type FormatFunction = (amount: number) => bigint;
-
 export const AssetSelector = ({
     options,
     selected = options[0],
     priceList,
-    amountFormatterMap,
     initialValue,
     onAssetChange,
     onAmountChange,
@@ -17,10 +14,9 @@ export const AssetSelector = ({
     options: Readonly<Array<CurrencyOption>>;
     selected?: CurrencyOption;
     priceList: Record<CurrencySymbol, number>;
-    amountFormatterMap?: Record<CurrencySymbol, FormatFunction>;
-    initialValue?: number;
+    initialValue?: string;
     onAssetChange?: (v: CurrencySymbol) => void;
-    onAmountChange?: (v: bigint) => void;
+    onAmountChange?: (v: string) => void;
 }) => {
     const [assetValue, setAssetValue] = useState(selected.value);
     const [amount, setAmount] = useState(initialValue);
@@ -44,24 +40,8 @@ export const AssetSelector = ({
             currencySign: 'accounting',
             minimumFractionDigits: 0,
             maximumFractionDigits: 2,
-        }).format(priceList[selectedOption.value] * amount);
+        }).format(priceList[selectedOption.value] * Number(amount));
     }, [selectedOption?.value, priceList, amount]);
-
-    const handleInputChange = useCallback(
-        (
-            amount: number,
-            assetValue: CurrencySymbol,
-            onAmountChange: (v: bigint) => void
-        ) => {
-            let format = (x: number) => BigInt(x);
-            if (amountFormatterMap && amountFormatterMap[assetValue]) {
-                format = amountFormatterMap[assetValue];
-            }
-
-            onAmountChange(format(amount));
-        },
-        [amountFormatterMap]
-    );
 
     const handleAssetChange = useCallback(
         (v: CurrencySymbol) => {
@@ -74,17 +54,13 @@ export const AssetSelector = ({
     );
 
     const handleAmountChange = useCallback(
-        (amount: number | undefined) => {
+        (amount: string | undefined) => {
             setAmount(amount);
             if (onAmountChange && selectedOption) {
-                handleInputChange(
-                    amount ?? 0,
-                    selectedOption.value,
-                    onAmountChange
-                );
+                onAmountChange(amount ?? '');
             }
         },
-        [handleInputChange, onAmountChange, selectedOption]
+        [onAmountChange, selectedOption]
     );
 
     return (

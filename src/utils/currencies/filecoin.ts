@@ -2,7 +2,7 @@ import { Token } from '@secured-finance/sf-core';
 
 export class WFIL extends Token {
     private constructor() {
-        super(1, 18, 'WFIL', 'Filecoin');
+        super(18, 'WFIL', 'Filecoin');
     }
 
     private static instance: WFIL;

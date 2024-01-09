@@ -67,7 +67,7 @@ export const useYieldCurveMarketRates = () => {
         currentIndex += 1;
     });
 
-    if (rates[0]?.toNumber() > maximumRate) {
+    if (rates[0]?.toNumber() > maximumRate && maximumRate > 0) {
         rates[0] = new Rate(maximumRate * 1.25);
     }
 
