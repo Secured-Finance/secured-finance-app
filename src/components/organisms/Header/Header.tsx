@@ -110,7 +110,7 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
 
             <nav
                 data-cy='header'
-                className='grid h-20 w-full grid-flow-col border-b border-neutral-1 px-5 laptop:grid-flow-col'
+                className='grid h-16 w-full grid-flow-col border-b border-neutral-1 px-4 tablet:h-20 tablet:px-5 laptop:grid-flow-col'
             >
                 <div className='col-span-2 flex flex-row items-center gap-3'>
                     <Link href='/' passHref>
@@ -143,7 +143,7 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                         </div>
                     </>
                 )}
-                <div className='col-span-2 flex flex-row items-center justify-end gap-2 laptop:col-span-1'>
+                <div className='col-span-2 flex flex-row items-center justify-end gap-3 laptop:col-span-1'>
                     {isConnected && address ? (
                         <WalletPopover
                             wallet={AddressUtils.format(address, 6)}

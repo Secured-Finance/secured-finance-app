@@ -1,4 +1,19 @@
 {
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    }
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    }
+  },
+  "[solidity]": {
+    "editor.defaultFormatter": "JuanBlanco.solidity"
+  },
   "typescript.tsdk": "node_modules/typescript/lib",
   "files.associations": {
     "*.jsx": "javascriptreact",
@@ -51,5 +66,10 @@
     "walletconnect",
     "zondax"
   ],
-  "jest.jestCommandLine": "npm run test -- --watchAll"
+  "jest.jestCommandLine": "npm run test -- --watchAll",
+  "[typescript][typescriptreact]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    }
+  }
 }

@@ -17,7 +17,7 @@ export const GradientBox = ({
             <div className='h-1 bg-starBlue'></div>
             <div
                 className={classNames(
-                    'border-b border-l border-r border-white-10 bg-black-20',
+                    'border-l border-r border-white-10 bg-black-20 tablet:border-b',
                     {
                         'rounded-b-2xl': shape === 'rounded-bottom',
                         'bg-gradient-to-b from-[rgba(106,118,177,0.1)] from-0% to-[rgba(106,118,177,0)] to-70%':

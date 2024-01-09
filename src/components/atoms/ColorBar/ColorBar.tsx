@@ -5,21 +5,24 @@ import { ZERO_BI, calculatePercentage } from 'src/utils/collateral';
 
 const COLORBAR_MIN_WIDTH = 5;
 const COLORBAR_MAX_WIDTH = 308;
+
 export const ColorBar = ({
     value,
     total,
     color,
     align,
+    maxWidth = COLORBAR_MAX_WIDTH,
 }: {
     value: bigint;
     total: bigint;
     align: 'left' | 'right';
+    maxWidth?: number;
 } & Required<ColorFormat>) => {
     const width = Math.min(
         Math.max(
             multiply(
                 divide(Number(calculatePercentage(value, total)), 100),
-                COLORBAR_MAX_WIDTH
+                maxWidth
             ),
             COLORBAR_MIN_WIDTH
         ),

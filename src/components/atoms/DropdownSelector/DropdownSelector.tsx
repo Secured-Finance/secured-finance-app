@@ -26,7 +26,7 @@ const DefaultButton = ({
     open: boolean;
 }) => {
     return (
-        <div className='flex h-10 w-36 flex-row items-center justify-between space-x-2 rounded-lg bg-white-5 px-2'>
+        <div className='flex h-10 w-full flex-row items-center justify-between space-x-2 rounded-lg bg-white-5 px-2 tablet:w-36'>
             {selectedOption?.iconSVG ? (
                 <span>
                     <selectedOption.iconSVG className='h-6 w-6' />
@@ -149,11 +149,7 @@ export const DropdownSelector = <T extends string = string>({
         <Menu as='div' className='relative'>
             {({ open }) => (
                 <>
-                    <Menu.Button
-                        className={classNames({
-                            'w-full': variant === 'fullWidth',
-                        })}
-                    >
+                    <Menu.Button className={classNames('w-full')}>
                         {() => {
                             switch (variant) {
                                 case 'default':

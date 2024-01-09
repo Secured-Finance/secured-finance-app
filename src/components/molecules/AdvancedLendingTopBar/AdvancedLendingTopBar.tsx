@@ -63,50 +63,67 @@ export const AdvancedLendingTopBar = <T extends string = string>({
 
     return (
         <GradientBox shape='rectangle'>
-            <div className='grid-col-3 tablet:grid-col-6 grid gap-y-6 px-5 pb-3 pt-6 laptop:grid-flow-col laptop:place-content-around laptop:items-start laptop:pt-4'>
-                <div className='col-span-3 pr-5'>
-                    <HorizontalAssetSelector
-                        selectedAsset={selectedAsset}
-                        assetList={assetList}
-                        options={options}
-                        selected={selected}
-                        onAssetChange={onAssetChange}
-                        onTermChange={onTermChange}
-                    />
-                </div>
-                <div className='col-span-3 col-start-1 tablet:col-span-2 laptop:col-span-2 laptop:border-r laptop:border-white-10 laptop:pr-5'>
-                    <MarketTab
-                        name={formatLoanValue(currentMarket?.value, 'price')}
-                        value={`${formatLoanValue(
-                            currentMarket?.value,
-                            'rate'
-                        )} APR`}
-                        variant={currentMarket ? 'green-name' : 'gray-name'}
-                        label='Current Market'
-                    />
-
-                    <div className='typography-caption-2 whitespace-nowrap text-neutral-4'>
-                        {getTime()}
+            <div className='grid grid-cols-12 gap-y-6 p-4 tablet:px-5 laptop:pt-4'>
+                <section className='col-span-12 grid grid-cols-12 tablet:col-span-6 tablet:gap-y-6 laptop:col-span-5 laptop:gap-y-0'>
+                    <div className='col-span-9 tablet:col-span-12 tablet:pr-9 laptop:col-span-9 laptop:pr-4'>
+                        <HorizontalAssetSelector
+                            selectedAsset={selectedAsset}
+                            assetList={assetList}
+                            options={options}
+                            selected={selected}
+                            onAssetChange={onAssetChange}
+                            onTermChange={onTermChange}
+                        />
                     </div>
-                </div>
-                <div className='border-r border-white-10 pr-5 tablet:col-start-4 tablet:row-start-1 laptop:col-start-auto laptop:row-start-auto laptop:px-5'>
-                    <MarketTab name='24h High' value={getValue(values, 0)} />
-                </div>
-                <div className='border-r border-white-10 px-5 tablet:col-start-5 tablet:row-start-1 laptop:col-start-auto laptop:row-start-auto'>
-                    <MarketTab name='24h Low' value={getValue(values, 1)} />
-                </div>
-                <div className='px-5 tablet:col-start-6 tablet:row-start-1 laptop:col-start-auto laptop:row-start-auto laptop:border-r laptop:border-white-10'>
-                    <MarketTab name='24h Trades' value={getValue(values, 2)} />
-                </div>
-                <div className='border-r border-white-10 pr-5 tablet:col-start-4 tablet:row-start-2 laptop:col-start-auto laptop:row-start-auto laptop:px-5'>
-                    <MarketTab name='24h Volume' value={getValue(values, 3)} />
-                </div>
-                <div className='border-white-10 px-5 tablet:col-start-5 tablet:row-start-2 laptop:col-start-auto laptop:row-start-auto'>
-                    <MarketTab
-                        name={`${selectedAsset?.value} Price`}
-                        value={getValue(values, 4)}
-                        source={handleSource(selectedAsset?.value)}
-                    />
+                    <div className='col-span-3 pl-5 tablet:pl-0 laptop:col-span-3 laptop:border-r laptop:border-white-10 laptop:pr-5'>
+                        <MarketTab
+                            name={formatLoanValue(
+                                currentMarket?.value,
+                                'price'
+                            )}
+                            value={`${formatLoanValue(
+                                currentMarket?.value,
+                                'rate'
+                            )} APR`}
+                            variant={currentMarket ? 'green-name' : 'gray-name'}
+                            label='Current Market'
+                        />
+                        <div className='typography-caption-2 whitespace-nowrap text-neutral-4'>
+                            {getTime()}
+                        </div>
+                    </div>
+                </section>
+
+                {/* all content in one line */}
+                <div className='col-span-12 grid grid-cols-12 gap-2 tablet:col-span-6 tablet:gap-y-6 laptop:col-span-7 laptop:items-start'>
+                    <div className='col-span-2 border-white-10 pr-5 tablet:col-span-3 tablet:border-r laptop:col-span-2 laptop:px-5'>
+                        <MarketTab
+                            name='24h High'
+                            value={getValue(values, 0)}
+                        />
+                    </div>
+                    <div className='col-span-2 border-white-10 tablet:col-span-5 tablet:border-r tablet:px-5 laptop:col-span-2'>
+                        <MarketTab name='24h Low' value={getValue(values, 1)} />
+                    </div>
+                    <div className='col-span-2 tablet:col-span-4 tablet:px-5 laptop:col-span-3 laptop:border-r laptop:border-white-10'>
+                        <MarketTab
+                            name='24h Trades'
+                            value={getValue(values, 2)}
+                        />
+                    </div>
+                    <div className='col-span-3 border-white-10 tablet:border-r tablet:pr-5 laptop:col-span-3 laptop:px-5'>
+                        <MarketTab
+                            name='24h Volume'
+                            value={getValue(values, 3)}
+                        />
+                    </div>
+                    <div className='col-span-2 tablet:px-5'>
+                        <MarketTab
+                            name={`${selectedAsset?.value} Price`}
+                            value={getValue(values, 4)}
+                            source={handleSource(selectedAsset?.value)}
+                        />
+                    </div>
                 </div>
             </div>
         </GradientBox>

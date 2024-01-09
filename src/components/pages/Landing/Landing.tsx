@@ -152,33 +152,35 @@ const WithBanner = ({
         <div className='flex flex-col justify-center gap-5'>
             <DelistedCurrencyDisclaimer currencies={delistedCurrencySet} />
             {market && (
-                <Alert severity='info'>
-                    <div className='typography-caption text-white'>
-                        <p>
-                            {`Itayose market for ${ccy}-${getUTCMonthYear(
-                                market.maturity
-                            )} is now open until ${Intl.DateTimeFormat(
-                                'en-US',
-                                {
-                                    weekday: 'long',
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric',
-                                }
-                            ).format(market.utcOpeningDate * 1000)}`}
-                            <span className='pl-4'>
-                                <Link href='itayose' passHref>
-                                    <a
-                                        href='_'
-                                        className='text-planetaryPurple underline'
-                                    >
-                                        Place Order Now
-                                    </a>
-                                </Link>
-                            </span>
-                        </p>
-                    </div>
-                </Alert>
+                <div className='px-4 tablet:px-0'>
+                    <Alert severity='info'>
+                        <div className='typography-caption text-white'>
+                            <p>
+                                {`Itayose market for ${ccy}-${getUTCMonthYear(
+                                    market.maturity
+                                )} is now open until ${Intl.DateTimeFormat(
+                                    'en-US',
+                                    {
+                                        weekday: 'long',
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric',
+                                    }
+                                ).format(market.utcOpeningDate * 1000)}`}
+                                <span className='pl-4'>
+                                    <Link href='itayose' passHref>
+                                        <a
+                                            href='_'
+                                            className='text-planetaryPurple underline'
+                                        >
+                                            Place Order Now
+                                        </a>
+                                    </Link>
+                                </span>
+                            </p>
+                        </div>
+                    </Alert>
+                </div>
             )}
             {children}
         </div>

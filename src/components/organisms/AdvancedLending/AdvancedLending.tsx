@@ -22,6 +22,7 @@ import { ThreeColumnsWithTopBar } from 'src/components/templates';
 import {
     CollateralBook,
     emptyOrderList,
+    useBreakpoint,
     useCurrencies,
     useGraphClientHook,
     useIsUnderCollateralThreshold,
@@ -269,6 +270,17 @@ export const AdvancedLending = ({
         [dispatch]
     );
 
+    const isMobile = useBreakpoint('tablet');
+
+    const TAB_OPTIONS = isMobile
+        ? ['Active', 'Orders', 'History']
+        : [
+              'Active Positions',
+              'Open Orders',
+              'Order History',
+              'My Transactions',
+          ];
+
     return (
         <ThreeColumnsWithTopBar
             topBar={
@@ -303,42 +315,38 @@ export const AdvancedLending = ({
                 marketPrice={marketPrice}
                 delistedCurrencySet={delistedCurrencySet}
             />
-
-            <OrderBookWidget
-                orderbook={orderBook}
-                currency={currency}
-                marketPrice={currentMarket?.value}
-                isCurrencyDelisted={delistedCurrencySet.has(currency)}
-                onFilterChange={state =>
-                    setIsShowingAll(state.showBorrow && state.showLend)
-                }
-                onAggregationChange={setMultiplier}
-            />
-
+            <div className='hidden laptop:block'>
+                <OrderBookWidget
+                    orderbook={orderBook}
+                    currency={currency}
+                    marketPrice={currentMarket?.value}
+                    isCurrencyDelisted={delistedCurrencySet.has(currency)}
+                    onFilterChange={state =>
+                        setIsShowingAll(state.showBorrow && state.showLend)
+                    }
+                    onAggregationChange={setMultiplier}
+                />
+            </div>
             <div className='flex h-full flex-grow flex-col gap-4'>
-                <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
-                    <div className='h-[410px] w-full px-2 py-4'>
-                        <LineChartTab
-                            rates={rates}
-                            maturityList={maturityList}
-                            itayoseMarketIndexSet={itayoseMarketIndexSet}
-                            followLinks={false}
-                            maximumRate={maximumRate}
-                            marketCloseToMaturityOriginalRate={
-                                marketCloseToMaturityOriginalRate
-                            }
-                        />
-                    </div>
-                </Tab>
+                <div className='hidden laptop:block'>
+                    <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
+                        <div className='h-[410px] w-full px-2 py-4'>
+                            <LineChartTab
+                                rates={rates}
+                                maturityList={maturityList}
+                                itayoseMarketIndexSet={itayoseMarketIndexSet}
+                                followLinks={false}
+                                maximumRate={maximumRate}
+                                marketCloseToMaturityOriginalRate={
+                                    marketCloseToMaturityOriginalRate
+                                }
+                            />
+                        </div>
+                    </Tab>
+                </div>
                 <HorizontalTab
-                    tabTitles={[
-                        'Active Positions',
-                        'Open Orders',
-                        'Order History',
-                        'My Transactions',
-                    ]}
+                    tabTitles={TAB_OPTIONS}
                     onTabChange={setSelectedTable}
-                    useCustomBreakpoint={true}
                 >
                     <ActiveTradeTable
                         data={

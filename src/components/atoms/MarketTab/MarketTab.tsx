@@ -25,12 +25,12 @@ export const MarketTab = ({
             aria-label={label ?? name}
         >
             <span
-                className={classNames({
-                    'typography-button-3 whitespace-nowrap leading-7 text-nebulaTeal':
+                className={classNames('whitespace-nowrap', {
+                    'typography-button-3  leading-7 text-nebulaTeal':
                         variant === 'green-name',
-                    'typography-button-3 whitespace-nowrap leading-7 text-slateGray':
+                    'typography-button-3 leading-7 text-slateGray':
                         variant === 'gray-name',
-                    'typography-caption-2 whitespace-nowrap text-slateGray':
+                    'typography-caption-2 text-slateGray':
                         variant === 'default',
                 })}
             >
@@ -39,14 +39,13 @@ export const MarketTab = ({
             <span
                 className={classNames(
                     {
-                        'typography-caption whitespace-nowrap text-white':
+                        'whitespace-nowrap text-white':
                             variant === 'green-name',
-                        'typography-caption whitespace-nowrap text-slateGray':
+                        'whitespace-nowrap text-slateGray':
                             variant === 'gray-name',
-                        'typography-caption text-neutral-8':
-                            variant === 'default',
+                        'text-neutral-8': variant === 'default',
                     },
-                    'flex items-center'
+                    'typography-caption-2 flex items-center'
                 )}
             >
                 {typeof value === 'number'
