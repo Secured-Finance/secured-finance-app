@@ -1,7 +1,9 @@
 import { renderHook } from 'src/test-utils';
 import { useHandleContractTransaction } from './useHandleContractTransaction';
 
-describe.skip('useHandleContractTransaction', () => {
+describe('useHandleContractTransaction', () => {
+    const txHash = '0x1234';
+
     it('should return a function', () => {
         const { result } = renderHook(() => useHandleContractTransaction());
         expect(typeof result.current).toBe('function');
@@ -9,17 +11,13 @@ describe.skip('useHandleContractTransaction', () => {
 
     it('should return true if the contract receipt has a block number', async () => {
         const { result } = renderHook(() => useHandleContractTransaction());
-        const mockTransaction = {
-            wait: jest.fn(() => Promise.resolve({ blockNumber: 123 })),
-        };
-        const resultValue = await result.current(mockTransaction);
+        const resultValue = await result.current(txHash);
         expect(resultValue).toBe(true);
     });
 
     it('should return false if the contract receipt does not have a block number', async () => {
         const { result } = renderHook(() => useHandleContractTransaction());
-        const mockTransaction = { wait: jest.fn(() => Promise.resolve({})) };
-        const resultValue = await result.current(mockTransaction);
+        const resultValue = await result.current('');
         expect(resultValue).toBe(false);
     });
 
@@ -33,11 +31,8 @@ describe.skip('useHandleContractTransaction', () => {
         const { result, store } = renderHook(() =>
             useHandleContractTransaction()
         );
-        const mockTransaction = {
-            wait: jest.fn(() => Promise.resolve({ blockNumber: 123 })),
-        };
         expect(store.getState().blockchain.lastActionTimestamp).toBeFalsy();
-        await result.current(mockTransaction);
+        await result.current(txHash);
         expect(store.getState().blockchain.lastActionTimestamp).toBeTruthy();
     });
 });
