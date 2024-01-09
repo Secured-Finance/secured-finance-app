@@ -14,6 +14,7 @@ export default {
         account: 'as',
         onClick: () => {},
         collateralBook: collateralBook80,
+        totalPVOfOpenOrdersInUSD: 2500,
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,

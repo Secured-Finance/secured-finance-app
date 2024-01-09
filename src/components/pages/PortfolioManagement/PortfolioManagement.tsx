@@ -304,7 +304,12 @@ export const PortfolioManagement = () => {
                             },
                         ]}
                     />
-                    <CollateralOrganism collateralBook={collateralBook} />
+                    <CollateralOrganism
+                        collateralBook={collateralBook}
+                        totalPVOfOpenOrdersInUSD={
+                            orderList.totalPVOfOpenOrdersInUSD
+                        }
+                    />
                     <HorizontalTab
                         tabTitles={[
                             'Active Positions',

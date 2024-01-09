@@ -20,6 +20,7 @@ interface CollateralTabLeftPaneProps {
     account: string | undefined;
     onClick: (step: 'deposit' | 'withdraw') => void;
     collateralBook: CollateralBook;
+    totalPVOfOpenOrdersInUSD: number;
 }
 
 const getInformationText = (collateralCurrencies: CurrencySymbol[]) => {
@@ -63,6 +64,7 @@ export const CollateralTabLeftPane = ({
     account,
     onClick,
     collateralBook,
+    totalPVOfOpenOrdersInUSD,
 }: CollateralTabLeftPaneProps) => {
     const chainError = useSelector(
         (state: RootState) => state.blockchain.chainError
@@ -79,7 +81,8 @@ export const CollateralTabLeftPane = ({
     const vaultBalance = account
         ? collateralBook.usdCollateral +
           collateralBook.totalPresentValue +
-          collateralBook.usdNonCollateral
+          collateralBook.usdNonCollateral +
+          totalPVOfOpenOrdersInUSD
         : 0;
 
     return (
