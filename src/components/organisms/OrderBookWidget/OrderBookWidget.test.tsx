@@ -47,7 +47,7 @@ describe('OrderBookWidget Component', () => {
         expect(store.getState().landingOrderForm.orderType).toEqual(
             OrderType.LIMIT
         );
-        expect(store.getState().landingOrderForm.unitPrice).toEqual(9200);
+        expect(store.getState().landingOrderForm.unitPrice).toEqual('92');
     });
 
     it('should update store when Lend order row is clicked', async () => {
@@ -58,7 +58,7 @@ describe('OrderBookWidget Component', () => {
         expect(store.getState().landingOrderForm.orderType).toEqual(
             OrderType.LIMIT
         );
-        expect(store.getState().landingOrderForm.unitPrice).toEqual(9400);
+        expect(store.getState().landingOrderForm.unitPrice).toEqual('94');
     });
 
     it('should display the spinner when loading', () => {

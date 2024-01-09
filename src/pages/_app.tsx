@@ -19,14 +19,9 @@ import {
     getAmplitudeApiKey,
     getSupportedChainIds,
     getWalletConnectId,
+    supportedNetworks,
 } from 'src/utils';
-import {
-    WagmiConfig,
-    configureChains,
-    createConfig,
-    mainnet,
-    sepolia,
-} from 'wagmi';
+import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
@@ -44,9 +39,7 @@ init(getAmplitudeApiKey(), undefined, {
 });
 
 const chainIds = getSupportedChainIds();
-const networks = [sepolia, mainnet].filter(chain =>
-    chainIds.includes(chain.id)
-);
+const networks = supportedNetworks.filter(chain => chainIds.includes(chain.id));
 
 const { chains, publicClient } = configureChains(networks, [
     alchemyProvider({
@@ -66,10 +59,10 @@ const config = createConfig({
                 projectId: projectId,
                 qrModalOptions: {
                     themeVariables: {
-                        '--wcm-font-family':
+                        '--w3m-font-family':
                             "'Suisse International', sans-serif",
-                        '--wcm-accent-color': '#002133',
-                        '--wcm-background-color': '#5162FF',
+                        '--w3m-accent-color': '#002133',
+                        '--w3m-background-color': '#5162FF',
                     },
                 },
             },

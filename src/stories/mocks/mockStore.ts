@@ -16,7 +16,7 @@ export const initialStore = {
         currency: CurrencySymbol.WFIL,
         maturity: dec22Fixture.toNumber(),
         side: OrderSide.BORROW,
-        amount: '0',
+        amount: '',
         unitPrice: undefined,
         orderType: OrderType.MARKET,
         lastView: 'Simple' as const,

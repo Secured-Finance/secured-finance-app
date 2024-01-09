@@ -3,7 +3,7 @@ import { fromBytes32 } from '@secured-finance/sf-graph-client';
 import { CellContext, createColumnHelper } from '@tanstack/react-table';
 import { useRouter } from 'next/router';
 import { useCallback, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Button, DropdownSelector, Timer } from 'src/components/atoms';
 import {
     CoreTable,
@@ -18,17 +18,9 @@ import {
     useMarketLists,
     useMaturityOptions,
 } from 'src/hooks';
-import {
-    selectLandingOrderForm,
-    setAmount,
-    setCurrency,
-    setMaturity,
-} from 'src/store/landingOrderForm';
-import { RootState } from 'src/store/types';
+import { setCurrency, setMaturity } from 'src/store/landingOrderForm';
 import {
     CurrencySymbol,
-    amountFormatterFromBase,
-    amountFormatterToBase,
     formatLoanValue,
     toCurrencySymbol,
     toOptions,
@@ -46,9 +38,6 @@ export const MarketLoanWidget = ({
 }: {
     isGlobalItayose: boolean;
 }) => {
-    const { currency, amount } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
-    );
     const dispatch = useDispatch();
     const router = useRouter();
 
@@ -94,17 +83,14 @@ export const MarketLoanWidget = ({
     const handleClick = useCallback(
         (info: CellContext<Market, string>) => {
             const ccy = fromBytes32(info.getValue()) as CurrencySymbol;
-            const fromAmount = amountFormatterFromBase[currency](amount);
-            const toAmount = amountFormatterToBase[ccy](fromAmount);
             dispatch(setMaturity(Number(info.row.original.maturity)));
             dispatch(setCurrency(ccy));
-            dispatch(setAmount(toAmount));
 
             info.row.original.isOpened
                 ? router.push('/advanced/')
                 : router.push('/itayose/');
         },
-        [amount, currency, dispatch, router]
+        [dispatch, router]
     );
 
     const columns = useMemo(
