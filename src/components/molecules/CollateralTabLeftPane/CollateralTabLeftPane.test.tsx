@@ -41,7 +41,7 @@ describe('CollateralTabLeftPane component', () => {
 
     it('should render balance when wallet is connected and collateral is deposited', () => {
         render(<Default />);
-        expect(screen.getByText('$15,200.34')).toBeInTheDocument();
+        expect(screen.getByText('$17,700.34')).toBeInTheDocument();
         expect(screen.getByText('Collateral Assets')).toBeInTheDocument();
         expect(screen.getByText('Non-collateral Assets')).toBeInTheDocument();
     });
@@ -67,7 +67,12 @@ describe('CollateralTabLeftPane component', () => {
     });
 
     it('should prompt user to deposit collateral when wallet is connected', () => {
-        render(<Default collateralBook={emptyCollateralBook} />);
+        render(
+            <Default
+                collateralBook={emptyCollateralBook}
+                totalPVOfOpenOrdersInUSD={0}
+            />
+        );
         expect(screen.getByText('SF Vault')).toBeInTheDocument();
         expect(screen.getByText('$0.00')).toBeInTheDocument();
         expect(
