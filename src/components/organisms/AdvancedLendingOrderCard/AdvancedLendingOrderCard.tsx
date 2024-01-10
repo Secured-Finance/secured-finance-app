@@ -317,9 +317,13 @@ export function AdvancedLendingOrderCard({
                 {side === OrderSide.BORROW && (
                     <div className='typography-caption mx-10px flex flex-row justify-between'>
                         <div className='text-slateGray'>{`Available To Borrow (${currency.toString()})`}</div>
-                        <div className='text-right text-planetaryPurple'>
+                        <div className='overflow-hidden truncate whitespace-nowrap text-right text-planetaryPurple'>
                             {prefixTilde(
-                                ordinaryFormat(availableToBorrow, 0, 6)
+                                ordinaryFormat(
+                                    availableToBorrow,
+                                    0,
+                                    currencyMap[currency].decimals
+                                )
                             )}
                         </div>
                     </div>

@@ -4,8 +4,12 @@ import classNames from 'classnames';
 import { Fragment, useMemo } from 'react';
 import { ExpandIndicator, Separator } from 'src/components/atoms';
 import { SvgIcon } from 'src/types';
-import { AddressUtils, CurrencySymbol, ordinaryFormat } from 'src/utils';
-import { AMOUNT_PRECISION } from 'src/utils/entities';
+import {
+    AddressUtils,
+    CurrencySymbol,
+    currencyMap,
+    ordinaryFormat,
+} from 'src/utils';
 
 interface WalletSourceSelectorProps {
     optionList: WalletSourceOption[];
@@ -23,9 +27,9 @@ export type WalletSourceOption = {
 
 const formatOption = (available: number, asset: CurrencySymbol) => {
     return `${ordinaryFormat(
-        Math.floor(available * AMOUNT_PRECISION) / AMOUNT_PRECISION,
+        available,
         0,
-        6
+        currencyMap[asset].decimals
     )} ${asset}`;
 };
 
@@ -71,7 +75,7 @@ export const WalletSourceSelector = ({
                         <>
                             <div className='relative h-full rounded-lg ring-inset ring-starBlue focus-within:ring-2'>
                                 <Listbox.Button
-                                    className='flex w-full cursor-text flex-row items-center justify-between rounded-lg bg-black-20 py-2 pl-2 pr-4'
+                                    className='flex w-full cursor-text flex-row items-center justify-between gap-1 rounded-lg bg-black-20 py-2 pl-2 pr-4'
                                     data-testid='wallet-source-selector-button'
                                 >
                                     <div
@@ -109,15 +113,14 @@ export const WalletSourceSelector = ({
                                             }
                                         />
                                     </div>
-                                    <div className='typography-caption w-fit max-w-[200px] text-white-60'>
+                                    <div className='typography-caption w-fit max-w-[200px] overflow-hidden truncate whitespace-nowrap text-white-60'>
                                         {account
                                             ? ordinaryFormat(
-                                                  Math.floor(
-                                                      selectedOption.available *
-                                                          AMOUNT_PRECISION
-                                                  ) / AMOUNT_PRECISION,
+                                                  selectedOption.available,
                                                   0,
-                                                  6
+                                                  currencyMap[
+                                                      selectedOption.asset
+                                                  ].decimals
                                               )
                                             : '--'}
                                     </div>
@@ -157,7 +160,7 @@ export const WalletSourceSelector = ({
                                                                     )}
                                                                 </span>
                                                             </div>
-                                                            <span className='typography-caption-2 leading-4 text-planetaryPurple'>
+                                                            <span className='typography-caption-2 line-clamp-1 leading-4 text-planetaryPurple'>
                                                                 {formatOption(
                                                                     assetObj.available,
                                                                     assetObj.asset
