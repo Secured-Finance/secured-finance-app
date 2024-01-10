@@ -24,6 +24,7 @@ export * from './LiquidationProgressBar';
 export * from './MenuPopover';
 export * from './MyWalletCard';
 export * from './PercentageSelector';
+export * from './Settings';
 export * from './StatsBar';
 export * from './SuccessPanel';
 export * from './Tab';
