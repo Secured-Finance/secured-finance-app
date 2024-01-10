@@ -27,7 +27,7 @@ export function computeTotalDailyVolumeInUSD(
     dailyVolumes.forEach(dailyVolume => {
         const { currency, volume } = dailyVolume;
         const ccy = hexToCurrencySymbol(currency);
-        if (!ccy) {
+        if (!ccy || !priceMap[ccy]) {
             return;
         }
 
