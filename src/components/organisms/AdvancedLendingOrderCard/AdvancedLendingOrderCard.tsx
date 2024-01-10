@@ -265,7 +265,7 @@ export function AdvancedLendingOrderCard({
         showPreOrderError;
 
     return (
-        <div className='h-full rounded-b-xl border border-t-0 border-white-10 bg-cardBackground bg-opacity-60 pb-7 tablet:border-t'>
+        <div className='h-full rounded-b-xl border border-b-0 border-t-0 border-white-10 bg-cardBackground bg-opacity-60 pb-7 tablet:border-b tablet:border-t'>
             <RadioGroupSelector
                 options={Object.values(OrderSideMap)}
                 selectedOption={OrderSideMap[side]}
@@ -424,7 +424,9 @@ export function AdvancedLendingOrderCard({
                     showError={showPreOrderError}
                 />
 
-                <Separator color='neutral-3'></Separator>
+                <div className='hidden tablet:block'>
+                    <Separator color='neutral-3'></Separator>
+                </div>
 
                 <div className='typography-nav-menu-default hidden flex-row justify-between laptop:flex'>
                     <div className='text-neutral-8'>Collateral Management</div>

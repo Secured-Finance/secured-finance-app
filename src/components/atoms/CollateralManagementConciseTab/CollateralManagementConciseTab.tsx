@@ -22,8 +22,8 @@ export const CollateralManagementConciseTab = ({
     const info = getLiquidationInformation(collateralCoverage);
 
     return (
-        <div className='flex h-fit w-full flex-col rounded-b bg-black-20 pb-4 pt-2'>
-            <div className='mx-4 mb-5 mt-4 flex flex-col'>
+        <div className='flex h-fit w-full flex-col gap-3 rounded-b pb-4 pt-2 tablet:gap-0'>
+            <div className='flex flex-col rounded-xl bg-black-20 px-4 pb-5 pt-4 tablet:rounded-none'>
                 <div className='typography-caption mb-3 flex flex-row justify-between text-grayScale'>
                     <span>Collateral Utilization</span>
                     <span>{percentFormat(collateralCoverage, 100)}</span>
@@ -43,8 +43,10 @@ export const CollateralManagementConciseTab = ({
                         : 'N/A'}
                 </div>
             </div>
-            <Separator color='neutral-3' />
-            <div className='mx-4 mb-4 mt-5 flex flex-col'>
+            <div className='hidden tablet:block'>
+                <Separator color='neutral-3' />
+            </div>
+            <div className='flex flex-col rounded-xl bg-black-20 px-4 pb-4 pt-5 tablet:rounded-none'>
                 <div className='typography-caption mb-1 flex flex-row justify-between'>
                     <span className='text-grayScale'>Liquidation Risk</span>
                     <span className={`${info.color}`}>{info.risk}</span>
