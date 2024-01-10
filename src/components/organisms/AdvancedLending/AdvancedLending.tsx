@@ -36,6 +36,7 @@ import { useOrderbook } from 'src/hooks/useOrderbook';
 import {
     resetUnitPrice,
     selectLandingOrderForm,
+    setAmount,
     setCurrency,
     setMaturity,
 } from 'src/store/landingOrderForm';
@@ -257,6 +258,7 @@ export const AdvancedLending = ({
         (v: CurrencySymbol) => {
             dispatch(setCurrency(v));
             dispatch(resetUnitPrice());
+            dispatch(setAmount(''));
         },
         [dispatch]
     );

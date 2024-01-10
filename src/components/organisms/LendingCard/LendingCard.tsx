@@ -128,6 +128,7 @@ export const LendingCard = ({
     const handleCurrencyChange = useCallback(
         (v: CurrencySymbol) => {
             dispatch(setCurrency(v));
+            dispatch(setAmount(''));
         },
         [dispatch]
     );

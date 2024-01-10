@@ -14,7 +14,7 @@ const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('Advanced Lending Component', () => {
-    it('should convert the amount to new currency when the user change the currency', async () => {
+    it.skip('should convert the amount to new currency when the user change the currency', async () => {
         const { store } = await waitFor(() =>
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,

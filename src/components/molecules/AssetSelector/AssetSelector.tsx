@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { InputBase } from 'src/components/atoms';
 import { CurrencyDropdown, CurrencyOption } from 'src/components/molecules';
-import { CurrencySymbol, prefixTilde } from 'src/utils';
+import { CurrencySymbol, currencyMap, prefixTilde } from 'src/utils';
 
 export const AssetSelector = ({
     options,
@@ -82,6 +82,7 @@ export const AssetSelector = ({
                     onValueChange={handleAmountChange}
                     value={amount}
                     data-cy='asset-selector-input'
+                    decimalPlacesAllowed={currencyMap[selected.value].decimals}
                     sizeDependentStyles={{
                         shortText: { maxChar: 8, styles: 'text-md' },
                         mediumText: { maxChar: 11, styles: 'text-[20px]' },

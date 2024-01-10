@@ -172,7 +172,6 @@ describe('Landing Component', () => {
             fireEvent.click(screen.getByRole('button', { name: 'WFIL' }));
             fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
 
-            assertInputValue('Amount', '1');
             assertInputValue('Bond Price', '96.85');
         });
 
