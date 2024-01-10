@@ -33,8 +33,8 @@ export const OrderInputBox = ({
     );
 
     return (
-        <div className='typography-caption grid h-10 grid-cols-2 place-content-between rounded-lg bg-black-20 p-2 ring-inset ring-starBlue focus-within:ring-2'>
-            <div className='flex flex-row items-center gap-2'>
+        <div className='typography-caption grid h-10 grid-cols-6 place-content-between rounded-lg bg-black-20 p-2 ring-inset ring-starBlue focus-within:ring-2'>
+            <div className='col-span-2 flex flex-row items-center gap-2'>
                 <div className='typography-caption whitespace-nowrap text-planetaryPurple'>
                     {field}
                 </div>
@@ -44,7 +44,7 @@ export const OrderInputBox = ({
                     </InfoToolTip>
                 )}
             </div>
-            <div className='grid grid-flow-col place-content-end gap-10px'>
+            <div className='col-span-4 grid grid-flow-col place-content-end gap-10px'>
                 {disabled ? (
                     <span className='text-right text-[18px] font-semibold leading-6 text-neutral-8/30'>
                         {initialValue ?? 0}
