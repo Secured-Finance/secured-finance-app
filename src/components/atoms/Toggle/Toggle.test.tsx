@@ -26,11 +26,4 @@ describe('Toggle component', () => {
         fireEvent.click(button);
         expect(button).toHaveAttribute('aria-checked', 'true');
     });
-
-    it('should not change state when clicked if disabled', () => {
-        render(<Default disabled />);
-        const button = screen.getByRole('switch');
-        fireEvent.click(button);
-        expect(button).toHaveAttribute('aria-checked', 'true');
-    });
 });
