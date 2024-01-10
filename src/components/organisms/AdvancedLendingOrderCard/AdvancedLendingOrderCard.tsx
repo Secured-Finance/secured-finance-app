@@ -37,6 +37,7 @@ import {
     ZERO_BI,
     amountFormatterFromBase,
     amountFormatterToBase,
+    currencyMap,
     divide,
     formatLoanValue,
     generateWalletSourceInformation,
@@ -45,7 +46,7 @@ import {
     prefixTilde,
     usdFormat,
 } from 'src/utils';
-import { AMOUNT_PRECISION, Amount, LoanValue } from 'src/utils/entities';
+import { Amount, LoanValue } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
 export function AdvancedLendingOrderCard({
@@ -172,12 +173,7 @@ export function AdvancedLendingOrderCard({
         const available =
             side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
         dispatch(
-            setAmount(
-                (
-                    Math.floor(percentage * available * AMOUNT_PRECISION) /
-                    (100.0 * AMOUNT_PRECISION)
-                ).toString()
-            )
+            setAmount((Math.floor(percentage * available) / 100.0).toString())
         );
         setSliderValue(percentage);
     };
@@ -335,6 +331,7 @@ export function AdvancedLendingOrderCard({
                     unit={currency}
                     initialValue={amountInput}
                     onValueChange={v => handleInputChange((v as string) ?? '')}
+                    decimalPlacesAllowed={currencyMap[currency].decimals}
                 />
                 <div className='mx-10px flex flex-col gap-6'>
                     <OrderDisplayBox

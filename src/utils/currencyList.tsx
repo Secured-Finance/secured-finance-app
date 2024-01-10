@@ -51,6 +51,7 @@ export const currencyMap: Readonly<
         pillColor: tailwindConfig.theme.colors.pill.btc,
         roundingDecimal: 4,
         longName: 'Bitcoin',
+        decimals: WBTC.onChain().decimals,
     },
     [CurrencySymbol.ETH]: {
         index: 1,
@@ -68,6 +69,7 @@ export const currencyMap: Readonly<
         pillColor: tailwindConfig.theme.colors.pill.eth,
         roundingDecimal: 3,
         longName: 'Ethereum',
+        decimals: ETH.decimals,
     },
     [CurrencySymbol.WFIL]: {
         index: 2,
@@ -87,6 +89,7 @@ export const currencyMap: Readonly<
         pillColor: tailwindConfig.theme.colors.pill.fil,
         roundingDecimal: 0,
         longName: 'Wrapped Filecoin',
+        decimals: WFIL.onChain().decimals,
     },
     [CurrencySymbol.USDC]: {
         index: 4,
@@ -104,6 +107,7 @@ export const currencyMap: Readonly<
         pillColor: tailwindConfig.theme.colors.pill.usdc,
         roundingDecimal: 0,
         longName: 'USD Coin',
+        decimals: USDC.onChain().decimals,
     },
     [CurrencySymbol.aUSDC]: {
         index: 5,
@@ -121,6 +125,7 @@ export const currencyMap: Readonly<
         pillColor: tailwindConfig.theme.colors.pill.usdc,
         roundingDecimal: 0,
         longName: 'USD Coin',
+        decimals: AUSDC.onChain().decimals,
     },
     [CurrencySymbol.axlFIL]: {
         index: 3,
@@ -138,6 +143,7 @@ export const currencyMap: Readonly<
         pillColor: tailwindConfig.theme.colors.pill.fil,
         roundingDecimal: 0,
         longName: 'Axelar Wrapped FIL',
+        decimals: AXLFIL.onChain().decimals,
     },
 };
 
@@ -179,6 +185,7 @@ export type CurrencyInfo = {
     pillColor: string;
     roundingDecimal: number;
     longName: string;
+    decimals: number;
 };
 
 export const toCurrency = (ccy: CurrencySymbol) => {
