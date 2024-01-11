@@ -76,7 +76,7 @@ describe('WalletSourceSelector component', () => {
 
         await waitFor(() => {
             expect(screen.getByText('SF Vault')).toBeInTheDocument();
-            expect(screen.getByText('4,000')).toBeInTheDocument();
+            expect(screen.getByText('0.0005')).toBeInTheDocument();
 
             expect(onChange).toBeCalledTimes(1);
             expect(onChange).toHaveBeenLastCalledWith(WalletSource.SF_VAULT);
@@ -92,5 +92,20 @@ describe('WalletSourceSelector component', () => {
         await waitFor(() => {
             expect(screen.queryByTestId('option-1')).not.toBeInTheDocument();
         });
+    });
+
+    it('should update the show amount correctly when an option is selected', async () => {
+        render(<Default />);
+
+        fireEvent.click(screen.getByTestId('wallet-source-selector-button'));
+        fireEvent.click(screen.getByTestId('option-1'));
+
+        await waitFor(() => {
+            expect(screen.getByText('SF Vault')).toBeInTheDocument();
+            expect(screen.getByText('0.0005')).toBeInTheDocument();
+        });
+
+        expect(screen.queryByText('0xb98b...fd6d')).not.toBeInTheDocument();
+        expect(screen.queryByText('1,000')).not.toBeInTheDocument();
     });
 });

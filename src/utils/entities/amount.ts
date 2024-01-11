@@ -2,6 +2,8 @@ import { CurrencyInfo, CurrencySymbol, currencyMap } from '../currencyList';
 
 export type BigNumberish = bigint | string | number;
 
+export const AMOUNT_PRECISION = 10000;
+
 export class Amount {
     private readonly _baseValue: bigint;
     private readonly _formatterFromBase: CurrencyInfo['fromBaseUnit'];
