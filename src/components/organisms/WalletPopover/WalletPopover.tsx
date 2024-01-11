@@ -111,7 +111,7 @@ export const WalletPopover = ({
                             <MetamaskLogo className='h-4 w-4' />
                         </span>
                         <span
-                            className='typography-button-2 text-grayScale'
+                            className='typography-button-2 leading-[22px] text-grayScale'
                             data-cy='wallet-address'
                         >
                             {wallet}
