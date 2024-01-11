@@ -11,7 +11,7 @@ import {
     Settings,
 } from 'src/components/molecules';
 import { WalletDialog, WalletPopover } from 'src/components/organisms';
-import { useIsGlobalItayose } from 'src/hooks';
+import { useBreakpoint, useIsGlobalItayose } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
@@ -81,6 +81,7 @@ const HeaderMessage = ({
 
 export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     const dispatch = useDispatch();
+    const isMobile = useBreakpoint('tablet');
     const { address, isConnected } = useAccount();
     const securedFinance = useSF();
     const chainError = useSelector(
@@ -119,7 +120,7 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                         </a>
                     </Link>
                     {showNavigation && (
-                        <div className='flex h-full flex-row pl-12'>
+                        <div className='flex h-full flex-row tablet:pl-12'>
                             {LINKS.map(link => (
                                 <div
                                     key={link.text}
@@ -148,7 +149,10 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                                 }
                             />
                             <WalletPopover
-                                wallet={AddressUtils.format(address, 6)}
+                                wallet={AddressUtils.format(
+                                    address,
+                                    isMobile ? 2 : 6
+                                )}
                                 networkName={
                                     securedFinance?.config?.network ?? 'Unknown'
                                 }

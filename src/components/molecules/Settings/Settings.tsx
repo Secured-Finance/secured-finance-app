@@ -30,7 +30,7 @@ export const Settings = () => {
                         data-cy='settings-button'
                         aria-label='Settings Button'
                         className={classNames(
-                            'flex items-center rounded-xl bg-neutral-800 p-[14px] ring-[1.5px] ring-neutral-500 focus:outline-none'
+                            'flex items-center rounded-[6px] bg-neutral-800 p-[7px] ring-[1.5px] ring-neutral-500 focus:outline-none tablet:rounded-xl tablet:p-[14px]'
                         )}
                     >
                         <Gear className='h-18px w-18px' />
