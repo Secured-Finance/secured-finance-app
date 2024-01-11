@@ -172,7 +172,10 @@ export function AdvancedLendingOrderCard({
     const handleAmountChange = (percentage: number) => {
         const available =
             side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
-        dispatch(setAmount(((percentage * available) / 100.0).toString()));
+        const amount = ((percentage * available) / 100)
+            .toFixed(currencyMap[currency].decimals)
+            .replace(/\.?0+$/, '');
+        dispatch(setAmount(amount));
         setSliderValue(percentage);
     };
 
