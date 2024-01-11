@@ -19,7 +19,7 @@ export const NavTab = ({ text, active = false, highlight }: NavTabProps) => {
             ></div>
             <div
                 className={classNames(
-                    'flex h-full items-center justify-center gap-2 px-4',
+                    'flex h-full items-center justify-center gap-2 px-[30px]',
                     {
                         'bg-gradient-to-b from-tabGradient2 to-tabGradient1':
                             active,

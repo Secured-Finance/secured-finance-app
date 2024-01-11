@@ -1,23 +1,26 @@
 import { Popover, Transition } from '@headlessui/react';
 import classNames from 'classnames';
 import { Fragment, useCallback, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import Gear from 'src/assets/icons/gear.svg';
 import { Toggle } from 'src/components/atoms';
+import { updateTestnetEnabled } from 'src/store/blockchain';
 
 export const testnetsEnabledId = 'testnetsEnabled';
 
 export const Settings = () => {
+    const dispatch = useDispatch();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const testnetsEnabledLocalstorage =
         localStorage.getItem(testnetsEnabledId) === 'true' || false;
-    const [testnetsEnabled, setTestnetsMode] = useState(
-        testnetsEnabledLocalstorage
-    );
+    const [testnetsEnabled, setTestnetsMode] = useState(false);
 
     const handleChange = useCallback(() => {
         const newState = !testnetsEnabled;
         setTestnetsMode(!testnetsEnabled);
+        dispatch(updateTestnetEnabled(!testnetsEnabled));
         localStorage.setItem(testnetsEnabledId, newState ? 'true' : 'false');
-    }, [testnetsEnabled]);
+    }, [dispatch, testnetsEnabled]);
 
     return (
         <Popover className='relative w-fit'>

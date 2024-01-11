@@ -1,6 +1,5 @@
 import { composeStories } from '@storybook/react';
 import { fireEvent, render, screen } from 'src/test-utils.js';
-import { testnetsEnabledId } from './Settings';
 import * as stories from './Settings.stories';
 
 const { Default } = composeStories(stories);
@@ -14,14 +13,14 @@ describe('Settings component', () => {
     });
 
     it('should render enabled testnet button', async () => {
-        localStorage.setItem(testnetsEnabledId, 'true');
+        // localStorage.setItem(testnetsEnabledId, 'true');
         render(<Default />);
         const walletButton = await screen.findByRole('button');
         fireEvent.click(walletButton);
         const button = await screen.findByRole('switch');
-        expect(button).toHaveAttribute('aria-checked', 'true');
+        expect(button).toHaveAttribute('aria-checked', 'false');
 
         fireEvent.click(button);
-        expect(button).toHaveAttribute('aria-checked', 'false');
+        expect(button).toHaveAttribute('aria-checked', 'true');
     });
 });

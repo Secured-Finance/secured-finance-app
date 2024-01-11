@@ -3,21 +3,21 @@ import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import SFLogo from 'src/assets/img/logo.svg';
 import SFLogoSmall from 'src/assets/img/small-logo.svg';
+import { Button, NavTab, SupportedNetworks } from 'src/components/atoms';
 import {
-    Button,
-    HighlightChip,
-    NavTab,
-    SupportedNetworks,
-} from 'src/components/atoms';
-import { HamburgerMenu, MenuPopover } from 'src/components/molecules';
+    HamburgerMenu,
+    MenuPopover,
+    NetworkSelector,
+    Settings,
+} from 'src/components/molecules';
 import { WalletDialog, WalletPopover } from 'src/components/organisms';
 import { useIsGlobalItayose } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
-import { getEnvShort, supportedNetworks } from 'src/utils';
+import { supportedNetworks } from 'src/utils';
 import { AddressUtils } from 'src/utils/address';
-import { isChipVisibleForEnv, isProdEnv } from 'src/utils/displayUtils';
+import { isProdEnv } from 'src/utils/displayUtils';
 import { useAccount } from 'wagmi';
 
 const PRODUCTION_LINKS = [
@@ -28,12 +28,12 @@ const PRODUCTION_LINKS = [
         dataCy: 'lending',
     },
     {
-        text: 'Market Dashboard',
+        text: 'Markets',
         link: '/dashboard',
         dataCy: 'terminal',
     },
     {
-        text: 'Portfolio Management',
+        text: 'Portfolio',
         link: '/portfolio',
         dataCy: 'history',
     },
@@ -101,7 +101,6 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
         }
     }
 
-    const envShort = getEnvShort();
     const LINKS = isProdEnv() ? PRODUCTION_LINKS : DEV_LINKS;
 
     return (
@@ -119,38 +118,43 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                             <SFLogoSmall className='inline h-7 w-7 tablet:hidden' />
                         </a>
                     </Link>
-                    {isChipVisibleForEnv() && (
-                        <HighlightChip text={envShort.toUpperCase()} />
+                    {showNavigation && (
+                        <div className='flex h-full flex-row pl-12'>
+                            {LINKS.map(link => (
+                                <div
+                                    key={link.text}
+                                    className='hidden h-full w-full laptop:inline'
+                                >
+                                    <ItemLink
+                                        text={link.text}
+                                        dataCy={link.dataCy}
+                                        link={link.link}
+                                        alternateLinks={link?.alternateLinks}
+                                    />
+                                </div>
+                            ))}
+                            <div className='hidden laptop:inline'>
+                                <MenuPopover />
+                            </div>
+                        </div>
                     )}
                 </div>
-                {showNavigation && (
-                    <>
-                        {LINKS.map(link => (
-                            <div
-                                key={link.text}
-                                className='hidden h-full w-full laptop:inline'
-                            >
-                                <ItemLink
-                                    text={link.text}
-                                    dataCy={link.dataCy}
-                                    link={link.link}
-                                    alternateLinks={link?.alternateLinks}
-                                />
-                            </div>
-                        ))}
-                        <div className='hidden laptop:inline'>
-                            <MenuPopover />
-                        </div>
-                    </>
-                )}
                 <div className='col-span-2 flex flex-row items-center justify-end gap-2 laptop:col-span-1'>
                     {isConnected && address ? (
-                        <WalletPopover
-                            wallet={AddressUtils.format(address, 6)}
-                            networkName={
-                                securedFinance?.config?.network ?? 'Unknown'
-                            }
-                        />
+                        <>
+                            <NetworkSelector
+                                networkName={
+                                    securedFinance?.config?.network ?? 'Unknown'
+                                }
+                            />
+                            <WalletPopover
+                                wallet={AddressUtils.format(address, 6)}
+                                networkName={
+                                    securedFinance?.config?.network ?? 'Unknown'
+                                }
+                            />
+                            <Settings />
+                        </>
                     ) : (
                         <Button
                             data-cy='wallet'

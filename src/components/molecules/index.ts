@@ -23,6 +23,7 @@ export * from './LineChart';
 export * from './LiquidationProgressBar';
 export * from './MenuPopover';
 export * from './MyWalletCard';
+export * from './NetworkSelector';
 export * from './PercentageSelector';
 export * from './Settings';
 export * from './StatsBar';
