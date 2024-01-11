@@ -76,7 +76,7 @@ describe('WalletSourceSelector component', () => {
 
         await waitFor(() => {
             expect(screen.getByText('SF Vault')).toBeInTheDocument();
-            expect(screen.getByText('4,000')).toBeInTheDocument();
+            expect(screen.getByText('0.0004')).toBeInTheDocument();
 
             expect(onChange).toBeCalledTimes(1);
             expect(onChange).toHaveBeenLastCalledWith(WalletSource.SF_VAULT);
