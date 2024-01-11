@@ -425,7 +425,7 @@ export const walletSourceList: WalletSourceOption[] = [
     },
     {
         source: WalletSource.SF_VAULT,
-        available: 0.0005,
+        available: 0.000492,
         asset: CurrencySymbol.WBTC,
         iconSVG: SFLogoSmall,
     },
