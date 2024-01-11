@@ -39,7 +39,7 @@ const TestnetChainsList: ChainInformation[] = [
     {
         chain: 'Arbitrum Sepolia',
         chainId: 421614,
-        icon: <Arbitrum className='h-5 w-5 rounded-full bg-red' />,
+        icon: <Arbitrum className='h-5 w-5 rounded-full' />,
     },
 ];
 
@@ -96,7 +96,7 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
                         data-cy='network-selector-button'
                         aria-label='Network Selector Button'
                         className={classNames(
-                            'flex items-center gap-2 rounded-xl bg-neutral-800 px-4 py-[11px] ring-[1.5px] ring-neutral-500 focus:outline-none'
+                            'flex items-center gap-2 rounded-xl bg-neutral-800 px-4 py-3 ring-[1.5px] ring-neutral-500 focus:outline-none'
                         )}
                     >
                         {selectedNetwork ? (
@@ -131,12 +131,25 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
                             <div className='relative flex h-fit flex-col overflow-hidden rounded-xl bg-neutral-900 py-[10px]'>
                                 <div className='flex items-center justify-between border-b border-neutral-700 py-[11px] pl-5 pr-4'>
                                     <div className='flex flex-row items-center gap-2'>
-                                        <span>
-                                            <ExclamationCircleIcon className='h-5 w-5' />
-                                        </span>
-                                        <span className='typography-button-2 leading-[22px] text-neutral-50'>
-                                            Network
-                                        </span>
+                                        {selectedNetwork ? (
+                                            <>
+                                                <div>
+                                                    {selectedNetwork.icon}
+                                                </div>
+                                                <span className='typography-button-2 leading-[22px] text-neutral-50'>
+                                                    {selectedNetwork.chain}
+                                                </span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <span>
+                                                    <ExclamationCircleIcon className='h-5 w-5' />
+                                                </span>
+                                                <span className='typography-button-2 leading-[22px] text-neutral-50'>
+                                                    Network
+                                                </span>
+                                            </>
+                                        )}
                                     </div>
                                     <span>
                                         <ExpandIndicator
