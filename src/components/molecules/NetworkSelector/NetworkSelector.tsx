@@ -21,12 +21,16 @@ const MainnetChainsList: ChainInformation[] = [
     {
         chain: 'Ethereum',
         chainId: 1,
-        icon: <Ethereum className='h-5 w-5 rounded-full' />,
+        icon: (
+            <Ethereum className='h-4 w-4 rounded-full tablet:h-5 tablet:w-5' />
+        ),
     },
     {
         chain: 'Arbitrum',
         chainId: 42161,
-        icon: <Arbitrum className='h-5 w-5 rounded-full' />,
+        icon: (
+            <Arbitrum className='h-4 w-4 rounded-full tablet:h-5 tablet:w-5' />
+        ),
     },
 ];
 
@@ -34,12 +38,16 @@ const TestnetChainsList: ChainInformation[] = [
     {
         chain: 'Sepolia',
         chainId: 11155111,
-        icon: <Ethereum className='h-5 w-5 rounded-full' />,
+        icon: (
+            <Ethereum className='h-4 w-4 rounded-full tablet:h-5 tablet:w-5' />
+        ),
     },
     {
         chain: 'Arbitrum Sepolia',
         chainId: 421614,
-        icon: <Arbitrum className='h-5 w-5 rounded-full' />,
+        icon: (
+            <Arbitrum className='h-4 w-4 rounded-full tablet:h-5 tablet:w-5' />
+        ),
     },
 ];
 
@@ -96,7 +104,7 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
                         data-cy='network-selector-button'
                         aria-label='Network Selector Button'
                         className={classNames(
-                            'flex items-center gap-2 rounded-xl bg-neutral-800 px-4 py-3 ring-[1.5px] ring-neutral-500 focus:outline-none'
+                            'flex items-center gap-2 rounded-[6px] bg-neutral-800 px-3 py-2 ring-[1.5px] ring-neutral-500 focus:outline-none tablet:rounded-xl tablet:px-4 tablet:py-3'
                         )}
                     >
                         {selectedNetwork ? (
@@ -104,12 +112,12 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
                         ) : (
                             <>
                                 <span>
-                                    <ExclamationCircleIcon className='h-5 w-5' />
+                                    <ExclamationCircleIcon className='h-4 w-4 tablet:h-5 tablet:w-5' />
                                 </span>
-                                <span className='typography-button-2 leading-[22px] text-neutral-50'>
+                                <span className='typography-button-2 leading-4 text-neutral-50 tablet:leading-[22px]'>
                                     Network
                                 </span>
-                                <span>
+                                <span className='hidden tablet:inline'>
                                     <ExpandIndicator
                                         expanded={open}
                                         variant='solid'
@@ -127,7 +135,7 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
                         leaveFrom='opacity-100 translate-y-0'
                         leaveTo='opacity-0 translate-y-5'
                     >
-                        <Popover.Panel className='absolute right-0 z-10 mt-3 w-64 origin-top-right'>
+                        <Popover.Panel className='absolute left-0 z-10 mt-3 w-64 origin-top-right tablet:right-0'>
                             <div className='relative flex h-fit flex-col overflow-hidden rounded-xl bg-neutral-900 py-[10px]'>
                                 <div className='flex items-center justify-between border-b border-neutral-700 py-[11px] pl-5 pr-4'>
                                     <div className='flex flex-row items-center gap-2'>
