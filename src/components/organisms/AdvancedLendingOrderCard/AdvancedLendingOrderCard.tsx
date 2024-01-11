@@ -45,7 +45,7 @@ import {
     prefixTilde,
     usdFormat,
 } from 'src/utils';
-import { Amount, LoanValue } from 'src/utils/entities';
+import { AMOUNT_PRECISION, Amount, LoanValue } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
 export function AdvancedLendingOrderCard({
@@ -172,7 +172,12 @@ export function AdvancedLendingOrderCard({
         const available =
             side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
         dispatch(
-            setAmount((Math.floor(percentage * available) / 100.0).toString())
+            setAmount(
+                (
+                    Math.floor(percentage * available * AMOUNT_PRECISION) /
+                    (100.0 * AMOUNT_PRECISION)
+                ).toString()
+            )
         );
         setSliderValue(percentage);
     };
@@ -319,7 +324,9 @@ export function AdvancedLendingOrderCard({
                     <div className='typography-caption mx-10px flex flex-row justify-between'>
                         <div className='text-slateGray'>{`Available To Borrow (${currency.toString()})`}</div>
                         <div className='text-right text-planetaryPurple'>
-                            {prefixTilde(ordinaryFormat(availableToBorrow))}
+                            {prefixTilde(
+                                ordinaryFormat(availableToBorrow, 0, 6)
+                            )}
                         </div>
                     </div>
                 )}
