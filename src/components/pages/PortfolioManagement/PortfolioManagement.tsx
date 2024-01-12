@@ -13,6 +13,7 @@ import {
     CollateralOrganism,
     MyTransactionsTable,
     MyWalletWidget,
+    OpenOrder,
     OrderHistoryTable,
     OrderTable,
 } from 'src/components/organisms';
@@ -96,23 +97,30 @@ export const PortfolioManagement = () => {
     );
 
     const activeOrderList = useMemo(() => {
-        return orderList.activeOrderList.map(order => {
+        const updatedOrderList: OpenOrder[] = [];
+        orderList.activeOrderList.forEach(order => {
             const ccy = hexToCurrencySymbol(order.currency);
-            if (!ccy) return order;
+            if (!ccy) {
+                return;
+            }
             const maturity = Number(order.maturity);
             const lendingMarket = lendingMarkets[ccy][maturity];
+            if (!lendingMarket) {
+                return;
+            }
             if (
                 lendingMarket?.isPreOrderPeriod ||
                 lendingMarket?.isItayosePeriod
             ) {
-                return {
+                updatedOrderList.push({
                     ...order,
                     calculationDate: lendingMarket.utcOpeningDate,
-                };
+                });
             } else {
-                return order;
+                updatedOrderList.push(order);
             }
         });
+        return updatedOrderList;
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -120,6 +128,7 @@ export const PortfolioManagement = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         JSON.stringify(orderList.activeOrderList),
     ]);
+
     const { data: positions } = usePositions(address, usedCurrencies);
 
     const dataUser = useMemo(() => {
