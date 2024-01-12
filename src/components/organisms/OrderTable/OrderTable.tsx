@@ -15,7 +15,7 @@ import {
     priceYieldColumnDefinition,
 } from 'src/utils/tableDefinitions';
 
-type OpenOrder = Order & { calculationDate?: number };
+export type OpenOrder = Order & { calculationDate?: number };
 
 const columnHelper = createColumnHelper<OpenOrder>();
 

@@ -93,12 +93,13 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
 
     const { data: isGlobalItayose } = useIsGlobalItayose();
 
-    if (isGlobalItayose) {
-        const landingPage = PRODUCTION_LINKS.find(
-            obj => obj.dataCy === 'lending'
-        );
-        if (landingPage) {
+    const landingPage = PRODUCTION_LINKS.find(obj => obj.dataCy === 'lending');
+
+    if (landingPage) {
+        if (isGlobalItayose) {
             landingPage.link = '/itayose';
+        } else {
+            landingPage.link = '/';
         }
     }
 
