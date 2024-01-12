@@ -101,8 +101,9 @@ export const PortfolioManagement = () => {
             const maturity = Number(order.maturity);
             const lendingMarket = lendingMarkets[ccy][maturity];
             if (
-                lendingMarket.isPreOrderPeriod ||
-                lendingMarket.isItayosePeriod
+                lendingMarket &&
+                (lendingMarket.isPreOrderPeriod ||
+                    lendingMarket.isItayosePeriod)
             ) {
                 return {
                     ...order,
