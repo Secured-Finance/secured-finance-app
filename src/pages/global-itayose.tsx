@@ -12,6 +12,7 @@ const GlobalItayose = () => {
 
     if (!isGlobalItayose) {
         Router.push('/');
+        return null;
     }
     return <GlobalItayoseComponent />;
 };
