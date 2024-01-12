@@ -67,7 +67,7 @@ export const PortfolioManagement = () => {
         TableType.ACTIVE_POSITION
     );
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
-    const { data: lendingMarkets = baseContracts } = useLendingMarkets();
+    const { data: lendingMarkets = { ...baseContracts } } = useLendingMarkets();
 
     const userOrderHistory = useGraphClientHook(
         {
@@ -94,6 +94,7 @@ export const PortfolioManagement = () => {
         address,
         usedCurrencies
     );
+
     const activeOrderList = useMemo(() => {
         return orderList.activeOrderList.map(order => {
             const ccy = hexToCurrencySymbol(order.currency);
@@ -101,9 +102,8 @@ export const PortfolioManagement = () => {
             const maturity = Number(order.maturity);
             const lendingMarket = lendingMarkets[ccy][maturity];
             if (
-                lendingMarket &&
-                (lendingMarket.isPreOrderPeriod ||
-                    lendingMarket.isItayosePeriod)
+                lendingMarket?.isPreOrderPeriod ||
+                lendingMarket?.isItayosePeriod
             ) {
                 return {
                     ...order,
