@@ -39,7 +39,7 @@ export const HorizontalAssetSelector = <T extends string = string>({
     );
 
     return (
-        <div className='typography-caption-2 grid min-w-fit grid-cols-2 gap-x-3 gap-y-1 text-neutral-4 tablet:gap-x-5'>
+        <div className='typography-caption-2 grid min-w-fit grid-cols-2 gap-x-2 gap-y-1 text-neutral-4 tablet:gap-x-5'>
             <CurrencyDropdown
                 currencyOptionList={assetList}
                 selected={selectedAsset}

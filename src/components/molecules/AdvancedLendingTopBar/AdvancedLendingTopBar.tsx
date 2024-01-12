@@ -64,8 +64,8 @@ export const AdvancedLendingTopBar = <T extends string = string>({
     return (
         <GradientBox shape='rectangle'>
             <div className='grid grid-cols-12 gap-y-3 px-4 py-5 tablet:px-5 laptop:pt-4'>
-                <section className='col-span-12 grid grid-cols-12 tablet:col-span-6 tablet:gap-y-6 laptop:col-span-5 laptop:gap-y-0'>
-                    <div className='col-span-9 tablet:col-span-12 tablet:pr-9 laptop:col-span-9 laptop:pr-4'>
+                <section className='col-span-12 grid grid-cols-12 gap-3 tablet:col-span-6 tablet:gap-y-6 laptop:col-span-5 laptop:gap-y-0'>
+                    <div className='col-span-8 tablet:col-span-12 tablet:pr-9 laptop:col-span-9 laptop:pr-4'>
                         <HorizontalAssetSelector
                             selectedAsset={selectedAsset}
                             assetList={assetList}
@@ -75,7 +75,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                             onTermChange={onTermChange}
                         />
                     </div>
-                    <div className='col-span-3 pl-5 tablet:pl-0 laptop:col-span-3 laptop:border-r laptop:border-white-10 laptop:pr-5'>
+                    <div className='col-span-4 pl-5 tablet:pl-0 laptop:col-span-3 laptop:border-r laptop:border-white-10 laptop:pr-5'>
                         <MarketTab
                             name={formatLoanValue(
                                 currentMarket?.value,
@@ -95,14 +95,14 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                 </section>
 
                 {/* content broken into 2 lines */}
-                <div className='col-span-12 grid grid-cols-12 gap-2 gap-y-3 tablet:col-span-6 tablet:gap-y-6 laptop:col-span-7 laptop:items-start'>
-                    <div className='col-span-4 border-white-10 tablet:col-span-3 tablet:border-r laptop:col-span-2 laptop:px-5'>
+                <div className='col-span-12 grid grid-cols-12 gap-3 gap-y-3 tablet:col-span-6 tablet:gap-y-6 laptop:col-span-7 laptop:items-start'>
+                    <div className='col-span-4 border-white-10 tablet:col-span-4 tablet:border-r laptop:col-span-2 laptop:px-5'>
                         <MarketTab
                             name='24h High'
                             value={getValue(values, 0)}
                         />
                     </div>
-                    <div className='col-span-4 border-white-10 tablet:col-span-5 tablet:border-r tablet:px-5 laptop:col-span-2'>
+                    <div className='col-span-4 border-white-10 tablet:col-span-4 tablet:border-r tablet:px-5 laptop:col-span-2'>
                         <MarketTab name='24h Low' value={getValue(values, 1)} />
                     </div>
                     <div className='col-span-4 tablet:col-span-4 tablet:px-5 laptop:col-span-3 laptop:border-r laptop:border-white-10'>
@@ -117,7 +117,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                             value={getValue(values, 3)}
                         />
                     </div>
-                    <div className='col-span-4 tablet:px-5'>
+                    <div className='col-span-4 tablet:px-5 laptop:col-span-2'>
                         <MarketTab
                             name={`${selectedAsset?.value} Price`}
                             value={getValue(values, 4)}

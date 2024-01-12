@@ -265,7 +265,7 @@ export function AdvancedLendingOrderCard({
         showPreOrderError;
 
     return (
-        <div className='h-full rounded-b-xl border border-b-0 border-t-0 border-white-10 bg-cardBackground bg-opacity-60 pb-7 tablet:border-b tablet:border-t'>
+        <div className='h-full border border-b-0 border-t-0 border-white-10 bg-cardBackground bg-opacity-60 pb-7 tablet:border-b tablet:border-t laptop:rounded-b-xl'>
             <RadioGroupSelector
                 options={Object.values(OrderSideMap)}
                 selectedOption={OrderSideMap[side]}
@@ -286,7 +286,7 @@ export function AdvancedLendingOrderCard({
                 {/* contains lend borrow elements, + yield curve and orderbook */}
                 <div className='grid grid-cols-12 gap-5'>
                     {/* lend borrow elements */}
-                    <div className='col-span-7 flex flex-col gap-6 tablet:justify-center'>
+                    <div className='col-span-7 flex flex-col gap-6 tablet:justify-start laptop:col-span-12'>
                         {!isItayose && (
                             <RadioGroupSelector
                                 options={OrderTypeOptions}

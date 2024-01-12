@@ -1,6 +1,8 @@
+import classNames from 'classnames';
 import Tick from 'src/assets/icons/tick.svg';
 import { Separator } from 'src/components/atoms';
 import { percentFormat, usdFormat } from 'src/utils';
+import { MOBILE_TRESHOLD_BLOCKS } from './constants';
 
 interface CollateralManagementConciseTabProps {
     collateralCoverage: number;
@@ -60,7 +62,24 @@ export const CollateralManagementConciseTab = ({
                 >
                     <Tick className='float-right h-5px w-2'></Tick>
                 </div>
-                <div className='mt-2 h-6px w-full rounded-full bg-gradient-to-r from-progressBarStart from-0% via-progressBarVia via-45% to-progressBarEnd to-80%'></div>
+                {/* desktop threshold */}
+                <div className='mt-2 hidden h-6px w-full rounded-full bg-gradient-to-r from-progressBarStart from-0% via-progressBarVia via-45% to-progressBarEnd to-80% laptop:block'></div>
+
+                {/* render mobile treshold here */}
+                <ul className='grid grid-cols-5 gap-2 laptop:hidden'>
+                    {MOBILE_TRESHOLD_BLOCKS.map((block, i) => {
+                        return (
+                            <li
+                                key={`mobile-threshold-${i}`}
+                                className={classNames(
+                                    'h-[6px] overflow-hidden rounded-xl bg-gradient-to-r',
+                                    block.className
+                                )}
+                            ></li>
+                        );
+                    })}
+                </ul>
+
                 <div className='typography-caption-2 mt-1 leading-6 text-planetaryPurple'>
                     {account
                         ? `Threshold: ${percentFormat(

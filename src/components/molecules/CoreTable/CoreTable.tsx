@@ -176,13 +176,13 @@ export const CoreTable = <T,>({
                     isLoading(rowIndex, rows.length) ? (
                         <tr key={rowIndex} className='animate-pulse'>
                             <td colSpan={row.getVisibleCells().length}>
-                                <div className='h-7 min-w-fit bg-[#808080]/20'></div>
+                                <div className='h-4 min-w-fit bg-[#808080]/20 laptop:h-7'></div>
                             </td>
                         </tr>
                     ) : (
                         <tr
                             key={row.id}
-                            className={classNames('h-7', {
+                            className={classNames('h-4 laptop:h-7', {
                                 'cursor-pointer': coreTableOptions.hoverRow?.(
                                     row.id
                                 ),

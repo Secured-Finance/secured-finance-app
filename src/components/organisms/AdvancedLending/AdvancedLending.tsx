@@ -57,6 +57,7 @@ import {
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
+import { TAB_OPTIONS_FULL, TAB_OPTIONS_TRUNCATED } from './constants';
 
 const useTradeHistoryDetails = (
     transactions: TransactionList,
@@ -271,15 +272,7 @@ export const AdvancedLending = ({
     );
 
     const isMobile = useBreakpoint('tablet');
-
-    const TAB_OPTIONS = isMobile
-        ? ['Active', 'Orders', 'History']
-        : [
-              'Active Positions',
-              'Open Orders',
-              'Order History',
-              'My Transactions',
-          ];
+    const TAB_OPTIONS = isMobile ? TAB_OPTIONS_TRUNCATED : TAB_OPTIONS_FULL;
 
     return (
         <ThreeColumnsWithTopBar

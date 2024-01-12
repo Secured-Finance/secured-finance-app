@@ -13,10 +13,10 @@ const TitleChip = ({
         <div
             data-testid={title}
             className={classNames(
-                'typography-caption-2 w-fit whitespace-nowrap px-5 py-3',
+                'typography-caption-2 w-fit whitespace-nowrap rounded-3xl px-5 py-3',
                 {
-                    'rounded-3xl bg-black-30 text-neutral-8': selected,
-                    'text-neutral-4': !selected,
+                    'bg-starBlue text-neutral-8': selected,
+                    'bg-black-20 text-[#CBD5E1]': !selected,
                 }
             )}
         >
@@ -49,34 +49,7 @@ export const HorizontalTab = ({
             className='flex h-full flex-col rounded-b-2xl border border-white-10 bg-gunMetal/40 shadow-tab'
         >
             <HeadlessTab.List className='h-16 justify-start border-b border-white-10 p-3'>
-                {/* <div
-                    className={classNames('w-full', {
-                        'horizontalTab:hidden': useCustomBreakpoint,
-                        'tablet:hidden': !useCustomBreakpoint,
-                    })}
-                >
-                    <DropdownSelector
-                        optionList={tabTitles.map((title, index) => ({
-                            label: title,
-                            value: index.toString(),
-                        }))}
-                        selected={{
-                            label: tabTitles[selectedIndex],
-                            value: selectedIndex.toString(),
-                        }}
-                        onChange={option =>
-                            setSelectedIndex(parseInt(option) || 0)
-                        }
-                        variant='fullWidth'
-                    />
-                </div> */}
-                <div
-                    // className={classNames('hidden', {
-                    //     'horizontalTab:block': useCustomBreakpoint,
-                    //     'tablet:block': !useCustomBreakpoint,
-                    // })}
-                    className='block'
-                >
+                <div className='flex gap-3'>
                     {tabTitles.map((title, index) => {
                         return (
                             <HeadlessTab
