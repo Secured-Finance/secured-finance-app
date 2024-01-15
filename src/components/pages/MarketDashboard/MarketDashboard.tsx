@@ -25,7 +25,6 @@ import {
     useIsGlobalItayose,
     useLastPrices,
     useLendingMarkets,
-    useTotalNumberOfAsset,
     useValueLockedByCurrency,
 } from 'src/hooks';
 import {
@@ -73,7 +72,6 @@ export const MarketDashboard = () => {
         curves[ccy] = Array.from(unitPrices.values()).map(r => r.apr);
     });
 
-    const { data: totalNumberOfAsset = 0 } = useTotalNumberOfAsset();
     const { data: valueLockedByCurrency = emptyValueLockedBook } =
         useValueLockedByCurrency();
 
@@ -128,7 +126,7 @@ export const MarketDashboard = () => {
                         values={[
                             {
                                 name: 'Digital Assets',
-                                value: totalNumberOfAsset.toString(),
+                                value: currencies.length.toString(),
                             },
                             {
                                 name: 'Total Value Locked',
