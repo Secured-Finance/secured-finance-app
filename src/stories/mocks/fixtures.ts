@@ -17,7 +17,7 @@ import {
     TradeHistory,
     TransactionList,
 } from 'src/types';
-import { CurrencySymbol, Rate } from 'src/utils';
+import { CurrencySymbol, Rate, createCurrencyMap } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
 export const wfilBytes32 = toBytes32('WFIL'); // 0x5746494c0000000000000000000000000000000000000000000000000000000000
@@ -25,14 +25,13 @@ export const ethBytes32 = toBytes32('ETH'); // 0x4554480000000000000000000000000
 export const wbtcBytes32 = toBytes32('WBTC'); // 0x5742544300000000000000000000000000000000000000000000000000000000
 export const usdcBytes32 = toBytes32('USDC'); // 0x5553444300000000000000000000000000000000000000000000000000000000
 
-export const assetPriceMap = {
-    WFIL: 6.0,
-    ETH: 2000.34,
-    USDC: 1.0,
-    WBTC: 50000.0,
-    aUSDC: 1.0,
-    axlFIL: 6.0,
-};
+export const assetPriceMap = createCurrencyMap<number>(0);
+assetPriceMap.WFIL = 6.0;
+assetPriceMap.ETH = 2000.34;
+assetPriceMap.USDC = 1.0;
+assetPriceMap.WBTC = 50000.0;
+assetPriceMap.aUSDC = 1.0;
+assetPriceMap.axlFIL = 6.0;
 
 export const preloadedEthBalance = {
     wallet: {
