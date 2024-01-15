@@ -41,6 +41,8 @@ describe('Itayose Component', () => {
     });
 
     it('should convert the amount to changed currency when the user change the currency', async () => {
+        process.env.SF_ENV = 'production';
+
         const { store } = await waitFor(() =>
             render(<Default />, { preloadedState })
         );

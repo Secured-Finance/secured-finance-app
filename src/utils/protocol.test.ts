@@ -6,21 +6,16 @@ import {
     usdcBytes32,
 } from 'src/stories/mocks/fixtures';
 import { ZERO_BI } from './collateral';
-import { CurrencySymbol } from './currencyList';
+import { createCurrencyMap } from './currencyList';
 import { computeTotalDailyVolumeInUSD } from './protocol';
 
 describe('computeTotalDailyVolumeInUSD', () => {
     it('should return 0 if no daily volumes', () => {
+        const expectedVolumes = createCurrencyMap<bigint>(ZERO_BI);
+
         expect(computeTotalDailyVolumeInUSD([], assetPriceMap)).toEqual({
             totalVolumeUSD: ZERO_BI,
-            volumePerCurrency: {
-                [CurrencySymbol.USDC]: ZERO_BI,
-                [CurrencySymbol.ETH]: ZERO_BI,
-                [CurrencySymbol.WFIL]: ZERO_BI,
-                [CurrencySymbol.WBTC]: ZERO_BI,
-                [CurrencySymbol.aUSDC]: ZERO_BI,
-                [CurrencySymbol.axlFIL]: ZERO_BI,
-            },
+            volumePerCurrency: expectedVolumes,
         });
     });
 
@@ -33,18 +28,15 @@ describe('computeTotalDailyVolumeInUSD', () => {
             timestamp: dec22Fixture.toString(),
             volume: '30000000',
         });
+        const expectedVolumes = createCurrencyMap<bigint>(ZERO_BI);
+        expectedVolumes.USDC = BigInt(30);
+        expectedVolumes.WFIL = BigInt(657000);
+
         expect(
             computeTotalDailyVolumeInUSD(dailyVolumes, assetPriceMap)
         ).toEqual({
             totalVolumeUSD: BigInt(3942030),
-            volumePerCurrency: {
-                [CurrencySymbol.USDC]: BigInt(30),
-                [CurrencySymbol.ETH]: ZERO_BI,
-                [CurrencySymbol.WFIL]: BigInt(657000),
-                [CurrencySymbol.WBTC]: ZERO_BI,
-                [CurrencySymbol.aUSDC]: ZERO_BI,
-                [CurrencySymbol.axlFIL]: ZERO_BI,
-            },
+            volumePerCurrency: expectedVolumes,
         });
     });
 });

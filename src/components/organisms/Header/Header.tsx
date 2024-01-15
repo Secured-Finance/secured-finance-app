@@ -15,7 +15,7 @@ import { useBreakpoint, useIsGlobalItayose } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
-import { supportedNetworks } from 'src/utils';
+import { Environment, getEnvironment, supportedNetworks } from 'src/utils';
 import { AddressUtils } from 'src/utils/address';
 import { isProdEnv } from 'src/utils/displayUtils';
 import { useAccount } from 'wagmi';
@@ -90,6 +90,8 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     const currentChainId = useSelector(
         (state: RootState) => state.blockchain.chainId
     );
+    const isProduction =
+        getEnvironment().toLowerCase() === Environment.PRODUCTION;
 
     const { data: isGlobalItayose } = useIsGlobalItayose();
 
@@ -158,7 +160,7 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                                     securedFinance?.config?.network ?? 'Unknown'
                                 }
                             />
-                            <Settings />
+                            <Settings isProduction={isProduction} />
                         </>
                     ) : (
                         <Button

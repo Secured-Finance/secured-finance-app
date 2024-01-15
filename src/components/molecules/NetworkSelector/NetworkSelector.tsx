@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { Fragment, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import Arbitrum from 'src/assets/icons/arbitrum-network.svg';
+import Avalanche from 'src/assets/icons/avalanche-network.svg';
 import Ethereum from 'src/assets/icons/ethereum-network.svg';
 import ExclamationCircleIcon from 'src/assets/icons/exclamation-circle.svg';
 import { ExpandIndicator, Separator } from 'src/components/atoms';
@@ -47,6 +48,13 @@ const TestnetChainsList: ChainInformation[] = [
         chainId: 421614,
         icon: (
             <Arbitrum className='h-4 w-4 rounded-full tablet:h-5 tablet:w-5' />
+        ),
+    },
+    {
+        chain: 'Avalanche Fuji',
+        chainId: 43113,
+        icon: (
+            <Avalanche className='h-4 w-4 rounded-full tablet:h-5 tablet:w-5' />
         ),
     },
 ];
