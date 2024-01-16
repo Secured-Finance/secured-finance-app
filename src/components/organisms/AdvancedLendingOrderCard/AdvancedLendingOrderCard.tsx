@@ -436,7 +436,7 @@ export function AdvancedLendingOrderCard({
                         </div>
                         <div className='col-span-5 block laptop:hidden'>
                             <div
-                                className='mb-3 flex flex-col'
+                                className='mb-3 flex max-w-[100px] flex-col'
                                 onClick={() =>
                                     setIsShowYieldCurveDialog(
                                         !isShowYieldCurveDialog
@@ -452,7 +452,10 @@ export function AdvancedLendingOrderCard({
                             >
                                 <LineChartTab
                                     rates={rates}
-                                    maturityList={maturityList}
+                                    maturityList={maturityList.map(item => ({
+                                        ...item,
+                                        label: '',
+                                    }))}
                                     itayoseMarketIndexSet={
                                         itayoseMarketIndexSet
                                     }
