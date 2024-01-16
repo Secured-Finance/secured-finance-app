@@ -16,6 +16,7 @@ describe('useMarketList', () => {
 
         await waitForNextUpdate();
         await waitForNextUpdate();
+        await waitForNextUpdate();
 
         expect(result.current.openMarkets).toHaveLength(32);
         expect(result.current.itayoseMarkets).toHaveLength(4);
