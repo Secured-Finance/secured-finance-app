@@ -337,77 +337,82 @@ export const AdvancedLending = ({
                         </div>
                     </Tab>
                 </div>
-                <HorizontalTab
-                    tabTitles={TAB_OPTIONS}
-                    onTabChange={setSelectedTable}
-                >
-                    <ActiveTradeTable
-                        data={
-                            positions
-                                ? positions.positions
-                                      .filter(
-                                          position =>
-                                              position.maturity ===
-                                              maturity.toString()
-                                      )
-                                      .map(position => {
-                                          const ccy = hexToCurrencySymbol(
-                                              position.currency
-                                          );
-                                          if (!ccy) return position;
-                                          return {
-                                              ...position,
-                                              underMinimalCollateralThreshold:
-                                                  isUnderCollateralThreshold(
-                                                      ccy,
-                                                      Number(position.maturity),
-                                                      Number(
-                                                          position.marketPrice
+                <div className='px-4 laptop:px-0'>
+                    <HorizontalTab
+                        tabTitles={TAB_OPTIONS}
+                        onTabChange={setSelectedTable}
+                    >
+                        <ActiveTradeTable
+                            data={
+                                positions
+                                    ? positions.positions
+                                          .filter(
+                                              position =>
+                                                  position.maturity ===
+                                                  maturity.toString()
+                                          )
+                                          .map(position => {
+                                              const ccy = hexToCurrencySymbol(
+                                                  position.currency
+                                              );
+                                              if (!ccy) return position;
+                                              return {
+                                                  ...position,
+                                                  underMinimalCollateralThreshold:
+                                                      isUnderCollateralThreshold(
+                                                          ccy,
+                                                          Number(
+                                                              position.maturity
+                                                          ),
+                                                          Number(
+                                                              position.marketPrice
+                                                          ),
+                                                          position.forwardValue >
+                                                              0
+                                                              ? OrderSide.LEND
+                                                              : OrderSide.BORROW
                                                       ),
-                                                      position.forwardValue > 0
-                                                          ? OrderSide.LEND
-                                                          : OrderSide.BORROW
-                                                  ),
-                                          };
-                                      })
-                                : []
-                        }
-                        height={350}
-                        delistedCurrencySet={delistedCurrencySet}
-                        variant='contractOnly'
-                    />
-                    <OrderTable
-                        data={filteredOrderList}
-                        variant='compact'
-                        height={350}
-                    />
-                    {userOrderHistory.loading ? (
-                        <TabSpinner />
-                    ) : (
-                        <OrderHistoryTable
-                            data={sortedOrderHistory}
-                            pagination={{
-                                totalData: sortedOrderHistory.length,
-                                getMoreData: () => {},
-                                containerHeight: 350,
-                            }}
+                                              };
+                                          })
+                                    : []
+                            }
+                            height={350}
+                            delistedCurrencySet={delistedCurrencySet}
                             variant='contractOnly'
                         />
-                    )}
-                    {userTransactionHistory.loading ? (
-                        <TabSpinner />
-                    ) : (
-                        <MyTransactionsTable
-                            data={myTransactions}
-                            pagination={{
-                                totalData: myTransactions.length,
-                                getMoreData: () => {},
-                                containerHeight: 350,
-                            }}
-                            variant='contractOnly'
+                        <OrderTable
+                            data={filteredOrderList}
+                            variant='compact'
+                            height={350}
                         />
-                    )}
-                </HorizontalTab>
+                        {userOrderHistory.loading ? (
+                            <TabSpinner />
+                        ) : (
+                            <OrderHistoryTable
+                                data={sortedOrderHistory}
+                                pagination={{
+                                    totalData: sortedOrderHistory.length,
+                                    getMoreData: () => {},
+                                    containerHeight: 350,
+                                }}
+                                variant='contractOnly'
+                            />
+                        )}
+                        {userTransactionHistory.loading ? (
+                            <TabSpinner />
+                        ) : (
+                            <MyTransactionsTable
+                                data={myTransactions}
+                                pagination={{
+                                    totalData: myTransactions.length,
+                                    getMoreData: () => {},
+                                    containerHeight: 350,
+                                }}
+                                variant='contractOnly'
+                            />
+                        )}
+                    </HorizontalTab>
+                </div>
             </div>
         </ThreeColumnsWithTopBar>
     );

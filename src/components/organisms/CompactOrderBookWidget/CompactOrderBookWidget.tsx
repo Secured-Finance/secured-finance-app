@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { Fragment, useEffect, useMemo, useReducer, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import WarningCircleIcon from 'src/assets/icons/warning-circle.svg';
-import { ColorBar, Spinner } from 'src/components/atoms';
+import { ColorBar, DropdownSelector, Spinner } from 'src/components/atoms';
 import { CoreTable, InfoToolTip, TableHeader } from 'src/components/molecules';
 import {
     AggregationFactorType,
@@ -24,17 +24,11 @@ import {
     ordinaryFormat,
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
-
-// const AGGREGATION_OPTIONS: (Option<string> & { multiplier: number })[] = [
-//     { label: '0.01', value: '1', multiplier: 1 },
-//     { label: '0.1', value: '10', multiplier: 10 },
-//     { label: '1', value: '100', multiplier: 100 },
-//     { label: '5', value: '500', multiplier: 500 },
-//     { label: '10', value: '1000', multiplier: 1000 },
-// ];
-
-const ORDERBOOK_DOUBLE_MAX_LINES = 12;
-const ORDERBOOK_SINGLE_MAX_LINES = 26;
+import {
+    AGGREGATION_OPTIONS,
+    ORDERBOOK_DOUBLE_MAX_LINES,
+    ORDERBOOK_SINGLE_MAX_LINES,
+} from './constants';
 
 const columnHelper = createColumnHelper<OrderBookEntry>();
 
@@ -198,7 +192,8 @@ export const CompactOrderBookWidget = ({
         onFilterChange?.(state);
     }, [onFilterChange, state]);
 
-    const [aggregationFactor] = useState<AggregationFactorType>(1);
+    const [aggregationFactor, setAggregationFactor] =
+        useState<AggregationFactorType>(1);
 
     useEffect(() => {
         onAggregationChange?.(aggregationFactor);
@@ -320,7 +315,7 @@ export const CompactOrderBookWidget = ({
     };
 
     return (
-        <div className='flex h-full w-full flex-col justify-start gap-y-3 rounded-b-2xl border border-white-10 bg-cardBackground/60 px-3 shadow-tab laptop:hidden'>
+        <div className='flex w-full flex-col justify-start gap-y-3 border border-white-10 bg-cardBackground/60 px-[0.625rem] shadow-tab laptop:hidden'>
             {isCurrencyDelisted && (
                 <div className='-mx-3 flex h-9 flex-row items-center gap-3 bg-black-20 px-4'>
                     <WarningCircleIcon className='h-4 w-4' />
@@ -329,7 +324,7 @@ export const CompactOrderBookWidget = ({
                     </div>
                 </div>
             )}
-            <div className='h-[800px]'>
+            <div className='h-[470px]'>
                 {orderbook.isLoading ? (
                     <div className='flex h-full w-full items-center justify-center'>
                         <Spinner />
@@ -361,7 +356,7 @@ export const CompactOrderBookWidget = ({
                             />
                         </div>
                         {state.showTicker && (
-                            <div className='typography-portfolio-heading -mx-3 flex h-14 flex-row items-center justify-between bg-black-20 px-4'>
+                            <div className='-mx-3 flex h-14 flex-row items-center justify-between bg-black-20 px-4 text-[1.125rem]'>
                                 <span
                                     className={classNames('font-semibold', {
                                         'flex flex-row items-center gap-2 text-white':
@@ -388,7 +383,7 @@ export const CompactOrderBookWidget = ({
                                     )}
                                 </span>
 
-                                <span className='font-normal text-slateGray'>
+                                <span className='text-xs font-medium text-[#FBFAFC]'>
                                     {formatLoanValue(marketPrice, 'rate')}
                                 </span>
                             </div>
@@ -420,6 +415,19 @@ export const CompactOrderBookWidget = ({
                         </div>
                     </>
                 )}
+            </div>
+            <div className='flex items-center justify-end'>
+                <div className='w-20'>
+                    <DropdownSelector
+                        optionList={AGGREGATION_OPTIONS}
+                        onChange={v =>
+                            setAggregationFactor(
+                                Number(v) as AggregationFactorType
+                            )
+                        }
+                        variant='fullWidth'
+                    />
+                </div>
             </div>
         </div>
     );
