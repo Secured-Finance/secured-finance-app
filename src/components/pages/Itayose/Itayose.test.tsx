@@ -30,9 +30,6 @@ const preloadedState = {
         amount: '0',
         unitPrice: 0,
     },
-    blockchain: {
-        testnetEnabled: true,
-    },
 };
 
 const mockSecuredFinance = mockUseSF();
