@@ -204,15 +204,13 @@ export const PortfolioManagement = () => {
         return {
             borrowedPV,
             lentPV,
-            netAssetValue: address
-                ? collateralBook.usdCollateral +
-                  collateralBook.totalPresentValue +
-                  collateralBook.usdNonCollateral +
-                  orderList.totalPVOfOpenOrdersInUSD
-                : 0,
+            netAssetValue:
+                collateralBook.usdCollateral +
+                collateralBook.totalPresentValue +
+                collateralBook.usdNonCollateral +
+                orderList.totalPVOfOpenOrdersInUSD,
         };
     }, [
-        address,
         collateralBook.totalPresentValue,
         collateralBook.usdCollateral,
         collateralBook.usdNonCollateral,

@@ -6,7 +6,7 @@ const { Default } = composeStories(stories);
 
 describe('CollateralTab Component', () => {
     it('should render CollateralTab', () => {
-        render(<Default netAssetValue={0} />);
+        render(<Default />);
         expect(screen.getByText('Net Asset Value')).toBeInTheDocument();
         expect(screen.getByText('$0.00')).toBeInTheDocument();
         expect(

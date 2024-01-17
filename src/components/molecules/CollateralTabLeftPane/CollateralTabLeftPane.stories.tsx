@@ -14,7 +14,7 @@ export default {
         account: 'as',
         onClick: () => {},
         collateralBook: collateralBook80,
-        netAssetValue: 17700.34,
+        netAssetValue: 12700.34,
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,
@@ -35,6 +35,7 @@ export const NotConnectedToWallet = Template.bind({});
 NotConnectedToWallet.args = {
     account: undefined,
     onClick: () => {},
+    netAssetValue: 0,
 };
 
 export const EmptyUSDCollateralBalance = Template.bind({});
@@ -42,4 +43,5 @@ EmptyUSDCollateralBalance.args = {
     account: 'as',
     onClick: () => {},
     collateralBook: emptyUSDCollateral,
+    netAssetValue: 600,
 };
