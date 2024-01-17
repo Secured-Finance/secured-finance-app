@@ -15,7 +15,7 @@ import { useBreakpoint, useIsGlobalItayose } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
-import { Environment, getEnvironment, supportedNetworks } from 'src/utils';
+import { getSupportedNetworks } from 'src/utils';
 import { AddressUtils } from 'src/utils/address';
 import { isProdEnv } from 'src/utils/displayUtils';
 import { useAccount } from 'wagmi';
@@ -65,7 +65,9 @@ const HeaderMessage = ({
                     <SupportedNetworks />
                 </div>
             );
-        } else if (supportedNetworks.find(n => n.id === chainId)?.testnet) {
+        } else if (
+            getSupportedNetworks().find(n => n.id === chainId)?.testnet
+        ) {
             return (
                 <div
                     className='typography-caption-2 w-full bg-horizonBlue p-[1px] text-center text-neutral-8'
@@ -90,8 +92,7 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     const currentChainId = useSelector(
         (state: RootState) => state.blockchain.chainId
     );
-    const isProduction =
-        getEnvironment().toLowerCase() === Environment.PRODUCTION;
+    const isProduction = isProdEnv();
 
     const { data: isGlobalItayose } = useIsGlobalItayose();
 
@@ -105,7 +106,7 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
         }
     }
 
-    const LINKS = isProdEnv() ? PRODUCTION_LINKS : DEV_LINKS;
+    const LINKS = isProduction ? PRODUCTION_LINKS : DEV_LINKS;
 
     return (
         <div className='relative'>
