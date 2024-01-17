@@ -1,6 +1,6 @@
 import { Popover, Transition } from '@headlessui/react';
 import classNames from 'classnames';
-import { Fragment, useCallback, useState } from 'react';
+import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Gear from 'src/assets/icons/gear.svg';
 import { Toggle } from 'src/components/atoms';
@@ -14,7 +14,9 @@ export const Settings = ({ isProduction }: { isProduction: boolean }) => {
     const testnetsEnabledLocalstorage =
         localStorage.getItem(testnetsEnabledId) === 'true' || false;
     const [testnetsEnabled, setTestnetsMode] = useState(!isProduction);
-    dispatch(updateTestnetEnabled(!isProduction));
+    useEffect(() => {
+        dispatch(updateTestnetEnabled(!isProduction));
+    }, [dispatch, isProduction]);
 
     const handleChange = useCallback(() => {
         const newState = !testnetsEnabled;
