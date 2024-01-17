@@ -1,10 +1,11 @@
+import * as analytics from '@amplitude/analytics-browser';
 import { formatDate } from '@secured-finance/sf-core';
 import { composeStories } from '@storybook/react';
 import { mar23Fixture } from 'src/stories/mocks/fixtures';
 import { initialStore } from 'src/stories/mocks/mockStore';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
-import { CurrencySymbol, currencyMap } from 'src/utils';
+import { ButtonEvents, CurrencySymbol, currencyMap } from 'src/utils';
 import timemachine from 'timemachine';
 import * as stories from './LendingCard.stories';
 
@@ -44,6 +45,9 @@ describe('LendingCard Component', () => {
             fireEvent.click(screen.getByRole('menuitem', { name: 'ETH' }));
         });
     };
+
+    const track = jest.spyOn(analytics, 'track');
+
     it('should render a LendingCard', async () => {
         await waitFor(() => render(<Default />));
     });
@@ -100,10 +104,11 @@ describe('LendingCard Component', () => {
         ).toBeInTheDocument();
     });
 
-    it('should switch to Ethereum when selecting it from the option', async () => {
+    it('should switch to Ethereum and track CURRENCY_CHANGE event when selecting it from the option', async () => {
         await waitFor(() => render(<Default />));
         await selectEthereum();
         expect(screen.getByText('ETH')).toBeInTheDocument();
+        expect(track).toHaveBeenCalledWith(ButtonEvents.CURRENCY_CHANGE);
     });
 
     it('should display the amount inputted by the user in USD', async () => {
@@ -218,5 +223,13 @@ describe('LendingCard Component', () => {
         expect(
             screen.queryByText('Insufficient amount in source')
         ).toBeInTheDocument();
+    });
+
+    it('should track ORDER_SIDE event when order side is changes', async () => {
+        await waitFor(() => render(<Default />, { preloadedState }));
+
+        const lendTab = screen.getByText('Lend');
+        fireEvent.click(lendTab);
+        expect(track).toHaveBeenCalledWith(ButtonEvents.ORDER_SIDE);
     });
 });

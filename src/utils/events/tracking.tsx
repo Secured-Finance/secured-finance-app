@@ -42,3 +42,10 @@ export function trackCollateralEvent(
         [CollateralProperties.SOURCE]: source,
     });
 }
+
+export function trackChainEvent(
+    event: InterfaceEvents.CHAIN_CONNECTED,
+    chain: string
+) {
+    track(event, { [InterfaceProperties.CHAIN]: chain });
+}
