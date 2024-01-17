@@ -90,7 +90,7 @@ export const CollateralTabLeftPane = ({
             <div className='flex-grow tablet:border-b tablet:border-white-10'>
                 <div className='m-6 flex flex-col gap-1'>
                     <span className='typography-body-2 h-6 w-fit text-slateGray'>
-                        SF Vault
+                        Net Asset Value
                     </span>
                     <span
                         data-testid='vault-balance'

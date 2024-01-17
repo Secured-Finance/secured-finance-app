@@ -12,7 +12,7 @@ const { Default, NotConnectedToWallet } = composeStories(stories);
 describe('CollateralTabLeftPane component', () => {
     it('should render CollateralTabLeftPane', () => {
         render(<NotConnectedToWallet />);
-        expect(screen.getByText('SF Vault')).toBeInTheDocument();
+        expect(screen.getByText('Net Asset Value')).toBeInTheDocument();
         expect(screen.getByText('$0.00')).toBeInTheDocument();
         expect(
             screen.getByText(
@@ -73,7 +73,7 @@ describe('CollateralTabLeftPane component', () => {
                 totalPVOfOpenOrdersInUSD={0}
             />
         );
-        expect(screen.getByText('SF Vault')).toBeInTheDocument();
+        expect(screen.getByText('Net Asset Value')).toBeInTheDocument();
         expect(screen.getByText('$0.00')).toBeInTheDocument();
         expect(
             screen.getAllByText(
