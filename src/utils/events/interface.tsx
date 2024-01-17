@@ -2,6 +2,7 @@ export enum InterfaceEvents {
     CONNECT_WALLET_BUTTON_CLICKED = 'Connect Wallet Button Clicked',
     WALLET_CHANGED_THROUGH_PROVIDER = 'Wallet Changed Through Provider',
     WALLET_CONNECTED = 'Wallet Connected',
+    CHAIN_CONNECTED = 'Chain Connected',
 }
 
 export enum OrderEvents {
@@ -42,6 +43,7 @@ export enum InterfaceProperties {
     WALLET_CONNECTION_RESULT = 'Wallet Connection Result',
     WALLET_ADDRESS = 'Wallet Address',
     WALLET_CONNECTOR = 'Wallet Connector',
+    CHAIN = 'Chain',
 }
 
 export enum WalletConnectionResult {

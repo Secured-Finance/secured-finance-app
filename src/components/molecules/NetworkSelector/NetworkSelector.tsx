@@ -9,6 +9,7 @@ import { ExpandIndicator, Separator } from 'src/components/atoms';
 import { Networks } from 'src/store/blockchain';
 import { RootState } from 'src/store/types';
 import { formatDataCy } from 'src/utils';
+import { InterfaceEvents, trackChainEvent } from 'src/utils/events';
 import { useSwitchNetwork } from 'wagmi';
 
 type ChainInformation = {
@@ -174,11 +175,15 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
                                                     <MenuItem
                                                         text={link.chain}
                                                         icon={link.icon}
-                                                        onClick={() =>
+                                                        onClick={() => {
                                                             handleNetworkChange(
                                                                 index
-                                                            )
-                                                        }
+                                                            );
+                                                            trackChainEvent(
+                                                                InterfaceEvents.CHAIN_CONNECTED,
+                                                                link.chain
+                                                            );
+                                                        }}
                                                     />
                                                 </div>
                                                 {index !==

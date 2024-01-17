@@ -1,3 +1,4 @@
+import * as analytics from '@amplitude/analytics-browser';
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
 import { CollateralBook } from 'src/hooks';
@@ -5,7 +6,7 @@ import { dec22Fixture } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
-import { CurrencySymbol } from 'src/utils';
+import { ButtonEvents, CurrencySymbol } from 'src/utils';
 import timemachine from 'timemachine';
 import * as stories from './AdvancedLendingOrderCard.stories';
 
@@ -59,6 +60,7 @@ const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('AdvancedLendingOrderCard Component', () => {
+    const track = jest.spyOn(analytics, 'track');
     const changeInputValue = (label: string, value: string) => {
         const input = screen.getByLabelText(label);
         fireEvent.change(input, { target: { value } });
@@ -731,6 +733,16 @@ describe('AdvancedLendingOrderCard Component', () => {
                 fireEvent.click(screen.getByText('Lend'));
             });
             assertBondPriceInputValue('20');
+        });
+    });
+
+    describe('Amplitude', () => {
+        it('should track ORDER_SIDE and ORDER_TYPE events when changing order side or order type', () => {
+            render(<Default marketPrice={9600} />, { preloadedState });
+            fireEvent.click(screen.getByText('Lend'));
+            expect(track).toHaveBeenCalledWith(ButtonEvents.ORDER_SIDE);
+            fireEvent.click(screen.getByText('Market'));
+            expect(track).toHaveBeenCalledWith(ButtonEvents.ORDER_TYPE);
         });
     });
 });
