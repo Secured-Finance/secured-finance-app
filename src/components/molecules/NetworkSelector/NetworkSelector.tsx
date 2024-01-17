@@ -33,6 +33,13 @@ const MainnetChainsList: ChainInformation[] = [
             <Arbitrum className='h-4 w-4 rounded-full tablet:h-5 tablet:w-5' />
         ),
     },
+    {
+        chain: 'Avalanche',
+        chainId: 43114,
+        icon: (
+            <Avalanche className='h-4 w-4 rounded-full tablet:h-5 tablet:w-5' />
+        ),
+    },
 ];
 
 const TestnetChainsList: ChainInformation[] = [
