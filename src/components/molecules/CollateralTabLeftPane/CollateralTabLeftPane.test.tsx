@@ -11,7 +11,7 @@ const { Default, NotConnectedToWallet } = composeStories(stories);
 
 describe('CollateralTabLeftPane component', () => {
     it('should render CollateralTabLeftPane', () => {
-        render(<NotConnectedToWallet netAssetValue={0} />);
+        render(<NotConnectedToWallet />);
         expect(screen.getByText('Net Asset Value')).toBeInTheDocument();
         expect(screen.getByText('$0.00')).toBeInTheDocument();
         expect(
@@ -41,7 +41,7 @@ describe('CollateralTabLeftPane component', () => {
 
     it('should render balance when wallet is connected and collateral is deposited', () => {
         render(<Default />);
-        expect(screen.getByText('$17,700.34')).toBeInTheDocument();
+        expect(screen.getByText('$12,700.34')).toBeInTheDocument();
         expect(screen.getByText('Collateral Assets')).toBeInTheDocument();
         expect(screen.getByText('Non-collateral Assets')).toBeInTheDocument();
     });
@@ -67,11 +67,9 @@ describe('CollateralTabLeftPane component', () => {
     });
 
     it('should prompt user to deposit collateral when wallet is connected', () => {
-        render(
-            <Default collateralBook={emptyCollateralBook} netAssetValue={0} />
-        );
+        render(<Default collateralBook={emptyCollateralBook} />);
         expect(screen.getByText('Net Asset Value')).toBeInTheDocument();
-        expect(screen.getByText('$0.00')).toBeInTheDocument();
+        expect(screen.getByText('$12,700.34')).toBeInTheDocument();
         expect(
             screen.getAllByText(
                 'Deposit collateral from your connected wallet to enable lending service on Secured Finance.'
