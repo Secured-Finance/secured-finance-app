@@ -25,7 +25,7 @@ Expanded.play = async ({ canvasElement }) => {
     await userEvent.click(walletButton);
 };
 
-export const IsProduction = Template.bind({});
-IsProduction.args = {
+export const IsNotProduction = Template.bind({});
+IsNotProduction.args = {
     isProduction: false,
 };

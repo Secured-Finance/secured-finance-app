@@ -457,7 +457,7 @@ export const mockUseSF = () => {
         executeEmergencySettlement: jest.fn(() => Promise.resolve('0x123')),
 
         getLastPrice: jest.fn((ccy: Currency) => {
-            const ccyMap = createCurrencyMap<bigint>(BigInt('0'));
+            const ccyMap = createCurrencyMap<bigint>(BigInt(ZERO_BI));
             ccyMap.ETH = BigInt('200034000000');
             ccyMap.WFIL = BigInt('600000000');
             ccyMap.USDC = BigInt('100000000');
