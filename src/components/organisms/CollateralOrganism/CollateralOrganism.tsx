@@ -6,17 +6,17 @@ const tabDataArray = [{ text: 'Asset Management' }];
 
 export const CollateralOrganism = ({
     collateralBook,
-    totalPVOfOpenOrdersInUSD,
+    netAssetValue,
 }: {
     collateralBook: CollateralBook;
-    totalPVOfOpenOrdersInUSD: number;
+    netAssetValue: number;
 }) => {
     return (
         <div className='h-fit w-full'>
             <Tab tabDataArray={tabDataArray}>
                 <CollateralTab
                     collateralBook={collateralBook}
-                    totalPVOfOpenOrdersInUSD={totalPVOfOpenOrdersInUSD}
+                    netAssetValue={netAssetValue}
                 />
             </Tab>
         </div>

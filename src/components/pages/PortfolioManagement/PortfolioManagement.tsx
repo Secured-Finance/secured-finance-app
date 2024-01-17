@@ -204,9 +204,23 @@ export const PortfolioManagement = () => {
         return {
             borrowedPV,
             lentPV,
-            netAssetValue: borrowedPV + lentPV + collateralBook.usdCollateral,
+            netAssetValue: address
+                ? collateralBook.usdCollateral +
+                  collateralBook.totalPresentValue +
+                  collateralBook.usdNonCollateral +
+                  orderList.totalPVOfOpenOrdersInUSD
+                : 0,
         };
-    }, [collateralBook.usdCollateral, isLoading, positions, priceMap]);
+    }, [
+        address,
+        collateralBook.totalPresentValue,
+        collateralBook.usdCollateral,
+        collateralBook.usdNonCollateral,
+        isLoading,
+        orderList.totalPVOfOpenOrdersInUSD,
+        positions,
+        priceMap,
+    ]);
 
     const myTransactions = useMemo(() => {
         const tradesFromCon = formatOrders(orderList.inactiveOrderList);
@@ -306,9 +320,7 @@ export const PortfolioManagement = () => {
                     />
                     <CollateralOrganism
                         collateralBook={collateralBook}
-                        totalPVOfOpenOrdersInUSD={
-                            orderList.totalPVOfOpenOrdersInUSD
-                        }
+                        netAssetValue={portfolioAnalytics.netAssetValue}
                     />
                     <HorizontalTab
                         tabTitles={[

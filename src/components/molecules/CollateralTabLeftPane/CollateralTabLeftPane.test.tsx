@@ -11,7 +11,7 @@ const { Default, NotConnectedToWallet } = composeStories(stories);
 
 describe('CollateralTabLeftPane component', () => {
     it('should render CollateralTabLeftPane', () => {
-        render(<NotConnectedToWallet />);
+        render(<NotConnectedToWallet netAssetValue={0} />);
         expect(screen.getByText('Net Asset Value')).toBeInTheDocument();
         expect(screen.getByText('$0.00')).toBeInTheDocument();
         expect(
@@ -68,10 +68,7 @@ describe('CollateralTabLeftPane component', () => {
 
     it('should prompt user to deposit collateral when wallet is connected', () => {
         render(
-            <Default
-                collateralBook={emptyCollateralBook}
-                totalPVOfOpenOrdersInUSD={0}
-            />
+            <Default collateralBook={emptyCollateralBook} netAssetValue={0} />
         );
         expect(screen.getByText('Net Asset Value')).toBeInTheDocument();
         expect(screen.getByText('$0.00')).toBeInTheDocument();
@@ -103,27 +100,13 @@ describe('CollateralTabLeftPane component', () => {
     });
 
     it('should change font size as collateral increases', async () => {
-        render(
-            <Default
-                collateralBook={{
-                    ...collateralBook80,
-                    usdCollateral: 100000.2,
-                }}
-            />
-        );
+        render(<Default netAssetValue={100000.2} />);
         const input = screen.getByTestId('vault-balance');
         expect(input).toHaveClass('text-xl tablet:text-md');
     });
 
     it('should change font size as collateral increases', async () => {
-        render(
-            <Default
-                collateralBook={{
-                    ...collateralBook80,
-                    usdCollateral: 210000000.2,
-                }}
-            />
-        );
+        render(<Default netAssetValue={210000000.2} />);
         const input = screen.getByTestId('vault-balance');
         expect(input).toHaveClass('text-md tablet:text-smd');
     });

@@ -14,7 +14,7 @@ export default {
         account: 'as',
         onClick: () => {},
         collateralBook: collateralBook80,
-        totalPVOfOpenOrdersInUSD: 2500,
+        netAssetValue: 17700.34,
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,
