@@ -9,7 +9,7 @@ import { LinkList } from 'src/utils';
 
 export const MenuPopover = ({}) => {
     return (
-        <div className='flex h-full items-center justify-center px-4'>
+        <div className='flex h-full items-center justify-center px-[30px]'>
             <Popover className='relative'>
                 {({}) => (
                     <>

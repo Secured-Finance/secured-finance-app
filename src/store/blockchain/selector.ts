@@ -1,12 +1,12 @@
 import { RootState } from '../types';
 
-type Networks = 'mainnet' | 'sepolia' | 'arbitrum-one' | 'arb-sepolia';
+type Networks = 'mainnet' | 'sepolia' | 'arbitrum-one' | 'arbitrum-sepolia';
 
-const Networks: Record<number, Networks> = {
+export const Networks: Record<number, Networks> = {
     1: 'mainnet',
     11155111: 'sepolia',
     42161: 'arbitrum-one',
-    421614: 'arb-sepolia',
+    421614: 'arbitrum-sepolia',
 };
 
 export const selectLastUserActionTimestamp = (state: RootState) =>
