@@ -23,8 +23,8 @@ const Template: StoryFn<typeof Toggle> = args => {
 };
 
 export const Default = Template.bind({});
-export const Checked = Template.bind({});
-Checked.args = {
+export const UnChecked = Template.bind({});
+UnChecked.args = {
     checked: false,
 };
 

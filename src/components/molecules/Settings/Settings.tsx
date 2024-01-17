@@ -15,14 +15,13 @@ export const Settings = ({ isProduction }: { isProduction: boolean }) => {
         localStorage.getItem(testnetsEnabledId) === 'true' || false;
     const [testnetsEnabled, setTestnetsMode] = useState(!isProduction);
     dispatch(updateTestnetEnabled(!isProduction));
-    localStorage.setItem(testnetsEnabledId, String(!isProduction));
 
     const handleChange = useCallback(() => {
-        const newState = isProduction ? !testnetsEnabled : true;
+        const newState = !testnetsEnabled;
         setTestnetsMode(newState);
         dispatch(updateTestnetEnabled(newState));
         localStorage.setItem(testnetsEnabledId, newState ? 'true' : 'false');
-    }, [dispatch, testnetsEnabled, isProduction]);
+    }, [dispatch, testnetsEnabled]);
 
     return (
         <Popover className='relative w-fit'>

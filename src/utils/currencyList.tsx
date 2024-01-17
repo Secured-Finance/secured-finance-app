@@ -57,7 +57,7 @@ export const currencyMap: Readonly<
         longName: 'Bitcoin',
     },
     [CurrencySymbol.BTCb]: {
-        index: 0,
+        index: 1,
         symbol: CurrencySymbol.BTCb,
         name: BTCB.onChain().name,
         icon: BTCIcon,
@@ -74,7 +74,7 @@ export const currencyMap: Readonly<
         longName: 'Bitcoin',
     },
     [CurrencySymbol.ETH]: {
-        index: 1,
+        index: 2,
         icon: EthIcon,
         symbol: CurrencySymbol.ETH,
         // TODO: update sf-core to use the right name
@@ -91,7 +91,7 @@ export const currencyMap: Readonly<
         longName: 'Ethereum',
     },
     [CurrencySymbol.WETHe]: {
-        index: 2,
+        index: 3,
         icon: EthIcon,
         symbol: CurrencySymbol.WETHe,
         name: WETHE.onChain().name,
@@ -108,7 +108,7 @@ export const currencyMap: Readonly<
         longName: 'Wrapped Filecoin',
     },
     [CurrencySymbol.WFIL]: {
-        index: 2,
+        index: 4,
         icon: FilIcon,
         symbol: CurrencySymbol.WFIL,
         name: WFIL.onChain().name,
@@ -127,7 +127,7 @@ export const currencyMap: Readonly<
         longName: 'Wrapped Filecoin',
     },
     [CurrencySymbol.USDC]: {
-        index: 4,
+        index: 6,
         symbol: CurrencySymbol.USDC,
         name: USDC.onChain().name,
         icon: UsdcIcon,
@@ -144,7 +144,7 @@ export const currencyMap: Readonly<
         longName: 'USD Coin',
     },
     [CurrencySymbol.aUSDC]: {
-        index: 5,
+        index: 7,
         symbol: CurrencySymbol.aUSDC,
         name: 'aUSDC',
         icon: UsdcIcon,
@@ -161,7 +161,7 @@ export const currencyMap: Readonly<
         longName: 'USD Coin',
     },
     [CurrencySymbol.axlFIL]: {
-        index: 3,
+        index: 5,
         symbol: CurrencySymbol.axlFIL,
         name: 'Axelar Wrapped FIL',
         icon: FilIcon,
