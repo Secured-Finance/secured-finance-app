@@ -8,7 +8,7 @@ const { Default } = composeStories(stories);
 describe('CollateralTab Component', () => {
     it('should render CollateralTab', () => {
         render(<Default />, { preloadedState: preloadedEthBalance });
-        expect(screen.getByText('SF Vault')).toBeInTheDocument();
+        expect(screen.getByText('Net Asset Value')).toBeInTheDocument();
         expect(screen.getByText('$0.00')).toBeInTheDocument();
         expect(
             screen.getByText(
