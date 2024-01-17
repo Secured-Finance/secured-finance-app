@@ -2,6 +2,7 @@ import {
     Chain,
     arbitrum,
     arbitrumSepolia,
+    avalanche,
     avalancheFuji,
     mainnet,
     sepolia,
@@ -13,4 +14,5 @@ export const supportedNetworks: Chain[] = [
     arbitrum,
     arbitrumSepolia,
     avalancheFuji,
+    avalanche,
 ];
