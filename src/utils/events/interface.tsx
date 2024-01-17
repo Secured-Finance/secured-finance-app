@@ -8,6 +8,16 @@ export enum OrderEvents {
     ORDER_PLACED = 'Order Placed',
 }
 
+export enum ButtonEvents {
+    DEPOSIT_COLLATERAL_BUTTON = 'Deposit Collateral Button',
+    WITHDRAW_COLLATERAL_BUTTON = 'Withdraw Collateral Button',
+    PLACE_ORDER = 'Place Order',
+    ORDER_TYPE = 'Order Type',
+    ORDER_SIDE = 'Order Side',
+    CURRENCY_CHANGE = 'Switch Currency',
+    TERM_CHANGE = 'Term Change',
+}
+
 export enum CollateralEvents {
     DEPOSIT_COLLATERAL = 'Deposit Collateral',
     WITHDRAW_COLLATERAL = 'Withdraw Collateral',

@@ -1,3 +1,4 @@
+import { track } from '@amplitude/analytics-browser';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
@@ -33,6 +34,7 @@ import {
 import { RootState } from 'src/store/types';
 import { OrderSideMap, OrderType, OrderTypeOptions } from 'src/types';
 import {
+    ButtonEvents,
     CurrencySymbol,
     ZERO_BI,
     amountFormatterFromBase,
@@ -249,6 +251,7 @@ export function AdvancedLendingOrderCard({
                         )
                     );
                     dispatch(setSourceAccount(WalletSource.METAMASK));
+                    track(ButtonEvents.ORDER_SIDE);
                 }}
                 variant='NavTab'
             />
@@ -261,6 +264,7 @@ export function AdvancedLendingOrderCard({
                         handleClick={option => {
                             dispatch(setOrderType(option as OrderType));
                             dispatch(resetUnitPrice());
+                            track(ButtonEvents.ORDER_TYPE);
                         }}
                         variant='StyledButton'
                     />
