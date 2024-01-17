@@ -1,3 +1,4 @@
+import { track } from '@amplitude/analytics-browser';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -31,6 +32,7 @@ import {
 import { RootState } from 'src/store/types';
 import { MaturityOptionList, OrderSideMap } from 'src/types';
 import {
+    ButtonEvents,
     CurrencySymbol,
     ZERO_BI,
     amountFormatterFromBase,
@@ -165,6 +167,7 @@ export const LendingCard = ({
                         )
                     );
                     dispatch(setSourceAccount(WalletSource.METAMASK));
+                    track(ButtonEvents.ORDER_SIDE);
                 }}
                 variant='NavTab'
             />
@@ -190,7 +193,10 @@ export const LendingCard = ({
                             priceList={assetPriceMap}
                             onAmountChange={v => dispatch(setAmount(v))}
                             initialValue={amountInput}
-                            onAssetChange={handleCurrencyChange}
+                            onAssetChange={v => {
+                                handleCurrencyChange(v);
+                                track(ButtonEvents.CURRENCY_CHANGE);
+                            }}
                         />
                         {side === OrderSide.LEND && (
                             <ErrorInfo
@@ -213,7 +219,10 @@ export const LendingCard = ({
                             ...selectedTerm,
                             value: selectedTerm.value.toString(),
                         }}
-                        onTermChange={v => dispatch(setMaturity(Number(v)))}
+                        onTermChange={v => {
+                            dispatch(setMaturity(Number(v)));
+                            track(ButtonEvents.TERM_CHANGE);
+                        }}
                         transformLabel={getTransformMaturityOption(
                             maturitiesOptionList.map(o => ({
                                 ...o,
