@@ -9,6 +9,7 @@ export default {
     component: CollateralOrganism,
     args: {
         collateralBook: emptyCollateralBook,
+        netAssetValue: 15200,
     },
     decorators: [withWalletProvider],
 } as Meta<typeof CollateralOrganism>;

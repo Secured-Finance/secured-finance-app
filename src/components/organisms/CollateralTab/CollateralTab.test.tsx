@@ -1,5 +1,4 @@
 import { composeStories } from '@storybook/react';
-import { preloadedEthBalance } from 'src/stories/mocks/fixtures';
 import { render, screen } from 'src/test-utils.js';
 import * as stories from './CollateralTab.stories';
 
@@ -7,7 +6,7 @@ const { Default } = composeStories(stories);
 
 describe('CollateralTab Component', () => {
     it('should render CollateralTab', () => {
-        render(<Default />, { preloadedState: preloadedEthBalance });
+        render(<Default netAssetValue={0} />);
         expect(screen.getByText('Net Asset Value')).toBeInTheDocument();
         expect(screen.getByText('$0.00')).toBeInTheDocument();
         expect(

@@ -10,6 +10,7 @@ export default {
     component: CollateralTab,
     args: {
         collateralBook: emptyCollateralBook,
+        netAssetValue: 15000,
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,

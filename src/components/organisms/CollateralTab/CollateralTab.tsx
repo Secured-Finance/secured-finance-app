@@ -53,10 +53,10 @@ export const generateCollateralList = (
 
 export const CollateralTab = ({
     collateralBook,
-    totalPVOfOpenOrdersInUSD,
+    netAssetValue,
 }: {
     collateralBook: CollateralBook;
-    totalPVOfOpenOrdersInUSD: number;
+    netAssetValue: number;
 }) => {
     const { address } = useAccount();
     const [openModal, setOpenModal] = useState<'' | 'deposit' | 'withdraw'>('');
@@ -98,7 +98,7 @@ export const CollateralTab = ({
                 onClick={step => setOpenModal(step)}
                 account={address}
                 collateralBook={collateralBook}
-                totalPVOfOpenOrdersInUSD={totalPVOfOpenOrdersInUSD}
+                netAssetValue={netAssetValue}
             />
             <CollateralTabRightPane
                 account={address}
