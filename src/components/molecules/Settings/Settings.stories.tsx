@@ -5,11 +5,14 @@ import { Settings, testnetsEnabledId } from './Settings';
 export default {
     title: 'Molecules/Settings',
     component: Settings,
+    args: {
+        isProduction: true,
+    },
 } as Meta<typeof Settings>;
 
-const Template: StoryFn<typeof Settings> = () => (
+const Template: StoryFn<typeof Settings> = args => (
     <div className='flex justify-end'>
-        <Settings />
+        <Settings {...args} />
     </div>
 );
 
@@ -20,4 +23,9 @@ Expanded.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const walletButton = await canvas.findByRole('button');
     await userEvent.click(walletButton);
+};
+
+export const IsNotProduction = Template.bind({});
+IsNotProduction.args = {
+    isProduction: false,
 };
