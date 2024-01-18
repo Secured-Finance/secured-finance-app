@@ -22,6 +22,7 @@ export interface CollateralBook {
     usdNonCollateral: number;
     coverage: number;
     collateralThreshold: number;
+    totalPresentValue: number;
 }
 
 const DIVIDER = 100000000;
@@ -46,6 +47,7 @@ export const emptyCollateralBook: CollateralBook = {
     usdNonCollateral: 0,
     coverage: 0,
     collateralThreshold: 0,
+    totalPresentValue: 0,
 };
 
 const emptyCollateralValues = {
@@ -79,10 +81,14 @@ export const useCollateralBook = (account: string | undefined) => {
             const [
                 collateralValues,
                 collateralParameters,
+                totalPresentValue,
                 withdrawableCollateral,
             ] = await Promise.all([
                 securedFinance?.tokenVault.getCollateralBook(account ?? ''),
                 securedFinance?.tokenVault.getCollateralParameters(),
+                securedFinance?.getTotalPresentValueInBaseCurrency(
+                    account ?? ''
+                ),
                 await Promise.all(
                     collateralCurrencyList.map(async ccy => {
                         const withdrawableCollateral =
@@ -102,6 +108,7 @@ export const useCollateralBook = (account: string | undefined) => {
                 collateralParameters:
                     collateralParameters ?? emptyCollateralParameters,
                 withdrawableCollateral: withdrawableCollateral,
+                totalPresentValue: totalPresentValue ?? 0,
             };
         },
         select: data => {
@@ -147,6 +154,7 @@ export const useCollateralBook = (account: string | undefined) => {
                 coverage: coverage,
                 collateralThreshold: collateralThreshold,
                 withdrawableCollateral: withdrawableCollateral,
+                totalPresentValue: divide(data.totalPresentValue, DIVIDER, 8),
             };
 
             return colBook;

@@ -10,6 +10,7 @@ export default {
     component: CollateralTab,
     args: {
         collateralBook: emptyCollateralBook,
+        netAssetValue: 0,
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,
@@ -33,4 +34,5 @@ ConnectedToWallet.parameters = {
 
 ConnectedToWallet.args = {
     collateralBook: collateralBook80,
+    netAssetValue: 12700.34,
 };
