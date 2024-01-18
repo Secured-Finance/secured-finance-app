@@ -198,9 +198,15 @@ export const options: ChartOptions<'line'> = {
         tooltip: {
             yAlign: 'bottom',
             caretPadding: 16,
-            backgroundColor: 'rgba(47, 50, 65, 1)',
+            // TODO: add these colors in mobile only
             borderWidth: 1,
-            borderColor: 'rgba(52, 56, 76, 1)',
+            backgroundColor: '#2033DB4D',
+            // backgroundColor: 'rgba(47, 50, 65, 1)',
+            // borderColor: 'rgba(52, 56, 76, 1)',
+            bodyFont: {
+                weight: 'bold',
+            },
+            borderColor: '#2033DB',
             displayColors: false,
             cornerRadius: 10,
             padding: 8,

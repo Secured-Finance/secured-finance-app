@@ -41,6 +41,7 @@ export const OrderHistoryTable = ({
 }) => {
     const { data: priceList } = useLastPrices();
     const isTablet = useBreakpoint('laptop');
+    const isMobile = useBreakpoint('tablet');
     const etherscanUrl = useEtherscanUrl();
 
     const columns = useMemo(
@@ -132,6 +133,7 @@ export const OrderHistoryTable = ({
                 name: 'order-history-table',
                 stickyFirstColumn: true,
                 pagination: pagination,
+                showHeaders: !isMobile,
             }}
         />
     );

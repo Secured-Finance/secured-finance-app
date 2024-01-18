@@ -57,6 +57,7 @@ export const MyTransactionsTable = ({
     variant?: 'contractOnly' | 'compact';
 }) => {
     const isTablet = useBreakpoint('laptop');
+    const isMobile = useBreakpoint('tablet');
     const columns = useMemo(
         () => [
             loanTypeColumnDefinition(columnHelper, 'Type', 'type'),
@@ -109,6 +110,7 @@ export const MyTransactionsTable = ({
                 name: 'my-transactions-table',
                 stickyFirstColumn: true,
                 pagination: pagination,
+                showHeaders: !isMobile,
             }}
         />
     );

@@ -46,9 +46,9 @@ export const HorizontalTab = ({
             selectedIndex={selectedIndex}
             onChange={onChange}
             as='div'
-            className='flex h-full flex-col border border-white-10 bg-gunMetal/40 shadow-tab laptop:rounded-b-2xl'
+            className='flex h-full flex-col overflow-hidden rounded-xl border-white-10 bg-gunMetal/40 shadow-tab laptop:rounded-none laptop:rounded-b-2xl laptop:border'
         >
-            <HeadlessTab.List className='h-16 justify-start border-b border-white-10 p-3'>
+            <HeadlessTab.List className='justify-start border-white-10 p-3 laptop:h-16 laptop:border-b'>
                 <div className='flex gap-3'>
                     {tabTitles.map((title, index) => {
                         return (

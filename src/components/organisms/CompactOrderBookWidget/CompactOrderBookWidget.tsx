@@ -3,6 +3,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import classNames from 'classnames';
 import { Fragment, useEffect, useMemo, useReducer, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import OrderbookToggleIcon from 'src/assets/icons/orderbook-toggle.svg';
 import WarningCircleIcon from 'src/assets/icons/warning-circle.svg';
 import { ColorBar, DropdownSelector, Spinner } from 'src/components/atoms';
 import { CoreTable, InfoToolTip, TableHeader } from 'src/components/molecules';
@@ -187,7 +188,7 @@ export const CompactOrderBookWidget = ({
     isCurrencyDelisted: boolean;
     isLoadingMap?: Record<OrderSide, boolean>;
 }) => {
-    const [state] = useReducer(reducer, initialState);
+    const [state, dispatch] = useReducer(reducer, initialState);
     useEffect(() => {
         onFilterChange?.(state);
     }, [onFilterChange, state]);
@@ -315,7 +316,7 @@ export const CompactOrderBookWidget = ({
     };
 
     return (
-        <div className='flex w-full flex-col justify-start gap-y-3 border border-white-10 bg-cardBackground/60 px-[0.625rem] shadow-tab laptop:hidden'>
+        <div className='flex w-full flex-col justify-start gap-y-3 laptop:hidden'>
             {isCurrencyDelisted && (
                 <div className='-mx-3 flex h-9 flex-row items-center gap-3 bg-black-20 px-4'>
                     <WarningCircleIcon className='h-4 w-4' />
@@ -356,7 +357,7 @@ export const CompactOrderBookWidget = ({
                             />
                         </div>
                         {state.showTicker && (
-                            <div className='-mx-3 flex h-14 flex-row items-center justify-between bg-black-20 px-4 text-[1.125rem]'>
+                            <div className='-mx-3 flex h-14 flex-row items-center justify-between px-4 text-[1.125rem]'>
                                 <span
                                     className={classNames('font-semibold', {
                                         'flex flex-row items-center gap-2 text-white':
@@ -416,8 +417,8 @@ export const CompactOrderBookWidget = ({
                     </>
                 )}
             </div>
-            <div className='flex items-center justify-end'>
-                <div className='w-20'>
+            <div className='flex items-center justify-between gap-2'>
+                <div className='w-full'>
                     <DropdownSelector
                         optionList={AGGREGATION_OPTIONS}
                         onChange={v =>
@@ -425,33 +426,34 @@ export const CompactOrderBookWidget = ({
                                 Number(v) as AggregationFactorType
                             )
                         }
-                        variant='fullWidth'
+                        variant='outlined'
                     />
                 </div>
+                <OrderBookIcon
+                    Icon={<OrderbookToggleIcon className='h-4 w-4' />}
+                    name='Orderbook'
+                    onClick={() => dispatch('showOnlyLend')}
+                />
             </div>
         </div>
     );
 };
 
-// const OrderBookIcon = ({
-//     Icon,
-//     name,
-//     active,
-//     onClick,
-// }: {
-//     Icon: React.ReactNode;
-//     name: string;
-//     active: boolean;
-//     onClick: () => void;
-// }) => (
-//     <button
-//         key={name}
-//         aria-label={name}
-//         className={classNames('px-[10px] py-[11px] hover:bg-universeBlue', {
-//             'bg-universeBlue': active,
-//         })}
-//         onClick={onClick}
-//     >
-//         {Icon}
-//     </button>
-// );
+const OrderBookIcon = ({
+    Icon,
+    name,
+    onClick,
+}: {
+    Icon: React.ReactNode;
+    name: string;
+    onClick: () => void;
+}) => (
+    <button
+        key={name}
+        aria-label={name}
+        className='flex aspect-square h-8 w-8 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg border border-[#64748B] text-white'
+        onClick={onClick}
+    >
+        {Icon}
+    </button>
+);

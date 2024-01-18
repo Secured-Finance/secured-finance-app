@@ -4,7 +4,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { useMemo, useState } from 'react';
 import { CoreTable, TableActionMenu } from 'src/components/molecules';
 import { RemoveOrderDialog } from 'src/components/organisms';
-import { Order } from 'src/hooks';
+import { Order, useBreakpoint } from 'src/hooks';
 import { hexToCurrencySymbol } from 'src/utils';
 import { Amount, Maturity } from 'src/utils/entities';
 import {
@@ -133,6 +133,7 @@ export const OrderTable = ({
         ],
         [variant]
     );
+    const isMobile = useBreakpoint('tablet');
 
     return (
         <>
@@ -151,6 +152,7 @@ export const OrderTable = ({
                         getMoreData: () => {},
                         totalData: data.length,
                     },
+                    showHeaders: !isMobile,
                 }}
             />
             {removeOrderDialogData && (

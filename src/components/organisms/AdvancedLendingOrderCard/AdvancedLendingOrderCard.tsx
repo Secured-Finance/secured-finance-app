@@ -313,7 +313,7 @@ export function AdvancedLendingOrderCard({
                     {/* contains lend borrow elements, + yield curve and orderbook */}
                     <div className='grid grid-cols-12 gap-5'>
                         {/* lend borrow elements */}
-                        <div className='col-span-7 flex flex-col gap-6 tablet:justify-start laptop:col-span-12'>
+                        <div className='col-span-7 flex flex-col gap-6 tablet:col-span-12 tablet:justify-start'>
                             {!isItayose && (
                                 <RadioGroupSelector
                                     options={OrderTypeOptions}
@@ -434,9 +434,9 @@ export function AdvancedLendingOrderCard({
                                 )}
                             />
                         </div>
-                        <div className='col-span-5 block laptop:hidden'>
+                        <div className='col-span-5 block tablet:hidden'>
                             <div
-                                className='mb-3 flex max-w-[100px] flex-col'
+                                className='mb-3 flex w-[72%] flex-col'
                                 onClick={() =>
                                     setIsShowYieldCurveDialog(
                                         !isShowYieldCurveDialog
@@ -450,6 +450,7 @@ export function AdvancedLendingOrderCard({
                                 role='button'
                                 tabIndex={0}
                             >
+                                {/* mobile yield curve here */}
                                 <LineChartTab
                                     rates={rates}
                                     maturityList={maturityList.map(item => ({

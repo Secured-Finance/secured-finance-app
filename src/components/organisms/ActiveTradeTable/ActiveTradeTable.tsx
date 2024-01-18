@@ -58,6 +58,7 @@ export const ActiveTradeTable = ({
     const router = useRouter();
     const dispatch = useDispatch();
     const isTablet = useBreakpoint('laptop');
+    const isMobile = useBreakpoint('tablet');
 
     const handleCurrencyChange = useCallback(
         (v: CurrencySymbol) => {
@@ -330,6 +331,7 @@ export const ActiveTradeTable = ({
                         getMoreData: () => {},
                         totalData: data.length,
                     },
+                    showHeaders: !isMobile,
                 }}
             />
             {unwindDialogData && (

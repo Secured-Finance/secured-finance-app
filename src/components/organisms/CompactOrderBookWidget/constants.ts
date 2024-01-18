@@ -9,4 +9,4 @@ export const AGGREGATION_OPTIONS: (Option<string> & { multiplier: number })[] =
         { label: '10', value: '1000', multiplier: 1000 },
     ];
 export const ORDERBOOK_DOUBLE_MAX_LINES = 6;
-export const ORDERBOOK_SINGLE_MAX_LINES = 26;
+export const ORDERBOOK_SINGLE_MAX_LINES = 12;

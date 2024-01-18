@@ -18,6 +18,31 @@ export type Option<T = string> = {
     chip?: ReactNode;
 };
 
+// TODO: allow this outlined button to accept className as prop
+const OutlinedButton = ({
+    selectedOption,
+    open,
+}: {
+    selectedOption: Option<string> | undefined;
+    open: boolean;
+}) => {
+    return (
+        <div className='flex h-8 w-full flex-row items-center justify-between space-x-2 rounded-lg border border-[#64748B] bg-transparent px-2 tablet:w-36'>
+            {selectedOption?.iconSVG ? (
+                <span>
+                    <selectedOption.iconSVG className='h-6 w-6' />
+                </span>
+            ) : null}
+            <span className='typography-caption w-16 text-left text-xs text-white'>
+                {selectedOption?.label}
+            </span>
+            <span data-cy={`asset-expand-${selectedOption?.label}`}>
+                <ExpandIndicator expanded={open} />
+            </span>
+        </div>
+    );
+};
+
 const DefaultButton = ({
     selectedOption,
     open,
@@ -112,7 +137,8 @@ export const DropdownSelector = <T extends string = string>({
         | 'roundedExpandButton'
         | 'noLabel'
         | 'fullWidth'
-        | 'fixedWidth';
+        | 'fixedWidth'
+        | 'outlined';
 }) => {
     const [selectedOptionValue, setSelectedOptionValue] = useState<T>(
         selected.value
@@ -176,6 +202,13 @@ export const DropdownSelector = <T extends string = string>({
                                             selectedOption={selectedOption}
                                         />
                                     );
+                                case 'outlined':
+                                    return (
+                                        <OutlinedButton
+                                            open={open}
+                                            selectedOption={selectedOption}
+                                        />
+                                    );
                             }
                         }}
                     </Menu.Button>
@@ -185,8 +218,11 @@ export const DropdownSelector = <T extends string = string>({
                             {
                                 'right-0': variant === 'noLabel',
                                 'max-h-[196px] w-52 tablet:max-h-60':
-                                    variant !== 'fullWidth',
-                                'w-full': variant === 'fullWidth',
+                                    variant !== 'fullWidth' &&
+                                    variant !== 'outlined',
+                                'w-full':
+                                    variant === 'fullWidth' ||
+                                    variant === 'outlined',
                                 'w-72': variant === 'fixedWidth',
                             }
                         )}
