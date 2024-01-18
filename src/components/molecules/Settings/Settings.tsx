@@ -6,23 +6,18 @@ import Gear from 'src/assets/icons/gear.svg';
 import { Toggle } from 'src/components/atoms';
 import { updateTestnetEnabled } from 'src/store/blockchain';
 
-export const testnetsEnabledId = 'testnetsEnabled';
-
 export const Settings = ({ isProduction }: { isProduction: boolean }) => {
     const dispatch = useDispatch();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const testnetsEnabledLocalstorage =
-        localStorage.getItem(testnetsEnabledId) === 'true' || false;
-    const [testnetsEnabled, setTestnetsMode] = useState(!isProduction);
+    const [testnetsEnabled, setTestnetsEnabled] = useState(!isProduction);
+
     useEffect(() => {
         dispatch(updateTestnetEnabled(!isProduction));
     }, [dispatch, isProduction]);
 
     const handleChange = useCallback(() => {
         const newState = !testnetsEnabled;
-        setTestnetsMode(newState);
+        setTestnetsEnabled(newState);
         dispatch(updateTestnetEnabled(newState));
-        localStorage.setItem(testnetsEnabledId, newState ? 'true' : 'false');
     }, [dispatch, testnetsEnabled]);
 
     return (
