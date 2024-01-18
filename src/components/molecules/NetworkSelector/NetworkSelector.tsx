@@ -72,8 +72,8 @@ const generateChainList = () => {
 };
 
 export const NetworkSelector = ({ networkName }: { networkName: string }) => {
-    const { testnetEnabled } = useSelector(
-        (state: RootState) => state.blockchain
+    const testnetEnabled = useSelector(
+        (state: RootState) => state.blockchain.testnetEnabled
     );
     const availableChains = useMemo(() => generateChainList(), []);
     const chainList = testnetEnabled
@@ -82,7 +82,7 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
 
     const { switchNetwork } = useSwitchNetwork();
     const selectedNetwork = chainList.find(
-        d => Networks[d.chainId] === networkName
+        d => Networks[d.chainId].toLowerCase() === networkName.toLowerCase()
     );
 
     const handleNetworkChange = useCallback(
@@ -134,60 +134,28 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
                     >
                         <Popover.Panel className='absolute left-0 z-10 mt-3 w-64 origin-top-right tablet:right-0'>
                             <div className='relative flex h-fit flex-col overflow-hidden rounded-xl bg-neutral-900 py-[10px]'>
-                                <div className='flex items-center justify-between border-b border-neutral-700 py-[11px] pl-5 pr-4'>
-                                    <div className='flex flex-row items-center gap-2'>
-                                        {selectedNetwork ? (
-                                            <>
-                                                <div>
-                                                    {selectedNetwork.icon}
-                                                </div>
-                                                <span className='typography-button-2 leading-[22px] text-neutral-50'>
-                                                    {selectedNetwork.chainName}
-                                                </span>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <span>
-                                                    <ExclamationCircleIcon className='h-5 w-5' />
-                                                </span>
-                                                <span className='typography-button-2 leading-[22px] text-neutral-50'>
-                                                    Network
-                                                </span>
-                                            </>
-                                        )}
-                                    </div>
-                                    <span>
-                                        <ExpandIndicator
-                                            expanded={open}
-                                            variant='solid'
-                                        />
-                                    </span>
-                                </div>
-                                <div className='pt-[6px]'>
-                                    {chainList.map((link, index) => {
-                                        return (
-                                            <div key={index} role='menuitem'>
-                                                <div className='px-2'>
-                                                    <MenuItem
-                                                        text={link.chainName}
-                                                        icon={link.icon}
-                                                        onClick={() =>
-                                                            handleNetworkChange(
-                                                                index
-                                                            )
-                                                        }
-                                                    />
-                                                </div>
-                                                {index !==
-                                                    chainList.length - 1 && (
-                                                    <div className='py-[6px]'>
-                                                        <Separator />
-                                                    </div>
-                                                )}
+                                {chainList.map((link, index) => {
+                                    return (
+                                        <div key={index} role='menuitem'>
+                                            <div className='px-2'>
+                                                <MenuItem
+                                                    text={link.chainName}
+                                                    icon={link.icon}
+                                                    onClick={() =>
+                                                        handleNetworkChange(
+                                                            index
+                                                        )
+                                                    }
+                                                />
                                             </div>
-                                        );
-                                    })}
-                                </div>
+                                            {index !== chainList.length - 1 && (
+                                                <div className='py-[6px]'>
+                                                    <Separator />
+                                                </div>
+                                            )}
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </Popover.Panel>
                     </Transition>
