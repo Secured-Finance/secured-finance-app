@@ -46,6 +46,7 @@ const collateralBook0: CollateralBook = {
         [CurrencySymbol.USDC]: BigInt(100000),
         [CurrencySymbol.ETH]: BigInt(100000),
     },
+    totalPresentValue: 0,
 };
 
 beforeEach(() => {
