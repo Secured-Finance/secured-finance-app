@@ -272,7 +272,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(await screen.findByText('0xB98b...Fd6D')).toBeInTheDocument();
         expect(input).toHaveValue('500');
         fireEvent.change(slider, { target: { value: 100 } });
-        expect(input).toHaveValue('10,000');
+        await waitFor(() => expect(input).toHaveValue('10,000'));
         fireEvent.change(slider, { target: { value: 1 } });
         expect(input).toHaveValue('100');
 

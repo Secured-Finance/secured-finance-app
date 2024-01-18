@@ -2,7 +2,12 @@ import { fromBytes32 } from '@secured-finance/sf-graph-client';
 import { useQuery } from '@tanstack/react-query';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
-import { CurrencySymbol, currencyMap, isPastDate } from 'src/utils';
+import {
+    CurrencySymbol,
+    createCurrencyMap,
+    currencyMap,
+    isPastDate,
+} from 'src/utils';
 import { useCurrencies } from '../useCurrencies';
 
 export type LendingMarket = {
@@ -11,7 +16,7 @@ export type LendingMarket = {
     isActive: boolean;
     utcOpeningDate: number;
     marketUnitPrice: number;
-    preOpenDate: number;
+    preOpeningDate: number;
     openingUnitPrice: number;
     isReady: boolean;
     isOpened: boolean;
@@ -32,7 +37,7 @@ const baseContract: { 0: LendingMarket } = {
         isActive: false,
         utcOpeningDate: 0,
         marketUnitPrice: 0,
-        preOpenDate: 0,
+        preOpeningDate: 0,
         openingUnitPrice: 0,
         isReady: false,
         isOpened: false,
@@ -47,23 +52,9 @@ const baseContract: { 0: LendingMarket } = {
     },
 };
 
-export const baseContracts: AvailableContracts = {
-    [CurrencySymbol.ETH]: baseContract,
-    [CurrencySymbol.WFIL]: baseContract,
-    [CurrencySymbol.USDC]: baseContract,
-    [CurrencySymbol.WBTC]: baseContract,
-    [CurrencySymbol.aUSDC]: baseContract,
-    [CurrencySymbol.axlFIL]: baseContract,
-};
-
-const emptyContracts: AvailableContracts = {
-    [CurrencySymbol.ETH]: {},
-    [CurrencySymbol.WFIL]: {},
-    [CurrencySymbol.USDC]: {},
-    [CurrencySymbol.WBTC]: {},
-    [CurrencySymbol.aUSDC]: {},
-    [CurrencySymbol.axlFIL]: {},
-};
+export const baseContracts: AvailableContracts =
+    createCurrencyMap(baseContract);
+export const emptyContracts: AvailableContracts = createCurrencyMap({});
 
 export type ContractMap = Record<number, LendingMarket>;
 export type AvailableContracts = Record<CurrencySymbol, ContractMap>;
@@ -107,7 +98,7 @@ export const useLendingMarkets = () => {
                         maxLendUnitPrice,
                         ccy,
                         currentMinDebtUnitPrice,
-                        preOpenDate,
+                        preOpeningDate,
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     } = market as any;
                     const currency = fromBytes32(ccy) as CurrencySymbol;
@@ -131,7 +122,7 @@ export const useLendingMarkets = () => {
                             isActive: isPastDate(Number(openingDate)),
                             marketUnitPrice: Number(marketUnitPrice),
                             openingUnitPrice: Number(openingUnitPrice),
-                            preOpenDate: Number(preOpenDate),
+                            preOpeningDate: Number(preOpeningDate),
                             isReady,
                             isOpened,
                             isMatured,

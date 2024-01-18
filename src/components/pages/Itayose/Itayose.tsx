@@ -48,6 +48,7 @@ import { RootState } from 'src/store/types';
 import { CurrencySymbol, ZERO_BI, toOptions, usdFormat } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
+import * as dayjs from 'dayjs';
 
 const Toolbar = ({
     selectedAsset,
@@ -222,21 +223,32 @@ export const Itayose = () => {
         [OrderSide.LEND]: isLoadingLend && lendFetchStatus !== 'idle',
     };
 
+    const preOrderDays = useMemo(() => {
+        const contract = lendingContracts[selectedTerm.value.toNumber()];
+        const openingDate = contract?.utcOpeningDate;
+        const preOpeningDate = contract?.preOpeningDate;
+        return openingDate && preOpeningDate
+            ? dayjs.unix(openingDate).diff(preOpeningDate * 1000, 'days')
+            : undefined;
+    }, [lendingContracts, selectedTerm.value]);
+
     return (
         <Page title='Pre-Open Order Book'>
-            <Alert>
-                <p className='typography-caption text-white'>
-                    Secure your market position by placing limit orders up to 14
-                    days before trading begins with no fees. Opt for either a
-                    lend or borrow during pre-open, not both. No new pre-orders
-                    will be accepted within 1 hour prior to the start of
-                    trading. Learn more at&nbsp;
-                    <TextLink
-                        href='https://docs.secured.finance/platform-guide/unique-features/fair-price-discovery/'
-                        text='Secured Finance Docs'
-                    />
-                </p>
-            </Alert>
+            {preOrderDays && (
+                <Alert>
+                    <p className='typography-caption text-white'>
+                        Secure your market position by placing limit orders up
+                        to {preOrderDays} days before trading begins with no
+                        fees. Opt for either a lend or borrow during pre-open,
+                        not both. No new pre-orders will be accepted within 1
+                        hour prior to the start of trading. Learn more at&nbsp;
+                        <TextLink
+                            href='https://docs.secured.finance/platform-guide/unique-features/fair-price-discovery/'
+                            text='Secured Finance Docs'
+                        />
+                    </p>
+                </Alert>
+            )}
             <ThreeColumnsWithTopBar
                 topBar={
                     <Toolbar

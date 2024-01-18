@@ -67,7 +67,7 @@ export const CollateralSimulationSection = ({
         0
     );
 
-    const coverage = Number(orderEstimationInfo?.coverage) ?? 0;
+    const coverage = Number(orderEstimationInfo?.coverage ?? 0);
 
     const remainingToBorrow = Math.max(
         0,

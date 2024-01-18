@@ -3,4 +3,5 @@ export type Blockchain = {
     chainId: number;
     chainError: boolean;
     lastActionTimestamp: number;
+    testnetEnabled: boolean;
 };
