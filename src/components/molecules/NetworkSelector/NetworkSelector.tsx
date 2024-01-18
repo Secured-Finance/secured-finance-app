@@ -1,70 +1,23 @@
 import { Popover, Transition } from '@headlessui/react';
 import classNames from 'classnames';
-import { Fragment, useCallback } from 'react';
+import { Fragment, useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import Arbitrum from 'src/assets/icons/arbitrum-network.svg';
-import Avalanche from 'src/assets/icons/avalanche-network.svg';
-import Ethereum from 'src/assets/icons/ethereum-network.svg';
 import ExclamationCircleIcon from 'src/assets/icons/exclamation-circle.svg';
 import { ExpandIndicator, Separator } from 'src/components/atoms';
 import { Networks } from 'src/store/blockchain';
 import { RootState } from 'src/store/types';
-import { formatDataCy } from 'src/utils';
+import {
+    SupportedChainsList,
+    formatDataCy,
+    getSupportedChainIds,
+} from 'src/utils';
 import { useSwitchNetwork } from 'wagmi';
 
-type ChainInformation = {
-    chain: string;
+type ChainInfo = {
+    chainName: string;
     chainId: number;
     icon: React.ReactNode;
 };
-
-const MainnetChainsList: ChainInformation[] = [
-    {
-        chain: 'Ethereum',
-        chainId: 1,
-        icon: (
-            <Ethereum className='h-4 w-4 rounded-full tablet:h-5 tablet:w-5' />
-        ),
-    },
-    {
-        chain: 'Arbitrum',
-        chainId: 42161,
-        icon: (
-            <Arbitrum className='h-4 w-4 rounded-full tablet:h-5 tablet:w-5' />
-        ),
-    },
-    {
-        chain: 'Avalanche',
-        chainId: 43114,
-        icon: (
-            <Avalanche className='h-4 w-4 rounded-full tablet:h-5 tablet:w-5' />
-        ),
-    },
-];
-
-const TestnetChainsList: ChainInformation[] = [
-    {
-        chain: 'Sepolia',
-        chainId: 11155111,
-        icon: (
-            <Ethereum className='h-4 w-4 rounded-full tablet:h-5 tablet:w-5' />
-        ),
-    },
-    {
-        chain: 'Arbitrum Sepolia',
-        chainId: 421614,
-        icon: (
-            <Arbitrum className='h-4 w-4 rounded-full tablet:h-5 tablet:w-5' />
-        ),
-    },
-    {
-        chain: 'Avalanche Fuji',
-        chainId: 43113,
-        icon: (
-            <Avalanche className='h-4 w-4 rounded-full tablet:h-5 tablet:w-5' />
-        ),
-    },
-];
 
 const MenuItem = ({
     text,
@@ -85,7 +38,7 @@ const MenuItem = ({
         >
             <div className='flex w-full cursor-pointer items-center gap-2'>
                 <div className='h-5 w-5'>{icon}</div>
-                <p className='typography-button-2 leading-[22px] text-neutral-50'>
+                <p className='typography-button-2 capitalize leading-[22px] text-neutral-50'>
                     {text}
                 </p>
             </div>
@@ -93,11 +46,40 @@ const MenuItem = ({
     );
 };
 
+const generateChainList = () => {
+    const supportedChainIds = getSupportedChainIds();
+    const testnetChainsList: ChainInfo[] = [];
+    const mainnetChainsList: ChainInfo[] = [];
+    SupportedChainsList.forEach(c => {
+        if (supportedChainIds.includes(c.chain.id)) {
+            const chainInfo: ChainInfo = {
+                chainName: c.chain.name,
+                chainId: c.chain.id,
+                icon: c.icon,
+            };
+            if (c.chain.testnet) {
+                testnetChainsList.push(chainInfo);
+            } else {
+                mainnetChainsList.push(chainInfo);
+            }
+        }
+    });
+
+    return {
+        testnetChainsList,
+        mainnetChainsList,
+    };
+};
+
 export const NetworkSelector = ({ networkName }: { networkName: string }) => {
     const { testnetEnabled } = useSelector(
         (state: RootState) => state.blockchain
     );
-    const chainList = testnetEnabled ? TestnetChainsList : MainnetChainsList;
+    const availableChains = useMemo(() => generateChainList(), []);
+    const chainList = testnetEnabled
+        ? availableChains.testnetChainsList
+        : availableChains.mainnetChainsList;
+
     const { switchNetwork } = useSwitchNetwork();
     const selectedNetwork = chainList.find(
         d => Networks[d.chainId] === networkName
@@ -160,7 +142,7 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
                                                     {selectedNetwork.icon}
                                                 </div>
                                                 <span className='typography-button-2 leading-[22px] text-neutral-50'>
-                                                    {selectedNetwork.chain}
+                                                    {selectedNetwork.chainName}
                                                 </span>
                                             </>
                                         ) : (
@@ -187,7 +169,7 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
                                             <div key={index} role='menuitem'>
                                                 <div className='px-2'>
                                                     <MenuItem
-                                                        text={link.chain}
+                                                        text={link.chainName}
                                                         icon={link.icon}
                                                         onClick={() =>
                                                             handleNetworkChange(
