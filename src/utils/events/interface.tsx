@@ -15,8 +15,15 @@ export enum ButtonEvents {
     PLACE_ORDER = 'Place Order',
     ORDER_TYPE = 'Order Type',
     ORDER_SIDE = 'Order Side',
-    CURRENCY_CHANGE = 'Switch Currency',
+    CURRENCY_CHANGE = 'Currency Change',
     TERM_CHANGE = 'Term Change',
+}
+
+export enum ButtonProperties {
+    ORDER_SIDE = 'Order Side',
+    ORDER_TYPE = 'Order Type',
+    CURRENCY = 'Currency',
+    TERM = 'Term',
 }
 
 export enum CollateralEvents {

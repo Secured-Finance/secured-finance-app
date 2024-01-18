@@ -33,6 +33,7 @@ import { RootState } from 'src/store/types';
 import { MaturityOptionList, OrderSideMap } from 'src/types';
 import {
     ButtonEvents,
+    ButtonProperties,
     CurrencySymbol,
     ZERO_BI,
     amountFormatterFromBase,
@@ -44,6 +45,7 @@ import {
     toOptions,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
+import { trackButtonEvent } from 'src/utils/events';
 import { useAccount } from 'wagmi';
 
 export const LendingCard = ({
@@ -167,7 +169,11 @@ export const LendingCard = ({
                         )
                     );
                     dispatch(setSourceAccount(WalletSource.METAMASK));
-                    track(ButtonEvents.ORDER_SIDE);
+                    trackButtonEvent(
+                        ButtonEvents.ORDER_SIDE,
+                        ButtonProperties.ORDER_SIDE,
+                        option
+                    );
                 }}
                 variant='NavTab'
             />
@@ -195,7 +201,11 @@ export const LendingCard = ({
                             initialValue={amountInput}
                             onAssetChange={v => {
                                 handleCurrencyChange(v);
-                                track(ButtonEvents.CURRENCY_CHANGE);
+                                trackButtonEvent(
+                                    ButtonEvents.CURRENCY_CHANGE,
+                                    ButtonProperties.CURRENCY,
+                                    v
+                                );
                             }}
                         />
                         {side === OrderSide.LEND && (

@@ -32,7 +32,9 @@ describe('Advanced Lending Component', () => {
         expect(store.getState().landingOrderForm.amount).toEqual('1');
         fireEvent.click(screen.getByRole('button', { name: 'WFIL' }));
         fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
-        expect(track).toHaveBeenCalledWith(ButtonEvents.CURRENCY_CHANGE);
+        expect(track).toHaveBeenCalledWith(ButtonEvents.CURRENCY_CHANGE, {
+            Currency: 'USDC',
+        });
         await waitFor(() => {
             expect(store.getState().landingOrderForm.amount).toEqual('1');
             expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
@@ -56,7 +58,9 @@ describe('Advanced Lending Component', () => {
         expect(store.getState().landingOrderForm.amount).toEqual('1');
         fireEvent.click(screen.getByRole('button', { name: 'DEC22' }));
         fireEvent.click(screen.getByText('MAR23'));
-        expect(track).toHaveBeenCalledWith(ButtonEvents.TERM_CHANGE);
+        expect(track).toHaveBeenCalledWith(ButtonEvents.TERM_CHANGE, {
+            Term: '1669852800',
+        });
         await waitFor(() => {
             expect(store.getState().landingOrderForm.amount).toEqual('1');
             expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(

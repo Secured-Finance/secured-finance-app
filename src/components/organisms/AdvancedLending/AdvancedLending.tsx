@@ -1,4 +1,3 @@
-import { track } from '@amplitude/analytics-browser';
 import { OrderSide } from '@secured-finance/sf-client';
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
@@ -44,6 +43,7 @@ import { RootState } from 'src/store/types';
 import { MaturityOptionList, TransactionList } from 'src/types';
 import {
     ButtonEvents,
+    ButtonProperties,
     CurrencySymbol,
     ZERO_BI,
     checkOrderIsFilled,
@@ -57,6 +57,7 @@ import {
     usdFormat,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
+import { trackButtonEvent } from 'src/utils/events';
 import { useAccount } from 'wagmi';
 
 const useTradeHistoryDetails = (
@@ -259,7 +260,11 @@ export const AdvancedLending = ({
         (v: CurrencySymbol) => {
             dispatch(setCurrency(v));
             dispatch(resetUnitPrice());
-            track(ButtonEvents.CURRENCY_CHANGE);
+            trackButtonEvent(
+                ButtonEvents.CURRENCY_CHANGE,
+                ButtonProperties.CURRENCY,
+                v
+            );
         },
         [dispatch]
     );
@@ -268,7 +273,11 @@ export const AdvancedLending = ({
         (v: string) => {
             dispatch(setMaturity(Number(v)));
             dispatch(resetUnitPrice());
-            track(ButtonEvents.TERM_CHANGE);
+            trackButtonEvent(
+                ButtonEvents.TERM_CHANGE,
+                ButtonProperties.TERM,
+                v
+            );
         },
         [dispatch]
     );

@@ -1,3 +1,4 @@
+import { track } from '@amplitude/analytics-browser';
 import { useCallback, useReducer, useState } from 'react';
 import { CollateralSelector, Spinner } from 'src/components/atoms';
 import {
@@ -21,7 +22,11 @@ import {
     amountFormatterToBase,
     formatAmount,
 } from 'src/utils';
-import { CollateralEvents, trackCollateralEvent } from 'src/utils/events';
+import {
+    ButtonEvents,
+    CollateralEvents,
+    trackCollateralEvent,
+} from 'src/utils/events';
 import { useAccount } from 'wagmi';
 
 enum Step {
@@ -143,6 +148,7 @@ export const WithdrawCollateral = ({
         try {
             const tx = await onWithdrawCollateral();
             const transactionStatus = await handleContractTransaction(tx);
+            track(ButtonEvents.WITHDRAW_COLLATERAL_BUTTON);
             if (!transactionStatus) {
                 dispatch({ type: 'error' });
             } else {
