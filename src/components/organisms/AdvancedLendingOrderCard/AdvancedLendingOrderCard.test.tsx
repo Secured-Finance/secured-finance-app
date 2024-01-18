@@ -737,12 +737,16 @@ describe('AdvancedLendingOrderCard Component', () => {
     });
 
     describe('Amplitude', () => {
-        it('should track ORDER_SIDE and ORDER_TYPE events when changing order side or order type', () => {
-            render(<Default marketPrice={9600} />, { preloadedState });
+        it('should track ORDER_SIDE and ORDER_TYPE events when changing order side or order type', async () => {
+            render(<Default />);
+            fireEvent.click(screen.getByText('Limit'));
+            expect(track).toHaveBeenCalledWith(ButtonEvents.ORDER_TYPE, {
+                'Order Type': 'Limit',
+            });
             fireEvent.click(screen.getByText('Lend'));
-            expect(track).toHaveBeenCalledWith(ButtonEvents.ORDER_SIDE);
-            fireEvent.click(screen.getByText('Market'));
-            expect(track).toHaveBeenCalledWith(ButtonEvents.ORDER_TYPE);
+            expect(track).toHaveBeenCalledWith(ButtonEvents.ORDER_SIDE, {
+                'Order Side': 'Lend',
+            });
         });
     });
 });

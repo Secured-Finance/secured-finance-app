@@ -6,6 +6,8 @@ import {
 } from '@amplitude/analytics-browser';
 import { amountFormatterFromBase, CurrencySymbol } from '../currencyList';
 import {
+    ButtonEvents,
+    ButtonProperties,
     CollateralEvents,
     CollateralProperties,
     InterfaceEvents,
@@ -48,4 +50,12 @@ export function trackChainEvent(
     chain: string
 ) {
     track(event, { [InterfaceProperties.CHAIN]: chain });
+}
+
+export function trackButtonEvent(
+    event: ButtonEvents,
+    property: ButtonProperties,
+    value: string
+) {
+    track(event, { [property]: value });
 }
