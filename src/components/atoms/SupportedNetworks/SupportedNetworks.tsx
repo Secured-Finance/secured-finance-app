@@ -1,8 +1,8 @@
-import { getSupportedChainIds, supportedNetworks } from 'src/utils';
+import { getSupportedChainIds, getSupportedNetworks } from 'src/utils';
 
 export const SupportedNetworks = () => {
     const chainIds = getSupportedChainIds();
-    const networkNames = supportedNetworks
+    const networkNames = getSupportedNetworks()
         .filter(chain => chainIds.includes(chain.id))
         .map(chain => chain.name)
         .map(name => (name === 'Ethereum' ? 'Mainnet' : name));

@@ -5,7 +5,8 @@ type Networks =
     | 'sepolia'
     | 'arbitrum-one'
     | 'arbitrum-sepolia'
-    | 'avalanche-fuji';
+    | 'avalanche-fuji'
+    | 'avalanche-mainnet';
 
 export const Networks: Record<number, Networks> = {
     1: 'mainnet',
@@ -13,6 +14,7 @@ export const Networks: Record<number, Networks> = {
     42161: 'arbitrum-one',
     421614: 'arbitrum-sepolia',
     43113: 'avalanche-fuji',
+    43114: 'avalanche-mainnet',
 };
 
 export const selectLastUserActionTimestamp = (state: RootState) =>

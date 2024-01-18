@@ -126,6 +126,23 @@ export const currencyMap: Readonly<
         roundingDecimal: 0,
         longName: 'Wrapped Filecoin',
     },
+    [CurrencySymbol.axlFIL]: {
+        index: 5,
+        symbol: CurrencySymbol.axlFIL,
+        name: 'Axelar Wrapped FIL',
+        icon: FilIcon,
+        coinGeckoId: 'filecoin',
+        isCollateral: false,
+        toBaseUnit: (amount: number) =>
+            convertToBlockchainUnit(amount, AXLFIL.onChain()),
+        fromBaseUnit: (amount: bigint) =>
+            convertFromBlockchainUnit(amount, AXLFIL.onChain()),
+        toCurrency: () => AXLFIL.onChain(),
+        chartColor: tailwindConfig.theme.colors.chart.fil,
+        pillColor: tailwindConfig.theme.colors.pill.fil,
+        roundingDecimal: 0,
+        longName: 'Axelar Wrapped FIL',
+    },
     [CurrencySymbol.USDC]: {
         index: 6,
         symbol: CurrencySymbol.USDC,
@@ -159,23 +176,6 @@ export const currencyMap: Readonly<
         pillColor: tailwindConfig.theme.colors.pill.usdc,
         roundingDecimal: 0,
         longName: 'USD Coin',
-    },
-    [CurrencySymbol.axlFIL]: {
-        index: 5,
-        symbol: CurrencySymbol.axlFIL,
-        name: 'Axelar Wrapped FIL',
-        icon: FilIcon,
-        coinGeckoId: 'filecoin',
-        isCollateral: false,
-        toBaseUnit: (amount: number) =>
-            convertToBlockchainUnit(amount, AXLFIL.onChain()),
-        fromBaseUnit: (amount: bigint) =>
-            convertFromBlockchainUnit(amount, AXLFIL.onChain()),
-        toCurrency: () => AXLFIL.onChain(),
-        chartColor: tailwindConfig.theme.colors.chart.fil,
-        pillColor: tailwindConfig.theme.colors.pill.fil,
-        roundingDecimal: 0,
-        longName: 'Axelar Wrapped FIL',
     },
 };
 
