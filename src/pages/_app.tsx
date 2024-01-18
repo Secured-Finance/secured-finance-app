@@ -18,8 +18,8 @@ import { RootState } from 'src/store/types';
 import {
     getAmplitudeApiKey,
     getSupportedChainIds,
+    getSupportedNetworks,
     getWalletConnectId,
-    supportedNetworks,
 } from 'src/utils';
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
@@ -39,7 +39,9 @@ init(getAmplitudeApiKey(), undefined, {
 });
 
 const chainIds = getSupportedChainIds();
-const networks = supportedNetworks.filter(chain => chainIds.includes(chain.id));
+const networks = getSupportedNetworks().filter(chain =>
+    chainIds.includes(chain.id)
+);
 
 const { chains, publicClient } = configureChains(networks, [
     alchemyProvider({
