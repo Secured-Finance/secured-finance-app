@@ -3,6 +3,7 @@ import * as jest from 'jest-mock';
 import {
     CurrencySymbol,
     ZERO_BI,
+    createCurrencyMap,
     currencyMap,
     hexToCurrencySymbol,
     toCurrencySymbol,
@@ -79,6 +80,9 @@ export const mockUseSF = () => {
     const mockSecuredFinance = {
         config: {
             network: 'sepolia',
+            chain: {
+                id: 5,
+            },
         },
         placeOrder: jest.fn(),
         placePreOrder: jest.fn(),
@@ -453,28 +457,28 @@ export const mockUseSF = () => {
         executeEmergencySettlement: jest.fn(() => Promise.resolve('0x123')),
 
         getLastPrice: jest.fn((ccy: Currency) => {
-            const ccyMap = {
-                [CurrencySymbol.ETH]: BigInt('200034000000'),
-                [CurrencySymbol.WFIL]: BigInt('600000000'),
-                [CurrencySymbol.USDC]: BigInt('100000000'),
-                [CurrencySymbol.WBTC]: BigInt('5000000000000'),
-                [CurrencySymbol.aUSDC]: BigInt('100000000'),
-                [CurrencySymbol.axlFIL]: BigInt('600000000'),
-            };
+            const ccyMap = createCurrencyMap<bigint>(BigInt(ZERO_BI));
+            ccyMap.ETH = BigInt('200034000000');
+            ccyMap.WFIL = BigInt('600000000');
+            ccyMap.USDC = BigInt('100000000');
+            ccyMap.WBTC = BigInt('5000000000000');
+            ccyMap.aUSDC = BigInt('100000000');
+            ccyMap.axlFIL = BigInt('600000000');
+
             return Promise.resolve(
                 ccyMap[toCurrencySymbol(ccy.symbol) ?? CurrencySymbol.WFIL]
             );
         }),
 
         getDecimals: jest.fn((ccy: Currency) => {
-            const ccyMap = {
-                [CurrencySymbol.ETH]: 8,
-                [CurrencySymbol.WFIL]: 26,
-                [CurrencySymbol.USDC]: 8,
-                [CurrencySymbol.WBTC]: 8,
-                [CurrencySymbol.aUSDC]: 8,
-                [CurrencySymbol.axlFIL]: 26,
-            };
+            const ccyMap = createCurrencyMap<number>(0);
+            ccyMap.ETH = 8;
+            ccyMap.WFIL = 26;
+            ccyMap.USDC = 8;
+            ccyMap.WBTC = 8;
+            ccyMap.aUSDC = 8;
+            ccyMap.axlFIL = 26;
+
             return Promise.resolve(
                 ccyMap[toCurrencySymbol(ccy.symbol) ?? CurrencySymbol.WFIL]
             );
@@ -487,6 +491,10 @@ export const mockUseSF = () => {
                 lastBorrowUnitPrice: BigInt(9970),
                 totalOffsetAmount: BigInt(40000000),
             })
+        ),
+
+        getTotalPresentValueInBaseCurrency: jest.fn(() =>
+            Promise.resolve(BigInt(250000000000))
         ),
 
         tokenVault: {

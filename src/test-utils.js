@@ -5,6 +5,8 @@ import { render as rtlRender } from '@testing-library/react';
 import { renderHook as rtlRenderHook } from '@testing-library/react-hooks';
 import { Provider } from 'react-redux';
 import { rootReducers } from 'src/store';
+import { connector, publicClient } from 'src/stories/mocks/mockWallet';
+import { WagmiConfig, createConfig } from 'wagmi';
 import { initialStore } from './stories/mocks/mockStore';
 
 const defaultOptions = { defaultOptions: { queries: { retry: false } } };
@@ -77,7 +79,14 @@ function renderHook(
         return (
             <Provider store={store}>
                 <QueryClientProvider client={queryClient}>
-                    {children}
+                    <WagmiConfig
+                        config={createConfig({
+                            publicClient: publicClient,
+                            connectors: [connector],
+                        })}
+                    >
+                        {children}
+                    </WagmiConfig>
                 </QueryClientProvider>
             </Provider>
         );

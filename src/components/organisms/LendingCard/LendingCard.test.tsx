@@ -28,6 +28,10 @@ describe('LendingCard Component', () => {
         wallet: {
             address: '0x1',
         },
+        blockchain: {
+            chainId: 11155111,
+            chainError: false,
+        },
     };
 
     const selectEthereum = async () => {
@@ -65,7 +69,7 @@ describe('LendingCard Component', () => {
         await waitFor(() => {
             fireEvent.click(screen.getByTestId('place-order-button'));
         });
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(await screen.findByRole('dialog')).toBeInTheDocument();
         expect(screen.getByText('Confirm Borrow')).toBeInTheDocument();
         const button = screen.getByTestId('dialog-action-button');
         expect(button).toHaveTextContent('OK');

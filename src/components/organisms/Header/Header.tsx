@@ -3,22 +3,22 @@ import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import SFLogo from 'src/assets/img/logo.svg';
 import SFLogoSmall from 'src/assets/img/small-logo.svg';
+import { Button, NavTab, SupportedNetworks } from 'src/components/atoms';
 import {
-    Button,
-    HighlightChip,
-    NavTab,
-    SupportedNetworks,
-} from 'src/components/atoms';
-import { HamburgerMenu, MenuPopover } from 'src/components/molecules';
+    HamburgerMenu,
+    MenuPopover,
+    NetworkSelector,
+    Settings,
+} from 'src/components/molecules';
 import { WalletDialog, WalletPopover } from 'src/components/organisms';
-import { useIsGlobalItayose } from 'src/hooks';
+import { useBreakpoint, useIsGlobalItayose } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
-import { getEnvShort } from 'src/utils';
+import { getSupportedNetworks } from 'src/utils';
 import { AddressUtils } from 'src/utils/address';
-import { isChipVisibleForEnv, isProdEnv } from 'src/utils/displayUtils';
-import { mainnet, useAccount } from 'wagmi';
+import { isProdEnv } from 'src/utils/displayUtils';
+import { useAccount } from 'wagmi';
 
 const PRODUCTION_LINKS = [
     {
@@ -28,12 +28,12 @@ const PRODUCTION_LINKS = [
         dataCy: 'lending',
     },
     {
-        text: 'Market Dashboard',
+        text: 'Markets',
         link: '/dashboard',
         dataCy: 'terminal',
     },
     {
-        text: 'Portfolio Management',
+        text: 'Portfolio',
         link: '/portfolio',
         dataCy: 'history',
     },
@@ -65,7 +65,9 @@ const HeaderMessage = ({
                     <SupportedNetworks />
                 </div>
             );
-        } else if (chainId !== mainnet.id) {
+        } else if (
+            getSupportedNetworks().find(n => n.id === chainId)?.testnet
+        ) {
             return (
                 <div
                     className='typography-caption-2 w-full bg-horizonBlue p-[1px] text-center text-neutral-8'
@@ -81,6 +83,7 @@ const HeaderMessage = ({
 
 export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     const dispatch = useDispatch();
+    const isMobile = useBreakpoint('tablet');
     const { address, isConnected } = useAccount();
     const securedFinance = useSF();
     const chainError = useSelector(
@@ -89,20 +92,21 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     const currentChainId = useSelector(
         (state: RootState) => state.blockchain.chainId
     );
+    const isProduction = isProdEnv();
 
     const { data: isGlobalItayose } = useIsGlobalItayose();
 
-    if (isGlobalItayose) {
-        const landingPage = PRODUCTION_LINKS.find(
-            obj => obj.dataCy === 'lending'
-        );
-        if (landingPage) {
+    const landingPage = PRODUCTION_LINKS.find(obj => obj.dataCy === 'lending');
+
+    if (landingPage) {
+        if (isGlobalItayose) {
             landingPage.link = '/itayose';
+        } else {
+            landingPage.link = '/';
         }
     }
 
-    const envShort = getEnvShort();
-    const LINKS = isProdEnv() ? PRODUCTION_LINKS : DEV_LINKS;
+    const LINKS = isProduction ? PRODUCTION_LINKS : DEV_LINKS;
 
     return (
         <div className='relative'>
@@ -119,38 +123,46 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                             <SFLogoSmall className='inline h-7 w-7 tablet:hidden' />
                         </a>
                     </Link>
-                    {isChipVisibleForEnv() && (
-                        <HighlightChip text={envShort.toUpperCase()} />
+                    {showNavigation && (
+                        <div className='flex h-full flex-row tablet:pl-12'>
+                            {LINKS.map(link => (
+                                <div
+                                    key={link.text}
+                                    className='hidden h-full w-full laptop:inline'
+                                >
+                                    <ItemLink
+                                        text={link.text}
+                                        dataCy={link.dataCy}
+                                        link={link.link}
+                                        alternateLinks={link?.alternateLinks}
+                                    />
+                                </div>
+                            ))}
+                            <div className='hidden laptop:inline'>
+                                <MenuPopover />
+                            </div>
+                        </div>
                     )}
                 </div>
-                {showNavigation && (
-                    <>
-                        {LINKS.map(link => (
-                            <div
-                                key={link.text}
-                                className='hidden h-full w-full laptop:inline'
-                            >
-                                <ItemLink
-                                    text={link.text}
-                                    dataCy={link.dataCy}
-                                    link={link.link}
-                                    alternateLinks={link?.alternateLinks}
-                                />
-                            </div>
-                        ))}
-                        <div className='hidden laptop:inline'>
-                            <MenuPopover />
-                        </div>
-                    </>
-                )}
-                <div className='col-span-2 flex flex-row items-center justify-end gap-3 laptop:col-span-1'>
+                <div className='col-span-2 flex flex-row items-center justify-end gap-2 laptop:col-span-1'>
                     {isConnected && address ? (
-                        <WalletPopover
-                            wallet={AddressUtils.format(address, 6)}
-                            networkName={
-                                securedFinance?.config?.network ?? 'Unknown'
-                            }
-                        />
+                        <>
+                            <NetworkSelector
+                                networkName={
+                                    securedFinance?.config?.network ?? 'Unknown'
+                                }
+                            />
+                            <WalletPopover
+                                wallet={AddressUtils.format(
+                                    address,
+                                    isMobile ? 2 : 6
+                                )}
+                                networkName={
+                                    securedFinance?.config?.network ?? 'Unknown'
+                                }
+                            />
+                            <Settings isProduction={isProduction} />
+                        </>
                     ) : (
                         <Button
                             data-cy='wallet'

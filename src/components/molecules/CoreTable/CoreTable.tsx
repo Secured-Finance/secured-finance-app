@@ -10,7 +10,7 @@ import {
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-
+import { useBreakpoint } from 'src/hooks';
 export interface Pagination {
     getMoreData: () => void;
     totalData: number;
@@ -50,10 +50,12 @@ export const CoreTable = <T,>({
     data,
     columns,
     options = DEFAULT_OPTIONS,
+    CustomRowComponent,
 }: {
     data: Array<T>;
     columns: ColumnDef<T, any>[];
     options?: Partial<CoreTableOptions>;
+    CustomRowComponent?: React.ReactElement;
 }) => {
     const [sorting, setSorting] = useState<SortingState>([]);
     const coreTableOptions: CoreTableOptions = {
@@ -64,6 +66,7 @@ export const CoreTable = <T,>({
         !!coreTableOptions.pagination?.totalData &&
             coreTableOptions.pagination?.totalData > 0
     );
+    const isMobile = useBreakpoint('tablet');
 
     useEffect(() => {
         if (
@@ -182,44 +185,54 @@ export const CoreTable = <T,>({
                     ) : (
                         <tr
                             key={row.id}
-                            className={classNames('h-4 laptop:h-7', {
-                                'cursor-pointer': coreTableOptions.hoverRow?.(
-                                    row.id
-                                ),
-                                'hover:bg-black-30':
-                                    coreTableOptions.hoverRow?.(row.id),
-                                'border-b border-white-10':
-                                    coreTableOptions.border &&
-                                    rowIndex !==
-                                        table.getRowModel().rows.length - 1,
-                            })}
+                            className={classNames(
+                                'h-auto tablet:h-4 laptop:h-7',
+                                {
+                                    'cursor-pointer':
+                                        coreTableOptions.hoverRow?.(row.id),
+                                    'hover:bg-black-30':
+                                        coreTableOptions.hoverRow?.(row.id),
+                                    'border-b border-white-10':
+                                        coreTableOptions.border &&
+                                        rowIndex !==
+                                            table.getRowModel().rows.length - 1,
+                                }
+                            )}
                             onClick={() =>
                                 coreTableOptions.hoverRow?.(row.id) &&
                                 coreTableOptions.onLineClick?.(row.id)
                             }
                             data-testid={`${coreTableOptions.name}-row`}
                         >
-                            {row.getVisibleCells().map((cell, cellIndex) => (
-                                <td
-                                    key={cell.id}
-                                    className={classNames(
-                                        'min-w-fit whitespace-nowrap pr-1 text-center font-medium tablet:px-1',
-                                        {
-                                            'sticky left-0 z-10 bg-[#161E2E] after:absolute after:-right-4 after:-top-0 after:z-10 after:h-full after:w-5 after:bg-gradient-to-r after:from-black-40 after:to-transparent tablet:relative tablet:left-auto tablet:z-auto tablet:bg-transparent tablet:after:hidden':
-                                                coreTableOptions.responsive &&
-                                                cellIndex === 0 &&
-                                                coreTableOptions?.stickyFirstColumn,
-                                            'py-2': !coreTableOptions.compact,
-                                            'py-1': coreTableOptions.compact,
-                                        }
-                                    )}
-                                >
-                                    {flexRender(
-                                        cell.column.columnDef.cell,
-                                        cell.getContext()
-                                    )}
-                                </td>
-                            ))}
+                            {isMobile && CustomRowComponent ? (
+                                <>{CustomRowComponent}</>
+                            ) : (
+                                <>
+                                    {row
+                                        .getVisibleCells()
+                                        .map((cell, cellIndex) => (
+                                            <td
+                                                key={cell.id}
+                                                className={classNames(
+                                                    'min-w-fit whitespace-nowrap pr-1 text-center font-medium tablet:px-1',
+                                                    {
+                                                        'sticky left-0 z-10 bg-[#161E2E] after:absolute after:-right-4 after:-top-0 after:z-10 after:h-full after:w-5 after:bg-gradient-to-r after:from-black-40 after:to-transparent tablet:relative tablet:left-auto tablet:z-auto tablet:bg-transparent tablet:after:hidden':
+                                                            coreTableOptions.responsive &&
+                                                            cellIndex === 0 &&
+                                                            coreTableOptions?.stickyFirstColumn,
+                                                        'py-2': !coreTableOptions.compact,
+                                                        'py-1': coreTableOptions.compact,
+                                                    }
+                                                )}
+                                            >
+                                                {flexRender(
+                                                    cell.column.columnDef.cell,
+                                                    cell.getContext()
+                                                )}
+                                            </td>
+                                        ))}
+                                </>
+                            )}
                         </tr>
                     )
                 )}

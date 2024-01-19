@@ -3,6 +3,7 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { createColumnHelper } from '@tanstack/react-table';
 import { useMemo, useState } from 'react';
 import { CoreTable, TableActionMenu } from 'src/components/molecules';
+import CompactOrderInfo from 'src/components/molecules/CompactOrderInfo/CompactOrderInfo';
 import { RemoveOrderDialog } from 'src/components/organisms';
 import { Order, useBreakpoint } from 'src/hooks';
 import { hexToCurrencySymbol } from 'src/utils';
@@ -15,7 +16,7 @@ import {
     priceYieldColumnDefinition,
 } from 'src/utils/tableDefinitions';
 
-type OpenOrder = Order & { calculationDate?: number };
+export type OpenOrder = Order & { calculationDate?: number };
 
 const columnHelper = createColumnHelper<OpenOrder>();
 
@@ -154,6 +155,7 @@ export const OrderTable = ({
                     },
                     showHeaders: !isMobile,
                 }}
+                CustomRowComponent={<CompactOrderInfo data={data} />}
             />
             {removeOrderDialogData && (
                 <RemoveOrderDialog

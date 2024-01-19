@@ -1,7 +1,7 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { dec22Fixture, dec24Fixture } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { renderHook } from 'src/test-utils';
+import { renderHook, waitFor } from 'src/test-utils';
 import { CurrencySymbol } from 'src/utils';
 import { useIsUnderCollateralThreshold } from './useIsUnderCollateralThreshold';
 
@@ -14,17 +14,25 @@ describe('useIsUnderCollateralThreshold', () => {
             const { result, waitForNextUpdate } = renderHook(() =>
                 useIsUnderCollateralThreshold(undefined)
             );
-            await waitForNextUpdate({ timeout: 2000 });
-            expect(
-                result.current(CurrencySymbol.USDC, 1, 100, OrderSide.BORROW)
-            ).toBe(false);
+
+            await waitForNextUpdate();
+            await waitFor(() =>
+                expect(
+                    result.current(
+                        CurrencySymbol.USDC,
+                        1,
+                        100,
+                        OrderSide.BORROW
+                    )
+                ).toBe(false)
+            );
         });
 
         it('returns false if market is not defined', async () => {
             const { result, waitForNextUpdate } = renderHook(() =>
                 useIsUnderCollateralThreshold('0xff')
             );
-            await waitForNextUpdate({ timeout: 2000 });
+            await waitForNextUpdate();
             expect(
                 result.current(CurrencySymbol.USDC, 1, 100, OrderSide.BORROW)
             ).toBe(false);
@@ -36,24 +44,28 @@ describe('useIsUnderCollateralThreshold', () => {
             const { result, waitForNextUpdate } = renderHook(() =>
                 useIsUnderCollateralThreshold('0xff')
             );
-            await waitForNextUpdate({ timeout: 2000 });
-            expect(
-                result.current(
-                    CurrencySymbol.USDC,
-                    dec24Fixture.toNumber(),
-                    9800,
-                    OrderSide.LEND
-                )
-            ).toBe(false);
+            await waitForNextUpdate();
+            await waitFor(() =>
+                expect(
+                    result.current(
+                        CurrencySymbol.USDC,
+                        dec24Fixture.toNumber(),
+                        9800,
+                        OrderSide.LEND
+                    )
+                ).toBe(false)
+            );
 
-            expect(
-                result.current(
-                    CurrencySymbol.USDC,
-                    dec24Fixture.toNumber(),
-                    9200,
-                    OrderSide.LEND
-                )
-            ).toBe(false);
+            await waitFor(() =>
+                expect(
+                    result.current(
+                        CurrencySymbol.USDC,
+                        dec24Fixture.toNumber(),
+                        9200,
+                        OrderSide.LEND
+                    )
+                ).toBe(false)
+            );
         });
     });
 
@@ -62,32 +74,35 @@ describe('useIsUnderCollateralThreshold', () => {
             const { result, waitForNextUpdate } = renderHook(() =>
                 useIsUnderCollateralThreshold('0xff')
             );
-            await waitForNextUpdate({ timeout: 2000 });
+            await waitForNextUpdate();
 
-            expect(
-                result.current(
-                    CurrencySymbol.USDC,
-                    dec24Fixture.toNumber(),
-                    9800,
-                    OrderSide.BORROW
-                )
-            ).toBe(false);
+            await waitFor(() =>
+                expect(
+                    result.current(
+                        CurrencySymbol.USDC,
+                        dec24Fixture.toNumber(),
+                        9800,
+                        OrderSide.BORROW
+                    )
+                ).toBe(false)
+            );
         });
 
         it('returns true if the price is above the threshold', async () => {
             const { result, waitForNextUpdate } = renderHook(() =>
                 useIsUnderCollateralThreshold('0xff')
             );
-            await waitForNextUpdate({ timeout: 2000 });
-            await waitForNextUpdate({ timeout: 2000 });
-            expect(
-                result.current(
-                    CurrencySymbol.USDC,
-                    dec24Fixture.toNumber(),
-                    9200,
-                    OrderSide.BORROW
-                )
-            ).toBe(true);
+            await waitForNextUpdate();
+            await waitFor(() =>
+                expect(
+                    result.current(
+                        CurrencySymbol.USDC,
+                        dec24Fixture.toNumber(),
+                        9200,
+                        OrderSide.BORROW
+                    )
+                ).toBe(true)
+            );
         });
     });
 
@@ -96,34 +111,36 @@ describe('useIsUnderCollateralThreshold', () => {
             const { result, waitForNextUpdate } = renderHook(() =>
                 useIsUnderCollateralThreshold('0xff')
             );
-            await waitForNextUpdate({ timeout: 2000 });
-            await waitForNextUpdate({ timeout: 2000 });
+            await waitForNextUpdate();
 
-            expect(
-                result.current(
-                    CurrencySymbol.WFIL,
-                    dec22Fixture.toNumber(),
-                    9800,
-                    OrderSide.BORROW
-                )
-            ).toBe(false);
+            await waitFor(() =>
+                expect(
+                    result.current(
+                        CurrencySymbol.WFIL,
+                        dec22Fixture.toNumber(),
+                        9800,
+                        OrderSide.BORROW
+                    )
+                ).toBe(false)
+            );
         });
 
         it('returns false when price is lower than currentMinDebtUnitPrice', async () => {
             const { result, waitForNextUpdate } = renderHook(() =>
                 useIsUnderCollateralThreshold('0xff')
             );
-            await waitForNextUpdate({ timeout: 2000 });
-            await waitForNextUpdate({ timeout: 2000 });
+            await waitForNextUpdate();
 
-            expect(
-                result.current(
-                    CurrencySymbol.WFIL,
-                    dec22Fixture.toNumber(),
-                    9200,
-                    OrderSide.BORROW
-                )
-            ).toBe(true);
+            await waitFor(() =>
+                expect(
+                    result.current(
+                        CurrencySymbol.WFIL,
+                        dec22Fixture.toNumber(),
+                        9200,
+                        OrderSide.BORROW
+                    )
+                ).toBe(true)
+            );
         });
     });
 
@@ -133,17 +150,18 @@ describe('useIsUnderCollateralThreshold', () => {
                 useIsUnderCollateralThreshold('0xff')
             );
 
-            await waitForNextUpdate({ timeout: 2000 });
-            await waitForNextUpdate({ timeout: 2000 });
+            await waitForNextUpdate();
 
-            expect(
-                result.current(
-                    CurrencySymbol.USDC,
-                    dec22Fixture.toNumber(),
-                    9800,
-                    OrderSide.BORROW
-                )
-            ).toBe(false);
+            await waitFor(() =>
+                expect(
+                    result.current(
+                        CurrencySymbol.USDC,
+                        dec22Fixture.toNumber(),
+                        9800,
+                        OrderSide.BORROW
+                    )
+                ).toBe(false)
+            );
         });
 
         it('returns false when price is lower than currentMinDebtUnitPrice', async () => {
@@ -151,17 +169,17 @@ describe('useIsUnderCollateralThreshold', () => {
                 useIsUnderCollateralThreshold('0xff')
             );
 
-            await waitForNextUpdate({ timeout: 2000 });
-            await waitForNextUpdate({ timeout: 2000 });
-
-            expect(
-                result.current(
-                    CurrencySymbol.USDC,
-                    dec22Fixture.toNumber(),
-                    9200,
-                    OrderSide.BORROW
-                )
-            ).toBe(false);
+            await waitForNextUpdate();
+            await waitFor(() =>
+                expect(
+                    result.current(
+                        CurrencySymbol.USDC,
+                        dec22Fixture.toNumber(),
+                        9200,
+                        OrderSide.BORROW
+                    )
+                ).toBe(false)
+            );
         });
     });
 });

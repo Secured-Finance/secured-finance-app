@@ -18,15 +18,10 @@ import { RootState } from 'src/store/types';
 import {
     getAmplitudeApiKey,
     getSupportedChainIds,
+    getSupportedNetworks,
     getWalletConnectId,
 } from 'src/utils';
-import {
-    WagmiConfig,
-    configureChains,
-    createConfig,
-    mainnet,
-    sepolia,
-} from 'wagmi';
+import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
@@ -44,7 +39,7 @@ init(getAmplitudeApiKey(), undefined, {
 });
 
 const chainIds = getSupportedChainIds();
-const networks = [sepolia, mainnet].filter(chain =>
+const networks = getSupportedNetworks().filter(chain =>
     chainIds.includes(chain.id)
 );
 
@@ -66,10 +61,10 @@ const config = createConfig({
                 projectId: projectId,
                 qrModalOptions: {
                     themeVariables: {
-                        '--wcm-font-family':
+                        '--w3m-font-family':
                             "'Suisse International', sans-serif",
-                        '--wcm-accent-color': '#002133',
-                        '--wcm-background-color': '#5162FF',
+                        '--w3m-accent-color': '#002133',
+                        '--w3m-background-color': '#5162FF',
                     },
                 },
             },

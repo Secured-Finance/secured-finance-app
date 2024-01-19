@@ -2,7 +2,7 @@ import { Token } from '@secured-finance/sf-core';
 
 export class USDC extends Token {
     private constructor() {
-        super(1, 6, 'USDC', 'USDC');
+        super(6, 'USDC', 'USDC');
     }
 
     private static instance: USDC;

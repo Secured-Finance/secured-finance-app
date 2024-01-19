@@ -1,4 +1,5 @@
 import {
+    dec24Fixture,
     maturitiesMockFromContract,
     wfilBytes32,
 } from 'src/stories/mocks/fixtures';
@@ -28,7 +29,7 @@ const preOrderMarket = {
     maxLendUnitPrice: BigInt('9630'),
     currentMinDebtUnitPrice: BigInt('9500'),
     ccy: wfilBytes32,
-    preOpenDate: BigInt('1684982800'),
+    preOpeningDate: BigInt('1684982800'),
 };
 
 const closedMarket = {
@@ -42,6 +43,26 @@ const nearMaturityMarket = {
     isReady: true,
     isOpened: true,
     isPreOrderPeriod: false,
+};
+
+const marketWithZeroAPR = {
+    name: 'DEC24',
+    maturity: BigInt(dec24Fixture.toString()),
+    openingDate: BigInt('1685577600'),
+    marketUnitPrice: BigInt('0'),
+    openingUnitPrice: BigInt('0'),
+    isReady: true,
+    isOpened: true,
+    isMatured: false,
+    isPreOrderPeriod: false,
+    isItayosePeriod: false,
+    bestBorrowUnitPrice: BigInt('0'),
+    bestLendUnitPrice: BigInt('0'),
+    minBorrowUnitPrice: BigInt('0'),
+    maxLendUnitPrice: BigInt('0'),
+    currentMinDebtUnitPrice: BigInt('0'),
+    ccy: wfilBytes32,
+    preOpeningDate: BigInt('1684972800'),
 };
 
 const noItayoseMarkets = maturitiesMockFromContract(wfilBytes32).slice(0, 8);
@@ -60,6 +81,13 @@ const closeToMaturity = [
     ...maturitiesMockFromContract(wfilBytes32),
     nearMaturityMarket,
 ];
+
+const closeToMaturityWithZeroAprMarkets = [
+    nearMaturityMarket,
+    marketWithZeroAPR,
+];
+
+beforeEach(() => mock.getOrderBookDetails.mockClear());
 
 describe('useYieldCurveMarketRates', () => {
     afterEach(() => {
@@ -202,6 +230,17 @@ describe('useYieldCurveMarketRates', () => {
     it('should change first market yield chart rate if its close to maturity and greater than maximum rate', async () => {
         jest.spyOn(mock, 'getOrderBookDetails').mockResolvedValue([
             ...closeToMaturity,
+        ]);
+        const { result } = renderHook(() => useYieldCurveMarketRates());
+        await waitFor(() =>
+            expect(mock.getOrderBookDetails).toHaveBeenCalled()
+        );
+        expect(result.current.rates[0]).toEqual(new Rate(43525));
+    });
+
+    it.skip('should return original rate for a market near maturity if maximum rate is 0', async () => {
+        jest.spyOn(mock, 'getOrderBookDetails').mockResolvedValue([
+            ...closeToMaturityWithZeroAprMarkets,
         ]);
         const { result } = renderHook(() => useYieldCurveMarketRates());
         await waitFor(() =>

@@ -25,10 +25,13 @@ describe('useOrderList', () => {
         expect(value.isLoading).toEqual(true);
 
         await waitForNextUpdate();
+        await waitForNextUpdate();
+
         expect(mock.getOrderList).toHaveBeenCalledTimes(1);
 
         const newValue = result.current;
         expect(newValue.data.activeOrderList.length).toBe(45);
+        expect(newValue.data.totalPVOfOpenOrdersInUSD).toEqual(252440.374);
         for (let i = 0; i < newValue.data.activeOrderList.length - 1; i++) {
             expect(
                 newValue.data.activeOrderList[i].createdAt >=

@@ -30,7 +30,7 @@ describe('WalletPopover component', () => {
         fireEvent.mouseEnter(alertIcon);
         const tooltip = screen.getByRole('tooltip');
         expect(tooltip).toHaveTextContent(
-            'Secured Finance only supported on Sepolia in Ethereum'
+            'Secured Finance only supported on Sepolia'
         );
     });
 
