@@ -8,6 +8,8 @@ export const GlobalItayoseMultiCurveChart = () => {
     const { data: lendingContracts = baseContracts } = useLendingMarkets();
     const { data: currencies } = useCurrencies();
 
+    const defaultCurrency = currencies ? currencies[0] : CurrencySymbol.WBTC;
+
     currencies?.forEach(ccy => {
         Object.keys(lendingContracts[ccy]).forEach(maturity => {
             const contract = lendingContracts[ccy][Number(maturity)];
@@ -36,7 +38,7 @@ export const GlobalItayoseMultiCurveChart = () => {
             <MultiCurveChart
                 title='Yield Curve'
                 curves={curves}
-                labels={Object.values(lendingContracts[CurrencySymbol.WBTC])
+                labels={Object.values(lendingContracts[defaultCurrency])
                     .filter(o => o.isPreOrderPeriod || o.isItayosePeriod)
                     .map(o => o.name)}
                 isGlobalItayose={true}
