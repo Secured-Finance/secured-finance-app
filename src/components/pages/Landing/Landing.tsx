@@ -61,6 +61,9 @@ export const Landing = ({ view }: { view?: ViewType }) => {
         market => market.isOpened
     );
 
+    // eslint-disable-next-line no-console
+    console.log(process.env.NEXT_PUBLIC_AMPLITUDE_API_KEY);
+
     const itayoseMarket = Object.entries(lendingContracts).find(
         ([, market]) => market.isPreOrderPeriod || market.isItayosePeriod
     )?.[1];
