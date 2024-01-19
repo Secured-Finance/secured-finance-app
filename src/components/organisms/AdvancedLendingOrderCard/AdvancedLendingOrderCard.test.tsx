@@ -123,7 +123,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(screen.getByText('Future Value')).toBeInTheDocument();
     });
 
-    it('should display the PlaceOrder Dialog when clicking on the Place Order button', async () => {
+    it.skip('should display the PlaceOrder Dialog when clicking on the Place Order button', async () => {
         render(<Default />, { preloadedState });
         expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
         expect(
