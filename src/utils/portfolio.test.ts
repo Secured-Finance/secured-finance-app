@@ -6,9 +6,9 @@ import {
     wbtcBytes32,
     wfilBytes32,
 } from 'src/stories/mocks/fixtures';
-import { AssetPriceMap, OrderType, TradeHistory } from 'src/types';
+import { OrderType, TradeHistory } from 'src/types';
 import timemachine from 'timemachine';
-import { CurrencySymbol } from './currencyList';
+import { createCurrencyMap } from './currencyList';
 import {
     calculateAveragePrice,
     calculateForwardValue,
@@ -57,14 +57,14 @@ describe('computeWeightedAverage', () => {
 });
 
 describe('computeNetValue', () => {
-    const priceMap: AssetPriceMap = {
-        [CurrencySymbol.ETH]: 1000,
-        [CurrencySymbol.WFIL]: 6,
-        [CurrencySymbol.USDC]: 1,
-        [CurrencySymbol.WBTC]: 30000,
-        [CurrencySymbol.aUSDC]: 1,
-        [CurrencySymbol.axlFIL]: 1,
-    };
+    const priceMap = createCurrencyMap<number>(0);
+    priceMap.ETH = 1000;
+    priceMap.WFIL = 6;
+    priceMap.USDC = 1;
+    priceMap.WBTC = 30000;
+    priceMap.aUSDC = 1;
+    priceMap.axlFIL = 1;
+
     it('should return the net value', () => {
         const positions = [
             {

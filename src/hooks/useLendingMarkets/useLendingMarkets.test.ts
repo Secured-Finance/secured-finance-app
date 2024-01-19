@@ -1,6 +1,7 @@
 import { maturities } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook, waitFor } from 'src/test-utils';
+import { createCurrencyMap } from 'src/utils';
 import timemachine from 'timemachine';
 import { useLendingMarkets } from './useLendingMarkets';
 
@@ -25,14 +26,14 @@ describe('useLendingMarkets', () => {
 
         await waitFor(() => expect(result.current.isSuccess).toEqual(true));
         const newValue = result.current;
-        expect(newValue.data).toEqual({
-            ETH: maturities,
-            USDC: maturities,
-            WBTC: maturities,
-            WFIL: maturities,
-            aUSDC: {},
-            axlFIL: {},
-        });
+
+        const expected = createCurrencyMap({});
+        expected.ETH = maturities;
+        expected.USDC = maturities;
+        expected.WBTC = maturities;
+        expected.WFIL = maturities;
+
+        expect(newValue.data).toEqual(expected);
         expect(newValue.isLoading).toEqual(false);
     });
 

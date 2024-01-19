@@ -1,25 +1,23 @@
 import { Popover, Transition } from '@headlessui/react';
 import classNames from 'classnames';
-import { Fragment, useCallback, useState } from 'react';
+import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Gear from 'src/assets/icons/gear.svg';
 import { Toggle } from 'src/components/atoms';
 import { updateTestnetEnabled } from 'src/store/blockchain';
 
-export const testnetsEnabledId = 'testnetsEnabled';
-
-export const Settings = () => {
+export const Settings = ({ isProduction }: { isProduction: boolean }) => {
     const dispatch = useDispatch();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const testnetsEnabledLocalstorage =
-        localStorage.getItem(testnetsEnabledId) === 'true' || false;
-    const [testnetsEnabled, setTestnetsMode] = useState(false);
+    const [testnetsEnabled, setTestnetsEnabled] = useState(!isProduction);
+
+    useEffect(() => {
+        dispatch(updateTestnetEnabled(!isProduction));
+    }, [dispatch, isProduction]);
 
     const handleChange = useCallback(() => {
         const newState = !testnetsEnabled;
-        setTestnetsMode(!testnetsEnabled);
-        dispatch(updateTestnetEnabled(!testnetsEnabled));
-        localStorage.setItem(testnetsEnabledId, newState ? 'true' : 'false');
+        setTestnetsEnabled(newState);
+        dispatch(updateTestnetEnabled(newState));
     }, [dispatch, testnetsEnabled]);
 
     return (
@@ -56,7 +54,8 @@ export const Settings = () => {
                                         Testnet mode
                                     </span>
                                     <Toggle
-                                        enabled={testnetsEnabled}
+                                        checked={testnetsEnabled}
+                                        disabled={!isProduction}
                                         onChange={handleChange}
                                     />
                                 </div>

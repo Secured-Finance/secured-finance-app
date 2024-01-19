@@ -2,7 +2,12 @@ import { fromBytes32 } from '@secured-finance/sf-graph-client';
 import { useQuery } from '@tanstack/react-query';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
-import { CurrencySymbol, currencyMap, isPastDate } from 'src/utils';
+import {
+    CurrencySymbol,
+    createCurrencyMap,
+    currencyMap,
+    isPastDate,
+} from 'src/utils';
 import { useCurrencies } from '../useCurrencies';
 
 export type LendingMarket = {
@@ -47,23 +52,9 @@ const baseContract: { 0: LendingMarket } = {
     },
 };
 
-export const baseContracts: AvailableContracts = {
-    [CurrencySymbol.ETH]: baseContract,
-    [CurrencySymbol.WFIL]: baseContract,
-    [CurrencySymbol.USDC]: baseContract,
-    [CurrencySymbol.WBTC]: baseContract,
-    [CurrencySymbol.aUSDC]: baseContract,
-    [CurrencySymbol.axlFIL]: baseContract,
-};
-
-const emptyContracts: AvailableContracts = {
-    [CurrencySymbol.ETH]: {},
-    [CurrencySymbol.WFIL]: {},
-    [CurrencySymbol.USDC]: {},
-    [CurrencySymbol.WBTC]: {},
-    [CurrencySymbol.aUSDC]: {},
-    [CurrencySymbol.axlFIL]: {},
-};
+export const baseContracts: AvailableContracts =
+    createCurrencyMap(baseContract);
+export const emptyContracts: AvailableContracts = createCurrencyMap({});
 
 export type ContractMap = Record<number, LendingMarket>;
 export type AvailableContracts = Record<CurrencySymbol, ContractMap>;

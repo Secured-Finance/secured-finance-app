@@ -15,9 +15,11 @@ import { hexToString } from 'viem';
 import { ZERO_BI } from './collateral';
 import { AUSDC } from './currencies/ausdc';
 import { AXLFIL } from './currencies/axlfil';
+import { BTCB } from './currencies/btcb';
 import { WFIL } from './currencies/filecoin';
 import { USDC } from './currencies/usdc';
 import { WBTC } from './currencies/wbtc';
+import { WETHE } from './currencies/wethe';
 
 BigNumberJS.set({ EXPONENTIAL_AT: 30 }); // setting to a decent limit
 
@@ -25,9 +27,11 @@ const ETH = Ether.onChain();
 
 export enum CurrencySymbol {
     ETH = 'ETH',
+    WETHe = 'WETH.e',
     WFIL = 'WFIL',
     USDC = 'USDC',
     WBTC = 'WBTC',
+    BTCb = 'BTC.b',
     aUSDC = 'aUSDC',
     axlFIL = 'axlFIL',
 }
@@ -52,8 +56,25 @@ export const currencyMap: Readonly<
         roundingDecimal: 4,
         longName: 'Bitcoin',
     },
-    [CurrencySymbol.ETH]: {
+    [CurrencySymbol.BTCb]: {
         index: 1,
+        symbol: CurrencySymbol.BTCb,
+        name: BTCB.onChain().name,
+        icon: BTCIcon,
+        coinGeckoId: 'wrapped-bitcoin',
+        isCollateral: true,
+        toBaseUnit: (amount: number) =>
+            convertToBlockchainUnit(amount, BTCB.onChain()),
+        fromBaseUnit: (amount: bigint) =>
+            convertFromBlockchainUnit(amount, BTCB.onChain()),
+        toCurrency: () => BTCB.onChain(),
+        chartColor: tailwindConfig.theme.colors.chart.btc,
+        pillColor: tailwindConfig.theme.colors.pill.btc,
+        roundingDecimal: 4,
+        longName: 'Bitcoin',
+    },
+    [CurrencySymbol.ETH]: {
+        index: 2,
         icon: EthIcon,
         symbol: CurrencySymbol.ETH,
         // TODO: update sf-core to use the right name
@@ -69,8 +90,25 @@ export const currencyMap: Readonly<
         roundingDecimal: 3,
         longName: 'Ethereum',
     },
+    [CurrencySymbol.WETHe]: {
+        index: 3,
+        icon: EthIcon,
+        symbol: CurrencySymbol.WETHe,
+        name: WETHE.onChain().name,
+        coinGeckoId: 'weth',
+        isCollateral: true,
+        toBaseUnit: (amount: number) =>
+            convertToBlockchainUnit(amount, WETHE.onChain()),
+        fromBaseUnit: (amount: bigint) =>
+            convertFromBlockchainUnit(amount, WETHE.onChain()),
+        toCurrency: () => WETHE.onChain(),
+        chartColor: tailwindConfig.theme.colors.chart.fil,
+        pillColor: tailwindConfig.theme.colors.pill.fil,
+        roundingDecimal: 0,
+        longName: 'Wrapped Filecoin',
+    },
     [CurrencySymbol.WFIL]: {
-        index: 2,
+        index: 4,
         icon: FilIcon,
         symbol: CurrencySymbol.WFIL,
         name: WFIL.onChain().name,
@@ -88,8 +126,25 @@ export const currencyMap: Readonly<
         roundingDecimal: 0,
         longName: 'Wrapped Filecoin',
     },
+    [CurrencySymbol.axlFIL]: {
+        index: 5,
+        symbol: CurrencySymbol.axlFIL,
+        name: 'Axelar Wrapped FIL',
+        icon: FilIcon,
+        coinGeckoId: 'filecoin',
+        isCollateral: false,
+        toBaseUnit: (amount: number) =>
+            convertToBlockchainUnit(amount, AXLFIL.onChain()),
+        fromBaseUnit: (amount: bigint) =>
+            convertFromBlockchainUnit(amount, AXLFIL.onChain()),
+        toCurrency: () => AXLFIL.onChain(),
+        chartColor: tailwindConfig.theme.colors.chart.fil,
+        pillColor: tailwindConfig.theme.colors.pill.fil,
+        roundingDecimal: 0,
+        longName: 'Axelar Wrapped FIL',
+    },
     [CurrencySymbol.USDC]: {
-        index: 4,
+        index: 6,
         symbol: CurrencySymbol.USDC,
         name: USDC.onChain().name,
         icon: UsdcIcon,
@@ -106,7 +161,7 @@ export const currencyMap: Readonly<
         longName: 'USD Coin',
     },
     [CurrencySymbol.aUSDC]: {
-        index: 5,
+        index: 7,
         symbol: CurrencySymbol.aUSDC,
         name: 'aUSDC',
         icon: UsdcIcon,
@@ -122,24 +177,14 @@ export const currencyMap: Readonly<
         roundingDecimal: 0,
         longName: 'USD Coin',
     },
-    [CurrencySymbol.axlFIL]: {
-        index: 3,
-        symbol: CurrencySymbol.axlFIL,
-        name: 'Axelar Wrapped FIL',
-        icon: FilIcon,
-        coinGeckoId: 'filecoin',
-        isCollateral: false,
-        toBaseUnit: (amount: number) =>
-            convertToBlockchainUnit(amount, AXLFIL.onChain()),
-        fromBaseUnit: (amount: bigint) =>
-            convertFromBlockchainUnit(amount, AXLFIL.onChain()),
-        toCurrency: () => AXLFIL.onChain(),
-        chartColor: tailwindConfig.theme.colors.chart.fil,
-        pillColor: tailwindConfig.theme.colors.pill.fil,
-        roundingDecimal: 0,
-        longName: 'Axelar Wrapped FIL',
-    },
 };
+
+const currencySymbolList = Object.keys(currencyMap) as CurrencySymbol[];
+export const createCurrencyMap = <T,>(defaultValue: T) =>
+    currencySymbolList.reduce((obj, ccy) => {
+        obj[ccy] = defaultValue;
+        return obj;
+    }, {} as Record<CurrencySymbol, T>);
 
 const getCurrencyMapAsList = () => {
     return Object.values(currencyMap).sort((a, b) => a.index - b.index);
@@ -189,12 +234,16 @@ export function toCurrencySymbol(ccy: string) {
     switch (ccy) {
         case CurrencySymbol.ETH:
             return CurrencySymbol.ETH;
+        case CurrencySymbol.WETHe:
+            return CurrencySymbol.WETHe;
         case CurrencySymbol.WFIL:
             return CurrencySymbol.WFIL;
         case CurrencySymbol.USDC:
             return CurrencySymbol.USDC;
         case CurrencySymbol.WBTC:
             return CurrencySymbol.WBTC;
+        case CurrencySymbol.BTCb:
+            return CurrencySymbol.BTCb;
         case CurrencySymbol.aUSDC:
             return CurrencySymbol.aUSDC;
         case CurrencySymbol.axlFIL:

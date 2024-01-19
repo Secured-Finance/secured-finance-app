@@ -6,17 +6,29 @@ export default {
     title: 'Atoms/Toggle',
     component: Toggle,
     args: {
-        enabled: true,
+        checked: true,
+        disabled: false,
     },
 } as Meta<typeof Toggle>;
 
 const Template: StoryFn<typeof Toggle> = args => {
-    const [enabled, setEnabled] = useState(args.enabled);
-    return <Toggle enabled={enabled} onChange={setEnabled} />;
+    const [checked, setChecked] = useState(args.checked);
+    return (
+        <Toggle
+            checked={checked}
+            disabled={args.disabled}
+            onChange={setChecked}
+        />
+    );
 };
 
 export const Default = Template.bind({});
+export const UnChecked = Template.bind({});
+UnChecked.args = {
+    checked: false,
+};
+
 export const Disabled = Template.bind({});
 Disabled.args = {
-    enabled: false,
+    disabled: true,
 };
