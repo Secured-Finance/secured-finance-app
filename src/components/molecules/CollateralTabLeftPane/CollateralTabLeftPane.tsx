@@ -20,6 +20,7 @@ interface CollateralTabLeftPaneProps {
     account: string | undefined;
     onClick: (step: 'deposit' | 'withdraw') => void;
     collateralBook: CollateralBook;
+    netAssetValue: number;
 }
 
 const getInformationText = (collateralCurrencies: CurrencySymbol[]) => {
@@ -63,6 +64,7 @@ export const CollateralTabLeftPane = ({
     account,
     onClick,
     collateralBook,
+    netAssetValue,
 }: CollateralTabLeftPaneProps) => {
     const chainError = useSelector(
         (state: RootState) => state.blockchain.chainError
@@ -76,32 +78,29 @@ export const CollateralTabLeftPane = ({
     const nonCollateralQuantityExist = useMemo(() => {
         return checkAssetQuantityExist(collateralBook.nonCollateral);
     }, [collateralBook.nonCollateral]);
-    const vaultBalance = account
-        ? collateralBook.usdCollateral + collateralBook.usdNonCollateral
-        : 0;
 
     return (
         <div className='flex min-h-[400px] w-full flex-col border-white-10 tablet:w-64 tablet:border-r'>
             <div className='flex-grow tablet:border-b tablet:border-white-10'>
                 <div className='m-6 flex flex-col gap-1'>
                     <span className='typography-body-2 h-6 w-fit text-slateGray'>
-                        SF Vault
+                        Net Asset Value
                     </span>
                     <span
                         data-testid='vault-balance'
                         className={classNames(
                             'w-fit font-secondary font-semibold text-white',
                             {
-                                'text-xl': vaultBalance.toString().length <= 6,
+                                'text-xl': netAssetValue.toString().length <= 6,
                                 'text-xl tablet:text-md':
-                                    vaultBalance.toString().length > 6 &&
-                                    vaultBalance.toString().length <= 9,
+                                    netAssetValue.toString().length > 6 &&
+                                    netAssetValue.toString().length <= 9,
                                 'text-md tablet:text-smd':
-                                    vaultBalance.toString().length > 9,
+                                    netAssetValue.toString().length > 9,
                             }
                         )}
                     >
-                        {usdFormat(vaultBalance, 2)}
+                        {usdFormat(netAssetValue, 2)}
                     </span>
                 </div>
                 {!account ? (
@@ -220,7 +219,7 @@ export const CollateralTabLeftPane = ({
                 </Button>
                 <Button
                     size='sm'
-                    disabled={!account || vaultBalance <= 0 || chainError}
+                    disabled={!account || netAssetValue <= 0 || chainError}
                     onClick={() => onClick('withdraw')}
                     data-testid='withdraw-collateral'
                     fullWidth={true}
