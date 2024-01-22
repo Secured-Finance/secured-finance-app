@@ -19,8 +19,8 @@ import {
 import { MyWalletWidget } from 'src/components/organisms';
 import { Page, Tooltip, TwoColumns } from 'src/components/templates';
 import {
+    useBlockExplorerUrl,
     useCurrencies,
-    useEtherscanUrl,
     useHandleContractTransaction,
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
@@ -91,7 +91,7 @@ export const Faucet = () => {
         (state: RootState) => state.blockchain.chainError
     );
 
-    const etherscanUrl = useEtherscanUrl();
+    const { blockExplorerUrl } = useBlockExplorerUrl();
     const handleContractTransaction = useHandleContractTransaction();
     const { address: account } = useAccount();
     const { data: client } = useWalletClient();
@@ -347,7 +347,7 @@ export const Faucet = () => {
                         ],
                     ]}
                     txHash={txHash}
-                    etherscanUrl={etherscanUrl}
+                    blockExplorerUrl={blockExplorerUrl}
                 />
             </Dialog>
         </Page>
