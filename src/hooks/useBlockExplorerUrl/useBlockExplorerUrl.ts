@@ -10,10 +10,10 @@ export const useBlockExplorerUrl = () => {
         if (!securedFinance) {
             return;
         }
-        const network = securedFinance.config.chain.id;
+        const currentChainId = securedFinance.config.chain.id;
         const supportedNetworks = getSupportedNetworks();
         const baseUrl =
-            supportedNetworks.find(n => n.id === network)?.blockExplorers
+            supportedNetworks.find(n => n.id === currentChainId)?.blockExplorers
                 ?.etherscan?.url || 'https://etherscan.io';
 
         setBlockExplorerUrl(baseUrl);
