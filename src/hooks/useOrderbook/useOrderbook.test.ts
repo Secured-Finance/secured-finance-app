@@ -80,34 +80,38 @@ describe('useOrderbook', () => {
     });
 
     it('should double the depth when not showing all orderbook', async () => {
-        const { result, waitForNextUpdate } = renderHook(() =>
+        const { result } = renderHook(() =>
             useOrderbook(CurrencySymbol.ETH, maturity)
         );
 
-        await waitForNextUpdate();
-
-        expect(result.current[0].data.borrowOrderbook.length).toBe(13);
-        expect(result.current[0].data.lendOrderbook.length).toBe(13);
+        await waitFor(() => {
+            expect(result.current[0].data.borrowOrderbook.length).toBe(13);
+            expect(result.current[0].data.lendOrderbook.length).toBe(13);
+        });
 
         act(() => result.current[2](false));
 
-        expect(result.current[0].data.borrowOrderbook.length).toBe(26);
-        expect(result.current[0].data.lendOrderbook.length).toBe(26);
+        await waitFor(() => {
+            expect(result.current[0].data.borrowOrderbook.length).toBe(26);
+            expect(result.current[0].data.lendOrderbook.length).toBe(26);
+        });
     });
 
     it('should multiply the depth when multiplier is set', async () => {
-        const { result, waitForNextUpdate } = renderHook(() =>
+        const { result } = renderHook(() =>
             useOrderbook(CurrencySymbol.ETH, maturity)
         );
 
-        await waitForNextUpdate();
-
-        expect(result.current[0].data.borrowOrderbook.length).toBe(13);
-        expect(result.current[0].data.lendOrderbook.length).toBe(13);
+        await waitFor(() => {
+            expect(result.current[0].data.borrowOrderbook.length).toBe(13);
+            expect(result.current[0].data.lendOrderbook.length).toBe(13);
+        });
 
         act(() => result.current[1](2));
 
-        expect(result.current[0].data.borrowOrderbook.length).toBe(26);
-        expect(result.current[0].data.lendOrderbook.length).toBe(26);
+        await waitFor(() => {
+            expect(result.current[0].data.borrowOrderbook.length).toBe(26);
+            expect(result.current[0].data.lendOrderbook.length).toBe(26);
+        });
     });
 });
