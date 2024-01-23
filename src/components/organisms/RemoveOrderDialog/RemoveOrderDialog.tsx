@@ -17,8 +17,9 @@ import {
     useOrders,
 } from 'src/hooks';
 import { setLastMessage } from 'src/store/lastError';
-import { AddressUtils } from 'src/utils';
+import { AddressUtils, ButtonEvents, ButtonProperties } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
+import { trackButtonEvent } from 'src/utils/events';
 
 enum Step {
     remove = 1,
@@ -137,6 +138,11 @@ export const RemoveOrderDialog = ({
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
+        trackButtonEvent(
+            ButtonEvents.CANCEL_BUTTON,
+            ButtonProperties.CANCEL_ACTION,
+            'Cancel Remove Order'
+        );
         onClose();
     }, [onClose]);
 

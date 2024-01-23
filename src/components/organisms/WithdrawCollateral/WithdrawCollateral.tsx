@@ -24,7 +24,9 @@ import {
 } from 'src/utils';
 import {
     ButtonEvents,
+    ButtonProperties,
     CollateralEvents,
+    trackButtonEvent,
     trackCollateralEvent,
 } from 'src/utils/events';
 import { useAccount } from 'wagmi';
@@ -130,6 +132,11 @@ export const WithdrawCollateral = ({
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
+        trackButtonEvent(
+            ButtonEvents.CANCEL_BUTTON,
+            ButtonProperties.CANCEL_ACTION,
+            'Cancel Withdraw Collateral'
+        );
         onClose();
     }, [onClose]);
 

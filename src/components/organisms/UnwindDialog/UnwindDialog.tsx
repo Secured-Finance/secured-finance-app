@@ -19,8 +19,14 @@ import {
     useOrders,
 } from 'src/hooks';
 import { setLastMessage } from 'src/store/lastError';
-import { AddressUtils, CurrencySymbol } from 'src/utils';
+import {
+    AddressUtils,
+    ButtonEvents,
+    ButtonProperties,
+    CurrencySymbol,
+} from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
+import { trackButtonEvent } from 'src/utils/events';
 import { useAccount } from 'wagmi';
 
 export type UnwindDialogType = 'UNWIND' | 'REPAY' | 'REDEEM';
@@ -165,6 +171,11 @@ export const UnwindDialog = ({
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
+        trackButtonEvent(
+            ButtonEvents.CANCEL_BUTTON,
+            ButtonProperties.CANCEL_ACTION,
+            'Unwind Order'
+        );
         onClose();
     }, [onClose]);
 

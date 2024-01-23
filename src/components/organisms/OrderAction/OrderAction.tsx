@@ -108,7 +108,7 @@ export const OrderAction = ({
                         fullWidth
                         onClick={() => {
                             setOpenPlaceOrderDialog(true);
-                            track(ButtonEvents.PLACE_ORDER);
+                            track(ButtonEvents.PLACE_ORDER_BUTTON);
                         }}
                         data-testid='place-order-button'
                         aria-label={getButtonText()}
