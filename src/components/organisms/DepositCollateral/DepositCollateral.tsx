@@ -1,4 +1,3 @@
-import { track } from '@amplitude/analytics-browser';
 import { useCallback, useReducer, useState } from 'react';
 import { CollateralSelector, Spinner } from 'src/components/atoms';
 import {
@@ -23,7 +22,12 @@ import {
     amountFormatterToBase,
     formatAmount,
 } from 'src/utils';
-import { ButtonEvents, trackCollateralEvent } from 'src/utils/events';
+import {
+    ButtonEvents,
+    ButtonProperties,
+    trackButtonEvent,
+    trackCollateralEvent,
+} from 'src/utils/events';
 
 enum Step {
     depositCollateral = 1,
@@ -123,6 +127,11 @@ export const DepositCollateral = ({
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
+        trackButtonEvent(
+            ButtonEvents.CANCEL_BUTTON,
+            ButtonProperties.CANCEL_ACTION,
+            'Cancel Deposit Collateral'
+        );
         onClose();
     }, [onClose]);
 
@@ -150,7 +159,6 @@ export const DepositCollateral = ({
         try {
             const tx = await onDepositCollateral();
             const transactionStatus = await handleContractTransaction(tx);
-            track(ButtonEvents.DEPOSIT_COLLATERAL_BUTTON);
             if (!transactionStatus) {
                 dispatch({ type: 'error' });
             } else {

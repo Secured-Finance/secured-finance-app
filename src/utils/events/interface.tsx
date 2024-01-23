@@ -12,11 +12,12 @@ export enum OrderEvents {
 export enum ButtonEvents {
     DEPOSIT_COLLATERAL_BUTTON = 'Deposit Collateral Button',
     WITHDRAW_COLLATERAL_BUTTON = 'Withdraw Collateral Button',
-    PLACE_ORDER = 'Place Order',
+    PLACE_ORDER_BUTTON = 'Place Order Button',
     ORDER_TYPE = 'Order Type',
     ORDER_SIDE = 'Order Side',
     CURRENCY_CHANGE = 'Currency Change',
     TERM_CHANGE = 'Term Change',
+    CANCEL_BUTTON = 'Cancel button clicked',
 }
 
 export enum ButtonProperties {
@@ -24,6 +25,11 @@ export enum ButtonProperties {
     ORDER_TYPE = 'Order Type',
     CURRENCY = 'Currency',
     TERM = 'Term',
+    CANCEL_ACTION = 'Cancel Action',
+}
+
+export enum InteractionEvents {
+    BOND_PRICE = 'Change Bond Price',
 }
 
 export enum CollateralEvents {
@@ -56,4 +62,8 @@ export enum InterfaceProperties {
 export enum WalletConnectionResult {
     FAILED = 'Failed',
     SUCCEEDED = 'Succeeded',
+}
+
+export enum InteractionProperties {
+    BOND_PRICE = 'Bond Price',
 }

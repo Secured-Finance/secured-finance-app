@@ -25,6 +25,11 @@ import {
     formatAmount,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
+import {
+    ButtonEvents,
+    ButtonProperties,
+    trackButtonEvent,
+} from 'src/utils/events';
 import { useAccount } from 'wagmi';
 
 enum Step {
@@ -149,6 +154,11 @@ export const PlaceOrder = ({
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
+        trackButtonEvent(
+            ButtonEvents.CANCEL_BUTTON,
+            ButtonProperties.CANCEL_ACTION,
+            'Cancel Place Order'
+        );
         onClose();
     }, [onClose]);
 
