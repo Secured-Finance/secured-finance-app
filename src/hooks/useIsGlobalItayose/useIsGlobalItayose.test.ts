@@ -7,7 +7,7 @@ import {
     wfilBytes32,
 } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { renderHook } from 'src/test-utils';
+import { renderHook, waitFor } from 'src/test-utils';
 import { useIsGlobalItayose } from './useIsGlobalItayose';
 
 const noOpenMarkets = [
@@ -82,30 +82,20 @@ describe('useIsGlobalItayose', () => {
         jest.spyOn(mock, 'getOrderBookDetails').mockResolvedValueOnce([
             ...noOpenMarkets,
         ]);
-        const { result, waitForNextUpdate } = renderHook(() =>
-            useIsGlobalItayose()
-        );
-        await waitForNextUpdate();
-        await waitForNextUpdate();
-        expect(result.current.data).toEqual(true);
+        const { result } = renderHook(() => useIsGlobalItayose());
+        await waitFor(() => expect(result.current.data).toEqual(true));
     });
 
     it('should return false if itayose and open markets exist', async () => {
-        const { result, waitForNextUpdate } = renderHook(() =>
-            useIsGlobalItayose()
-        );
-        await waitForNextUpdate();
-        expect(result.current.data).toEqual(false);
+        const { result } = renderHook(() => useIsGlobalItayose());
+        await waitFor(() => expect(result.current.data).toEqual(false));
     });
 
     it('should return false if there are no itayose markets', async () => {
         jest.spyOn(mock, 'getOrderBookDetails').mockResolvedValueOnce([
             ...noItayoseMarkets,
         ]);
-        const { result, waitForNextUpdate } = renderHook(() =>
-            useIsGlobalItayose()
-        );
-        await waitForNextUpdate();
-        expect(result.current.data).toEqual(false);
+        const { result } = renderHook(() => useIsGlobalItayose());
+        await waitFor(() => expect(result.current.data).toEqual(false));
     });
 });
