@@ -8,16 +8,16 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
 describe('useLastPrices', () => {
     it('should return the last prices', async () => {
-        const { result, waitForNextUpdate } = renderHook(() => useLastPrices());
+        const { result } = renderHook(() => useLastPrices());
 
-        await waitForNextUpdate();
-        await waitFor(() => expect(result.current.isSuccess).toEqual(true));
-
-        expect(result.current.data).toEqual({
-            [CurrencySymbol.ETH]: 2000.34,
-            [CurrencySymbol.WFIL]: 6,
-            [CurrencySymbol.USDC]: 1,
-            [CurrencySymbol.WBTC]: 50000,
+        await waitFor(() => {
+            expect(result.current.isSuccess).toEqual(true);
+            expect(result.current.data).toEqual({
+                [CurrencySymbol.ETH]: 2000.34,
+                [CurrencySymbol.WFIL]: 6,
+                [CurrencySymbol.USDC]: 1,
+                [CurrencySymbol.WBTC]: 50000,
+            });
         });
     });
 });
