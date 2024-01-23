@@ -10,7 +10,7 @@ import {
     SuccessPanel,
     WalletRadioGroup,
 } from 'src/components/molecules';
-import { useEtherscanUrl } from 'src/hooks';
+import { useBlockExplorerUrl } from 'src/hooks';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
 import { Wallet } from 'src/types';
@@ -33,7 +33,7 @@ function hasMetaMask() {
 }
 
 export const WalletDialog = () => {
-    const etherscanUrl = useEtherscanUrl();
+    const { blockExplorerUrl } = useBlockExplorerUrl();
     const options = useMemo(() => {
         const options = [
             {
@@ -197,7 +197,7 @@ export const WalletDialog = () => {
                                 AddressUtils.format(address ?? '', 8),
                             ],
                         ]}
-                        etherscanUrl={etherscanUrl}
+                        blockExplorerUrl={blockExplorerUrl}
                     />
                 )}
                 {isError && <FailurePanel errorMessage={errorMessage} />}

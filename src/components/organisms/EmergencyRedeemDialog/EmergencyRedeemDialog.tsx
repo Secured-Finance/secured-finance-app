@@ -9,7 +9,7 @@ import {
     FailurePanel,
     SuccessPanel,
 } from 'src/components/molecules';
-import { useEtherscanUrl, useHandleContractTransaction } from 'src/hooks';
+import { useBlockExplorerUrl, useHandleContractTransaction } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import {
     AddressUtils,
@@ -125,7 +125,7 @@ export const EmergencyRedeemDialog = ({
         []
     );
 
-    const etherscanUrl = useEtherscanUrl();
+    const { blockExplorerUrl } = useBlockExplorerUrl();
     const securedFinance = useSF();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [errorMessage, setErrorMessage] = useState(
@@ -233,7 +233,7 @@ export const EmergencyRedeemDialog = ({
                                     ['Amount (USD)', netValue],
                                 ]}
                                 txHash={txHash}
-                                etherscanUrl={etherscanUrl}
+                                blockExplorerUrl={blockExplorerUrl}
                             />
                         );
                     case Step.error:
