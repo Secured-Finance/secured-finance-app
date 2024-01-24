@@ -2,7 +2,12 @@ import * as analytics from '@amplitude/analytics-browser';
 import { composeStories } from '@storybook/react';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
-import { CollateralEvents, CollateralProperties } from 'src/utils';
+import {
+    ButtonEvents,
+    ButtonProperties,
+    CollateralEvents,
+    CollateralProperties,
+} from 'src/utils';
 import * as stories from './DepositCollateral.stories';
 
 const { Default } = composeStories(stories);
@@ -11,6 +16,7 @@ const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('DepositCollateral component', () => {
+    const track = jest.spyOn(analytics, 'track');
     it('should display the DepositCollateral Modal when open', () => {
         render(<Default />);
 
@@ -166,7 +172,6 @@ describe('DepositCollateral component', () => {
     });
 
     it('should track the deposit collateral', async () => {
-        const track = jest.spyOn(analytics, 'track');
         const onClose = jest.fn();
         render(<Default onClose={onClose} source='Source Of Deposit' />);
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
@@ -194,6 +199,9 @@ describe('DepositCollateral component', () => {
             name: 'Cancel',
         });
         fireEvent.click(cancelButton);
+        expect(track).toHaveBeenCalledWith(ButtonEvents.CANCEL_BUTTON, {
+            [ButtonProperties.CANCEL_ACTION]: 'Cancel Deposit Collateral',
+        });
         expect(onClose).toHaveBeenCalled();
     });
 

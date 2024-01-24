@@ -1,4 +1,3 @@
-import { track } from '@amplitude/analytics-browser';
 import { useCallback, useReducer, useState } from 'react';
 import { CollateralSelector, Spinner } from 'src/components/atoms';
 import {
@@ -155,7 +154,6 @@ export const WithdrawCollateral = ({
         try {
             const tx = await onWithdrawCollateral();
             const transactionStatus = await handleContractTransaction(tx);
-            track(ButtonEvents.WITHDRAW_COLLATERAL_BUTTON);
             if (!transactionStatus) {
                 dispatch({ type: 'error' });
             } else {
