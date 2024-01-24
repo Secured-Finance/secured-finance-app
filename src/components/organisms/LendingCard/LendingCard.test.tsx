@@ -5,7 +5,12 @@ import { mar23Fixture } from 'src/stories/mocks/fixtures';
 import { initialStore } from 'src/stories/mocks/mockStore';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
-import { ButtonEvents, CurrencySymbol, currencyMap } from 'src/utils';
+import {
+    ButtonEvents,
+    ButtonProperties,
+    CurrencySymbol,
+    currencyMap,
+} from 'src/utils';
 import timemachine from 'timemachine';
 import * as stories from './LendingCard.stories';
 
@@ -225,11 +230,13 @@ describe('LendingCard Component', () => {
         ).toBeInTheDocument();
     });
 
-    it.skip('should track ORDER_SIDE event when order side is changes', async () => {
+    it('should track ORDER_SIDE event when order side is changes', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
 
         const lendTab = screen.getByText('Lend');
         fireEvent.click(lendTab);
-        expect(track).toHaveBeenCalledWith(ButtonEvents.ORDER_SIDE);
+        expect(track).toHaveBeenCalledWith(ButtonEvents.ORDER_SIDE, {
+            [ButtonProperties.ORDER_SIDE]: 'Lend',
+        });
     });
 });

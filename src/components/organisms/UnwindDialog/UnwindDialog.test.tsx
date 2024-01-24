@@ -1,6 +1,8 @@
+import * as analytics from '@amplitude/analytics-browser';
 import { composeStories } from '@storybook/react';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { render, screen, waitFor } from 'src/test-utils.js';
+import { ButtonEvents, ButtonProperties } from 'src/utils';
 import * as stories from './UnwindDialog.stories';
 
 const { Default, Redeem, Repay } = composeStories(stories);
@@ -71,12 +73,16 @@ describe('UnwindDialog Component', () => {
     });
 
     it('should call onClose when cancel button is clicked', () => {
+        const track = jest.spyOn(analytics, 'track');
         const onClose = jest.fn();
         render(<Default onClose={onClose} />);
         const cancelButton = screen.getByRole('button', {
             name: 'Cancel',
         });
         cancelButton.click();
+        expect(track).toHaveBeenCalledWith(ButtonEvents.CANCEL_BUTTON, {
+            [ButtonProperties.CANCEL_ACTION]: 'Cancel Unwind Order',
+        });
         expect(onClose).toHaveBeenCalled();
     });
 

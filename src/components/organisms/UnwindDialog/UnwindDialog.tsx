@@ -174,7 +174,7 @@ export const UnwindDialog = ({
         trackButtonEvent(
             ButtonEvents.CANCEL_BUTTON,
             ButtonProperties.CANCEL_ACTION,
-            'Unwind Order'
+            'Cancel Unwind Order'
         );
         onClose();
     }, [onClose]);

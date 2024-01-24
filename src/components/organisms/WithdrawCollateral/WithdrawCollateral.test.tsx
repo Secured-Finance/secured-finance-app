@@ -222,7 +222,7 @@ describe('WithdrawCollateral component', () => {
         expect(screen.getByText('50 USDC Available')).toBeInTheDocument();
     });
 
-    it('should call onClose when cancel button is clicked and emit cancel button event', () => {
+    it('should call onClose when cancel button is clicked and emit  CANCEL_BUTTON event', () => {
         const onClose = jest.fn();
         render(<Default onClose={onClose} />);
         const cancelButton = screen.getByRole('button', {

@@ -93,7 +93,7 @@ describe('OrderAction component', () => {
         expect(screen.getByTestId('deposit-collateral-button')).toBeDisabled();
     });
 
-    it('should render place order button when collateral is sufficient for order and emit place order button event when clicked', async () => {
+    it('should render place order button when collateral is sufficient for order and emit PLACE_ORDER_BUTTON button event when clicked', async () => {
         await waitFor(() => {
             render(<EnoughCollateral />, { preloadedState });
         });
