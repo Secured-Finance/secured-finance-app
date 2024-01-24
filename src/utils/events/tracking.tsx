@@ -16,7 +16,8 @@ import {
 
 export async function associateWallet(
     account: string | null,
-    raiseEvent = true
+    raiseEvent = true,
+    chainName = 'Unsupported'
 ) {
     if (!account) return;
     setUserId(account);
@@ -27,6 +28,7 @@ export async function associateWallet(
     if (raiseEvent) {
         track(InterfaceEvents.WALLET_CONNECTED, {
             [InterfaceProperties.WALLET_ADDRESS]: account,
+            [InterfaceProperties.CHAIN]: chainName,
         });
     }
 }
