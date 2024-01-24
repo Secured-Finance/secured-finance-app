@@ -1,10 +1,11 @@
+import * as analytics from '@amplitude/analytics-browser';
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
 import { dec22Fixture, usdcBytes32 } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
-import { CurrencySymbol, WalletSource } from 'src/utils';
+import { ButtonEvents, CurrencySymbol, WalletSource } from 'src/utils';
 import * as stories from './OrderAction.stories';
 
 const {
@@ -33,13 +34,14 @@ const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('OrderAction component', () => {
+    const track = jest.spyOn(analytics, 'track');
     it('should render connect wallet button', async () => {
         await waitFor(() => render(<Primary />, { preloadedState }));
         expect(screen.getByRole('button')).toBeInTheDocument();
         expect(screen.getByText('Connect Wallet')).toBeInTheDocument();
     });
 
-    it('should render deposit collateral button when collateral is not sufficient', async () => {
+    it('should render deposit collateral button when collateral is not sufficient and emit deposit collateral button event when clicked', async () => {
         await waitFor(() =>
             render(<NotEnoughCollateral />, {
                 preloadedState: {
@@ -59,6 +61,9 @@ describe('OrderAction component', () => {
         ).toBeInTheDocument();
         const button = screen.getByTestId('deposit-collateral-button');
         fireEvent.click(button);
+        expect(track).toHaveBeenCalledWith(
+            ButtonEvents.DEPOSIT_COLLATERAL_BUTTON
+        );
         expect(
             screen.getByRole('dialog', { name: 'Deposit Collateral' })
         ).toBeInTheDocument();
@@ -88,7 +93,7 @@ describe('OrderAction component', () => {
         expect(screen.getByTestId('deposit-collateral-button')).toBeDisabled();
     });
 
-    it('should render place order button when collateral is sufficient for order', async () => {
+    it('should render place order button when collateral is sufficient for order and emit place order button event when clicked', async () => {
         await waitFor(() => {
             render(<EnoughCollateral />, { preloadedState });
         });
@@ -98,6 +103,7 @@ describe('OrderAction component', () => {
         const button = screen.getByTestId('place-order-button');
         await waitFor(() => expect(button).toBeEnabled());
         fireEvent.click(button);
+        expect(track).toHaveBeenCalledWith(ButtonEvents.PLACE_ORDER_BUTTON);
         expect(
             screen.getByRole('dialog', { name: 'Confirm Borrow' })
         ).toBeInTheDocument();

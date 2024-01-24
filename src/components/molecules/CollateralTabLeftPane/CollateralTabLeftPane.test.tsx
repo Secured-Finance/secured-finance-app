@@ -1,3 +1,4 @@
+import * as analytics from '@amplitude/analytics-browser';
 import { composeStories } from '@storybook/react';
 import { emptyCollateralBook } from 'src/hooks';
 import {
@@ -5,11 +6,13 @@ import {
     emptyUSDCollateral,
 } from 'src/stories/mocks/fixtures';
 import { fireEvent, render, screen } from 'src/test-utils.js';
+import { ButtonEvents } from 'src/utils';
 import * as stories from './CollateralTabLeftPane.stories';
 
 const { Default, NotConnectedToWallet } = composeStories(stories);
 
 describe('CollateralTabLeftPane component', () => {
+    const track = jest.spyOn(analytics, 'track');
     it('should render CollateralTabLeftPane', () => {
         render(<NotConnectedToWallet />);
         expect(screen.getByText('Net Asset Value')).toBeInTheDocument();
@@ -52,17 +55,23 @@ describe('CollateralTabLeftPane component', () => {
         expect(screen.getByTestId('withdraw-collateral')).toBeEnabled();
     });
 
-    it('should call onClick with deposit when deposit button is clicked', () => {
+    it('should call onClick with deposit and emit deposit collateral button event when deposit button is clicked', () => {
         const onClick = jest.fn();
         render(<Default onClick={onClick} />);
         fireEvent.click(screen.getByTestId('deposit-collateral'));
+        expect(track).toHaveBeenCalledWith(
+            ButtonEvents.DEPOSIT_COLLATERAL_BUTTON
+        );
         expect(onClick).toHaveBeenCalledWith('deposit');
     });
 
-    it('should call onClick with withdraw when withdraw button is clicked', () => {
+    it('should call onClick with withdraw and emit withdraw collateral button event when withdraw button is clicked', () => {
         const onClick = jest.fn();
         render(<Default onClick={onClick} />);
         fireEvent.click(screen.getByTestId('withdraw-collateral'));
+        expect(track).toHaveBeenCalledWith(
+            ButtonEvents.WITHDRAW_COLLATERAL_BUTTON
+        );
         expect(onClick).toHaveBeenCalledWith('withdraw');
     });
 

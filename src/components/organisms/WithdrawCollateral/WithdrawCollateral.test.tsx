@@ -3,6 +3,8 @@ import { composeStories } from '@storybook/react';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import {
+    ButtonEvents,
+    ButtonProperties,
     CollateralEvents,
     CollateralProperties,
     CurrencySymbol,
@@ -17,6 +19,7 @@ const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('WithdrawCollateral component', () => {
+    const track = jest.spyOn(analytics, 'track');
     it('should display the WithdrawCollateral Modal when open', () => {
         const onClose = jest.fn();
         render(<Default onClose={onClose} />);
@@ -131,7 +134,6 @@ describe('WithdrawCollateral component', () => {
     });
 
     it('should track the withdrawing of collateral', async () => {
-        const track = jest.spyOn(analytics, 'track');
         const onClose = jest.fn();
         render(<Default onClose={onClose} source='Source of Withdrawal' />);
 
@@ -220,13 +222,16 @@ describe('WithdrawCollateral component', () => {
         expect(screen.getByText('50 USDC Available')).toBeInTheDocument();
     });
 
-    it('should call onClose when cancel button is clicked', () => {
+    it('should call onClose when cancel button is clicked and emit cancel button event', () => {
         const onClose = jest.fn();
         render(<Default onClose={onClose} />);
         const cancelButton = screen.getByRole('button', {
             name: 'Cancel',
         });
         fireEvent.click(cancelButton);
+        expect(track).toHaveBeenCalledWith(ButtonEvents.CANCEL_BUTTON, {
+            [ButtonProperties.CANCEL_ACTION]: 'Cancel Withdraw Collateral',
+        });
         expect(onClose).toHaveBeenCalled();
     });
 

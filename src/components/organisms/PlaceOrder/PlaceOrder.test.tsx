@@ -1,10 +1,11 @@
+import * as analytics from '@amplitude/analytics-browser';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
 import { dec22Fixture, dec24Fixture } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
-import { CurrencySymbol } from 'src/utils';
+import { ButtonEvents, ButtonProperties, CurrencySymbol } from 'src/utils';
 import { Amount } from 'src/utils/entities';
 import * as stories from './PlaceOrder.stories';
 
@@ -295,7 +296,8 @@ describe('PlaceOrder component', () => {
         expect(screen.getByText('Confirm Lend')).toBeInTheDocument();
     });
 
-    it('should call onClose when cancel button is clicked', () => {
+    it('should call onClose and emit cancel button event when cancel button is clicked', () => {
+        const track = jest.spyOn(analytics, 'track');
         const onClose = jest.fn();
         render(<Default onClose={onClose} />);
         const cancelButton = screen.getByRole('button', {
@@ -303,6 +305,9 @@ describe('PlaceOrder component', () => {
         });
         fireEvent.click(cancelButton);
         expect(onClose).toHaveBeenCalled();
+        expect(track).toHaveBeenCalledWith(ButtonEvents.CANCEL_BUTTON, {
+            [ButtonProperties.CANCEL_ACTION]: 'Cancel Place Order',
+        });
     });
 
     it('should not show cancel button if dialog is not on first step', async () => {
