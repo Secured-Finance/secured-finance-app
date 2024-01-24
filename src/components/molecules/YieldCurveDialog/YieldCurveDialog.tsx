@@ -22,7 +22,7 @@ export const YieldCurveDialog = ({
                         </button>
                     </div>
                     <Dialog.Panel
-                        className='flex min-h-[339px] w-full items-end overflow-y-auto px-3 pb-6 shadow-deep tablet:h-fit tablet:w-fit'
+                        className='flex h-[339px] w-full items-end overflow-y-auto px-3 pb-6 shadow-deep tablet:h-fit tablet:w-fit'
                         data-cy='modal'
                     >
                         {children}

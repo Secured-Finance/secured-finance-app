@@ -83,7 +83,6 @@ export function AdvancedLendingOrderCard({
         selectLandingOrderForm(state.landingOrderForm)
     );
 
-    // TODO: reconcile location of these imported hooks
     const [orderBook, setMultiplier, setIsShowingAll] = useOrderbook(
         currency,
         maturity
@@ -120,7 +119,6 @@ export function AdvancedLendingOrderCard({
         maximumRate,
         marketCloseToMaturityOriginalRate,
     } = useYieldCurveMarketRates();
-    // end of imported hooks for OrderBook on mobile
 
     const { amountInput, unitPriceInput } = useSelector((state: RootState) =>
         selectLandingOrderInputs(state.landingOrderForm)
@@ -455,7 +453,6 @@ export function AdvancedLendingOrderCard({
                                 role='button'
                                 tabIndex={0}
                             >
-                                {/* mobile yield curve here */}
                                 <LineChartTab
                                     rates={rates}
                                     maturityList={maturityList.map(item => ({
@@ -487,20 +484,20 @@ export function AdvancedLendingOrderCard({
                                 onAggregationChange={setMultiplier}
                             />
                         </div>
-                        <div className='mx-10px'>
+                        {/* <div className='mx-10px'>
                             <OrderDisplayBox
                                 field='Fixed Rate (APR)'
                                 value={formatLoanValue(loanValue, 'rate')}
                             />
-                        </div>
+                        </div> */}
                     </div>
-                    <div className='mx-10px'>
+                    {/* <div className='mx-10px'>
                         <Slider
                             onChange={handleAmountChange}
                             value={sliderValue}
                         />
-                    </div>
-                    {side === OrderSide.BORROW && (
+                    </div> */}
+                    {/* {side === OrderSide.BORROW && (
                         <div className='typography-caption mx-10px flex flex-row justify-between'>
                             <div className='text-slateGray'>{`Available To Borrow (${currency.toString()})`}</div>
                             <div className='text-right text-planetaryPurple'>
@@ -509,7 +506,7 @@ export function AdvancedLendingOrderCard({
                                 )}
                             </div>
                         </div>
-                    )}
+                    )} */}
 
                     <ErrorInfo
                         errorMessage='Simultaneous borrow and lend orders are not allowed during the pre-open market period.'

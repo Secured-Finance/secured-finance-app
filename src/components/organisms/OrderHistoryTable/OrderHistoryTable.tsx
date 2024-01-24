@@ -5,7 +5,9 @@ import {
     Pagination,
     TableActionMenu,
 } from 'src/components/molecules';
+import CompactOrderHistoryInfo from 'src/components/molecules/CompactOrderHistoryInfo/CompactOrderHistoryInfo';
 import { useBreakpoint, useEtherscanUrl, useLastPrices } from 'src/hooks';
+import { orderHistoryList } from 'src/stories/mocks/fixtures';
 import { Order, OrderHistoryList } from 'src/types';
 import {
     amountColumnDefinition,
@@ -19,7 +21,7 @@ import {
 
 const columnHelper = createColumnHelper<Order>();
 
-const getStatus = (status: string) => {
+export const getStatus = (status: string) => {
     switch (status) {
         case 'PartiallyBlocked':
             return 'Partially Blocked';
@@ -126,15 +128,21 @@ export const OrderHistoryTable = ({
     ];
 
     return (
-        <CoreTable
-            columns={isTablet ? columnsForTabletMobile : columns}
-            data={data}
-            options={{
-                name: 'order-history-table',
-                stickyFirstColumn: true,
-                pagination: pagination,
-                showHeaders: !isMobile,
-            }}
-        />
+        <>
+            <CompactOrderHistoryInfo data={orderHistoryList} />
+            <CoreTable
+                columns={isTablet ? columnsForTabletMobile : columns}
+                data={data}
+                options={{
+                    name: 'order-history-table',
+                    stickyFirstColumn: true,
+                    pagination: pagination,
+                    showHeaders: !isMobile,
+                }}
+                CustomRowComponent={
+                    <CompactOrderHistoryInfo data={orderHistoryList} />
+                }
+            />
+        </>
     );
 };

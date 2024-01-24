@@ -26,7 +26,7 @@ export const CurrencyDropdown = ({
             optionList={optionList}
             selected={selected}
             onChange={onChange}
-            variant='fixedWidth'
+            variant='fullWidth'
         />
     );
 };

@@ -22,13 +22,77 @@ export const CollateralManagementConciseTab = ({
         padding = 1;
     }
     const info = getLiquidationInformation(collateralCoverage);
+    const treshold = percentFormat(
+        collateralThreshold && collateralThreshold > collateralCoverage
+            ? collateralThreshold - collateralCoverage
+            : 0
+    );
+
+    const Notification = ({ percentage }: { percentage: string }) => {
+        const percentageNumber = +percentage.replace('%', '');
+
+        if (percentageNumber >= 60) {
+            return (
+                <div className='flex flex-col text-xs text-[#B9BDEA] tablet:hidden'>
+                    <p>
+                        Your funds are currently at{' '}
+                        <>
+                            {percentageNumber >= 80 ? (
+                                <span className='text-[#FF324B]'>
+                                    very high risk
+                                </span>
+                            ) : (
+                                <span className='text-[#FF9FAE]'>
+                                    high risk
+                                </span>
+                            )}{' '}
+                            of liquidation.{' '}
+                        </>
+                    </p>
+                    <p>
+                        <span>
+                            {percentageNumber >= 80
+                                ? 'Deposit collateral'
+                                : 'Add more funds'}
+                        </span>{' '}
+                        to increase your trading capacity.
+                    </p>
+                </div>
+            );
+        }
+
+        if (percentageNumber >= 20) {
+            return (
+                <div className='flex flex-col text-xs text-[#B9BDEA] tablet:hidden'>
+                    <p>
+                        Your funds are currently at{' '}
+                        {percentageNumber >= 40 ? (
+                            <span className='text-[#FAAD14]'>medium risk</span>
+                        ) : (
+                            <span className='text-[#15D6E8]'>lower risk</span>
+                        )}{' '}
+                        of liquidation.
+                    </p>
+                    <p>Add more funds to increase your trading capacity.</p>
+                </div>
+            );
+        }
+
+        return (
+            <p className='text-xs text-[#B9BDEA] tablet:hidden'>
+                Your funds are currently not at risk of liquidation.
+            </p>
+        );
+    };
 
     return (
         <div className='flex h-fit w-full flex-col gap-3 rounded-b pb-4 pt-2 tablet:gap-0'>
             <div className='flex flex-col rounded-xl bg-black-20 px-4 pb-5 pt-4 tablet:rounded-none'>
                 <div className='typography-caption mb-3 flex flex-row justify-between text-grayScale'>
                     <span>Collateral Utilization</span>
-                    <span>{percentFormat(collateralCoverage, 100)}</span>
+                    <span className='font-semibold text-[#15D6E8] laptop:font-normal laptop:text-white'>
+                        {percentFormat(collateralCoverage, 100)}
+                    </span>
                 </div>
                 <div className='h-6px w-full overflow-hidden rounded-full bg-[#2A313C]'>
                     <div
@@ -81,15 +145,9 @@ export const CollateralManagementConciseTab = ({
                 </ul>
 
                 <div className='typography-caption-2 mt-1 leading-6 text-planetaryPurple'>
-                    {account
-                        ? `Threshold: ${percentFormat(
-                              collateralThreshold &&
-                                  collateralThreshold > collateralCoverage
-                                  ? collateralThreshold - collateralCoverage
-                                  : 0
-                          )}`
-                        : 'N/A'}
+                    {account ? `Threshold: ${treshold}` : 'N/A'}
                 </div>
+                {account && <Notification percentage={'11%'} />}
             </div>
         </div>
     );

@@ -21,6 +21,7 @@ import {
     defaultDatasets,
 } from 'src/components/molecules/LineChart/constants';
 import { MaturityListItem } from 'src/components/organisms';
+import { useBreakpoint } from 'src/hooks';
 import { Maturity } from 'src/utils/entities';
 
 ChartJS.register(
@@ -73,6 +74,7 @@ export const LineChart = ({
     handleChartClick,
 }: LineChartProps) => {
     const chartRef = useRef<ChartJS<'line'>>(null);
+    const isMobile = useBreakpoint('tablet');
 
     if (data.datasets.length > 0 && data.datasets[0].data.length > 0) {
         const dataArray = data.datasets[0].data as number[];
@@ -163,7 +165,7 @@ export const LineChart = ({
                     ref={chartRef}
                     onClick={handleClick}
                     data-chromatic='ignore'
-                    plugins={[crossHairPlugin]}
+                    plugins={isMobile ? [] : [crossHairPlugin]}
                     onMouseOut={onMouseOut}
                 />
             ) : (

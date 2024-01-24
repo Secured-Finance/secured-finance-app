@@ -2,7 +2,7 @@ import { ChartOptions, ChartTypeRegistry, TooltipItem } from 'chart.js';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { LineChart, getData, options } from 'src/components/molecules';
-import { useIsGlobalItayose } from 'src/hooks';
+import { useBreakpoint, useIsGlobalItayose } from 'src/hooks';
 import {
     selectLandingOrderForm,
     setMaturity,
@@ -30,6 +30,7 @@ export const LineChartTab = ({
     const router = useRouter();
 
     const { data: isGlobalItayose } = useIsGlobalItayose();
+    const isMobile = useBreakpoint('tablet');
 
     const { currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
@@ -41,6 +42,7 @@ export const LineChartTab = ({
             ...options.scales,
             y: {
                 ...options.scales?.y,
+                display: !isMobile,
                 position: 'right',
                 max:
                     marketCloseToMaturityOriginalRate > maximumRate &&

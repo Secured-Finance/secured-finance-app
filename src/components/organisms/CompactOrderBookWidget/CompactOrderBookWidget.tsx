@@ -42,12 +42,15 @@ const OrderBookCell = ({
     fontWeight?: 'normal' | 'semibold';
 } & ColorFormat) => (
     <span
-        className={classNames('typography-caption-2 z-[1] text-right', {
-            'text-galacticOrange': color === 'negative',
-            'text-nebulaTeal': color === 'positive',
-            'text-neutral-6': color === 'neutral',
-            'font-semibold': fontWeight === 'semibold',
-        })}
+        className={classNames(
+            'typography-caption-2 z-[1] flex h-[1.375rem] items-center text-right laptop:h-auto',
+            {
+                'text-galacticOrange': color === 'negative',
+                'text-nebulaTeal': color === 'positive',
+                'text-neutral-6': color === 'neutral',
+                'font-semibold': fontWeight === 'semibold',
+            }
+        )}
     >
         {value ? value : <Fragment>&nbsp;</Fragment>}
     </span>
@@ -60,7 +63,7 @@ const AmountCell = ({
     value: bigint;
     currency: CurrencySymbol;
 }) => (
-    <div className='typography-caption-2 flex justify-end pr-[25%] text-neutral-6'>
+    <div className='typography-caption-2 flex h-[1.375rem] items-center justify-end pr-[25%] text-neutral-6'>
         {value === ZERO_BI ? (
             <OrderBookCell />
         ) : (
@@ -189,6 +192,7 @@ export const CompactOrderBookWidget = ({
     isLoadingMap?: Record<OrderSide, boolean>;
 }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
+
     useEffect(() => {
         onFilterChange?.(state);
     }, [onFilterChange, state]);
@@ -266,7 +270,7 @@ export const CompactOrderBookWidget = ({
                 cell: info => (
                     <AmountCell value={info.getValue()} currency={currency} />
                 ),
-                header: () => <TableHeader title='Amount' align='center' />,
+                header: () => <TableHeader title='Amount' align='right' />,
             }),
             columnHelper.accessor('value', {
                 id: 'price',
@@ -315,6 +319,16 @@ export const CompactOrderBookWidget = ({
         return rowData.amount !== ZERO_BI;
     };
 
+    const handleOrderBookView = () => {
+        if (state.showTicker) {
+            dispatch('showOnlyBorrow');
+        } else if (state.showBorrow) {
+            dispatch('showOnlyLend');
+        } else {
+            dispatch('reset');
+        }
+    };
+
     return (
         <div className='flex w-full flex-col justify-start gap-y-3 laptop:hidden'>
             {isCurrencyDelisted && (
@@ -325,7 +339,7 @@ export const CompactOrderBookWidget = ({
                     </div>
                 </div>
             )}
-            <div className='h-[470px]'>
+            <div className='h-[400px]'>
                 {orderbook.isLoading ? (
                     <div className='flex h-full w-full items-center justify-center'>
                         <Spinner />
@@ -357,7 +371,7 @@ export const CompactOrderBookWidget = ({
                             />
                         </div>
                         {state.showTicker && (
-                            <div className='-mx-3 flex h-14 flex-row items-center justify-between px-4 text-[1.125rem]'>
+                            <div className='flex h-14 flex-row items-center justify-between text-[1.125rem]'>
                                 <span
                                     className={classNames('font-semibold', {
                                         'flex flex-row items-center gap-2 text-white':
@@ -432,7 +446,7 @@ export const CompactOrderBookWidget = ({
                 <OrderBookIcon
                     Icon={<OrderbookToggleIcon className='h-4 w-4' />}
                     name='Orderbook'
-                    onClick={() => dispatch('showOnlyLend')}
+                    onClick={() => handleOrderBookView()}
                 />
             </div>
         </div>

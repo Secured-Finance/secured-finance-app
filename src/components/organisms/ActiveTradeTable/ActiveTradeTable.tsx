@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { useCallback, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { CoreTable, TableActionMenu } from 'src/components/molecules';
+import CompactActiveTradeInfo from 'src/components/molecules/CompactActiveTradeInfo/CompactActiveTradeInfo';
 import { UnwindDialog, UnwindDialogType } from 'src/components/organisms';
 import { Position, useBreakpoint, useLastPrices } from 'src/hooks';
 import {
@@ -14,8 +15,10 @@ import {
     setCurrency,
     setMaturity,
 } from 'src/store/landingOrderForm';
+import { wfilBytes32 } from 'src/stories/mocks/fixtures';
 import {
     CurrencySymbol,
+    getTimestampRelativeToNow,
     hexToCurrencySymbol,
     isMaturityPastDays,
     isPastDate,
@@ -318,8 +321,67 @@ export const ActiveTradeTable = ({
         ...columns.slice(2),
     ];
 
+    // TODO: remove lone CompactActiveTradeInfo expression
     return (
         <>
+            <CompactActiveTradeInfo
+                data={[
+                    {
+                        amount: BigInt('500000000000000000000'),
+                        currency: wfilBytes32,
+                        forwardValue: BigInt('500000000000000000000'),
+                        maturity: new Maturity(
+                            getTimestampRelativeToNow(22, true)
+                        ).toString(),
+                        marketPrice: BigInt(10000),
+                    },
+                    {
+                        amount: BigInt('500000000000000000000'),
+                        currency: wfilBytes32,
+                        forwardValue: BigInt('500000000000000000000'),
+                        maturity: new Maturity(
+                            getTimestampRelativeToNow(28, true)
+                        ).toString(),
+                        marketPrice: BigInt(10000),
+                    },
+                    {
+                        amount: BigInt('-500000000000000000000'),
+                        currency: wfilBytes32,
+                        forwardValue: BigInt('-500000000000000000000'),
+                        maturity: new Maturity(
+                            getTimestampRelativeToNow(120)
+                        ).toString(),
+                        marketPrice: BigInt(10000),
+                    },
+                    {
+                        amount: BigInt('-500000000000000000000'),
+                        currency: wfilBytes32,
+                        forwardValue: BigInt('-500000000000000000000'),
+                        maturity: new Maturity(
+                            getTimestampRelativeToNow(200)
+                        ).toString(),
+                        marketPrice: BigInt(10000),
+                    },
+                    {
+                        amount: BigInt('500000000000000000000'),
+                        currency: wfilBytes32,
+                        forwardValue: BigInt('500000000000000000000'),
+                        maturity: new Maturity(
+                            getTimestampRelativeToNow(160)
+                        ).toString(),
+                        marketPrice: BigInt(10000),
+                    },
+                    {
+                        amount: BigInt('500000000000000000000'),
+                        currency: wfilBytes32,
+                        forwardValue: BigInt('500000000000000000000'),
+                        maturity: new Maturity(
+                            getTimestampRelativeToNow(200)
+                        ).toString(),
+                        marketPrice: BigInt(10000),
+                    },
+                ]}
+            />
             <CoreTable
                 data={data}
                 columns={isTablet ? columnsForTabletMobile : columns}
@@ -333,6 +395,7 @@ export const ActiveTradeTable = ({
                     },
                     showHeaders: !isMobile,
                 }}
+                CustomRowComponent={<CompactActiveTradeInfo data={data} />}
             />
             {unwindDialogData && (
                 <UnwindDialog
@@ -353,7 +416,7 @@ export const ActiveTradeTable = ({
     );
 };
 
-const formatMaturity = (
+export const formatMaturity = (
     maturityTimeStamp: number,
     timeUnit: 'day' | 'hours' | 'minutes',
     currentTime: number

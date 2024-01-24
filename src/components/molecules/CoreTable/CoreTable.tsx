@@ -185,19 +185,17 @@ export const CoreTable = <T,>({
                     ) : (
                         <tr
                             key={row.id}
-                            className={classNames(
-                                'h-auto tablet:h-4 laptop:h-7',
-                                {
-                                    'cursor-pointer':
-                                        coreTableOptions.hoverRow?.(row.id),
-                                    'hover:bg-black-30':
-                                        coreTableOptions.hoverRow?.(row.id),
-                                    'border-b border-white-10':
-                                        coreTableOptions.border &&
-                                        rowIndex !==
-                                            table.getRowModel().rows.length - 1,
-                                }
-                            )}
+                            className={classNames('h-4 laptop:h-7', {
+                                'cursor-pointer': coreTableOptions.hoverRow?.(
+                                    row.id
+                                ),
+                                'hover:bg-black-30':
+                                    coreTableOptions.hoverRow?.(row.id),
+                                'border-b border-white-10':
+                                    coreTableOptions.border &&
+                                    rowIndex !==
+                                        table.getRowModel().rows.length - 1,
+                            })}
                             onClick={() =>
                                 coreTableOptions.hoverRow?.(row.id) &&
                                 coreTableOptions.onLineClick?.(row.id)
@@ -221,7 +219,8 @@ export const CoreTable = <T,>({
                                                             cellIndex === 0 &&
                                                             coreTableOptions?.stickyFirstColumn,
                                                         'py-2': !coreTableOptions.compact,
-                                                        'py-1': coreTableOptions.compact,
+                                                        'tablet:py-1':
+                                                            coreTableOptions.compact,
                                                     }
                                                 )}
                                             >

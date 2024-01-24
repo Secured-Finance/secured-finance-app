@@ -105,7 +105,7 @@ const ethEntries: Array<OrderBookEntry> = [
 ];
 
 export default {
-    title: 'Organism/OrderBookWidget',
+    title: 'Organism/CompactOrderBookWidget',
     component: CompactOrderBookWidget,
     args: {
         orderbook: {

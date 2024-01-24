@@ -1,56 +1,72 @@
-import { OrderSide } from '@secured-finance/sf-client';
 import { getUTCMonthYear } from '@secured-finance/sf-core';
 import classNames from 'classnames';
-import { useState } from 'react';
 import { CurrencyIcon } from 'src/components/atoms';
-import { RemoveOrderDialog } from 'src/components/organisms';
-import { Order } from 'src/hooks';
+import { getStatus } from 'src/components/organisms';
+import { Order, OrderHistoryList } from 'src/types';
 import {
     CurrencySymbol,
     currencyMap,
     formatLoanValue,
+    formatTimestamp,
     hexToCurrencySymbol,
+    ordinaryFormat,
 } from 'src/utils';
-import { Amount, LoanValue, Maturity } from 'src/utils/entities';
+import { LoanValue, Maturity } from 'src/utils/entities';
 
-// TODO: replace with Order
-type Props = { data?: any };
+type Props = { data: OrderHistoryList };
 
-export type OpenOrder = Order & { calculationDate?: number };
+// Note: filledAmount not added
 
-export default function CompactOrderInfo({ data }: Props) {
-    const [removeOrderDialogData, setRemoveOrderDialogData] = useState<{
-        orderId: bigint;
-        maturity: Maturity;
-        amount: Amount;
-        side: OrderSide;
-        isOpen: boolean;
-        orderUnitPrice: number;
-    }>();
+// Contract
+// Type
+// Price
+// Filled Amount
+// Amount
+// Status
+// Order Time
+// Actions
 
+export default function CompactOrderHistoryInfo({ data }: Props) {
     if (!data || data.length === 0) return null;
 
     return (
-        <>
-            {data.map((order: any, i: number) => {
-                const unitPrice = order.unitPrice;
+        <section>
+            {data.map((order: Order, i: number) => {
+                const unitPrice = order.inputUnitPrice;
                 const ccy = hexToCurrencySymbol(order.currency);
                 const maturity = new Maturity(order.maturity);
-                const side = order.side;
+                const side = order.side.toString();
 
                 const contract = `${getUTCMonthYear(maturity.toNumber())}`;
 
-                const calculationDate = order.calculationDate;
+                // const calculationDate = order.calculationDate;
                 const loanValue = LoanValue.fromPrice(
                     Number(unitPrice.toString()),
                     Number(order.maturity.toString()),
-                    calculationDate
+                    undefined
                 );
 
                 const formattedLoanValue = formatLoanValue(loanValue, 'price');
                 const formattedLoanApr = formatLoanValue(loanValue, 'rate');
-                const amount = currencyMap[ccy as CurrencySymbol].fromBaseUnit(
-                    order.amount as bigint
+
+                const inputAmount =
+                    order.type === 'Market' && order.status === 'Filled'
+                        ? order.filledAmount
+                        : order.inputAmount;
+
+                const status = getStatus(order.status);
+
+                const amount =
+                    currencyMap[ccy as CurrencySymbol].fromBaseUnit(
+                        inputAmount
+                    );
+
+                const roundingDecimal =
+                    currencyMap[ccy as CurrencySymbol].roundingDecimal;
+                const amountDisplay = ordinaryFormat(
+                    amount,
+                    roundingDecimal,
+                    roundingDecimal
                 );
 
                 const text = side === '1' ? 'Borrow' : 'Lend';
@@ -73,9 +89,9 @@ export default function CompactOrderInfo({ data }: Props) {
                                                 'flex w-[45px] items-center justify-center rounded-full px-[0.375rem] py-[0.125rem] text-[0.625rem]',
                                                 {
                                                     'bg-[#FFE5E8] text-[#FF324B]':
-                                                        order.side === '1',
+                                                        side === '1',
                                                     'bg-[#E4FFE7] text-[#10991D]':
-                                                        order.side !== '1',
+                                                        side !== '1',
                                                 }
                                             )}
                                         >
@@ -83,70 +99,54 @@ export default function CompactOrderInfo({ data }: Props) {
                                         </span>
                                     </div>
                                 </div>
-                                <button
-                                    className='max-h-7 overflow-hidden rounded-md border border-[#C4CAFF] px-[0.625rem] py-1 text-xs font-semibold leading-none text-[#C4CAFF]'
-                                    onClick={() => {
-                                        const amount = BigInt(order.amount);
-                                        setRemoveOrderDialogData({
-                                            orderId: order.orderId,
-                                            maturity,
-                                            amount: new Amount(
-                                                amount,
-                                                ccy as CurrencySymbol
-                                            ),
-                                            side: side,
-                                            isOpen: true,
-                                            orderUnitPrice: Number(unitPrice),
-                                        });
-                                    }}
-                                >
-                                    Cancel
-                                </button>
+                                <div>
+                                    {!!status && (
+                                        <span className='text-xs font-semibold'>
+                                            {status}
+                                        </span>
+                                    )}
+                                </div>
                             </div>
                             <div className='text-xs text-[#E2E8F0]'>
                                 <ul className='flex w-full flex-col gap-[0.375rem]'>
+                                    {!!formattedLoanValue && (
+                                        <li className='flex justify-between'>
+                                            <span>Market Price</span>
+                                            <span>{formattedLoanValue}</span>
+                                        </li>
+                                    )}
                                     {!!contract && (
                                         <li className='flex justify-between'>
                                             <span>Contract</span>
                                             <span>{contract}</span>
                                         </li>
                                     )}
-                                    {!!formattedLoanValue && (
-                                        <li className='flex justify-between'>
-                                            <span>Price</span>
-                                            <span>{formattedLoanValue}</span>
-                                        </li>
-                                    )}
                                     <li className='flex justify-between'>
                                         <span>APR%</span>
                                         <span>{formattedLoanApr}</span>
                                     </li>
-                                    {!!amount && (
+                                    {!!amountDisplay && (
                                         <li className='flex justify-between'>
                                             <span>Amount</span>
                                             <span>
-                                                {amount} {ccy || ''}
+                                                {amountDisplay} {ccy || ''}
                                             </span>
                                         </li>
                                     )}
+                                    <li className='flex justify-between'>
+                                        <span>Transaction time</span>
+                                        <span>
+                                            {formatTimestamp(
+                                                +order.createdAt.toString()
+                                            )}
+                                        </span>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 );
             })}
-
-            {removeOrderDialogData && (
-                <RemoveOrderDialog
-                    {...removeOrderDialogData}
-                    onClose={() =>
-                        setRemoveOrderDialogData({
-                            ...removeOrderDialogData,
-                            isOpen: false,
-                        })
-                    }
-                />
-            )}
-        </>
+        </section>
     );
 }

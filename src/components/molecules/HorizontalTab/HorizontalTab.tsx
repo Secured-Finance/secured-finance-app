@@ -13,7 +13,7 @@ const TitleChip = ({
         <div
             data-testid={title}
             className={classNames(
-                'typography-caption-2 w-fit whitespace-nowrap rounded-3xl px-5 py-3',
+                'typography-caption-2 w-fit whitespace-nowrap rounded-full px-4 py-2 laptop:rounded-3xl laptop:px-5 laptop:py-3',
                 {
                     'bg-starBlue text-neutral-8': selected,
                     'bg-black-20 text-[#CBD5E1]': !selected,

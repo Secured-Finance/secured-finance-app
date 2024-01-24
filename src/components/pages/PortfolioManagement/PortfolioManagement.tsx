@@ -300,7 +300,7 @@ export const PortfolioManagement = () => {
             )}
 
             <TwoColumns>
-                <div className='flex flex-col gap-6'>
+                <div className='flex flex-col gap-6 px-3 tablet:px-0'>
                     <StatsBar
                         testid='portfolio-management'
                         values={[
