@@ -1,5 +1,6 @@
 export * from './queries';
 export * from './useBalances';
+export * from './useBlockExplorerUrl';
 export * from './useBorrowableAmount';
 export * from './useBreakpoint';
 export * from './useCollateralBook';
@@ -7,7 +8,6 @@ export * from './useCurrencies';
 export * from './useCurrenciesForOrders';
 export * from './useCurrencyDelistedStatus';
 export * from './useDecimals';
-export * from './useEtherscanUrl';
 export * from './useGraphClientHook';
 export * from './useHandleContractTransaction';
 export * from './useIsGlobalItayose';

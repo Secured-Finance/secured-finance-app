@@ -81,7 +81,7 @@ export const mockUseSF = () => {
         config: {
             network: 'sepolia',
             chain: {
-                id: 5,
+                id: 11155111,
             },
         },
         placeOrder: jest.fn(),
