@@ -7,7 +7,7 @@ import {
 } from 'src/stories/mocks/queries';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor, within } from 'src/test-utils.js';
-import { ButtonEvents } from 'src/utils';
+import { ButtonEvents, ButtonProperties } from 'src/utils';
 import * as stories from './AdvancedLending.stories';
 
 const { Default, ConnectedToWallet, Delisted } = composeStories(stories);
@@ -33,7 +33,7 @@ describe('Advanced Lending Component', () => {
         fireEvent.click(screen.getByRole('button', { name: 'WFIL' }));
         fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
         expect(track).toHaveBeenCalledWith(ButtonEvents.CURRENCY_CHANGE, {
-            Currency: 'USDC',
+            [ButtonProperties.CURRENCY]: 'USDC',
         });
         await waitFor(() => {
             expect(store.getState().landingOrderForm.amount).toEqual('1');
@@ -43,7 +43,7 @@ describe('Advanced Lending Component', () => {
         });
     });
 
-    it('should not reset the amount and track TERM_CHANGE event when the user change the maturity', async () => {
+    it('should not reset the amount and emit TERM_CHANGE event when the user change the maturity', async () => {
         const { store } = await waitFor(() =>
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
@@ -59,7 +59,7 @@ describe('Advanced Lending Component', () => {
         fireEvent.click(screen.getByRole('button', { name: 'DEC22' }));
         fireEvent.click(screen.getByText('MAR23'));
         expect(track).toHaveBeenCalledWith(ButtonEvents.TERM_CHANGE, {
-            Term: '1669852800',
+            [ButtonProperties.TERM]: '1669852800',
         });
         await waitFor(() => {
             expect(store.getState().landingOrderForm.amount).toEqual('1');

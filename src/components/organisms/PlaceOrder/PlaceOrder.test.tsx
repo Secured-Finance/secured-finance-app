@@ -296,7 +296,7 @@ describe('PlaceOrder component', () => {
         expect(screen.getByText('Confirm Lend')).toBeInTheDocument();
     });
 
-    it('should call onClose and emit cancel button event when cancel button is clicked', () => {
+    it('should call onClose and emit cancel button event when CANCEL_BUTTON is clicked', () => {
         const track = jest.spyOn(analytics, 'track');
         const onClose = jest.fn();
         render(<Default onClose={onClose} />);

@@ -6,7 +6,13 @@ import { dec22Fixture } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
-import { ButtonEvents, CurrencySymbol } from 'src/utils';
+import {
+    ButtonEvents,
+    ButtonProperties,
+    CurrencySymbol,
+    InteractionEvents,
+    InteractionProperties,
+} from 'src/utils';
 import timemachine from 'timemachine';
 import * as stories from './AdvancedLendingOrderCard.stories';
 
@@ -735,6 +741,14 @@ describe('AdvancedLendingOrderCard Component', () => {
             });
             assertBondPriceInputValue('20');
         });
+
+        it('should emit BOND_PRICE event when bond price is changed', () => {
+            render(<Default marketPrice={9600} />, { preloadedState });
+            changeInputValue('Bond Price', '20');
+            expect(track).toHaveBeenCalledWith(InteractionEvents.BOND_PRICE, {
+                [InteractionProperties.BOND_PRICE]: '20',
+            });
+        });
     });
 
     describe('Amplitude', () => {
@@ -742,11 +756,11 @@ describe('AdvancedLendingOrderCard Component', () => {
             render(<Default />);
             fireEvent.click(screen.getByText('Limit'));
             expect(track).toHaveBeenCalledWith(ButtonEvents.ORDER_TYPE, {
-                'Order Type': 'Limit',
+                [ButtonProperties.ORDER_TYPE]: 'Limit',
             });
             fireEvent.click(screen.getByText('Lend'));
             expect(track).toHaveBeenCalledWith(ButtonEvents.ORDER_SIDE, {
-                'Order Side': 'Lend',
+                [ButtonProperties.ORDER_SIDE]: 'Lend',
             });
         });
     });

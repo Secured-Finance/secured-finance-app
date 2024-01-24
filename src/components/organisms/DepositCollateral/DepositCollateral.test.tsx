@@ -192,7 +192,7 @@ describe('DepositCollateral component', () => {
         );
     });
 
-    it('should call onClose when cancel button is clicked', () => {
+    it('should call onClose when cancel button and emit CANCEL_BUTTON event is clicked', () => {
         const onClose = jest.fn();
         render(<Default onClose={onClose} />);
         const cancelButton = screen.getByRole('button', {

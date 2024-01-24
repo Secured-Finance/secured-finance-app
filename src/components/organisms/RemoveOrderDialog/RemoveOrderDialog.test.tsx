@@ -66,7 +66,7 @@ describe('RemoveOrderDialog Component', () => {
         expect(await screen.findByText('~ $600')).toBeInTheDocument();
     });
 
-    it('should call onClose when cancel button is clicked and emit cancel button event', () => {
+    it('should call onClose when cancel button is clicked and emit CANCEL_BUTTON event', () => {
         const track = jest.spyOn(analytics, 'track');
         const onClose = jest.fn();
         render(<Default onClose={onClose} />);
