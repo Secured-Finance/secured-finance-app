@@ -11,7 +11,7 @@ import {
 import { OrderDetails } from 'src/components/organisms';
 import {
     emptyCollateralBook,
-    useEtherscanUrl,
+    useBlockExplorerUrl,
     useHandleContractTransaction,
     useLastPrices,
     useOrders,
@@ -111,7 +111,7 @@ export const RemoveOrderDialog = ({
         }
     };
 
-    const etherscanUrl = useEtherscanUrl();
+    const { blockExplorerUrl } = useBlockExplorerUrl();
     const handleContractTransaction = useHandleContractTransaction();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [txHash, setTxHash] = useState<string | undefined>();
@@ -223,7 +223,7 @@ export const RemoveOrderDialog = ({
                             ],
                         ]}
                         txHash={txHash}
-                        etherscanUrl={etherscanUrl}
+                        blockExplorerUrl={blockExplorerUrl}
                     />
                 );
             case Step.error:

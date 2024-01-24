@@ -12,7 +12,7 @@ import {
 import { OrderDetails } from 'src/components/organisms';
 import {
     CollateralBook,
-    useEtherscanUrl,
+    useBlockExplorerUrl,
     useHandleContractTransaction,
     useIsUnderCollateralThreshold,
 } from 'src/hooks';
@@ -133,7 +133,7 @@ export const PlaceOrder = ({
         }
     };
 
-    const etherscanUrl = useEtherscanUrl();
+    const { blockExplorerUrl } = useBlockExplorerUrl();
     const handleContractTransaction = useHandleContractTransaction();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [txHash, setTxHash] = useState<string | undefined>();
@@ -313,7 +313,7 @@ export const PlaceOrder = ({
                                     ],
                                 ]}
                                 txHash={txHash}
-                                etherscanUrl={etherscanUrl}
+                                blockExplorerUrl={blockExplorerUrl}
                             />
                         );
                     case Step.error:

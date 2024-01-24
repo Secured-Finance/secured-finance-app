@@ -7,16 +7,18 @@ import { Tooltip } from 'src/components/templates';
 export const SuccessPanel = ({
     itemList,
     txHash,
-    etherscanUrl,
+    blockExplorerUrl,
 }: {
     itemList: [string, string][];
     txHash?: string;
-    etherscanUrl?: string;
+    blockExplorerUrl?: string;
 }) => {
-    const etherscanLink = etherscanUrl ? `${etherscanUrl}/tx/${txHash}` : '';
+    const blockExplorerLink = blockExplorerUrl
+        ? `${blockExplorerUrl}/tx/${txHash}`
+        : '';
 
     const handleButtonClick = () => {
-        window.open(etherscanLink, '_blank');
+        window.open(blockExplorerLink, '_blank');
     };
 
     const items: [React.ReactNode, React.ReactNode][] = [];
