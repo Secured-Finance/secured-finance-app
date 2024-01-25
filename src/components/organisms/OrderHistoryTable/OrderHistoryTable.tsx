@@ -6,7 +6,7 @@ import {
     TableActionMenu,
 } from 'src/components/molecules';
 import CompactOrderHistoryInfo from 'src/components/molecules/CompactOrderHistoryInfo/CompactOrderHistoryInfo';
-import { useBreakpoint, useEtherscanUrl, useLastPrices } from 'src/hooks';
+import { useBlockExplorerUrl, useBreakpoint, useLastPrices } from 'src/hooks';
 import { orderHistoryList } from 'src/stories/mocks/fixtures';
 import { Order, OrderHistoryList } from 'src/types';
 import {
@@ -44,7 +44,7 @@ export const OrderHistoryTable = ({
     const { data: priceList } = useLastPrices();
     const isTablet = useBreakpoint('laptop');
     const isMobile = useBreakpoint('tablet');
-    const etherscanUrl = useEtherscanUrl();
+    const { blockExplorerUrl } = useBlockExplorerUrl();
 
     const columns = useMemo(
         () => [
@@ -94,8 +94,8 @@ export const OrderHistoryTable = ({
                 id: 'actions',
                 cell: info => {
                     const txHash = info.row.original.txHash;
-                    const etherscanLink = etherscanUrl
-                        ? `${etherscanUrl}/tx/${txHash}`
+                    const blockExplorerLink = blockExplorerUrl
+                        ? `${blockExplorerUrl}/tx/${txHash}`
                         : '';
                     return (
                         <div className='flex justify-center'>
@@ -105,7 +105,7 @@ export const OrderHistoryTable = ({
                                         text: 'View',
                                         onClick: () => {
                                             window.open(
-                                                etherscanLink,
+                                                blockExplorerLink,
                                                 '_blank'
                                             );
                                         },
@@ -118,7 +118,7 @@ export const OrderHistoryTable = ({
                 header: () => <div className='p-2'>Actions</div>,
             }),
         ],
-        [etherscanUrl, priceList, variant]
+        [blockExplorerUrl, priceList, variant]
     );
 
     const columnsForTabletMobile = [

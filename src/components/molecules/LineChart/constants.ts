@@ -199,19 +199,14 @@ export const options: ChartOptions<'line'> = {
             yAlign: 'bottom',
             caretPadding: 16,
             borderWidth: 1,
-            backgroundColor: '#2033DB4D',
+            backgroundColor: 'rgba(47, 50, 65, 1)',
+            borderColor: 'rgba(52, 56, 76, 1)',
             bodyFont: {
                 weight: 'bold',
             },
-            borderColor: '#2033DB',
             displayColors: false,
             cornerRadius: 10,
-            padding: {
-                left: 13,
-                right: 13,
-                top: 8,
-                bottom: 8,
-            },
+            padding: 8,
             callbacks: {
                 label: (item: TooltipItem<keyof ChartTypeRegistry>) => {
                     let content = '';

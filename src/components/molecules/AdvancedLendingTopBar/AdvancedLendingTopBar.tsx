@@ -75,7 +75,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                             onTermChange={onTermChange}
                         />
                     </div>
-                    <div className='col-span-4 pl-5 tablet:pl-0 laptop:col-span-3 laptop:border-r laptop:border-white-10 laptop:pr-5'>
+                    <div className='col-span-4 pl-4 tablet:pl-0 laptop:col-span-3 laptop:border-r laptop:border-white-10 laptop:pr-5'>
                         <MarketTab
                             name={formatLoanValue(
                                 currentMarket?.value,

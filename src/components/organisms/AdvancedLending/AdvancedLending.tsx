@@ -12,12 +12,11 @@ import {
     ActiveTradeTable,
     AdvancedLendingOrderCard,
     LineChartTab,
-    MyTransactionsTable,
     OrderBookWidget,
     OrderHistoryTable,
     OrderTable,
 } from 'src/components/organisms';
-import { TabSpinner, TableType } from 'src/components/pages';
+import { TableType } from 'src/components/pages';
 import { ThreeColumnsWithTopBar } from 'src/components/templates';
 import {
     CollateralBook,
@@ -385,7 +384,16 @@ export const AdvancedLending = ({
                             variant='compact'
                             height={350}
                         />
-                        {userOrderHistory.loading ? (
+                        <OrderHistoryTable
+                            data={sortedOrderHistory}
+                            pagination={{
+                                totalData: sortedOrderHistory.length,
+                                getMoreData: () => {},
+                                containerHeight: 350,
+                            }}
+                            variant='contractOnly'
+                        />
+                        {/* {userOrderHistory.loading ? (
                             <TabSpinner />
                         ) : (
                             <OrderHistoryTable
@@ -410,7 +418,7 @@ export const AdvancedLending = ({
                                 }}
                                 variant='contractOnly'
                             />
-                        )}
+                        )} */}
                     </HorizontalTab>
                 </div>
             </div>

@@ -1,6 +1,6 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
-import { Settings, testnetsEnabledId } from './Settings';
+import { Settings } from './Settings';
 
 export default {
     title: 'Molecules/Settings',
@@ -19,13 +19,17 @@ const Template: StoryFn<typeof Settings> = args => (
 export const Default = Template.bind({});
 export const Expanded = Template.bind({});
 Expanded.play = async ({ canvasElement }) => {
-    localStorage.setItem(testnetsEnabledId, 'true');
     const canvas = within(canvasElement);
-    const walletButton = await canvas.findByRole('button');
-    await userEvent.click(walletButton);
+    const settingsButton = await canvas.findByRole('button');
+    await userEvent.click(settingsButton);
 };
 
 export const IsNotProduction = Template.bind({});
 IsNotProduction.args = {
     isProduction: false,
+};
+IsNotProduction.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const settingsButton = await canvas.findByRole('button');
+    await userEvent.click(settingsButton);
 };

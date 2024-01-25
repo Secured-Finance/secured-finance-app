@@ -121,7 +121,9 @@ export default function CompactActiveTradeInfo({ data }: Props) {
                             ? OrderSide.BORROW
                             : OrderSide.LEND;
 
-                    const contract = `${getUTCMonthYear(maturityTimestamp)}`;
+                    const contract = `${ccy} ${getUTCMonthYear(
+                        maturityTimestamp
+                    )}`;
 
                     const amount = currencyMap[
                         ccy as CurrencySymbol
@@ -160,11 +162,21 @@ export default function CompactActiveTradeInfo({ data }: Props) {
                         undefined
                     );
 
+                    const formattedLoanApr = formatLoanValue(
+                        marketPrice,
+                        'rate'
+                    );
+
                     const text = forwardValue < 0 ? 'Borrow' : 'Lend';
 
                     return (
                         <div className='px-5' key={`active-trade-info-${i}`}>
-                            <div className='flex flex-col gap-4 border-b border-neutral-600 py-4 text-[#FBFAFC]'>
+                            <div
+                                className={classNames(
+                                    'flex flex-col gap-4 border-neutral-600 py-4 text-[#FBFAFC]',
+                                    { 'border-b': i !== data.length - 1 }
+                                )}
+                            >
                                 <div className='flex justify-between'>
                                     <div className='flex gap-2'>
                                         <CurrencyIcon
@@ -201,12 +213,14 @@ export default function CompactActiveTradeInfo({ data }: Props) {
                                                 'price'
                                             )}
                                         </h3>
-                                        <p className='flex items-center gap-1 text-xs text-[#94A3B8]'>
-                                            APR:{' '}
-                                            <span className='text-sm font-semibold'>
-                                                5.00%
-                                            </span>
-                                        </p>
+                                        {!!formattedLoanApr && (
+                                            <p className='flex items-center gap-1 text-xs text-[#94A3B8]'>
+                                                APR:{' '}
+                                                <span className='text-sm font-semibold'>
+                                                    {formattedLoanApr}
+                                                </span>
+                                            </p>
+                                        )}
                                     </div>
                                 </div>
                                 <div className='text-xs text-[#E2E8F0]'>

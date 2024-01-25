@@ -15,17 +15,6 @@ import { LoanValue, Maturity } from 'src/utils/entities';
 
 type Props = { data: OrderHistoryList };
 
-// Note: filledAmount not added
-
-// Contract
-// Type
-// Price
-// Filled Amount
-// Amount
-// Status
-// Order Time
-// Actions
-
 export default function CompactOrderHistoryInfo({ data }: Props) {
     if (!data || data.length === 0) return null;
 
@@ -37,7 +26,9 @@ export default function CompactOrderHistoryInfo({ data }: Props) {
                 const maturity = new Maturity(order.maturity);
                 const side = order.side.toString();
 
-                const contract = `${getUTCMonthYear(maturity.toNumber())}`;
+                const contract = `${ccy} ${getUTCMonthYear(
+                    maturity.toNumber()
+                )}`;
 
                 // const calculationDate = order.calculationDate;
                 const loanValue = LoanValue.fromPrice(
@@ -73,7 +64,12 @@ export default function CompactOrderHistoryInfo({ data }: Props) {
 
                 return (
                     <div className='px-5' key={`order-info-${i}`}>
-                        <div className='flex flex-col gap-4 border-b border-neutral-600 py-4 text-[#FBFAFC]'>
+                        <div
+                            className={classNames(
+                                'flex flex-col gap-4 border-neutral-600 py-4 text-[#FBFAFC]',
+                                { 'border-b': i !== data.length - 1 }
+                            )}
+                        >
                             <div className='flex justify-between'>
                                 <div className='flex gap-2'>
                                     <CurrencyIcon
@@ -99,11 +95,19 @@ export default function CompactOrderHistoryInfo({ data }: Props) {
                                         </span>
                                     </div>
                                 </div>
-                                <div>
+                                <div className='flex flex-col items-end gap-1'>
                                     {!!status && (
                                         <span className='text-xs font-semibold'>
                                             {status}
                                         </span>
+                                    )}
+                                    {!!formattedLoanApr && (
+                                        <p className='flex items-center gap-1 text-xs text-[#94A3B8]'>
+                                            APR:{' '}
+                                            <span className='text-sm font-semibold text-[#C4CAFF]'>
+                                                {formattedLoanApr}
+                                            </span>
+                                        </p>
                                     )}
                                 </div>
                             </div>
@@ -121,10 +125,6 @@ export default function CompactOrderHistoryInfo({ data }: Props) {
                                             <span>{contract}</span>
                                         </li>
                                     )}
-                                    <li className='flex justify-between'>
-                                        <span>APR%</span>
-                                        <span>{formattedLoanApr}</span>
-                                    </li>
                                     {!!amountDisplay && (
                                         <li className='flex justify-between'>
                                             <span>Amount</span>

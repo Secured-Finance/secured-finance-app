@@ -11,6 +11,7 @@ export const initialStore = {
         ...store.getState().blockchain,
         chainId: 11155111,
         chainError: false,
+        testnetEnabled: true,
     },
     landingOrderForm: {
         currency: CurrencySymbol.WFIL,

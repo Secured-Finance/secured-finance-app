@@ -6,6 +6,7 @@ import { CoreTable, TableActionMenu } from 'src/components/molecules';
 import CompactOrderInfo from 'src/components/molecules/CompactOrderInfo/CompactOrderInfo';
 import { RemoveOrderDialog } from 'src/components/organisms';
 import { Order, useBreakpoint } from 'src/hooks';
+import { activeOrders, preOpenOrders } from 'src/stories/mocks/fixtures';
 import { hexToCurrencySymbol } from 'src/utils';
 import { Amount, Maturity } from 'src/utils/entities';
 import {
@@ -138,6 +139,14 @@ export const OrderTable = ({
 
     return (
         <>
+            <CompactOrderInfo
+                data={[
+                    ...activeOrders,
+                    ...activeOrders,
+                    ...activeOrders,
+                    ...preOpenOrders,
+                ]}
+            />
             <CoreTable
                 columns={
                     variant === 'compact'

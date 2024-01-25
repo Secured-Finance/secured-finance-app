@@ -30,6 +30,8 @@
   },
   "prettier.prettierPath": "node_modules/prettier",
   "cSpell.words": [
+    "arbiscan",
+    "arbitrum",
     "attofil",
     "Axelar",
     "bigint",
@@ -57,6 +59,7 @@
     "Scriptable",
     "secp",
     "Sepolia",
+    "snowtrace",
     "Subcontainer",
     "tanstack",
     "testid",

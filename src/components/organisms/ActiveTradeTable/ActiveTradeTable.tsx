@@ -349,7 +349,7 @@ export const ActiveTradeTable = ({
                         currency: wfilBytes32,
                         forwardValue: BigInt('-500000000000000000000'),
                         maturity: new Maturity(
-                            getTimestampRelativeToNow(120)
+                            getTimestampRelativeToNow(120, true)
                         ).toString(),
                         marketPrice: BigInt(10000),
                     },

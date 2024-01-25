@@ -13,8 +13,7 @@ import {
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 
-// TODO: replace with Order
-type Props = { data?: any };
+type Props = { data?: OpenOrder[] };
 
 export type OpenOrder = Order & { calculationDate?: number };
 
@@ -32,13 +31,15 @@ export default function CompactOrderInfo({ data }: Props) {
 
     return (
         <>
-            {data.map((order: any, i: number) => {
+            {data.map((order: OpenOrder, i: number) => {
                 const unitPrice = order.unitPrice;
                 const ccy = hexToCurrencySymbol(order.currency);
                 const maturity = new Maturity(order.maturity);
                 const side = order.side;
 
-                const contract = `${getUTCMonthYear(maturity.toNumber())}`;
+                const contract = `${ccy} ${getUTCMonthYear(
+                    maturity.toNumber()
+                )}`;
 
                 const calculationDate = order.calculationDate;
                 const loanValue = LoanValue.fromPrice(
@@ -53,11 +54,16 @@ export default function CompactOrderInfo({ data }: Props) {
                     order.amount as bigint
                 );
 
-                const text = side === '1' ? 'Borrow' : 'Lend';
+                const text = side.toString() === '1' ? 'Borrow' : 'Lend';
 
                 return (
                     <div className='px-5' key={`order-info-${i}`}>
-                        <div className='flex flex-col gap-4 border-b border-neutral-600 py-4 text-[#FBFAFC]'>
+                        <div
+                            className={classNames(
+                                'flex flex-col gap-4 border-neutral-600 py-4 text-[#FBFAFC]',
+                                { 'border-b': i !== data.length - 1 }
+                            )}
+                        >
                             <div className='flex justify-between'>
                                 <div className='flex gap-2'>
                                     <CurrencyIcon
@@ -73,9 +79,11 @@ export default function CompactOrderInfo({ data }: Props) {
                                                 'flex w-[45px] items-center justify-center rounded-full px-[0.375rem] py-[0.125rem] text-[0.625rem]',
                                                 {
                                                     'bg-[#FFE5E8] text-[#FF324B]':
-                                                        order.side === '1',
+                                                        order.side.toString() ===
+                                                        '1',
                                                     'bg-[#E4FFE7] text-[#10991D]':
-                                                        order.side !== '1',
+                                                        order.side.toString() !==
+                                                        '1',
                                                 }
                                             )}
                                         >

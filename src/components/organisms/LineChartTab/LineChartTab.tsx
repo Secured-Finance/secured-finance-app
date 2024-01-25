@@ -54,9 +54,22 @@ export const LineChartTab = ({
         plugins: {
             tooltip: {
                 ...options.plugins?.tooltip,
+                padding: {
+                    left: 12.85,
+                    right: 12.85,
+                    top: 8,
+                    bottom: 8,
+                },
+                backgroundColor: '#2033DB4D',
+                bodyFont: {
+                    weight: 'bold',
+                },
+                borderColor: '#2033DB',
+                mode: 'index',
                 callbacks: {
                     ...options.plugins?.tooltip?.callbacks,
                     label: (context: TooltipItem<keyof ChartTypeRegistry>) => {
+                        const modifier = '%';
                         if (
                             context.dataIndex === 0 &&
                             marketCloseToMaturityOriginalRate > maximumRate
@@ -65,10 +78,10 @@ export const LineChartTab = ({
                                 (
                                     marketCloseToMaturityOriginalRate /
                                     ONE_PERCENT
-                                ).toFixed(3) + '%'
+                                ).toFixed(3) + modifier
                             );
                         } else {
-                            return context.formattedValue + '%';
+                            return context.formattedValue + modifier;
                         }
                     },
                 },

@@ -43,7 +43,7 @@ const OrderBookCell = ({
 } & ColorFormat) => (
     <span
         className={classNames(
-            'typography-caption-2 z-[1] flex h-[1.375rem] items-center text-right laptop:h-auto',
+            'z-[1] flex h-[1.375rem] items-center text-right text-xs laptop:h-auto',
             {
                 'text-galacticOrange': color === 'negative',
                 'text-nebulaTeal': color === 'positive',
@@ -63,7 +63,7 @@ const AmountCell = ({
     value: bigint;
     currency: CurrencySymbol;
 }) => (
-    <div className='typography-caption-2 flex h-[1.375rem] items-center justify-end pr-[25%] text-neutral-6'>
+    <div className='flex h-[1.375rem] items-center justify-end pr-[25%] text-neutral-6'>
         {value === ZERO_BI ? (
             <OrderBookCell />
         ) : (
@@ -109,7 +109,7 @@ const PriceCell = ({
     return (
         <div
             className={classNames(
-                'typography-caption-2 relative flex items-center overflow-visible font-bold text-neutral-6',
+                'relative flex items-center overflow-visible text-neutral-6',
                 {
                     'justify-start': align === 'left',
                     'justify-end': align === 'right',
@@ -339,7 +339,7 @@ export const CompactOrderBookWidget = ({
                     </div>
                 </div>
             )}
-            <div className='h-[400px]'>
+            <div className='h-[405px] tablet:h-[490px]'>
                 {orderbook.isLoading ? (
                     <div className='flex h-full w-full items-center justify-center'>
                         <Spinner />

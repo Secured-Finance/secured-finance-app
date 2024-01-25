@@ -21,6 +21,7 @@ import {
     useMarket,
     useYieldCurveMarketRates,
 } from 'src/hooks';
+import { OrderBookEntry } from 'src/hooks/useOrderbook';
 import {
     resetUnitPrice,
     selectLandingOrderForm,
@@ -46,7 +47,12 @@ import {
     prefixTilde,
     usdFormat,
 } from 'src/utils';
-import { AMOUNT_PRECISION, Amount, LoanValue } from 'src/utils/entities';
+import {
+    AMOUNT_PRECISION,
+    Amount,
+    LoanValue,
+    Maturity,
+} from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
 // TODO: reconcile location of imported OrderBook for mobile
@@ -278,6 +284,90 @@ export function AdvancedLendingOrderCard({
         isInvalidBondPrice ||
         showPreOrderError;
 
+    const maturityMar23 = new Maturity(1675252800);
+
+    const ZERO_ENTRY = {
+        amount: ZERO_BI,
+        value: LoanValue.fromPrice(0, maturityMar23.toNumber()),
+    };
+
+    const ethEntries: Array<OrderBookEntry> = [
+        {
+            amount: BigInt('12000000000000000000'),
+            value: LoanValue.fromPrice(9653, maturityMar23.toNumber()),
+        },
+        {
+            amount: BigInt('12301100000000000000'),
+            value: LoanValue.fromPrice(9674, maturityMar23.toNumber()),
+        },
+        {
+            amount: BigInt('10034003400000000000'),
+            value: LoanValue.fromPrice(9679, maturityMar23.toNumber()),
+        },
+        {
+            amount: BigInt('100000000000000000000'),
+            value: LoanValue.fromPrice(9679, maturityMar23.toNumber()),
+        },
+        {
+            amount: BigInt('100200000000000000000'),
+            value: LoanValue.fromPrice(9679, maturityMar23.toNumber()),
+        },
+    ];
+
+    // const borrowEntries: Array<OrderBookEntry> = [
+    //     {
+    //         amount: BigInt('4300320000000'),
+    //         value: LoanValue.fromPrice(9850, maturityMar23.toNumber()),
+    //     },
+    //     {
+    //         amount: BigInt('23000005200000'),
+    //         value: LoanValue.fromPrice(9700, maturityMar23.toNumber()),
+    //     },
+    //     {
+    //         amount: BigInt('1500000000000'),
+    //         value: LoanValue.fromPrice(9500, maturityMar23.toNumber()),
+    //     },
+    //     {
+    //         amount: BigInt('1200000000000'),
+    //         value: LoanValue.fromPrice(9475, maturityMar23.toNumber()),
+    //     },
+    //     {
+    //         amount: BigInt('180000000000'),
+    //         value: LoanValue.fromPrice(9400, maturityMar23.toNumber()),
+    //     },
+    //     {
+    //         amount: BigInt('0'),
+    //         value: LoanValue.fromPrice(9200, maturityMar23.toNumber()),
+    //     },
+    // ];
+
+    // const lendEntries: Array<OrderBookEntry> = [
+    //     {
+    //         amount: BigInt('4300000000000'),
+    //         value: LoanValue.fromPrice(9200, maturityMar23.toNumber()),
+    //     },
+    //     {
+    //         amount: BigInt('5500000000000'),
+    //         value: LoanValue.fromPrice(9110, maturityMar23.toNumber()),
+    //     },
+    //     {
+    //         amount: BigInt('300000000000'),
+    //         value: LoanValue.fromPrice(9050, maturityMar23.toNumber()),
+    //     },
+    //     {
+    //         amount: BigInt('1500000000000'),
+    //         value: LoanValue.fromPrice(9010, maturityMar23.toNumber()),
+    //     },
+    //     {
+    //         amount: BigInt('2100000000000'),
+    //         value: LoanValue.fromPrice(8980, maturityMar23.toNumber()),
+    //     },
+    //     {
+    //         amount: BigInt('5100000000000'),
+    //         value: LoanValue.fromPrice(8960, maturityMar23.toNumber()),
+    //     },
+    // ];
+
     return (
         <>
             <YieldCurveDialog
@@ -313,10 +403,8 @@ export function AdvancedLendingOrderCard({
                 />
 
                 <div className='flex w-full flex-col justify-center gap-6 px-4 pt-4'>
-                    {/* contains lend borrow elements, + yield curve and orderbook */}
                     <div className='grid grid-cols-12 gap-5'>
-                        {/* lend borrow elements */}
-                        <div className='col-span-7 flex flex-col gap-6 tablet:col-span-12 tablet:justify-start'>
+                        <div className='col-span-7 flex flex-col gap-6 tablet:justify-start laptop:col-span-12'>
                             {!isItayose && (
                                 <RadioGroupSelector
                                     options={OrderTypeOptions}
@@ -437,9 +525,9 @@ export function AdvancedLendingOrderCard({
                                 )}
                             />
                         </div>
-                        <div className='col-span-5 block tablet:hidden'>
+                        <div className='col-span-5 block laptop:hidden'>
                             <div
-                                className='mb-3 flex w-[72%] flex-col'
+                                className='mb-3 flex h-[100px] flex-col'
                                 onClick={() =>
                                     setIsShowYieldCurveDialog(
                                         !isShowYieldCurveDialog
@@ -470,12 +558,29 @@ export function AdvancedLendingOrderCard({
                                 />
                             </div>
                             <CompactOrderBookWidget
-                                orderbook={orderBook}
-                                currency={currency}
-                                marketPrice={currentMarket?.value}
-                                isCurrencyDelisted={delistedCurrencySet.has(
-                                    currency
-                                )}
+                                // orderbook={orderBook}
+                                // marketPrice={currentMarket?.value}
+                                // isCurrencyDelisted={delistedCurrencySet.has(
+                                //     currency
+                                // )}
+                                // currency={currency}
+                                orderbook={{
+                                    data: {
+                                        borrowOrderbook: [
+                                            ...ethEntries,
+                                            ZERO_ENTRY,
+                                            ZERO_ENTRY,
+                                            ZERO_ENTRY,
+                                        ],
+                                        lendOrderbook: [
+                                            ...ethEntries,
+                                            ZERO_ENTRY,
+                                        ],
+                                    },
+                                    isLoading: false,
+                                }}
+                                currency={CurrencySymbol.ETH}
+                                isCurrencyDelisted={false}
                                 onFilterChange={state =>
                                     setIsShowingAll(
                                         state.showBorrow && state.showLend
@@ -484,29 +589,7 @@ export function AdvancedLendingOrderCard({
                                 onAggregationChange={setMultiplier}
                             />
                         </div>
-                        {/* <div className='mx-10px'>
-                            <OrderDisplayBox
-                                field='Fixed Rate (APR)'
-                                value={formatLoanValue(loanValue, 'rate')}
-                            />
-                        </div> */}
                     </div>
-                    {/* <div className='mx-10px'>
-                        <Slider
-                            onChange={handleAmountChange}
-                            value={sliderValue}
-                        />
-                    </div> */}
-                    {/* {side === OrderSide.BORROW && (
-                        <div className='typography-caption mx-10px flex flex-row justify-between'>
-                            <div className='text-slateGray'>{`Available To Borrow (${currency.toString()})`}</div>
-                            <div className='text-right text-planetaryPurple'>
-                                {prefixTilde(
-                                    ordinaryFormat(availableToBorrow, 0, 6)
-                                )}
-                            </div>
-                        </div>
-                    )} */}
 
                     <ErrorInfo
                         errorMessage='Simultaneous borrow and lend orders are not allowed during the pre-open market period.'

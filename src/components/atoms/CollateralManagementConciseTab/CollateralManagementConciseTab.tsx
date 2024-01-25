@@ -28,69 +28,12 @@ export const CollateralManagementConciseTab = ({
             : 0
     );
 
-    const Notification = ({ percentage }: { percentage: string }) => {
-        const percentageNumber = +percentage.replace('%', '');
-
-        if (percentageNumber >= 60) {
-            return (
-                <div className='flex flex-col text-xs text-[#B9BDEA] tablet:hidden'>
-                    <p>
-                        Your funds are currently at{' '}
-                        <>
-                            {percentageNumber >= 80 ? (
-                                <span className='text-[#FF324B]'>
-                                    very high risk
-                                </span>
-                            ) : (
-                                <span className='text-[#FF9FAE]'>
-                                    high risk
-                                </span>
-                            )}{' '}
-                            of liquidation.{' '}
-                        </>
-                    </p>
-                    <p>
-                        <span>
-                            {percentageNumber >= 80
-                                ? 'Deposit collateral'
-                                : 'Add more funds'}
-                        </span>{' '}
-                        to increase your trading capacity.
-                    </p>
-                </div>
-            );
-        }
-
-        if (percentageNumber >= 20) {
-            return (
-                <div className='flex flex-col text-xs text-[#B9BDEA] tablet:hidden'>
-                    <p>
-                        Your funds are currently at{' '}
-                        {percentageNumber >= 40 ? (
-                            <span className='text-[#FAAD14]'>medium risk</span>
-                        ) : (
-                            <span className='text-[#15D6E8]'>lower risk</span>
-                        )}{' '}
-                        of liquidation.
-                    </p>
-                    <p>Add more funds to increase your trading capacity.</p>
-                </div>
-            );
-        }
-
-        return (
-            <p className='text-xs text-[#B9BDEA] tablet:hidden'>
-                Your funds are currently not at risk of liquidation.
-            </p>
-        );
-    };
-
     return (
         <div className='flex h-fit w-full flex-col gap-3 rounded-b pb-4 pt-2 tablet:gap-0'>
             <div className='flex flex-col rounded-xl bg-black-20 px-4 pb-5 pt-4 tablet:rounded-none'>
                 <div className='typography-caption mb-3 flex flex-row justify-between text-grayScale'>
                     <span>Collateral Utilization</span>
-                    <span className='font-semibold text-[#15D6E8] laptop:font-normal laptop:text-white'>
+                    <span className='font-semibold text-nebulaTeal laptop:font-normal laptop:text-white'>
                         {percentFormat(collateralCoverage, 100)}
                     </span>
                 </div>
@@ -115,7 +58,13 @@ export const CollateralManagementConciseTab = ({
             <div className='flex flex-col rounded-xl bg-black-20 px-4 pb-4 pt-5 tablet:rounded-none'>
                 <div className='typography-caption mb-1 flex flex-row justify-between'>
                     <span className='text-grayScale'>Liquidation Risk</span>
-                    <span className={`${info.color}`}>{info.risk}</span>
+                    <span
+                        className={classNames(info.color, {
+                            'font-semibold': collateralCoverage > 20,
+                        })}
+                    >
+                        {info.risk}
+                    </span>
                 </div>
                 <div
                     style={{
@@ -147,17 +96,81 @@ export const CollateralManagementConciseTab = ({
                 <div className='typography-caption-2 mt-1 leading-6 text-planetaryPurple'>
                     {account ? `Threshold: ${treshold}` : 'N/A'}
                 </div>
-                {account && <Notification percentage={'11%'} />}
+                {account && <Notification percentage={'61%'} />}
             </div>
         </div>
     );
 };
 
-export const getLiquidationInformation = (liquidationPercentage: number) => {
-    if (liquidationPercentage < 40) {
-        return { color: 'text-progressBarStart', risk: 'Low' };
-    } else if (liquidationPercentage >= 40 && liquidationPercentage < 60) {
-        return { color: 'text-progressBarVia', risk: 'Medium' };
+const Notification = ({ percentage }: { percentage: string }) => {
+    const percentageNumber = +percentage.replace('%', '');
+
+    if (percentageNumber >= 60) {
+        return (
+            <div className='flex flex-col pt-[0.375rem] text-xs text-secondary7 tablet:hidden'>
+                <p>
+                    Your funds are currently at{' '}
+                    <>
+                        {percentageNumber >= 80 ? (
+                            <span className='text-[#FF324B]'>
+                                very high risk
+                            </span>
+                        ) : (
+                            <span className='text-[#FF9FAE]'>high risk</span>
+                        )}{' '}
+                        of liquidation.{' '}
+                    </>
+                </p>
+                <p>
+                    <span className='font-semibold text-nebulaTeal underline'>
+                        {percentageNumber >= 80
+                            ? 'Deposit collateral'
+                            : 'Add more funds'}
+                    </span>{' '}
+                    to increase your trading capacity.
+                </p>
+            </div>
+        );
     }
-    return { color: 'text-progressBarEnd', risk: 'High' };
+
+    if (percentageNumber >= 20) {
+        return (
+            <div className='flex flex-col pt-[0.375rem] text-xs text-secondary7 tablet:hidden'>
+                <p>
+                    Your funds are currently at{' '}
+                    {percentageNumber >= 40 ? (
+                        <span className='text-[#FAAD14]'>medium risk</span>
+                    ) : (
+                        <span className='text-nebulaTeal'>lower risk</span>
+                    )}{' '}
+                    of liquidation.
+                </p>
+                <p>
+                    <span className='font-semibold text-nebulaTeal underline'>
+                        Add more funds
+                    </span>{' '}
+                    to increase your trading capacity.
+                </p>
+            </div>
+        );
+    }
+
+    return (
+        <p className='text-xs text-secondary7 tablet:hidden'>
+            Your funds are currently not at risk of liquidation.
+        </p>
+    );
+};
+
+export const getLiquidationInformation = (liquidationPercentage: number) => {
+    if (liquidationPercentage < 20) {
+        return { color: 'text-[#C4CAFF]', risk: 'Safe' };
+    } else if (liquidationPercentage >= 20 && liquidationPercentage < 40) {
+        return { color: 'text-nebulaTeal', risk: 'Low' };
+    } else if (liquidationPercentage >= 40 && liquidationPercentage < 60) {
+        return { color: 'text-yellow', risk: 'Medium' };
+    } else if (liquidationPercentage >= 60 && liquidationPercentage < 80) {
+        return { color: 'text-galacticOrange', risk: 'High' };
+    }
+    return { color: 'text-[#FF324B]', risk: 'Very High' };
 };
