@@ -80,17 +80,17 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
         ? availableChains.testnetChainsList
         : availableChains.mainnetChainsList;
 
-    const { switchNetwork } = useSwitchNetwork();
+    const { switchNetworkAsync } = useSwitchNetwork();
     const selectedNetwork = chainList.find(
         d => Networks[d.chainId].toLowerCase() === networkName.toLowerCase()
     );
 
     const handleNetworkChange = useCallback(
-        (index: number) => {
+        async (index: number) => {
             const id = chainList[index].chainId;
-            switchNetwork?.(id);
+            await switchNetworkAsync?.(id);
         },
-        [chainList, switchNetwork]
+        [chainList, switchNetworkAsync]
     );
 
     return (
@@ -142,8 +142,8 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
                                                     <MenuItem
                                                         text={link.chainName}
                                                         icon={link.icon}
-                                                        onClick={() => {
-                                                            handleNetworkChange(
+                                                        onClick={async () => {
+                                                            await handleNetworkChange(
                                                                 index
                                                             );
                                                             close();
