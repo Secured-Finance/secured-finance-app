@@ -1,5 +1,5 @@
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { renderHook } from 'src/test-utils';
+import { renderHook, waitFor } from 'src/test-utils';
 import { useIsRedemptionRequired } from './useIsRedemptionRequired';
 
 const mock = mockUseSF();
@@ -12,22 +12,22 @@ beforeEach(() => mock.isRedemptionRequired.mockClear());
 describe('useIsRedemptionRequired hook', () => {
     it('should return true if the user needs to perform a redemption action', async () => {
         mock.isRedemptionRequired.mockResolvedValueOnce(true);
-        const { result, waitForNextUpdate } = renderHook(() =>
-            useIsRedemptionRequired(user)
-        );
-        await waitForNextUpdate();
-        expect(mock.isRedemptionRequired).toHaveBeenCalledTimes(1);
-        expect(result.current.data).toEqual(true);
+        const { result } = renderHook(() => useIsRedemptionRequired(user));
+
+        await waitFor(() => {
+            expect(mock.isRedemptionRequired).toHaveBeenCalledTimes(1);
+            expect(result.current.data).toEqual(true);
+        });
     });
 
     it('should return false if the user does not need to perform a redemption action', async () => {
         mock.isRedemptionRequired.mockResolvedValueOnce(false);
-        const { result, waitForNextUpdate } = renderHook(() =>
-            useIsRedemptionRequired(user)
-        );
-        await waitForNextUpdate();
-        expect(mock.isRedemptionRequired).toHaveBeenCalledTimes(1);
-        expect(result.current.data).toEqual(false);
+        const { result } = renderHook(() => useIsRedemptionRequired(user));
+
+        await waitFor(() => {
+            expect(mock.isRedemptionRequired).toHaveBeenCalledTimes(1);
+            expect(result.current.data).toEqual(false);
+        });
     });
 
     it('should return false if the user is not defined', async () => {
