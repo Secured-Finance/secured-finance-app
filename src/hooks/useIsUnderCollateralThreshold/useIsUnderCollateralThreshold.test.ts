@@ -11,11 +11,10 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 describe('useIsUnderCollateralThreshold', () => {
     describe('Edge cases', () => {
         it('should return false if the user is not connected', async () => {
-            const { result, waitForNextUpdate } = renderHook(() =>
+            const { result } = renderHook(() =>
                 useIsUnderCollateralThreshold(undefined)
             );
 
-            await waitForNextUpdate();
             await waitFor(() =>
                 expect(
                     result.current(
@@ -29,22 +28,29 @@ describe('useIsUnderCollateralThreshold', () => {
         });
 
         it('returns false if market is not defined', async () => {
-            const { result, waitForNextUpdate } = renderHook(() =>
+            const { result } = renderHook(() =>
                 useIsUnderCollateralThreshold('0xff')
             );
-            await waitForNextUpdate();
-            expect(
-                result.current(CurrencySymbol.USDC, 1, 100, OrderSide.BORROW)
-            ).toBe(false);
+
+            await waitFor(() =>
+                expect(
+                    result.current(
+                        CurrencySymbol.USDC,
+                        1,
+                        100,
+                        OrderSide.BORROW
+                    )
+                ).toBe(false)
+            );
         });
     });
 
     describe('When OrderSide is Lend', () => {
         it('should always return false whatever the price', async () => {
-            const { result, waitForNextUpdate } = renderHook(() =>
+            const { result } = renderHook(() =>
                 useIsUnderCollateralThreshold('0xff')
             );
-            await waitForNextUpdate();
+
             await waitFor(() =>
                 expect(
                     result.current(
@@ -71,10 +77,9 @@ describe('useIsUnderCollateralThreshold', () => {
 
     describe('Pre-Order markets', () => {
         it('returns false if the price is above the threshold', async () => {
-            const { result, waitForNextUpdate } = renderHook(() =>
+            const { result } = renderHook(() =>
                 useIsUnderCollateralThreshold('0xff')
             );
-            await waitForNextUpdate();
 
             await waitFor(() =>
                 expect(
@@ -89,10 +94,10 @@ describe('useIsUnderCollateralThreshold', () => {
         });
 
         it('returns true if the price is above the threshold', async () => {
-            const { result, waitForNextUpdate } = renderHook(() =>
+            const { result } = renderHook(() =>
                 useIsUnderCollateralThreshold('0xff')
             );
-            await waitForNextUpdate();
+
             await waitFor(() =>
                 expect(
                     result.current(
@@ -108,10 +113,9 @@ describe('useIsUnderCollateralThreshold', () => {
 
     describe('when user has an active lend position', () => {
         it('returns false when price is higher than currentMinDebtUnitPrice', async () => {
-            const { result, waitForNextUpdate } = renderHook(() =>
+            const { result } = renderHook(() =>
                 useIsUnderCollateralThreshold('0xff')
             );
-            await waitForNextUpdate();
 
             await waitFor(() =>
                 expect(
@@ -126,10 +130,9 @@ describe('useIsUnderCollateralThreshold', () => {
         });
 
         it('returns false when price is lower than currentMinDebtUnitPrice', async () => {
-            const { result, waitForNextUpdate } = renderHook(() =>
+            const { result } = renderHook(() =>
                 useIsUnderCollateralThreshold('0xff')
             );
-            await waitForNextUpdate();
 
             await waitFor(() =>
                 expect(
@@ -146,11 +149,9 @@ describe('useIsUnderCollateralThreshold', () => {
 
     describe('when user does not have an active lend position', () => {
         it('returns false when price is higher than currentMinDebtUnitPrice', async () => {
-            const { result, waitForNextUpdate } = renderHook(() =>
+            const { result } = renderHook(() =>
                 useIsUnderCollateralThreshold('0xff')
             );
-
-            await waitForNextUpdate();
 
             await waitFor(() =>
                 expect(
@@ -165,11 +166,10 @@ describe('useIsUnderCollateralThreshold', () => {
         });
 
         it('returns false when price is lower than currentMinDebtUnitPrice', async () => {
-            const { result, waitForNextUpdate } = renderHook(() =>
+            const { result } = renderHook(() =>
                 useIsUnderCollateralThreshold('0xff')
             );
 
-            await waitForNextUpdate();
             await waitFor(() =>
                 expect(
                     result.current(

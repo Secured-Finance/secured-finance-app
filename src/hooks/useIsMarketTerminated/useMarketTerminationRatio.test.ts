@@ -1,6 +1,6 @@
 import { Currency } from '@secured-finance/sf-core';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { renderHook } from 'src/test-utils';
+import { renderHook, waitFor } from 'src/test-utils';
 import { CurrencySymbol } from 'src/utils';
 import { useMarketTerminationRatio } from './useMarketTerminationRatio';
 
@@ -11,19 +11,18 @@ beforeEach(() => mock.getMarketTerminationRatio.mockClear());
 
 describe('useMarketTerminationRatio hook', () => {
     it('should return the ratio of collateral in the vault at the time of termination', async () => {
-        const { result, waitForNextUpdate } = renderHook(() =>
-            useMarketTerminationRatio()
-        );
+        const { result } = renderHook(() => useMarketTerminationRatio());
 
         expect(result.current.data).toEqual([]);
-        await waitForNextUpdate();
 
-        expect(mock.getMarketTerminationRatio).toHaveBeenCalledTimes(3); // 3 collateral tokens
-        expect(result.current.data).toEqual([
-            { currency: CurrencySymbol.ETH, ratio: 2000 },
-            { currency: CurrencySymbol.WBTC, ratio: 4000 },
-            { currency: CurrencySymbol.USDC, ratio: 4000 },
-        ]);
+        await waitFor(() => {
+            expect(mock.getMarketTerminationRatio).toHaveBeenCalledTimes(3); // 3 collateral tokens
+            expect(result.current.data).toEqual([
+                { currency: CurrencySymbol.ETH, ratio: 2000 },
+                { currency: CurrencySymbol.WBTC, ratio: 4000 },
+                { currency: CurrencySymbol.USDC, ratio: 4000 },
+            ]);
+        });
     });
 
     it('should return the ratio of collateral even if the collateral is very big', async () => {
@@ -42,18 +41,17 @@ describe('useMarketTerminationRatio hook', () => {
             }
         );
 
-        const { result, waitForNextUpdate } = renderHook(() =>
-            useMarketTerminationRatio()
-        );
+        const { result } = renderHook(() => useMarketTerminationRatio());
 
         expect(result.current.data).toEqual([]);
-        await waitForNextUpdate();
 
-        expect(mock.getMarketTerminationRatio).toHaveBeenCalledTimes(3); // 3 collateral tokens
-        expect(result.current.data).toEqual([
-            { currency: CurrencySymbol.ETH, ratio: 3396 },
-            { currency: CurrencySymbol.WBTC, ratio: 4717 },
-            { currency: CurrencySymbol.USDC, ratio: 1887 },
-        ]);
+        await waitFor(() => {
+            expect(mock.getMarketTerminationRatio).toHaveBeenCalledTimes(3); // 3 collateral tokens
+            expect(result.current.data).toEqual([
+                { currency: CurrencySymbol.ETH, ratio: 3396 },
+                { currency: CurrencySymbol.WBTC, ratio: 4717 },
+                { currency: CurrencySymbol.USDC, ratio: 1887 },
+            ]);
+        });
     });
 });
