@@ -8,11 +8,9 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
 describe('useTerminationPrices hook', () => {
     it('should a map with the prices of all tokens', async () => {
-        const { result, waitForNextUpdate } = renderHook(() =>
-            useTerminationPrices()
-        );
+        const { result } = renderHook(() => useTerminationPrices());
         expect(result.current.data).toEqual(undefined);
-        await waitForNextUpdate();
+
         await waitFor(() =>
             expect(result.current.data).toEqual({
                 [CurrencySymbol.ETH]: 1577.71480752,

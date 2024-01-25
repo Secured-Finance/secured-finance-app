@@ -8,7 +8,7 @@ import {
 } from 'src/components/molecules';
 import { CollateralInput } from 'src/components/organisms';
 import {
-    useEtherscanUrl,
+    useBlockExplorerUrl,
     useHandleContractTransaction,
     useLastPrices,
 } from 'src/hooks';
@@ -101,7 +101,7 @@ export const DepositCollateral = ({
 }: {
     collateralList: Partial<Record<CurrencySymbol, CollateralInfo>>;
 } & DialogState) => {
-    const etherscanUrl = useEtherscanUrl();
+    const { blockExplorerUrl } = useBlockExplorerUrl();
     const [asset, setAsset] = useState(CurrencySymbol.USDC);
     const [collateral, setCollateral] = useState<string>();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
@@ -261,7 +261,7 @@ export const DepositCollateral = ({
                                     ],
                                 ]}
                                 txHash={txHash}
-                                etherscanUrl={etherscanUrl}
+                                blockExplorerUrl={blockExplorerUrl}
                             />
                         );
                     case Step.error:

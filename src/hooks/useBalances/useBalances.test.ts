@@ -10,7 +10,7 @@ const preloadedState = { wallet: { address: '0x1', ethBalance: 0 } };
 
 describe('useBalances', () => {
     it('should return balances of all currencies', async () => {
-        const { result, waitForNextUpdate } = renderHook(() => useBalances(), {
+        const { result } = renderHook(() => useBalances(), {
             preloadedState: preloadedState,
         });
 
@@ -20,7 +20,6 @@ describe('useBalances', () => {
         expected.USDC = 4000;
 
         expect(result.current).toEqual(zeroBalances);
-        await waitForNextUpdate();
         await waitFor(() => expect(result.current).toEqual(expected));
     });
 });

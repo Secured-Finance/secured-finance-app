@@ -11,8 +11,8 @@ import {
 import { OrderDetails } from 'src/components/organisms';
 import {
     emptyCollateralBook,
+    useBlockExplorerUrl,
     useCollateralBook,
-    useEtherscanUrl,
     useHandleContractTransaction,
     useLastPrices,
     useMarket,
@@ -53,7 +53,7 @@ export const UnwindDialog = ({
     side: OrderSide;
     type: UnwindDialogType;
 } & DialogState) => {
-    const etherscanUrl = useEtherscanUrl();
+    const { blockExplorerUrl } = useBlockExplorerUrl();
     const handleContractTransaction = useHandleContractTransaction();
     const { address } = useAccount();
     const [txHash, setTxHash] = useState<string | undefined>();
@@ -241,7 +241,7 @@ export const UnwindDialog = ({
                             ],
                         ]}
                         txHash={txHash}
-                        etherscanUrl={etherscanUrl}
+                        blockExplorerUrl={blockExplorerUrl}
                     />
                 );
             case Step.error:
