@@ -115,6 +115,11 @@ export const MarketDashboard = () => {
         return val;
     }, [currencies, priceList, valueLockedByCurrency]);
 
+    const defaultCurrency =
+        currencies && currencies.length > 0
+            ? currencies[0]
+            : CurrencySymbol.WBTC;
+
     return (
         <Page title='Market Dashboard' name='dashboard-page'>
             <DelistedCurrencyDisclaimer currencies={delistedCurrencySet} />
@@ -153,7 +158,7 @@ export const MarketDashboard = () => {
                                 title='Yield Curve'
                                 curves={curves}
                                 labels={Object.values(
-                                    lendingContracts[CurrencySymbol.WBTC]
+                                    lendingContracts[defaultCurrency]
                                 )
                                     .filter(o => o.isReady && !o.isMatured)
                                     .map(o => o.name)}
