@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { useBreakpoint } from 'src/hooks';
 import { SvgIcon } from 'src/types';
 
 export const Button = ({
@@ -9,6 +10,7 @@ export const Button = ({
     StartIcon,
     EndIcon,
     variant = 'solid',
+    mobileText, // Added prop to handle button text on mobile
     ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement> &
     React.AnchorHTMLAttributes<HTMLAnchorElement> & {
@@ -16,10 +18,12 @@ export const Button = ({
         href?: string;
         size?: 'xs' | 'sm' | 'md';
         variant?: 'solid' | 'outlined';
+        mobileText?: string;
     } & {
         StartIcon?: SvgIcon;
         EndIcon?: SvgIcon;
     }) => {
+    const isMobile = useBreakpoint('tablet');
     const Tag = href ? 'a' : 'button';
     const tagProps = href
         ? {
@@ -30,6 +34,7 @@ export const Button = ({
         : props;
 
     const label = typeof children === 'string' ? children : 'Button';
+    const text = isMobile && mobileText ? mobileText : children;
 
     return (
         <Tag
@@ -62,7 +67,7 @@ export const Button = ({
                     'typography-button-1': size === 'md',
                 })}
             >
-                {children}
+                {text}
             </p>
             {EndIcon && (
                 <span className='ml-3'>
