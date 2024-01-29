@@ -134,11 +134,8 @@ describe('useYieldCurveMarketRates', () => {
 
     it('should return empty lists for no markets', async () => {
         jest.spyOn(mock, 'getOrderBookDetails').mockResolvedValue([]);
-        const { result, waitForNextUpdate } = renderHook(() =>
-            useYieldCurveMarketRates()
-        );
-        await waitForNextUpdate();
-        expect(result.current.rates).toHaveLength(0);
+        const { result } = renderHook(() => useYieldCurveMarketRates());
+        await waitFor(() => expect(result.current.rates).toHaveLength(0));
         expect(result.current.maturityList).toHaveLength(0);
         expect(result.current.itayoseMarketIndexSet).toEqual(new Set());
     });
@@ -188,11 +185,10 @@ describe('useYieldCurveMarketRates', () => {
     });
 
     it('should return 0 marketCloseToMaturityOriginalRate if no market is near maturity', async () => {
-        const { result, waitForNextUpdate } = renderHook(() =>
-            useYieldCurveMarketRates()
+        const { result } = renderHook(() => useYieldCurveMarketRates());
+        await waitFor(() =>
+            expect(result.current.marketCloseToMaturityOriginalRate).toEqual(0)
         );
-        await waitForNextUpdate();
-        expect(result.current.marketCloseToMaturityOriginalRate).toEqual(0);
     });
 
     it('should not change first market yield chart rate if its not close to maturity', async () => {

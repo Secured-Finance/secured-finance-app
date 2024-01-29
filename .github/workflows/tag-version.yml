@@ -3,10 +3,16 @@ name: Create a Version and Tag It
 on:
   workflow_dispatch:
     inputs:
-      hotfix:
-        description: 'Hotfix'
-        required: false
-        type: boolean
+      version:
+        description: 'Version to deploy'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - 'hotfix'
+          - 'patch'
+          - 'minor'
+          - 'major'
 
 jobs:
   create-version:
@@ -28,9 +34,13 @@ jobs:
         run: |
           git config user.name "SF Machine User[bot]"
           git config user.email "${{ secrets.MACHINE_USER_APP_ID }}+sf-machine-user[bot]@users.noreply.github.com"
-          if [ "${{ github.event.inputs.hotfix }}" = "true" ]; then
+          if [ "${{ github.event.inputs.version }}" = "hotfix" ]; then
             npm version patch -m "Hotfix: %s"
-          else
+          elif [ "${{ github.event.inputs.version }}" = "patch" ]; then
+            npm version patch -m "Release: %s"
+          elif [ "${{ github.event.inputs.version }}" = "minor" ]; then
             npm version minor -m "Release: %s"
+          else
+            npm version major -m "Release: %s"
           fi
           git push --follow-tags

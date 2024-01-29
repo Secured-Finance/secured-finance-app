@@ -133,6 +133,10 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
             await securedFinanceLib.init(publicClient, walletClient);
 
             setSecuredFinance(previous => {
+                if (securedFinanceLib.config.chain.id !== chainId) {
+                    return previous;
+                }
+
                 if (!previous) {
                     return securedFinanceLib;
                 }
@@ -175,6 +179,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
         publicClient?.transport,
         publicClient?.chain,
         publicClient,
+        chainId,
     ]);
 
     useEffect(() => {

@@ -139,10 +139,12 @@ export const DepositCollateral = ({
     const defaultCcyIndex = optionList.findIndex(
         col => col.symbol === CurrencySymbol.USDC
     );
-    [optionList[0], optionList[defaultCcyIndex]] = [
-        optionList[defaultCcyIndex],
-        optionList[0],
-    ];
+    if (defaultCcyIndex >= 0) {
+        [optionList[0], optionList[defaultCcyIndex]] = [
+            optionList[defaultCcyIndex],
+            optionList[0],
+        ];
+    }
 
     const isDisabled = useCallback(() => {
         return (

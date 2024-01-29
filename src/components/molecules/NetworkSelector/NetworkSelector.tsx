@@ -80,17 +80,17 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
         ? availableChains.testnetChainsList
         : availableChains.mainnetChainsList;
 
-    const { switchNetwork } = useSwitchNetwork();
+    const { switchNetworkAsync } = useSwitchNetwork();
     const selectedNetwork = chainList.find(
         d => Networks[d.chainId].toLowerCase() === networkName.toLowerCase()
     );
 
     const handleNetworkChange = useCallback(
-        (index: number) => {
+        async (index: number) => {
             const id = chainList[index].chainId;
-            switchNetwork?.(id);
+            await switchNetworkAsync?.(id);
         },
-        [chainList, switchNetwork]
+        [chainList, switchNetworkAsync]
     );
 
     return (
@@ -133,30 +133,34 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
                         leaveTo='opacity-0 translate-y-5'
                     >
                         <Popover.Panel className='absolute left-0 z-10 mt-3 w-64 origin-top-right tablet:right-0'>
-                            <div className='relative flex h-fit flex-col overflow-hidden rounded-xl bg-neutral-900 py-[10px]'>
-                                {chainList.map((link, index) => {
-                                    return (
-                                        <div key={index} role='menuitem'>
-                                            <div className='px-2'>
-                                                <MenuItem
-                                                    text={link.chainName}
-                                                    icon={link.icon}
-                                                    onClick={() =>
-                                                        handleNetworkChange(
-                                                            index
-                                                        )
-                                                    }
-                                                />
-                                            </div>
-                                            {index !== chainList.length - 1 && (
-                                                <div className='py-[6px]'>
-                                                    <Separator />
+                            {({ close }) => (
+                                <div className='relative flex h-fit flex-col overflow-hidden rounded-xl bg-neutral-900 py-[10px]'>
+                                    {chainList.map((link, index) => {
+                                        return (
+                                            <div key={index} role='menuitem'>
+                                                <div className='px-2'>
+                                                    <MenuItem
+                                                        text={link.chainName}
+                                                        icon={link.icon}
+                                                        onClick={async () => {
+                                                            await handleNetworkChange(
+                                                                index
+                                                            );
+                                                            close();
+                                                        }}
+                                                    />
                                                 </div>
-                                            )}
-                                        </div>
-                                    );
-                                })}
-                            </div>
+                                                {index !==
+                                                    chainList.length - 1 && (
+                                                    <div className='py-[6px]'>
+                                                        <Separator />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            )}
                         </Popover.Panel>
                     </Transition>
                 </>
