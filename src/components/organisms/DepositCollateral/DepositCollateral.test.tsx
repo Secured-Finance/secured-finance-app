@@ -7,6 +7,7 @@ import {
     ButtonProperties,
     CollateralEvents,
     CollateralProperties,
+    CurrencySymbol,
 } from 'src/utils';
 import * as stories from './DepositCollateral.stories';
 
@@ -125,6 +126,24 @@ describe('DepositCollateral component', () => {
         expect(screen.queryByText('WFIL Available')).not.toBeInTheDocument();
         expect(screen.queryByText('WBTC')).not.toBeInTheDocument();
         expect(screen.queryByText('WBTC Available')).not.toBeInTheDocument();
+    });
+
+    it('should not open with USDC as default currency if USDC is not available as collateral', () => {
+        render(
+            <Default
+                collateralList={{
+                    [CurrencySymbol.ETH]: {
+                        symbol: CurrencySymbol.ETH,
+                        available: 10,
+                        name: 'Ethereum',
+                    },
+                }}
+            />
+        );
+        expect(screen.getByText('Ethereum')).toBeInTheDocument();
+        expect(screen.getByText('10 Ethereum Available')).toBeInTheDocument();
+        expect(screen.queryByText('USDC')).not.toBeInTheDocument();
+        expect(screen.queryByText('USDC Available')).not.toBeInTheDocument();
     });
 
     it('should reach failure screen when transaction fails', async () => {
