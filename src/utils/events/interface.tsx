@@ -17,7 +17,7 @@ export enum ButtonEvents {
     ORDER_SIDE = 'Order Side',
     CURRENCY_CHANGE = 'Currency Change',
     TERM_CHANGE = 'Term Change',
-    CANCEL_BUTTON = 'Cancel button clicked',
+    CANCEL_BUTTON = 'Cancel button',
 }
 
 export enum ButtonProperties {

@@ -75,7 +75,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
             });
             reset();
             if (accounts.length > 0) {
-                associateWallet(accounts[0], true, chainName);
+                associateWallet(accounts[0], chainName);
             }
         },
         [chainName]
@@ -179,7 +179,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
 
     useEffect(() => {
         if (address) {
-            associateWallet(address, false);
+            associateWallet(address, chainName, false);
             return;
         }
 
@@ -190,7 +190,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
             );
             if (connector) connect({ connector: connector });
         }
-    }, [connect, address, connectors]);
+    }, [connect, address, connectors, chainName]);
 
     useEffect(() => {
         if (!publicClient) return;

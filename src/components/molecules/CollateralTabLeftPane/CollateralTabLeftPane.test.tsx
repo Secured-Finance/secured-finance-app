@@ -55,7 +55,7 @@ describe('CollateralTabLeftPane component', () => {
         expect(screen.getByTestId('withdraw-collateral')).toBeEnabled();
     });
 
-    it('should call onClick with deposit and emit deposit collateral button event when deposit button is clicked', () => {
+    it('should call onClick with deposit and emit DEPOSIT_COLLATERAL_BUTTON event when deposit button is clicked', () => {
         const onClick = jest.fn();
         render(<Default onClick={onClick} />);
         fireEvent.click(screen.getByTestId('deposit-collateral'));
@@ -65,7 +65,7 @@ describe('CollateralTabLeftPane component', () => {
         expect(onClick).toHaveBeenCalledWith('deposit');
     });
 
-    it('should call onClick with withdraw and emit withdraw collateral button event when withdraw button is clicked', () => {
+    it('should call onClick with withdraw and emit WITHDRAW_COLLATERAL_BUTTON event when withdraw button is clicked', () => {
         const onClick = jest.fn();
         render(<Default onClick={onClick} />);
         fireEvent.click(screen.getByTestId('withdraw-collateral'));

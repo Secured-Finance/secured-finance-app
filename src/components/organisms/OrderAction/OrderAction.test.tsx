@@ -41,7 +41,7 @@ describe('OrderAction component', () => {
         expect(screen.getByText('Connect Wallet')).toBeInTheDocument();
     });
 
-    it('should render deposit collateral button when collateral is not sufficient and emit deposit collateral button event when clicked', async () => {
+    it('should render deposit collateral button when collateral is not sufficient and emit DEPOSIT_COLLATERAL_BUTTON event when clicked', async () => {
         await waitFor(() =>
             render(<NotEnoughCollateral />, {
                 preloadedState: {
