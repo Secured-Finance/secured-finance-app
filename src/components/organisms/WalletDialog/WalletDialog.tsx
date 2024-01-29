@@ -87,8 +87,7 @@ export const WalletDialog = () => {
                             data?.connector?.name,
                         [InterfaceProperties.WALLET_ADDRESS]: data?.account,
                     });
-                    if (data?.account)
-                        associateWallet(data.account, true, chainName);
+                    if (data?.account) associateWallet(data.account, chainName);
                 }
             },
         });

@@ -16,8 +16,8 @@ import {
 
 export async function associateWallet(
     account: string | null,
-    raiseEvent = true,
-    chainName = 'Unsupported'
+    chainName: string | undefined,
+    raiseEvent = true
 ) {
     if (!account) return;
     setUserId(account);
@@ -28,7 +28,7 @@ export async function associateWallet(
     if (raiseEvent) {
         track(InterfaceEvents.WALLET_CONNECTED, {
             [InterfaceProperties.WALLET_ADDRESS]: account,
-            [InterfaceProperties.CHAIN]: chainName,
+            [InterfaceProperties.CHAIN]: chainName ?? 'Unsupported',
         });
     }
 }
@@ -45,13 +45,6 @@ export function trackCollateralEvent(
             amountFormatterFromBase[assetType](amount).toString(),
         [CollateralProperties.SOURCE]: source,
     });
-}
-
-export function trackChainEvent(
-    event: InterfaceEvents.CHAIN_CONNECTED,
-    chain: string
-) {
-    track(event, { [InterfaceProperties.CHAIN]: chain });
 }
 
 export function trackButtonEvent(

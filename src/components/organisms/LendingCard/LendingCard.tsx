@@ -1,4 +1,3 @@
-import { track } from '@amplitude/analytics-browser';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -231,7 +230,11 @@ export const LendingCard = ({
                         }}
                         onTermChange={v => {
                             dispatch(setMaturity(Number(v)));
-                            track(ButtonEvents.TERM_CHANGE);
+                            trackButtonEvent(
+                                ButtonEvents.TERM_CHANGE,
+                                ButtonProperties.TERM,
+                                v
+                            );
                         }}
                         transformLabel={getTransformMaturityOption(
                             maturitiesOptionList.map(o => ({

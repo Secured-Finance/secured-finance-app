@@ -129,7 +129,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(screen.getByText('Future Value')).toBeInTheDocument();
     });
 
-    it.skip('should display the PlaceOrder Dialog when clicking on the Place Order button', async () => {
+    it('should display the PlaceOrder Dialog when clicking on the Place Order button', async () => {
         render(<Default />, { preloadedState });
         expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
         expect(
@@ -741,14 +741,6 @@ describe('AdvancedLendingOrderCard Component', () => {
             });
             assertBondPriceInputValue('20');
         });
-
-        it('should emit BOND_PRICE event when bond price is changed', () => {
-            render(<Default marketPrice={9600} />, { preloadedState });
-            changeInputValue('Bond Price', '20');
-            expect(track).toHaveBeenCalledWith(InteractionEvents.BOND_PRICE, {
-                [InteractionProperties.BOND_PRICE]: '20',
-            });
-        });
     });
 
     describe('Amplitude', () => {
@@ -756,11 +748,19 @@ describe('AdvancedLendingOrderCard Component', () => {
             render(<Default />);
             fireEvent.click(screen.getByText('Limit'));
             expect(track).toHaveBeenCalledWith(ButtonEvents.ORDER_TYPE, {
-                [ButtonProperties.ORDER_TYPE]: 'Limit',
+                [ButtonProperties.ORDER_TYPE]: OrderType.LIMIT,
             });
             fireEvent.click(screen.getByText('Lend'));
             expect(track).toHaveBeenCalledWith(ButtonEvents.ORDER_SIDE, {
                 [ButtonProperties.ORDER_SIDE]: 'Lend',
+            });
+        });
+
+        it('should emit BOND_PRICE event when bond price is changed', () => {
+            render(<Default marketPrice={9600} />, { preloadedState });
+            changeInputValue('Bond Price', '20');
+            expect(track).toHaveBeenCalledWith(InteractionEvents.BOND_PRICE, {
+                [InteractionProperties.BOND_PRICE]: '20',
             });
         });
     });

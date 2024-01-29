@@ -72,7 +72,7 @@ describe('UnwindDialog Component', () => {
         );
     });
 
-    it('should call onClose when cancel button is clicked', () => {
+    it('should call onClose and emit CANCEL_BUTTON event when cancel button is clicked', () => {
         const track = jest.spyOn(analytics, 'track');
         const onClose = jest.fn();
         render(<Default onClose={onClose} />);
