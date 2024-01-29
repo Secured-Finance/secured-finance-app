@@ -138,13 +138,15 @@ export const RemoveOrderDialog = ({
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
-        trackButtonEvent(
-            ButtonEvents.CANCEL_BUTTON,
-            ButtonProperties.CANCEL_ACTION,
-            'Cancel Remove Order'
-        );
+        if (state.currentStep === Step.remove) {
+            trackButtonEvent(
+                ButtonEvents.CANCEL_BUTTON,
+                ButtonProperties.CANCEL_ACTION,
+                'Cancel Remove Order'
+            );
+        }
         onClose();
-    }, [onClose]);
+    }, [onClose, state.currentStep]);
 
     const handleCancelOrder = useCallback(async () => {
         try {

@@ -171,13 +171,15 @@ export const UnwindDialog = ({
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
-        trackButtonEvent(
-            ButtonEvents.CANCEL_BUTTON,
-            ButtonProperties.CANCEL_ACTION,
-            'Cancel Unwind Order'
-        );
+        if (state.currentStep === Step.confirm) {
+            trackButtonEvent(
+                ButtonEvents.CANCEL_BUTTON,
+                ButtonProperties.CANCEL_ACTION,
+                'Cancel Unwind Order'
+            );
+        }
         onClose();
-    }, [onClose]);
+    }, [onClose, state.currentStep]);
 
     const handleUnwindPosition = useCallback(
         async (ccy: CurrencySymbol, maturity: Maturity) => {
