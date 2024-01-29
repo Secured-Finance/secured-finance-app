@@ -1,5 +1,5 @@
 import { Switch } from '@headlessui/react';
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 export const Toggle = ({
     checked = true,
@@ -15,7 +15,7 @@ export const Toggle = ({
             disabled={disabled}
             checked={checked}
             onChange={onChange}
-            className={classNames(
+            className={clsx(
                 'relative inline-flex h-18px w-8 items-center rounded-[14px]',
                 {
                     'bg-starBlue': checked,

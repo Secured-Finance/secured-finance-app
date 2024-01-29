@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 export const TwoColumns = ({
     children,
@@ -13,7 +13,7 @@ export const TwoColumns = ({
     return (
         <div className='flex flex-col justify-between gap-x-3 gap-y-4 laptop:flex-row'>
             <div
-                className={classNames({
+                className={clsx({
                     [bigSize]: !narrowFirstColumn,
                     [smallSize]: narrowFirstColumn,
                 })}
@@ -21,7 +21,7 @@ export const TwoColumns = ({
                 {children[0]}
             </div>
             <div
-                className={classNames({
+                className={clsx({
                     [bigSize]: narrowFirstColumn,
                     [smallSize]: !narrowFirstColumn,
                 })}

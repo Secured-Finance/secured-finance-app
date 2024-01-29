@@ -1,7 +1,7 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { formatDate } from '@secured-finance/sf-core';
 import { createColumnHelper } from '@tanstack/react-table';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import * as dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { useCallback, useMemo, useState } from 'react';
@@ -214,16 +214,12 @@ export const ActiveTradeTable = ({
                     return (
                         <div className='grid w-40 justify-center tablet:w-full'>
                             <div
-                                className={classNames(
-                                    'typography-caption w-full',
-                                    {
-                                        'text-galacticOrange':
-                                            ccy && delistedCurrencySet.has(ccy),
-                                        'text-neutral7':
-                                            ccy &&
-                                            !delistedCurrencySet.has(ccy),
-                                    }
-                                )}
+                                className={clsx('typography-caption w-full', {
+                                    'text-galacticOrange':
+                                        ccy && delistedCurrencySet.has(ccy),
+                                    'text-neutral7':
+                                        ccy && !delistedCurrencySet.has(ccy),
+                                })}
                             >
                                 {getMaturityDisplayValue(
                                     maturityTimestamp,

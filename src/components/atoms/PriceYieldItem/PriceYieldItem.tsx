@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Alignment } from 'src/types';
 import { formatLoanValue } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
@@ -16,14 +16,14 @@ export const PriceYieldItem = ({
 }) => {
     return (
         <div
-            className={classNames('flex w-12 flex-col', {
+            className={clsx('flex w-12 flex-col', {
                 'text-right': align === 'right',
                 'text-center': align === 'center',
                 'text-left': align === 'left',
             })}
         >
             <span
-                className={classNames(
+                className={clsx(
                     {
                         'typography-caption-2': compact === true,
                         'typography-caption': compact === false,

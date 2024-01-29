@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -88,7 +88,7 @@ export const CollateralTabLeftPane = ({
                     </span>
                     <span
                         data-testid='vault-balance'
-                        className={classNames(
+                        className={clsx(
                             'w-fit font-secondary font-semibold text-white',
                             {
                                 'text-xl': netAssetValue.toString().length <= 6,

@@ -1,5 +1,5 @@
 import { ArrowUpRightIcon } from '@heroicons/react/24/outline';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import Check from 'src/assets/icons/check-mark.svg';
 import { SectionWithItems } from 'src/components/atoms';
 import { Tooltip } from 'src/components/templates';
@@ -55,13 +55,10 @@ export const SuccessPanel = ({
 
 const ValueComponent = ({ value, index }: { value: string; index: number }) => (
     <span
-        className={classNames(
-            'typography-caption whitespace-nowrap leading-6',
-            {
-                'text-[#58BD7D]': index === 0,
-                'text-neutral-8': index !== 0,
-            }
-        )}
+        className={clsx('typography-caption whitespace-nowrap leading-6', {
+            'text-[#58BD7D]': index === 0,
+            'text-neutral-8': index !== 0,
+        })}
     >
         {value}
     </span>

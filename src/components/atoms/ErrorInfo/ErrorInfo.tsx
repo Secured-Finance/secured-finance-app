@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 export const ErrorInfo = ({
     errorMessage,
@@ -11,7 +11,7 @@ export const ErrorInfo = ({
 }) => {
     return showError ? (
         <div
-            className={classNames('flex w-full px-2', {
+            className={clsx('flex w-full px-2', {
                 'justify-start': align === 'left',
                 'justify-end': align === 'right',
             })}
