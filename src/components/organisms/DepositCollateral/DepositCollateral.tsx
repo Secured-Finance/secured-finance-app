@@ -127,13 +127,15 @@ export const DepositCollateral = ({
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
-        trackButtonEvent(
-            ButtonEvents.CANCEL_BUTTON,
-            ButtonProperties.CANCEL_ACTION,
-            'Cancel Deposit Collateral'
-        );
+        if (state.currentStep === Step.depositCollateral) {
+            trackButtonEvent(
+                ButtonEvents.CANCEL_BUTTON,
+                ButtonProperties.CANCEL_ACTION,
+                'Cancel Deposit Collateral'
+            );
+        }
         onClose();
-    }, [onClose]);
+    }, [onClose, state.currentStep]);
 
     const optionList = Object.values(collateralList);
     const defaultCcyIndex = optionList.findIndex(

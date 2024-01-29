@@ -154,13 +154,15 @@ export const PlaceOrder = ({
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
-        trackButtonEvent(
-            ButtonEvents.CANCEL_BUTTON,
-            ButtonProperties.CANCEL_ACTION,
-            'Cancel Place Order'
-        );
+        if (state.currentStep === Step.orderConfirm) {
+            trackButtonEvent(
+                ButtonEvents.CANCEL_BUTTON,
+                ButtonProperties.CANCEL_ACTION,
+                'Cancel Place Order'
+            );
+        }
         onClose();
-    }, [onClose]);
+    }, [onClose, state.currentStep]);
 
     useEffect(() => {
         if (state.currentStep === Step.orderConfirm) {

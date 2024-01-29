@@ -187,7 +187,6 @@ describe('WithdrawCollateral component', () => {
     });
 
     it('should withdraw whole amount when 100% is clicked', async () => {
-        const track = jest.spyOn(analytics, 'track');
         render(<Default source='Source of Withdrawal' />);
 
         fireEvent.click(screen.getByTestId('collateral-selector-button'));

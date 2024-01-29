@@ -131,13 +131,15 @@ export const WithdrawCollateral = ({
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
-        trackButtonEvent(
-            ButtonEvents.CANCEL_BUTTON,
-            ButtonProperties.CANCEL_ACTION,
-            'Cancel Withdraw Collateral'
-        );
+        if (state.currentStep === Step.withdrawCollateral) {
+            trackButtonEvent(
+                ButtonEvents.CANCEL_BUTTON,
+                ButtonProperties.CANCEL_ACTION,
+                'Cancel Withdraw Collateral'
+            );
+        }
         onClose();
-    }, [onClose]);
+    }, [onClose, state.currentStep]);
 
     const isDisabled = useCallback(() => {
         return (
