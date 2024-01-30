@@ -100,8 +100,20 @@ module.exports = {
                 700: '#2033DB',
                 900: '#0213A5',
             },
+            success: {
+                50: '#DDFFE9',
+                300: '#AFFFCB',
+                500: '#74E37E',
+                700: '#5CD167',
+                900: '#157637',
+            },
+            error: {
+                300: '#FF9FAE',
+                500: '#FF324B',
+                700: '#CE0920',
+                900: '#A50114',
+            },
             // Primary
-            universeBlue: '#002133',
             horizonBlue: '#3555AC',
             teal: '#11CABE',
             green: '#5CD167',
@@ -110,7 +122,6 @@ module.exports = {
             red: '#FA2256',
             purple: '#BD47FB',
             gunMetal: '#292D3F',
-            primary7: '#11CABE',
 
             // Secondary
             galacticOrange: '#FF9FAE',
