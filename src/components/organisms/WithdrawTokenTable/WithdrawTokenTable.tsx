@@ -1,6 +1,7 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import { useMemo, useState } from 'react';
 import { Button } from 'src/components/atoms';
+import { ButtonSizes } from 'src/components/atoms/Button/types';
 import { CoreTable } from 'src/components/molecules';
 import { WithdrawCollateral } from 'src/components/organisms';
 import { EmergencySettlementStep } from 'src/components/templates';
@@ -89,7 +90,7 @@ export const WithdrawTokenTable = ({ data }: { data: TokenPosition[] }) => {
                                     );
                                     setOpenModal(true);
                                 }}
-                                size='sm'
+                                size={ButtonSizes.sm}
                             >
                                 Withdraw
                             </Button>
