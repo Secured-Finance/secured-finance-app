@@ -16,8 +16,8 @@ const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('Advanced Lending Component', () => {
-    const track = jest.spyOn(analytics, 'track');
     it('should convert the amount to new currency and track CURRENCY_CHANGE when the user change the currency', async () => {
+        const track = jest.spyOn(analytics, 'track');
         const { store } = await waitFor(() =>
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
@@ -44,6 +44,7 @@ describe('Advanced Lending Component', () => {
     });
 
     it('should not reset the amount and emit TERM_CHANGE event when the user change the maturity', async () => {
+        const track = jest.spyOn(analytics, 'track');
         const { store } = await waitFor(() =>
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,

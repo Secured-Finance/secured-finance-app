@@ -51,8 +51,6 @@ describe('LendingCard Component', () => {
         fireEvent.click(screen.getByRole('menuitem', { name: 'ETH' }));
     };
 
-    const track = jest.spyOn(analytics, 'track');
-
     it('should render a LendingCard', async () => {
         await waitFor(() => render(<Default />));
     });
@@ -110,6 +108,7 @@ describe('LendingCard Component', () => {
     });
 
     it('should switch to Ethereum and emit CURRENCY_CHANGE event when selecting it from the option', async () => {
+        const track = jest.spyOn(analytics, 'track');
         await waitFor(() => render(<Default />));
         await selectEthereum();
         expect(screen.getByText('ETH')).toBeInTheDocument();
@@ -127,6 +126,7 @@ describe('LendingCard Component', () => {
     });
 
     it('should transform the contract label to a date and emit TERM_CHANGE event when term is changed', async () => {
+        const track = jest.spyOn(analytics, 'track');
         await waitFor(() => render(<Default />));
         fireEvent.click(
             screen.getByRole('button', {
@@ -236,6 +236,7 @@ describe('LendingCard Component', () => {
     });
 
     it('should track ORDER_SIDE event when order side is changes', async () => {
+        const track = jest.spyOn(analytics, 'track');
         await waitFor(() => render(<Default />, { preloadedState }));
 
         const lendTab = screen.getByText('Lend');

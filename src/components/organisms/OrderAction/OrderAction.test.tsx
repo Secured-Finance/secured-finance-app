@@ -34,7 +34,6 @@ const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('OrderAction component', () => {
-    const track = jest.spyOn(analytics, 'track');
     it('should render connect wallet button', async () => {
         await waitFor(() => render(<Primary />, { preloadedState }));
         expect(screen.getByRole('button')).toBeInTheDocument();
@@ -42,6 +41,7 @@ describe('OrderAction component', () => {
     });
 
     it('should render deposit collateral button when collateral is not sufficient and emit DEPOSIT_COLLATERAL_BUTTON event when clicked', async () => {
+        const track = jest.spyOn(analytics, 'track');
         await waitFor(() =>
             render(<NotEnoughCollateral />, {
                 preloadedState: {
@@ -94,6 +94,7 @@ describe('OrderAction component', () => {
     });
 
     it('should render place order button when collateral is sufficient for order and emit PLACE_ORDER_BUTTON button event when clicked', async () => {
+        const track = jest.spyOn(analytics, 'track');
         await waitFor(() => {
             render(<EnoughCollateral />, { preloadedState });
         });
