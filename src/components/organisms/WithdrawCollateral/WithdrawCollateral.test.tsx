@@ -19,7 +19,6 @@ const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('WithdrawCollateral component', () => {
-    const track = jest.spyOn(analytics, 'track');
     it('should display the WithdrawCollateral Modal when open', () => {
         const onClose = jest.fn();
         render(<Default onClose={onClose} />);
@@ -135,6 +134,7 @@ describe('WithdrawCollateral component', () => {
 
     it('should track the withdrawing of collateral', async () => {
         const onClose = jest.fn();
+        const track = jest.spyOn(analytics, 'track');
         render(<Default onClose={onClose} source='Source of Withdrawal' />);
 
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
@@ -187,6 +187,7 @@ describe('WithdrawCollateral component', () => {
     });
 
     it('should withdraw whole amount when 100% is clicked', async () => {
+        const track = jest.spyOn(analytics, 'track');
         render(<Default source='Source of Withdrawal' />);
 
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
@@ -222,6 +223,7 @@ describe('WithdrawCollateral component', () => {
     });
 
     it('should call onClose when cancel button is clicked and emit  CANCEL_BUTTON event', () => {
+        const track = jest.spyOn(analytics, 'track');
         const onClose = jest.fn();
         render(<Default onClose={onClose} />);
         const cancelButton = screen.getByRole('button', {
