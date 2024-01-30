@@ -264,9 +264,11 @@ export const OrderBookWidget = ({
     );
 
     const maxAmountInOrderbook = useMemo(() => {
-        const maxLendAmount = Number(getMaxAmount(lendOrders));
-        const maxBorrowAmount = Number(getMaxAmount(borrowOrders));
-        return BigInt(Math.max(maxBorrowAmount, maxLendAmount));
+        const maxLendAmount = getMaxAmount(lendOrders);
+        const maxBorrowAmount = getMaxAmount(borrowOrders);
+        return maxLendAmount > maxBorrowAmount
+            ? maxLendAmount
+            : maxBorrowAmount;
     }, [borrowOrders, lendOrders]);
 
     const buyColumns = useMemo(

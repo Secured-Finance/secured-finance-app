@@ -14,7 +14,7 @@ describe('OrderBookWidget Component', () => {
         expect(screen.getByTestId('sellOrders')).toBeInTheDocument();
     });
 
-    it.only('should render colorbar of correct length', () => {
+    it('should render colorbar of correct length', () => {
         render(<Default />);
         const bars = screen.getAllByTestId('color-bar');
         expect(bars[0]).toHaveStyle('width: 2px');
