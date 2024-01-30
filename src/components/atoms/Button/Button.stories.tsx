@@ -1,6 +1,7 @@
 import { StarIcon } from '@heroicons/react/24/solid';
 import type { Meta, StoryFn } from '@storybook/react';
 import { Button } from './';
+import { ButtonSizes, ButtonVariants } from './types';
 
 export default {
     title: 'Atoms/Button',
@@ -10,7 +11,8 @@ export default {
     },
     argTypes: {
         children: { control: 'text' },
-        size: { control: 'radio', options: ['sm', 'md'] },
+        size: { control: 'radio', options: Object.values(ButtonSizes) },
+        variant: { control: 'radio', options: Object.values(ButtonVariants) },
         fullWidth: { control: 'boolean' },
         StartIcon: { control: false },
         EndIcon: { control: false },
@@ -29,14 +31,17 @@ const Template: StoryFn<typeof Button> = args => (
 export const Primary = () => {
     return (
         <div className='grid gap-4'>
-            <Button size='xs'>Unwind</Button>
-            <Button size='sm'>Deposit</Button>
-            <Button size='md'>Connect Wallet</Button>
+            <Button size={ButtonSizes.xs}>Unwind</Button>
+            <Button size={ButtonSizes.sm}>Deposit</Button>
+            <Button size={ButtonSizes.md}>Connect Wallet</Button>
+            <Button size={ButtonSizes.lg}>Place Order</Button>
             <Button disabled>Disabled</Button>
-            <Button disabled variant='outlined'>
-                Disabled
-            </Button>
-            <Button size='md' fullWidth>
+            <Button variant={ButtonVariants.secondary}>Order</Button>
+            <Button
+                size={ButtonSizes.md}
+                variant={ButtonVariants.tertiary}
+                fullWidth
+            >
                 Full Width
             </Button>
             <Button StartIcon={StarIcon}>Icons</Button>
@@ -47,25 +52,38 @@ export const Primary = () => {
 
 export const Default = Template.bind({});
 
+export const ExtraSmall = Template.bind({});
+ExtraSmall.args = {
+    ...Default.args,
+    size: ButtonSizes.xs,
+};
+
 export const Small = Template.bind({});
 Small.args = {
     ...Default.args,
-    size: 'sm',
+    size: ButtonSizes.sm,
 };
 
 export const Medium = Template.bind({});
 Medium.args = {
     ...Default.args,
-    size: 'md',
+    size: ButtonSizes.md,
 };
 
-export const WithIcon = Template.bind({});
-WithIcon.args = {
+export const Large = Template.bind({});
+Large.args = {
     ...Default.args,
-    StartIcon: StarIcon,
+    size: ButtonSizes.lg,
 };
 
-export const Outlined = Template.bind({});
-Outlined.args = {
-    variant: 'outlined',
+export const Secondary = Template.bind({});
+Secondary.args = {
+    ...Default.args,
+    variant: ButtonVariants.secondary,
+};
+
+export const Tertiary = Template.bind({});
+Tertiary.args = {
+    ...Default.args,
+    variant: ButtonVariants.tertiary,
 };

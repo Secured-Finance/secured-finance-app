@@ -94,6 +94,12 @@ module.exports = {
             '2xs': ['10px', { lineHeight: '15px' }],
         },
         colors: {
+            primary: {
+                50: '#F5F6FF',
+                500: '#5162FF',
+                700: '#2033DB',
+                900: '#0213A5',
+            },
             // Primary
             universeBlue: '#002133',
             horizonBlue: '#3555AC',
@@ -127,6 +133,7 @@ module.exports = {
                 '8': '#FCFCFD',
                 '50': '#FBFAFC',
                 '300': '#CBD5E1',
+                '400': '#94A3B8',
                 '500': '#64748B',
                 '600': '#475569',
                 '700': '#334155',

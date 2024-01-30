@@ -3,7 +3,7 @@ import WFIL from 'src/assets/coins/fil.svg';
 import { render, screen } from 'src/test-utils.js';
 import * as stories from './Button.stories';
 
-const { Default, Outlined } = composeStories(stories);
+const { Default, Tertiary } = composeStories(stories);
 
 describe('test Button component', () => {
     it('should render button with a text', () => {
@@ -57,10 +57,10 @@ describe('test Button component', () => {
         expect(screen.getByRole('img')).toBeInTheDocument();
     });
 
-    it('should render an outlined button when variant is outlined', async () => {
-        render(<Outlined />);
+    it('should render an outlined button when variant is tertiary', async () => {
+        render(<Tertiary />);
         expect(screen.getByRole('button')).toHaveClass(
-            'enabled:border-2 enabled:border-slateGray enabled:text-neutral-8 enabled:hover:border-none enabled:hover:bg-neutral-8 enabled:hover:text-neutral-2 disabled:bg-neutral-8 disabled:text-neutral-2'
+            'border-primary-50 bg-transparent'
         );
     });
 });

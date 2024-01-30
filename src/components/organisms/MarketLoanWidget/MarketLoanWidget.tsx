@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { useCallback, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Button, DropdownSelector, Timer } from 'src/components/atoms';
+import { ButtonSizes } from 'src/components/atoms/Button/types';
 import {
     CoreTable,
     Tab,
@@ -162,7 +163,10 @@ export const MarketLoanWidget = ({
                 cell: info => {
                     return (
                         <div className='flex justify-end px-4 laptop:px-1'>
-                            <Button onClick={() => handleClick(info)} size='sm'>
+                            <Button
+                                onClick={() => handleClick(info)}
+                                size={ButtonSizes.sm}
+                            >
                                 {info.row.original.isOpened
                                     ? 'Open Order'
                                     : 'GO'}

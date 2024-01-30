@@ -1,6 +1,7 @@
 import { Dialog as HeadlessDialog } from '@headlessui/react';
 import { useRef } from 'react';
 import { Button } from 'src/components/atoms';
+import { ButtonSizes, ButtonVariants } from 'src/components/atoms/Button/types';
 
 export type DialogState = {
     isOpen: boolean;
@@ -60,7 +61,7 @@ export const Dialog = ({
                             {callToAction ? (
                                 <div className='grid w-full gap-4'>
                                     <Button
-                                        size='sm'
+                                        size={ButtonSizes.sm}
                                         fullWidth
                                         onClick={onClick}
                                         data-testid='dialog-action-button'
@@ -70,8 +71,8 @@ export const Dialog = ({
                                     </Button>
                                     {showCancelButton && (
                                         <Button
-                                            variant='outlined'
-                                            size='sm'
+                                            variant={ButtonVariants.tertiary}
+                                            size={ButtonSizes.sm}
                                             fullWidth
                                             onClick={onClose}
                                         >
