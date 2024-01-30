@@ -104,7 +104,7 @@ export const HamburgerMenu = ({
                         <Menu.Items
                             as='div'
                             className={classNames(
-                                'typography-body-1 flex h-screen w-full flex-col gap-4 overflow-y-auto bg-universeBlue p-8 text-neutral-4'
+                                'typography-body-1 flex h-screen w-full flex-col gap-4 overflow-y-auto bg-neutral-900 p-8 text-neutral-4'
                             )}
                         >
                             <Closable onClose={close}>

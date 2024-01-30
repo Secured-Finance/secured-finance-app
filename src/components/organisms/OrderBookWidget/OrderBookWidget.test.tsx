@@ -105,12 +105,12 @@ describe('OrderBookWidget Component', () => {
 
         it('should render the Show All Orders button as active by default', () => {
             render(<Default />);
-            expect(getButton('Show All Orders')).toHaveClass('bg-universeBlue');
+            expect(getButton('Show All Orders')).toHaveClass('bg-neutral-900');
             expect(getButton('Show Only Lend Orders')).not.toHaveClass(
-                'bg-universeBlue'
+                'bg-neutral-900'
             );
             expect(getButton('Show Only Borrow Orders')).not.toHaveClass(
-                'bg-universeBlue'
+                'bg-neutral-900'
             );
         });
 
@@ -121,24 +121,24 @@ describe('OrderBookWidget Component', () => {
 
             fireEvent.click(getButton('Show Only Borrow Orders'));
             expect(getButton('Show All Orders')).not.toHaveClass(
-                'bg-universeBlue'
+                'bg-neutral-900'
             );
             expect(getButton('Show Only Lend Orders')).not.toHaveClass(
-                'bg-universeBlue'
+                'bg-neutral-900'
             );
             expect(getButton('Show Only Borrow Orders')).toHaveClass(
-                'bg-universeBlue'
+                'bg-neutral-900'
             );
             expectToHaveRows('buyOrders');
             expectNotToHaveRows('sellOrders');
 
             fireEvent.click(getButton('Show Only Borrow Orders'));
-            expect(getButton('Show All Orders')).toHaveClass('bg-universeBlue');
+            expect(getButton('Show All Orders')).toHaveClass('bg-neutral-900');
             expect(getButton('Show Only Lend Orders')).not.toHaveClass(
-                'bg-universeBlue'
+                'bg-neutral-900'
             );
             expect(getButton('Show Only Borrow Orders')).not.toHaveClass(
-                'bg-universeBlue'
+                'bg-neutral-900'
             );
             expectToHaveRows('buyOrders');
             expectToHaveRows('sellOrders');
@@ -151,24 +151,24 @@ describe('OrderBookWidget Component', () => {
 
             fireEvent.click(getButton('Show Only Lend Orders'));
             expect(getButton('Show All Orders')).not.toHaveClass(
-                'bg-universeBlue'
+                'bg-neutral-900'
             );
             expect(getButton('Show Only Lend Orders')).toHaveClass(
-                'bg-universeBlue'
+                'bg-neutral-900'
             );
             expect(getButton('Show Only Borrow Orders')).not.toHaveClass(
-                'bg-universeBlue'
+                'bg-neutral-900'
             );
             expectNotToHaveRows('buyOrders');
             expectToHaveRows('sellOrders');
 
             fireEvent.click(getButton('Show Only Lend Orders'));
-            expect(getButton('Show All Orders')).toHaveClass('bg-universeBlue');
+            expect(getButton('Show All Orders')).toHaveClass('bg-neutral-900');
             expect(getButton('Show Only Lend Orders')).not.toHaveClass(
-                'bg-universeBlue'
+                'bg-neutral-900'
             );
             expect(getButton('Show Only Borrow Orders')).not.toHaveClass(
-                'bg-universeBlue'
+                'bg-neutral-900'
             );
             expectToHaveRows('buyOrders');
             expectToHaveRows('sellOrders');

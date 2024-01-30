@@ -4,7 +4,7 @@ import { SvgIcon } from 'src/types';
 import { ButtonSizes, ButtonVariants } from './types';
 
 export const Button = ({
-    href, //do nothing
+    href,
     size = ButtonSizes.md,
     fullWidth = false,
     children,
@@ -37,18 +37,17 @@ export const Button = ({
     const label = typeof children === 'string' ? children : 'Button';
     const text = isMobile && mobileText ? mobileText : children;
 
-    // 'enabled:border enabled:border-slateGray enabled:text-neutral-8 enabled:hover:border-none enabled:hover:bg-neutral-8 enabled:hover:text-neutral-2 disabled:bg-neutral-8 disabled:text-neutral-2'
-
-    //   text-neutral-8 enabled:hover:bg-gradient-to-t enabled:hover:from-black-20 enabled:hover:via-black-20 enabled:hover:to-starBlue disabled:bg-gradient-to-t disabled:from-black/25 disabled:via-black/25 disabled:to-starBlue disabled:opacity-50
-
     return (
         <Tag
             {...tagProps}
             aria-label={label}
             className={classNames(
-                'flex items-center justify-center border text-white disabled:bg-neutral-600 disabled:text-neutral-400',
+                'flex items-center justify-center border font-semibold active:border-transparent disabled:bg-neutral-600 disabled:text-neutral-400',
                 props?.className,
                 {
+                    'text-neutral-50':
+                        variant !== ButtonVariants.primaryBuy &&
+                        variant !== ButtonVariants.tertiaryBuy, // TODO: add on more variants as we go with success and error versions
                     'h-7 rounded-md px-[0.625rem] py-1':
                         size === ButtonSizes.xs,
                     'h-[1.875rem] rounded-lg px-3 py-[0.375rem]':
@@ -62,8 +61,14 @@ export const Button = ({
                         variant === ButtonVariants.primary,
                     'border-primary-50 bg-primary-700 hover:bg-primary-900':
                         variant === ButtonVariants.secondary,
-                    'border-primary-50 bg-transparent':
+                    'border-primary-50 bg-transparent hover:bg-neutral-900':
                         variant === ButtonVariants.tertiary,
+                    'border-transparent bg-success-500 text-neutral-900 hover:bg-success-700 active:bg-success-900 active:text-neutral-50':
+                        variant === ButtonVariants.primaryBuy,
+                    'border-transparent bg-error-500 hover:bg-error-700 active:bg-error-900':
+                        variant === ButtonVariants.primarySell,
+                    'border-success-300 bg-transparent text-success-300 hover:bg-success-900 hover:text-success-50 active:border-transparent':
+                        variant === ButtonVariants.tertiaryBuy,
                 }
             )}
         >
