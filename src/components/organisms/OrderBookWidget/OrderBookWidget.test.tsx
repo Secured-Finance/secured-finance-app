@@ -14,6 +14,23 @@ describe('OrderBookWidget Component', () => {
         expect(screen.getByTestId('sellOrders')).toBeInTheDocument();
     });
 
+    it.only('should render colorbar of correct length', () => {
+        render(<Default />);
+        const bars = screen.getAllByTestId('color-bar');
+        expect(bars[0]).toHaveStyle('width: 2px');
+        expect(bars[1]).toHaveStyle('width: 55.44%');
+        expect(bars[2]).toHaveStyle('width: 308%');
+        expect(bars[3]).toHaveStyle('width: 18.48%');
+        expect(bars[4]).toHaveStyle('width: 15.4%');
+        expect(bars[5]).toHaveStyle('width: 5%');
+        expect(bars[6]).toHaveStyle('width: 55.44%');
+        expect(bars[7]).toHaveStyle('width: 70.84%');
+        expect(bars[8]).toHaveStyle('width: 5%');
+        expect(bars[9]).toHaveStyle('width: 18.48%');
+        expect(bars[10]).toHaveStyle('width: 27.72%');
+        expect(bars[11]).toHaveStyle('width: 67.76%');
+    });
+
     describe('Mid Price', () => {
         it('should display the market price', () => {
             render(<Default />);
