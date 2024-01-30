@@ -263,12 +263,11 @@ export const OrderBookWidget = ({
         aggregationFactor
     );
 
-    const maxBorrowAmount = useMemo(
-        () => getMaxAmount(borrowOrders),
-        [borrowOrders]
-    );
-
-    const maxLendAmount = useMemo(() => getMaxAmount(lendOrders), [lendOrders]);
+    const maxAmountInOrderbook = useMemo(() => {
+        const maxLendAmount = Number(getMaxAmount(lendOrders));
+        const maxBorrowAmount = Number(getMaxAmount(borrowOrders));
+        return BigInt(Math.max(maxBorrowAmount, maxLendAmount));
+    }, [borrowOrders, lendOrders]);
 
     const buyColumns = useMemo(
         () => [
@@ -278,7 +277,7 @@ export const OrderBookWidget = ({
                     <PriceCell
                         value={info.getValue()}
                         amount={info.row.original.amount}
-                        totalAmount={maxBorrowAmount}
+                        totalAmount={maxAmountInOrderbook}
                         aggregationFactor={aggregationFactor}
                         position='borrow'
                         align='left'
@@ -305,7 +304,7 @@ export const OrderBookWidget = ({
                 header: () => <TableHeader title='APR' align='right' />,
             }),
         ],
-        [aggregationFactor, currency, maxBorrowAmount]
+        [aggregationFactor, currency, maxAmountInOrderbook]
     );
 
     const sellColumns = useMemo(
@@ -334,7 +333,7 @@ export const OrderBookWidget = ({
                     <PriceCell
                         value={info.getValue()}
                         amount={info.row.original.amount}
-                        totalAmount={maxLendAmount}
+                        totalAmount={maxAmountInOrderbook}
                         aggregationFactor={aggregationFactor}
                         position='lend'
                         align='left'
@@ -343,7 +342,7 @@ export const OrderBookWidget = ({
                 header: () => <TableHeader title='Price' align='left' />,
             }),
         ],
-        [aggregationFactor, currency, maxLendAmount]
+        [aggregationFactor, currency, maxAmountInOrderbook]
     );
 
     const handleClick = (rowId: string, side: OrderSide): void => {
