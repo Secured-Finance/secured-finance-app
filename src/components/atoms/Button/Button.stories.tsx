@@ -1,6 +1,7 @@
 import { StarIcon } from '@heroicons/react/24/solid';
 import type { Meta, StoryFn } from '@storybook/react';
 import { Button } from './';
+import { FIGMA_STORYBOOK_LINK } from './constants';
 import { ButtonSizes, ButtonVariants } from './types';
 
 export default {
@@ -20,6 +21,10 @@ export default {
     parameters: {
         viewport: {
             disable: true,
+        },
+        design: {
+            type: 'figma',
+            url: FIGMA_STORYBOOK_LINK,
         },
     },
 } as Meta<typeof Button>;
@@ -86,4 +91,34 @@ export const Tertiary = Template.bind({});
 Tertiary.args = {
     ...Default.args,
     variant: ButtonVariants.tertiary,
+};
+
+export const PrimaryBuy = Template.bind({});
+PrimaryBuy.args = {
+    ...Default.args,
+    variant: ButtonVariants.primaryBuy,
+};
+
+export const PrimarySell = Template.bind({});
+PrimarySell.args = {
+    ...Default.args,
+    variant: ButtonVariants.primarySell,
+};
+
+export const SecondaryNeutral = Template.bind({});
+SecondaryNeutral.args = {
+    ...Default.args,
+    variant: ButtonVariants.secondaryNeutral,
+};
+
+export const TertiaryBuy = Template.bind({});
+TertiaryBuy.args = {
+    ...Default.args,
+    variant: ButtonVariants.tertiaryBuy,
+};
+
+export const TertiarySell = Template.bind({});
+TertiarySell.args = {
+    ...Default.args,
+    variant: ButtonVariants.tertiarySell,
 };

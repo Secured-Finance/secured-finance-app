@@ -11,7 +11,7 @@ export enum ButtonVariants {
     tertiary = 'tertiary',
     primaryBuy = 'primary-buy',
     primarySell = 'primary-sell',
-    secondaryNeutral = 'secondary-neutral', // TODO: might need to change this
+    secondaryNeutral = 'secondary-neutral',
     tertiaryBuy = 'tertiary-buy',
     tertiarySell = 'tertiary-sell',
 }
