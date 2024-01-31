@@ -3,6 +3,8 @@ import { composeStories } from '@storybook/react';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import {
+    ButtonEvents,
+    ButtonProperties,
     CollateralEvents,
     CollateralProperties,
     CurrencySymbol,
@@ -131,8 +133,8 @@ describe('WithdrawCollateral component', () => {
     });
 
     it('should track the withdrawing of collateral', async () => {
-        const track = jest.spyOn(analytics, 'track');
         const onClose = jest.fn();
+        const track = jest.spyOn(analytics, 'track');
         render(<Default onClose={onClose} source='Source of Withdrawal' />);
 
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
@@ -220,13 +222,17 @@ describe('WithdrawCollateral component', () => {
         expect(screen.getByText('50 USDC Available')).toBeInTheDocument();
     });
 
-    it('should call onClose when cancel button is clicked', () => {
+    it('should call onClose when cancel button is clicked and emit  CANCEL_BUTTON event', () => {
+        const track = jest.spyOn(analytics, 'track');
         const onClose = jest.fn();
         render(<Default onClose={onClose} />);
         const cancelButton = screen.getByRole('button', {
             name: 'Cancel',
         });
         fireEvent.click(cancelButton);
+        expect(track).toHaveBeenCalledWith(ButtonEvents.CANCEL_BUTTON, {
+            [ButtonProperties.CANCEL_ACTION]: 'Cancel Withdraw Collateral',
+        });
         expect(onClose).toHaveBeenCalled();
     });
 

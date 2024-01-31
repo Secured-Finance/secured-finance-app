@@ -21,7 +21,13 @@ import {
     amountFormatterToBase,
     formatAmount,
 } from 'src/utils';
-import { CollateralEvents, trackCollateralEvent } from 'src/utils/events';
+import {
+    ButtonEvents,
+    ButtonProperties,
+    CollateralEvents,
+    trackButtonEvent,
+    trackCollateralEvent,
+} from 'src/utils/events';
 import { useAccount } from 'wagmi';
 
 enum Step {
@@ -125,8 +131,15 @@ export const WithdrawCollateral = ({
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
+        if (state.currentStep === Step.withdrawCollateral) {
+            trackButtonEvent(
+                ButtonEvents.CANCEL_BUTTON,
+                ButtonProperties.CANCEL_ACTION,
+                'Cancel Withdraw Collateral'
+            );
+        }
         onClose();
-    }, [onClose]);
+    }, [onClose, state.currentStep]);
 
     const isDisabled = useCallback(() => {
         return (
