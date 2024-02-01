@@ -1,5 +1,5 @@
 import { RadioGroup } from '@headlessui/react';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { NavTab } from 'src/components/atoms';
 
 export const RadioGroupSelector = ({
@@ -18,7 +18,7 @@ export const RadioGroupSelector = ({
             value={selectedOption}
             onChange={handleClick}
             as='div'
-            className={classNames('flex flex-row items-center', {
+            className={clsx('flex flex-row items-center', {
                 'h-16': variant === 'NavTab',
                 'h-12 gap-1 rounded-lg bg-black-20 p-2':
                     variant === 'StyledButton',
@@ -47,7 +47,7 @@ export const RadioGroupSelector = ({
 const StyledButton = ({ active, text }: { active: boolean; text: string }) => {
     return (
         <div
-            className={classNames(
+            className={clsx(
                 'typography-caption-2 group flex h-full w-full items-center justify-center rounded font-semibold duration-300 hover:opacity-100 hover:ease-in-out',
                 {
                     'bg-starBlue text-neutral-8': active,

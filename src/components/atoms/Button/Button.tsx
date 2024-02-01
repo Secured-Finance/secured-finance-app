@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { SvgIcon } from 'src/types';
 
 export const Button = ({
@@ -35,7 +35,7 @@ export const Button = ({
         <Tag
             {...tagProps}
             aria-label={label}
-            className={classNames(
+            className={clsx(
                 `flex items-center justify-center rounded-xl ${props?.className}`,
                 {
                     'h-8 px-3 py-2': size === 'xs',
@@ -56,7 +56,7 @@ export const Button = ({
                 </span>
             )}
             <p
-                className={classNames('whitespace-nowrap', {
+                className={clsx('whitespace-nowrap', {
                     'typography-button-2 text-xs': size === 'xs',
                     'typography-button-2': size === 'sm',
                     'typography-button-1': size === 'md',

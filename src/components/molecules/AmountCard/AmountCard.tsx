@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { currencyMap, formatAmount, prefixTilde, usdFormat } from 'src/utils';
 import { Amount } from 'src/utils/entities';
 
@@ -23,7 +23,7 @@ export const AmountCard = ({
             </div>
             <div className='col-span-1 grid items-center justify-end'>
                 <span
-                    className={classNames(
+                    className={clsx(
                         'flex justify-end font-semibold text-white',
                         {
                             'typography-body-2': formattedValue.length > 10,

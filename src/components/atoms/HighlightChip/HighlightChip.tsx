@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 export const HighlightChip = ({
     text,
@@ -8,7 +8,7 @@ export const HighlightChip = ({
     size?: 'small' | 'large';
 }) => (
     <div
-        className={classNames(
+        className={clsx(
             'flex items-center justify-center rounded-3xl bg-starBlue ',
             {
                 'typography-dropdown-selection-label h-5 w-10 font-semibold text-white':

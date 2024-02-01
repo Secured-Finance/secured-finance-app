@@ -1,5 +1,5 @@
 import { Popover, Transition } from '@headlessui/react';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Fragment, useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import ExclamationCircleIcon from 'src/assets/icons/exclamation-circle.svg';
@@ -31,7 +31,7 @@ const MenuItem = ({
     return (
         <button
             data-cy={formatDataCy(text)}
-            className={classNames(
+            className={clsx(
                 'flex w-full rounded px-3 py-2 transition duration-150 ease-in-out hover:bg-neutral-700 focus:outline-none'
             )}
             onClick={onClick}
@@ -100,7 +100,7 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
                     <Popover.Button
                         data-cy='network-selector-button'
                         aria-label='Network Selector Button'
-                        className={classNames(
+                        className={clsx(
                             'flex items-center gap-2 rounded-[6px] bg-neutral-800 px-3 py-2 ring-[1.5px] ring-neutral-500 focus:outline-none tablet:rounded-xl tablet:px-4 tablet:py-3'
                         )}
                     >

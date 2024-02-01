@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import WarningCircleIcon from 'src/assets/icons/warning-circle.svg';
 
 export const Section = ({
@@ -34,7 +34,7 @@ export const Section = ({
 
     return (
         <div
-            className={classNames('rounded-xl border', {
+            className={clsx('rounded-xl border', {
                 'border-neutral-3': variant === 'default',
                 'bg-yellow/6 border-orange': variant === 'warning',
             })}

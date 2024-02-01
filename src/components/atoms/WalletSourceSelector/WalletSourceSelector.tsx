@@ -1,6 +1,6 @@
 import { Listbox, Transition } from '@headlessui/react';
 import { WalletSource } from '@secured-finance/sf-client';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Fragment, useMemo } from 'react';
 import { ExpandIndicator, Separator } from 'src/components/atoms';
 import { SvgIcon } from 'src/types';
@@ -138,7 +138,7 @@ export const WalletSourceSelector = ({
                                                 {({ active }) => (
                                                     <div>
                                                         <div
-                                                            className={classNames(
+                                                            className={clsx(
                                                                 'flex flex-row items-center justify-between rounded-lg p-2',
                                                                 {
                                                                     'bg-horizonBlue':
