@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import ArrowUpSquare from 'src/assets/icons/arrow-up-square.svg';
 import { ordinaryFormat } from 'src/utils';
 
@@ -19,13 +19,13 @@ export const MarketTab = ({
 }: MarketTabProps) => {
     return (
         <section
-            className={classNames('flex h-fit flex-grow flex-col', {
+            className={clsx('flex h-fit flex-grow flex-col', {
                 'gap-1': variant === 'default',
             })}
             aria-label={label ?? name}
         >
             <span
-                className={classNames({
+                className={clsx({
                     'typography-button-3 whitespace-nowrap leading-7 text-nebulaTeal':
                         variant === 'green-name',
                     'typography-button-3 whitespace-nowrap leading-7 text-slateGray':
@@ -37,7 +37,7 @@ export const MarketTab = ({
                 {name}
             </span>
             <span
-                className={classNames(
+                className={clsx(
                     {
                         'typography-caption whitespace-nowrap text-white':
                             variant === 'green-name',

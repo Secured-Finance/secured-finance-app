@@ -1,5 +1,5 @@
 import { Tab as HeadlessTab } from '@headlessui/react';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Children, useState } from 'react';
 import { DropdownSelector } from 'src/components/atoms';
 
@@ -13,7 +13,7 @@ const TitleChip = ({
     return (
         <div
             data-testid={title}
-            className={classNames(
+            className={clsx(
                 'typography-caption-2 w-fit whitespace-nowrap px-5 py-3',
                 {
                     'rounded-3xl bg-black-30 text-neutral-8': selected,
@@ -53,7 +53,7 @@ export const HorizontalTab = ({
         >
             <HeadlessTab.List className='h-16 justify-start border-b border-white-10 p-3'>
                 <div
-                    className={classNames('w-full', {
+                    className={clsx('w-full', {
                         'horizontalTab:hidden': useCustomBreakpoint,
                         'tablet:hidden': !useCustomBreakpoint,
                     })}
@@ -74,7 +74,7 @@ export const HorizontalTab = ({
                     />
                 </div>
                 <div
-                    className={classNames('hidden', {
+                    className={clsx('hidden', {
                         'horizontalTab:block': useCustomBreakpoint,
                         'tablet:block': !useCustomBreakpoint,
                     })}

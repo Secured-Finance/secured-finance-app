@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Separator } from 'src/components/atoms';
 
 export const GradientBox = ({
@@ -16,7 +16,7 @@ export const GradientBox = ({
         <div>
             <div className='h-1 bg-starBlue'></div>
             <div
-                className={classNames(
+                className={clsx(
                     'border-b border-l border-r border-white-10 bg-black-20',
                     {
                         'rounded-b-2xl': shape === 'rounded-bottom',

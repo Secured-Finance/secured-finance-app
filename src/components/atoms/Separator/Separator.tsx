@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 interface SeparatorProps {
     color?: 'neutral-2' | 'neutral-3' | 'moonGrey' | 'white-10' | 'default';
@@ -11,7 +11,7 @@ export const Separator = ({
 }: SeparatorProps) => {
     return (
         <div
-            className={classNames(
+            className={clsx(
                 {
                     'border-b': orientation === 'horizontal',
                     'border-l': orientation === 'vertical',
