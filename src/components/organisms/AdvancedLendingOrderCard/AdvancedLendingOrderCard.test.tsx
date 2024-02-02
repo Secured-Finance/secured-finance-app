@@ -1,3 +1,4 @@
+import * as analytics from '@amplitude/analytics-browser';
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
 import { CollateralBook } from 'src/hooks';
@@ -5,7 +6,13 @@ import { dec22Fixture } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
-import { CurrencySymbol } from 'src/utils';
+import {
+    ButtonEvents,
+    ButtonProperties,
+    CurrencySymbol,
+    InteractionEvents,
+    InteractionProperties,
+} from 'src/utils';
 import timemachine from 'timemachine';
 import * as stories from './AdvancedLendingOrderCard.stories';
 
@@ -732,6 +739,30 @@ describe('AdvancedLendingOrderCard Component', () => {
                 fireEvent.click(screen.getByText('Lend'));
             });
             assertBondPriceInputValue('20');
+        });
+    });
+
+    describe('Amplitude', () => {
+        it('should track ORDER_SIDE and ORDER_TYPE events when changing order side or order type', async () => {
+            const track = jest.spyOn(analytics, 'track');
+            render(<Default />);
+            fireEvent.click(screen.getByText('Limit'));
+            expect(track).toHaveBeenCalledWith(ButtonEvents.ORDER_TYPE, {
+                [ButtonProperties.ORDER_TYPE]: OrderType.LIMIT,
+            });
+            fireEvent.click(screen.getByText('Lend'));
+            expect(track).toHaveBeenCalledWith(ButtonEvents.ORDER_SIDE, {
+                [ButtonProperties.ORDER_SIDE]: 'Lend',
+            });
+        });
+
+        it('should emit BOND_PRICE event when bond price is changed', () => {
+            const track = jest.spyOn(analytics, 'track');
+            render(<Default marketPrice={9600} />, { preloadedState });
+            changeInputValue('Bond Price', '20');
+            expect(track).toHaveBeenCalledWith(InteractionEvents.BOND_PRICE, {
+                [InteractionProperties.BOND_PRICE]: '20',
+            });
         });
     });
 });

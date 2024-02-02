@@ -1,3 +1,4 @@
+import { track } from '@amplitude/analytics-browser';
 import { OrderSide } from '@secured-finance/sf-client';
 import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,7 +21,7 @@ import { useCollateralBalances } from 'src/hooks/useBalances';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { amountFormatterFromBase } from 'src/utils';
+import { ButtonEvents, amountFormatterFromBase } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
@@ -107,6 +108,7 @@ export const OrderAction = ({
                         fullWidth
                         onClick={() => {
                             setOpenPlaceOrderDialog(true);
+                            track(ButtonEvents.PLACE_ORDER_BUTTON);
                         }}
                         data-testid='place-order-button'
                         mobileText='Order'
@@ -118,7 +120,10 @@ export const OrderAction = ({
                     <Button
                         disabled={chainError}
                         fullWidth
-                        onClick={() => setOpenDepositCollateralDialog(true)}
+                        onClick={() => {
+                            setOpenDepositCollateralDialog(true);
+                            track(ButtonEvents.DEPOSIT_COLLATERAL_BUTTON);
+                        }}
                         data-testid='deposit-collateral-button'
                     >
                         Deposit collateral to borrow

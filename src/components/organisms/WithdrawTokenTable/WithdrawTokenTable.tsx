@@ -1,11 +1,11 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import { useMemo, useState } from 'react';
 import { Button } from 'src/components/atoms';
-import { ButtonSizes } from 'src/components/atoms/Button/types';
 import { CoreTable } from 'src/components/molecules';
 import { WithdrawCollateral } from 'src/components/organisms';
 import { EmergencySettlementStep } from 'src/components/templates';
 import { useTerminationPrices } from 'src/hooks';
+import { ButtonSizes } from 'src/types';
 import {
     CollateralInfo,
     CurrencySymbol,

@@ -1,3 +1,4 @@
+import { track } from '@amplitude/analytics-browser';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
@@ -33,6 +34,8 @@ import {
 import { RootState } from 'src/store/types';
 import { OrderSideMap, OrderType, OrderTypeOptions } from 'src/types';
 import {
+    ButtonEvents,
+    ButtonProperties,
     CurrencySymbol,
     ZERO_BI,
     amountFormatterFromBase,
@@ -46,6 +49,11 @@ import {
     usdFormat,
 } from 'src/utils';
 import { AMOUNT_PRECISION, Amount, LoanValue } from 'src/utils/entities';
+import {
+    InteractionEvents,
+    InteractionProperties,
+    trackButtonEvent,
+} from 'src/utils/events';
 import { useAccount } from 'wagmi';
 
 export function AdvancedLendingOrderCard({
@@ -249,6 +257,11 @@ export function AdvancedLendingOrderCard({
                         )
                     );
                     dispatch(setSourceAccount(WalletSource.METAMASK));
+                    trackButtonEvent(
+                        ButtonEvents.ORDER_SIDE,
+                        ButtonProperties.ORDER_SIDE,
+                        option
+                    );
                 }}
                 variant='NavTab'
             />
@@ -261,6 +274,11 @@ export function AdvancedLendingOrderCard({
                         handleClick={option => {
                             dispatch(setOrderType(option as OrderType));
                             dispatch(resetUnitPrice());
+                            trackButtonEvent(
+                                ButtonEvents.ORDER_TYPE,
+                                ButtonProperties.ORDER_TYPE,
+                                option
+                            );
                         }}
                         variant='StyledButton'
                     />
@@ -292,6 +310,10 @@ export function AdvancedLendingOrderCard({
                             v !== undefined
                                 ? dispatch(setUnitPrice(v.toString()))
                                 : dispatch(setUnitPrice(''));
+                            track(InteractionEvents.BOND_PRICE, {
+                                [InteractionProperties.BOND_PRICE]:
+                                    v?.toString(),
+                            });
                         }}
                         informationText='Input value greater than or equal to 0.01 and up to and including 100.'
                         decimalPlacesAllowed={2}

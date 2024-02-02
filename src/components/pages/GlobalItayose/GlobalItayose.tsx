@@ -2,7 +2,6 @@ import { useRouter } from 'next/router';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, TextLink, Timer } from 'src/components/atoms';
-import { ButtonSizes } from 'src/components/atoms/Button/types';
 import { CurrencyDropdown } from 'src/components/molecules';
 import { GlobalItayoseMultiCurveChart } from 'src/components/organisms';
 import { baseContracts, useCurrencies, useLendingMarkets } from 'src/hooks';
@@ -12,6 +11,7 @@ import {
     setCurrency,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
+import { ButtonSizes } from 'src/types';
 import { CurrencySymbol, toOptions } from 'src/utils';
 
 export const GlobalItayose = () => {

@@ -1,3 +1,4 @@
+import { track } from '@amplitude/analytics-browser';
 import classNames from 'classnames';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
@@ -7,10 +8,11 @@ import {
     CollateralInformationTable,
     CollateralManagementConciseTab,
 } from 'src/components/atoms';
-import { ButtonSizes } from 'src/components/atoms/Button/types';
 import { CollateralBook, useCollateralCurrencies } from 'src/hooks';
 import { RootState } from 'src/store/types';
+import { ButtonSizes } from 'src/types';
 import {
+    ButtonEvents,
     CurrencySymbol,
     ZERO_BI,
     amountFormatterFromBase,
@@ -211,7 +213,10 @@ export const CollateralTabLeftPane = ({
             <div className='flex h-24 flex-row items-center justify-center gap-4 px-6'>
                 <Button
                     size={ButtonSizes.sm}
-                    onClick={() => onClick('deposit')}
+                    onClick={() => {
+                        onClick('deposit');
+                        track(ButtonEvents.DEPOSIT_COLLATERAL_BUTTON);
+                    }}
                     disabled={!account || chainError}
                     data-testid='deposit-collateral'
                     fullWidth={true}
@@ -221,7 +226,10 @@ export const CollateralTabLeftPane = ({
                 <Button
                     size={ButtonSizes.sm}
                     disabled={!account || netAssetValue <= 0 || chainError}
-                    onClick={() => onClick('withdraw')}
+                    onClick={() => {
+                        onClick('withdraw');
+                        track(ButtonEvents.WITHDRAW_COLLATERAL_BUTTON);
+                    }}
                     data-testid='withdraw-collateral'
                     fullWidth={true}
                 >

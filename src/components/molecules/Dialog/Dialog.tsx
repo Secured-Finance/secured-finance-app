@@ -1,7 +1,8 @@
 import { Dialog as HeadlessDialog } from '@headlessui/react';
 import { useRef } from 'react';
 import { Button } from 'src/components/atoms';
-import { ButtonSizes, ButtonVariants } from 'src/components/atoms/Button/types';
+import { ButtonVariants } from 'src/components/atoms/Button/types';
+import { ButtonSizes } from 'src/types';
 
 export type DialogState = {
     isOpen: boolean;

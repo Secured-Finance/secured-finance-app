@@ -1,8 +1,9 @@
 import { StarIcon } from '@heroicons/react/24/solid';
 import type { Meta, StoryFn } from '@storybook/react';
+import { ButtonSizes } from 'src/types';
 import { Button } from './';
 import { FIGMA_STORYBOOK_LINK } from './constants';
-import { ButtonSizes, ButtonVariants } from './types';
+import { ButtonVariants } from './types';
 
 export default {
     title: 'Atoms/Button',

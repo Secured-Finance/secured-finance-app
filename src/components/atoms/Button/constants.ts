@@ -1,6 +1,5 @@
-import { ButtonSizes, ButtonVariants } from './types';
-
-// TODO: add all the relevant class names to replace placeholders
+import { ButtonSizes } from 'src/types';
+import { ButtonVariants } from './types';
 
 export const FIGMA_STORYBOOK_LINK =
     'https://www.figma.com/file/YIBsk1ihFbPlDb8XldGj1T/SF-Design-System?type=design&node-id=294%3A4449&mode=design&t=IIcr5aKhnOxXG0ip-1';

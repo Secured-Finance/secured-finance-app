@@ -5,7 +5,6 @@ import { useRouter } from 'next/router';
 import { useCallback, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Button, DropdownSelector, Timer } from 'src/components/atoms';
-import { ButtonSizes } from 'src/components/atoms/Button/types';
 import {
     CoreTable,
     Tab,
@@ -20,6 +19,7 @@ import {
     useMaturityOptions,
 } from 'src/hooks';
 import { setCurrency, setMaturity } from 'src/store/landingOrderForm';
+import { ButtonSizes } from 'src/types';
 import {
     CurrencySymbol,
     formatLoanValue,
