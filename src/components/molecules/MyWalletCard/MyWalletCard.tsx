@@ -1,5 +1,5 @@
 import { Dialog } from '@headlessui/react';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import dynamic from 'next/dynamic';
 import { useMemo, useRef, useState } from 'react';
 import Filecoin from 'src/assets/coins/fil.svg';
@@ -82,7 +82,7 @@ export const MyWalletCard = ({
         <div className='h-fit w-full bg-transparent'>
             <GradientBox header='My Wallet'>
                 <div
-                    className={classNames('px-[10px]', {
+                    className={clsx('px-[10px]', {
                         'pb-6': !hideBridge,
                     })}
                 >

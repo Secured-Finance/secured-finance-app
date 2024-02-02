@@ -1,5 +1,5 @@
 import { InformationCircleIcon } from '@heroicons/react/24/solid';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useState } from 'react';
 import ErrorCircleIcon from 'src/assets/icons/error-circle.svg';
 import WarningCircleIcon from 'src/assets/icons/warning-circle.svg';
@@ -60,14 +60,14 @@ export const Alert = ({
         <section
             aria-label={severity}
             role='alert'
-            className={classNames('rounded-xl', {
+            className={clsx('rounded-xl', {
                 'border-2 border-yellow bg-yellow/20': variant === 'outlined', // should be changed to handle different colors
                 'bg-[rgba(41, 45, 63, 0.60)] border border-white-10 shadow-tab':
                     variant === 'solid',
             })}
         >
             <div
-                className={classNames(
+                className={clsx(
                     'flex w-full flex-row items-center justify-between gap-1 rounded-xl px-5 py-3',
                     {
                         'bg-gradient-to-b from-[rgba(111,116,176,0.35)] to-[rgba(57,77,174,0)]':

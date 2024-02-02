@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useBreakpoint } from 'src/hooks';
 import { ButtonSizes, SvgIcon } from 'src/types';
 import { sizeStyle, variantStyle } from './constants';
@@ -42,7 +42,7 @@ export const Button = ({
         <Tag
             {...tagProps}
             aria-label={label}
-            className={classNames(
+            className={clsx(
                 'flex items-center justify-center border font-semibold active:border-transparent disabled:bg-neutral-600 disabled:text-neutral-400',
                 props?.className,
                 sizeStyle[size],
@@ -64,7 +64,7 @@ export const Button = ({
                 </span>
             )}
             <p
-                className={classNames('whitespace-nowrap', {
+                className={clsx('whitespace-nowrap', {
                     'text-xs': size === ButtonSizes.xs,
                     'text-sm': size === ButtonSizes.sm,
                     'text-base':

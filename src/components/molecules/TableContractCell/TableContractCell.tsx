@@ -1,6 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { getUTCMonthYear } from '@secured-finance/sf-core';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useMemo } from 'react';
 import ErrorCircleIcon from 'src/assets/icons/error-circle.svg';
 import WarningCircleIcon from 'src/assets/icons/warning-circle.svg';
@@ -64,14 +64,14 @@ export const TableContractCell = ({
     return (
         <div className='flex flex-col'>
             <div
-                className={classNames('flex h-6 flex-row justify-start gap-2', {
+                className={clsx('flex h-6 flex-row justify-start gap-2', {
                     'tablet:w-32':
                         variant !== 'contractOnly' && variant !== 'compact',
                 })}
             >
                 {variant !== 'contractOnly' ? (
                     <div
-                        className={classNames({
+                        className={clsx({
                             'mt-1':
                                 variant === 'default' ||
                                 variant === 'currencyOnly' ||
@@ -100,7 +100,7 @@ export const TableContractCell = ({
             </div>
             {variant !== 'compact' && variant !== 'contractOnly' ? (
                 <div
-                    className={classNames(
+                    className={clsx(
                         'typography-caption-2 text-left text-neutral-4',
                         {
                             'ml-8':
