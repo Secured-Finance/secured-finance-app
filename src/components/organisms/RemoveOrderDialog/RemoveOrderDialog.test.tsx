@@ -1,6 +1,8 @@
+import * as analytics from '@amplitude/analytics-browser';
 import { composeStories } from '@storybook/react';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
+import { ButtonEvents, ButtonProperties } from 'src/utils';
 import * as stories from './RemoveOrderDialog.stories';
 
 const { Default } = composeStories(stories);
@@ -64,7 +66,8 @@ describe('RemoveOrderDialog Component', () => {
         expect(await screen.findByText('~ $600')).toBeInTheDocument();
     });
 
-    it('should call onClose when cancel button is clicked', () => {
+    it('should call onClose when cancel button is clicked and emit CANCEL_BUTTON event', () => {
+        const track = jest.spyOn(analytics, 'track');
         const onClose = jest.fn();
         render(<Default onClose={onClose} />);
         const cancelButton = screen.getByRole('button', {
@@ -72,6 +75,9 @@ describe('RemoveOrderDialog Component', () => {
         });
         fireEvent.click(cancelButton);
         expect(onClose).toHaveBeenCalled();
+        expect(track).toHaveBeenCalledWith(ButtonEvents.CANCEL_BUTTON, {
+            [ButtonProperties.CANCEL_ACTION]: 'Cancel Remove Order',
+        });
     });
 
     it('should not show cancel button if dialog is not on first step', async () => {

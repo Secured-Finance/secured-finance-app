@@ -6,6 +6,8 @@ import {
 } from '@amplitude/analytics-browser';
 import { amountFormatterFromBase, CurrencySymbol } from '../currencyList';
 import {
+    ButtonEvents,
+    ButtonProperties,
     CollateralEvents,
     CollateralProperties,
     InterfaceEvents,
@@ -14,6 +16,7 @@ import {
 
 export async function associateWallet(
     account: string | null,
+    chainName: string | undefined,
     raiseEvent = true
 ) {
     if (!account) return;
@@ -25,6 +28,7 @@ export async function associateWallet(
     if (raiseEvent) {
         track(InterfaceEvents.WALLET_CONNECTED, {
             [InterfaceProperties.WALLET_ADDRESS]: account,
+            [InterfaceProperties.CHAIN]: chainName ?? 'Unsupported',
         });
     }
 }
@@ -41,4 +45,12 @@ export function trackCollateralEvent(
             amountFormatterFromBase[assetType](amount).toString(),
         [CollateralProperties.SOURCE]: source,
     });
+}
+
+export function trackButtonEvent(
+    event: ButtonEvents,
+    property: ButtonProperties,
+    value: string
+) {
+    track(event, { [property]: value });
 }

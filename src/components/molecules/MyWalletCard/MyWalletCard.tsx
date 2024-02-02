@@ -6,12 +6,12 @@ import Filecoin from 'src/assets/coins/fil.svg';
 import AxelarFil from 'src/assets/coins/wfil.svg';
 import AxelarSquid from 'src/assets/img/squid+axelar.svg';
 import { Button, GradientBox, Separator } from 'src/components/atoms';
-import { ButtonSizes } from 'src/components/atoms/Button/types';
 import {
     AssetDisclosure,
     AssetDisclosureProps,
 } from 'src/components/molecules';
 import { useBalances } from 'src/hooks';
+import { ButtonSizes } from 'src/types';
 import {
     CurrencySymbol,
     WalletSource,

@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import { useBreakpoint } from 'src/hooks';
-import { SvgIcon } from 'src/types';
+import { ButtonSizes, SvgIcon } from 'src/types';
 import { sizeStyle, variantStyle } from './constants';
-import { ButtonSizes, ButtonVariants } from './types';
+import { ButtonVariants } from './types';
 
 export const Button = ({
     href,
@@ -51,7 +51,7 @@ export const Button = ({
                     'text-neutral-50':
                         variant !== ButtonVariants.primaryBuy &&
                         variant !== ButtonVariants.tertiaryBuy &&
-                        variant !== ButtonVariants.tertiarySell, // TODO: add on more variants as we go with success and error versions
+                        variant !== ButtonVariants.tertiarySell,
                     'w-full': fullWidth,
                     'w-fit': !fullWidth,
                 }
