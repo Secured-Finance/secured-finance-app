@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { ColorFormat } from 'src/types';
 import { divide, multiply } from 'src/utils';
 import { ZERO_BI, calculatePercentage } from 'src/utils/collateral';
@@ -27,7 +27,7 @@ export const ColorBar = ({
     );
     return (
         <div
-            className={classNames('absolute h-6', {
+            className={clsx('absolute h-6', {
                 'bg-galacticOrange/20': color === 'negative',
                 'bg-nebulaTeal/20': color === 'positive',
                 '-left-0.5': align === 'left',

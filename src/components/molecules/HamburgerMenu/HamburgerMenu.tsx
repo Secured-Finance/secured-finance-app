@@ -1,6 +1,6 @@
 import { Menu, Transition } from '@headlessui/react';
 import { ArrowUpIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import Link from 'next/link';
 import { HTMLAttributes, LegacyRef, forwardRef, useState } from 'react';
 import Burger from 'src/assets/img/burger.svg';
@@ -32,7 +32,7 @@ const MenuItemLink = ({ text, link }: { text: string; link: string }) => {
             {({ active }) => (
                 <NextLink
                     href={link}
-                    className={classNames(
+                    className={clsx(
                         'flex h-16 w-full items-center justify-start whitespace-nowrap px-9 py-4 text-center',
                         {
                             'border-l-4 border-starBlue bg-gradient-to-r from-[#6A76B159] via-[#4A5BAF1F] to-[#394DAE00] text-neutral-8':
@@ -52,7 +52,7 @@ const MobileItemLink = ({ text, href }: { text: string; href: string }) => {
         <Menu.Item>
             {({ active }) => (
                 <a
-                    className={classNames(
+                    className={clsx(
                         'flex h-16 w-full flex-row items-center justify-start gap-3 whitespace-nowrap p-4 text-center',
                         {
                             'rounded-2xl bg-[#233447] text-neutral-8': active,
@@ -64,13 +64,10 @@ const MobileItemLink = ({ text, href }: { text: string; href: string }) => {
                 >
                     <p>{text}</p>
                     <ArrowUpIcon
-                        className={classNames(
-                            'mt-1 h-4 w-4 rotate-45 text-white',
-                            {
-                                inline: active,
-                                hidden: !active,
-                            }
-                        )}
+                        className={clsx('mt-1 h-4 w-4 rotate-45 text-white', {
+                            inline: active,
+                            hidden: !active,
+                        })}
                     />
                 </a>
             )}
@@ -103,8 +100,8 @@ export const HamburgerMenu = ({
                     >
                         <Menu.Items
                             as='div'
-                            className={classNames(
-                                'typography-body-1 flex h-screen w-full flex-col gap-4 overflow-y-auto bg-neutral-900 p-8 text-neutral-4'
+                            className={clsx(
+                                'typography-body-1 bg-universeBlue flex h-screen w-full flex-col gap-4 overflow-y-auto p-8 text-neutral-4'
                             )}
                         >
                             <Closable onClose={close}>
@@ -128,7 +125,7 @@ export const HamburgerMenu = ({
                                                     setShowMore(!showMore);
                                                 }}
                                                 aria-label='Show More'
-                                                className={classNames(
+                                                className={clsx(
                                                     'flex h-16 w-full items-center justify-between px-9 py-4 text-center focus:outline-none',
                                                     {
                                                         'border-l-4 border-starBlue bg-gradient-to-r from-[#6A76B159] via-[#4A5BAF1F] to-[#394DAE00] text-neutral-8':
@@ -138,7 +135,7 @@ export const HamburgerMenu = ({
                                             >
                                                 More
                                                 <ChevronDownIcon
-                                                    className={classNames(
+                                                    className={clsx(
                                                         'mt-2 inline h-6 w-6 text-neutral-4',
                                                         {
                                                             'rotate-180':

@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { InfoToolTip } from 'src/components/molecules';
 import { Alignment, ColorFormat } from 'src/types';
 import {
@@ -54,14 +54,14 @@ export const CurrencyItem = ({
     return (
         <div
             data-testid='currency-amount-item'
-            className={classNames('flex flex-col', {
+            className={clsx('flex flex-col', {
                 'text-right': align === 'right',
                 'text-center': align === 'center',
                 'text-left': align === 'left',
             })}
         >
             <span
-                className={classNames(fontSize, 'h-6', {
+                className={clsx(fontSize, 'h-6', {
                     'text-galacticOrange': color === 'negative',
                     'text-nebulaTeal': color === 'positive',
                     'text-neutral-8': color === 'neutral',
