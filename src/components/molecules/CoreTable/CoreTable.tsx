@@ -7,7 +7,7 @@ import {
     SortingState,
     useReactTable,
 } from '@tanstack/react-table';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
@@ -116,14 +116,14 @@ export const CoreTable = <T,>({
 
     const coreTable = (
         <table
-            className={classNames('w-full', {
+            className={clsx('w-full', {
                 'table-fixed': !coreTableOptions.responsive,
             })}
             data-testid={coreTableOptions.name}
         >
             {coreTableOptions.showHeaders ? (
                 <thead
-                    className={classNames(
+                    className={clsx(
                         'typography-caption-2 px-6 text-slateGray',
                         {
                             'after:absolute after:bottom-0 after:z-20 after:w-full after:border-b after:border-white-10':
@@ -148,7 +148,7 @@ export const CoreTable = <T,>({
                                 <th
                                     data-testid={`${coreTableOptions.name}-header-cell`}
                                     key={header.id}
-                                    className={classNames(
+                                    className={clsx(
                                         'whitespace-nowrap py-2 pr-1 text-center font-bold tablet:px-1',
                                         {
                                             'sticky left-0 z-10 bg-[#161E2E] after:absolute after:-right-4 after:-top-0 after:z-10 after:h-full after:w-5 after:bg-gradient-to-r after:from-black-40 after:to-transparent tablet:relative tablet:left-auto tablet:z-auto tablet:bg-transparent tablet:after:hidden':
@@ -182,7 +182,7 @@ export const CoreTable = <T,>({
                     ) : (
                         <tr
                             key={row.id}
-                            className={classNames('h-7', {
+                            className={clsx('h-7', {
                                 'cursor-pointer': coreTableOptions.hoverRow?.(
                                     row.id
                                 ),
@@ -202,7 +202,7 @@ export const CoreTable = <T,>({
                             {row.getVisibleCells().map((cell, cellIndex) => (
                                 <td
                                     key={cell.id}
-                                    className={classNames(
+                                    className={clsx(
                                         'min-w-fit whitespace-nowrap pr-1 text-center font-medium tablet:px-1',
                                         {
                                             'sticky left-0 z-10 bg-[#161E2E] after:absolute after:-right-4 after:-top-0 after:z-10 after:h-full after:w-5 after:bg-gradient-to-r after:from-black-40 after:to-transparent tablet:relative tablet:left-auto tablet:z-auto tablet:bg-transparent tablet:after:hidden':
@@ -235,7 +235,7 @@ export const CoreTable = <T,>({
 
     return (
         <div
-            className={classNames({
+            className={clsx({
                 'overflow-x-auto overflow-y-visible text-white laptop:overflow-visible':
                     coreTableOptions.responsive,
             })}

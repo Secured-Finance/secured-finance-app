@@ -6,7 +6,7 @@ import {
     WalletIcon,
 } from '@heroicons/react/24/outline';
 import { Token } from '@secured-finance/sf-core';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import MetaMaskIcon from 'src/assets/img/metamask-fox.svg';
@@ -52,7 +52,7 @@ const MenuAddToken = ({
                     {({ active }) => (
                         <button
                             onClick={onClick}
-                            className={classNames(
+                            className={clsx(
                                 'flex w-full flex-row items-center justify-start gap-2 rounded-md px-4 py-2 text-left text-white-60 focus:outline-none',
                                 {
                                     'bg-slateGray': active,
@@ -70,7 +70,7 @@ const MenuAddToken = ({
                             onClick={() => {
                                 navigator.clipboard.writeText(address);
                             }}
-                            className={classNames(
+                            className={clsx(
                                 'flex w-full flex-row items-center justify-start gap-2 rounded-md px-4 py-2 text-left text-white-60 focus:outline-none',
                                 {
                                     'bg-slateGray': active,
@@ -224,7 +224,7 @@ export const Faucet = () => {
                                                         disabled={!client}
                                                     >
                                                         <WalletIcon
-                                                            className={classNames(
+                                                            className={clsx(
                                                                 'h-5 w-5 text-slateGray ',
                                                                 {
                                                                     'hover:text-planetaryPurple':

@@ -1,7 +1,7 @@
 import { reset as resetTracking } from '@amplitude/analytics-browser';
 import { Popover, Transition } from '@headlessui/react';
 import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Fragment, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AlertTriangle from 'src/assets/icons/alert-triangle.svg';
@@ -33,7 +33,7 @@ const MenuItem = ({
     return (
         <div
             data-cy={formatDataCy(text)}
-            className={classNames(
+            className={clsx(
                 'flex w-full rounded-md p-2 transition duration-150 ease-in-out focus:outline-none',
                 {
                     'hover:bg-horizonBlue': onClick,
@@ -49,7 +49,7 @@ const MenuItem = ({
             <button
                 aria-label='Menu Item'
                 onClick={onClick}
-                className={classNames(
+                className={clsx(
                     'flex flex-row items-center justify-start space-x-2',
                     {
                         'cursor-default': !onClick,
@@ -99,7 +99,7 @@ export const WalletPopover = ({
                     <Popover.Button
                         data-cy='popover-button'
                         aria-label='Wallet Popover Button'
-                        className={classNames(
+                        className={clsx(
                             'flex items-center gap-x-3 rounded-[6px] bg-transparent px-4 py-2 ring-2 hover:bg-white-10 hover:ring-white-10 focus:outline-none tablet:rounded-xl tablet:py-3',
                             {
                                 'bg-white-10 ring-white-10': open,

@@ -11,7 +11,7 @@ import {
     Tooltip,
 } from 'chart.js';
 import { TooltipModel } from 'chart.js/auto';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import { CurrencyIcon } from 'src/components/atoms';
@@ -149,7 +149,7 @@ const CurveChip = ({
         <button
             data-testid='curve-chip'
             style={{ backgroundColor: currencyMap[ccy].pillColor }}
-            className={classNames(
+            className={clsx(
                 `flex w-fit items-center justify-center rounded-xl px-3 py-2 font-secondary text-xs font-semibold uppercase leading-3 text-neutral-8`,
                 {
                     'opacity-50': !active,
