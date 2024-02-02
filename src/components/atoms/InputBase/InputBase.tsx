@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import NumericFormat, {
     NumberFormatValues,
     SourceInfo,
@@ -40,7 +40,7 @@ export const InputBase = ({
     };
 
     const fontSizeClass = sizeDependentStyles
-        ? classNames({
+        ? clsx({
               [sizeDependentStyles.shortText.styles]:
                   !value ||
                   (value &&
@@ -63,7 +63,7 @@ export const InputBase = ({
 
     return (
         <NumericFormat
-            className={classNames(
+            className={clsx(
                 'bg-transparent placeholder-opacity-50 focus:outline-none',
                 className,
                 fontSizeClass
