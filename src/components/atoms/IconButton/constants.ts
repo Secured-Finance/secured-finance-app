@@ -11,6 +11,8 @@ export const variantStyle: { [key in IconButtonVariants]: string } = {
         'text-neutral-900 bg-neutral-50 border-neutral-500 hover:bg-neutral-300 hover:border-transparent active:border-neutral-500',
     [IconButtonVariants.secondaryBuy]:
         'text-success-900 bg-success-50 border-green-700 hover:bg-success-300 hover:border-transparent active:border-success-700',
+    [IconButtonVariants.secondarySell]:
+        'text-error-500 bg-error-50 border-error-500 hover:border-transparent hover:bg-error-300 active:border-error-500',
 };
 
 export const iconSizeStyle: { [key in ButtonSizes]: string } = {

@@ -46,6 +46,11 @@ SecondaryBuy.args = {
     variant: IconButtonVariants.secondaryBuy,
 };
 
+export const SecondarySell = Template.bind({});
+SecondarySell.args = {
+    variant: IconButtonVariants.secondarySell,
+};
+
 export const CloseButton = Template.bind({});
 CloseButton.args = {
     ...Primary.args,
