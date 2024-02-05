@@ -99,7 +99,7 @@ export const WalletSourceSelector = ({
                                                           selectedOption.source,
                                                           account
                                                       )
-                                                    : 'Select Source'}
+                                                    : 'Connect'}
                                             </span>
                                         </div>
                                         <ExpandIndicator
@@ -119,7 +119,7 @@ export const WalletSourceSelector = ({
                                                   0,
                                                   6
                                               )
-                                            : '--'}
+                                            : '0.00'}
                                     </div>
                                 </Listbox.Button>
                                 <Transition

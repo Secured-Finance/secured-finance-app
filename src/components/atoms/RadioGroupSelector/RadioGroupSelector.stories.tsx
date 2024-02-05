@@ -28,6 +28,31 @@ const Template: StoryFn<typeof RadioGroupSelector> = args => {
 };
 
 export const NavTab = Template.bind({});
+
+export const NavTabWithOptionsStyles = Template.bind({});
+
+NavTabWithOptionsStyles.args = {
+    ...NavTabWithOptionsStyles.args,
+    optionsStyles: [
+        {
+            bgColor: 'bg-nebulaTeal',
+            textClass: 'text-secondary3 font-semibold',
+            gradient: {
+                from: 'from-tabGradient4',
+                to: 'to-tabGradient3',
+            },
+        },
+        {
+            bgColor: 'bg-error5',
+            textClass: 'text-galacticOrange font-semibold',
+            gradient: {
+                from: 'from-tabGradient6',
+                to: 'to-tabGradient5',
+            },
+        },
+    ],
+};
+
 export const StyledButton = Template.bind({});
 StyledButton.args = {
     options: ['Limit', 'Market', 'Stop'],

@@ -37,8 +37,8 @@ describe('WalletSourceSelector component', () => {
         render(<NotConnectedToWallet />);
         expect(screen.getByText('Lending Source')).toBeInTheDocument();
         expect(screen.getByText('Available to Lend')).toBeInTheDocument();
-        expect(screen.getByText('Select Source')).toBeInTheDocument();
-        expect(screen.getByText('--')).toBeInTheDocument();
+        expect(screen.getByText('Connect')).toBeInTheDocument();
+        expect(screen.getByText('0.00')).toBeInTheDocument();
     });
 
     it('should render a clickable button', () => {
