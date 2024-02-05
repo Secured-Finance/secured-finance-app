@@ -34,7 +34,7 @@ const Template: StoryFn<typeof Button> = args => (
     <Button {...args}>{args.children}</Button>
 );
 
-export const Primary = () => {
+export const Default = () => {
     return (
         <div className='grid gap-4'>
             <Button size={ButtonSizes.xs}>Unwind</Button>
@@ -56,70 +56,70 @@ export const Primary = () => {
     );
 };
 
-export const Default = Template.bind({});
+export const Primary = Template.bind({});
 
 export const ExtraSmall = Template.bind({});
 ExtraSmall.args = {
-    ...Default.args,
+    ...Primary.args,
     size: ButtonSizes.xs,
 };
 
 export const Small = Template.bind({});
 Small.args = {
-    ...Default.args,
+    ...Primary.args,
     size: ButtonSizes.sm,
 };
 
 export const Medium = Template.bind({});
 Medium.args = {
-    ...Default.args,
+    ...Primary.args,
     size: ButtonSizes.md,
 };
 
 export const Large = Template.bind({});
 Large.args = {
-    ...Default.args,
+    ...Primary.args,
     size: ButtonSizes.lg,
 };
 
 export const Secondary = Template.bind({});
 Secondary.args = {
-    ...Default.args,
+    ...Primary.args,
     variant: ButtonVariants.secondary,
 };
 
 export const Tertiary = Template.bind({});
 Tertiary.args = {
-    ...Default.args,
+    ...Primary.args,
     variant: ButtonVariants.tertiary,
 };
 
 export const PrimaryBuy = Template.bind({});
 PrimaryBuy.args = {
-    ...Default.args,
+    ...Primary.args,
     variant: ButtonVariants.primaryBuy,
 };
 
 export const PrimarySell = Template.bind({});
 PrimarySell.args = {
-    ...Default.args,
+    ...Primary.args,
     variant: ButtonVariants.primarySell,
 };
 
 export const SecondaryNeutral = Template.bind({});
 SecondaryNeutral.args = {
-    ...Default.args,
+    ...Primary.args,
     variant: ButtonVariants.secondaryNeutral,
 };
 
 export const TertiaryBuy = Template.bind({});
 TertiaryBuy.args = {
-    ...Default.args,
+    ...Primary.args,
     variant: ButtonVariants.tertiaryBuy,
 };
 
 export const TertiarySell = Template.bind({});
 TertiarySell.args = {
-    ...Default.args,
+    ...Primary.args,
     variant: ButtonVariants.tertiarySell,
 };
