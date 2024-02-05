@@ -113,7 +113,9 @@ module.exports = {
             secondaryPurple: '#AE72FF',
             moonGrey: '#E6E6E6',
             slateGray: '#777E90',
+            secondary3: '#96EAF1',
             secondary7: '#B9BDEA',
+            error5: '#FF324B',
 
             neutral: {
                 DEFAULT: '#353945',
@@ -127,6 +129,7 @@ module.exports = {
                 '8': '#FCFCFD',
                 '50': '#FBFAFC',
                 '300': '#CBD5E1',
+                '400': '#94A3B8',
                 '500': '#64748B',
                 '600': '#475569',
                 '700': '#334155',
@@ -137,6 +140,10 @@ module.exports = {
 
             tabGradient2: 'rgba(106, 118, 177, 0.35)',
             tabGradient1: 'rgba(57, 77, 174, 0)',
+            tabGradient4: 'rgba(47, 174, 186, 0.35)',
+            tabGradient3: 'rgba(21, 214, 232, 0)',
+            tabGradient6: 'rgba(255, 50, 75, 0.35)',
+            tabGradient5: 'rgba(255, 50, 75, 0)',
             backgroundBlur: 'rgba(35, 43, 56, 0.6)',
             cardBackground: '#161E2E',
             panelStroke: 'rgb(45, 64, 100)',

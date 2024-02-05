@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { useCallback } from 'react';
 import { InputBase } from 'src/components/atoms';
 import { InfoToolTip } from 'src/components/molecules';
@@ -11,6 +12,7 @@ interface OrderInputBoxProps {
     decimalPlacesAllowed?: number;
     maxLimit?: number;
     onValueChange?: (v: string | undefined) => void;
+    bgClassName?: string;
 }
 
 export const OrderInputBox = ({
@@ -22,6 +24,7 @@ export const OrderInputBox = ({
     decimalPlacesAllowed,
     maxLimit,
     onValueChange,
+    bgClassName = 'bg-black-20',
 }: OrderInputBoxProps) => {
     const handleAmountChange = useCallback(
         (amount: string | undefined) => {
@@ -33,7 +36,12 @@ export const OrderInputBox = ({
     );
 
     return (
-        <div className='typography-caption grid h-10 grid-cols-2 place-content-between rounded-lg bg-black-20 p-2 ring-inset ring-starBlue focus-within:ring-2'>
+        <div
+            className={clsx(
+                'typography-caption grid h-10 grid-cols-2 place-content-between rounded-lg p-2 ring-inset ring-starBlue focus-within:ring-2',
+                bgClassName
+            )}
+        >
             <div className='flex flex-row items-center gap-2'>
                 <div className='typography-caption whitespace-nowrap text-planetaryPurple'>
                     {field}
@@ -46,7 +54,7 @@ export const OrderInputBox = ({
             </div>
             <div className='grid grid-flow-col place-content-end gap-10px'>
                 {disabled ? (
-                    <span className='text-right text-[18px] font-semibold leading-6 text-neutral-8/30'>
+                    <span className='text-secondary text-right text-[16px] font-semibold leading-6 text-neutral-300'>
                         {initialValue ?? 0}
                     </span>
                 ) : (

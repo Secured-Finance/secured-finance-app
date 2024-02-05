@@ -105,13 +105,16 @@ export function AdvancedLendingOrderCard({
     }, [maturity, unitPrice, marketPrice, calculationDate]);
 
     const unitPriceValue = useMemo(() => {
+        if (orderType === OrderType.MARKET) {
+            return 'Market';
+        }
         if (!maturity) return undefined;
         if (unitPriceInput !== undefined) {
             return unitPriceInput;
         }
         if (!marketPrice) return undefined;
         return (marketPrice / 100.0).toString();
-    }, [maturity, marketPrice, unitPriceInput]);
+    }, [maturity, marketPrice, orderType, unitPriceInput]);
 
     const dispatch = useDispatch();
     const { address } = useAccount();
@@ -264,6 +267,24 @@ export function AdvancedLendingOrderCard({
                     );
                 }}
                 variant='NavTab'
+                optionsStyles={[
+                    {
+                        bgColor: 'bg-nebulaTeal',
+                        textClass: 'text-secondary3 font-semibold',
+                        gradient: {
+                            from: 'from-tabGradient4',
+                            to: 'to-tabGradient3',
+                        },
+                    },
+                    {
+                        bgColor: 'bg-error5',
+                        textClass: 'text-galacticOrange font-semibold',
+                        gradient: {
+                            from: 'from-tabGradient6',
+                            to: 'to-tabGradient5',
+                        },
+                    },
+                ]}
             />
 
             <div className='flex w-full flex-col justify-center gap-6 px-4 pt-5'>
@@ -318,6 +339,11 @@ export function AdvancedLendingOrderCard({
                         informationText='Input value greater than or equal to 0.01 and up to and including 100.'
                         decimalPlacesAllowed={2}
                         maxLimit={100}
+                        bgClassName={
+                            orderType === OrderType.MARKET
+                                ? 'bg-neutral-700'
+                                : 'bg-black-20'
+                        }
                     />
                     <ErrorInfo
                         errorMessage='Invalid bond price'

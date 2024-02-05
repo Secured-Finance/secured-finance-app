@@ -710,9 +710,10 @@ describe('AdvancedLendingOrderCard Component', () => {
                 },
             });
             assertBondPriceInputValue('92');
+            expect(screen.getAllByText('Market')).toHaveLength(1);
 
             fireEvent.click(screen.getByText('Market'));
-            expect(screen.getByText('96')).toBeInTheDocument();
+            expect(screen.getAllByText('Market')).toHaveLength(2);
         });
 
         it('should calculate the APR from the user input bond price', async () => {

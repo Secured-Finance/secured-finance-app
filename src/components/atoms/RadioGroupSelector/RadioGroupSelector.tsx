@@ -7,11 +7,20 @@ export const RadioGroupSelector = ({
     selectedOption,
     handleClick,
     variant,
+    optionsStyles,
 }: {
     options: string[];
     selectedOption: string;
     handleClick: (option: string) => void;
     variant: 'NavTab' | 'StyledButton';
+    optionsStyles?: {
+        bgColor: string;
+        textClass: string;
+        gradient: {
+            from: string;
+            to: string;
+        };
+    }[];
 }) => {
     return (
         <RadioGroup
@@ -24,7 +33,7 @@ export const RadioGroupSelector = ({
                     variant === 'StyledButton',
             })}
         >
-            {options.map(option => (
+            {options.map((option, index) => (
                 <RadioGroup.Option
                     key={option}
                     value={option}
@@ -33,7 +42,15 @@ export const RadioGroupSelector = ({
                 >
                     {({ checked }) =>
                         variant === 'NavTab' ? (
-                            <NavTab text={option} active={checked} />
+                            <NavTab
+                                text={option}
+                                active={checked}
+                                navStyles={
+                                    optionsStyles
+                                        ? optionsStyles[index]
+                                        : undefined
+                                }
+                            />
                         ) : (
                             <StyledButton text={option} active={checked} />
                         )
@@ -50,8 +67,8 @@ const StyledButton = ({ active, text }: { active: boolean; text: string }) => {
             className={clsx(
                 'typography-caption-2 group flex h-full w-full items-center justify-center rounded font-semibold duration-300 hover:opacity-100 hover:ease-in-out',
                 {
-                    'bg-starBlue text-neutral-8': active,
-                    'text-neutral-4 opacity-70': !active,
+                    'bg-starBlue text-neutral-50': active,
+                    'text-neutral-400 opacity-70': !active,
                 }
             )}
         >
