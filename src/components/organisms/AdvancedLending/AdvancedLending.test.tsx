@@ -135,17 +135,15 @@ describe('Advanced Lending Component', () => {
         ).toBeInTheDocument();
     });
 
-    it.skip('should only show the orders of the user related to orderbook', async () => {
+    it('should only show the orders of the user related to orderbook', async () => {
         await waitFor(() =>
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
             })
         );
-        await waitFor(() =>
-            fireEvent.click(screen.getByRole('tab', { name: 'Open Orders' }))
-        );
+        fireEvent.click(screen.getByRole('tab', { name: 'Open Orders' }));
         expect(
-            within(screen.getByTestId('open-order-table')).queryAllByRole('row')
+            await screen.findAllByTestId('open-order-table-row')
         ).toHaveLength(1);
     });
 
