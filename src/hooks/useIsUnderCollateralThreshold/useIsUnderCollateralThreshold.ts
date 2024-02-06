@@ -26,6 +26,7 @@ export const useIsUnderCollateralThreshold = (address: UserAccount) => {
                 return price < market.currentMinDebtUnitPrice;
             }
 
+            // @dev if check involves no active lending positions, either create a new hook for that or remove the position check
             return (
                 price < market.currentMinDebtUnitPrice &&
                 (position?.lendCurrencies.has(currency) ?? false)

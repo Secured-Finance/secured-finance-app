@@ -15,6 +15,7 @@ import {
     InfoToolTip,
 } from 'src/components/molecules';
 import { CollateralBook, useMarket, useOrderFee } from 'src/hooks';
+import { OrderType } from 'src/types';
 import {
     calculateFee,
     divide,
@@ -48,6 +49,7 @@ export const OrderDetails = ({
     isCurrencyDelisted,
     isRemoveOrder = false,
     showZCUsage = true,
+    orderType,
 }: {
     amount: Amount;
     maturity: Maturity;
@@ -59,6 +61,7 @@ export const OrderDetails = ({
     isCurrencyDelisted?: boolean;
     isRemoveOrder?: boolean;
     showZCUsage?: boolean;
+    orderType?: OrderType;
 }) => {
     const { data: orderFee = 0 } = useOrderFee(amount.currency);
 
@@ -73,6 +76,14 @@ export const OrderDetails = ({
             ? market.minBorrowUnitPrice
             : market.maxLendUnitPrice;
     }, [market, side]);
+
+    let bondPrice = formatLoanValue(loanValue ?? LoanValue.ZERO, 'price');
+    let APR = formatLoanValue(loanValue ?? LoanValue.ZERO, 'rate');
+
+    if (orderType !== OrderType.LIMIT) {
+        bondPrice = prefixTilde(bondPrice);
+        APR = prefixTilde(APR);
+    }
 
     return (
         <div className='grid w-full grid-cols-1 justify-items-stretch gap-6 text-white'>
@@ -123,21 +134,8 @@ export const OrderDetails = ({
             <SectionWithItems
                 header={<AmountCard amount={amount} price={assetPrice} />}
                 itemList={[
-                    [
-                        'Bond Price',
-                        prefixTilde(
-                            formatLoanValue(
-                                loanValue ?? LoanValue.ZERO,
-                                'price'
-                            )
-                        ),
-                    ],
-                    [
-                        'APR',
-                        prefixTilde(
-                            formatLoanValue(loanValue ?? LoanValue.ZERO, 'rate')
-                        ),
-                    ],
+                    ['Bond Price', bondPrice],
+                    ['APR', APR],
                     ['Maturity Date', formatDate(maturity.toNumber())],
                 ]}
             />

@@ -161,7 +161,7 @@ export const OrderAction = ({
                 onClose={() => setOpenDepositCollateralDialog(false)}
                 collateralList={depositCollateralList}
                 source='Order Action Button'
-            ></DepositCollateral>
+            />
         </div>
     );
 };
