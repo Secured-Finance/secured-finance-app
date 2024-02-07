@@ -59,7 +59,7 @@ export const WalletSourceSelector = ({
         <div className='flex h-20 w-full flex-col justify-between'>
             <div className='typography-caption-2 mx-2 flex flex-row justify-between text-secondary7'>
                 <span>Lending Source</span>
-                <span>Available to Lend</span>
+                <span>Available</span>
             </div>
             <div className='w-full'>
                 <Listbox
