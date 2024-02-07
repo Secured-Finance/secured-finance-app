@@ -277,8 +277,8 @@ export function AdvancedLendingOrderCard({
                         },
                     },
                     {
-                        bgColor: 'bg-error5',
-                        textClass: 'text-galacticOrange font-semibold',
+                        bgColor: 'bg-galacticOrange',
+                        textClass: 'text-[#FFE5E8] font-semibold',
                         gradient: {
                             from: 'from-tabGradient6',
                             to: 'to-tabGradient5',
@@ -287,7 +287,7 @@ export function AdvancedLendingOrderCard({
                 ]}
             />
 
-            <div className='flex w-full flex-col justify-center gap-6 px-4 pt-5'>
+            <div className='flex w-full flex-col justify-center gap-4 px-4 pt-5'>
                 {!isItayose && (
                     <RadioGroupSelector
                         options={OrderTypeOptions}
@@ -365,9 +365,6 @@ export function AdvancedLendingOrderCard({
                         />
                     </div>
                 </div>
-                <div className='mx-10px'>
-                    <Slider onChange={handleAmountChange} value={sliderValue} />
-                </div>
                 {side === OrderSide.BORROW && (
                     <div className='typography-caption mx-10px flex flex-row justify-between'>
                         <div className='text-slateGray'>{`Available To Borrow (${currency.toString()})`}</div>
@@ -384,7 +381,10 @@ export function AdvancedLendingOrderCard({
                     initialValue={amountInput}
                     onValueChange={v => handleInputChange((v as string) ?? '')}
                 />
-                <div className='mx-10px flex flex-col gap-6'>
+                <div className='mx-10px'>
+                    <Slider onChange={handleAmountChange} value={sliderValue} />
+                </div>
+                <div className='mx-10px flex flex-col gap-2'>
                     <OrderDisplayBox
                         field='Est. Present Value'
                         value={usdFormat(orderAmount?.toUSD(price) ?? 0, 2)}

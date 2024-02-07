@@ -38,7 +38,7 @@ export const OrderInputBox = ({
     return (
         <div
             className={clsx(
-                'typography-caption grid h-10 grid-cols-2 place-content-between rounded-lg p-2 ring-inset ring-starBlue focus-within:ring-2',
+                'typography-caption grid h-10 grid-cols-2 place-content-between rounded-lg py-2 pl-3 pr-4 ring-inset ring-starBlue focus-within:ring-2',
                 bgClassName
             )}
         >
@@ -54,13 +54,13 @@ export const OrderInputBox = ({
             </div>
             <div className='grid grid-flow-col place-content-end gap-10px'>
                 {disabled ? (
-                    <span className='text-secondary text-right text-[16px] font-semibold leading-6 text-neutral-300'>
+                    <span className='text-secondary text-right text-base font-semibold leading-6 text-neutral-300'>
                         {initialValue ?? 0}
                     </span>
                 ) : (
                     <InputBase
                         value={initialValue}
-                        className='col col-span-2 flex text-right text-[18px] font-semibold leading-6 text-neutral-8'
+                        className='col col-span-2 flex text-right text-[1.125rem] font-semibold leading-6 text-neutral-8'
                         label={field}
                         onValueChange={handleAmountChange}
                         decimalPlacesAllowed={decimalPlacesAllowed}
