@@ -9,12 +9,6 @@ export enum OrderEvents {
     ORDER_PLACED = 'Order Placed',
 }
 
-export enum NavigationEvents {
-    LANDING = 'Landing',
-    MARKETS = 'Markets',
-    PORTFOLIO = 'Portfolio',
-}
-
 export enum ButtonEvents {
     DEPOSIT_COLLATERAL_BUTTON = 'Deposit Collateral Button',
     WITHDRAW_COLLATERAL_BUTTON = 'Withdraw Collateral Button',

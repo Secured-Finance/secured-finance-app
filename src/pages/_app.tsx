@@ -1,5 +1,5 @@
-import { init } from '@amplitude/analytics-browser';
-import { LogLevel } from '@amplitude/analytics-types';
+import * as amplitude from '@amplitude/analytics-browser';
+import { pageViewTrackingPlugin } from '@amplitude/plugin-page-view-tracking-browser';
 import { GraphClientProvider } from '@secured-finance/sf-graph-client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -33,10 +33,16 @@ const projectId = getWalletConnectId();
 
 const queryClient = new QueryClient();
 
-init(getAmplitudeApiKey(), undefined, {
+amplitude.init(getAmplitudeApiKey(), {
     appVersion: process.env.SF_ENV,
-    logLevel: LogLevel.None,
 });
+
+const pageViewTracking = pageViewTrackingPlugin({
+    trackOn: undefined,
+    trackHistoryChanges: undefined,
+});
+
+amplitude.add(pageViewTracking);
 
 const chainIds = getSupportedChainIds();
 const networks = getSupportedNetworks().filter(chain =>
