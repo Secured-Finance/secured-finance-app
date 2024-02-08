@@ -276,10 +276,10 @@ export const AdvancedLending = ({
             trackButtonEvent(
                 ButtonEvents.TERM_CHANGE,
                 ButtonProperties.TERM,
-                v
+                selectedTerm.label
             );
         },
-        [dispatch]
+        [dispatch, selectedTerm.label]
     );
 
     return (

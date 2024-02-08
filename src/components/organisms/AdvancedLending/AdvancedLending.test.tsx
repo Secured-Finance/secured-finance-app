@@ -60,7 +60,7 @@ describe('Advanced Lending Component', () => {
         fireEvent.click(screen.getByRole('button', { name: 'DEC22' }));
         fireEvent.click(screen.getByText('MAR23'));
         expect(track).toHaveBeenCalledWith(ButtonEvents.TERM_CHANGE, {
-            [ButtonProperties.TERM]: '1669852800',
+            [ButtonProperties.TERM]: 'MAR23',
         });
         await waitFor(() => {
             expect(store.getState().landingOrderForm.amount).toEqual('1');
