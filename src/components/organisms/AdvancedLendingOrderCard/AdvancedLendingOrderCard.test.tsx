@@ -90,17 +90,17 @@ describe('AdvancedLendingOrderCard Component', () => {
 
     it('should render CollateralManagementConciseTab', async () => {
         render(<Default />, { preloadedState });
-        await waitFor(() =>
-            expect(
-                screen.getByText('Collateral Management')
-            ).toBeInTheDocument()
-        );
+        expect(screen.getByText('Collateral Management')).toBeInTheDocument();
         expect(screen.getByText('Collateral Utilization')).toBeInTheDocument();
-        expect(screen.getByText('37%')).toBeInTheDocument();
-        expect(screen.getByTestId('collateral-progress-bar-track')).toHaveStyle(
-            'width: calc(100% * 0.37)'
-        );
-        expect(screen.getByText('Available: $5,203.15')).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.getByText('37%')).toBeInTheDocument();
+            expect(
+                screen.getByTestId('collateral-progress-bar-track')
+            ).toHaveStyle('width: calc(100% * 0.37)');
+            expect(
+                screen.getByText('Available: $5,203.15')
+            ).toBeInTheDocument();
+        });
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
         expect(screen.getByText('Low')).toBeInTheDocument();
@@ -197,33 +197,36 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(screen.getByText('0.1')).toBeInTheDocument();
     });
 
-    it('should change amount when slider is moved', async () => {
+    it('should change amount when slider is moved and trigger SLIDER event for Amplitude', async () => {
+        const track = jest.spyOn(analytics, 'track');
         render(<Default />, {
             preloadedState: {
                 ...preloadedState,
-                landingOrderForm: {
-                    ...preloadedState.landingOrderForm,
-                    currency: CurrencySymbol.WFIL,
-                    side: OrderSide.LEND,
-                },
             },
         });
 
-        const walletSourceButton = screen.getByTestId(
-            'wallet-source-selector-button'
-        );
-        fireEvent.click(walletSourceButton);
-
-        expect(screen.getByText('SF Vault')).toBeInTheDocument();
-        const option = screen.getByTestId('option-1');
-        fireEvent.click(option);
+        await waitFor(() => {
+            expect(
+                screen.getByText('Available: $5,203.15')
+            ).toBeInTheDocument();
+        });
 
         const slider = screen.getByRole('slider');
         const input = screen.getByRole('textbox', { name: 'Amount' });
-        fireEvent.change(slider, { target: { value: 50 } });
-        expect(input).toHaveValue('50');
+
+        await waitFor(() => {
+            fireEvent.change(slider, { target: { value: 50 } });
+            expect(input).toHaveValue('2,601.5749');
+        });
+
+        expect(track).toHaveBeenCalledWith(InteractionEvents.SLIDER, {
+            [InteractionProperties.SLIDER_VALUE]: 50,
+        });
         fireEvent.change(slider, { target: { value: 100 } });
-        expect(input).toHaveValue('100');
+        expect(input).toHaveValue('5,203.1499');
+        expect(track).toHaveBeenCalledWith(InteractionEvents.SLIDER, {
+            [InteractionProperties.SLIDER_VALUE]: 100,
+        });
     });
 
     it('should not reset amount and slider to 0 when wallet source is changed', async () => {
