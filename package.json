@@ -5,7 +5,8 @@
   "homepage": ".",
   "dependencies": {
     "@0xsquid/widget": "^1.6.20",
-    "@amplitude/analytics-browser": "^1.7.0",
+    "@amplitude/analytics-browser": "^2.0.0",
+    "@amplitude/plugin-page-view-tracking-browser": "^2.1.0",
     "@glif/filecoin-number": "^1.1.0-beta.11",
     "@headlessui/react": "^1.7.15",
     "@heroicons/react": "^2.0.18",
@@ -58,11 +59,7 @@
     "cypress:run": "cypress run"
   },
   "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
+    "production": [">0.2%", "not dead", "not op_mini all"],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
