@@ -83,6 +83,7 @@ export function AdvancedLendingOrderCard({
         selectLandingOrderForm(state.landingOrderForm)
     );
 
+    const { address, isConnected } = useAccount();
     const { amountInput, unitPriceInput } = useSelector((state: RootState) =>
         selectLandingOrderInputs(state.landingOrderForm)
     );
@@ -113,11 +114,11 @@ export function AdvancedLendingOrderCard({
             return unitPriceInput;
         }
         if (!marketPrice) return undefined;
+        if (!isConnected) return undefined;
         return (marketPrice / 100.0).toString();
-    }, [maturity, marketPrice, orderType, unitPriceInput]);
+    }, [maturity, marketPrice, orderType, unitPriceInput, isConnected]);
 
     const dispatch = useDispatch();
-    const { address } = useAccount();
 
     const collateralUsagePercent = useMemo(() => {
         return collateralBook.coverage / 100.0;
@@ -246,6 +247,9 @@ export function AdvancedLendingOrderCard({
         isInvalidBondPrice ||
         showPreOrderError;
 
+    const isBondPriceFieldDisabled =
+        orderType === OrderType.MARKET || !isConnected;
+
     return (
         <div className='h-full rounded-b-xl border border-white-10 bg-cardBackground bg-opacity-60 pb-7'>
             <RadioGroupSelector
@@ -325,7 +329,7 @@ export function AdvancedLendingOrderCard({
                 <div className='flex flex-col gap-10px'>
                     <OrderInputBox
                         field='Bond Price'
-                        disabled={orderType === OrderType.MARKET}
+                        disabled={isBondPriceFieldDisabled}
                         initialValue={unitPriceValue}
                         onValueChange={v => {
                             v !== undefined
@@ -340,7 +344,7 @@ export function AdvancedLendingOrderCard({
                         decimalPlacesAllowed={2}
                         maxLimit={100}
                         bgClassName={
-                            orderType === OrderType.MARKET
+                            isBondPriceFieldDisabled
                                 ? 'bg-neutral-700'
                                 : 'bg-black-20'
                         }
@@ -380,9 +384,17 @@ export function AdvancedLendingOrderCard({
                     unit={currency}
                     initialValue={amountInput}
                     onValueChange={v => handleInputChange((v as string) ?? '')}
+                    disabled={!isConnected}
+                    bgClassName={
+                        !isConnected ? 'bg-neutral-700' : 'bg-black-20'
+                    }
                 />
                 <div className='mx-10px'>
-                    <Slider onChange={handleAmountChange} value={sliderValue} />
+                    <Slider
+                        onChange={handleAmountChange}
+                        value={sliderValue}
+                        disabled={!isConnected}
+                    />
                 </div>
                 <div className='mx-10px flex flex-col gap-2'>
                     <OrderDisplayBox
