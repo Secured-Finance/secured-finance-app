@@ -176,9 +176,12 @@ export function AdvancedLendingOrderCard({
         selectedWalletSource.source,
     ]);
 
-    const handleAmountChange = (percentage: number) => {
+    const handleSliderChange = (percentage: number) => {
         const available =
             side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
+        track(InteractionEvents.SLIDER, {
+            [InteractionProperties.SLIDER_VALUE]: percentage,
+        });
         dispatch(
             setAmount(
                 (
@@ -340,7 +343,7 @@ export function AdvancedLendingOrderCard({
                     </div>
                 </div>
                 <div className='mx-10px'>
-                    <Slider onChange={handleAmountChange} value={sliderValue} />
+                    <Slider onChange={handleSliderChange} value={sliderValue} />
                 </div>
                 {side === OrderSide.BORROW && (
                     <div className='typography-caption mx-10px flex flex-row justify-between'>
