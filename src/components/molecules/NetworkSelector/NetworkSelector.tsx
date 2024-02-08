@@ -38,7 +38,7 @@ const MenuItem = ({
         >
             <div className='flex w-full cursor-pointer items-center gap-2'>
                 <div className='h-5 w-5'>{icon}</div>
-                <p className='typography-button-2 capitalize leading-[22px] text-neutral-50'>
+                <p className='typography-button-2 leading-[22px] text-neutral-50'>
                     {text}
                 </p>
             </div>
