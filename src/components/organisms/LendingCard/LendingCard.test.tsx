@@ -136,7 +136,7 @@ describe('LendingCard Component', () => {
         fireEvent.click(screen.getByText('MAR23'));
         const dateWithTimezone = formatDate(mar23Fixture.toNumber());
         expect(track).toHaveBeenCalledWith(ButtonEvents.TERM_CHANGE, {
-            [ButtonProperties.TERM]: '1669852800',
+            [ButtonProperties.TERM]: 'MAR23',
         });
         expect(screen.getByText(dateWithTimezone)).toBeInTheDocument();
     });
