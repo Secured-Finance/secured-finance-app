@@ -33,16 +33,18 @@ const projectId = getWalletConnectId();
 
 const queryClient = new QueryClient();
 
-amplitude.init(getAmplitudeApiKey(), {
-    appVersion: process.env.SF_ENV,
-});
+if (typeof window !== 'undefined') {
+    amplitude.init(getAmplitudeApiKey(), {
+        appVersion: process.env.SF_ENV,
+    });
 
-const pageViewTracking = pageViewTrackingPlugin({
-    trackOn: undefined,
-    trackHistoryChanges: undefined,
-});
+    const pageViewTracking = pageViewTrackingPlugin({
+        trackOn: undefined,
+        trackHistoryChanges: undefined,
+    });
 
-amplitude.add(pageViewTracking);
+    amplitude.add(pageViewTracking);
+}
 
 const chainIds = getSupportedChainIds();
 const networks = getSupportedNetworks().filter(chain =>
