@@ -39,8 +39,10 @@ export const Slider = ({
                 disabled={disabled}
                 slotProps={{
                     thumb: {
-                        className:
-                            'ring-starBlue-80 ring-[5px] w-3 h-3 -ml-[5px] bg-white rounded-full shadow-sliderthumb absolute',
+                        className: clsx(
+                            ' ring-[5px] w-3 h-3 -ml-[5px] bg-white rounded-full shadow-sliderthumb absolute',
+                            disabled ? 'ring-transparent' : 'ring-starBlue-80'
+                        ),
                     },
                     root: {
                         className: clsx(
