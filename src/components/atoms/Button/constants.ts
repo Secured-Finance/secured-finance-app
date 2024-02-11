@@ -18,7 +18,7 @@ export const variantStyle: { [key in ButtonVariants]: string } = {
     [ButtonVariants.secondaryNeutral]:
         'border-neutral-50 bg-neutral-700 text-neutral-50 hover:bg-neutral-800 hover:border-transparent active:border-neutral-50 active:bg-neutral-900',
     [ButtonVariants.tertiaryBuy]:
-        'border-success-300 bg-transparent text-success-300 hover:bg-success-900 hover:text-success-50 active:border-transparent',
+        'border-success-300 bg-transparent text-success-300 hover:bg-success-900 hover:text-success-50 hover:border-success-50 active:border-transparent',
     [ButtonVariants.tertiarySell]:
         'border-error-300 bg-transparent text-error-300 hover:bg-error-900 hover:text-error-50 hover:border-error-50 active:border-transparent',
 };
@@ -27,6 +27,6 @@ export const sizeStyle: { [key in ButtonSizes]: string } = {
     [ButtonSizes.xs]: 'h-7 rounded-md px-[0.625rem] py-1',
     [ButtonSizes.sm]: 'h-[1.875rem] rounded-lg px-3 py-[0.375rem]',
     [ButtonSizes.md]:
-        'h-[2.5rem] rounded-[0.635rem] px-[0.875rem] py-[0.635rem]',
-    [ButtonSizes.lg]: 'h-[3.25rem] rounded-xl p-4',
+        'h-[2.5rem] rounded-[0.625rem] px-[0.875rem] py-[0.625rem]',
+    [ButtonSizes.lg]: 'h-[3.25rem] rounded-xl py-3 px-5',
 };
