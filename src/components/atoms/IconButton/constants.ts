@@ -6,13 +6,13 @@ export const FIGMA_STORYBOOK_LINK =
 
 export const variantStyle: { [key in IconButtonVariants]: string } = {
     [IconButtonVariants.primary]:
-        'text-primary-500 bg-primary-50 border-primary-500 hover:bg-primary-300 hover:border-transparent active:border-primary-500',
+        'text-primary-500 bg-primary-50 border-primary-50 hover:text-primary-50 hover:bg-primary-700 hover:border-transparent active:border-primary-50',
     [IconButtonVariants.secondary]:
-        'text-neutral-900 bg-neutral-50 border-neutral-500 hover:bg-neutral-300 hover:border-transparent active:border-neutral-500',
+        'text-neutral-50 bg-neutral-800 border-neutral-50 hover:bg-neutral-700 hover:border-transparent active:border-neutral-50 active:bg-neutral-900',
     [IconButtonVariants.secondaryBuy]:
-        'text-success-900 bg-success-50 border-green-700 hover:bg-success-300 hover:border-transparent active:border-success-700',
+        'text-success-900 bg-success-700 border-success-50 hover:bg-success-900 hover:text-success-50 hover:border-transparent active:border-success-300',
     [IconButtonVariants.secondarySell]:
-        'text-error-500 bg-error-50 border-error-500 hover:border-transparent hover:bg-error-300 active:border-error-500',
+        'text-error-50 bg-error-700 border-error-50 hover:border-transparent hover:bg-error-900 active:border-error-50',
 };
 
 export const iconSizeStyle: { [key in ButtonSizes]: string } = {
@@ -26,5 +26,5 @@ export const sizeStyle: { [key in ButtonSizes]: string } = {
     [ButtonSizes.xs]: 'h-5 w-5',
     [ButtonSizes.sm]: 'h-[1.625rem] w-[1.625rem]',
     [ButtonSizes.md]: 'h-8 w-8',
-    [ButtonSizes.lg]: 'h-[2.75rem] w-[2.75rem]',
+    [ButtonSizes.lg]: 'h-11 w-11',
 };

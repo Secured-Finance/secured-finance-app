@@ -28,5 +28,5 @@ export const sizeStyle: { [key in ButtonSizes]: string } = {
     [ButtonSizes.sm]: 'h-[1.875rem] rounded-lg px-3 py-[0.375rem]',
     [ButtonSizes.md]:
         'h-[2.5rem] rounded-[0.625rem] px-[0.875rem] py-[0.625rem]',
-    [ButtonSizes.lg]: 'h-[3.25rem] rounded-xl py-3 px-5',
+    [ButtonSizes.lg]: 'h-11 rounded-xl py-3 px-5',
 };
