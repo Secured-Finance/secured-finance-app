@@ -54,6 +54,5 @@
     "walletconnect",
     "zondax"
   ],
-  "jest.jestCommandLine": "npm run test -- --watchAll",
-  "files.autoSave": "onFocusChange"
+  "jest.jestCommandLine": "npm run test -- --watchAll"
 }

@@ -276,16 +276,16 @@ export function AdvancedLendingOrderCard({
                         bgColor: 'bg-nebulaTeal',
                         textClass: 'text-secondary3 font-semibold',
                         gradient: {
-                            from: 'from-tabGradient4',
-                            to: 'to-tabGradient3',
+                            from: 'from-tabGradient-4',
+                            to: 'to-tabGradient-3',
                         },
                     },
                     {
                         bgColor: 'bg-galacticOrange',
                         textClass: 'text-[#FFE5E8] font-semibold',
                         gradient: {
-                            from: 'from-tabGradient6',
-                            to: 'to-tabGradient5',
+                            from: 'from-tabGradient-6',
+                            to: 'to-tabGradient-5',
                         },
                     },
                 ]}

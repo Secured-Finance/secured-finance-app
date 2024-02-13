@@ -38,16 +38,16 @@ NavTabWithOptionsStyles.args = {
             bgColor: 'bg-nebulaTeal',
             textClass: 'text-secondary3 font-semibold',
             gradient: {
-                from: 'from-tabGradient4',
-                to: 'to-tabGradient3',
+                from: 'from-tabGradient-4',
+                to: 'to-tabGradient-3',
             },
         },
         {
             bgColor: 'bg-error5',
             textClass: 'text-galacticOrange font-semibold',
             gradient: {
-                from: 'from-tabGradient6',
-                to: 'to-tabGradient5',
+                from: 'from-tabGradient-6',
+                to: 'to-tabGradient-5',
             },
         },
     ],

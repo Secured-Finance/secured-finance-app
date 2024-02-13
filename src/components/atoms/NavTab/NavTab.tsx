@@ -39,7 +39,7 @@ export const NavTab = ({
                         [`${
                             navStyles
                                 ? `bg-gradient-to-b ${navStyles.gradient.from} ${navStyles.gradient.to}`
-                                : 'bg-gradient-to-b from-tabGradient2 to-tabGradient1'
+                                : 'bg-gradient-to-b from-tabGradient-2 to-tabGradient-1'
                         }`]: active,
                     }
                 )}
