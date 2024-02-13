@@ -36,6 +36,30 @@ Primary.args = {
     variant: IconButtonVariants.primary,
 };
 
+export const ExtraSmall = Template.bind({});
+ExtraSmall.args = {
+    ...Primary.args,
+    size: ButtonSizes.xs,
+};
+
+export const Small = Template.bind({});
+Small.args = {
+    ...Primary.args,
+    size: ButtonSizes.sm,
+};
+
+export const Medium = Template.bind({});
+Medium.args = {
+    ...Primary.args,
+    size: ButtonSizes.md,
+};
+
+export const Large = Template.bind({});
+Large.args = {
+    ...Primary.args,
+    size: ButtonSizes.lg,
+};
+
 export const Secondary = Template.bind({});
 Secondary.args = {
     variant: IconButtonVariants.secondary,

@@ -11,8 +11,8 @@ export const IconButton = ({
 }: {
     onClick: () => void;
     Icon: SvgIcon;
-    variant: IconButtonVariants;
-    size: ButtonSizes;
+    variant?: IconButtonVariants;
+    size?: ButtonSizes;
 }) => {
     return (
         <button
