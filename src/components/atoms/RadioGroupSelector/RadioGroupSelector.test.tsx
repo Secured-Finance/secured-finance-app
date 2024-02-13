@@ -18,12 +18,12 @@ describe('RadioGroupSelector component', () => {
         render(<NavTab />);
         const lendButton = screen.getByText('Lend');
         expect(lendButton.parentNode).toHaveClass(
-            'bg-gradient-to-b from-tabGradient2 to-tabGradient1'
+            'bg-gradient-to-b from-tabGradient-2 to-tabGradient-1'
         );
 
         const borrowButton = screen.getByText('Borrow');
         expect(borrowButton.parentNode).not.toHaveClass(
-            'bg-gradient-to-b from-tabGradient2 to-tabGradient1'
+            'bg-gradient-to-b from-tabGradient-2 to-tabGradient-1'
         );
     });
 
@@ -33,14 +33,14 @@ describe('RadioGroupSelector component', () => {
 
         const borrowButton = screen.getByText('Borrow');
         expect(borrowButton.parentNode).not.toHaveClass(
-            'bg-gradient-to-b from-tabGradient2 to-tabGradient1'
+            'bg-gradient-to-b from-tabGradient-2 to-tabGradient-1'
         );
 
         fireEvent.click(borrowButton);
         expect(handleClick).toBeCalledTimes(1);
         expect(handleClick).toHaveBeenCalledWith('Borrow');
         expect(borrowButton.parentNode).toHaveClass(
-            'bg-gradient-to-b from-tabGradient2 to-tabGradient1'
+            'bg-gradient-to-b from-tabGradient-2 to-tabGradient-1'
         );
     });
 
@@ -49,19 +49,19 @@ describe('RadioGroupSelector component', () => {
         render(<NavTabWithOptionsStyles handleClick={handleClick} />);
         const lendButton = screen.getByText('Lend');
         expect(lendButton.parentNode).toHaveClass(
-            'bg-gradient-to-b from-tabGradient4 to-tabGradient3'
+            'bg-gradient-to-b from-tabGradient-4 to-tabGradient-3'
         );
 
         const borrowButton = screen.getByText('Borrow');
         expect(borrowButton.parentNode).not.toHaveClass(
-            'bg-gradient-to-b from-tabGradient6 to-tabGradient5'
+            'bg-gradient-to-b from-tabGradient-6 to-tabGradient-5'
         );
 
         fireEvent.click(borrowButton);
         expect(handleClick).toBeCalledTimes(1);
         expect(handleClick).toHaveBeenCalledWith('Borrow');
         expect(borrowButton.parentNode).toHaveClass(
-            'bg-gradient-to-b from-tabGradient6 to-tabGradient5'
+            'bg-gradient-to-b from-tabGradient-6 to-tabGradient-5'
         );
     });
 
