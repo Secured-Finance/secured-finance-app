@@ -11,7 +11,6 @@ import {
     setCurrency,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { ButtonSizes } from 'src/types';
 import { CurrencySymbol, toOptions } from 'src/utils';
 
 export const GlobalItayose = () => {
@@ -69,7 +68,6 @@ export const GlobalItayose = () => {
                         onChange={handleCurrencyChange}
                     />
                     <Button
-                        size={ButtonSizes.md}
                         onClick={() => {
                             router.push('/itayose/');
                         }}
