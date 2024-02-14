@@ -358,20 +358,7 @@ export function AdvancedLendingOrderCard({
                             <OrderDisplayBox
                                 field='Max Slippage'
                                 value={divide(slippage, 100)}
-                                informationText={
-                                    <>
-                                        Price is likely to hit our price range
-                                        limit and thus be unable to be executed.
-                                        You can refer to our{' '}
-                                        <a
-                                            href='https://docs.secured.finance/technical-overview/protocol-safety-measures/price-range-limit#what-is-the-circuit-breaker-in-bond-market'
-                                            className='underline'
-                                        >
-                                            Circuit Breaker
-                                        </a>{' '}
-                                        docs for more details.
-                                    </>
-                                }
+                                informationText='A bond price limit, triggering a circuit breaker if exceeded within a single block due to price fluctuations.'
                             />
                         </div>
                     )}
