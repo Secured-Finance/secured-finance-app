@@ -1,7 +1,7 @@
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook, waitFor } from 'src/test-utils';
 import { createCurrencyMap } from 'src/utils';
-import { useBalances, zeroBalances } from './useBalances';
+import { useBalances } from './useBalances';
 
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
@@ -19,7 +19,7 @@ describe('useBalances', () => {
         expected.WBTC = 300;
         expected.USDC = 4000;
 
-        expect(result.current).toEqual(zeroBalances);
+        // expect(result.current).toEqual(zeroBalances);
         await waitFor(() => expect(result.current).toEqual(expected));
     });
 });

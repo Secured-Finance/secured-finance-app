@@ -1,7 +1,7 @@
 import * as analytics from '@amplitude/analytics-browser';
 import { composeStories } from '@storybook/react';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
+import { act, fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { ButtonEvents, ButtonProperties } from 'src/utils';
 import * as stories from './RemoveOrderDialog.stories';
 
@@ -17,7 +17,7 @@ describe('RemoveOrderDialog Component', () => {
 
     it('should call the cancelLendingOrder function when the button is clicked', async () => {
         render(<Default />);
-        screen.getByText('OK').click();
+        act(() => screen.getByText('OK').click());
         await waitFor(() =>
             expect(mockSecuredFinance.cancelLendingOrder).toHaveBeenCalled()
         );
@@ -30,7 +30,7 @@ describe('RemoveOrderDialog Component', () => {
         const spy = jest.spyOn(console, 'error').mockImplementation();
         render(<Default />);
 
-        screen.getByText('OK').click();
+        act(() => screen.getByText('OK').click());
         await waitFor(() =>
             expect(mockSecuredFinance.cancelLendingOrder).toHaveBeenCalled()
         );
@@ -44,7 +44,7 @@ describe('RemoveOrderDialog Component', () => {
     it('should update the lastActionTimestamp in the store when the transaction receipt is received', async () => {
         const { store } = render(<Default />);
         expect(store.getState().blockchain.lastActionTimestamp).toEqual(0);
-        screen.getByText('OK').click();
+        act(() => screen.getByText('OK').click());
         expect(await screen.findByText('Removed!')).toBeInTheDocument();
         expect(store.getState().blockchain.lastActionTimestamp).toBeTruthy();
     });
@@ -73,7 +73,7 @@ describe('RemoveOrderDialog Component', () => {
         const cancelButton = screen.getByRole('button', {
             name: 'Cancel',
         });
-        fireEvent.click(cancelButton);
+        act(() => fireEvent.click(cancelButton));
         expect(onClose).toHaveBeenCalled();
         expect(track).toHaveBeenCalledWith(ButtonEvents.CANCEL_BUTTON, {
             [ButtonProperties.CANCEL_ACTION]: 'Cancel Remove Order',
@@ -86,9 +86,7 @@ describe('RemoveOrderDialog Component', () => {
             name: 'Cancel',
         });
         expect(cancelButton).toBeInTheDocument();
-        waitFor(() => {
-            fireEvent.click(screen.getByTestId('dialog-action-button'));
-        });
-        expect(cancelButton).not.toBeInTheDocument();
+        act(() => fireEvent.click(screen.getByTestId('dialog-action-button')));
+        await waitFor(() => expect(cancelButton).not.toBeInTheDocument());
     });
 });

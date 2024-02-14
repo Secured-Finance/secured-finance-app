@@ -4,7 +4,7 @@ import { composeStories } from '@storybook/react';
 import { CollateralBook } from 'src/hooks';
 import { dec22Fixture } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
+import { act, fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
 import {
     ButtonEvents,
@@ -135,7 +135,7 @@ describe('AdvancedLendingOrderCard Component', () => {
             await screen.findByTestId('place-order-button')
         ).toBeInTheDocument();
         expect(await screen.findByText('Place Order')).toBeEnabled();
-        screen.getByTestId('place-order-button').click();
+        act(() => screen.getByTestId('place-order-button').click());
         expect(
             screen.getByRole('dialog', {
                 name: 'Confirm Borrow',
@@ -272,6 +272,9 @@ describe('AdvancedLendingOrderCard Component', () => {
                 },
             })
         );
+
+        expect(screen.getByText('Lending Source')).toBeInTheDocument();
+        expect(await screen.findByText('10,000')).toBeInTheDocument();
 
         const slider = screen.getByRole('slider');
         const input = screen.getByRole('textbox', { name: 'Amount' });

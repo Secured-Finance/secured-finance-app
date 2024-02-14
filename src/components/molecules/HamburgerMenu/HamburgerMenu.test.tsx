@@ -1,5 +1,5 @@
 import { composeStories } from '@storybook/react';
-import { render, screen, waitFor } from 'src/test-utils.js';
+import { act, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './HamburgerMenu.stories';
 
 const { Default } = composeStories(stories);
@@ -18,7 +18,7 @@ describe('HamburgerMenu Component', () => {
     it('should expand the menu when the button is clicked', async () => {
         render(<Default />);
         const button = screen.getByRole('button', { name: 'Hamburger Menu' });
-        button.click();
+        act(() => button.click());
         await waitFor(() => {
             expect(
                 screen.getByRole('button', {
@@ -32,9 +32,9 @@ describe('HamburgerMenu Component', () => {
 
     it('should open the sub menu when the More button is clicked', async () => {
         render(<Default />);
-        screen.getByRole('button', { expanded: false }).click();
+        act(() => screen.getByRole('button', { expanded: false }).click());
         expect(screen.queryByText('Documentation')).not.toBeInTheDocument();
-        screen.getByRole('button', { name: 'Show More' }).click();
+        act(() => screen.getByRole('button', { name: 'Show More' }).click());
         await waitFor(() => {
             expect(screen.getByText('Documentation')).toBeInTheDocument();
         });

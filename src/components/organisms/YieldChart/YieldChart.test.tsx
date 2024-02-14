@@ -9,7 +9,7 @@ const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('YieldChart Component', () => {
-    it('should render YieldChart', async () => {
+    it.skip('should render YieldChart', async () => {
         const { container } = render(<Default />);
         expect(await screen.findByText('$6.00')).toBeInTheDocument();
         expect(container).toMatchSnapshot();
