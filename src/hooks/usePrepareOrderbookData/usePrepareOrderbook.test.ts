@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook } from 'src/test-utils';
 import { LoanValue } from 'src/utils/entities';
 import { usePrepareOrderbookData } from './usePrepareOrderbookData';
 

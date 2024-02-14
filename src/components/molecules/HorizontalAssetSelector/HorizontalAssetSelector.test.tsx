@@ -1,5 +1,5 @@
 import { composeStories } from '@storybook/react';
-import { render, screen } from 'src/test-utils.js';
+import { act, render, screen } from 'src/test-utils.js';
 import * as stories from './HorizontalAssetSelector.stories';
 
 const { Default } = composeStories(stories);
@@ -13,8 +13,8 @@ describe('HorizontalAssetSelector Component', () => {
         const onAssetChange = jest.fn();
         render(<Default onAssetChange={onAssetChange} />);
         expect(onAssetChange).toHaveBeenNthCalledWith(1, 'WBTC');
-        screen.getByRole('button', { name: 'WBTC' }).click();
-        screen.getByRole('menuitem', { name: 'USDC' }).click();
+        act(() => screen.getByRole('button', { name: 'WBTC' }).click());
+        act(() => screen.getByRole('menuitem', { name: 'USDC' }).click());
         expect(onAssetChange).toHaveBeenNthCalledWith(2, 'USDC');
     });
 });

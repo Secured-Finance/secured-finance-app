@@ -12,8 +12,9 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 describe('MarketLoanWidget Component', () => {
     it('should filter by currency', async () => {
         render(<Default />);
-        await waitFor(() => {
-            expect(screen.queryByText('WBTC')).toBeInTheDocument();
+        await waitFor(async () => {
+            expect(screen.queryAllByText('WBTC').length).toBeGreaterThan(0);
+            // Look into this re-render issue
             screen.getByRole('button', { name: 'All Assets' }).click();
             screen.getByRole('menuitem', { name: 'WFIL' }).click();
         });

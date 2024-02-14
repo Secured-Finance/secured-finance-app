@@ -1,7 +1,14 @@
 import { composeStories } from '@storybook/react';
 import { userEvent } from '@storybook/testing-library';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { fireEvent, render, screen, waitFor, within } from 'src/test-utils.js';
+import {
+    act,
+    fireEvent,
+    render,
+    screen,
+    waitFor,
+    within,
+} from 'src/test-utils.js';
 import timemachine from 'timemachine';
 import * as stories from './ActiveTradeTable.stories';
 
@@ -36,7 +43,7 @@ describe('ActiveTradeTable Component', () => {
         expect(initialRows[8]).toHaveTextContent('Borrow');
         expect(initialRows[9]).toHaveTextContent('Lend');
         expect(initialRows[10]).toHaveTextContent('Lend');
-        screen.getByText('Type').click();
+        act(() => screen.getByText('Type').click());
         const sortedRowsAsc = screen.getAllByRole('row');
         expect(sortedRowsAsc[1]).toHaveTextContent('Lend');
         expect(sortedRowsAsc[2]).toHaveTextContent('Lend');
@@ -48,7 +55,7 @@ describe('ActiveTradeTable Component', () => {
         expect(sortedRowsAsc[8]).toHaveTextContent('Borrow');
         expect(sortedRowsAsc[9]).toHaveTextContent('Borrow');
         expect(sortedRowsAsc[9]).toHaveTextContent('Borrow');
-        screen.getByText('Type').click();
+        act(() => screen.getByText('Type').click());
         const sortedRowsDesc = screen.getAllByRole('row');
         expect(sortedRowsDesc[1]).toHaveTextContent('Borrow');
         expect(sortedRowsDesc[2]).toHaveTextContent('Borrow');
