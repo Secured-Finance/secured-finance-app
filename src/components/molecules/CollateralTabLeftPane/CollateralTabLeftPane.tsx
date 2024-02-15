@@ -1,4 +1,5 @@
-import classNames from 'classnames';
+import { track } from '@amplitude/analytics-browser';
+import clsx from 'clsx';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -7,13 +8,13 @@ import {
     CollateralInformationTable,
     CollateralManagementConciseTab,
 } from 'src/components/atoms';
-import { CollateralBook } from 'src/hooks';
+import { CollateralBook, useCollateralCurrencies } from 'src/hooks';
 import { RootState } from 'src/store/types';
 import {
+    ButtonEvents,
     CurrencySymbol,
     ZERO_BI,
     amountFormatterFromBase,
-    getCurrencyMapAsList,
     usdFormat,
 } from 'src/utils';
 
@@ -21,14 +22,12 @@ interface CollateralTabLeftPaneProps {
     account: string | undefined;
     onClick: (step: 'deposit' | 'withdraw') => void;
     collateralBook: CollateralBook;
+    netAssetValue: number;
 }
 
-const getInformationText = () => {
+const getInformationText = (collateralCurrencies: CurrencySymbol[]) => {
     let article = '';
     let currencyString = '';
-    const collateralCurrencies = getCurrencyMapAsList()
-        .filter(ccy => ccy.isCollateral)
-        .map(ccy => ccy.symbol);
 
     const length = collateralCurrencies.length;
 
@@ -67,42 +66,43 @@ export const CollateralTabLeftPane = ({
     account,
     onClick,
     collateralBook,
+    netAssetValue,
 }: CollateralTabLeftPaneProps) => {
     const chainError = useSelector(
         (state: RootState) => state.blockchain.chainError
     );
+
+    const { data: collateralCurrencies = [] } = useCollateralCurrencies();
+
     const collateralQuantityExist = useMemo(() => {
         return checkAssetQuantityExist(collateralBook.collateral);
     }, [collateralBook.collateral]);
     const nonCollateralQuantityExist = useMemo(() => {
         return checkAssetQuantityExist(collateralBook.nonCollateral);
     }, [collateralBook.nonCollateral]);
-    const vaultBalance = account
-        ? collateralBook.usdCollateral + collateralBook.usdNonCollateral
-        : 0;
 
     return (
         <div className='flex min-h-[400px] w-full flex-col border-white-10 tablet:w-64 tablet:border-r'>
             <div className='flex-grow tablet:border-b tablet:border-white-10'>
                 <div className='m-6 flex flex-col gap-1'>
                     <span className='typography-body-2 h-6 w-fit text-slateGray'>
-                        SF Vault
+                        Net Asset Value
                     </span>
                     <span
                         data-testid='vault-balance'
-                        className={classNames(
+                        className={clsx(
                             'w-fit font-secondary font-semibold text-white',
                             {
-                                'text-xl': vaultBalance.toString().length <= 6,
+                                'text-xl': netAssetValue.toString().length <= 6,
                                 'text-xl tablet:text-md':
-                                    vaultBalance.toString().length > 6 &&
-                                    vaultBalance.toString().length <= 9,
+                                    netAssetValue.toString().length > 6 &&
+                                    netAssetValue.toString().length <= 9,
                                 'text-md tablet:text-smd':
-                                    vaultBalance.toString().length > 9,
+                                    netAssetValue.toString().length > 9,
                             }
                         )}
                     >
-                        {usdFormat(vaultBalance, 2)}
+                        {usdFormat(netAssetValue, 2)}
                     </span>
                 </div>
                 {!account ? (
@@ -116,7 +116,9 @@ export const CollateralTabLeftPane = ({
                             {collateralQuantityExist && (
                                 <AssetInformation
                                     header='Collateral Assets'
-                                    informationText={getInformationText()}
+                                    informationText={getInformationText(
+                                        collateralCurrencies
+                                    )}
                                     collateralBook={collateralBook.collateral}
                                 ></AssetInformation>
                             )}
@@ -210,7 +212,10 @@ export const CollateralTabLeftPane = ({
             <div className='flex h-24 flex-row items-center justify-center gap-4 px-6'>
                 <Button
                     size='sm'
-                    onClick={() => onClick('deposit')}
+                    onClick={() => {
+                        onClick('deposit');
+                        track(ButtonEvents.DEPOSIT_COLLATERAL_BUTTON);
+                    }}
                     disabled={!account || chainError}
                     data-testid='deposit-collateral'
                     fullWidth={true}
@@ -219,8 +224,11 @@ export const CollateralTabLeftPane = ({
                 </Button>
                 <Button
                     size='sm'
-                    disabled={!account || vaultBalance <= 0 || chainError}
-                    onClick={() => onClick('withdraw')}
+                    disabled={!account || netAssetValue <= 0 || chainError}
+                    onClick={() => {
+                        onClick('withdraw');
+                        track(ButtonEvents.WITHDRAW_COLLATERAL_BUTTON);
+                    }}
                     data-testid='withdraw-collateral'
                     fullWidth={true}
                 >

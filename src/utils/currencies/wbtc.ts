@@ -1,20 +1,9 @@
 import { Token } from '@secured-finance/sf-core';
-import assert from 'assert';
 import { CurrencySymbol } from '../currencyList';
 
 export class WBTC extends Token {
     private constructor() {
-        assert(
-            process.env.NEXT_PUBLIC_WBTC_CONTRACT_ADDRESS,
-            'WBTC_CONTRACT_ADDRESS is not set'
-        );
-        super(
-            1,
-            process.env.NEXT_PUBLIC_WBTC_CONTRACT_ADDRESS,
-            8,
-            CurrencySymbol.WBTC,
-            'Bitcoin'
-        );
+        super(8, CurrencySymbol.WBTC, 'Bitcoin');
     }
 
     private static instance: WBTC;

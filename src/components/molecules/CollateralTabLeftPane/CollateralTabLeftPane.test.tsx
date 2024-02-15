@@ -1,3 +1,4 @@
+import * as analytics from '@amplitude/analytics-browser';
 import { composeStories } from '@storybook/react';
 import { emptyCollateralBook } from 'src/hooks';
 import {
@@ -5,6 +6,7 @@ import {
     emptyUSDCollateral,
 } from 'src/stories/mocks/fixtures';
 import { fireEvent, render, screen } from 'src/test-utils.js';
+import { ButtonEvents } from 'src/utils';
 import * as stories from './CollateralTabLeftPane.stories';
 
 const { Default, NotConnectedToWallet } = composeStories(stories);
@@ -12,7 +14,7 @@ const { Default, NotConnectedToWallet } = composeStories(stories);
 describe('CollateralTabLeftPane component', () => {
     it('should render CollateralTabLeftPane', () => {
         render(<NotConnectedToWallet />);
-        expect(screen.getByText('SF Vault')).toBeInTheDocument();
+        expect(screen.getByText('Net Asset Value')).toBeInTheDocument();
         expect(screen.getByText('$0.00')).toBeInTheDocument();
         expect(
             screen.getByText(
@@ -52,24 +54,32 @@ describe('CollateralTabLeftPane component', () => {
         expect(screen.getByTestId('withdraw-collateral')).toBeEnabled();
     });
 
-    it('should call onClick with deposit when deposit button is clicked', () => {
+    it('should call onClick with deposit and emit DEPOSIT_COLLATERAL_BUTTON event when deposit button is clicked', () => {
+        const track = jest.spyOn(analytics, 'track');
         const onClick = jest.fn();
         render(<Default onClick={onClick} />);
         fireEvent.click(screen.getByTestId('deposit-collateral'));
+        expect(track).toHaveBeenCalledWith(
+            ButtonEvents.DEPOSIT_COLLATERAL_BUTTON
+        );
         expect(onClick).toHaveBeenCalledWith('deposit');
     });
 
-    it('should call onClick with withdraw when withdraw button is clicked', () => {
+    it('should call onClick with withdraw and emit WITHDRAW_COLLATERAL_BUTTON event when withdraw button is clicked', () => {
+        const track = jest.spyOn(analytics, 'track');
         const onClick = jest.fn();
         render(<Default onClick={onClick} />);
         fireEvent.click(screen.getByTestId('withdraw-collateral'));
+        expect(track).toHaveBeenCalledWith(
+            ButtonEvents.WITHDRAW_COLLATERAL_BUTTON
+        );
         expect(onClick).toHaveBeenCalledWith('withdraw');
     });
 
     it('should prompt user to deposit collateral when wallet is connected', () => {
         render(<Default collateralBook={emptyCollateralBook} />);
-        expect(screen.getByText('SF Vault')).toBeInTheDocument();
-        expect(screen.getByText('$0.00')).toBeInTheDocument();
+        expect(screen.getByText('Net Asset Value')).toBeInTheDocument();
+        expect(screen.getByText('$12,700.34')).toBeInTheDocument();
         expect(
             screen.getAllByText(
                 'Deposit collateral from your connected wallet to enable lending service on Secured Finance.'
@@ -98,27 +108,13 @@ describe('CollateralTabLeftPane component', () => {
     });
 
     it('should change font size as collateral increases', async () => {
-        render(
-            <Default
-                collateralBook={{
-                    ...collateralBook80,
-                    usdCollateral: 100000.2,
-                }}
-            />
-        );
+        render(<Default netAssetValue={100000.2} />);
         const input = screen.getByTestId('vault-balance');
         expect(input).toHaveClass('text-xl tablet:text-md');
     });
 
     it('should change font size as collateral increases', async () => {
-        render(
-            <Default
-                collateralBook={{
-                    ...collateralBook80,
-                    usdCollateral: 210000000.2,
-                }}
-            />
-        );
+        render(<Default netAssetValue={210000000.2} />);
         const input = screen.getByTestId('vault-balance');
         expect(input).toHaveClass('text-md tablet:text-smd');
     });

@@ -1,11 +1,14 @@
 import { fromBytes32 } from '@secured-finance/sf-graph-client';
 import { useQuery } from '@tanstack/react-query';
-import { useMemo } from 'react';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
-import { CurrencySymbol, getCurrencyMapAsList, isPastDate } from 'src/utils';
-
-const PRE_OPEN_TIME = 60 * 60 * 24 * 7; // 7 days in seconds
+import {
+    CurrencySymbol,
+    createCurrencyMap,
+    currencyMap,
+    isPastDate,
+} from 'src/utils';
+import { useCurrencies } from '../useCurrencies';
 
 export type LendingMarket = {
     name: string;
@@ -13,7 +16,7 @@ export type LendingMarket = {
     isActive: boolean;
     utcOpeningDate: number;
     marketUnitPrice: number;
-    preOpenDate: number;
+    preOpeningDate: number;
     openingUnitPrice: number;
     isReady: boolean;
     isOpened: boolean;
@@ -34,7 +37,7 @@ const baseContract: { 0: LendingMarket } = {
         isActive: false,
         utcOpeningDate: 0,
         marketUnitPrice: 0,
-        preOpenDate: 0,
+        preOpeningDate: 0,
         openingUnitPrice: 0,
         isReady: false,
         isOpened: false,
@@ -49,39 +52,26 @@ const baseContract: { 0: LendingMarket } = {
     },
 };
 
-export const baseContracts: AvailableContracts = {
-    [CurrencySymbol.ETH]: baseContract,
-    [CurrencySymbol.WFIL]: baseContract,
-    [CurrencySymbol.USDC]: baseContract,
-    [CurrencySymbol.WBTC]: baseContract,
-};
-
-const emptyContracts: AvailableContracts = {
-    [CurrencySymbol.ETH]: {},
-    [CurrencySymbol.WFIL]: {},
-    [CurrencySymbol.USDC]: {},
-    [CurrencySymbol.WBTC]: {},
-};
+export const baseContracts: AvailableContracts =
+    createCurrencyMap(baseContract);
+export const emptyContracts: AvailableContracts = createCurrencyMap({});
 
 export type ContractMap = Record<number, LendingMarket>;
 export type AvailableContracts = Record<CurrencySymbol, ContractMap>;
 
 export const useLendingMarkets = () => {
     const securedFinance = useSF();
-    const currencies = useMemo(
-        () => getCurrencyMapAsList().map(currency => currency.toCurrency()),
-        []
-    );
-    const currencyKey = useMemo(() => {
-        return currencies.map(ccy => ccy.symbol).join('-');
-    }, [currencies]);
+    const { data: currencies, isSuccess: isCurrencySuccess } = useCurrencies();
 
     return useQuery({
-        // eslint-disable-next-line @tanstack/query/exhaustive-deps
-        queryKey: [QueryKeys.LENDING_MARKETS, currencyKey],
+        queryKey: [
+            QueryKeys.LENDING_MARKETS,
+            currencies,
+            securedFinance?.config.chain.id,
+        ],
         queryFn: async () => {
             const lendingMarkets = await securedFinance?.getOrderBookDetails(
-                currencies
+                currencies?.map(ccy => currencyMap[ccy].toCurrency()) ?? []
             );
             return lendingMarkets ?? [];
         },
@@ -89,7 +79,7 @@ export const useLendingMarkets = () => {
             const names: string[] = [];
             let availableContracts: AvailableContracts = baseContracts;
             if (markets && markets.length > 0) {
-                availableContracts = emptyContracts;
+                availableContracts = JSON.parse(JSON.stringify(emptyContracts));
                 markets.forEach(market => {
                     let name = market.name;
                     const {
@@ -108,6 +98,7 @@ export const useLendingMarkets = () => {
                         maxLendUnitPrice,
                         ccy,
                         currentMinDebtUnitPrice,
+                        preOpeningDate,
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     } = market as any;
                     const currency = fromBytes32(ccy) as CurrencySymbol;
@@ -131,7 +122,7 @@ export const useLendingMarkets = () => {
                             isActive: isPastDate(Number(openingDate)),
                             marketUnitPrice: Number(marketUnitPrice),
                             openingUnitPrice: Number(openingUnitPrice),
-                            preOpenDate: Number(openingDate) - PRE_OPEN_TIME,
+                            preOpeningDate: Number(preOpeningDate),
                             isReady,
                             isOpened,
                             isMatured,
@@ -150,6 +141,6 @@ export const useLendingMarkets = () => {
             }
             return availableContracts;
         },
-        enabled: !!securedFinance,
+        enabled: !!securedFinance && isCurrencySuccess,
     });
 };

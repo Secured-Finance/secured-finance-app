@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useMemo } from 'react';
-import { useLastPrices } from 'src/hooks';
+import { useCollateralCurrencies, useLastPrices } from 'src/hooks';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
 import { AssetPriceMap } from 'src/types';
@@ -11,7 +10,6 @@ import {
     computeAvailableToBorrow,
     currencyMap,
     divide,
-    getCurrencyMapAsList,
     toCurrency,
 } from 'src/utils';
 
@@ -24,6 +22,7 @@ export interface CollateralBook {
     usdNonCollateral: number;
     coverage: number;
     collateralThreshold: number;
+    totalPresentValue: number;
 }
 
 const DIVIDER = 100000000;
@@ -36,6 +35,7 @@ export const emptyCollateralBook: CollateralBook = {
     },
     nonCollateral: {
         [CurrencySymbol.WFIL]: ZERO_BI,
+        [CurrencySymbol.axlFIL]: ZERO_BI,
     },
     withdrawableCollateral: {
         [CurrencySymbol.USDC]: ZERO_BI,
@@ -47,6 +47,7 @@ export const emptyCollateralBook: CollateralBook = {
     usdNonCollateral: 0,
     coverage: 0,
     collateralThreshold: 0,
+    totalPresentValue: 0,
 };
 
 const emptyCollateralValues = {
@@ -55,6 +56,7 @@ const emptyCollateralValues = {
         [CurrencySymbol.USDC]: ZERO_BI,
         [CurrencySymbol.WBTC]: ZERO_BI,
         [CurrencySymbol.WFIL]: ZERO_BI,
+        [CurrencySymbol.axlFIL]: ZERO_BI,
     },
     collateralCoverage: ZERO_BI,
     totalCollateralAmount: ZERO_BI,
@@ -70,33 +72,33 @@ const emptyCollateralParameters = {
 export const useCollateralBook = (account: string | undefined) => {
     const securedFinance = useSF();
 
-    const collateralCurrencyList = useMemo(
-        () => getCurrencyMapAsList().filter(ccy => ccy.isCollateral),
-        []
-    );
-
-    // TODO: replace this with the calculation done by the smart contract
+    const { data: collateralCurrencyList = [] } = useCollateralCurrencies();
     const { data: priceList } = useLastPrices();
 
     return useQuery({
-        queryKey: [QueryKeys.COLLATERAL_BOOK, account],
+        queryKey: [QueryKeys.COLLATERAL_BOOK, account, collateralCurrencyList],
         queryFn: async () => {
             const [
                 collateralValues,
                 collateralParameters,
+                totalPresentValue,
                 withdrawableCollateral,
             ] = await Promise.all([
-                securedFinance?.getCollateralBook(account ?? ''),
-                securedFinance?.getCollateralParameters(),
+                securedFinance?.tokenVault.getCollateralBook(account ?? ''),
+                securedFinance?.tokenVault.getCollateralParameters(),
+                securedFinance?.getTotalPresentValueInBaseCurrency(
+                    account ?? ''
+                ),
                 await Promise.all(
-                    collateralCurrencyList.map(async currencyInfo => {
-                        const ccy = currencyInfo.symbol;
+                    collateralCurrencyList.map(async ccy => {
                         const withdrawableCollateral =
-                            await securedFinance?.getWithdrawableCollateral(
+                            await securedFinance?.tokenVault.getWithdrawableCollateral(
                                 toCurrency(ccy),
                                 account ?? ''
                             );
-                        return { [ccy]: withdrawableCollateral ?? ZERO_BI };
+                        return {
+                            [ccy]: withdrawableCollateral ?? ZERO_BI,
+                        };
                     })
                 ),
             ]);
@@ -106,6 +108,7 @@ export const useCollateralBook = (account: string | undefined) => {
                 collateralParameters:
                     collateralParameters ?? emptyCollateralParameters,
                 withdrawableCollateral: withdrawableCollateral,
+                totalPresentValue: totalPresentValue ?? 0,
             };
         },
         select: data => {
@@ -151,11 +154,13 @@ export const useCollateralBook = (account: string | undefined) => {
                 coverage: coverage,
                 collateralThreshold: collateralThreshold,
                 withdrawableCollateral: withdrawableCollateral,
+                totalPresentValue: divide(data.totalPresentValue, DIVIDER, 8),
             };
 
             return colBook;
         },
-        enabled: !!securedFinance && !!account,
+        enabled:
+            !!securedFinance && !!account && collateralCurrencyList.length > 0,
     });
 };
 

@@ -1,7 +1,7 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { formatDate } from '@secured-finance/sf-core';
 import { createColumnHelper } from '@tanstack/react-table';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import * as dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { useCallback, useMemo, useState } from 'react';
@@ -9,7 +9,11 @@ import { useDispatch } from 'react-redux';
 import { CoreTable, TableActionMenu } from 'src/components/molecules';
 import { UnwindDialog, UnwindDialogType } from 'src/components/organisms';
 import { Position, useBreakpoint, useLastPrices } from 'src/hooks';
-import { setCurrency, setMaturity } from 'src/store/landingOrderForm';
+import {
+    resetUnitPrice,
+    setCurrency,
+    setMaturity,
+} from 'src/store/landingOrderForm';
 import {
     CurrencySymbol,
     hexToCurrencySymbol,
@@ -55,6 +59,14 @@ export const ActiveTradeTable = ({
     const dispatch = useDispatch();
     const isTablet = useBreakpoint('laptop');
 
+    const handleCurrencyChange = useCallback(
+        (v: CurrencySymbol) => {
+            dispatch(setCurrency(v));
+            dispatch(resetUnitPrice());
+        },
+        [dispatch]
+    );
+
     const getTableActionMenu = useCallback(
         (
             maturity: number,
@@ -67,7 +79,7 @@ export const ActiveTradeTable = ({
                     text: 'Add/Reduce',
                     onClick: (): void => {
                         dispatch(setMaturity(maturity));
-                        dispatch(setCurrency(ccy));
+                        handleCurrencyChange(ccy);
                         router.push('/advanced/');
                     },
                 },
@@ -122,7 +134,7 @@ export const ActiveTradeTable = ({
                 },
             ];
         },
-        [delistedCurrencySet, dispatch, router]
+        [delistedCurrencySet, dispatch, handleCurrencyChange, router]
     );
 
     const getMaturityDisplayValue = useCallback(
@@ -202,16 +214,12 @@ export const ActiveTradeTable = ({
                     return (
                         <div className='grid w-40 justify-center tablet:w-full'>
                             <div
-                                className={classNames(
-                                    'typography-caption w-full',
-                                    {
-                                        'text-galacticOrange':
-                                            ccy && delistedCurrencySet.has(ccy),
-                                        'text-neutral7':
-                                            ccy &&
-                                            !delistedCurrencySet.has(ccy),
-                                    }
-                                )}
+                                className={clsx('typography-caption w-full', {
+                                    'text-galacticOrange':
+                                        ccy && delistedCurrencySet.has(ccy),
+                                    'text-neutral7':
+                                        ccy && !delistedCurrencySet.has(ccy),
+                                })}
                             >
                                 {getMaturityDisplayValue(
                                     maturityTimestamp,

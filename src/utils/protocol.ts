@@ -2,6 +2,7 @@ import { AssetPriceMap, DailyVolumes } from 'src/types';
 import { ZERO_BI } from './collateral';
 import {
     CurrencySymbol,
+    createCurrencyMap,
     currencyMap,
     hexToCurrencySymbol,
 } from './currencyList';
@@ -13,19 +14,14 @@ export function computeTotalDailyVolumeInUSD(
     totalVolumeUSD: bigint;
     volumePerCurrency: Record<CurrencySymbol, bigint>;
 } {
-    const volumePerCurrency: Record<CurrencySymbol, bigint> = {
-        [CurrencySymbol.ETH]: ZERO_BI,
-        [CurrencySymbol.WFIL]: ZERO_BI,
-        [CurrencySymbol.USDC]: ZERO_BI,
-        [CurrencySymbol.WBTC]: ZERO_BI,
-    };
+    const volumePerCurrency = createCurrencyMap<bigint>(ZERO_BI);
 
     let totalVolumeUSD = ZERO_BI;
 
     dailyVolumes.forEach(dailyVolume => {
         const { currency, volume } = dailyVolume;
         const ccy = hexToCurrencySymbol(currency);
-        if (!ccy) {
+        if (!ccy || !priceMap[ccy]) {
             return;
         }
 

@@ -1,18 +1,6 @@
 import assert from 'assert';
 import { Environment } from './strings';
 
-export const getMainnetChainId = (): number => {
-    const mainnetChainId = process.env.NEXT_PUBLIC_MAINNET_CHAIN_ID;
-    assert(mainnetChainId, 'NEXT_PUBLIC_MAINNET_CHAIN_ID is not set');
-    return parseInt(mainnetChainId, 10);
-};
-
-export const getSupportedNetworks = (): string[] => {
-    const supportedNetworks = process.env.NEXT_PUBLIC_SUPPORTED_NETWORKS;
-    assert(supportedNetworks, 'NEXT_PUBLIC_SUPPORTED_NETWORKS is not set');
-    return supportedNetworks.split(',');
-};
-
 export const getSupportedChainIds = (): number[] => {
     const supportedChainIds = process.env.NEXT_PUBLIC_SUPPORTED_CHAIN_IDS;
     assert(supportedChainIds, 'NEXT_PUBLIC_SUPPORTED_CHAIN_IDS is not set');

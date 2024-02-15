@@ -7,7 +7,7 @@ import {
     SortingState,
     useReactTable,
 } from '@tanstack/react-table';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
@@ -29,6 +29,8 @@ type CoreTableOptions = {
     showHeaders?: boolean;
     compact?: boolean;
     stickyHeader?: boolean;
+    isFirstRowLoading?: boolean;
+    isLastRowLoading?: boolean;
 };
 
 const DEFAULT_OPTIONS: CoreTableOptions = {
@@ -106,16 +108,22 @@ export const CoreTable = <T,>({
 
     const table = useReactTable<T>(configuration);
 
+    const rows = table.getRowModel().rows;
+
+    const isLoading = (rowIndex: number, dataRows: number) =>
+        (options.isFirstRowLoading && rowIndex === 0) ||
+        (options.isLastRowLoading && rowIndex === dataRows - 1);
+
     const coreTable = (
         <table
-            className={classNames('w-full', {
+            className={clsx('w-full', {
                 'table-fixed': !coreTableOptions.responsive,
             })}
             data-testid={coreTableOptions.name}
         >
             {coreTableOptions.showHeaders ? (
                 <thead
-                    className={classNames(
+                    className={clsx(
                         'typography-caption-2 px-6 text-slateGray',
                         {
                             'after:absolute after:bottom-0 after:z-20 after:w-full after:border-b after:border-white-10':
@@ -140,7 +148,7 @@ export const CoreTable = <T,>({
                                 <th
                                     data-testid={`${coreTableOptions.name}-header-cell`}
                                     key={header.id}
-                                    className={classNames(
+                                    className={clsx(
                                         'whitespace-nowrap py-2 pr-1 text-center font-bold tablet:px-1',
                                         {
                                             'sticky left-0 z-10 bg-[#161E2E] after:absolute after:-right-4 after:-top-0 after:z-10 after:h-full after:w-5 after:bg-gradient-to-r after:from-black-40 after:to-transparent tablet:relative tablet:left-auto tablet:z-auto tablet:bg-transparent tablet:after:hidden':
@@ -164,50 +172,57 @@ export const CoreTable = <T,>({
             ) : null}
 
             <tbody>
-                {table.getRowModel().rows.map((row, rowIndex) => (
-                    <tr
-                        key={row.id}
-                        className={classNames('h-7', {
-                            'cursor-pointer': coreTableOptions.hoverRow?.(
-                                row.id
-                            ),
-                            'hover:bg-black-30': coreTableOptions.hoverRow?.(
-                                row.id
-                            ),
-                            'border-b border-white-10':
-                                coreTableOptions.border &&
-                                rowIndex !==
-                                    table.getRowModel().rows.length - 1,
-                        })}
-                        onClick={() =>
-                            coreTableOptions.hoverRow?.(row.id) &&
-                            coreTableOptions.onLineClick?.(row.id)
-                        }
-                        data-testid={`${coreTableOptions.name}-row`}
-                    >
-                        {row.getVisibleCells().map((cell, cellIndex) => (
-                            <td
-                                key={cell.id}
-                                className={classNames(
-                                    'min-w-fit whitespace-nowrap pr-1 text-center font-medium tablet:px-1',
-                                    {
-                                        'sticky left-0 z-10 bg-[#161E2E] after:absolute after:-right-4 after:-top-0 after:z-10 after:h-full after:w-5 after:bg-gradient-to-r after:from-black-40 after:to-transparent tablet:relative tablet:left-auto tablet:z-auto tablet:bg-transparent tablet:after:hidden':
-                                            coreTableOptions.responsive &&
-                                            cellIndex === 0 &&
-                                            coreTableOptions?.stickyFirstColumn,
-                                        'py-2': !coreTableOptions.compact,
-                                        'py-1': coreTableOptions.compact,
-                                    }
-                                )}
-                            >
-                                {flexRender(
-                                    cell.column.columnDef.cell,
-                                    cell.getContext()
-                                )}
+                {rows.map((row, rowIndex) =>
+                    isLoading(rowIndex, rows.length) ? (
+                        <tr key={rowIndex} className='animate-pulse'>
+                            <td colSpan={row.getVisibleCells().length}>
+                                <div className='h-7 min-w-fit bg-[#808080]/20'></div>
                             </td>
-                        ))}
-                    </tr>
-                ))}
+                        </tr>
+                    ) : (
+                        <tr
+                            key={row.id}
+                            className={clsx('h-7', {
+                                'cursor-pointer': coreTableOptions.hoverRow?.(
+                                    row.id
+                                ),
+                                'hover:bg-black-30':
+                                    coreTableOptions.hoverRow?.(row.id),
+                                'border-b border-white-10':
+                                    coreTableOptions.border &&
+                                    rowIndex !==
+                                        table.getRowModel().rows.length - 1,
+                            })}
+                            onClick={() =>
+                                coreTableOptions.hoverRow?.(row.id) &&
+                                coreTableOptions.onLineClick?.(row.id)
+                            }
+                            data-testid={`${coreTableOptions.name}-row`}
+                        >
+                            {row.getVisibleCells().map((cell, cellIndex) => (
+                                <td
+                                    key={cell.id}
+                                    className={clsx(
+                                        'min-w-fit whitespace-nowrap pr-1 text-center font-medium tablet:px-1',
+                                        {
+                                            'sticky left-0 z-10 bg-[#161E2E] after:absolute after:-right-4 after:-top-0 after:z-10 after:h-full after:w-5 after:bg-gradient-to-r after:from-black-40 after:to-transparent tablet:relative tablet:left-auto tablet:z-auto tablet:bg-transparent tablet:after:hidden':
+                                                coreTableOptions.responsive &&
+                                                cellIndex === 0 &&
+                                                coreTableOptions?.stickyFirstColumn,
+                                            'py-2': !coreTableOptions.compact,
+                                            'py-1': coreTableOptions.compact,
+                                        }
+                                    )}
+                                >
+                                    {flexRender(
+                                        cell.column.columnDef.cell,
+                                        cell.getContext()
+                                    )}
+                                </td>
+                            ))}
+                        </tr>
+                    )
+                )}
             </tbody>
         </table>
     );
@@ -220,7 +235,7 @@ export const CoreTable = <T,>({
 
     return (
         <div
-            className={classNames({
+            className={clsx({
                 'overflow-x-auto overflow-y-visible text-white laptop:overflow-visible':
                     coreTableOptions.responsive,
             })}

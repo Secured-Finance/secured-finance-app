@@ -16,10 +16,12 @@ import {
     CollateralBook,
     useBalances,
     useBorrowableAmount,
+    useCurrencies,
     useLastPrices,
 } from 'src/hooks';
 import {
     selectLandingOrderForm,
+    selectLandingOrderInputs,
     setAmount,
     setCurrency,
     setMaturity,
@@ -29,6 +31,8 @@ import {
 import { RootState } from 'src/store/types';
 import { MaturityOptionList, OrderSideMap } from 'src/types';
 import {
+    ButtonEvents,
+    ButtonProperties,
     CurrencySymbol,
     ZERO_BI,
     amountFormatterFromBase,
@@ -36,10 +40,11 @@ import {
     formatLoanValue,
     generateWalletSourceInformation,
     getAmountValidation,
-    getCurrencyMapAsOptions,
     getTransformMaturityOption,
+    toOptions,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
+import { trackButtonEvent } from 'src/utils/events';
 import { useAccount } from 'wagmi';
 
 export const LendingCard = ({
@@ -56,12 +61,16 @@ export const LendingCard = ({
     const { currency, maturity, side, sourceAccount, amount } = useSelector(
         (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
     );
+    const { amountInput } = useSelector((state: RootState) =>
+        selectLandingOrderInputs(state.landingOrderForm)
+    );
 
     const dispatch = useDispatch();
     const { address } = useAccount();
 
     const { data: assetPriceMap } = useLastPrices();
-    const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
+    const { data: currencies } = useCurrencies();
+    const assetList = toOptions(currencies, currency);
 
     const balanceRecord = useBalances();
 
@@ -121,18 +130,9 @@ export const LendingCard = ({
 
     const handleCurrencyChange = useCallback(
         (v: CurrencySymbol) => {
-            let formatFrom = (x: bigint) => Number(x);
-            if (amountFormatterFromBase && amountFormatterFromBase[currency]) {
-                formatFrom = amountFormatterFromBase[currency];
-            }
-            let formatTo = (x: number) => BigInt(x);
-            if (amountFormatterToBase && amountFormatterToBase[v]) {
-                formatTo = amountFormatterToBase[v];
-            }
-            dispatch(setAmount(formatTo(formatFrom(amount))));
             dispatch(setCurrency(v));
         },
-        [amount, currency, dispatch]
+        [dispatch]
     );
 
     const handleWalletSourceChange = (source: WalletSource) => {
@@ -147,17 +147,12 @@ export const LendingCard = ({
                   );
         const inputAmount =
             amount > amountFormatterToBase[currency](available)
-                ? amountFormatterToBase[currency](available)
-                : amount;
-        dispatch(setAmount(inputAmount));
+                ? available
+                : amountFormatterFromBase[currency](amount);
+        dispatch(setAmount(inputAmount.toString()));
     };
 
     const { data: availableToBorrow } = useBorrowableAmount(address, currency);
-
-    const orderAmount =
-        amount > ZERO_BI
-            ? amountFormatterFromBase[currency](amount)
-            : undefined;
 
     return (
         <div className='w-[345px] flex-shrink-0 space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-7 shadow-deep'>
@@ -173,6 +168,11 @@ export const LendingCard = ({
                         )
                     );
                     dispatch(setSourceAccount(WalletSource.METAMASK));
+                    trackButtonEvent(
+                        ButtonEvents.ORDER_SIDE,
+                        ButtonProperties.ORDER_SIDE,
+                        option
+                    );
                 }}
                 variant='NavTab'
             />
@@ -197,9 +197,15 @@ export const LendingCard = ({
                             selected={selectedAsset}
                             priceList={assetPriceMap}
                             onAmountChange={v => dispatch(setAmount(v))}
-                            initialValue={orderAmount}
-                            amountFormatterMap={amountFormatterToBase}
-                            onAssetChange={handleCurrencyChange}
+                            initialValue={amountInput}
+                            onAssetChange={v => {
+                                handleCurrencyChange(v);
+                                trackButtonEvent(
+                                    ButtonEvents.CURRENCY_CHANGE,
+                                    ButtonProperties.CURRENCY,
+                                    v
+                                );
+                            }}
                         />
                         {side === OrderSide.LEND && (
                             <ErrorInfo
@@ -222,7 +228,14 @@ export const LendingCard = ({
                             ...selectedTerm,
                             value: selectedTerm.value.toString(),
                         }}
-                        onTermChange={v => dispatch(setMaturity(Number(v)))}
+                        onTermChange={v => {
+                            dispatch(setMaturity(Number(v)));
+                            trackButtonEvent(
+                                ButtonEvents.TERM_CHANGE,
+                                ButtonProperties.TERM,
+                                selectedTerm.label
+                            );
+                        }}
                         transformLabel={getTransformMaturityOption(
                             maturitiesOptionList.map(o => ({
                                 ...o,

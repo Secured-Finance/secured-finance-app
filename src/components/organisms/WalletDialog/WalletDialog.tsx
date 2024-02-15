@@ -10,7 +10,7 @@ import {
     SuccessPanel,
     WalletRadioGroup,
 } from 'src/components/molecules';
-import { useEtherscanUrl } from 'src/hooks';
+import { useBlockExplorerUrl } from 'src/hooks';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
 import { Wallet } from 'src/types';
@@ -20,6 +20,7 @@ import {
     InterfaceProperties,
     WalletConnectionResult,
     getSupportedChainIds,
+    getSupportedNetworks,
     writeWalletInStore,
 } from 'src/utils';
 import { associateWallet } from 'src/utils/events';
@@ -33,7 +34,11 @@ function hasMetaMask() {
 }
 
 export const WalletDialog = () => {
-    const etherscanUrl = useEtherscanUrl();
+    const chainId = useSelector((state: RootState) => state.blockchain.chainId);
+
+    const chainName = getSupportedNetworks().find(n => n.id === chainId)?.name;
+
+    const { blockExplorerUrl } = useBlockExplorerUrl();
     const options = useMemo(() => {
         const options = [
             {
@@ -66,6 +71,7 @@ export const WalletDialog = () => {
             onSettled(data, error) {
                 if (error) {
                     track(InterfaceEvents.CONNECT_WALLET_BUTTON_CLICKED, {
+                        [InterfaceProperties.CHAIN]: chainName,
                         [InterfaceProperties.WALLET_CONNECTION_RESULT]:
                             WalletConnectionResult.FAILED,
                         [InterfaceProperties.WALLET_CONNECTOR]:
@@ -74,13 +80,14 @@ export const WalletDialog = () => {
                     setErrorMessage(error.message);
                 } else {
                     track(InterfaceEvents.CONNECT_WALLET_BUTTON_CLICKED, {
+                        [InterfaceProperties.CHAIN]: chainName,
                         [InterfaceProperties.WALLET_CONNECTION_RESULT]:
                             WalletConnectionResult.SUCCEEDED,
                         [InterfaceProperties.WALLET_CONNECTOR]:
                             data?.connector?.name,
                         [InterfaceProperties.WALLET_ADDRESS]: data?.account,
                     });
-                    if (data?.account) associateWallet(data.account);
+                    if (data?.account) associateWallet(data.account, chainName);
                 }
             },
         });
@@ -197,7 +204,7 @@ export const WalletDialog = () => {
                                 AddressUtils.format(address ?? '', 8),
                             ],
                         ]}
-                        etherscanUrl={etherscanUrl}
+                        blockExplorerUrl={blockExplorerUrl}
                     />
                 )}
                 {isError && <FailurePanel errorMessage={errorMessage} />}

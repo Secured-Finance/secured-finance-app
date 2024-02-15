@@ -6,7 +6,7 @@ import {
     WalletIcon,
 } from '@heroicons/react/24/outline';
 import { Token } from '@secured-finance/sf-core';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import MetaMaskIcon from 'src/assets/img/metamask-fox.svg';
@@ -18,15 +18,19 @@ import {
 } from 'src/components/molecules';
 import { MyWalletWidget } from 'src/components/organisms';
 import { Page, Tooltip, TwoColumns } from 'src/components/templates';
-import { useEtherscanUrl, useHandleContractTransaction } from 'src/hooks';
+import {
+    useBlockExplorerUrl,
+    useCurrencies,
+    useHandleContractTransaction,
+} from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { RootState } from 'src/store/types';
 import {
     AddressUtils,
     CurrencySymbol,
-    getCurrencyMapAsList,
-    getCurrencyMapAsOptions,
+    currencyMap,
     toCurrency,
+    toOptions,
 } from 'src/utils';
 import { useAccount, useWalletClient } from 'wagmi';
 
@@ -48,7 +52,7 @@ const MenuAddToken = ({
                     {({ active }) => (
                         <button
                             onClick={onClick}
-                            className={classNames(
+                            className={clsx(
                                 'flex w-full flex-row items-center justify-start gap-2 rounded-md px-4 py-2 text-left text-white-60 focus:outline-none',
                                 {
                                     'bg-slateGray': active,
@@ -66,7 +70,7 @@ const MenuAddToken = ({
                             onClick={() => {
                                 navigator.clipboard.writeText(address);
                             }}
-                            className={classNames(
+                            className={clsx(
                                 'flex w-full flex-row items-center justify-start gap-2 rounded-md px-4 py-2 text-left text-white-60 focus:outline-none',
                                 {
                                     'bg-slateGray': active,
@@ -86,18 +90,16 @@ export const Faucet = () => {
     const chainError = useSelector(
         (state: RootState) => state.blockchain.chainError
     );
-    const etherscanUrl = useEtherscanUrl();
+
+    const { blockExplorerUrl } = useBlockExplorerUrl();
     const handleContractTransaction = useHandleContractTransaction();
     const { address: account } = useAccount();
     const { data: client } = useWalletClient();
     const sf = useSF();
 
-    const assetList = useMemo(
-        () =>
-            getCurrencyMapAsOptions().filter(
-                option => toCurrency(option.value).isToken
-            ),
-        []
+    const { data: currencies } = useCurrencies();
+    const assetList = toOptions(currencies, CurrencySymbol.WBTC).filter(
+        ccy => currencyMap[ccy.value].toCurrency().isToken
     );
 
     const [ccy, setCcy] = useState<CurrencySymbol | null>(null);
@@ -146,13 +148,13 @@ export const Faucet = () => {
             client.watchAsset({
                 type: 'ERC20',
                 options: {
-                    address: token.address,
+                    address: address,
                     symbol: token.symbol,
                     decimals: token.decimals,
                 },
             });
         },
-        [client]
+        [client, address]
     );
 
     useEffect(() => {
@@ -182,10 +184,8 @@ export const Faucet = () => {
                                     selected={assetList[0]}
                                     onChange={ccy => {
                                         if (
-                                            getCurrencyMapAsList()
-                                                .map(item =>
-                                                    item.symbol.toString()
-                                                )
+                                            assetList
+                                                .map(item => item.label)
                                                 .includes(ccy)
                                         ) {
                                             setCcy(ccy as CurrencySymbol);
@@ -224,7 +224,7 @@ export const Faucet = () => {
                                                         disabled={!client}
                                                     >
                                                         <WalletIcon
-                                                            className={classNames(
+                                                            className={clsx(
                                                                 'h-5 w-5 text-slateGray ',
                                                                 {
                                                                     'hover:text-planetaryPurple':
@@ -347,7 +347,7 @@ export const Faucet = () => {
                         ],
                     ]}
                     txHash={txHash}
-                    etherscanUrl={etherscanUrl}
+                    blockExplorerUrl={blockExplorerUrl}
                 />
             </Dialog>
         </Page>

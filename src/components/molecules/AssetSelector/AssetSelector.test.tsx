@@ -1,18 +1,10 @@
 import { composeStories } from '@storybook/react';
 import { fireEvent, render, screen } from 'src/test-utils.js';
-import { CurrencySymbol } from 'src/utils';
 import * as stories from './AssetSelector.stories';
 
 const { Default } = composeStories(stories);
 
 describe('AssetSelector Component', () => {
-    const amountFormatterMap = {
-        [CurrencySymbol.WBTC]: (amount: number) => BigInt(amount * 100),
-        [CurrencySymbol.ETH]: (amount: number) => BigInt(amount * 1000),
-        [CurrencySymbol.WFIL]: (amount: number) => BigInt(amount * 10000),
-        [CurrencySymbol.USDC]: (amount: number) => BigInt(amount * 100000),
-    };
-
     it('should render a AssetSelector', () => {
         render(<Default />);
     });
@@ -41,24 +33,19 @@ describe('AssetSelector Component', () => {
         render(<Default onAmountChange={onAmountChange} />);
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '1' } });
-        expect(onAmountChange).toHaveBeenCalledWith(BigInt(1));
+        expect(onAmountChange).toHaveBeenCalledWith('1');
         fireEvent.change(input, { target: { value: '10' } });
-        expect(onAmountChange).toHaveBeenLastCalledWith(BigInt(10));
+        expect(onAmountChange).toHaveBeenLastCalledWith('10');
     });
 
     it('should call onAmountChange function with the amount converted to BigInt with the function from amountFormatterMap', () => {
         const onAmountChange = jest.fn();
-        render(
-            <Default
-                onAmountChange={onAmountChange}
-                amountFormatterMap={amountFormatterMap}
-            />
-        );
+        render(<Default onAmountChange={onAmountChange} />);
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '1' } });
-        expect(onAmountChange).toHaveBeenCalledWith(BigInt(100));
+        expect(onAmountChange).toHaveBeenCalledWith('1');
         fireEvent.change(input, { target: { value: '10' } });
-        expect(onAmountChange).toHaveBeenLastCalledWith(BigInt(1000));
+        expect(onAmountChange).toHaveBeenLastCalledWith('10');
     });
 
     it('should not call onAmountChange function when the asset is changed', () => {
@@ -88,7 +75,7 @@ describe('AssetSelector Component', () => {
     });
 
     it('should reduce the size of the text when typing a big number', () => {
-        render(<Default amountFormatterMap={amountFormatterMap} />);
+        render(<Default />);
         const input = screen.getByRole('textbox');
         expect(input).toHaveClass('text-md');
         fireEvent.change(input, { target: { value: '100000000' } });

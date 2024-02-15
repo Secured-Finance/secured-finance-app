@@ -47,6 +47,7 @@ export const OrderDetails = ({
     showWarning,
     isCurrencyDelisted,
     isRemoveOrder = false,
+    showZCUsage = true,
 }: {
     amount: Amount;
     maturity: Maturity;
@@ -57,6 +58,7 @@ export const OrderDetails = ({
     showWarning?: boolean;
     isCurrencyDelisted?: boolean;
     isRemoveOrder?: boolean;
+    showZCUsage?: boolean;
 }) => {
     const { data: orderFee = 0 } = useOrderFee(amount.currency);
 
@@ -143,9 +145,11 @@ export const OrderDetails = ({
                 <>
                     <CollateralSimulationSection
                         collateral={collateral}
+                        maturity={maturity}
                         tradeAmount={amount}
                         assetPrice={assetPrice}
                         side={side}
+                        showZCUsage={showZCUsage}
                     />
                     <SectionWithItems
                         itemList={[

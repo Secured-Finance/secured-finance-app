@@ -1,25 +1,31 @@
 import { MultiCurveChart } from 'src/components/organisms/MultiCurveChart';
-import { baseContracts, useLendingMarkets } from 'src/hooks';
-import { CurrencySymbol, getCurrencyMapAsList, Rate } from 'src/utils';
+import { baseContracts, useCurrencies, useLendingMarkets } from 'src/hooks';
+import { CurrencySymbol, Rate } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 
 export const GlobalItayoseMultiCurveChart = () => {
     const curves: Record<string, Rate[]> = {};
     const { data: lendingContracts = baseContracts } = useLendingMarkets();
+    const { data: currencies } = useCurrencies();
 
-    getCurrencyMapAsList().forEach(ccy => {
-        Object.keys(lendingContracts[ccy.symbol]).forEach(maturity => {
-            const contract = lendingContracts[ccy.symbol][Number(maturity)];
+    const defaultCurrency =
+        currencies && currencies.length > 0
+            ? currencies[0]
+            : CurrencySymbol.WBTC;
+
+    currencies?.forEach(ccy => {
+        Object.keys(lendingContracts[ccy]).forEach(maturity => {
+            const contract = lendingContracts[ccy][Number(maturity)];
             if (contract.isItayosePeriod || contract.isPreOrderPeriod) {
-                if (ccy.symbol in curves) {
-                    curves[ccy.symbol].push(
+                if (ccy in curves) {
+                    curves[ccy].push(
                         LoanValue.fromPrice(
                             contract.openingUnitPrice,
                             contract.maturity
                         ).apr
                     );
                 } else {
-                    curves[ccy.symbol] = [
+                    curves[ccy] = [
                         LoanValue.fromPrice(
                             contract.openingUnitPrice,
                             contract.maturity
@@ -35,7 +41,7 @@ export const GlobalItayoseMultiCurveChart = () => {
             <MultiCurveChart
                 title='Yield Curve'
                 curves={curves}
-                labels={Object.values(lendingContracts[CurrencySymbol.WFIL])
+                labels={Object.values(lendingContracts[defaultCurrency])
                     .filter(o => o.isPreOrderPeriod || o.isItayosePeriod)
                     .map(o => o.name)}
                 isGlobalItayose={true}

@@ -1,6 +1,6 @@
 import { UseQueryResult } from '@tanstack/react-query';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { renderHook } from 'src/test-utils';
+import { renderHook, waitFor } from 'src/test-utils';
 import { CurrencySymbol } from 'src/utils';
 import { useERC20Balance } from './useERC20Balance';
 
@@ -15,9 +15,7 @@ const balanceArray = [
 
 describe('useERC20Balance', () => {
     it('should fetch token balance', async () => {
-        const { result, waitForNextUpdate } = renderHook(() =>
-            useERC20Balance('0x1')
-        );
+        const { result } = renderHook(() => useERC20Balance('0x1'));
 
         const queries = result.current as UseQueryResult<unknown>[];
         queries.forEach(query => {
@@ -25,11 +23,12 @@ describe('useERC20Balance', () => {
             expect(query.isLoading).toEqual(true);
         });
 
-        await waitForNextUpdate();
         const updatedQueries = result.current as UseQueryResult<unknown>[];
-        updatedQueries.forEach((query, index) => {
-            expect(query.data).toEqual(balanceArray[index]);
-            expect(query.isLoading).toEqual(false);
+        updatedQueries.forEach(async (query, index) => {
+            await waitFor(() => {
+                expect(query.data).toEqual(balanceArray[index]);
+                expect(query.isLoading).toEqual(false);
+            });
         });
     });
 });

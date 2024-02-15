@@ -6,6 +6,7 @@ const initialState: Blockchain = {
     chainId: 0,
     chainError: true,
     lastActionTimestamp: 0,
+    testnetEnabled: false,
 };
 
 const blockchainSlice = createSlice({
@@ -23,6 +24,9 @@ const blockchainSlice = createSlice({
         },
         updateLastActionTimestamp(state) {
             state.lastActionTimestamp = Date.now();
+        },
+        updateTestnetEnabled(state, action: PayloadAction<boolean>) {
+            state.testnetEnabled = action.payload;
         },
     },
 });

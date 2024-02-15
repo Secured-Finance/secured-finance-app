@@ -9,6 +9,7 @@ export default {
     component: CollateralOrganism,
     args: {
         collateralBook: emptyCollateralBook,
+        netAssetValue: 0,
     },
     decorators: [withWalletProvider],
 } as Meta<typeof CollateralOrganism>;
@@ -26,4 +27,5 @@ ConnectedToWallet.parameters = {
 };
 ConnectedToWallet.args = {
     collateralBook: collateralBook37,
+    netAssetValue: 12700.34,
 };

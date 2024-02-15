@@ -12,7 +12,7 @@ import {
 import { OrderDetails } from 'src/components/organisms';
 import {
     CollateralBook,
-    useEtherscanUrl,
+    useBlockExplorerUrl,
     useHandleContractTransaction,
     useIsUnderCollateralThreshold,
 } from 'src/hooks';
@@ -25,6 +25,11 @@ import {
     formatAmount,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
+import {
+    ButtonEvents,
+    ButtonProperties,
+    trackButtonEvent,
+} from 'src/utils/events';
 import { useAccount } from 'wagmi';
 
 enum Step {
@@ -128,7 +133,7 @@ export const PlaceOrder = ({
         }
     };
 
-    const etherscanUrl = useEtherscanUrl();
+    const { blockExplorerUrl } = useBlockExplorerUrl();
     const handleContractTransaction = useHandleContractTransaction();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [txHash, setTxHash] = useState<string | undefined>();
@@ -149,8 +154,15 @@ export const PlaceOrder = ({
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
+        if (state.currentStep === Step.orderConfirm) {
+            trackButtonEvent(
+                ButtonEvents.CANCEL_BUTTON,
+                ButtonProperties.CANCEL_ACTION,
+                'Cancel Place Order'
+            );
+        }
         onClose();
-    }, [onClose]);
+    }, [onClose, state.currentStep]);
 
     useEffect(() => {
         if (state.currentStep === Step.orderConfirm) {
@@ -304,7 +316,7 @@ export const PlaceOrder = ({
                                     ],
                                 ]}
                                 txHash={txHash}
-                                etherscanUrl={etherscanUrl}
+                                blockExplorerUrl={blockExplorerUrl}
                             />
                         );
                     case Step.error:

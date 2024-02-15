@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 interface ButtonSelectProps {
     options: { label: string; value: string }[];
@@ -13,7 +13,7 @@ export function RadioButton({ options, value, onChange }: ButtonSelectProps) {
             {options.map(option => (
                 <button
                     key={option.value}
-                    className={classNames(
+                    className={clsx(
                         'typography-caption flex cursor-pointer items-center justify-center rounded-full px-4 py-1 text-sm transition-colors duration-300 ease-in-out',
                         'border border-transparent',
                         {

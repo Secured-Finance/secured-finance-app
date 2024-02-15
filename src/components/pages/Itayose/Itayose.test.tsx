@@ -48,14 +48,12 @@ describe('Itayose Component', () => {
         fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
             target: { value: '1' },
         });
-        expect(store.getState().landingOrderForm.amount).toEqual('100000000');
+        expect(store.getState().landingOrderForm.amount).toEqual('1');
         await waitFor(() => {
             fireEvent.click(screen.getByRole('button', { name: 'WBTC' }));
             fireEvent.click(screen.getByRole('menuitem', { name: 'WFIL' }));
         });
-        expect(store.getState().landingOrderForm.amount).toEqual(
-            '1000000000000000000'
-        );
+        expect(store.getState().landingOrderForm.amount).toEqual('1');
         expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
             '1'
         );
@@ -85,6 +83,7 @@ describe('Itayose Component', () => {
             ).toHaveBeenLastCalledWith(
                 expect.anything(),
                 expect.anything(),
+                expect.anything(),
                 13
             );
             await waitFor(() =>
@@ -100,6 +99,7 @@ describe('Itayose Component', () => {
                 ).toHaveBeenLastCalledWith(
                     expect.anything(),
                     expect.anything(),
+                    expect.anything(),
                     26
                 )
             );
@@ -112,6 +112,7 @@ describe('Itayose Component', () => {
             ).toHaveBeenLastCalledWith(
                 expect.anything(),
                 expect.anything(),
+                expect.anything(),
                 13
             );
             await waitFor(() => {
@@ -122,6 +123,7 @@ describe('Itayose Component', () => {
                 expect(
                     mockSecuredFinance.getLendOrderBook
                 ).toHaveBeenLastCalledWith(
+                    expect.anything(),
                     expect.anything(),
                     expect.anything(),
                     1300

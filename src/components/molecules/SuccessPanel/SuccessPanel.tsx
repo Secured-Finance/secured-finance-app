@@ -1,5 +1,5 @@
 import { ArrowUpRightIcon } from '@heroicons/react/24/outline';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import Check from 'src/assets/icons/check-mark.svg';
 import { SectionWithItems } from 'src/components/atoms';
 import { Tooltip } from 'src/components/templates';
@@ -7,16 +7,18 @@ import { Tooltip } from 'src/components/templates';
 export const SuccessPanel = ({
     itemList,
     txHash,
-    etherscanUrl,
+    blockExplorerUrl,
 }: {
     itemList: [string, string][];
     txHash?: string;
-    etherscanUrl?: string;
+    blockExplorerUrl?: string;
 }) => {
-    const etherscanLink = etherscanUrl ? `${etherscanUrl}/tx/${txHash}` : '';
+    const blockExplorerLink = blockExplorerUrl
+        ? `${blockExplorerUrl}/tx/${txHash}`
+        : '';
 
     const handleButtonClick = () => {
-        window.open(etherscanLink, '_blank');
+        window.open(blockExplorerLink, '_blank');
     };
 
     const items: [React.ReactNode, React.ReactNode][] = [];
@@ -53,13 +55,10 @@ export const SuccessPanel = ({
 
 const ValueComponent = ({ value, index }: { value: string; index: number }) => (
     <span
-        className={classNames(
-            'typography-caption whitespace-nowrap leading-6',
-            {
-                'text-[#58BD7D]': index === 0,
-                'text-neutral-8': index !== 0,
-            }
-        )}
+        className={clsx('typography-caption whitespace-nowrap leading-6', {
+            'text-[#58BD7D]': index === 0,
+            'text-neutral-8': index !== 0,
+        })}
     >
         {value}
     </span>

@@ -8,7 +8,7 @@ import {
 } from 'src/components/molecules';
 import { CollateralInput } from 'src/components/organisms';
 import {
-    useEtherscanUrl,
+    useBlockExplorerUrl,
     useHandleContractTransaction,
     useLastPrices,
 } from 'src/hooks';
@@ -17,12 +17,17 @@ import {
     AddressUtils,
     CollateralInfo,
     CurrencySymbol,
-    ZERO_BI,
     amountFormatterFromBase,
     amountFormatterToBase,
     formatAmount,
 } from 'src/utils';
-import { CollateralEvents, trackCollateralEvent } from 'src/utils/events';
+import {
+    ButtonEvents,
+    ButtonProperties,
+    CollateralEvents,
+    trackButtonEvent,
+    trackCollateralEvent,
+} from 'src/utils/events';
 import { useAccount } from 'wagmi';
 
 enum Step {
@@ -101,41 +106,51 @@ export const WithdrawCollateral = ({
     selected,
     source,
 }: {
-    collateralList: Record<CurrencySymbol, CollateralInfo>;
+    collateralList: Partial<Record<CurrencySymbol, CollateralInfo>>;
     selected?: CurrencySymbol;
 } & DialogState) => {
-    const etherscanUrl = useEtherscanUrl();
+    const { blockExplorerUrl } = useBlockExplorerUrl();
     const handleContractTransaction = useHandleContractTransaction();
     const { address } = useAccount();
     const [asset, setAsset] = useState(CurrencySymbol.ETH);
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
-    const [collateral, setCollateral] = useState<bigint>();
+    const [collateral, setCollateral] = useState<string>();
     const [txHash, setTxHash] = useState<string | undefined>();
     const [errorMessage, setErrorMessage] = useState(
         'Your withdrawal transaction has failed.'
+    );
+    const collateralBigInt = amountFormatterToBase[asset](
+        Number(collateral ?? '')
     );
 
     const { data: priceList } = useLastPrices();
     const { onWithdrawCollateral } = useWithdrawCollateral(
         asset,
-        collateral ?? ZERO_BI
+        collateralBigInt
     );
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
+        if (state.currentStep === Step.withdrawCollateral) {
+            trackButtonEvent(
+                ButtonEvents.CANCEL_BUTTON,
+                ButtonProperties.CANCEL_ACTION,
+                'Cancel Withdraw Collateral'
+            );
+        }
         onClose();
-    }, [onClose]);
+    }, [onClose, state.currentStep]);
 
     const isDisabled = useCallback(() => {
         return (
             state.currentStep === Step.withdrawCollateral &&
-            (!collateral ||
-                collateral >
+            (!collateralBigInt ||
+                collateralBigInt >
                     amountFormatterToBase[asset](
                         collateralList[asset]?.available ?? 0
                     ))
         );
-    }, [collateralList, asset, collateral, state.currentStep]);
+    }, [state.currentStep, collateralBigInt, asset, collateralList]);
 
     const handleWithdrawCollateral = useCallback(async () => {
         try {
@@ -147,7 +162,7 @@ export const WithdrawCollateral = ({
                 trackCollateralEvent(
                     CollateralEvents.WITHDRAW_COLLATERAL,
                     asset,
-                    collateral ?? ZERO_BI,
+                    collateralBigInt,
                     source ?? ''
                 );
                 setTxHash(tx);
@@ -161,7 +176,7 @@ export const WithdrawCollateral = ({
         }
     }, [
         asset,
-        collateral,
+        collateralBigInt,
         handleContractTransaction,
         onWithdrawCollateral,
         source,
@@ -221,19 +236,13 @@ export const WithdrawCollateral = ({
                                 <CollateralInput
                                     price={priceList[asset]}
                                     asset={asset}
-                                    onAmountChange={(v: bigint | undefined) =>
+                                    onAmountChange={(v: string | undefined) =>
                                         setCollateral(v)
                                     }
                                     availableAmount={
-                                        collateralList[asset]?.available
+                                        collateralList[asset]?.available ?? 0
                                     }
-                                    amount={
-                                        collateral
-                                            ? amountFormatterFromBase[asset](
-                                                  collateral
-                                              )
-                                            : undefined
-                                    }
+                                    amount={collateral}
                                 />
                                 <div className='typography-caption-2 h-fit rounded-xl border border-red px-3 py-2 text-slateGray'>
                                     Please note that withdrawal will impact the
@@ -263,13 +272,13 @@ export const WithdrawCollateral = ({
                                         'Amount',
                                         `${formatAmount(
                                             amountFormatterFromBase[asset](
-                                                collateral ?? ZERO_BI
+                                                collateralBigInt
                                             )
                                         )} ${asset}`,
                                     ],
                                 ]}
                                 txHash={txHash}
-                                etherscanUrl={etherscanUrl}
+                                blockExplorerUrl={blockExplorerUrl}
                             />
                         );
                     case Step.error:

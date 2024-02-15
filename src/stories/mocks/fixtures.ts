@@ -17,7 +17,7 @@ import {
     TradeHistory,
     TransactionList,
 } from 'src/types';
-import { CurrencySymbol, Rate } from 'src/utils';
+import { CurrencySymbol, Rate, createCurrencyMap } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
 export const wfilBytes32 = toBytes32('WFIL'); // 0x5746494c0000000000000000000000000000000000000000000000000000000000
@@ -25,12 +25,13 @@ export const ethBytes32 = toBytes32('ETH'); // 0x4554480000000000000000000000000
 export const wbtcBytes32 = toBytes32('WBTC'); // 0x5742544300000000000000000000000000000000000000000000000000000000
 export const usdcBytes32 = toBytes32('USDC'); // 0x5553444300000000000000000000000000000000000000000000000000000000
 
-export const assetPriceMap = {
-    WFIL: 6.0,
-    ETH: 2000.34,
-    USDC: 1.0,
-    WBTC: 50000.0,
-};
+export const assetPriceMap = createCurrencyMap<number>(0);
+assetPriceMap.WFIL = 6.0;
+assetPriceMap.ETH = 2000.34;
+assetPriceMap.USDC = 1.0;
+assetPriceMap.WBTC = 50000.0;
+assetPriceMap.aUSDC = 1.0;
+assetPriceMap.axlFIL = 6.0;
 
 export const preloadedEthBalance = {
     wallet: {
@@ -52,7 +53,8 @@ export const dec24Fixture = new Maturity(1733011200);
 
 const openingDateTimestamp = 1638316800;
 const openingDate = BigInt(openingDateTimestamp);
-const preOpenDateTimestamp = 1637712000;
+const preOpeningDateTimestamp = 1637712000;
+const preOpeningDate = BigInt(preOpeningDateTimestamp);
 
 export const maturitiesMockFromContract = (ccy: string) => [
     {
@@ -72,6 +74,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         maxLendUnitPrice: BigInt('9700'),
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
+        preOpeningDate: preOpeningDate,
     },
     {
         name: 'MAR23',
@@ -90,6 +93,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         maxLendUnitPrice: BigInt('9698'),
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
+        preOpeningDate: preOpeningDate,
     },
     {
         name: 'JUN23',
@@ -108,6 +112,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         maxLendUnitPrice: BigInt('9692'),
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
+        preOpeningDate: preOpeningDate,
     },
     {
         name: 'SEP23',
@@ -126,6 +131,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         maxLendUnitPrice: BigInt('9687'),
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
+        preOpeningDate: preOpeningDate,
     },
     {
         name: 'DEC23',
@@ -144,6 +150,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         maxLendUnitPrice: BigInt('9666'),
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
+        preOpeningDate: preOpeningDate,
     },
     {
         name: 'MAR24',
@@ -162,6 +169,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         maxLendUnitPrice: BigInt('9656'),
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
+        preOpeningDate: preOpeningDate,
     },
     {
         name: 'JUN24',
@@ -180,6 +188,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         maxLendUnitPrice: BigInt('9640'),
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
+        preOpeningDate: preOpeningDate,
     },
     {
         name: 'SEP24',
@@ -198,6 +207,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         maxLendUnitPrice: BigInt('9630'),
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
+        preOpeningDate: preOpeningDate,
     },
     {
         name: 'DEC24',
@@ -216,6 +226,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         maxLendUnitPrice: BigInt('9630'),
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
+        preOpeningDate: BigInt(1684972800),
     },
 ];
 
@@ -226,7 +237,7 @@ export const maturities = {
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
         marketUnitPrice: 9801,
-        preOpenDate: preOpenDateTimestamp,
+        preOpeningDate: preOpeningDateTimestamp,
         openingUnitPrice: 9710,
         isReady: true,
         isOpened: true,
@@ -245,7 +256,7 @@ export const maturities = {
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
         marketUnitPrice: 9701,
-        preOpenDate: preOpenDateTimestamp,
+        preOpeningDate: preOpeningDateTimestamp,
         openingUnitPrice: 9710,
         isReady: true,
         isOpened: true,
@@ -264,7 +275,7 @@ export const maturities = {
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
         marketUnitPrice: 9601,
-        preOpenDate: preOpenDateTimestamp,
+        preOpeningDate: preOpeningDateTimestamp,
         openingUnitPrice: 9710,
         isReady: true,
         isOpened: true,
@@ -283,7 +294,7 @@ export const maturities = {
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
         marketUnitPrice: 9501,
-        preOpenDate: preOpenDateTimestamp,
+        preOpeningDate: preOpeningDateTimestamp,
         openingUnitPrice: 9710,
         isReady: true,
         isOpened: true,
@@ -302,7 +313,7 @@ export const maturities = {
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
         marketUnitPrice: 9401,
-        preOpenDate: preOpenDateTimestamp,
+        preOpeningDate: preOpeningDateTimestamp,
         openingUnitPrice: 9710,
         isReady: true,
         isOpened: true,
@@ -321,7 +332,7 @@ export const maturities = {
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
         marketUnitPrice: 9301,
-        preOpenDate: preOpenDateTimestamp,
+        preOpeningDate: preOpeningDateTimestamp,
         openingUnitPrice: 9710,
         isReady: true,
         isOpened: true,
@@ -340,7 +351,7 @@ export const maturities = {
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
         marketUnitPrice: 9201,
-        preOpenDate: preOpenDateTimestamp,
+        preOpeningDate: preOpeningDateTimestamp,
         openingUnitPrice: 9710,
         isReady: true,
         isOpened: true,
@@ -359,7 +370,7 @@ export const maturities = {
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
         marketUnitPrice: 9101,
-        preOpenDate: preOpenDateTimestamp,
+        preOpeningDate: preOpeningDateTimestamp,
         openingUnitPrice: 9710,
         isReady: true,
         isOpened: true,
@@ -378,7 +389,7 @@ export const maturities = {
         isActive: false,
         utcOpeningDate: 1685577600,
         marketUnitPrice: 9001,
-        preOpenDate: 1684972800,
+        preOpeningDate: 1684972800,
         openingUnitPrice: 9710,
         isReady: false,
         isOpened: false,
@@ -413,7 +424,7 @@ export const walletSourceList: WalletSourceOption[] = [
     },
     {
         source: WalletSource.SF_VAULT,
-        available: 4000,
+        available: 0.000492,
         asset: CurrencySymbol.WBTC,
         iconSVG: SFLogoSmall,
     },
@@ -886,6 +897,7 @@ export const collateralBook80: CollateralBook = {
         [CurrencySymbol.ETH]: BigInt(100000),
         [CurrencySymbol.WBTC]: BigInt(100000),
     },
+    totalPresentValue: 2500,
 };
 
 export const collateralBook37: CollateralBook = {
@@ -907,6 +919,7 @@ export const collateralBook37: CollateralBook = {
         [CurrencySymbol.ETH]: BigInt(100000),
         [CurrencySymbol.WBTC]: BigInt(100000),
     },
+    totalPresentValue: 2500,
 };
 
 export const emptyUSDCollateral: CollateralBook = {
@@ -928,6 +941,7 @@ export const emptyUSDCollateral: CollateralBook = {
         [CurrencySymbol.ETH]: BigInt(0),
         [CurrencySymbol.WBTC]: BigInt(0),
     },
+    totalPresentValue: 0,
 };
 
 function generateDailyVolumes(days: number) {

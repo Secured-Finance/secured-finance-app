@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { RadioButton } from 'src/components/atoms';
 import {
     HistoricalChart,
@@ -30,7 +30,7 @@ export const HistoricalWidget = ({
 }: THistoricalWidgetProps) => {
     return (
         <div
-            className={classNames({
+            className={clsx({
                 className,
             })}
         >

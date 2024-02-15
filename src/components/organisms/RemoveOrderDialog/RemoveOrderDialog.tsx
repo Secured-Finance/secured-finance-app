@@ -11,14 +11,15 @@ import {
 import { OrderDetails } from 'src/components/organisms';
 import {
     emptyCollateralBook,
-    useEtherscanUrl,
+    useBlockExplorerUrl,
     useHandleContractTransaction,
     useLastPrices,
     useOrders,
 } from 'src/hooks';
 import { setLastMessage } from 'src/store/lastError';
-import { AddressUtils } from 'src/utils';
+import { AddressUtils, ButtonEvents, ButtonProperties } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
+import { trackButtonEvent } from 'src/utils/events';
 
 enum Step {
     remove = 1,
@@ -110,7 +111,7 @@ export const RemoveOrderDialog = ({
         }
     };
 
-    const etherscanUrl = useEtherscanUrl();
+    const { blockExplorerUrl } = useBlockExplorerUrl();
     const handleContractTransaction = useHandleContractTransaction();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [txHash, setTxHash] = useState<string | undefined>();
@@ -137,8 +138,15 @@ export const RemoveOrderDialog = ({
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
+        if (state.currentStep === Step.remove) {
+            trackButtonEvent(
+                ButtonEvents.CANCEL_BUTTON,
+                ButtonProperties.CANCEL_ACTION,
+                'Cancel Remove Order'
+            );
+        }
         onClose();
-    }, [onClose]);
+    }, [onClose, state.currentStep]);
 
     const handleCancelOrder = useCallback(async () => {
         try {
@@ -217,7 +225,7 @@ export const RemoveOrderDialog = ({
                             ],
                         ]}
                         txHash={txHash}
-                        etherscanUrl={etherscanUrl}
+                        blockExplorerUrl={blockExplorerUrl}
                     />
                 );
             case Step.error:

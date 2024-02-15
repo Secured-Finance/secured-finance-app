@@ -1,16 +1,16 @@
-import ErrorPage from 'next/error';
 import Router from 'next/router';
 import { Itayose as ItayoseComponent } from 'src/components/pages';
 import {
     baseContracts,
+    useCurrencies,
     useIsMarketTerminated,
     useLendingMarkets,
 } from 'src/hooks';
-import { getCurrencyMapAsList } from 'src/utils';
 
 const Itayose = () => {
     const { data: isTerminated, isLoading: isLoadingMarketTerminated } =
         useIsMarketTerminated();
+    const { data: currencies = [] } = useCurrencies();
 
     const {
         data: lendingMarkets = baseContracts,
@@ -26,16 +26,17 @@ const Itayose = () => {
         return null;
     }
 
-    for (const ccy of getCurrencyMapAsList()) {
-        for (const maturity of Object.keys(lendingMarkets[ccy.symbol])) {
-            const contract = lendingMarkets[ccy.symbol][Number(maturity)];
+    for (const ccy of currencies) {
+        for (const maturity of Object.keys(lendingMarkets[ccy])) {
+            const contract = lendingMarkets[ccy][Number(maturity)];
             if (contract.isItayosePeriod || contract.isPreOrderPeriod) {
                 return <ItayoseComponent />;
             }
         }
     }
 
-    return <ErrorPage statusCode={404} />;
+    Router.push('/');
+    return null;
 };
 
 export default Itayose;

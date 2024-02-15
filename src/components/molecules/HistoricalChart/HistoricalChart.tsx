@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import {
     CandlestickData,
     HistogramData,
@@ -258,9 +258,9 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
         'absolute left-4 top-4 z-50 flex gap-4 text-2xs text-neutral-4 font-medium leading-4';
 
     return (
-        <div className={classNames(className)}>
+        <div className={clsx(className)}>
             <div ref={chartContainerRef} className='relative h-full w-full'>
-                <div className={classNames(titleOfChartClass, 'relative mb-2')}>
+                <div className={clsx(titleOfChartClass, 'relative mb-2')}>
                     <div>{hoverTime}</div>
                     {Object.entries(legendData)
                         .filter(([key, _]) =>
@@ -278,9 +278,9 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
             </div>
             <div
                 ref={secondContianerRef}
-                className={classNames(className, 'relative h-full w-full')}
+                className={clsx(className, 'relative h-full w-full')}
             >
-                <div className={classNames(titleOfChartClass, '-top-4')}>
+                <div className={clsx(titleOfChartClass, '-top-4')}>
                     <div>
                         <span>Vol(BTC):</span>
                         <span className='ml-2 text-[#FF9FAE]'>

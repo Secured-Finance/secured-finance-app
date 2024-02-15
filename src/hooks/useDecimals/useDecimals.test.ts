@@ -1,5 +1,5 @@
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { renderHook } from 'src/test-utils';
+import { renderHook, waitFor } from 'src/test-utils';
 import { CurrencySymbol } from 'src/utils';
 import { useDecimals } from './useDecimals';
 
@@ -8,15 +8,15 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
 describe('useDecimals', () => {
     it('should return the decimals of each currency', async () => {
-        const { result, waitForNextUpdate } = renderHook(() => useDecimals());
+        const { result } = renderHook(() => useDecimals());
 
-        await waitForNextUpdate();
-
-        expect(result.current.data).toEqual({
-            [CurrencySymbol.ETH]: 8,
-            [CurrencySymbol.WFIL]: 26,
-            [CurrencySymbol.USDC]: 8,
-            [CurrencySymbol.WBTC]: 8,
-        });
+        await waitFor(() =>
+            expect(result.current.data).toEqual({
+                [CurrencySymbol.ETH]: 8,
+                [CurrencySymbol.WFIL]: 26,
+                [CurrencySymbol.USDC]: 8,
+                [CurrencySymbol.WBTC]: 8,
+            })
+        );
     });
 });

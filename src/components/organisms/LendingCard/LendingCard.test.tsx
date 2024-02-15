@@ -1,10 +1,16 @@
+import * as analytics from '@amplitude/analytics-browser';
 import { formatDate } from '@secured-finance/sf-core';
 import { composeStories } from '@storybook/react';
 import { mar23Fixture } from 'src/stories/mocks/fixtures';
 import { initialStore } from 'src/stories/mocks/mockStore';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
-import { CurrencySymbol, currencyMap } from 'src/utils';
+import {
+    ButtonEvents,
+    ButtonProperties,
+    CurrencySymbol,
+    currencyMap,
+} from 'src/utils';
 import timemachine from 'timemachine';
 import * as stories from './LendingCard.stories';
 
@@ -28,18 +34,23 @@ describe('LendingCard Component', () => {
         wallet: {
             address: '0x1',
         },
+        blockchain: {
+            chainId: 11155111,
+            chainError: false,
+        },
     };
 
     const selectEthereum = async () => {
-        await waitFor(() => {
+        await waitFor(() =>
             fireEvent.click(
                 screen.getByRole('button', {
                     name: DEFAULT_CHOICE.symbol,
                 })
-            );
-            fireEvent.click(screen.getByRole('menuitem', { name: 'ETH' }));
-        });
+            )
+        );
+        fireEvent.click(screen.getByRole('menuitem', { name: 'ETH' }));
     };
+
     it('should render a LendingCard', async () => {
         await waitFor(() => render(<Default />));
     });
@@ -65,14 +76,14 @@ describe('LendingCard Component', () => {
         await waitFor(() => {
             fireEvent.click(screen.getByTestId('place-order-button'));
         });
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(await screen.findByRole('dialog')).toBeInTheDocument();
         expect(screen.getByText('Confirm Borrow')).toBeInTheDocument();
         const button = screen.getByTestId('dialog-action-button');
         expect(button).toHaveTextContent('OK');
     });
 
     it('should let the user choose between ETH, Filecoin and USDC when clicking on the asset selector', async () => {
-        render(<Default />);
+        await waitFor(() => render(<Default />, { preloadedState }));
 
         expect(
             await screen.findByText(DEFAULT_CHOICE.symbol)
@@ -96,10 +107,14 @@ describe('LendingCard Component', () => {
         ).toBeInTheDocument();
     });
 
-    it('should switch to Ethereum when selecting it from the option', async () => {
+    it('should switch to Ethereum and emit CURRENCY_CHANGE event when selecting it from the option', async () => {
+        const track = jest.spyOn(analytics, 'track');
         await waitFor(() => render(<Default />));
         await selectEthereum();
         expect(screen.getByText('ETH')).toBeInTheDocument();
+        expect(track).toHaveBeenCalledWith(ButtonEvents.CURRENCY_CHANGE, {
+            [ButtonProperties.CURRENCY]: 'ETH',
+        });
     });
 
     it('should display the amount inputted by the user in USD', async () => {
@@ -107,10 +122,11 @@ describe('LendingCard Component', () => {
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '10' } });
 
-        expect(screen.getByText(`~ $${6 * 10}`)).toBeInTheDocument();
+        expect(await screen.findByText(`~ $${6 * 10}`)).toBeInTheDocument();
     });
 
-    it('should transform the contract label to a date', async () => {
+    it('should transform the contract label to a date and emit TERM_CHANGE event when term is changed', async () => {
+        const track = jest.spyOn(analytics, 'track');
         await waitFor(() => render(<Default />));
         fireEvent.click(
             screen.getByRole('button', {
@@ -119,6 +135,9 @@ describe('LendingCard Component', () => {
         );
         fireEvent.click(screen.getByText('MAR23'));
         const dateWithTimezone = formatDate(mar23Fixture.toNumber());
+        expect(track).toHaveBeenCalledWith(ButtonEvents.TERM_CHANGE, {
+            [ButtonProperties.TERM]: 'MAR23',
+        });
         expect(screen.getByText(dateWithTimezone)).toBeInTheDocument();
     });
 
@@ -128,15 +147,15 @@ describe('LendingCard Component', () => {
         fireEvent.change(input, { target: { value: '10' } });
         await waitFor(() => {
             fireEvent.click(screen.getByTestId('place-order-button'));
+            expect(screen.getByText('Confirm Borrow')).toBeInTheDocument();
         });
-        expect(screen.getByText('Confirm Borrow')).toBeInTheDocument();
     });
 
     it('should support orders with decimal amounts', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '10.5' } });
-        expect(screen.getByText(`~ $${6 * 10.5}`)).toBeInTheDocument();
+        expect(await screen.findByText(`~ $${6 * 10.5}`)).toBeInTheDocument();
     });
 
     it('should render a disabled button if amount is undefined or zero', async () => {
@@ -214,5 +233,16 @@ describe('LendingCard Component', () => {
         expect(
             screen.queryByText('Insufficient amount in source')
         ).toBeInTheDocument();
+    });
+
+    it('should track ORDER_SIDE event when order side is changes', async () => {
+        const track = jest.spyOn(analytics, 'track');
+        await waitFor(() => render(<Default />, { preloadedState }));
+
+        const lendTab = screen.getByText('Lend');
+        fireEvent.click(lendTab);
+        expect(track).toHaveBeenCalledWith(ButtonEvents.ORDER_SIDE, {
+            [ButtonProperties.ORDER_SIDE]: 'Lend',
+        });
     });
 });

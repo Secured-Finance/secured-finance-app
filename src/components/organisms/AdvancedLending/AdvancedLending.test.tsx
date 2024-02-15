@@ -1,3 +1,4 @@
+import * as analytics from '@amplitude/analytics-browser';
 import { composeStories } from '@storybook/react';
 import {
     emptyTransaction,
@@ -6,6 +7,7 @@ import {
 } from 'src/stories/mocks/queries';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor, within } from 'src/test-utils.js';
+import { ButtonEvents, ButtonProperties } from 'src/utils';
 import * as stories from './AdvancedLending.stories';
 
 const { Default, ConnectedToWallet, Delisted } = composeStories(stories);
@@ -14,52 +16,54 @@ const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('Advanced Lending Component', () => {
-    it('should convert the amount to new currency when the user change the currency', async () => {
+    it('should convert the amount to new currency and track CURRENCY_CHANGE when the user change the currency', async () => {
+        const track = jest.spyOn(analytics, 'track');
         const { store } = await waitFor(() =>
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
             })
         );
-        expect(store.getState().landingOrderForm.amount).toEqual('0');
+        expect(store.getState().landingOrderForm.amount).toEqual('');
         await waitFor(() =>
             fireEvent.input(screen.getByRole('textbox', { name: 'Amount' }), {
                 target: { value: '1' },
             })
         );
-        expect(store.getState().landingOrderForm.amount).toEqual(
-            '1000000000000000000'
-        );
+        expect(store.getState().landingOrderForm.amount).toEqual('1');
         fireEvent.click(screen.getByRole('button', { name: 'WFIL' }));
         fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
+        expect(track).toHaveBeenCalledWith(ButtonEvents.CURRENCY_CHANGE, {
+            [ButtonProperties.CURRENCY]: 'USDC',
+        });
         await waitFor(() => {
-            expect(store.getState().landingOrderForm.amount).toEqual('1000000');
+            expect(store.getState().landingOrderForm.amount).toEqual('1');
             expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
                 '1'
             );
         });
     });
 
-    it('should not reset the amount when the user change the maturity', async () => {
+    it('should not reset the amount and emit TERM_CHANGE event when the user change the maturity', async () => {
+        const track = jest.spyOn(analytics, 'track');
         const { store } = await waitFor(() =>
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
             })
         );
-        expect(store.getState().landingOrderForm.amount).toEqual('0');
+        expect(store.getState().landingOrderForm.amount).toEqual('');
         await waitFor(() =>
             fireEvent.input(screen.getByRole('textbox', { name: 'Amount' }), {
                 target: { value: '1' },
             })
         );
-        expect(store.getState().landingOrderForm.amount).toEqual(
-            '1000000000000000000'
-        );
+        expect(store.getState().landingOrderForm.amount).toEqual('1');
         fireEvent.click(screen.getByRole('button', { name: 'DEC22' }));
         fireEvent.click(screen.getByText('MAR23'));
+        expect(track).toHaveBeenCalledWith(ButtonEvents.TERM_CHANGE, {
+            [ButtonProperties.TERM]: 'MAR23',
+        });
         await waitFor(() => {
-            expect(store.getState().landingOrderForm.amount).toEqual(
-                '1000000000000000000'
-            );
+            expect(store.getState().landingOrderForm.amount).toEqual('1');
             expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
                 '1'
             );
@@ -173,6 +177,7 @@ describe('Advanced Lending Component', () => {
             ).toHaveBeenLastCalledWith(
                 expect.anything(),
                 expect.anything(),
+                expect.anything(),
                 13
             );
             await waitFor(() =>
@@ -185,6 +190,7 @@ describe('Advanced Lending Component', () => {
             expect(
                 mockSecuredFinance.getBorrowOrderBook
             ).toHaveBeenLastCalledWith(
+                expect.anything(),
                 expect.anything(),
                 expect.anything(),
                 26
@@ -202,6 +208,7 @@ describe('Advanced Lending Component', () => {
             ).toHaveBeenLastCalledWith(
                 expect.anything(),
                 expect.anything(),
+                expect.anything(),
                 13
             );
             await waitFor(() => {
@@ -212,6 +219,7 @@ describe('Advanced Lending Component', () => {
                 expect(
                     mockSecuredFinance.getLendOrderBook
                 ).toHaveBeenLastCalledWith(
+                    expect.anything(),
                     expect.anything(),
                     expect.anything(),
                     1300

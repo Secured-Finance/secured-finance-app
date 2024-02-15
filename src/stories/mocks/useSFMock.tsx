@@ -3,6 +3,7 @@ import * as jest from 'jest-mock';
 import {
     CurrencySymbol,
     ZERO_BI,
+    createCurrencyMap,
     currencyMap,
     hexToCurrencySymbol,
     toCurrencySymbol,
@@ -51,6 +52,7 @@ function generateOrderbook(depth: number) {
         unitPrices: [...unitPrices, ...zeros],
         amounts: [...amounts, ...zeros],
         quantities: [...quantities, ...zeros],
+        next: ZERO_BI,
     };
 }
 
@@ -78,6 +80,9 @@ export const mockUseSF = () => {
     const mockSecuredFinance = {
         config: {
             network: 'sepolia',
+            chain: {
+                id: 11155111,
+            },
         },
         placeOrder: jest.fn(),
         placePreOrder: jest.fn(),
@@ -157,17 +162,6 @@ export const mockUseSF = () => {
                         throw new Error('Not implemented');
                 }
             }),
-        getCollateralBook: jest.fn(() =>
-            Promise.resolve({
-                collateral: {
-                    ...collateralBook37.collateral,
-                    ...collateralBook37.nonCollateral,
-                },
-                collateralCoverage: collateralBook37.coverage,
-                totalCollateralAmount: BigInt('1210034000000'),
-                totalUnusedCollateralAmount: BigInt('762321420000'),
-            })
-        ),
 
         getLendingMarket: jest.fn((_, maturity: number) => {
             if (maturity === dec24Fixture.toNumber()) {
@@ -211,15 +205,11 @@ export const mockUseSF = () => {
             Promise.resolve('0xb98bd7c7f656290hu071e52d1a56e6uyh98765e4')
         ),
 
-        withdrawCollateral: jest.fn(() =>
-            Promise.resolve('0xb98bd7c7f656290hu071e52d1a56e6uyh98765e4')
-        ),
-
-        getBorrowOrderBook: jest.fn((_, __, limit: number) =>
+        getBorrowOrderBook: jest.fn((_, __, ___, limit: number) =>
             Promise.resolve(generateOrderbook(limit))
         ),
 
-        getLendOrderBook: jest.fn((_, __, limit: number) =>
+        getLendOrderBook: jest.fn((_, __, ___, limit: number) =>
             Promise.resolve(generateOrderbook(limit))
         ),
 
@@ -261,16 +251,6 @@ export const mockUseSF = () => {
         ),
 
         unwindPosition: jest.fn(() => Promise.resolve('0x123')),
-
-        getCollateralParameters: jest.fn(() =>
-            Promise.resolve({
-                liquidationThresholdRate: BigInt('12500'),
-            })
-        ),
-
-        getWithdrawableCollateral: jest.fn(() =>
-            Promise.resolve(BigInt(1000000000000))
-        ),
 
         getUsedCurrenciesForOrders: jest.fn(() =>
             Promise.resolve([ethBytes32, wfilBytes32, wbtcBytes32, usdcBytes32])
@@ -405,7 +385,10 @@ export const mockUseSF = () => {
         getOrderFeeRate: jest.fn(() => Promise.resolve(BigInt('100'))),
 
         getOrderEstimation: jest.fn(() =>
-            Promise.resolve({ coverage: BigInt(5500) })
+            Promise.resolve({
+                coverage: BigInt(5500),
+                filledAmount: BigInt('90000000000000000000'),
+            })
         ),
 
         currencyExists: jest.fn((currency: Currency) => {
@@ -438,18 +421,28 @@ export const mockUseSF = () => {
             }
         }),
 
-        getMarketTerminationPrice: jest.fn((currency: Currency) => {
+        getMarketTerminationPriceAndDecimals: jest.fn((currency: Currency) => {
             switch (currency.symbol) {
                 case CurrencySymbol.ETH:
-                    return Promise.resolve(BigInt('157771480752')); // 1577.71480752
+                    return Promise.resolve({
+                        price: BigInt('157771480752'),
+                        decimals: 8,
+                    }); // 1577.71480752
                 case CurrencySymbol.WFIL:
-                    return Promise.resolve(
-                        BigInt('320452554902293372851000000')
-                    );
+                    return Promise.resolve({
+                        price: BigInt('320452554902293372851000000'),
+                        decimals: 26,
+                    });
                 case CurrencySymbol.USDC:
-                    return Promise.resolve(BigInt('100000000'));
+                    return Promise.resolve({
+                        price: BigInt('100000000'),
+                        decimals: 8,
+                    });
                 case CurrencySymbol.WBTC:
-                    return Promise.resolve(BigInt('2557771480752'));
+                    return Promise.resolve({
+                        price: BigInt('2557771480752'),
+                        decimals: 8,
+                    });
                 default:
                     throw new Error('Not implemented');
             }
@@ -464,43 +457,88 @@ export const mockUseSF = () => {
         executeEmergencySettlement: jest.fn(() => Promise.resolve('0x123')),
 
         getLastPrice: jest.fn((ccy: Currency) => {
-            const ccyMap = {
-                [CurrencySymbol.ETH]: BigInt('200034000000'),
-                [CurrencySymbol.WFIL]: BigInt('600000000'),
-                [CurrencySymbol.USDC]: BigInt('100000000'),
-                [CurrencySymbol.WBTC]: BigInt('5000000000000'),
-            };
+            const ccyMap = createCurrencyMap<bigint>(BigInt(ZERO_BI));
+            ccyMap.ETH = BigInt('200034000000');
+            ccyMap.WFIL = BigInt('600000000');
+            ccyMap.USDC = BigInt('100000000');
+            ccyMap.WBTC = BigInt('5000000000000');
+            ccyMap.aUSDC = BigInt('100000000');
+            ccyMap.axlFIL = BigInt('600000000');
+
             return Promise.resolve(
                 ccyMap[toCurrencySymbol(ccy.symbol) ?? CurrencySymbol.WFIL]
             );
         }),
 
         getDecimals: jest.fn((ccy: Currency) => {
-            const ccyMap = {
-                [CurrencySymbol.ETH]: 8,
-                [CurrencySymbol.WFIL]: 26,
-                [CurrencySymbol.USDC]: 8,
-                [CurrencySymbol.WBTC]: 8,
-            };
+            const ccyMap = createCurrencyMap<number>(0);
+            ccyMap.ETH = 8;
+            ccyMap.WFIL = 26;
+            ccyMap.USDC = 8;
+            ccyMap.WBTC = 8;
+            ccyMap.aUSDC = 8;
+            ccyMap.axlFIL = 26;
+
             return Promise.resolve(
                 ccyMap[toCurrencySymbol(ccy.symbol) ?? CurrencySymbol.WFIL]
             );
         }),
 
-        getBorrowableAmount: jest.fn((_address, currency: Currency) => {
-            switch (currency.symbol) {
-                case CurrencySymbol.ETH:
-                    return Promise.resolve(BigInt('2600000000000000000'));
-                case CurrencySymbol.WFIL:
-                    return Promise.resolve(BigInt('867190000000000000000'));
-                case CurrencySymbol.USDC:
-                    return Promise.resolve(BigInt('5203150000'));
-                case CurrencySymbol.WBTC:
-                    return Promise.resolve(BigInt('10000000'));
-                default:
-                    throw new Error('Not implemented');
-            }
-        }),
+        getItayoseEstimation: jest.fn(() =>
+            Promise.resolve({
+                openingUnitPrice: BigInt(9970),
+                lastLendUnitPrice: BigInt(9975),
+                lastBorrowUnitPrice: BigInt(9970),
+                totalOffsetAmount: BigInt(40000000),
+            })
+        ),
+
+        getTotalPresentValueInBaseCurrency: jest.fn(() =>
+            Promise.resolve(BigInt(250000000000))
+        ),
+
+        tokenVault: {
+            getBorrowableAmount: jest.fn((_address, currency: Currency) => {
+                switch (currency.symbol) {
+                    case CurrencySymbol.ETH:
+                        return Promise.resolve(BigInt('2600000000000000000'));
+                    case CurrencySymbol.WFIL:
+                        return Promise.resolve(BigInt('867190000000000000000'));
+                    case CurrencySymbol.USDC:
+                        return Promise.resolve(BigInt('5203150000'));
+                    case CurrencySymbol.WBTC:
+                        return Promise.resolve(BigInt('10000000'));
+                    default:
+                        throw new Error('Not implemented');
+                }
+            }),
+
+            getCollateralBook: jest.fn(() =>
+                Promise.resolve({
+                    collateral: {
+                        ...collateralBook37.collateral,
+                        ...collateralBook37.nonCollateral,
+                    },
+                    collateralCoverage: collateralBook37.coverage,
+                    totalCollateralAmount: BigInt('1210034000000'),
+                    totalUnusedCollateralAmount: BigInt('762321420000'),
+                })
+            ),
+
+            getCollateralParameters: jest.fn(() =>
+                Promise.resolve({
+                    liquidationThresholdRate: BigInt('12500'),
+                })
+            ),
+
+            getWithdrawableCollateral: jest.fn(() =>
+                Promise.resolve(BigInt(1000000000000))
+            ),
+
+            withdrawCollateral: jest.fn(() =>
+                Promise.resolve('0xb98bd7c7f656290hu071e52d1a56e6uyh98765e4')
+            ),
+        },
     };
 
     return mockSecuredFinance;

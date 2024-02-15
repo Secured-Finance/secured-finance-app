@@ -25,9 +25,13 @@ import {
     MarketPhase,
     baseContracts,
     emptyCollateralBook,
+    useBorrowOrderBook,
     useCollateralBook,
+    useCurrencies,
     useCurrencyDelistedStatus,
+    useItayoseEstimation,
     useLastPrices,
+    useLendOrderBook,
     useLendingMarkets,
     useMarketOrderList,
     useMarketPhase,
@@ -37,20 +41,14 @@ import {
 } from 'src/hooks';
 import {
     selectLandingOrderForm,
-    setAmount,
     setCurrency,
     setMaturity,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import {
-    CurrencySymbol,
-    amountFormatterFromBase,
-    amountFormatterToBase,
-    getCurrencyMapAsOptions,
-    usdFormat,
-} from 'src/utils';
+import { CurrencySymbol, ZERO_BI, toOptions, usdFormat } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
+import * as dayjs from 'dayjs';
 
 const Toolbar = ({
     selectedAsset,
@@ -108,13 +106,17 @@ const Toolbar = ({
 export const Itayose = () => {
     const { address } = useAccount();
 
-    const { amount, currency, maturity } = useSelector((state: RootState) =>
+    const { currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
 
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
 
     const { data: lendingMarkets = baseContracts } = useLendingMarkets();
+    const { data: itayoseEstimation } = useItayoseEstimation(
+        currency,
+        maturity
+    );
     const lendingContracts = lendingMarkets[currency];
 
     const marketPhase = useMarketPhase(currency, maturity);
@@ -140,22 +142,56 @@ export const Itayose = () => {
         );
     }, [maturity, maturityOptionList]);
 
+    const { data: currencies } = useCurrencies();
     const assetList = useMemo(
         () =>
-            getCurrencyMapAsOptions().filter(
+            toOptions(currencies, currency).filter(
                 ccy => !delistedCurrencySet.has(ccy.label as CurrencySymbol)
             ),
-        [delistedCurrencySet]
+        [currencies, currency, delistedCurrencySet]
     );
+
+    const estimatedOpeningUnitPrice = lendingMarkets[currency][maturity]
+        ?.openingUnitPrice
+        ? LoanValue.fromPrice(
+              lendingMarkets[currency][maturity]?.openingUnitPrice ?? 0,
+              maturity,
+              lendingContracts[selectedTerm.value.toNumber()]?.utcOpeningDate
+          )
+        : undefined;
 
     const selectedAsset = useMemo(() => {
         return assetList.find(option => option.value === currency);
     }, [currency, assetList]);
 
+    const {
+        data: borrowAmount,
+        isLoading: isLoadingBorrow,
+        fetchStatus: borrowFetchStatus,
+    } = useBorrowOrderBook(
+        currency,
+        maturity,
+        Number(itayoseEstimation?.lastBorrowUnitPrice ?? ZERO_BI)
+    );
+
+    const {
+        data: lendAmount,
+        isLoading: isLoadingLend,
+        fetchStatus: lendFetchStatus,
+    } = useLendOrderBook(
+        currency,
+        maturity,
+        Number(itayoseEstimation?.lastLendUnitPrice ?? ZERO_BI)
+    );
+
     const [orderBook, setMultiplier, setIsShowingAll] = useOrderbook(
         currency,
         maturity,
-        lendingContracts[selectedTerm.value.toNumber()]?.utcOpeningDate
+        lendingContracts[selectedTerm.value.toNumber()]?.utcOpeningDate,
+        itayoseEstimation?.lastBorrowUnitPrice,
+        borrowAmount,
+        itayoseEstimation?.lastLendUnitPrice,
+        lendAmount
     );
 
     const { data: collateralBook = emptyCollateralBook } =
@@ -177,44 +213,42 @@ export const Itayose = () => {
 
     const handleAssetChange = useCallback(
         (v: CurrencySymbol) => {
-            let formatFrom = (x: bigint) => Number(x);
-            if (amountFormatterFromBase && amountFormatterFromBase[currency]) {
-                formatFrom = amountFormatterFromBase[currency];
-            }
-            let formatTo = (x: number) => BigInt(x);
-            if (amountFormatterToBase && amountFormatterToBase[v]) {
-                formatTo = amountFormatterToBase[v];
-            }
-            dispatch(setAmount(formatTo(formatFrom(amount))));
             dispatch(setCurrency(v));
         },
-        [amount, currency, dispatch]
+        [dispatch]
     );
 
-    const estimatedOpeningUnitPrice = lendingMarkets[currency][maturity]
-        ?.openingUnitPrice
-        ? LoanValue.fromPrice(
-              lendingMarkets[currency][maturity]?.openingUnitPrice ?? 0,
-              maturity,
-              lendingContracts[selectedTerm.value.toNumber()]?.utcOpeningDate
-          )
-        : undefined;
+    const isLoadingMap = {
+        [OrderSide.BORROW]: isLoadingBorrow && borrowFetchStatus !== 'idle',
+        [OrderSide.LEND]: isLoadingLend && lendFetchStatus !== 'idle',
+    };
+
+    const preOrderDays = useMemo(() => {
+        const contract = lendingContracts[selectedTerm.value.toNumber()];
+        const openingDate = contract?.utcOpeningDate;
+        const preOpeningDate = contract?.preOpeningDate;
+        return openingDate && preOpeningDate
+            ? dayjs.unix(openingDate).diff(preOpeningDate * 1000, 'days')
+            : undefined;
+    }, [lendingContracts, selectedTerm.value]);
 
     return (
         <Page title='Pre-Open Order Book'>
-            <Alert>
-                <p className='typography-caption text-white'>
-                    Secure your market position by placing limit orders up to 7
-                    days before trading begins with no fees. Opt for either a
-                    lend or borrow during pre-open, not both. No new pre-orders
-                    will be accepted within 1 hour prior to the start of
-                    trading. Learn more at&nbsp;
-                    <TextLink
-                        href='https://docs.secured.finance/platform-guide/unique-features/fair-price-discovery/'
-                        text='Secured Finance Docs'
-                    />
-                </p>
-            </Alert>
+            {preOrderDays && (
+                <Alert>
+                    <p className='typography-caption text-white'>
+                        Secure your market position by placing limit orders up
+                        to {preOrderDays} days before trading begins with no
+                        fees. Opt for either a lend or borrow during pre-open,
+                        not both. No new pre-orders will be accepted within 1
+                        hour prior to the start of trading. Learn more at&nbsp;
+                        <TextLink
+                            href='https://docs.secured.finance/platform-guide/unique-features/fair-price-discovery/'
+                            text='Secured Finance Docs'
+                        />
+                    </p>
+                </Alert>
+            )}
             <ThreeColumnsWithTopBar
                 topBar={
                     <Toolbar
@@ -270,6 +304,7 @@ export const Itayose = () => {
                     onFilterChange={state =>
                         setIsShowingAll(state.showBorrow && state.showLend)
                     }
+                    isLoadingMap={isLoadingMap}
                     onAggregationChange={setMultiplier}
                     isCurrencyDelisted={delistedCurrencySet.has(currency)}
                 />

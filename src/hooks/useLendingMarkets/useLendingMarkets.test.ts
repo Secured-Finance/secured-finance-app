@@ -1,6 +1,7 @@
 import { maturities } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { renderHook } from 'src/test-utils';
+import { renderHook, waitFor } from 'src/test-utils';
+import { createCurrencyMap } from 'src/utils';
 import timemachine from 'timemachine';
 import { useLendingMarkets } from './useLendingMarkets';
 
@@ -11,28 +12,28 @@ beforeAll(() => {
     });
 });
 
+afterEach(() => mock.getOrderBookDetails.mockClear());
+
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
 describe('useLendingMarkets', () => {
     it('should return a function to fetch the lending markets', async () => {
-        const { result, waitForNextUpdate } = renderHook(() =>
-            useLendingMarkets()
-        );
+        const { result } = renderHook(() => useLendingMarkets());
         const value = result.current;
         expect(value.data).toEqual(undefined);
         expect(value.isLoading).toEqual(true);
 
-        await waitForNextUpdate();
-
-        expect(mock.getOrderBookDetails).toHaveBeenCalledTimes(1);
+        await waitFor(() => expect(result.current.isSuccess).toEqual(true));
         const newValue = result.current;
-        expect(newValue.data).toEqual({
-            ETH: maturities,
-            USDC: maturities,
-            WBTC: maturities,
-            WFIL: maturities,
-        });
+
+        const expected = createCurrencyMap({});
+        expected.ETH = maturities;
+        expected.USDC = maturities;
+        expected.WBTC = maturities;
+        expected.WFIL = maturities;
+
+        expect(newValue.data).toEqual(expected);
         expect(newValue.isLoading).toEqual(false);
     });
 
@@ -43,10 +44,9 @@ describe('useLendingMarkets', () => {
             { ...lendingMarkets[0], maturity: BigInt('10000') },
         ]);
 
-        const { result, waitForNextUpdate } = renderHook(() =>
-            useLendingMarkets()
-        );
-        await waitForNextUpdate();
+        const { result } = renderHook(() => useLendingMarkets());
+        await waitFor(() => expect(result.current.isSuccess).toEqual(true));
+
         const newValue = result.current;
 
         expect(newValue.data.ETH[10000].name).toEqual('DEC22-1');

@@ -1,5 +1,5 @@
 import { Popover } from '@headlessui/react';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { cloneElement, useState } from 'react';
 import { Alignment } from 'src/types';
 
@@ -37,7 +37,7 @@ export const Tooltip = ({
                     </Popover.Button>
                     {open && children && (
                         <Popover.Panel
-                            className={classNames(
+                            className={clsx(
                                 'absolute z-50 mt-2 flex w-screen justify-center',
                                 {
                                     'max-w-[256px]': maxWidth === 'large',

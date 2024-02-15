@@ -27,10 +27,21 @@ describe('Toggle component', () => {
         expect(button).toHaveAttribute('aria-checked', 'true');
     });
 
-    it('should not change state when clicked if disabled', () => {
-        render(<Default disabled />);
+    it('should be always true when toggle is disabled and is checked', () => {
+        render(<Default disabled={true} checked={true} />);
         const button = screen.getByRole('switch');
+        expect(button).toHaveClass('disabled:opacity-50');
+        expect(button).toHaveAttribute('aria-checked', 'true');
         fireEvent.click(button);
         expect(button).toHaveAttribute('aria-checked', 'true');
+    });
+
+    it('should be always false when toggle is disabled and is un checked', () => {
+        render(<Default disabled={true} checked={false} />);
+        const button = screen.getByRole('switch');
+        expect(button).toHaveClass('disabled:opacity-50');
+        expect(button).toHaveAttribute('aria-checked', 'false');
+        fireEvent.click(button);
+        expect(button).toHaveAttribute('aria-checked', 'false');
     });
 });

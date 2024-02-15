@@ -1,4 +1,4 @@
-import ErrorPage from 'next/error';
+import Router from 'next/router';
 import { EmergencyGlobalSettlement } from 'src/components/pages/';
 import { useIsMarketTerminated } from 'src/hooks';
 
@@ -14,7 +14,8 @@ const Emergency = () => {
         return <EmergencyGlobalSettlement />;
     }
 
-    return <ErrorPage statusCode={404} />;
+    Router.push('/');
+    return null;
 };
 
 export default Emergency;

@@ -2,7 +2,7 @@ import { reset, track } from '@amplitude/analytics-browser';
 import { SecuredFinanceClient } from '@secured-finance/sf-client';
 import { useQueryClient } from '@tanstack/react-query';
 import { createContext, useCallback, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { QUERIES_TO_INVALIDATE } from 'src/hooks';
 import { useEthereumWalletStore } from 'src/hooks/useEthWallet';
 import {
@@ -10,8 +10,17 @@ import {
     updateChainId,
     updateLatestBlock,
 } from 'src/store/blockchain';
-import { getSupportedChainIds, readWalletFromStore } from 'src/utils';
-import { InterfaceEvents, associateWallet } from 'src/utils/events';
+import { RootState } from 'src/store/types';
+import {
+    getSupportedChainIds,
+    getSupportedNetworks,
+    readWalletFromStore,
+} from 'src/utils';
+import {
+    InterfaceEvents,
+    InterfaceProperties,
+    associateWallet,
+} from 'src/utils/events';
 import { hexToNumber } from 'viem';
 import {
     PublicClient,
@@ -43,9 +52,12 @@ export const Context = createContext<SFContext>({
 const SecuredFinanceProvider: React.FC = ({ children }) => {
     const { address, isConnected } = useAccount();
     const { chain } = useNetwork();
+    const chainId = useSelector((state: RootState) => state.blockchain.chainId);
     const { connect, connectors } = useConnect();
     const { data: client } = useWalletClient();
-    const publicClient = usePublicClient();
+    const publicClient = usePublicClient({
+        chainId: chainId,
+    });
     const queryClient = useQueryClient();
 
     const [securedFinance, setSecuredFinance] =
@@ -54,13 +66,20 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
 
     useEthereumWalletStore();
 
-    const handleAccountChanged = useCallback((accounts: string[]) => {
-        track(InterfaceEvents.WALLET_CHANGED_THROUGH_PROVIDER);
-        reset();
-        if (accounts.length > 0) {
-            associateWallet(accounts[0]);
-        }
-    }, []);
+    const chainName = getSupportedNetworks().find(n => n.id === chainId)?.name;
+
+    const handleAccountChanged = useCallback(
+        (accounts: string[]) => {
+            track(InterfaceEvents.WALLET_CHANGED_THROUGH_PROVIDER, {
+                [InterfaceProperties.CHAIN]: chainName,
+            });
+            reset();
+            if (accounts.length > 0) {
+                associateWallet(accounts[0], chainName);
+            }
+        },
+        [chainName]
+    );
 
     const dispatchChainError = useCallback(
         (chainId: number) => {
@@ -75,8 +94,11 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
     const handleChainChanged = useCallback(
         (chainId: string) => {
             dispatchChainError(hexToNumber(chainId as `0x${string}`));
+            track(InterfaceEvents.CHAIN_CONNECTED, {
+                [InterfaceProperties.CHAIN]: chainName,
+            });
         },
-        [dispatchChainError]
+        [chainName, dispatchChainError]
     );
 
     useEffect(() => {
@@ -115,6 +137,17 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
                     return securedFinanceLib;
                 }
 
+                if (securedFinanceLib.config.chain.id !== chainId) {
+                    return previous;
+                }
+
+                if (
+                    previous.config.chain.id !==
+                    securedFinanceLib.config.chain.id
+                ) {
+                    return securedFinanceLib;
+                }
+
                 if (isConnected) {
                     return securedFinanceLib;
                 }
@@ -146,11 +179,12 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
         publicClient?.transport,
         publicClient?.chain,
         publicClient,
+        chainId,
     ]);
 
     useEffect(() => {
         if (address) {
-            associateWallet(address, false);
+            associateWallet(address, chainName, false);
             return;
         }
 
@@ -161,7 +195,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
             );
             if (connector) connect({ connector: connector });
         }
-    }, [connect, address, connectors]);
+    }, [connect, address, connectors, chainName]);
 
     useEffect(() => {
         if (!publicClient) return;

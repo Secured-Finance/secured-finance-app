@@ -15,7 +15,7 @@ export default {
 
 const Template: StoryFn<typeof InputBase> = args => {
     const [value, setValue] = useState(args.value);
-    const handleChange = (newValue: number | undefined) => {
+    const handleChange = (newValue: string | undefined) => {
         setValue(newValue);
         args.onValueChange(newValue);
     };
@@ -25,7 +25,7 @@ const Template: StoryFn<typeof InputBase> = args => {
 export const Default = Template.bind({});
 export const WithValue = Template.bind({});
 WithValue.args = {
-    value: 50,
+    value: '50',
 };
 
 export const DecimalPlacesAllowed = Template.bind({});
@@ -50,6 +50,15 @@ LongInput.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const input = canvas.getByRole('textbox');
     await userEvent.type(input, '123456789.123', {
+        delay: 100,
+    });
+};
+
+export const DecimalInput = Template.bind({});
+DecimalInput.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const input = canvas.getByRole('textbox');
+    await userEvent.type(input, '.', {
         delay: 100,
     });
 };

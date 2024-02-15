@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import NumericFormat, {
     NumberFormatValues,
     SourceInfo,
@@ -11,13 +11,14 @@ export type SizeDependentStylesConfig = Record<
 
 interface InputBaseProps {
     className?: string;
-    value?: number;
-    onValueChange: (v: number | undefined) => void;
+    value?: string;
+    onValueChange: (v: string | undefined) => void;
     label?: string;
     decimalPlacesAllowed?: number;
     maxLimit?: number;
     sizeDependentStyles?: SizeDependentStylesConfig;
 }
+
 export const InputBase = ({
     className,
     value,
@@ -31,14 +32,15 @@ export const InputBase = ({
         values: NumberFormatValues,
         _sourceInfo: SourceInfo
     ) => {
-        const value = values.floatValue;
+        let value = values.value;
         if (onValueChange) {
+            value = value === '.' ? '0'.concat(value) : value;
             onValueChange(value);
         }
     };
 
     const fontSizeClass = sizeDependentStyles
-        ? classNames({
+        ? clsx({
               [sizeDependentStyles.shortText.styles]:
                   !value ||
                   (value &&
@@ -61,7 +63,7 @@ export const InputBase = ({
 
     return (
         <NumericFormat
-            className={classNames(
+            className={clsx(
                 'bg-transparent placeholder-opacity-50 focus:outline-none',
                 className,
                 fontSizeClass
@@ -79,6 +81,7 @@ export const InputBase = ({
                 return floatValue <= maxLimit;
             }}
             inputMode='decimal'
+            allowLeadingZeros={false}
         />
     );
 };

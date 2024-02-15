@@ -3,11 +3,7 @@ import SFLogoSmall from 'src/assets/img/logo-small.svg';
 import MetamaskIcon from 'src/assets/img/metamask-fox.svg';
 import { WalletSourceOption } from 'src/components/atoms';
 import { AssetDisclosureProps } from 'src/components/molecules';
-import {
-    amountFormatterFromBase,
-    CurrencySymbol,
-    getCurrencyMapAsList,
-} from './currencyList';
+import { amountFormatterFromBase, CurrencySymbol } from './currencyList';
 
 export enum WalletSource {
     METAMASK = 'METAMASK',
@@ -20,19 +16,13 @@ export type CollateralInfo = {
     available: number;
 };
 
-export const walletInformation: Partial<
-    Record<WalletSource, CurrencySymbol[]>
-> = {
-    [WalletSource.METAMASK]: getCurrencyMapAsList().map(({ symbol }) => symbol),
-};
-
 export const generateWalletInformation = (
     accounts: Partial<Record<WalletSource, string>>,
     balance: Record<string, number>,
-    information?: Partial<Record<WalletSource, CurrencySymbol[]>>
+    information: Partial<Record<WalletSource, CurrencySymbol[]>>
 ): AssetDisclosureProps[] => {
     const collateralRecords = [];
-    const walletConfiguration = information ?? walletInformation;
+    const walletConfiguration = information;
     const walletsArray = Object.keys(walletConfiguration) as WalletSource[];
     for (let i = 0; i < walletsArray.length; i++) {
         const wallet = walletsArray[i];
@@ -84,6 +74,6 @@ export const generateWalletSourceInformation = (
 };
 
 // NOTE: Here are the user counts for previous versions of the app
-// till Sepolia v0.0.9: 19446
-export const PREVIOUS_TOTAL_USERS = 19446;
+// till Sepolia v0.0.10: 21118
+export const PREVIOUS_TOTAL_USERS = 21118;
 export const COIN_GECKO_SOURCE = 'https://www.coingecko.com/en/coins/';

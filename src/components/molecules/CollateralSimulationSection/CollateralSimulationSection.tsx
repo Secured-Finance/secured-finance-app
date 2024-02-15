@@ -1,16 +1,14 @@
 import { OrderSide } from '@secured-finance/sf-client';
-import {
-    SectionWithItems,
-    getLiquidationInformation,
-} from 'src/components/atoms';
+import { FormatCollateralUsage, SectionWithItems } from 'src/components/atoms';
 import { InfoToolTip } from 'src/components/molecules';
 import {
     CollateralBook,
     useBorrowableAmount,
     useOrderEstimation,
+    useZCUsage,
 } from 'src/hooks';
-import { formatCollateralRatio, usdFormat } from 'src/utils';
-import { Amount } from 'src/utils/entities';
+import { amountFormatterFromBase, usdFormat } from 'src/utils';
+import { Amount, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
 const CollateralUsageItem = () => {
@@ -29,21 +27,47 @@ const CollateralUsageItem = () => {
 
 export const CollateralSimulationSection = ({
     collateral,
+    maturity,
     tradeAmount,
     assetPrice,
     side,
+    showZCUsage = true,
 }: {
     collateral: CollateralBook;
+    maturity: Maturity;
     tradeAmount: Amount;
     assetPrice: number;
     side: OrderSide;
+    showZCUsage?: boolean;
 }) => {
     const { address } = useAccount();
-    const { data: coverage = 0 } = useOrderEstimation(address);
+
+    const { data: orderEstimationInfo } = useOrderEstimation(address);
+
     const { data: availableToBorrow } = useBorrowableAmount(
         address,
         tradeAmount.currency
     );
+
+    const getZCUsage = useZCUsage(address, side);
+
+    const filledAmount = amountFormatterFromBase[tradeAmount.currency](
+        orderEstimationInfo?.filledAmount ?? BigInt(0)
+    );
+
+    const zcUsage = getZCUsage(
+        maturity.toNumber(),
+        tradeAmount.currency,
+        filledAmount
+    );
+
+    const initialZCUsage = getZCUsage(
+        maturity.toNumber(),
+        tradeAmount.currency,
+        0
+    );
+
+    const coverage = Number(orderEstimationInfo?.coverage ?? 0);
 
     const remainingToBorrow = Math.max(
         0,
@@ -55,26 +79,27 @@ export const CollateralSimulationSection = ({
     const items: [string | React.ReactNode, string | React.ReactNode][] = [
         ['Borrow Remaining', usdFormat(remainingToBorrow * assetPrice, 2)],
         [
+            'ZC Usage',
+            <FormatCollateralUsage
+                key='ZCUsage'
+                initialValue={initialZCUsage}
+                finalValue={zcUsage}
+                maxValue={coverage}
+            />,
+        ],
+        [
             <CollateralUsageItem key={1} />,
-            getCollateralUsage(collateral.coverage, coverage),
+            <FormatCollateralUsage
+                key='collateralUsage'
+                initialValue={collateral.coverage}
+                finalValue={coverage}
+            />,
         ],
     ];
 
-    return <SectionWithItems itemList={items} />;
-};
+    if (!showZCUsage) {
+        items.splice(1, 1);
+    }
 
-const getCollateralUsage = (initial: number, final: number) => {
-    const initialColor = getLiquidationInformation(initial / 100).color;
-    const finalColor = getLiquidationInformation(final / 100).color;
-    return (
-        <div className='flex flex-row gap-1'>
-            <span className={`${initialColor}`}>
-                {formatCollateralRatio(initial)}
-            </span>
-            <span className='text-neutral-8'>&#8594;</span>
-            <span className={`${finalColor}`}>
-                {formatCollateralRatio(final)}
-            </span>
-        </div>
-    );
+    return <SectionWithItems itemList={items} />;
 };

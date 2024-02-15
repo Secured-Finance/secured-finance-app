@@ -15,8 +15,13 @@ import SecuredFinanceProvider from 'src/contexts/SecuredFinanceProvider';
 import store from 'src/store';
 import { selectNetworkName } from 'src/store/blockchain';
 import { RootState } from 'src/store/types';
-import { getAmplitudeApiKey, getWalletConnectId } from 'src/utils';
-import { WagmiConfig, configureChains, createConfig, sepolia } from 'wagmi';
+import {
+    getAmplitudeApiKey,
+    getSupportedChainIds,
+    getSupportedNetworks,
+    getWalletConnectId,
+} from 'src/utils';
+import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
@@ -33,15 +38,17 @@ init(getAmplitudeApiKey(), undefined, {
     logLevel: LogLevel.None,
 });
 
-const { chains, publicClient } = configureChains(
-    [sepolia],
-    [
-        alchemyProvider({
-            apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ?? '',
-        }),
-        publicProvider(),
-    ]
+const chainIds = getSupportedChainIds();
+const networks = getSupportedNetworks().filter(chain =>
+    chainIds.includes(chain.id)
 );
+
+const { chains, publicClient } = configureChains(networks, [
+    alchemyProvider({
+        apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ?? '',
+    }),
+    publicProvider(),
+]);
 
 const config = createConfig({
     autoConnect: false,
@@ -54,10 +61,10 @@ const config = createConfig({
                 projectId: projectId,
                 qrModalOptions: {
                     themeVariables: {
-                        '--wcm-font-family':
+                        '--w3m-font-family':
                             "'Suisse International', sans-serif",
-                        '--wcm-accent-color': '#002133',
-                        '--wcm-background-color': '#5162FF',
+                        '--w3m-accent-color': '#002133',
+                        '--w3m-background-color': '#5162FF',
                     },
                 },
             },

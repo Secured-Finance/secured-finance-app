@@ -6,7 +6,7 @@ import {
     HeaderContext,
     Row,
 } from '@tanstack/react-table';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Chip, CurrencyItem, PriceYieldItem } from 'src/components/atoms';
 import { TableContractCell, TableHeader } from 'src/components/molecules';
 import { Alignment, AssetPriceMap, ColorFormat } from 'src/types';
@@ -338,7 +338,7 @@ export const contractColumnDefinition = <
                     : OrderSide.LEND;
             return (
                 <div
-                    className={classNames('flex px-3', {
+                    className={clsx('flex px-3', {
                         'justify-start': alignCell === 'left',
                         'justify-center': alignCell === 'center',
                         'justify-end': alignCell === 'right',
@@ -488,7 +488,7 @@ export const dateAndTimeColumnDefinition = <T extends { createdAt: bigint }>(
                 <div className='flex justify-center'>
                     <div className='flex flex-col text-right'>
                         <span
-                            className={classNames(
+                            className={clsx(
                                 fontSize ? fontSize : 'typography-caption-2',
                                 'h-6 text-slateGray'
                             )}

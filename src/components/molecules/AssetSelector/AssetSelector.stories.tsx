@@ -1,15 +1,14 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import { within } from '@storybook/testing-library';
 import { currencyList } from 'src/stories/mocks/fixtures';
-import { CurrencySymbol } from 'src/utils';
+import { createCurrencyMap } from 'src/utils';
 import { AssetSelector } from './AssetSelector';
 
-const priceList: Record<CurrencySymbol, number> = {
-    WBTC: 20515,
-    ETH: 1012,
-    WFIL: 4.85,
-    USDC: 1.0,
-};
+const priceList = createCurrencyMap<number>(0);
+priceList.WBTC = 20515;
+priceList.ETH = 1012;
+priceList.WFIL = 4.85;
+priceList.USDC = 1.0;
 
 export default {
     title: 'Molecules/AssetSelector',

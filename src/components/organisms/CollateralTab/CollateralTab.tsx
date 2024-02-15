@@ -7,22 +7,28 @@ import {
     DepositCollateral,
     WithdrawCollateral,
 } from 'src/components/organisms';
-import { CollateralBook, useCollateralBalances } from 'src/hooks';
+import {
+    CollateralBook,
+    useCollateralBalances,
+    useCollateralCurrencies,
+    useCurrencies,
+} from 'src/hooks';
 import {
     CollateralInfo,
     CurrencySymbol,
     amountFormatterFromBase,
-    getCurrencyMapAsList,
+    currencyMap,
 } from 'src/utils';
 import { useAccount } from 'wagmi';
 
 export const generateCollateralList = (
     balance: Partial<Record<CurrencySymbol, number | bigint>>,
-    useAllCurrencies: boolean
+    useAllCurrencies: boolean,
+    currencies: CurrencySymbol[]
 ): Record<CurrencySymbol, CollateralInfo> => {
     let collateralRecords: Record<string, CollateralInfo> = {};
-
-    getCurrencyMapAsList()
+    currencies
+        ?.map(ccy => currencyMap[ccy])
         .filter(ccy => ccy.isCollateral || useAllCurrencies)
         .forEach(currencyInfo => {
             const ccy = currencyInfo.symbol;
@@ -47,17 +53,26 @@ export const generateCollateralList = (
 
 export const CollateralTab = ({
     collateralBook,
+    netAssetValue,
 }: {
     collateralBook: CollateralBook;
+    netAssetValue: number;
 }) => {
     const { address } = useAccount();
     const [openModal, setOpenModal] = useState<'' | 'deposit' | 'withdraw'>('');
 
     const collateralBalances = useCollateralBalances();
+    const { data: collateralCurrencies = [] } = useCollateralCurrencies();
+    const { data: currencies = [] } = useCurrencies();
 
     const depositCollateralList = useMemo(
-        () => generateCollateralList(collateralBalances, false),
-        [collateralBalances]
+        () =>
+            generateCollateralList(
+                collateralBalances,
+                false,
+                collateralCurrencies
+            ),
+        [collateralBalances, collateralCurrencies]
     );
 
     const withdrawCollateralList = useMemo(
@@ -67,9 +82,14 @@ export const CollateralTab = ({
                     ...collateralBook.withdrawableCollateral,
                     ...collateralBook.nonCollateral,
                 },
-                true
+                true,
+                currencies
             ),
-        [collateralBook.nonCollateral, collateralBook.withdrawableCollateral]
+        [
+            collateralBook.nonCollateral,
+            collateralBook.withdrawableCollateral,
+            currencies,
+        ]
     );
 
     return (
@@ -78,6 +98,7 @@ export const CollateralTab = ({
                 onClick={step => setOpenModal(step)}
                 account={address}
                 collateralBook={collateralBook}
+                netAssetValue={netAssetValue}
             />
             <CollateralTabRightPane
                 account={address}
