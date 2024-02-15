@@ -17,7 +17,8 @@ export const IconButton = ({
     return (
         <button
             className={clsx(
-                'flex aspect-square items-center justify-center rounded-full border disabled:border-neutral-200 disabled:bg-neutral-100 disabled:text-neutral-400',
+                'flex aspect-square items-center justify-center rounded-full border disabled:border-transparent disabled:bg-neutral-600 disabled:text-neutral-400',
+                'light:disabled:border-neutral-200 light:disabled:bg-neutral-100 light:disabled:text-neutral-400',
                 variantStyle[variant],
                 sizeStyle[size]
             )}
