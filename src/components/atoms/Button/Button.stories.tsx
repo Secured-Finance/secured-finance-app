@@ -82,18 +82,6 @@ Large.args = {
     size: ButtonSizes.lg,
 };
 
-export const Secondary = Template.bind({});
-Secondary.args = {
-    ...Primary.args,
-    variant: ButtonVariants.secondary,
-};
-
-export const Tertiary = Template.bind({});
-Tertiary.args = {
-    ...Primary.args,
-    variant: ButtonVariants.tertiary,
-};
-
 export const PrimaryBuy = Template.bind({});
 PrimaryBuy.args = {
     ...Primary.args,
@@ -106,10 +94,22 @@ PrimarySell.args = {
     variant: ButtonVariants.primarySell,
 };
 
+export const Secondary = Template.bind({});
+Secondary.args = {
+    ...Primary.args,
+    variant: ButtonVariants.secondary,
+};
+
 export const SecondaryNeutral = Template.bind({});
 SecondaryNeutral.args = {
     ...Primary.args,
     variant: ButtonVariants.secondaryNeutral,
+};
+
+export const Tertiary = Template.bind({});
+Tertiary.args = {
+    ...Primary.args,
+    variant: ButtonVariants.tertiary,
 };
 
 export const TertiaryBuy = Template.bind({});
