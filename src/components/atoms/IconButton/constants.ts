@@ -7,11 +7,11 @@ export const FIGMA_STORYBOOK_LINK =
 
 export const variantStyle: { [key in IconButtonVariants]: string } = {
     [IconButtonVariants.primary]: clsx(
-        'text-primary-50 bg-primary-500 border-primary-50 hover:text-primary-50 hover:bg-primary-700 hover:border-transparent active:border-primary-50',
-        'light:text-primary-500 light:bg-primary-50 light:border-primary-500 light:hover:border-primary-300 light:hover:bg-primary-300 light:active:border-primary-500'
+        'bg-primary-500 border-primary-50 hover:bg-primary-700 hover:border-transparent active:border-primary-50',
+        'light:text-primary-500 light:bg-primary-50 light:border-primary-500 light:hover:border-transparent light:hover:bg-primary-300 light:active:border-primary-500'
     ),
     [IconButtonVariants.secondary]: clsx(
-        'text-neutral-50 bg-neutral-800 border-neutral-50 hover:bg-neutral-700 hover:border-transparent active:border-neutral-50 active:bg-neutral-900',
+        'bg-neutral-800 border-neutral-50 hover:bg-neutral-700 hover:border-transparent active:border-neutral-50 active:bg-neutral-900',
         'light:bg-neutral-50 light:text-neutral-900 light:border-neutral-500 light:hover:border-transparent light:hover:bg-neutral-300 light:active:border-neutral-500'
     ),
     [IconButtonVariants.secondaryBuy]: clsx(
