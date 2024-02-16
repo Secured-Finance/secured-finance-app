@@ -2,8 +2,6 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 
 const {
     themeVariants,
-    prefersLight,
-    prefersDark,
 } = require('tailwindcss-theme-variants');
 
 module.exports = {

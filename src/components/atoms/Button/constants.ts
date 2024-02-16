@@ -8,7 +8,7 @@ export const FIGMA_STORYBOOK_LINK =
 export const variantStyle: { [key in ButtonVariants]: string } = {
     [ButtonVariants.primary]: clsx(
         'border-transparent bg-primary-500 hover:bg-primary-700 active:bg-primary-900',
-        'light:bg-primary-500 light:text-neutral-50 light:border-transparent light:hover:bg-primary-700 light:disabled:text-neutral-400 light:disabled:bg-neutral-100 light:active:bg-primary-900'
+        'light:disabled:text-neutral-400 light:disabled:bg-neutral-100'
     ),
     [ButtonVariants.primaryBuy]: clsx(
         'border-transparent bg-success-500 text-neutral-900 hover:bg-success-700 active:bg-success-900 active:text-neutral-50',
@@ -23,7 +23,7 @@ export const variantStyle: { [key in ButtonVariants]: string } = {
         'light:border-primary-500 light:text-primary-500 light:bg-primary-50 light:hover:bg-primary-300 light:hover:border-transparent light:disabled:text-neutral-300 light:disabled:bg-neutral-100 light:disabled:border-transparent light:active:bg-primary-300 light:active:text-primary-700 light:active:border-primary-500'
     ),
     [ButtonVariants.secondaryNeutral]: clsx(
-        'border-neutral-50 bg-neutral-700 text-neutral-50 hover:bg-neutral-800 hover:border-transparent active:border-neutral-50 active:bg-neutral-900',
+        'border-neutral-50 bg-neutral-700 hover:bg-neutral-800 hover:border-transparent active:border-neutral-50 active:bg-neutral-900',
         'light:bg-neutral-50 light:text-neutral-600 light:border-neutral-600 light:hover:bg-neutral-200 light:hover:border-transparent light:disabled:text-neutral-300 light:disabled:bg-neutral-100 light:disabled:border-transparent light:active:bg-neutral-300 light:active:border-neutral-600'
     ),
     [ButtonVariants.tertiary]: clsx(
@@ -36,7 +36,7 @@ export const variantStyle: { [key in ButtonVariants]: string } = {
     ),
     [ButtonVariants.tertiarySell]: clsx(
         'border-error-300 bg-transparent text-error-300 hover:bg-error-900 hover:text-error-50 hover:border-error-50 active:border-transparent',
-        'light:bg-transparent light:border-error-500 light:text-error-500 light:hover:bg-error-50 light:hover:border-error-300 light:hover:text-error-500 light:disabled:text-neutral-300 light:disabled:bg-neutral-100 light:disabled:border-transparent light:active:border-transparent light:active:text-error-900 light:active:bg-error-300'
+        'light:border-error-500 light:text-error-500 light:hover:bg-error-50 light:hover:border-error-300 light:hover:text-error-500 light:disabled:text-neutral-300 light:disabled:bg-neutral-100 light:disabled:border-transparent light:active:border-transparent light:active:text-error-900 light:active:bg-error-300'
     ),
 };
 
