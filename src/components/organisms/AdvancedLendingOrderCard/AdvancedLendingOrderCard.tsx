@@ -346,7 +346,7 @@ export function AdvancedLendingOrderCard({
                         bgClassName={
                             isBondPriceFieldDisabled
                                 ? 'bg-neutral-700'
-                                : 'bg-black-20'
+                                : undefined
                         }
                     />
                     <ErrorInfo

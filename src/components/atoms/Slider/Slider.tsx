@@ -47,7 +47,10 @@ export const Slider = ({
                     root: {
                         className: clsx(
                             'w-full relative flex items-center h-6',
-                            disabled ? 'cursor-default' : 'cursor-pointer'
+                            {
+                                'cursor-default': disabled,
+                                'cursor-pointer': !disabled,
+                            }
                         ),
                     },
                     rail: {

@@ -45,8 +45,8 @@ describe('Itayose Component', () => {
             render(<Default />, { preloadedState })
         );
         expect(store.getState().landingOrderForm.amount).toEqual('0');
-        await waitFor(() => screen.getByRole('textbox', { name: 'Amount' }));
-        fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
+        const ele = await screen.findByRole('textbox', { name: 'Amount' });
+        fireEvent.change(ele, {
             target: { value: '1' },
         });
         expect(store.getState().landingOrderForm.amount).toEqual('1');
