@@ -133,12 +133,12 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
             await securedFinanceLib.init(publicClient, walletClient);
 
             setSecuredFinance(previous => {
-                if (securedFinanceLib.config.chain.id !== chainId) {
-                    return previous;
-                }
-
                 if (!previous) {
                     return securedFinanceLib;
+                }
+
+                if (securedFinanceLib.config.chain.id !== chainId) {
+                    return previous;
                 }
 
                 if (
