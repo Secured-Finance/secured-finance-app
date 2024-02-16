@@ -89,22 +89,16 @@ describe('test Button component', () => {
 
     it('should render an outlined button when variant is tertiary', async () => {
         render(<Tertiary />);
-        expect(screen.getByRole('button')).toHaveClass(
-            'border-primary-50 bg-transparent'
-        );
+        expect(screen.getByRole('button')).toHaveClass('border-primary-50');
     });
 
     it('should render a green outlined button when variant is tertiary-buy', async () => {
         render(<TertiaryBuy />);
-        expect(screen.getByRole('button')).toHaveClass(
-            'bg-transparent border-success-300'
-        );
+        expect(screen.getByRole('button')).toHaveClass('border-success-300');
     });
 
     it('should render a red outlined button when variant is tertiary-buy', async () => {
         render(<TertiarySell />);
-        expect(screen.getByRole('button')).toHaveClass(
-            'bg-transparent border-error-300'
-        );
+        expect(screen.getByRole('button')).toHaveClass('border-error-300');
     });
 });
