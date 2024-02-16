@@ -1,5 +1,7 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 
+const { themeVariants } = require('tailwindcss-theme-variants');
+
 module.exports = {
     content: ['./src/**/*.{ts,tsx,js,jsx}', './public/index.html'],
     safelist: [
@@ -94,9 +96,71 @@ module.exports = {
             '2xs': ['10px', { lineHeight: '15px' }],
         },
         colors: {
+            primary: {
+                50: '#F5F6FF',
+                300: '#C4CAFF',
+                500: '#5162FF',
+                700: '#2033DB',
+                900: '#0213A5',
+            },
+            secondary: {
+                50: '#D4FCFF',
+                300: '#96EAF1',
+                500: '#15D6E8',
+                700: '#09A8B7',
+                900: '#017E8A',
+            },
+            tertiary: {
+                50: '#F5F6FF',
+                300: '#C4CAFF',
+                500: '#5162FF',
+                700: '#BD47FB',
+                900: '#0213A5',
+            },
+            // TODO: handle neutral 1-8 as figma variables
+            neutral: {
+                1: '#141416',
+                2: '#23262F',
+                3: '#353945',
+                4: '#777E91',
+                5: '#B1B5C4',
+                6: '#E6E8EC',
+                7: '#F4F5F6',
+                8: '#FCFCFD',
+                50: '#FBFAFC',
+                100: '#F1F5F9',
+                200: '#E2E8F0',
+                300: '#CBD5E1',
+                400: '#94A3B8',
+                500: '#64748B',
+                600: '#475569',
+                700: '#334155',
+                800: '#1E293B',
+                900: '#002133',
+            },
+            success: {
+                50: '#DDFFE9',
+                300: '#AFFFCB',
+                500: '#74E37E',
+                700: '#5CD167',
+                900: '#157637',
+            },
+            warning: {
+                50: '#FFF1D7',
+                300: '#FFDB93',
+                500: '#FFCD69',
+                700: '#FAAD14',
+                900: '#BD7003',
+            },
+            error: {
+                50: '#FFE5E8',
+                300: '#FF9FAE',
+                500: '#FF324B',
+                700: '#CE0920',
+                900: '#A50114',
+            },
             // Primary
-            universeBlue: '#002133',
-            horizonBlue: '#3555AC',
+
             teal: '#11CABE',
             green: '#5CD167',
             orange: '#F9AA4B',
@@ -104,35 +168,15 @@ module.exports = {
             red: '#FA2256',
             purple: '#BD47FB',
             gunMetal: '#292D3F',
-            primary7: '#11CABE',
 
             // Secondary
-            galacticOrange: '#FF9FAE',
             planetaryPurple: '#ADB6FF',
             nebulaTeal: '#15D6E8',
-            secondaryPurple: '#AE72FF',
+            horizonBlue: '#3555AC',
+            galacticOrange: '#FF9FAE',
             moonGrey: '#E6E6E6',
             slateGray: '#777E90',
             secondary7: '#B9BDEA',
-
-            neutral: {
-                DEFAULT: '#353945',
-                '1': '#141416',
-                '2': '#23262F',
-                '3': '#353945',
-                '4': '#777E91',
-                '5': '#B1B5C4',
-                '6': '#E6E8EC',
-                '7': '#F4F5F6',
-                '8': '#FCFCFD',
-                '50': '#FBFAFC',
-                '300': '#CBD5E1',
-                '500': '#64748B',
-                '600': '#475569',
-                '700': '#334155',
-                '800': '#1E293B',
-                '900': '#002133',
-            },
             grayScale: '#FAFAFA',
 
             tabGradient2: 'rgba(106, 118, 177, 0.35)',
@@ -195,5 +239,13 @@ module.exports = {
             },
         },
     },
-    plugins: [],
+    plugins: [
+        themeVariants({
+            themes: {
+                light: {
+                    selector: '.light',
+                },
+            },
+        }),
+    ],
 };

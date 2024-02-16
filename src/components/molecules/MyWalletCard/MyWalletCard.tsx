@@ -11,6 +11,7 @@ import {
     AssetDisclosureProps,
 } from 'src/components/molecules';
 import { useBalances } from 'src/hooks';
+import { ButtonSizes } from 'src/types';
 import {
     CurrencySymbol,
     WalletSource,
@@ -41,7 +42,7 @@ const BridgeDialog = ({
             <div className='fixed inset-0 bg-backgroundBlur backdrop-blur-sm' />
             <div className='fixed inset-0 flex items-center justify-center'>
                 <Dialog.Panel
-                    className='h-screen w-full overflow-y-auto rounded-xl bg-universeBlue p-6 shadow-deep tablet:h-fit tablet:w-fit'
+                    className='h-screen w-full overflow-y-auto rounded-xl bg-neutral-900 p-6 shadow-deep tablet:h-fit tablet:w-fit'
                     data-cy='modal'
                 >
                     <div
@@ -111,7 +112,7 @@ export const MyWalletCard = ({
                                     </div>
                                     <Button
                                         onClick={() => setIsOpen(true)}
-                                        size='xs'
+                                        size={ButtonSizes.xs}
                                     >
                                         Bridge
                                     </Button>

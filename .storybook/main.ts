@@ -11,6 +11,8 @@ const config: StorybookConfig = {
         'storybook-addon-performance',
         'storybook-addon-apollo-client',
         '@storybook/addon-interactions',
+        '@storybook/addon-designs',
+        'storybook-dark-mode',
     ],
     typescript: {
         reactDocgen: false,

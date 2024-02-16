@@ -111,6 +111,7 @@ export const OrderAction = ({
                             track(ButtonEvents.PLACE_ORDER_BUTTON);
                         }}
                         data-testid='place-order-button'
+                        mobileText='Order'
                         aria-label={getButtonText()}
                     >
                         {getButtonText()}

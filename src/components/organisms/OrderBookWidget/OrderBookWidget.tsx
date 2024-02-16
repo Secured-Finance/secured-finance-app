@@ -534,8 +534,8 @@ const OrderBookIcon = ({
     <button
         key={name}
         aria-label={name}
-        className={clsx('px-[10px] py-[11px] hover:bg-universeBlue', {
-            'bg-universeBlue': active,
+        className={clsx('px-[10px] py-[11px] hover:bg-neutral-900', {
+            'bg-neutral-900': active,
         })}
         onClick={onClick}
     >
