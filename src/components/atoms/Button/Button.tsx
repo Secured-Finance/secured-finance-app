@@ -1,25 +1,31 @@
 import clsx from 'clsx';
-import { SvgIcon } from 'src/types';
+import { useBreakpoint } from 'src/hooks';
+import { ButtonSizes, SvgIcon } from 'src/types';
+import { sizeStyle, variantStyle } from './constants';
+import { ButtonVariants } from './types';
 
 export const Button = ({
-    href, //do nothing
-    size = 'md',
+    href,
+    size = ButtonSizes.md,
     fullWidth = false,
     children,
     StartIcon,
     EndIcon,
-    variant = 'solid',
+    variant = ButtonVariants.primary,
+    mobileText, // Added prop to handle button text on mobile
     ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement> &
     React.AnchorHTMLAttributes<HTMLAnchorElement> & {
         fullWidth?: boolean;
         href?: string;
-        size?: 'xs' | 'sm' | 'md';
-        variant?: 'solid' | 'outlined';
+        size?: ButtonSizes;
+        variant?: ButtonVariants;
+        mobileText?: string;
     } & {
         StartIcon?: SvgIcon;
         EndIcon?: SvgIcon;
     }) => {
+    const isMobile = useBreakpoint('tablet');
     const Tag = href ? 'a' : 'button';
     const tagProps = href
         ? {
@@ -30,26 +36,28 @@ export const Button = ({
         : props;
 
     const label = typeof children === 'string' ? children : 'Button';
+    const text = isMobile && mobileText ? mobileText : children;
 
     return (
         <Tag
             {...tagProps}
             aria-label={label}
             className={clsx(
-                `flex items-center justify-center rounded-xl ${props?.className}`,
+                'flex items-center justify-center border font-semibold disabled:bg-neutral-600 disabled:text-neutral-400',
+                props?.className,
+                sizeStyle[size],
+                variantStyle[variant],
                 {
-                    'h-8 px-3 py-2': size === 'xs',
-                    'h-10 px-4 py-3': size === 'sm',
-                    'h-12 px-6 py-4': size === 'md',
+                    'text-neutral-50':
+                        variant !== ButtonVariants.primaryBuy &&
+                        variant !== ButtonVariants.tertiaryBuy &&
+                        variant !== ButtonVariants.tertiarySell,
                     'w-full': fullWidth,
                     'w-fit': !fullWidth,
-                    'enabled:border-2 enabled:border-slateGray enabled:text-neutral-8 enabled:hover:border-none enabled:hover:bg-neutral-8 enabled:hover:text-neutral-2 disabled:bg-neutral-8 disabled:text-neutral-2':
-                        variant === 'outlined',
-                    'bg-starBlue text-neutral-8 enabled:hover:bg-gradient-to-t enabled:hover:from-black-20 enabled:hover:via-black-20 enabled:hover:to-starBlue disabled:bg-gradient-to-t disabled:from-black/25 disabled:via-black/25 disabled:to-starBlue disabled:opacity-50':
-                        variant === 'solid',
                 }
             )}
         >
+            {/* TODO: handle height of start and end icon wrt size prop value */}
             {StartIcon && (
                 <span className='mr-3'>
                     <StartIcon className='h-4 text-white' role='img' />
@@ -57,12 +65,13 @@ export const Button = ({
             )}
             <p
                 className={clsx('whitespace-nowrap', {
-                    'typography-button-2 text-xs': size === 'xs',
-                    'typography-button-2': size === 'sm',
-                    'typography-button-1': size === 'md',
+                    'text-xs': size === ButtonSizes.xs,
+                    'text-sm': size === ButtonSizes.sm,
+                    'text-base':
+                        size === ButtonSizes.md || size === ButtonSizes.lg,
                 })}
             >
-                {children}
+                {text}
             </p>
             {EndIcon && (
                 <span className='ml-3'>

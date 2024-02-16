@@ -68,7 +68,6 @@ export const GlobalItayose = () => {
                         onChange={handleCurrencyChange}
                     />
                     <Button
-                        size='md'
                         onClick={() => {
                             router.push('/itayose/');
                         }}

@@ -10,6 +10,7 @@ import {
 } from 'src/components/atoms';
 import { CollateralBook, useCollateralCurrencies } from 'src/hooks';
 import { RootState } from 'src/store/types';
+import { ButtonSizes } from 'src/types';
 import {
     ButtonEvents,
     CurrencySymbol,
@@ -211,7 +212,7 @@ export const CollateralTabLeftPane = ({
             </div>
             <div className='flex h-24 flex-row items-center justify-center gap-4 px-6'>
                 <Button
-                    size='sm'
+                    size={ButtonSizes.sm}
                     onClick={() => {
                         onClick('deposit');
                         track(ButtonEvents.DEPOSIT_COLLATERAL_BUTTON);
@@ -223,7 +224,7 @@ export const CollateralTabLeftPane = ({
                     Deposit
                 </Button>
                 <Button
-                    size='sm'
+                    size={ButtonSizes.sm}
                     disabled={!account || netAssetValue <= 0 || chainError}
                     onClick={() => {
                         onClick('withdraw');

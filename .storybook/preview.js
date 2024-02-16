@@ -53,6 +53,12 @@ export const parameters = {
     // Date is set to 1st Feb 2022 for all stories
     // This can be overridden in individual stories
     date: { value: new Date('2022-02-01T11:00:00.00Z') },
+    darkMode: {
+        classTarget: 'html',
+        stylePreview: true,
+        lightClass: 'light',
+        darkClass: 'dark',
+    },
 };
 
 export const decorators = [
