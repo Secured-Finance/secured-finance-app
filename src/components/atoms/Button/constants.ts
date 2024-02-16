@@ -27,15 +27,15 @@ export const variantStyle: { [key in ButtonVariants]: string } = {
         'light:bg-neutral-50 light:text-neutral-600 light:border-neutral-600 light:hover:bg-neutral-200 light:hover:border-transparent light:disabled:text-neutral-300 light:disabled:bg-neutral-100 light:disabled:border-transparent light:active:bg-neutral-300 light:active:border-neutral-600'
     ),
     [ButtonVariants.tertiary]: clsx(
-        'border-primary-50 bg-transparent hover:bg-neutral-900 active:border-transparent',
-        'light:bg-transparent light:text-neutral-900 light:border-neutral-500 light:hover:bg-neutral-50 light:hover:text-neutral-500 light:hover:border-neutral-300 light:disabled:text-neutral-300 light:disabled:bg-neutral-100 light:disabled:border-transparent light:active:text-neutral-900 light:active:bg-neutral-300 light:active:border-transparent'
+        'border-primary-50 hover:bg-neutral-900 active:border-transparent',
+        'light:text-neutral-900 light:border-neutral-500 light:hover:bg-neutral-50 light:hover:text-neutral-500 light:hover:border-neutral-300 light:disabled:text-neutral-300 light:disabled:bg-neutral-100 light:disabled:border-transparent light:active:text-neutral-900 light:active:bg-neutral-300 light:active:border-transparent'
     ),
     [ButtonVariants.tertiaryBuy]: clsx(
-        'border-success-300 bg-transparent text-success-300 hover:bg-success-900 hover:text-success-50 hover:border-success-50 active:border-transparent',
-        'light:bg-transparent light:border-success-900 light:text-success-900 light:hover:bg-success-50 light:disabled:text-neutral-300 light:disabled:bg-neutral-100 light:disabled:border-transparent light:active:bg-success-300 light:active:text-success-900 light:active:border-transparent'
+        'border-success-300 text-success-300 hover:bg-success-900 hover:text-success-50 hover:border-success-50 active:border-transparent',
+        'light:border-success-900 light:text-success-900 light:hover:bg-success-50 light:disabled:text-neutral-300 light:disabled:bg-neutral-100 light:disabled:border-transparent light:active:bg-success-300 light:active:text-success-900 light:active:border-transparent'
     ),
     [ButtonVariants.tertiarySell]: clsx(
-        'border-error-300 bg-transparent text-error-300 hover:bg-error-900 hover:text-error-50 hover:border-error-50 active:border-transparent',
+        'border-error-300 text-error-300 hover:bg-error-900 hover:text-error-50 hover:border-error-50 active:border-transparent',
         'light:border-error-500 light:text-error-500 light:hover:bg-error-50 light:hover:border-error-300 light:hover:text-error-500 light:disabled:text-neutral-300 light:disabled:bg-neutral-100 light:disabled:border-transparent light:active:border-transparent light:active:text-error-900 light:active:bg-error-300'
     ),
 };
