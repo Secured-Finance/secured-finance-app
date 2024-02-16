@@ -1,8 +1,6 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 
-const {
-    themeVariants,
-} = require('tailwindcss-theme-variants');
+const { themeVariants } = require('tailwindcss-theme-variants');
 
 module.exports = {
     content: ['./src/**/*.{ts,tsx,js,jsx}', './public/index.html'],
