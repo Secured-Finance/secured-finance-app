@@ -1,5 +1,3 @@
-import { init } from '@amplitude/analytics-browser';
-import { LogLevel } from '@amplitude/analytics-types';
 import { GraphClientProvider } from '@secured-finance/sf-graph-client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -16,7 +14,6 @@ import store from 'src/store';
 import { selectNetworkName } from 'src/store/blockchain';
 import { RootState } from 'src/store/types';
 import {
-    getAmplitudeApiKey,
     getSupportedChainIds,
     getSupportedNetworks,
     getWalletConnectId,
@@ -33,10 +30,10 @@ const projectId = getWalletConnectId();
 
 const queryClient = new QueryClient();
 
-init(getAmplitudeApiKey(), undefined, {
-    appVersion: process.env.SF_ENV,
-    logLevel: LogLevel.None,
-});
+// init(getAmplitudeApiKey(), undefined, {
+//     appVersion: process.env.SF_ENV,
+//     logLevel: LogLevel.None,
+// });
 
 const chainIds = getSupportedChainIds();
 const networks = getSupportedNetworks().filter(chain =>
@@ -61,10 +58,10 @@ const config = createConfig({
                 projectId: projectId,
                 qrModalOptions: {
                     themeVariables: {
-                        '--w3m-font-family':
+                        '--wcm-font-family':
                             "'Suisse International', sans-serif",
-                        '--w3m-accent-color': '#002133',
-                        '--w3m-background-color': '#5162FF',
+                        '--wcm-accent-color': '#002133',
+                        '--wcm-background-color': '#5162FF',
                     },
                 },
             },

@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Arbitrum from 'src/assets/icons/arbitrum-network.svg';
 import Avalanche from 'src/assets/icons/avalanche-network.svg';
 import Ethereum from 'src/assets/icons/ethereum-network.svg';
@@ -35,7 +36,8 @@ export const SupportedChainsList: ChainInformation[] = [
     {
         chain: mainnet,
         icon: (
-            <Ethereum className='h-4 w-4 rounded-full tablet:h-5 tablet:w-5' />
+            <Image src='src/assets/icons/ethereum-network.svg' alt='Ethereum' />
+            // <Ethereum className='h-4 w-4 rounded-full tablet:h-5 tablet:w-5' />
         ),
     },
     {

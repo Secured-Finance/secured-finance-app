@@ -1,5 +1,5 @@
 import { composeStories } from '@storybook/react';
-import { useRouter } from 'next/router';
+import mockRouter from 'next-router-mock';
 import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './Header.stories';
 
@@ -16,11 +16,11 @@ jest.mock(
             children
 );
 
+jest.mock('next/router', () => jest.requireActual('next-router-mock'));
+
 describe('Header component', () => {
     it('should render the header', () => {
-        (useRouter as jest.Mock).mockReturnValue({
-            pathname: '/',
-        });
+        mockRouter.push('/');
         render(<Primary />);
         expect(screen.getByText('OTC Lending')).toBeInTheDocument();
         expect(screen.getByText('Markets')).toBeInTheDocument();
@@ -29,9 +29,7 @@ describe('Header component', () => {
     });
 
     it('should highlight the landing page by default page', () => {
-        (useRouter as jest.Mock).mockReturnValue({
-            pathname: '/',
-        });
+        mockRouter.push('/');
         render(<Primary />);
         const textElement = screen.getByText('OTC Lending');
         expect(textElement.parentNode).toHaveClass(
@@ -40,9 +38,7 @@ describe('Header component', () => {
     });
 
     it('should highlight the landing page when on global-itayose', () => {
-        (useRouter as jest.Mock).mockReturnValue({
-            pathname: '/global-itayose',
-        });
+        mockRouter.push('/global-itayose');
         render(<Primary />);
         const textElement = screen.getByText('OTC Lending');
         expect(textElement.parentNode).toHaveClass(
@@ -51,10 +47,7 @@ describe('Header component', () => {
     });
 
     it('should highlight the dashboard page when on dashboard page', () => {
-        (useRouter as jest.Mock).mockImplementation(() => ({
-            pathname: '/dashboard',
-            push: jest.fn(),
-        }));
+        mockRouter.push('/dashboard');
 
         render(<Primary />);
         fireEvent.click(screen.getByText('Markets'));
@@ -66,10 +59,7 @@ describe('Header component', () => {
     });
 
     it('should highlight the landing page when on advanced page', () => {
-        (useRouter as jest.Mock).mockImplementation(() => ({
-            pathname: '/advanced',
-            push: jest.fn(),
-        }));
+        mockRouter.push('/advanced');
 
         render(<Primary />);
         const textElement = screen.getByText('OTC Lending');
@@ -79,10 +69,7 @@ describe('Header component', () => {
     });
 
     it('should render testnet info header on chainError false', () => {
-        (useRouter as jest.Mock).mockImplementation(() => ({
-            pathname: '/',
-            push: jest.fn(),
-        }));
+        mockRouter.push('/');
 
         render(<Primary />);
         expect(screen.getByTestId('testnet-info')).toBeInTheDocument();
@@ -91,11 +78,8 @@ describe('Header component', () => {
         ).toBeInTheDocument();
     });
 
-    it.skip('should render testnet alert header on chainError true', () => {
-        (useRouter as jest.Mock).mockImplementation(() => ({
-            pathname: '/',
-            push: jest.fn(),
-        }));
+    it('should render testnet alert header on chainError true', () => {
+        mockRouter.push('/');
 
         render(<Primary />, {
             preloadedState: {
@@ -110,10 +94,7 @@ describe('Header component', () => {
     });
 
     it('should not render testnet header if current chain is mainnet', () => {
-        (useRouter as jest.Mock).mockImplementation(() => ({
-            pathname: '/',
-            push: jest.fn(),
-        }));
+        mockRouter.push('/');
 
         render(<Primary />, {
             preloadedState: {

@@ -6,7 +6,7 @@ module.exports = { webpackOverride };
 function webpackOverride(config) {
     // disable whatever is already set to load SVGs
     config.module.rules
-        .filter(rule => rule.test && rule.test.test('.svg'))
+        .filter(rule => rule.test && rule.test.test?.('.svg'))
         .forEach(rule => (rule.exclude = /\.svg$/i));
 
     config.module.rules.push({
