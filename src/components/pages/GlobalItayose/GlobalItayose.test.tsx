@@ -11,6 +11,8 @@ jest.mock('next/router', () => ({
     })),
 }));
 
+jest.mock('next/router', () => jest.requireActual('next-router-mock'));
+
 describe('GlobalItayose Component', () => {
     it('should render a GlobalItayose', () => {
         render(<Default />);

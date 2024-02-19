@@ -387,14 +387,13 @@ export function AdvancedLendingOrderCard({
 
                 <div className='typography-nav-menu-default flex flex-row justify-between'>
                     <div className='text-neutral-8'>Collateral Management</div>
-                    <Link href='/portfolio' passHref>
-                        <a
-                            className='text-planetaryPurple'
-                            href='_'
-                            role='button'
-                        >
-                            {'Manage \u00BB'}
-                        </a>
+                    <Link
+                        href='/portfolio'
+                        passHref
+                        className='text-planetaryPurple'
+                        role='button'
+                    >
+                        {'Manage \u00BB'}
                     </Link>
                 </div>
 

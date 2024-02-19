@@ -117,11 +117,9 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                 className='grid h-20 w-full grid-flow-col border-b border-neutral-1 px-5 laptop:grid-flow-col'
             >
                 <div className='col-span-2 flex flex-row items-center gap-3'>
-                    <Link href='/' passHref>
-                        <a href='_'>
-                            <SFLogo className='hidden tablet:inline tablet:h-10 tablet:w-[200px]' />
-                            <SFLogoSmall className='inline h-7 w-7 tablet:hidden' />
-                        </a>
+                    <Link href='/'>
+                        <SFLogo className='hidden tablet:inline tablet:h-10 tablet:w-[200px]' />
+                        <SFLogoSmall className='inline h-7 w-7 tablet:hidden' />
                     </Link>
                     {showNavigation && (
                         <div className='flex h-full flex-row tablet:pl-12'>
@@ -207,10 +205,13 @@ const ItemLink = ({
         );
     };
     return (
-        <Link href={link} className='h-full' passHref>
-            <a className='h-full' href='_' data-cy={dataCy.toLowerCase()}>
-                <NavTab text={text} active={useCheckActive()} />
-            </a>
+        <Link
+            href={link}
+            className='h-full'
+            passHref
+            data-cy={dataCy.toLowerCase()}
+        >
+            <NavTab text={text} active={useCheckActive()} />
         </Link>
     );
 };

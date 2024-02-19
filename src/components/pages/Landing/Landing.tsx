@@ -167,13 +167,11 @@ const WithBanner = ({
                                 }
                             ).format(market.utcOpeningDate * 1000)}`}
                             <span className='pl-4'>
-                                <Link href='itayose' passHref>
-                                    <a
-                                        href='_'
-                                        className='text-planetaryPurple underline'
-                                    >
-                                        Place Order Now
-                                    </a>
+                                <Link
+                                    href='itayose'
+                                    className='text-planetaryPurple underline'
+                                >
+                                    Place Order Now
                                 </Link>
                             </span>
                         </p>
