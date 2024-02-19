@@ -1,6 +1,15 @@
 import clsx from 'clsx';
 import { HighlightChip } from '../HighlightChip';
 
+export interface NavStylesProps {
+    bgColorActive: string;
+    textClassActive: string;
+    gradient: {
+        from: string;
+        to: string;
+    };
+}
+
 interface NavTabProps {
     text: string;
     active: boolean;
@@ -9,14 +18,7 @@ interface NavTabProps {
         size: 'small' | 'large';
         visible: boolean;
     };
-    navStyles?: {
-        bgColor: string;
-        textClass: string;
-        gradient: {
-            from: string;
-            to: string;
-        };
-    };
+    navStyles?: NavStylesProps;
 }
 
 export const NavTab = ({
@@ -29,7 +31,7 @@ export const NavTab = ({
         <div className='group flex h-full w-full flex-col text-center'>
             <div
                 className={clsx('h-1 w-full', {
-                    [navStyles?.bgColor || 'bg-starBlue']: active,
+                    [navStyles?.bgColorActive || 'bg-starBlue']: active,
                 })}
             ></div>
             <div
@@ -48,7 +50,7 @@ export const NavTab = ({
                     className={clsx(
                         'typography-nav-menu-default h-4 whitespace-nowrap duration-300 group-hover:opacity-100 group-hover:ease-in-out',
                         {
-                            [navStyles?.textClass || '']: active,
+                            [navStyles?.textClassActive || '']: active,
                             'text-neutral-8': !active || !navStyles,
                             'opacity-100': active,
                             'opacity-70': !active,

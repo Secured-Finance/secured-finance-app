@@ -16,7 +16,7 @@ import {
 import timemachine from 'timemachine';
 import * as stories from './AdvancedLendingOrderCard.stories';
 
-const { Default } = composeStories(stories);
+const { Default, WalletNotConnected } = composeStories(stories);
 
 const preloadedState = {
     landingOrderForm: {
@@ -424,6 +424,29 @@ describe('AdvancedLendingOrderCard Component', () => {
         ).not.toBeInTheDocument();
     });
 
+    // TODO: complete test for when wallet is not connected
+    it('should disable elements when wallet not connected', () => {
+        render(<WalletNotConnected />, { preloadedState });
+
+        // lending side
+        const lendingSourceBtn = screen.getByTestId(
+            'wallet-source-selector-button'
+        );
+
+        const input = screen.getByRole('input', { name: 'Bond Price' });
+        expect(input).not.toBeInTheDocument();
+
+        // const collateralInput = screen.getByLabelText('Collateral input');
+        // const borrowInput = screen.getByLabelText('Borrow input');
+        // const submitButton = screen.getByRole('button', {
+        //     name: 'Submit order',
+        // });
+
+        // expect(collateralInput).toBeDisabled();
+        // expect(borrowInput).toBeDisabled();
+        // expect(submitButton).toBeDisabled();
+    });
+
     describe('Itayose Order Card', () => {
         it('should hide both market and limit order when in onlyLimitOrder mode', async () => {
             render(<Default isItayose preOrderPosition='none' />);
@@ -698,7 +721,7 @@ describe('AdvancedLendingOrderCard Component', () => {
             assertBondPriceInputValue('92');
         });
 
-        it('should be reset to market price when changing order type from LIMIT to MARKET', () => {
+        it('should be reset to Market display when changing order type from LIMIT to MARKET', async () => {
             render(<Default marketPrice={9600} />, {
                 preloadedState: {
                     ...preloadedState,
@@ -712,8 +735,15 @@ describe('AdvancedLendingOrderCard Component', () => {
             assertBondPriceInputValue('92');
             expect(screen.getAllByText('Market')).toHaveLength(1);
 
-            fireEvent.click(screen.getByText('Market'));
-            expect(screen.getAllByText('Market')).toHaveLength(2);
+            const marketButton = screen.getByRole('radio', {
+                name: 'Market',
+            });
+
+            fireEvent.click(marketButton);
+
+            const spanInput = screen.getByTestId('disabled-input');
+            expect(spanInput).toBeInTheDocument();
+            expect(spanInput).toHaveTextContent('Market');
         });
 
         it('should calculate the APR from the user input bond price', async () => {
