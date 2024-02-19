@@ -273,16 +273,16 @@ export function AdvancedLendingOrderCard({
                 variant='NavTab'
                 optionsStyles={[
                     {
-                        bgColor: 'bg-nebulaTeal',
-                        textClass: 'text-secondary3 font-semibold',
+                        bgColorActive: 'bg-nebulaTeal',
+                        textClassActive: 'text-secondary3 font-semibold',
                         gradient: {
                             from: 'from-tabGradient-4',
                             to: 'to-tabGradient-3',
                         },
                     },
                     {
-                        bgColor: 'bg-galacticOrange',
-                        textClass: 'text-[#FFE5E8] font-semibold',
+                        bgColorActive: 'bg-galacticOrange',
+                        textClassActive: 'text-[#FFE5E8] font-semibold',
                         gradient: {
                             from: 'from-tabGradient-6',
                             to: 'to-tabGradient-5',
@@ -385,9 +385,7 @@ export function AdvancedLendingOrderCard({
                     initialValue={amountInput}
                     onValueChange={v => handleInputChange((v as string) ?? '')}
                     disabled={!isConnected}
-                    bgClassName={
-                        !isConnected ? 'bg-neutral-700' : 'bg-black-20'
-                    }
+                    bgClassName={!isConnected ? 'bg-neutral-700' : undefined}
                 />
                 <div className='mx-10px'>
                     <Slider

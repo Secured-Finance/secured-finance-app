@@ -25,7 +25,7 @@ describe('test Slider component', () => {
         const slider = screen.getByRole('slider');
         expect(slider).toBeDisabled();
 
-        fireEvent.click(slider);
+        fireEvent.change(slider, { target: { value: 100 } });
         expect(onChangeMock).not.toHaveBeenCalled();
     });
 });

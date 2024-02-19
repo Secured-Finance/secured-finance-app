@@ -35,16 +35,16 @@ NavTabWithOptionsStyles.args = {
     ...NavTabWithOptionsStyles.args,
     optionsStyles: [
         {
-            bgColor: 'bg-nebulaTeal',
-            textClass: 'text-secondary3 font-semibold',
+            bgColorActive: 'bg-nebulaTeal',
+            textClassActive: 'text-secondary3 font-semibold',
             gradient: {
                 from: 'from-tabGradient-4',
                 to: 'to-tabGradient-3',
             },
         },
         {
-            bgColor: 'bg-error5',
-            textClass: 'text-galacticOrange font-semibold',
+            bgColorActive: 'bg-error5',
+            textClassActive: 'text-galacticOrange font-semibold',
             gradient: {
                 from: 'from-tabGradient-6',
                 to: 'to-tabGradient-5',

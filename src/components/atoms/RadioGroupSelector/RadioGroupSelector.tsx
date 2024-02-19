@@ -1,6 +1,6 @@
 import { RadioGroup } from '@headlessui/react';
 import clsx from 'clsx';
-import { NavTab } from 'src/components/atoms';
+import { NavStylesProps, NavTab } from 'src/components/atoms';
 
 export const RadioGroupSelector = ({
     options,
@@ -13,14 +13,7 @@ export const RadioGroupSelector = ({
     selectedOption: string;
     handleClick: (option: string) => void;
     variant: 'NavTab' | 'StyledButton';
-    optionsStyles?: {
-        bgColor: string;
-        textClass: string;
-        gradient: {
-            from: string;
-            to: string;
-        };
-    }[];
+    optionsStyles?: NavStylesProps[];
 }) => {
     return (
         <RadioGroup
@@ -46,7 +39,7 @@ export const RadioGroupSelector = ({
                                 text={option}
                                 active={checked}
                                 navStyles={
-                                    optionsStyles
+                                    optionsStyles && optionsStyles[index]
                                         ? optionsStyles[index]
                                         : undefined
                                 }

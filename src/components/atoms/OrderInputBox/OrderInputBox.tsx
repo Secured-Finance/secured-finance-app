@@ -54,7 +54,10 @@ export const OrderInputBox = ({
             </div>
             <div className='grid grid-flow-col place-content-end gap-10px'>
                 {disabled ? (
-                    <span className='text-right text-base font-semibold leading-6 text-neutral-300'>
+                    <span
+                        className='text-right text-base font-semibold leading-6 text-neutral-300'
+                        data-testid='disabled-input'
+                    >
                         {initialValue ?? 0}
                     </span>
                 ) : (
