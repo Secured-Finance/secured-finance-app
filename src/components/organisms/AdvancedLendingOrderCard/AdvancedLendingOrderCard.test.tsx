@@ -424,27 +424,24 @@ describe('AdvancedLendingOrderCard Component', () => {
         ).not.toBeInTheDocument();
     });
 
-    // TODO: complete test for when wallet is not connected
-    it('should disable elements when wallet not connected', () => {
+    it('should disable elements and hide order inputs when wallet is not connected', async () => {
         render(<WalletNotConnected />, { preloadedState });
 
         // lending side
-        const lendingSourceBtn = screen.getByTestId(
-            'wallet-source-selector-button'
-        );
+        fireEvent.click(screen.getByRole('radio', { name: 'Lend' }));
+        expect(
+            screen.getByTestId('wallet-source-selector-button')
+        ).toBeDisabled();
+        expect(
+            screen.queryByRole('input', { name: 'Bond Price' })
+        ).not.toBeInTheDocument();
 
-        const input = screen.getByRole('input', { name: 'Bond Price' });
-        expect(input).not.toBeInTheDocument();
+        // borrow side
+        fireEvent.click(screen.getByRole('radio', { name: 'Borrow' }));
 
-        // const collateralInput = screen.getByLabelText('Collateral input');
-        // const borrowInput = screen.getByLabelText('Borrow input');
-        // const submitButton = screen.getByRole('button', {
-        //     name: 'Submit order',
-        // });
-
-        // expect(collateralInput).toBeDisabled();
-        // expect(borrowInput).toBeDisabled();
-        // expect(submitButton).toBeDisabled();
+        expect(
+            screen.queryByRole('textbox', { name: 'Amount' })
+        ).not.toBeInTheDocument();
     });
 
     describe('Itayose Order Card', () => {
