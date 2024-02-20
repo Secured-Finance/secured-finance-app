@@ -1,4 +1,4 @@
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Landing } from 'src/components/pages';
 import { useIsGlobalItayose, useIsMarketTerminated } from 'src/hooks';
@@ -11,6 +11,8 @@ function EntryPoint() {
     const { data: isGlobalItayose, isLoading: isLoadingGlobalItayose } =
         useIsGlobalItayose();
 
+    const router = useRouter();
+
     useEffect(() => {
         setIsMounted(true);
     }, []);
@@ -19,13 +21,13 @@ function EntryPoint() {
         return null;
     }
 
-    if (isTerminated) {
-        Router.push('/emergency');
+    if (isTerminated && typeof window !== 'undefined') {
+        router.push('/emergency');
         return null;
     }
 
-    if (isGlobalItayose) {
-        Router.push('/global-itayose');
+    if (isGlobalItayose && typeof window !== 'undefined') {
+        router.push('/global-itayose');
         return null;
     }
 

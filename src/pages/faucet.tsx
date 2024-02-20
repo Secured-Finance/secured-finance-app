@@ -1,9 +1,10 @@
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import { Faucet as FaucetComponent } from 'src/components/pages';
 import { useIsMarketTerminated } from 'src/hooks';
 import { isProdEnv } from 'src/utils/displayUtils';
 
 const Faucet = () => {
+    const router = useRouter();
     if (isProdEnv()) {
         return null;
     }
@@ -16,8 +17,8 @@ const Faucet = () => {
         return null;
     }
 
-    if (isTerminated) {
-        Router.push('/emergency');
+    if (isTerminated && typeof window !== 'undefined') {
+        router.push('/emergency');
         return null;
     }
 
