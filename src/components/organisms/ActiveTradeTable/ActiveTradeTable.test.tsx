@@ -24,8 +24,6 @@ beforeAll(() => {
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-jest.mock('next/router', () => jest.requireActual('next-router-mock'));
-
 describe('ActiveTradeTable Component', () => {
     it('should render a ActiveTradeTable as a table', () => {
         render(<Default />);
