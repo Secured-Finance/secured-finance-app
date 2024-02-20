@@ -9,8 +9,6 @@ const { Default, GlobalItayose } = composeStories(stories);
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
-jest.mock('next/router', () => jest.requireActual('next-router-mock'));
-
 describe('MarketLoanWidget Component', () => {
     it('should filter by currency', async () => {
         render(<Default />);

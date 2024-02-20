@@ -8,8 +8,6 @@ const { Default, Loading } = composeStories(stories);
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-jest.mock('next/router', () => require('next-router-mock'));
-
 describe('YieldChart Component', () => {
     it.skip('should render YieldChart', async () => {
         const { container } = render(<Default />);

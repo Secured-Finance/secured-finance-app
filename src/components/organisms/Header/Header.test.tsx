@@ -5,18 +5,12 @@ import * as stories from './Header.stories';
 
 const { Primary } = composeStories(stories);
 
-jest.mock('next/router', () => ({
-    useRouter: jest.fn(),
-}));
-
 jest.mock(
     'next/link',
     () =>
         ({ children }: { children: React.ReactNode }) =>
             children
 );
-
-jest.mock('next/router', () => jest.requireActual('next-router-mock'));
 
 describe('Header component', () => {
     it('should render the header', () => {
