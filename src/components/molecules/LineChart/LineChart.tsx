@@ -2,6 +2,7 @@ import {
     CategoryScale,
     ChartData,
     Chart as ChartJS,
+    ChartOptions,
     LineElement,
     LinearScale,
     PointElement,
@@ -158,7 +159,7 @@ export const LineChart = ({
                 <Line
                     style={style}
                     data={refinedData}
-                    options={options}
+                    options={options as ChartOptions<'line'>}
                     ref={chartRef}
                     onClick={handleClick}
                     data-chromatic='ignore'
