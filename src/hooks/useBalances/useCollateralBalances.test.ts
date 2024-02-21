@@ -10,7 +10,6 @@ const preloadedState = { wallet: { address: '0x1', ethBalance: 0 } };
 
 describe('useCollateralBalances', () => {
     it('should return balances of only collateral currencies', async () => {
-        // jest.spyOn(console, 'error').mockImplementation(() => {});
         const { result } = renderHook(() => useCollateralBalances(), {
             preloadedState: preloadedState,
         });
@@ -22,7 +21,6 @@ describe('useCollateralBalances', () => {
         await waitFor(() =>
             expect(mock.getERC20Balance).toHaveBeenCalledTimes(3)
         );
-        // expect(console.error).toHaveBeenCalled();
         expect(result.current).toEqual({
             [CurrencySymbol.ETH]: 0,
             [CurrencySymbol.WBTC]: 300,
