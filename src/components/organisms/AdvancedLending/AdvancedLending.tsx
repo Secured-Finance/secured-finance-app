@@ -282,6 +282,13 @@ export const AdvancedLending = ({
         [dispatch, selectedTerm.label]
     );
 
+    const handleFilterChange = useCallback(
+        state => {
+            setIsShowingAll(state.showBorrow && state.showLend);
+        },
+        [setIsShowingAll]
+    );
+
     return (
         <ThreeColumnsWithTopBar
             topBar={
@@ -322,9 +329,7 @@ export const AdvancedLending = ({
                 currency={currency}
                 marketPrice={currentMarket?.value}
                 isCurrencyDelisted={delistedCurrencySet.has(currency)}
-                onFilterChange={state =>
-                    setIsShowingAll(state.showBorrow && state.showLend)
-                }
+                onFilterChange={handleFilterChange}
                 onAggregationChange={setMultiplier}
             />
 
