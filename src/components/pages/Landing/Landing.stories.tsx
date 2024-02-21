@@ -1,5 +1,5 @@
 import type { Meta, StoryFn } from '@storybook/react';
-import { within } from '@storybook/testing-library';
+import { screen, waitFor } from '@storybook/testing-library';
 import { RESPONSIVE_PARAMETERS } from 'src/../.storybook/constants';
 import {
     withAppLayout,
@@ -48,12 +48,15 @@ ConnectedToWallet.parameters = {
 };
 
 export const AdvancedView = Template.bind({});
-AdvancedView.play = async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    canvas.getByText('Advanced').click();
-    const button = await canvas.findByRole('button', { name: 'DEC22' });
-    button.click();
-    canvas.getByRole('menuitem', { name: 'JUN23' }).click();
+AdvancedView.play = async () => {
+    screen.getByText('Advanced').click();
+    await waitFor(async () => {
+        screen.getByRole('button', { name: 'DEC22' }).click();
+    });
+
+    await waitFor(() => {
+        screen.getByRole('menuitem', { name: 'JUN23' }).click();
+    });
 };
 AdvancedView.parameters = {
     connected: true,
