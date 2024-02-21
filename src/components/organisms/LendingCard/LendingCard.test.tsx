@@ -4,7 +4,7 @@ import { composeStories } from '@storybook/react';
 import { mar23Fixture } from 'src/stories/mocks/fixtures';
 import { initialStore } from 'src/stories/mocks/mockStore';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
+import { act, fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import {
     ButtonEvents,
     ButtonProperties,
@@ -69,14 +69,14 @@ describe('LendingCard Component', () => {
         );
     });
 
-    it.skip('should open Confirm Borrow dialog when borrow button is clicked', async () => {
+    it('should open Confirm Borrow dialog when borrow button is clicked', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '10' } });
         const placeOrderButton = await screen.findByRole('button', {
-            name: 'Place Order',
-        }); // bad test
-        await waitFor(() => {
+            name: 'Borrow',
+        });
+        act(() => {
             fireEvent.click(placeOrderButton);
         });
         expect(await screen.findByRole('dialog')).toBeInTheDocument();
@@ -144,15 +144,17 @@ describe('LendingCard Component', () => {
         expect(screen.getByText(dateWithTimezone)).toBeInTheDocument();
     });
 
-    it.skip('should open the confirm borrow dialog to place a market order when the borrow button is clicked', async () => {
+    it('should open the confirm borrow dialog to place a market order when the borrow button is clicked', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '10' } });
-        await waitFor(() => {
-            fireEvent.click(screen.getByTestId('place-order-button'));
-            expect(screen.getByText('Confirm Borrow')).toBeInTheDocument();
+        const placeOrderButton = await screen.findByRole('button', {
+            name: 'Borrow',
         });
-        // bad test
+        act(() => {
+            fireEvent.click(placeOrderButton);
+        });
+        expect(screen.getByText('Confirm Borrow')).toBeInTheDocument();
     });
 
     it('should support orders with decimal amounts', async () => {
