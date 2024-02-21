@@ -22,7 +22,6 @@ describe('useLendingMarkets', () => {
         const { result } = renderHook(() => useLendingMarkets());
         const value = result.current;
         expect(value.data).toEqual(undefined);
-        // expect(value.isLoading).toEqual(true);
 
         await waitFor(() => expect(result.current.isSuccess).toEqual(true));
         const newValue = result.current;

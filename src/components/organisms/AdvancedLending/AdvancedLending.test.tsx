@@ -15,8 +15,8 @@ const { Default, ConnectedToWallet, Delisted } = composeStories(stories);
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-describe.skip('Advanced Lending Component', () => {
-    it.skip('should convert the amount to new currency and track CURRENCY_CHANGE when the user change the currency', async () => {
+describe('Advanced Lending Component', () => {
+    it('should convert the amount to new currency and track CURRENCY_CHANGE when the user change the currency', async () => {
         const track = jest.spyOn(analytics, 'track');
         const { store } = await waitFor(() =>
             render(<ConnectedToWallet />, {
@@ -43,7 +43,7 @@ describe.skip('Advanced Lending Component', () => {
         });
     });
 
-    it.skip('should not reset the amount and emit TERM_CHANGE event when the user change the maturity', async () => {
+    it('should not reset the amount and emit TERM_CHANGE event when the user change the maturity', async () => {
         const track = jest.spyOn(analytics, 'track');
         const { store } = await waitFor(() =>
             render(<ConnectedToWallet />, {
@@ -135,7 +135,7 @@ describe.skip('Advanced Lending Component', () => {
         ).toBeInTheDocument();
     });
 
-    it.skip('should only show the orders of the user related to orderbook', async () => {
+    it('should only show the orders of the user related to orderbook', async () => {
         await waitFor(() =>
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
@@ -165,7 +165,7 @@ describe.skip('Advanced Lending Component', () => {
         ).not.toBeInTheDocument();
     });
 
-    describe.skip('Dynamic orderbook depth', () => {
+    describe('Dynamic orderbook depth', () => {
         it('should retrieve more data when the user select only one side of the orderbook', async () => {
             await waitFor(() =>
                 render(<Default />, {
