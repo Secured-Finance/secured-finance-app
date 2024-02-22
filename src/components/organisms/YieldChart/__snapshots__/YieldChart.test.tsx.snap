@@ -1,0 +1,124 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`YieldChart Component should render YieldChart 1`] = `
+<div>
+  <div
+    class="hidden h-[480px] w-fit flex-row overflow-hidden rounded-r-xl border-y border-r border-panelStroke shadow-[0_46px_64px_rgba(0,0,0,0.4)] tablet:visible tablet:flex"
+  >
+    <div
+      class="flex flex-col items-start overflow-hidden transition-width duration-700 ease-out w-[640px] pl-8"
+      data-testid="yield-chart-component"
+    >
+      <div
+        class="h-20"
+      >
+        <div
+          class="flex h-20 w-[585px] flex-row justify-between p-4"
+        >
+          <div
+            class="flex h-[44px] w-fit flex-row items-center justify-between gap-3"
+          >
+            <div>
+              <svg
+                aria-label="WFIL"
+                class="h-9 w-9"
+                role="img"
+              />
+            </div>
+            <div
+              class="flex h-full w-full flex-col"
+            >
+              <span
+                class="typography-caption-2 h-5 text-planetaryPurple"
+              >
+                Filecoin
+              </span>
+              <span
+                class="typography-caption flex h-full items-center text-neutral-8"
+              >
+                $6.00
+              </span>
+            </div>
+          </div>
+          <div
+            class="flex flex-row gap-2"
+          >
+            <div
+              class="flex h-[44px] w-[135px] flex-col p-0 text-center"
+            >
+              <div
+                class="typography-caption-2 h-5 text-planetaryPurple"
+              >
+                Total Volume (Asset)
+              </div>
+              <div
+                class="typography-caption h-6 text-white-60"
+              >
+                300 WFIL
+              </div>
+            </div>
+            <div
+              class="flex h-[44px] w-[135px] flex-col p-0 text-center"
+            >
+              <div
+                class="typography-caption-2 h-5 text-planetaryPurple"
+              >
+                Total Volume (USD)
+              </div>
+              <div
+                class="typography-caption h-6 text-white-60"
+              >
+                $1,800
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex w-full flex-grow items-center pl-[35px]"
+      >
+        <div
+          class="h-[350px] w-[550px]"
+        >
+          <div
+            class="h-full w-full"
+          >
+            <canvas
+              data-chromatic="ignore"
+              height="0"
+              role="img"
+              style="display: block; box-sizing: border-box; height: 0px; width: 0px;"
+              width="0"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <button
+      class="relative flex w-10 items-center justify-center bg-starBlue-30"
+    >
+      <svg
+        class="absolute top-2 h-8 w-8"
+      />
+      <div
+        class="rotate-90"
+      >
+        <svg
+          aria-hidden="true"
+          class="h-5 w-5 text-white"
+          data-testid="chevron-down-icon"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+            fill-rule="evenodd"
+          />
+        </svg>
+      </div>
+    </button>
+  </div>
+</div>
+`;
