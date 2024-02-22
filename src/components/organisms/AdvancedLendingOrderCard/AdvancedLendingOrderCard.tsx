@@ -113,7 +113,7 @@ export function AdvancedLendingOrderCard({
         if (!marketPrice) return undefined;
         if (!isConnected) return undefined;
         return (marketPrice / 100.0).toString();
-    }, [maturity, marketPrice, orderType, unitPriceInput, isConnected]);
+    }, [maturity, marketPrice, unitPriceInput, isConnected]);
 
     const dispatch = useDispatch();
 
