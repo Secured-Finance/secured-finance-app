@@ -41,7 +41,10 @@ export const Slider = ({
                     thumb: {
                         className: clsx(
                             ' ring-[5px] w-3 h-3 -ml-[5px] bg-white rounded-full shadow-sliderthumb absolute',
-                            disabled ? 'ring-transparent' : 'ring-starBlue-80'
+                            {
+                                'ring-transparent': disabled,
+                                'ring-starBlue-80': !disabled,
+                            }
                         ),
                     },
                     root: {
