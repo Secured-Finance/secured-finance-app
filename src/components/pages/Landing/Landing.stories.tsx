@@ -33,6 +33,7 @@ export default {
         },
         ...RESPONSIVE_PARAMETERS,
         layout: 'fullscreen',
+        connected: true,
     },
 } as Meta<typeof Landing>;
 

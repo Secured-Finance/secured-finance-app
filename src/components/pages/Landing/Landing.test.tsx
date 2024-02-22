@@ -153,7 +153,7 @@ describe('Landing Component', () => {
             assertInputValue('Bond Price', '96.83');
         });
 
-        it.skip('should reset bond price to the best price when user changes currency', async () => {
+        it('should reset bond price to the best price when user changes currency', async () => {
             await waitFor(() => {
                 render(<Default />, {
                     apolloMocks: Default.parameters?.apolloClient.mocks,
@@ -162,7 +162,9 @@ describe('Landing Component', () => {
             });
             clickAdvancedButton();
             await waitFor(() =>
-                expect(screen.getByText('DEC22')).toBeInTheDocument()
+                expect(
+                    screen.getByRole('button', { name: 'DEC22' })
+                ).toBeInTheDocument()
             );
 
             assertInputValue('Bond Price', '96.85');
