@@ -106,9 +106,6 @@ export function AdvancedLendingOrderCard({
     }, [maturity, unitPrice, marketPrice, calculationDate]);
 
     const unitPriceValue = useMemo(() => {
-        if (orderType === OrderType.MARKET) {
-            return 'Market';
-        }
         if (!maturity) return undefined;
         if (unitPriceInput !== undefined) {
             return unitPriceInput;
@@ -247,8 +244,9 @@ export function AdvancedLendingOrderCard({
         isInvalidBondPrice ||
         showPreOrderError;
 
-    const isBondPriceFieldDisabled =
-        orderType === OrderType.MARKET || !isConnected;
+    const isMarketOrderType = orderType === OrderType.MARKET;
+
+    const isBondPriceFieldDisabled = isMarketOrderType || !isConnected;
 
     return (
         <div className='h-full rounded-b-xl border border-white-10 bg-cardBackground bg-opacity-60 pb-7'>
@@ -330,7 +328,9 @@ export function AdvancedLendingOrderCard({
                     <OrderInputBox
                         field='Bond Price'
                         disabled={isBondPriceFieldDisabled}
-                        initialValue={unitPriceValue}
+                        initialValue={
+                            isMarketOrderType ? 'Market' : unitPriceValue
+                        }
                         onValueChange={v => {
                             v !== undefined
                                 ? dispatch(setUnitPrice(v.toString()))
@@ -353,7 +353,7 @@ export function AdvancedLendingOrderCard({
                         errorMessage='Invalid bond price'
                         showError={isInvalidBondPrice}
                     />
-                    {orderType === OrderType.MARKET && (
+                    {isMarketOrderType && (
                         <div className='mx-10px'>
                             <OrderDisplayBox
                                 field='Max Slippage'
