@@ -1,22 +1,17 @@
 import { useEffect, useState } from 'react';
-import { historcialChartMockData } from 'src/components/organisms/HistoricalWidget/constants';
+import { historicalChartMockData } from 'src/components/organisms/HistoricalWidget/constants';
 
 export const useHistoricalChartData = () => {
-    const [selectTimeScale, setSlectTimeScale] = useState('4h');
+    const [selectTimeScale, setSelectTimeScale] = useState('4h');
     const [selectChartType, setSelectChartType] = useState('VOL');
     const [data, setData] = useState([]);
-    const getBSCData = async (_: string) => {
-        // const data = await fetch(
-        //     `https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=${time}&limit=${limit}`
-        // ).then(res => res.json());
-        const result = historcialChartMockData.map(
+    const getBSCData = async (_timeScale: string) => {
+        // NOTE: 'value' is replacing "close" as bond price
+        const result = historicalChartMockData.map(
             (item: (string | number)[]) => {
                 return {
                     time: item[0] as string,
-                    open: item[1] as string,
-                    high: item[2] as string,
-                    low: item[3] as string,
-                    close: item[4] as string,
+                    value: item[4] as string,
                     vol: item[5] as string,
                 };
             }
@@ -29,7 +24,7 @@ export const useHistoricalChartData = () => {
     };
 
     const onTimeScaleChange = (time: string, _: string) => {
-        setSlectTimeScale(time);
+        setSelectTimeScale(time);
     };
 
     useEffect(() => {

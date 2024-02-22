@@ -34,7 +34,7 @@ export const HistoricalWidget = ({
                 className,
             })}
         >
-            <div className='flex justify-between border-b border-t border-neutral-2 bg-[#292D3F99] p-4'>
+            <div className='flex justify-between border-b border-t border-neutral-2 bg-[#292D3F99] px-4 py-2'>
                 <RadioButton
                     options={timeScales}
                     value={selectTimeScale}

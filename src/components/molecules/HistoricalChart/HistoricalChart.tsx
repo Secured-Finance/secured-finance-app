@@ -11,14 +11,14 @@ import {
     WhitespaceData,
 } from 'lightweight-charts';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { createCanlestickChart, createVolumeChart } from 'src/utils/charts';
+import { useSelector } from 'react-redux';
+import { selectLandingOrderForm } from 'src/store/landingOrderForm';
+import { RootState } from 'src/store/types';
+import { createPriceChart, createVolumeChart } from 'src/utils/charts';
 
 export interface ITradingData {
     time: number;
-    open: number;
-    high: number;
-    low: number;
-    close: number;
+    value: number;
     vol: number;
 }
 
@@ -27,6 +27,7 @@ export interface HistoricalChartProps {
     className?: string;
 }
 
+// NOTE: leaving Candlestick here for when subgraph can handle the associated data structure
 type TSeries = ISeriesApi<
     'Line' | 'Area' | 'Histogram' | 'Candlestick' | 'Bar'
 >;
@@ -60,37 +61,38 @@ function syncCrosshair(
 }
 
 export function HistoricalChart({ data, className }: HistoricalChartProps) {
-    const chartContainerRef = useRef<HTMLDivElement>(null);
-    const secondContianerRef = useRef<HTMLDivElement>(null);
+    const priceChartContainerRef = useRef<HTMLDivElement>(null);
+    const volumeChartContainerRef = useRef<HTMLDivElement>(null);
     const [hoverTime, setHoverTime] = useState('');
+    const { currency } = useSelector((state: RootState) =>
+        selectLandingOrderForm(state.landingOrderForm)
+    );
+    const VOLUME_KEY_NAME = `Vol(${currency})`;
     const [legendData, setLegendData] = useState({
-        O: '',
-        H: '',
-        L: '',
-        C: '',
-        'Vol(BTC)': '',
+        // O: '',
+        // H: '',
+        // L: '',
+        // C: '',
+        VOLUME_KEY_NAME: '',
         Change: '',
     });
 
     const setupCharts = useCallback(
-        (candlestickSeries: TSeries, volumeSeries: TSeries) => {
+        (lineChartSeries: TSeries, volumeSeries: TSeries) => {
             volumeSeries.applyOptions({ baseLineVisible: false });
 
-            const candleData = data.map(item => ({
+            const priceData = data.map(item => ({
                 time: Math.floor(item.time / 1000) as UTCTimestamp,
-                open: Number(item.open),
-                high: Number(item.high),
-                low: Number(item.low),
-                close: Number(item.close),
+                value: Number(item.value),
             }));
 
             const volumeData = data.map(item => ({
                 time: Math.floor(item.time / 1000) as UTCTimestamp,
                 value: Number(item.vol),
-                color: item.open > item.close ? '#FF9FAE' : '#09A8B7',
+                color: '#09A8B7',
             }));
 
-            candlestickSeries.setData(candleData);
+            lineChartSeries.setData(priceData);
             volumeSeries.setData(volumeData);
         },
         [data]
@@ -131,15 +133,16 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
             setHoverTime(formattedDate);
 
             setLegendData({
-                O: `${(mergeData?.open / 1000).toFixed(2)}K`,
-                H: `${(mergeData?.high / 1000).toFixed(2)}K`,
-                L: `${(mergeData?.low / 1000).toFixed(2)}K`,
-                C: `${(mergeData?.close / 1000).toFixed(2)}K`,
-                'Vol(BTC)': mergeData?.value?.toFixed(2),
-                Change: `${(
-                    ((mergeData?.close - mergeData?.open) / mergeData?.open) *
-                    100
-                ).toFixed(2)}%`,
+                // O: `${(mergeData?.open / 1000).toFixed(2)}K`,
+                // H: `${(mergeData?.high / 1000).toFixed(2)}K`,
+                // L: `${(mergeData?.low / 1000).toFixed(2)}K`,
+                // C: `${(mergeData?.close / 1000).toFixed(2)}K`,
+                VOLUME_KEY_NAME: mergeData?.value?.toFixed(2),
+                // Change: `${(
+                //     ((mergeData?.close - mergeData?.open) / mergeData?.open) *
+                //     100
+                // ).toFixed(2)}%`,
+                Change: '0.00%',
             });
         };
 
@@ -171,25 +174,27 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
     };
 
     useEffect(() => {
-        if (!chartContainerRef.current || !secondContianerRef.current) return;
-        const { candlestickSeries, chart: candleStickChart } =
-            createCanlestickChart(chartContainerRef.current);
-
-        const { volumeSeries, chart: volumeChart } = createVolumeChart(
-            secondContianerRef.current
+        if (!priceChartContainerRef.current || !volumeChartContainerRef.current)
+            return;
+        const { lineChartSeries, chart: priceChart } = createPriceChart(
+            priceChartContainerRef.current
         );
 
-        setupCharts(candlestickSeries, volumeSeries);
+        const { volumeSeries, chart: volumeChart } = createVolumeChart(
+            volumeChartContainerRef.current
+        );
+
+        setupCharts(lineChartSeries, volumeSeries);
 
         subscribeToChartEvents(
-            candleStickChart,
+            priceChart,
             volumeChart,
-            candlestickSeries,
+            lineChartSeries,
             volumeSeries
         );
 
+        priceChart.timeScale();
         volumeChart.timeScale();
-        candleStickChart.timeScale();
 
         const updateTitleData = (
             param: MouseEventParams<Time>,
@@ -199,19 +204,19 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
 
             let index = 0;
             if (param.time) {
-                index = candlestickSeries
+                index = lineChartSeries
                     .data()
                     .findIndex(
                         (item: Record<'time', Time>) => item.time === param.time
                     );
             }
 
-            const candleData = candlestickSeries.dataByIndex(index);
+            const candleData = lineChartSeries.dataByIndex(index);
             const volumeData = volumeSeries.dataByIndex(index);
-            if (sourceChart === 'candlestick') {
+            if (sourceChart === 'price') {
                 syncCrosshair(volumeChart, volumeSeries, candleData);
             } else if (sourceChart === 'volume') {
-                syncCrosshair(candleStickChart, candlestickSeries, volumeData);
+                syncCrosshair(priceChart, lineChartSeries, volumeData);
             }
             const mergeData = {
                 ...candleData,
@@ -228,20 +233,22 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
             setHoverTime(formattedDate);
 
             setLegendData({
-                O: `${(mergeData?.open / 1000).toFixed(2)}K`,
-                H: `${(mergeData?.high / 1000).toFixed(2)}K`,
-                L: `${(mergeData?.low / 1000).toFixed(2)}K`,
-                C: `${(mergeData?.close / 1000).toFixed(2)}K`,
-                'Vol(BTC)': mergeData?.value?.toFixed(2),
-                Change: `${(
-                    ((mergeData?.close - mergeData?.open) / mergeData?.open) *
-                    100
-                ).toFixed(2)}%`,
+                // O: `${(mergeData?.open / 1000).toFixed(2)}K`,
+                // H: `${(mergeData?.high / 1000).toFixed(2)}K`,
+                // L: `${(mergeData?.low / 1000).toFixed(2)}K`,
+                // C: `${(mergeData?.close / 1000).toFixed(2)}K`,
+                VOLUME_KEY_NAME: mergeData?.value?.toFixed(2),
+                // TODO: handle change calculation
+                // Change: `${(
+                //     ((mergeData?.close - mergeData?.open) / mergeData?.open) *
+                //     100
+                // ).toFixed(2)}%`,
+                Change: `0.00%`,
             });
         };
 
-        candleStickChart.subscribeCrosshairMove(function (param) {
-            updateTitleData(param, 'candlestick');
+        priceChart.subscribeCrosshairMove(function (param) {
+            updateTitleData(param, 'price');
         });
 
         volumeChart.subscribeCrosshairMove(function (param) {
@@ -249,48 +256,54 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
         });
 
         return () => {
-            candleStickChart.remove();
+            priceChart.remove();
             volumeChart.remove();
         };
     }, [data, setupCharts]);
 
     const titleOfChartClass =
-        'absolute left-4 top-4 z-50 flex gap-4 text-2xs text-neutral-4 font-medium leading-4';
+        'z-10 flex gap-4 text-2xs text-neutral-4 font-medium leading-4 p-4';
 
     return (
-        <div className={clsx(className)}>
-            <div ref={chartContainerRef} className='relative h-full w-full'>
-                <div className={clsx(titleOfChartClass, 'relative mb-2')}>
-                    <div>{hoverTime}</div>
-                    {Object.entries(legendData)
-                        .filter(([key, _]) =>
-                            ['O', 'H', 'L', 'C', 'Change'].includes(key)
-                        )
-                        .map(([key, value]) => (
-                            <div key={key} className='flex gap-1'>
-                                <div>{key}</div>
-                                <div className='font-normal text-[#15D6E8]'>
-                                    {value}
-                                </div>
+        <div className={clsx(className, 'bg-neutral-900')}>
+            <div className={clsx(titleOfChartClass, 'relative')}>
+                <div>{hoverTime}</div>
+                {Object.entries(legendData)
+                    .filter(([key, _]) =>
+                        ['O', 'H', 'L', 'C', 'Change'].includes(key)
+                    )
+                    .map(([key, value]) => (
+                        <div key={key} className='flex gap-1'>
+                            <div>{key}</div>
+                            <div className='font-normal text-[#15D6E8]'>
+                                {value}
                             </div>
-                        ))}
-                </div>
+                        </div>
+                    ))}
             </div>
+            {/* TODO: handle placement of chart title (within or outside of chart) */}
             <div
-                ref={secondContianerRef}
-                className={clsx(className, 'relative h-full w-full')}
+                ref={priceChartContainerRef}
+                className='relative h-[260px] w-full'
+            ></div>
+            <div
+                ref={volumeChartContainerRef}
+                className={clsx(className, 'relative h-[170px] w-full')}
             >
-                <div className={clsx(titleOfChartClass, '-top-4')}>
+                <div className={clsx(titleOfChartClass)}>
                     <div>
-                        <span>Vol(BTC):</span>
+                        <span>{VOLUME_KEY_NAME}:</span>
                         <span className='ml-2 text-[#FF9FAE]'>
-                            {(Number(legendData['Vol(BTC)']) / 1000).toFixed(3)}
+                            {(
+                                Number(legendData.VOLUME_KEY_NAME) / 1000
+                            ).toFixed(3)}
                             K
                         </span>
                     </div>
+                    {/* TODO: confirm if we are showing USDT here */}
                     <div>
                         <span>Vol(USDT):</span>
-                        <span className='text-[#FF9FAE] '></span>
+                        <span className='text-[#FF9FAE]'></span>
                     </div>
                 </div>
             </div>

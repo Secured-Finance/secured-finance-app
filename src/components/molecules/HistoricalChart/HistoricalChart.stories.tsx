@@ -5,10 +5,7 @@ import { HistoricalChart } from '.';
 const renderData = tradingData.map(item => {
     return {
         time: item[0],
-        open: item[1],
-        high: item[2],
-        low: item[3],
-        close: item[4],
+        value: item[4],
         vol: item[5],
     };
 });

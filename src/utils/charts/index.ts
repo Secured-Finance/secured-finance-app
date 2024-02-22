@@ -1,16 +1,16 @@
 import { createChart } from 'lightweight-charts';
-export interface TradingData {
-    time: number;
-    open: number;
-    high: number;
-    low: number;
-    close: number;
-    vol: number;
-}
+
+// export interface TradingData {
+//     time: number;
+//     open: number;
+//     high: number;
+//     low: number;
+//     close: number;
+//     vol: number;
+// }
 
 const commonOptions = {
-    // width: 800,
-    height: 400,
+    autoSize: true,
     layout: {
         background: { color: '#052132' },
         textColor: 'rgba(119, 126, 144, 1)',
@@ -33,17 +33,21 @@ const commonOptions = {
         mode: 1,
         vertLine: {
             color: 'rgba(230, 232, 236, 1)',
+            labelBackgroundColor: '#5162FF',
         },
         horzLine: {
             color: 'rgba(230, 232, 236, 1)',
+            labelBackgroundColor: '#5162FF',
         },
     },
 };
 
-export const createCanlestickChart = (ref: HTMLDivElement) => {
+// add line chart properties
+// handle data structure for line chart
+
+export const createPriceChart = (ref: HTMLDivElement) => {
     const chart = createChart(ref, {
         ...commonOptions,
-        height: 260,
         timeScale: {
             visible: false,
         },
@@ -60,17 +64,13 @@ export const createCanlestickChart = (ref: HTMLDivElement) => {
             '2px solid #334155';
     }
 
-    const candlestickSeries = chart.addCandlestickSeries({
-        upColor: '#15D6E8',
-        downColor: '#FF9FAE',
-        borderVisible: false,
-        wickUpColor: '#15D6E8',
-        wickDownColor: '#FF9FAE',
+    const lineChartSeries = chart.addLineSeries({
+        color: '#09A8B7',
         priceFormat: {
             type: 'volume',
         },
     });
-    return { chart, candlestickSeries };
+    return { chart, lineChartSeries };
 };
 
 export const createVolumeChart = (ref: HTMLDivElement) => {
@@ -85,7 +85,6 @@ export const createVolumeChart = (ref: HTMLDivElement) => {
                 visible: false,
             },
         },
-        height: 170,
         rightPriceScale: {
             ...commonOptions.rightPriceScale,
             scaleMargins: {

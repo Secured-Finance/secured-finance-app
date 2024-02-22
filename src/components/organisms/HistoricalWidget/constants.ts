@@ -44,7 +44,7 @@ export const graphTypeOptions = [
     },
 ];
 
-export const historcialChartMockData = [
+export const historicalChartMockData = [
     [
         1685664000000,
         '26817.93000000',

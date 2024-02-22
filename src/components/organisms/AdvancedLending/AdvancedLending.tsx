@@ -336,10 +336,7 @@ export const AdvancedLending = ({
 
             <div className='flex h-full flex-grow flex-col gap-4'>
                 <Tab
-                    tabDataArray={[
-                        { text: 'Yield Curve' },
-                        { text: 'Historcial Chart' },
-                    ]}
+                    tabDataArray={[{ text: 'Yield Curve' }, { text: 'Price' }]}
                 >
                     <div className='h-[410px] w-full px-2 py-4'>
                         <LineChartTab
