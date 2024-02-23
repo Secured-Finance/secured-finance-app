@@ -1,6 +1,7 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
+import { VisibilityState } from '@tanstack/table-core';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -283,7 +284,7 @@ export const AdvancedLending = ({
     );
 
     const handleFilterChange = useCallback(
-        state => {
+        (state: VisibilityState) => {
             setIsShowingAll(state.showBorrow && state.showLend);
         },
         [setIsShowingAll]
