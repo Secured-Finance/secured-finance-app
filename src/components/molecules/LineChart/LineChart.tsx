@@ -78,7 +78,6 @@ export const LineChart = ({
         const dataArray = data.datasets[0].data as number[];
 
         if (dataArray.every(item => item === 0)) {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             options = {
                 ...options,
                 scales: {

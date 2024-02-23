@@ -389,7 +389,6 @@ export function AdvancedLendingOrderCard({
                     <div className='text-neutral-8'>Collateral Management</div>
                     <Link
                         href='/portfolio'
-                        passHref
                         className='text-planetaryPurple'
                         role='button'
                     >
