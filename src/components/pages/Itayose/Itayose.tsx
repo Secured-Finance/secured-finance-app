@@ -1,4 +1,5 @@
 import { OrderSide } from '@secured-finance/sf-client';
+import { VisibilityState } from '@tanstack/table-core';
 import * as dayjs from 'dayjs';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -233,7 +234,7 @@ export const Itayose = () => {
     }, [lendingContracts, selectedTerm.value]);
 
     const handleFilterChange = useCallback(
-        state => {
+        (state: VisibilityState) => {
             setIsShowingAll(state.showBorrow && state.showLend);
         },
         [setIsShowingAll]
