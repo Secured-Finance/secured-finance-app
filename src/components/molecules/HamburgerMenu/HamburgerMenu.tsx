@@ -12,7 +12,7 @@ import { UrlObject } from 'url';
 const NextLink = forwardRef(
     (
         props: HTMLAttributes<HTMLAnchorElement> & { href: string | UrlObject },
-        ref: Ref<HTMLAnchorElement> // check this
+        ref: Ref<HTMLAnchorElement>
     ) => {
         const { href, children, ...rest } = props;
         return (

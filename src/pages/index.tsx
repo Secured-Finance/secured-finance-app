@@ -21,14 +21,16 @@ function EntryPoint() {
         return null;
     }
 
-    if (isTerminated && typeof window !== 'undefined') {
-        router.push('/emergency');
-        return null;
-    }
+    if (typeof window !== 'undefined') {
+        if (isTerminated) {
+            router.push('/emergency');
+            return null;
+        }
 
-    if (isGlobalItayose && typeof window !== 'undefined') {
-        router.push('/global-itayose');
-        return null;
+        if (isGlobalItayose) {
+            router.push('/global-itayose');
+            return null;
+        }
     }
 
     return <Landing />;

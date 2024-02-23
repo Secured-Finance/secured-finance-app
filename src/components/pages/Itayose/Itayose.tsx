@@ -1,4 +1,5 @@
 import { OrderSide } from '@secured-finance/sf-client';
+import * as dayjs from 'dayjs';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -48,7 +49,6 @@ import { RootState } from 'src/store/types';
 import { CurrencySymbol, ZERO_BI, toOptions, usdFormat } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
-import * as dayjs from 'dayjs';
 
 const Toolbar = ({
     selectedAsset,
@@ -232,6 +232,13 @@ export const Itayose = () => {
             : undefined;
     }, [lendingContracts, selectedTerm.value]);
 
+    const handleFilterChange = useCallback(
+        state => {
+            setIsShowingAll(state.showBorrow && state.showLend);
+        },
+        [setIsShowingAll]
+    );
+
     return (
         <Page title='Pre-Open Order Book'>
             {preOrderDays && (
@@ -301,9 +308,7 @@ export const Itayose = () => {
                     orderbook={orderBook}
                     variant='itayose'
                     marketPrice={estimatedOpeningUnitPrice}
-                    onFilterChange={state =>
-                        setIsShowingAll(state.showBorrow && state.showLend)
-                    }
+                    onFilterChange={handleFilterChange}
                     isLoadingMap={isLoadingMap}
                     onAggregationChange={setMultiplier}
                     isCurrencyDelisted={delistedCurrencySet.has(currency)}
