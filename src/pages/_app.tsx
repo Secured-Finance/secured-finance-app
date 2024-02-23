@@ -34,16 +34,16 @@ const projectId = getWalletConnectId();
 const queryClient = new QueryClient();
 
 if (typeof window !== 'undefined') {
-    amplitude.init(getAmplitudeApiKey(), {
-        appVersion: process.env.SF_ENV,
-    });
-
     const pageViewTracking = pageViewTrackingPlugin({
         trackOn: undefined,
         trackHistoryChanges: undefined,
     });
 
     amplitude.add(pageViewTracking);
+    amplitude.init(getAmplitudeApiKey(), {
+        appVersion: process.env.SF_ENV,
+        logLevel: amplitude.Types.LogLevel.Error,
+    });
 }
 
 const chainIds = getSupportedChainIds();
