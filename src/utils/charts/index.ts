@@ -65,10 +65,11 @@ export const createPriceChart = (ref: HTMLDivElement) => {
     }
 
     const lineChartSeries = chart.addLineSeries({
-        color: '#09A8B7',
+        color: '#5162FF',
         priceFormat: {
             type: 'volume',
         },
+        lineWidth: 2,
     });
     return { chart, lineChartSeries };
 };
@@ -93,6 +94,7 @@ export const createVolumeChart = (ref: HTMLDivElement) => {
             },
         },
         timeScale: {
+            visible: true,
             ticksVisible: true,
         },
     });
