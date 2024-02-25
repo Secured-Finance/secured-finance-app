@@ -43,8 +43,10 @@ export const useHistoricalChartData = () => {
 
             groupedByDate[dateString].push(transaction);
         });
-        // TODO: define data point here
-        setData(groupedByDate as never);
+
+        const bondPrices = Object.values(groupedByDate).flat();
+
+        setData(bondPrices as never);
     };
 
     const onTimeScaleChange = (time: string, _: string) => {

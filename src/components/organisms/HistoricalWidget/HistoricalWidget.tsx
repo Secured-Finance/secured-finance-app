@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import { RadioButton } from 'src/components/atoms';
 import {
     HistoricalChart,
     ITradingData,
@@ -13,9 +12,9 @@ interface THistoricalWidgetProps {
     chartType: TOptions[];
     data: ITradingData[];
     selectTimeScale: string;
-    selectChartType: string;
+    // selectChartType: string;
     onTimeScaleChange: (value: string, type: string) => void;
-    onChartTypeChange: (value: string, type: string) => void;
+    // onChartTypeChange: (value: string, type: string) => void;
 }
 
 export const HistoricalWidget = ({
@@ -24,17 +23,17 @@ export const HistoricalWidget = ({
     selectTimeScale,
     chartType,
     data,
-    selectChartType,
+    // selectChartType,
     onTimeScaleChange,
-    onChartTypeChange,
-}: THistoricalWidgetProps) => {
+}: // onChartTypeChange,
+THistoricalWidgetProps) => {
     return (
         <div
             className={clsx({
                 className,
             })}
         >
-            <div className='flex justify-between border-b border-t border-neutral-2 bg-[#292D3F99] px-4 py-2'>
+            {/* <div className='flex justify-between border-b border-t border-neutral-2 bg-[#292D3F99] px-4 py-2'>
                 <RadioButton
                     options={timeScales}
                     value={selectTimeScale}
@@ -42,14 +41,14 @@ export const HistoricalWidget = ({
                         onTimeScaleChange(time, selectChartType)
                     }
                 />
-                {/* <RadioButton
+                <RadioButton
                     options={chartType}
                     value={selectChartType}
                     onChange={(type: string) =>
                         onChartTypeChange(selectTimeScale, type)
                     }
-                /> */}
-            </div>
+                />
+            </div> */}
             <HistoricalChart data={data} />
         </div>
     );

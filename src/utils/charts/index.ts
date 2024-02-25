@@ -1,14 +1,5 @@
 import { createChart } from 'lightweight-charts';
 
-// export interface TradingData {
-//     time: number;
-//     open: number;
-//     high: number;
-//     low: number;
-//     close: number;
-//     vol: number;
-// }
-
 const commonOptions = {
     autoSize: true,
     layout: {
@@ -41,9 +32,6 @@ const commonOptions = {
         },
     },
 };
-
-// add line chart properties
-// handle data structure for line chart
 
 export const createPriceChart = (ref: HTMLDivElement) => {
     const chart = createChart(ref, {
