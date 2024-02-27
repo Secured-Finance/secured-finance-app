@@ -310,7 +310,9 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
                 </div>
                 <div>
                     <span>Vol(USDT):</span>
-                    <span className='text-[#FF9FAE]'></span>
+                    <span className='text-[#FF9FAE]'>
+                        {/* TODO: Add vol(USDT) */}
+                    </span>
                 </div>
             </div>
 
