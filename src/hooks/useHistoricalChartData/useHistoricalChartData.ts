@@ -16,7 +16,7 @@ type Candlestick = {
 };
 
 export const useHistoricalChartData = () => {
-    const [selectTimeScale, setSlectTimeScale] = useState('4h');
+    const [selectTimeScale, setSlectTimeScale] = useState('15m');
     const [selectChartType, setSelectChartType] = useState('VOL');
     const [data, setData] = useState([]);
     const getBSCData = async (_: string) => {

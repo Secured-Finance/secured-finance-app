@@ -1,3 +1,4 @@
+import { getUTCMonthYear } from '@secured-finance/sf-core';
 import clsx from 'clsx';
 import {
     CandlestickData,
@@ -11,7 +12,10 @@ import {
     WhitespaceData,
 } from 'lightweight-charts';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { createCanlestickChart, createVolumeChart } from 'src/utils/charts';
+import { useSelector } from 'react-redux';
+import { selectLandingOrderForm } from 'src/store/landingOrderForm';
+import { RootState } from 'src/store/types';
+import { createCandlestickChart, createVolumeChart } from 'src/utils/charts';
 
 export interface ITradingData {
     time: number;
@@ -61,14 +65,21 @@ function syncCrosshair(
 
 export function HistoricalChart({ data, className }: HistoricalChartProps) {
     const chartContainerRef = useRef<HTMLDivElement>(null);
-    const secondContianerRef = useRef<HTMLDivElement>(null);
+    const secondContainerRef = useRef<HTMLDivElement>(null);
     const [hoverTime, setHoverTime] = useState('');
+    const { currency, maturity } = useSelector((state: RootState) =>
+        selectLandingOrderForm(state.landingOrderForm)
+    );
+    const prettyMaturity = getUTCMonthYear(+maturity);
+
+    const VOLUME_KEY_NAME = `Vol(${currency} ${prettyMaturity})`;
+
     const [legendData, setLegendData] = useState({
         O: '',
         H: '',
         L: '',
         C: '',
-        'Vol(BTC)': '',
+        VOLUME_KEY_NAME: '',
         Change: '',
     });
 
@@ -77,7 +88,7 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
             volumeSeries.applyOptions({ baseLineVisible: false });
 
             const candleData = data.map(item => ({
-                time: Math.floor(item.time / 1000) as UTCTimestamp,
+                time: Math.floor(item.time) as UTCTimestamp,
                 open: Number(item.open),
                 high: Number(item.high),
                 low: Number(item.low),
@@ -85,7 +96,7 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
             }));
 
             const volumeData = data.map(item => ({
-                time: Math.floor(item.time / 1000) as UTCTimestamp,
+                time: Math.floor(item.time) as UTCTimestamp,
                 value: Number(item.vol),
                 color: item.open > item.close ? '#FF9FAE' : '#09A8B7',
             }));
@@ -135,7 +146,7 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
                 H: `${(mergeData?.high / 1000).toFixed(2)}K`,
                 L: `${(mergeData?.low / 1000).toFixed(2)}K`,
                 C: `${(mergeData?.close / 1000).toFixed(2)}K`,
-                'Vol(BTC)': mergeData?.value?.toFixed(2),
+                VOLUME_KEY_NAME: mergeData?.value?.toFixed(2), // TODO: handle volume display
                 Change: `${(
                     ((mergeData?.close - mergeData?.open) / mergeData?.open) *
                     100
@@ -171,12 +182,12 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
     };
 
     useEffect(() => {
-        if (!chartContainerRef.current || !secondContianerRef.current) return;
+        if (!chartContainerRef.current || !secondContainerRef.current) return;
         const { candlestickSeries, chart: candleStickChart } =
-            createCanlestickChart(chartContainerRef.current);
+            createCandlestickChart(chartContainerRef.current);
 
         const { volumeSeries, chart: volumeChart } = createVolumeChart(
-            secondContianerRef.current
+            secondContainerRef.current
         );
 
         setupCharts(candlestickSeries, volumeSeries);
@@ -232,7 +243,7 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
                 H: `${(mergeData?.high / 1000).toFixed(2)}K`,
                 L: `${(mergeData?.low / 1000).toFixed(2)}K`,
                 C: `${(mergeData?.close / 1000).toFixed(2)}K`,
-                'Vol(BTC)': mergeData?.value?.toFixed(2),
+                VOLUME_KEY_NAME: mergeData?.value?.toFixed(2),
                 Change: `${(
                     ((mergeData?.close - mergeData?.open) / mergeData?.open) *
                     100
@@ -255,45 +266,58 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
     }, [data, setupCharts]);
 
     const titleOfChartClass =
-        'absolute left-4 top-4 z-50 flex gap-4 text-2xs text-neutral-4 font-medium leading-4';
-
+        'z-10 flex gap-4 text-2xs text-neutral-4 font-medium leading-4 pt-[0.375rem] px-4';
     return (
-        <div className={clsx(className)}>
-            <div ref={chartContainerRef} className='relative h-full w-full'>
-                <div className={clsx(titleOfChartClass, 'relative mb-2')}>
-                    <div>{hoverTime}</div>
-                    {Object.entries(legendData)
-                        .filter(([key, _]) =>
-                            ['O', 'H', 'L', 'C', 'Change'].includes(key)
-                        )
-                        .map(([key, value]) => (
+        <div className={clsx(className, 'bg-neutral-900 pt-[0.625rem]')}>
+            <div className={clsx(titleOfChartClass)}>
+                <div>{hoverTime}</div>
+                {Object.entries(legendData)
+                    .filter(([key, _]) =>
+                        ['O', 'H', 'L', 'C', 'Change'].includes(key)
+                    )
+                    .map(([key, value]) => {
+                        return (
                             <div key={key} className='flex gap-1'>
-                                <div>{key}</div>
-                                <div className='font-normal text-[#15D6E8]'>
+                                <div className='text-neutral-4'>{key}</div>
+                                <div
+                                    className={clsx('font-normal', {
+                                        'text-[#F5F6FF]': key !== 'Change',
+                                        'text-nebulaTeal':
+                                            key === 'Change' &&
+                                            !value.includes('-'),
+                                        'text-galacticOrange':
+                                            key === 'Change' &&
+                                            value.includes('-'),
+                                    })}
+                                >
                                     {value}
                                 </div>
                             </div>
-                        ))}
-                </div>
+                        );
+                    })}
             </div>
             <div
-                ref={secondContianerRef}
-                className={clsx(className, 'relative h-full w-full')}
-            >
-                <div className={clsx(titleOfChartClass, '-top-4')}>
-                    <div>
-                        <span>Vol(BTC):</span>
-                        <span className='ml-2 text-[#FF9FAE]'>
-                            {(Number(legendData['Vol(BTC)']) / 1000).toFixed(3)}
-                            K
-                        </span>
-                    </div>
-                    <div>
-                        <span>Vol(USDT):</span>
-                        <span className='text-[#FF9FAE] '></span>
-                    </div>
+                ref={chartContainerRef}
+                className='relative h-[260px] w-full'
+            ></div>
+            <div className={clsx(titleOfChartClass)}>
+                <div>
+                    <span>{VOLUME_KEY_NAME}:</span>
+                    <span className='ml-[0.375rem] text-[#FF9FAE]'>
+                        {(Number(legendData.VOLUME_KEY_NAME) / 1000).toFixed(3)}
+                        K
+                    </span>
+                </div>
+                <div>
+                    <span>Vol(USDT):</span>
+                    <span className='text-[#FF9FAE]'></span>
                 </div>
             </div>
+
+            <div
+                ref={secondContainerRef}
+                className={clsx(className, 'relative h-[170px] w-full')}
+            ></div>
         </div>
     );
 }

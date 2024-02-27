@@ -9,11 +9,10 @@ export interface TradingData {
 }
 
 const commonOptions = {
-    // width: 800,
-    height: 400,
+    autoSize: true,
     layout: {
         background: { color: '#052132' },
-        textColor: 'rgba(119, 126, 144, 1)',
+        textColor: '#777E90', // time scale
     },
     grid: {
         vertLines: {
@@ -25,7 +24,7 @@ const commonOptions = {
         },
     },
     rightPriceScale: {
-        textColor: 'rgba(177, 181, 195, 1)',
+        textColor: '#CBD5E1', // price scale
         borderColor: 'rgba(119, 126, 144, 1)',
         borderVisible: false,
     },
@@ -33,14 +32,16 @@ const commonOptions = {
         mode: 1,
         vertLine: {
             color: 'rgba(230, 232, 236, 1)',
+            labelBackgroundColor: '#5162FF',
         },
         horzLine: {
             color: 'rgba(230, 232, 236, 1)',
+            labelBackgroundColor: '#5162FF',
         },
     },
 };
 
-export const createCanlestickChart = (ref: HTMLDivElement) => {
+export const createCandlestickChart = (ref: HTMLDivElement) => {
     const chart = createChart(ref, {
         ...commonOptions,
         height: 260,
