@@ -1,24 +1,25 @@
 import clsx from 'clsx';
+import { colorStyle, sizeStyle } from './constants';
+import { ChipColors, ChipSizes } from './types';
 
-export const Chip = ({ label }: { label: 'Borrow' | 'Lend' }) => {
+export const Chip = ({
+    color = ChipColors.Gray,
+    size = ChipSizes.md,
+    label = 'Label',
+}: {
+    color?: ChipColors;
+    size?: ChipSizes;
+    label: string;
+}) => {
     return (
         <div
             className={clsx(
-                'flex h-6 w-[70px] items-center justify-center rounded border',
-                {
-                    'border-galacticOrange': label === 'Borrow',
-                    'border-nebulaTeal': label === 'Lend',
-                }
+                'inline-flex items-center justify-center rounded py-0.5',
+                colorStyle[color],
+                sizeStyle[size]
             )}
         >
-            <span
-                className={clsx('typography-pill-label px-2 py-1 text-center', {
-                    'text-galacticOrange': label === 'Borrow',
-                    'text-nebulaTeal': label === 'Lend',
-                })}
-            >
-                {label}
-            </span>
+            {label}
         </div>
     );
 };

@@ -8,6 +8,7 @@ import {
 } from '@tanstack/react-table';
 import clsx from 'clsx';
 import { Chip, CurrencyItem, PriceYieldItem } from 'src/components/atoms';
+import { ChipColors } from 'src/components/atoms/Chip/types';
 import { TableContractCell, TableHeader } from 'src/components/molecules';
 import { Alignment, AssetPriceMap, ColorFormat } from 'src/types';
 import { ZERO_BI, formatTimestamp } from 'src/utils';
@@ -273,6 +274,11 @@ export const loanTypeColumnDefinition = <T extends SideProperty>(
             return (
                 <div className='flex justify-center'>
                     <Chip
+                        color={
+                            value.toString() === '1'
+                                ? ChipColors.Green
+                                : ChipColors.Red
+                        }
                         label={value.toString() === '1' ? 'Borrow' : 'Lend'}
                     />
                 </div>
@@ -295,7 +301,14 @@ export const loanTypeFromFVColumnDefinition = <T extends ForwardValueProperty>(
             if (info.getValue() === ZERO_BI) return null;
             return (
                 <div className='flex justify-center'>
-                    <Chip label={info.getValue() < 0 ? 'Borrow' : 'Lend'} />
+                    <Chip
+                        color={
+                            info.getValue() < 0
+                                ? ChipColors.Green
+                                : ChipColors.Red
+                        }
+                        label={info.getValue() < 0 ? 'Borrow' : 'Lend'}
+                    />
                 </div>
             );
         },
