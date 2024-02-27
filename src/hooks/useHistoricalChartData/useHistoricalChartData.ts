@@ -1,26 +1,35 @@
 import { useEffect, useState } from 'react';
-import { historcialChartMockData } from 'src/components/organisms/HistoricalWidget/constants';
+import { historicalChartMockData } from 'src/components/organisms/HistoricalWidget/constants';
+
+type Candlestick = {
+    id: string;
+    interval: string;
+    currency: string;
+    maturity: string;
+    timestamp: number;
+    open: string;
+    close: string;
+    high: string;
+    low: string;
+    volume: number;
+    lendingMarket: Record<string, never>; // Assuming lendingMarket is an empty object
+};
 
 export const useHistoricalChartData = () => {
     const [selectTimeScale, setSlectTimeScale] = useState('4h');
     const [selectChartType, setSelectChartType] = useState('VOL');
     const [data, setData] = useState([]);
     const getBSCData = async (_: string) => {
-        // const data = await fetch(
-        //     `https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=${time}&limit=${limit}`
-        // ).then(res => res.json());
-        const result = historcialChartMockData.map(
-            (item: (string | number)[]) => {
-                return {
-                    time: item[0] as string,
-                    open: item[1] as string,
-                    high: item[2] as string,
-                    low: item[3] as string,
-                    close: item[4] as string,
-                    vol: item[5] as string,
-                };
-            }
-        );
+        const result = historicalChartMockData.map((item: Candlestick) => {
+            return {
+                time: item.timestamp.toString(),
+                open: item.open,
+                high: item.high,
+                low: item.low,
+                close: item.close,
+                vol: item.volume.toString(),
+            };
+        });
         setData(result as never[]);
     };
 

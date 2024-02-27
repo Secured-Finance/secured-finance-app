@@ -5,12 +5,12 @@ import {
     ITradingData,
 } from 'src/components/molecules/HistoricalChart';
 
-type TOpions = { label: string; value: string };
+type TOptions = { label: string; value: string };
 
 interface THistoricalWidgetProps {
     className?: string;
-    timeScales: TOpions[];
-    chartType: TOpions[];
+    timeScales: TOptions[];
+    chartType: TOptions[];
     data: ITradingData[];
     selectTimeScale: string;
     selectChartType: string;
@@ -42,13 +42,13 @@ export const HistoricalWidget = ({
                         onTimeScaleChange(time, selectChartType)
                     }
                 />
-                <RadioButton
+                {/* <RadioButton
                     options={chartType}
                     value={selectChartType}
                     onChange={(type: string) =>
                         onChartTypeChange(selectTimeScale, type)
                     }
-                />
+                /> */}
             </div>
             <HistoricalChart data={data} />
         </div>
