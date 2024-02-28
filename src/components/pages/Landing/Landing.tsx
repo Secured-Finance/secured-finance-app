@@ -6,6 +6,7 @@ import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ViewType } from 'src/components/atoms';
 import { Alert, DelistedCurrencyDisclaimer } from 'src/components/molecules';
+import { AlertSeverity } from 'src/components/molecules/Alert/types';
 import {
     AdvancedLending,
     LendingCard,
@@ -152,9 +153,9 @@ const WithBanner = ({
         <div className='flex flex-col justify-center gap-5'>
             <DelistedCurrencyDisclaimer currencies={delistedCurrencySet} />
             {market && (
-                <Alert severity='info'>
-                    <div className='typography-caption text-white'>
-                        <p>
+                <Alert
+                    title={
+                        <>
                             {`Itayose market for ${ccy}-${getUTCMonthYear(
                                 market.maturity
                             )} is now open until ${Intl.DateTimeFormat(
@@ -176,9 +177,10 @@ const WithBanner = ({
                                     </a>
                                 </Link>
                             </span>
-                        </p>
-                    </div>
-                </Alert>
+                        </>
+                    }
+                    severity={AlertSeverity.Info}
+                />
             )}
             {children}
         </div>

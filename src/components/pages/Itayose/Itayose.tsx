@@ -1,4 +1,5 @@
 import { OrderSide } from '@secured-finance/sf-client';
+import * as dayjs from 'dayjs';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -48,7 +49,6 @@ import { RootState } from 'src/store/types';
 import { CurrencySymbol, ZERO_BI, toOptions, usdFormat } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
-import * as dayjs from 'dayjs';
 
 const Toolbar = ({
     selectedAsset,
@@ -235,19 +235,22 @@ export const Itayose = () => {
     return (
         <Page title='Pre-Open Order Book'>
             {preOrderDays && (
-                <Alert>
-                    <p className='typography-caption text-white'>
-                        Secure your market position by placing limit orders up
-                        to {preOrderDays} days before trading begins with no
-                        fees. Opt for either a lend or borrow during pre-open,
-                        not both. No new pre-orders will be accepted within 1
-                        hour prior to the start of trading. Learn more at&nbsp;
-                        <TextLink
-                            href='https://docs.secured.finance/platform-guide/unique-features/fair-price-discovery/'
-                            text='Secured Finance Docs'
-                        />
-                    </p>
-                </Alert>
+                <Alert
+                    title={
+                        <>
+                            Secure your market position by placing limit orders
+                            up to {preOrderDays} days before trading begins with
+                            no fees. Opt for either a lend or borrow during
+                            pre-open, not both. No new pre-orders will be
+                            accepted within 1 hour prior to the start of
+                            trading. Learn more at&nbsp;
+                            <TextLink
+                                href='https://docs.secured.finance/platform-guide/unique-features/fair-price-discovery/'
+                                text='Secured Finance Docs'
+                            />
+                        </>
+                    }
+                />
             )}
             <ThreeColumnsWithTopBar
                 topBar={
