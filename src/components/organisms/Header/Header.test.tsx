@@ -91,7 +91,7 @@ describe('Header component', () => {
         ).toBeInTheDocument();
     });
 
-    it.skip('should render testnet alert header on chainError true', () => {
+    it('should render testnet alert header on chainError true', () => {
         (useRouter as jest.Mock).mockImplementation(() => ({
             pathname: '/',
             push: jest.fn(),
@@ -100,7 +100,7 @@ describe('Header component', () => {
         render(<Primary />, {
             preloadedState: {
                 blockchain: {
-                    chainId: 5,
+                    chainId: 11155111,
                     chainError: true,
                 },
             },
