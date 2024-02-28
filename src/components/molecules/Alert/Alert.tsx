@@ -59,7 +59,7 @@ export const Alert = ({
             )}
         >
             <div
-                className={clsx('flex items-start', {
+                className={clsx('flex items-start pr-4', {
                     'gap-2': !subtitle,
                     'gap-4': subtitle,
                 })}
@@ -89,7 +89,7 @@ export const Alert = ({
             </div>
             <button
                 onClick={handleClose}
-                className='h-4 w-4 text-neutral-200 light:text-neutral-500'
+                className='h-4 w-4 flex-shrink-0 text-neutral-200 light:text-neutral-500'
             >
                 <XMarkIcon />
             </button>
