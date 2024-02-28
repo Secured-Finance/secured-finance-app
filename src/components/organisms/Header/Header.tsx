@@ -1,3 +1,4 @@
+import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,6 +16,7 @@ import { useBreakpoint, useIsGlobalItayose } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
+import { ButtonSizes } from 'src/types';
 import { getSupportedNetworks } from 'src/utils';
 import { AddressUtils } from 'src/utils/address';
 import { isProdEnv } from 'src/utils/displayUtils';
@@ -108,28 +110,37 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
 
     const LINKS = isProduction ? PRODUCTION_LINKS : DEV_LINKS;
 
+    let buttonSize = ButtonSizes.xs;
+
+    if (!isMobile) {
+        buttonSize = ButtonSizes.md;
+    }
+
     return (
         <div className='relative'>
             <HeaderMessage chainId={currentChainId} chainError={chainError} />
-
             <nav
                 data-cy='header'
-                className='grid h-20 w-full grid-flow-col border-b border-neutral-1 px-5 laptop:grid-flow-col'
+                className='grid h-[4.5rem] w-full grid-flow-col items-center border-b border-neutral-1 px-6 py-[1.375rem] tablet:px-5 tablet:py-0 laptop:grid-flow-col'
             >
-                <div className='col-span-2 flex flex-row items-center gap-3'>
+                <div className='col-span-2 flex h-full flex-row items-center gap-3 tablet:gap-4'>
                     <Link href='/' passHref>
-                        <a href='_'>
-                            <SFLogo className='hidden tablet:inline tablet:h-10 tablet:w-[200px]' />
+                        <a
+                            href='_'
+                            className='flex items-center tablet:h-10 tablet:border-r tablet:border-neutral-800 tablet:pr-4'
+                        >
+                            <SFLogo className='hidden tablet:flex tablet:h-[15px] tablet:w-[150px]' />
                             <SFLogoSmall className='inline h-7 w-7 tablet:hidden' />
                         </a>
                     </Link>
+                    <button className='hidden items-center gap-1 text-sm text-neutral-50 tablet:flex laptop:hidden'>
+                        Menu{' '}
+                        <ChevronDownIcon className='h-4 w-4 text-neutral-400' />
+                    </button>
                     {showNavigation && (
-                        <div className='flex h-full flex-row tablet:pl-12'>
+                        <div className='hidden h-full flex-row laptop:flex'>
                             {LINKS.map(link => (
-                                <div
-                                    key={link.text}
-                                    className='hidden h-full w-full laptop:inline'
-                                >
+                                <div key={link.text} className='h-full w-full'>
                                     <ItemLink
                                         text={link.text}
                                         dataCy={link.dataCy}
@@ -138,20 +149,14 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                                     />
                                 </div>
                             ))}
-                            <div className='hidden laptop:inline'>
-                                <MenuPopover />
-                            </div>
+                            <MenuPopover />
                         </div>
                     )}
                 </div>
-                <div className='col-span-2 flex flex-row items-center justify-end gap-2 laptop:col-span-1'>
+                <div className='col-span-2 flex flex-row items-center justify-end gap-2 tablet:gap-3 laptop:col-span-1 laptop:gap-4'>
                     {isConnected && address ? (
                         <>
-                            <NetworkSelector
-                                networkName={
-                                    securedFinance?.config?.network ?? 'Unknown'
-                                }
-                            />
+                            <NetworkSelector networkName={'Unknown'} />
                             <WalletPopover
                                 wallet={AddressUtils.format(
                                     address,
@@ -165,6 +170,8 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                         </>
                     ) : (
                         <Button
+                            size={buttonSize}
+                            className='mr-1 tablet:mr-0'
                             data-cy='wallet'
                             data-testid='connect-wallet'
                             onClick={() => dispatch(setWalletDialogOpen(true))}
@@ -173,7 +180,7 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                         </Button>
                     )}
 
-                    <div className='inline laptop:hidden'>
+                    <div className='flex tablet:hidden'>
                         <HamburgerMenu
                             links={LINKS.map(link => ({
                                 label: link.text,

@@ -1,8 +1,6 @@
 import { Popover, Transition } from '@headlessui/react';
-import {
-    ArrowUpRightIcon,
-    EllipsisHorizontalIcon,
-} from '@heroicons/react/24/solid';
+import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import { ArrowUpRightIcon } from '@heroicons/react/24/solid';
 import { Fragment } from 'react';
 import { MenuItem, Separator } from 'src/components/atoms';
 import { LinkList } from 'src/utils';
@@ -16,10 +14,10 @@ export const MenuPopover = ({}) => {
                         <Popover.Button
                             as='button'
                             data-cy='popover-button'
-                            className='typography-nav-menu-default mt-1 flex h-4 flex-row items-center whitespace-nowrap text-neutral-8 opacity-70 outline-none duration-300 focus-within:text-secondary7 focus-within:opacity-100 hover:text-secondary7 hover:opacity-100 hover:ease-in-out'
+                            className='typography-nav-menu-default mt-1 flex h-4 flex-row items-center gap-2.5 whitespace-nowrap text-neutral-8 opacity-70 outline-none duration-300 focus-within:text-secondary7 focus-within:opacity-100 hover:text-secondary7 hover:opacity-100 hover:ease-in-out'
                         >
                             <p>More</p>
-                            <EllipsisHorizontalIcon className='ml-1 h-5 w-5' />
+                            <ChevronDownIcon className='h-4 w-4' />
                         </Popover.Button>
                         <Transition
                             as={Fragment}

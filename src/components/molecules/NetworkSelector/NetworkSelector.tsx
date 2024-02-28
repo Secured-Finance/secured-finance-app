@@ -101,25 +101,24 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
                         data-cy='network-selector-button'
                         aria-label='Network Selector Button'
                         className={clsx(
-                            'flex items-center gap-2 rounded-[6px] bg-neutral-800 px-3 py-2 ring-[1.5px] ring-neutral-500 focus:outline-none tablet:rounded-xl tablet:px-4 tablet:py-3'
+                            'flex items-center gap-2 rounded-[6px] bg-neutral-800 px-3 py-2 ring-1 ring-neutral-500 focus:outline-none tablet:rounded-xl tablet:py-3 tablet:pl-4 tablet:pr-3 tablet:ring-[1.5px]',
+                            {
+                                'pr-2': !selectedNetwork,
+                            }
                         )}
                     >
                         {selectedNetwork ? (
                             <div>{selectedNetwork.icon}</div>
                         ) : (
                             <>
-                                <span>
-                                    <ExclamationCircleIcon className='h-4 w-4 tablet:h-5 tablet:w-5' />
-                                </span>
-                                <span className='typography-button-2 leading-4 text-neutral-50 tablet:leading-[22px]'>
+                                <ExclamationCircleIcon className='h-4 w-4 tablet:h-5 tablet:w-5' />
+                                <span className='text-[0.6875rem] leading-4 text-neutral-50 tablet:text-xs tablet:leading-5'>
                                     Network
                                 </span>
-                                <span className='hidden tablet:inline'>
-                                    <ExpandIndicator
-                                        expanded={open}
-                                        variant='solid'
-                                    />
-                                </span>
+                                <ExpandIndicator
+                                    expanded={open}
+                                    variant='solid'
+                                />
                             </>
                         )}
                     </Popover.Button>
