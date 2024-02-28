@@ -3,7 +3,6 @@ import {
     InformationCircleIcon,
     XCircleIcon,
 } from '@heroicons/react/24/solid';
-import WarningCircleIcon from 'src/assets/icons/warning-circle.svg';
 import { AlertSeverity } from './types';
 
 export const FIGMA_STORYBOOK_LINK =
@@ -31,6 +30,6 @@ export const alertIconMapping: { [key in AlertSeverity]: JSX.Element } = {
         <CheckCircleIcon className='text-success-300 light:text-success-700' />
     ),
     [AlertSeverity.Warning]: (
-        <WarningCircleIcon className='text-warning-300 light:text-error-700' />
+        <InformationCircleIcon className='text-warning-300 light:text-error-700' />
     ),
 };
