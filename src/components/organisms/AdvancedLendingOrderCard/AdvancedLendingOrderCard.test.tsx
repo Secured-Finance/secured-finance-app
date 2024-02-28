@@ -273,6 +273,8 @@ describe('AdvancedLendingOrderCard Component', () => {
             })
         );
 
+        expect(screen.getByText('Lending Source')).toBeInTheDocument();
+        expect(await screen.findByText('10,000')).toBeInTheDocument();
         const slider = screen.getByRole('slider');
         const input = screen.getByRole('textbox', { name: 'Amount' });
 
@@ -299,7 +301,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(input).toHaveValue('50');
     });
 
-    it.skip('amount should be set to max wallet amount if input amount is greater than wallet amount and wallet source is changed', async () => {
+    it('amount should be set to max wallet amount if input amount is greater than wallet amount and wallet source is changed', async () => {
         await waitFor(() =>
             render(<Default />, {
                 preloadedState: {
@@ -313,6 +315,8 @@ describe('AdvancedLendingOrderCard Component', () => {
             })
         );
 
+        expect(screen.getByText('Lending Source')).toBeInTheDocument();
+        expect(await screen.findByText('10,000')).toBeInTheDocument();
         const slider = screen.getByRole('slider');
         const input = screen.getByRole('textbox', { name: 'Amount' });
 
@@ -547,7 +551,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                 assertInvalidBondPriceErrorIsNotShown();
             });
 
-            it.skip('should not show error, place order button should be disabled if bond price is undefined for borrow orders', async () => {
+            it('should not show error, place order button should be disabled if bond price is undefined for borrow orders', async () => {
                 render(<Default />, {
                     preloadedState: {
                         ...preloadedState,
