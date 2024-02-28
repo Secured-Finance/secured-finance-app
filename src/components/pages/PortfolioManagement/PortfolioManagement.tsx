@@ -8,6 +8,7 @@ import {
     HorizontalTab,
     StatsBar,
 } from 'src/components/molecules';
+import { AlertSeverity } from 'src/components/molecules/Alert/types';
 import {
     ActiveTradeTable,
     CollateralOrganism,
@@ -268,16 +269,9 @@ export const PortfolioManagement = () => {
     return (
         <Page title='Portfolio Management' name='portfolio-management'>
             {userDelistedCurrenciesArray.length > 0 && (
-                <div className='px-3 laptop:px-0'>
-                    <Alert
-                        severity='error'
-                        showCloseButton={true}
-                        localStorageKey={DELISTED_CURRENCIES_KEY}
-                        localStorageValue={Array.from(delistedCurrencySet)
-                            .sort()
-                            .join()}
-                    >
-                        <p className='text-white'>
+                <Alert
+                    title={
+                        <>
                             Please note that your contracts for{' '}
                             {generateDelistedCurrencyText(
                                 userDelistedCurrenciesArray
@@ -295,9 +289,14 @@ export const PortfolioManagement = () => {
                             >
                                 Learn more
                             </a>
-                        </p>
-                    </Alert>
-                </div>
+                        </>
+                    }
+                    severity={AlertSeverity.Error}
+                    localStorageKey={DELISTED_CURRENCIES_KEY}
+                    localStorageValue={Array.from(delistedCurrencySet)
+                        .sort()
+                        .join()}
+                />
             )}
 
             <TwoColumns>

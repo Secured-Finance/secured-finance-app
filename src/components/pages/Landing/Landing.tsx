@@ -6,6 +6,7 @@ import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ViewType } from 'src/components/atoms';
 import { Alert, DelistedCurrencyDisclaimer } from 'src/components/molecules';
+import { AlertSeverity } from 'src/components/molecules/Alert/types';
 import {
     AdvancedLending,
     LendingCard,
@@ -178,40 +179,34 @@ const WithBanner = ({
                 </div>
             )}
             {market && (
-                <div className='px-3 laptop:px-0'>
-                    <Alert severity='info'>
-                        <div className='typography-caption text-white'>
-                            <p>
-                                {`Market ${ccy}-${getUTCMonthYear(
-                                    market.maturity,
-                                    true
-                                )} is open for pre-orders now until ${Intl.DateTimeFormat(
-                                    'en-US',
-                                    {
-                                        timeZone: 'UTC',
-                                        year: 'numeric',
-                                        month: 'long',
-                                        day: 'numeric',
-                                    }
-                                ).format(
-                                    preOrderTimeLimit
-                                )} ${Intl.DateTimeFormat('en-GB', {
-                                    timeZone: 'UTC',
-                                    hour: '2-digit',
-                                    minute: '2-digit',
-                                }).format(preOrderTimeLimit)} (UTC)`}
-                                <span className='pl-4'>
-                                    <Link
-                                        href='itayose'
+                <Alert
+                    title={
+                        <>
+                            {`Itayose market for ${ccy}-${getUTCMonthYear(
+                                market.maturity
+                            )} is now open until ${Intl.DateTimeFormat(
+                                'en-US',
+                                {
+                                    weekday: 'long',
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric',
+                                }
+                            ).format(market.utcOpeningDate * 1000)}`}
+                            <span className='pl-4'>
+                                <Link href='itayose' passHref>
+                                    <a
+                                        href='_'
                                         className='text-planetaryPurple underline'
                                     >
                                         Place Order Now
-                                    </Link>
-                                </span>
-                            </p>
-                        </div>
-                    </Alert>
-                </div>
+                                    </a>
+                                </Link>
+                            </span>
+                        </>
+                    }
+                    severity={AlertSeverity.Info}
+                />
             )}
             {children}
         </div>
