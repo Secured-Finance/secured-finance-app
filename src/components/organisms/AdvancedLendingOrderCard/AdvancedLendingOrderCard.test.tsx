@@ -200,9 +200,7 @@ describe('AdvancedLendingOrderCard Component', () => {
     it('should change amount when slider is moved and trigger SLIDER event for Amplitude', async () => {
         const track = jest.spyOn(analytics, 'track');
         render(<Default />, {
-            preloadedState: {
-                ...preloadedState,
-            },
+            preloadedState,
         });
 
         await waitFor(() => {

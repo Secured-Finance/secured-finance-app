@@ -42,7 +42,7 @@ if (typeof window !== 'undefined') {
     amplitude.add(pageViewTracking);
     amplitude.init(getAmplitudeApiKey(), {
         appVersion: process.env.SF_ENV,
-        logLevel: amplitude.Types.LogLevel.Error,
+        logLevel: amplitude.Types.LogLevel.None,
     });
 }
 
