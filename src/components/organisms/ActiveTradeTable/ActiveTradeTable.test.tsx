@@ -146,12 +146,22 @@ describe('ActiveTradeTable Component', () => {
             expect(delistedContractRow).toHaveTextContent('100.00');
         });
 
-        it.skip('should not display PV for matured delisted contracts', () => {
+        it('should not display PV for matured delisted contracts', async () => {
             render(<Delisted />);
             const delistedContractRow = screen.getAllByRole('row')[10];
+            const activeContractRow = screen.getAllByRole('row')[5];
+
             expect(delistedContractRow).toHaveTextContent('Redeemable');
-            const rows = screen.getAllByTestId('currency-amount-item');
-            expect(rows[15]).toHaveValue(undefined);
+            expect(activeContractRow).toHaveTextContent('22h');
+
+            const delistRowOnlyFv = await within(
+                delistedContractRow
+            ).findAllByTestId('currency-amount-item');
+            const activeRowFvAndPv = await within(
+                activeContractRow
+            ).findAllByTestId('currency-amount-item');
+            expect(delistRowOnlyFv).toHaveLength(1);
+            expect(activeRowFvAndPv).toHaveLength(2);
         });
 
         it('should display unwind position till maturity', () => {
