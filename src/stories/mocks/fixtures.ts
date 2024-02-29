@@ -58,7 +58,7 @@ const preOpeningDate = BigInt(preOpeningDateTimestamp);
 
 export const maturitiesMockFromContract = (ccy: string) => [
     {
-        name: 'DEC22',
+        name: 'DEC2022',
         maturity: BigInt(dec22Fixture.toString()),
         openingDate: openingDate,
         marketUnitPrice: BigInt('9801'),
@@ -77,7 +77,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         preOpeningDate: preOpeningDate,
     },
     {
-        name: 'MAR23',
+        name: 'MAR2023',
         maturity: BigInt(mar23Fixture.toString()),
         openingDate: openingDate,
         marketUnitPrice: BigInt('9701'),
@@ -96,7 +96,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         preOpeningDate: preOpeningDate,
     },
     {
-        name: 'JUN23',
+        name: 'JUN2023',
         maturity: BigInt(jun23Fixture.toString()),
         openingDate: openingDate,
         marketUnitPrice: BigInt('9601'),
@@ -115,7 +115,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         preOpeningDate: preOpeningDate,
     },
     {
-        name: 'SEP23',
+        name: 'SEP2023',
         maturity: BigInt(sep23Fixture.toString()),
         openingDate: openingDate,
         marketUnitPrice: BigInt('9501'),
@@ -134,7 +134,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         preOpeningDate: preOpeningDate,
     },
     {
-        name: 'DEC23',
+        name: 'DEC2023',
         maturity: BigInt(dec23Fixture.toString()),
         openingDate: openingDate,
         marketUnitPrice: BigInt('9401'),
@@ -153,7 +153,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         preOpeningDate: preOpeningDate,
     },
     {
-        name: 'MAR24',
+        name: 'MAR2024',
         maturity: BigInt(mar24Fixture.toString()),
         openingDate: openingDate,
         marketUnitPrice: BigInt('9301'),
@@ -172,7 +172,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         preOpeningDate: preOpeningDate,
     },
     {
-        name: 'JUN24',
+        name: 'JUN2024',
         maturity: BigInt(jun24Fixture.toString()),
         openingDate: openingDate,
         marketUnitPrice: BigInt('9201'),
@@ -191,7 +191,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         preOpeningDate: preOpeningDate,
     },
     {
-        name: 'SEP24',
+        name: 'SEP2024',
         maturity: BigInt(sep24Fixture.toString()),
         openingDate: openingDate,
         marketUnitPrice: BigInt('9101'),
@@ -210,7 +210,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         preOpeningDate: preOpeningDate,
     },
     {
-        name: 'DEC24',
+        name: 'DEC2024',
         maturity: BigInt(dec24Fixture.toString()),
         openingDate: BigInt('1685577600'),
         marketUnitPrice: BigInt('9001'),
@@ -232,7 +232,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
 
 export const maturities = {
     [dec22Fixture.toNumber()]: {
-        name: 'DEC22',
+        name: 'DEC2022',
         maturity: dec22Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
@@ -251,7 +251,7 @@ export const maturities = {
         currentMinDebtUnitPrice: 9500,
     },
     [mar23Fixture.toNumber()]: {
-        name: 'MAR23',
+        name: 'MAR2023',
         maturity: mar23Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
@@ -270,7 +270,7 @@ export const maturities = {
         currentMinDebtUnitPrice: 9500,
     },
     [jun23Fixture.toNumber()]: {
-        name: 'JUN23',
+        name: 'JUN2023',
         maturity: jun23Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
@@ -289,7 +289,7 @@ export const maturities = {
         currentMinDebtUnitPrice: 9500,
     },
     [sep23Fixture.toNumber()]: {
-        name: 'SEP23',
+        name: 'SEP2023',
         maturity: sep23Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
@@ -308,7 +308,7 @@ export const maturities = {
         currentMinDebtUnitPrice: 9500,
     },
     [dec23Fixture.toNumber()]: {
-        name: 'DEC23',
+        name: 'DEC2023',
         maturity: dec23Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
@@ -327,7 +327,7 @@ export const maturities = {
         currentMinDebtUnitPrice: 9500,
     },
     [mar24Fixture.toNumber()]: {
-        name: 'MAR24',
+        name: 'MAR2024',
         maturity: mar24Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
@@ -346,7 +346,7 @@ export const maturities = {
         currentMinDebtUnitPrice: 9500,
     },
     [jun24Fixture.toNumber()]: {
-        name: 'JUN24',
+        name: 'JUN2024',
         maturity: jun24Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
@@ -365,7 +365,7 @@ export const maturities = {
         currentMinDebtUnitPrice: 9500,
     },
     [sep24Fixture.toNumber()]: {
-        name: 'SEP24',
+        name: 'SEP2024',
         maturity: sep24Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
@@ -384,7 +384,7 @@ export const maturities = {
         currentMinDebtUnitPrice: 9500,
     },
     [dec24Fixture.toNumber()]: {
-        name: 'DEC24',
+        name: 'DEC2024',
         maturity: dec24Fixture.toNumber(),
         isActive: false,
         utcOpeningDate: 1685577600,
@@ -405,14 +405,14 @@ export const maturities = {
 };
 
 export const maturityOptions: MaturityOptionList = [
-    { label: 'DEC22', value: dec22Fixture },
-    { label: 'MAR23', value: mar23Fixture },
-    { label: 'JUN23', value: jun23Fixture },
-    { label: 'SEP23', value: sep23Fixture },
-    { label: 'DEC23', value: dec23Fixture },
-    { label: 'MAR24', value: mar24Fixture },
-    { label: 'JUN24', value: jun24Fixture },
-    { label: 'SEP24', value: sep24Fixture },
+    { label: 'DEC2022', value: dec22Fixture },
+    { label: 'MAR2023', value: mar23Fixture },
+    { label: 'JUN2023', value: jun23Fixture },
+    { label: 'SEP2023', value: sep23Fixture },
+    { label: 'DEC2023', value: dec23Fixture },
+    { label: 'MAR2024', value: mar24Fixture },
+    { label: 'JUN2024', value: jun24Fixture },
+    { label: 'SEP2024', value: sep24Fixture },
 ];
 
 export const walletSourceList: WalletSourceOption[] = [

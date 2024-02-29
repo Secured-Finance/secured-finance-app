@@ -17,4 +17,15 @@ describe('test Slider component', () => {
         fireEvent.change(slider, { target: { value: 100 } });
         expect(onChangeMock).toHaveBeenCalledWith(100);
     });
+
+    it('should not allow clicking when disabled', () => {
+        const onChangeMock = jest.fn();
+        render(<Default disabled value={25} />);
+
+        const slider = screen.getByRole('slider');
+        expect(slider).toBeDisabled();
+
+        fireEvent.change(slider, { target: { value: 100 } });
+        expect(onChangeMock).not.toHaveBeenCalled();
+    });
 });
