@@ -16,7 +16,7 @@ import {
 import timemachine from 'timemachine';
 import * as stories from './AdvancedLendingOrderCard.stories';
 
-const { Default } = composeStories(stories);
+const { Default, WalletNotConnected } = composeStories(stories);
 
 const preloadedState = {
     landingOrderForm: {
@@ -274,6 +274,8 @@ describe('AdvancedLendingOrderCard Component', () => {
             })
         );
 
+        expect(screen.getByText('Lending Source')).toBeInTheDocument();
+        expect(await screen.findByText('10,000')).toBeInTheDocument();
         const slider = screen.getByRole('slider');
         const input = screen.getByRole('textbox', { name: 'Amount' });
 
@@ -300,7 +302,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(input).toHaveValue('50');
     });
 
-    it.skip('amount should be set to max wallet amount if input amount is greater than wallet amount and wallet source is changed', async () => {
+    it('amount should be set to max wallet amount if input amount is greater than wallet amount and wallet source is changed', async () => {
         await waitFor(() =>
             render(<Default />, {
                 preloadedState: {
@@ -314,6 +316,8 @@ describe('AdvancedLendingOrderCard Component', () => {
             })
         );
 
+        expect(screen.getByText('Lending Source')).toBeInTheDocument();
+        expect(await screen.findByText('10,000')).toBeInTheDocument();
         const slider = screen.getByRole('slider');
         const input = screen.getByRole('textbox', { name: 'Amount' });
 
@@ -422,6 +426,26 @@ describe('AdvancedLendingOrderCard Component', () => {
         });
         expect(
             screen.queryByText('Available To Borrow (WFIL)')
+        ).not.toBeInTheDocument();
+    });
+
+    it('should disable elements and hide order inputs when wallet is not connected', async () => {
+        render(<WalletNotConnected />, { preloadedState });
+
+        // lending side
+        fireEvent.click(screen.getByRole('radio', { name: 'Lend' }));
+        expect(
+            screen.getByTestId('wallet-source-selector-button')
+        ).toBeDisabled();
+        expect(
+            screen.queryByRole('input', { name: 'Bond Price' })
+        ).not.toBeInTheDocument();
+
+        // borrow side
+        fireEvent.click(screen.getByRole('radio', { name: 'Borrow' }));
+
+        expect(
+            screen.queryByRole('textbox', { name: 'Amount' })
         ).not.toBeInTheDocument();
     });
 
@@ -548,7 +572,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                 assertInvalidBondPriceErrorIsNotShown();
             });
 
-            it.skip('should not show error, place order button should be disabled if bond price is undefined for borrow orders', async () => {
+            it('should not show error, place order button should be disabled if bond price is undefined for borrow orders', async () => {
                 render(<Default />, {
                     preloadedState: {
                         ...preloadedState,
@@ -699,7 +723,7 @@ describe('AdvancedLendingOrderCard Component', () => {
             assertBondPriceInputValue('92');
         });
 
-        it('should be reset to market price when changing order type from LIMIT to MARKET', () => {
+        it('should be reset to Market display when changing order type from LIMIT to MARKET', async () => {
             render(<Default marketPrice={9600} />, {
                 preloadedState: {
                     ...preloadedState,
@@ -711,9 +735,17 @@ describe('AdvancedLendingOrderCard Component', () => {
                 },
             });
             assertBondPriceInputValue('92');
+            expect(screen.getAllByText('Market')).toHaveLength(1);
 
-            fireEvent.click(screen.getByText('Market'));
-            expect(screen.getByText('96')).toBeInTheDocument();
+            const marketButton = screen.getByRole('radio', {
+                name: 'Market',
+            });
+
+            fireEvent.click(marketButton);
+
+            const spanInput = screen.getByTestId('disabled-input');
+            expect(spanInput).toBeInTheDocument();
+            expect(spanInput).toHaveTextContent('Market');
         });
 
         it('should calculate the APR from the user input bond price', async () => {
