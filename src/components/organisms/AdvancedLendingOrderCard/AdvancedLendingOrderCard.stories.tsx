@@ -30,6 +30,11 @@ OnlyLimitOrder.args = {
     preOrderPosition: 'none',
 };
 
+export const WalletNotConnected = Template.bind({});
+WalletNotConnected.parameters = {
+    connected: false,
+};
+
 export const Lend = Template.bind({});
 Lend.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);

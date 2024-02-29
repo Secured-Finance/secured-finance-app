@@ -174,7 +174,7 @@ describe('OrderAction component', () => {
     it('should disable the button if the market is not open or pre-open', async () => {
         const lendingMarkets = await mockSecuredFinance.getOrderBookDetails();
         const marketIndex = lendingMarkets.findIndex(
-            value => value.ccy === usdcBytes32 && value.name === 'DEC22'
+            value => value.ccy === usdcBytes32 && value.name === 'DEC2022'
         );
         const market = lendingMarkets[marketIndex];
         lendingMarkets[marketIndex] = {
