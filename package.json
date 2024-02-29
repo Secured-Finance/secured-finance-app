@@ -5,7 +5,8 @@
   "homepage": ".",
   "dependencies": {
     "@0xsquid/widget": "^1.6.20",
-    "@amplitude/analytics-browser": "^1.7.0",
+    "@amplitude/analytics-browser": "^2.4.0",
+    "@amplitude/plugin-page-view-tracking-browser": "^2.1.0",
     "@glif/filecoin-number": "^1.1.0-beta.11",
     "@headlessui/react": "^1.7.15",
     "@heroicons/react": "^2.0.18",
