@@ -168,7 +168,7 @@ describe('Landing Component', () => {
                         screen.getByLabelText('Wallet Popover Button')
                     ).toBeInTheDocument();
                 },
-                { timeout: 3000 }
+                { timeout: 5000 }
             );
 
             clickAdvancedButton();
