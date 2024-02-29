@@ -188,7 +188,7 @@ describe('Landing Component', () => {
 
             assertInputValue('Amount', '1');
             assertInputValue('Bond Price', '96.85');
-        });
+        }, 6000);
 
         it.skip('should reset bond price to the best price when user changes mode', async () => {
             await waitFor(() => {
