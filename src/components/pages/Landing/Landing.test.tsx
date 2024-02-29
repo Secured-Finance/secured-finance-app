@@ -155,15 +155,24 @@ describe('Landing Component', () => {
 
         it('should reset bond price to the best price when user changes currency', async () => {
             await waitFor(() => {
-                render(<Default />, {
+                render(<ConnectedToWallet />, {
                     apolloMocks: Default.parameters?.apolloClient.mocks,
                     preloadedState,
                 });
             });
+
             clickAdvancedButton();
             await waitFor(() =>
-                expect(screen.getByText('DEC2022')).toBeInTheDocument()
+                expect(
+                    screen.getByRole('button', { name: 'DEC2022' })
+                ).toBeInTheDocument()
             );
+
+            // ensure wallet is connected
+            await waitFor(() => {
+                expect(screen.getByLabelText('Bond Price')).toBeInTheDocument();
+            });
+
             assertInputValue('Bond Price', '96.85');
 
             changeInputValue('Amount', '1');
