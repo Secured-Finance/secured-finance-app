@@ -155,11 +155,22 @@ describe('Landing Component', () => {
 
         it('should reset bond price to the best price when user changes currency', async () => {
             await waitFor(() => {
-                render(<Default />, {
+                render(<ConnectedToWallet />, {
                     apolloMocks: Default.parameters?.apolloClient.mocks,
                     preloadedState,
                 });
             });
+
+            // ensure wallet is connected
+            await waitFor(
+                () => {
+                    expect(
+                        screen.getByLabelText('Wallet Popover Button')
+                    ).toBeInTheDocument();
+                },
+                { timeout: 3000 }
+            );
+
             clickAdvancedButton();
             await waitFor(() =>
                 expect(
