@@ -12,7 +12,7 @@ import { useIsGlobalItayose } from './useIsGlobalItayose';
 
 const noOpenMarkets = [
     {
-        name: 'DEC22',
+        name: 'DEC2022',
         maturity: BigInt(dec22Fixture.toString()),
         openingDate: BigInt('1685587600'),
         marketUnitPrice: BigInt('9001'),
@@ -31,7 +31,7 @@ const noOpenMarkets = [
         preOpeningDate: BigInt('1684982800'),
     },
     {
-        name: 'MAR23',
+        name: 'MAR2023',
         maturity: BigInt(mar23Fixture.toString()),
         openingDate: BigInt('1685587600'),
         marketUnitPrice: BigInt('9001'),
@@ -50,7 +50,7 @@ const noOpenMarkets = [
         preOpeningDate: BigInt('1684982800'),
     },
     {
-        name: 'JUN23',
+        name: 'JUN2023',
         maturity: BigInt(jun23Fixture.toString()),
         openingDate: BigInt('1685587600'),
         marketUnitPrice: BigInt('9001'),

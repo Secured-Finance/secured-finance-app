@@ -156,7 +156,8 @@ const WithBanner = ({
                     <div className='typography-caption text-white'>
                         <p>
                             {`Itayose market for ${ccy}-${getUTCMonthYear(
-                                market.maturity
+                                market.maturity,
+                                true
                             )} is now open until ${Intl.DateTimeFormat(
                                 'en-US',
                                 {
