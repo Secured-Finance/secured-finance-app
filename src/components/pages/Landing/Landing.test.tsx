@@ -161,22 +161,17 @@ describe('Landing Component', () => {
                 });
             });
 
-            // ensure wallet is connected
-            await waitFor(
-                () => {
-                    expect(
-                        screen.getByLabelText('Wallet Popover Button')
-                    ).toBeInTheDocument();
-                },
-                { timeout: 5000 }
-            );
-
             clickAdvancedButton();
             await waitFor(() =>
                 expect(
                     screen.getByRole('button', { name: 'DEC22' })
                 ).toBeInTheDocument()
             );
+
+            // ensure wallet is connected
+            await waitFor(() => {
+                expect(screen.getByLabelText('Bond Price')).toBeInTheDocument();
+            });
 
             assertInputValue('Bond Price', '96.85');
 
@@ -188,7 +183,7 @@ describe('Landing Component', () => {
 
             assertInputValue('Amount', '1');
             assertInputValue('Bond Price', '96.85');
-        }, 6000);
+        });
 
         it.skip('should reset bond price to the best price when user changes mode', async () => {
             await waitFor(() => {
