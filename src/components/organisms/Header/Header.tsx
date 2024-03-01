@@ -86,6 +86,8 @@ const HeaderMessage = ({
 export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     const dispatch = useDispatch();
     const isMobile = useBreakpoint('tablet');
+    const isDesktop = useBreakpoint('desktop');
+
     const { address, isConnected } = useAccount();
     const securedFinance = useSF();
     const chainError = useSelector(
@@ -116,24 +118,28 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
         buttonSize = ButtonSizes.md;
     }
 
+    if (!isDesktop) {
+        buttonSize = ButtonSizes.lg;
+    }
+
     return (
         <div className='relative'>
             <HeaderMessage chainId={currentChainId} chainError={chainError} />
             <nav
                 data-cy='header'
-                className='grid h-[4.5rem] w-full grid-flow-col items-center border-b border-neutral-1 px-6 py-[1.375rem] tablet:px-5 tablet:py-0 laptop:grid-flow-col'
+                className='grid h-[4.5rem] w-full grid-flow-col items-center border-b border-neutral-1 px-6 py-[1.375rem] tablet:px-5 tablet:py-0 laptop:grid-flow-col desktop:h-20'
             >
-                <div className='col-span-2 flex h-full flex-row items-center gap-3 tablet:gap-4'>
+                <div className='col-span-2 flex h-full flex-row items-center gap-3 tablet:gap-4 desktop:gap-6'>
                     <Link href='/' passHref>
                         <a
                             href='_'
-                            className='flex items-center tablet:h-10 tablet:border-r tablet:border-neutral-800 tablet:pr-4'
+                            className='flex items-center tablet:h-10 tablet:border-r tablet:border-neutral-800 tablet:pr-4 desktop:pr-6'
                         >
-                            <SFLogo className='hidden tablet:flex tablet:h-[15px] tablet:w-[150px]' />
+                            <SFLogo className='hidden tablet:flex tablet:h-[15px] tablet:w-[150px] desktop:h-5 desktop:w-[200px]' />
                             <SFLogoSmall className='inline h-7 w-7 tablet:hidden' />
                         </a>
                     </Link>
-                    <button className='hidden items-center gap-1 text-sm text-neutral-50 tablet:flex laptop:hidden'>
+                    <button className='hidden h-full items-center gap-1 px-5 text-sm text-neutral-50 tablet:flex laptop:hidden'>
                         Menu{' '}
                         <ChevronDownIcon className='h-4 w-4 text-neutral-400' />
                     </button>
@@ -153,7 +159,7 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                         </div>
                     )}
                 </div>
-                <div className='col-span-2 flex flex-row items-center justify-end gap-2 tablet:gap-3 laptop:col-span-1 laptop:gap-4'>
+                <div className='col-span-2 flex flex-row items-center justify-end gap-2 tablet:gap-3 laptop:col-span-1 laptop:gap-4 desktop:gap-5'>
                     {isConnected && address ? (
                         <>
                             <NetworkSelector networkName={'Unknown'} />
