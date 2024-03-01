@@ -61,7 +61,7 @@ import {
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { trackButtonEvent } from 'src/utils/events';
 import { useAccount } from 'wagmi';
-import { graphTypeOptions, timeScales } from '../HistoricalWidget/constants';
+import { graphTypeOptions } from '../HistoricalWidget/constants';
 
 const useTradeHistoryDetails = (
     transactions: TransactionList,
@@ -352,7 +352,6 @@ export const AdvancedLending = ({
                     </div>
                     <div>
                         <HistoricalWidget
-                            timeScales={timeScales}
                             chartType={graphTypeOptions}
                             {...dataSet}
                         />

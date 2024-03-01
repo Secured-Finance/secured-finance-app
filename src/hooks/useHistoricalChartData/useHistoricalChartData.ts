@@ -1,52 +1,76 @@
-import { useEffect, useState } from 'react';
-import { historicalChartMockData } from 'src/components/organisms/HistoricalWidget/constants';
+import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
+import { useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
+// import { historicalChartMockData as historicalTradeData } from 'src/components/organisms/HistoricalWidget/constants';
+import { toBytes32 } from '@secured-finance/sf-graph-client';
+import { selectLandingOrderForm } from 'src/store/landingOrderForm';
+import { RootState } from 'src/store/types';
+import { HistoricalDataIntervals } from 'src/types';
+import { amountFormatterFromBase } from 'src/utils';
+import { useGraphClientHook } from '../useGraphClientHook';
 
-type Candlestick = {
-    id: string;
-    interval: string;
+export interface HistoricalDataPoint {
     currency: string;
     maturity: string;
-    timestamp: number;
+    interval: string;
+    timestamp: string;
     open: string;
     close: string;
     high: string;
     low: string;
-    volume: number;
-    lendingMarket: Record<string, never>; // Assuming lendingMarket is an empty object
-};
+    average: string;
+    volume: string;
+    volumeInFV: string;
+}
 
 export const useHistoricalChartData = () => {
-    const [selectTimeScale, setSlectTimeScale] = useState('15m');
+    const [selectedTimeScale, setSelectedTimeScale] =
+        useState<HistoricalDataIntervals>(HistoricalDataIntervals['15M']);
     const [selectChartType, setSelectChartType] = useState('VOL');
-    const [data, setData] = useState([]);
-    const getBSCData = async (_: string) => {
-        const result = historicalChartMockData.map((item: Candlestick) => {
-            return {
-                time: item.timestamp.toString(),
-                open: item.open,
-                high: item.high,
-                low: item.low,
-                close: item.close,
-                vol: item.volume.toString(),
-            };
-        });
-        setData(result as never[]);
-    };
+    const { currency, maturity } = useSelector((state: RootState) =>
+        selectLandingOrderForm(state.landingOrderForm)
+    );
+
+    // TODO: handle query name here
+    const historicalTradeData = useGraphClientHook(
+        {
+            interval: selectedTimeScale,
+            currency: toBytes32(currency),
+            maturity: maturity,
+        },
+        queries.FilteredUserOrderHistoryDocument,
+        'user'
+    );
+
+    const data = useMemo(() => {
+        return (historicalTradeData.data?.transactionCandleSticks || []).map(
+            (item: HistoricalDataPoint) => {
+                const volAdjusted = amountFormatterFromBase[currency](
+                    BigInt(item.volume)
+                );
+
+                return {
+                    time: item.timestamp,
+                    open: +item.open / 100,
+                    high: +item.high / 100,
+                    low: +item.low / 100,
+                    close: +item.close / 100,
+                    vol: volAdjusted,
+                };
+            }
+        ); // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedTimeScale]);
 
     const onChartTypeChange = (_: string, type: string) => {
         setSelectChartType(type);
     };
 
-    const onTimeScaleChange = (time: string, _: string) => {
-        setSlectTimeScale(time);
+    const onTimeScaleChange = (time: string) => {
+        setSelectedTimeScale(time as HistoricalDataIntervals);
     };
 
-    useEffect(() => {
-        getBSCData(selectTimeScale);
-    }, [selectTimeScale]);
-
     return {
-        selectTimeScale,
+        selectedTimeScale,
         selectChartType,
         onChartTypeChange,
         onTimeScaleChange,

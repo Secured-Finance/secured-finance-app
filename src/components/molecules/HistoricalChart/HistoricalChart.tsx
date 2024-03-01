@@ -71,7 +71,6 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
         selectLandingOrderForm(state.landingOrderForm)
     );
     const prettyMaturity = getUTCMonthYear(+maturity);
-
     const VOLUME_KEY_NAME = `Vol(${currency} ${prettyMaturity})`;
 
     const [legendData, setLegendData] = useState({

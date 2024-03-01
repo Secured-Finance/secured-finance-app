@@ -4,24 +4,30 @@ import {
     HistoricalChart,
     ITradingData,
 } from 'src/components/molecules/HistoricalChart';
+import { HistoricalDataIntervals } from 'src/types';
 
 type TOptions = { label: string; value: string };
 
 interface THistoricalWidgetProps {
     className?: string;
-    timeScales: TOptions[];
+    // timeScales: TOptions[];
     chartType: TOptions[];
     data: ITradingData[];
-    selectTimeScale: string;
+    selectedTimeScale: string;
     selectChartType: string;
-    onTimeScaleChange: (value: string, type: string) => void;
+    onTimeScaleChange: (value: string) => void;
     onChartTypeChange: (value: string, type: string) => void;
 }
 
+const timeScales = Object.entries(HistoricalDataIntervals).map(interval => ({
+    label: interval[0],
+    value: interval[1],
+}));
+
 export const HistoricalWidget = ({
     className,
-    timeScales,
-    selectTimeScale,
+    // timeScales,
+    selectedTimeScale,
     chartType,
     data,
     selectChartType,
@@ -37,10 +43,8 @@ export const HistoricalWidget = ({
             <div className='flex justify-between border-b border-t border-neutral-2 bg-[#292D3F99] px-4 py-2'>
                 <RadioButton
                     options={timeScales}
-                    value={selectTimeScale}
-                    onChange={(time: string) =>
-                        onTimeScaleChange(time, selectChartType)
-                    }
+                    value={selectedTimeScale}
+                    onChange={(time: string) => onTimeScaleChange(time)}
                 />
                 {/* <RadioButton
                     options={chartType}
