@@ -1,13 +1,17 @@
-import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
+// import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-// import { historicalChartMockData as historicalTradeData } from 'src/components/organisms/HistoricalWidget/constants';
-import { toBytes32 } from '@secured-finance/sf-graph-client';
+import { historicalChartMockData as historicalTradeData } from 'src/components/organisms/HistoricalWidget/constants';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { HistoricalDataIntervals } from 'src/types';
-import { amountFormatterFromBase } from 'src/utils';
-import { useGraphClientHook } from '../useGraphClientHook';
+import {
+    CurrencySymbol,
+    amountFormatterFromBase,
+    hexToCurrencySymbol,
+} from 'src/utils';
+// import { toBytes32 } from '@secured-finance/sf-graph-client';
+// import { useGraphClientHook } from '../useGraphClientHook';
 
 export interface HistoricalDataPoint {
     currency: string;
@@ -32,22 +36,23 @@ export const useHistoricalChartData = () => {
     );
 
     // TODO: handle query name here
-    const historicalTradeData = useGraphClientHook(
-        {
-            interval: selectedTimeScale,
-            currency: toBytes32(currency),
-            maturity: maturity,
-        },
-        queries.FilteredUserOrderHistoryDocument,
-        'user'
-    );
+    // const historicalTradeData = useGraphClientHook(
+    //     {
+    //         interval: selectedTimeScale,
+    //         currency: toBytes32(currency),
+    //         maturity: maturity,
+    //     },
+    //     queries.FilteredUserOrderHistoryDocument,
+    //     'user'
+    // );
 
     const data = useMemo(() => {
         return (historicalTradeData.data?.transactionCandleSticks || []).map(
             (item: HistoricalDataPoint) => {
-                const volAdjusted = amountFormatterFromBase[currency](
-                    BigInt(item.volume)
-                );
+                const ccy = hexToCurrencySymbol(item.currency);
+                const volAdjusted = amountFormatterFromBase[
+                    ccy as CurrencySymbol
+                ](BigInt(item.volume));
 
                 return {
                     time: item.timestamp,

@@ -141,11 +141,11 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
             setHoverTime(formattedDate);
 
             setLegendData({
-                O: `${(mergeData?.open / 1000).toFixed(2)}K`,
-                H: `${(mergeData?.high / 1000).toFixed(2)}K`,
-                L: `${(mergeData?.low / 1000).toFixed(2)}K`,
-                C: `${(mergeData?.close / 1000).toFixed(2)}K`,
-                VOLUME_KEY_NAME: mergeData?.value?.toFixed(2), // TODO: handle volume display
+                O: `${mergeData?.open}`,
+                H: `${mergeData?.high}`,
+                L: `${mergeData?.low}`,
+                C: `${mergeData?.close}`,
+                VOLUME_KEY_NAME: mergeData?.value?.toFixed(2),
                 Change: `${(
                     ((mergeData?.close - mergeData?.open) / mergeData?.open) *
                     100
@@ -238,10 +238,10 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
             setHoverTime(formattedDate);
 
             setLegendData({
-                O: `${(mergeData?.open / 1000).toFixed(2)}K`,
-                H: `${(mergeData?.high / 1000).toFixed(2)}K`,
-                L: `${(mergeData?.low / 1000).toFixed(2)}K`,
-                C: `${(mergeData?.close / 1000).toFixed(2)}K`,
+                O: `${mergeData?.open}`,
+                H: `${mergeData?.high}`,
+                L: `${mergeData?.low}`,
+                C: `${mergeData?.close}`,
                 VOLUME_KEY_NAME: mergeData?.value?.toFixed(2),
                 Change: `${(
                     ((mergeData?.close - mergeData?.open) / mergeData?.open) *
