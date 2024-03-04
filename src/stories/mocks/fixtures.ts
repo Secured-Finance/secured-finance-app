@@ -795,7 +795,7 @@ export const mappedOrderHistoryList = orderHistoryList.map(order => {
     return {
         ...order,
         status: getMappedOrderStatus(order),
-    } as typeof order & { status: string };
+    };
 });
 
 export const transactions: TransactionHistoryList = [
