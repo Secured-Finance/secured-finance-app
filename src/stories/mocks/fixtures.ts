@@ -17,7 +17,12 @@ import {
     TransactionHistoryList,
     TransactionList,
 } from 'src/types';
-import { CurrencySymbol, Rate, createCurrencyMap } from 'src/utils';
+import {
+    CurrencySymbol,
+    Rate,
+    createCurrencyMap,
+    getMappedOrderStatus,
+} from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
 export const wfilBytes32 = toBytes32('WFIL'); // 0x5746494c0000000000000000000000000000000000000000000000000000000000
@@ -561,7 +566,7 @@ export const orderHistoryList: OrderHistoryList = [
         inputUnitPrice: BigInt('9600'),
         filledAmount: BigInt('0'),
         inputAmount: BigInt('5000000000000000000000'),
-        status: 'Open',
+        status: 'Cancelled',
         type: OrderType.LIMIT,
         createdAt: BigInt('1605299000'),
         txHash: toBytes32('hash'),
@@ -603,8 +608,8 @@ export const orderHistoryList: OrderHistoryList = [
         inputUnitPrice: BigInt('9600'),
         filledAmount: BigInt('0'),
         inputAmount: BigInt('5000000000000000000000'),
-        status: 'Open',
-        type: OrderType.LIMIT,
+        status: 'Killed',
+        type: OrderType.MARKET,
         createdAt: BigInt('1689299000'),
         txHash: toBytes32('hash'),
         lendingMarket: {
@@ -645,8 +650,8 @@ export const orderHistoryList: OrderHistoryList = [
         inputUnitPrice: BigInt('9600'),
         filledAmount: BigInt('0'),
         inputAmount: BigInt('100000000000000000'),
-        status: 'Open',
-        type: OrderType.LIMIT,
+        status: 'Killed',
+        type: OrderType.MARKET,
         createdAt: BigInt('1669299000'),
         txHash: toBytes32('hash'),
         lendingMarket: {
@@ -656,7 +661,7 @@ export const orderHistoryList: OrderHistoryList = [
         user: {
             id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
         },
-        isCircuitBreakerTriggered: false,
+        isCircuitBreakerTriggered: true,
     },
     {
         orderId: 1,
@@ -687,7 +692,7 @@ export const orderHistoryList: OrderHistoryList = [
         inputUnitPrice: BigInt('9800'),
         filledAmount: BigInt('50000000000000000'),
         inputAmount: BigInt('500000000000000000'),
-        status: 'PartiallyFilled',
+        status: 'Killed',
         type: OrderType.LIMIT,
         createdAt: BigInt('1649299000'),
         txHash: toBytes32('hash'),
@@ -719,7 +724,7 @@ export const orderHistoryList: OrderHistoryList = [
         user: {
             id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
         },
-        isCircuitBreakerTriggered: false,
+        isCircuitBreakerTriggered: true,
     },
     {
         orderId: 3,
@@ -729,13 +734,13 @@ export const orderHistoryList: OrderHistoryList = [
         inputUnitPrice: BigInt('9600'),
         filledAmount: BigInt('0'),
         inputAmount: BigInt('5000000000000000000000'),
-        status: 'Killed',
+        status: 'Open',
         type: OrderType.LIMIT,
         createdAt: BigInt('1629299000'),
         txHash: toBytes32('hash'),
         lendingMarket: {
             id: '1',
-            isActive: true,
+            isActive: false,
         },
         user: {
             id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
@@ -750,13 +755,13 @@ export const orderHistoryList: OrderHistoryList = [
         inputUnitPrice: BigInt('9800'),
         filledAmount: BigInt('10000000000000000000'),
         inputAmount: BigInt('100000000000000000000'),
-        status: 'Killed',
+        status: 'PartiallyFilled',
         type: OrderType.LIMIT,
         createdAt: BigInt('1619299000'),
         txHash: toBytes32('hash'),
         lendingMarket: {
             id: '1',
-            isActive: true,
+            isActive: false,
         },
         user: {
             id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
@@ -769,7 +774,7 @@ export const orderHistoryList: OrderHistoryList = [
         side: 1,
         maturity: BigInt(dec22Fixture.toString()),
         inputUnitPrice: BigInt('0'),
-        filledAmount: BigInt('10000000000000000000'),
+        filledAmount: BigInt('100000000000000000000'),
         inputAmount: BigInt('100000000000000000000'),
         status: 'Filled',
         type: OrderType.MARKET,
@@ -785,6 +790,13 @@ export const orderHistoryList: OrderHistoryList = [
         isCircuitBreakerTriggered: false,
     },
 ];
+
+export const mappedOrderHistoryList = orderHistoryList.map(order => {
+    return {
+        ...order,
+        status: getMappedOrderStatus(order),
+    } as typeof order & { status: string };
+});
 
 export const transactions: TransactionHistoryList = [
     {

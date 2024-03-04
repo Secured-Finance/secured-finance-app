@@ -6,7 +6,7 @@ import {
     TableActionMenu,
 } from 'src/components/molecules';
 import { useBlockExplorerUrl, useBreakpoint, useLastPrices } from 'src/hooks';
-import { Order } from 'src/types';
+import { Order, OrderHistoryList } from 'src/types';
 import {
     amountColumnDefinition,
     contractColumnDefinition,
@@ -19,23 +19,12 @@ import {
 
 const columnHelper = createColumnHelper<Order>();
 
-const getStatus = (status: string) => {
-    switch (status) {
-        case 'PartiallyBlocked':
-            return 'Partially Blocked';
-        case 'PartiallyFilled':
-            return 'Partially Filled';
-        default:
-            return status;
-    }
-};
-
 export const OrderHistoryTable = ({
     data,
     pagination,
     variant = 'default',
 }: {
-    data: Order[];
+    data: OrderHistoryList;
     pagination?: Pagination;
     variant?: 'contractOnly' | 'default';
 }) => {
@@ -74,9 +63,7 @@ export const OrderHistoryTable = ({
             ),
             columnHelper.accessor('status', {
                 cell: info => (
-                    <div className='typography-caption'>
-                        {getStatus(info.getValue())}
-                    </div>
+                    <div className='typography-caption'>{info.getValue()}</div>
                 ),
                 header: tableHeaderDefinition('Status'),
             }),
