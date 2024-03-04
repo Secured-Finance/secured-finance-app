@@ -79,8 +79,8 @@ describe('Landing Component', () => {
             await within(screen.getByTestId('market-rate')).findByText('3.26%')
         ).toBeInTheDocument();
 
-        fireEvent.click(screen.getByRole('button', { name: 'DEC22' }));
-        fireEvent.click(screen.getByText('MAR23'));
+        fireEvent.click(screen.getByRole('button', { name: 'DEC2022' }));
+        fireEvent.click(screen.getByText('MAR2023'));
         expect(screen.getByTestId('market-rate')).toHaveTextContent('2.62%');
     });
 
@@ -123,7 +123,7 @@ describe('Landing Component', () => {
             clickAdvancedButton();
 
             await waitFor(() =>
-                expect(screen.getByText('DEC22')).toBeInTheDocument()
+                expect(screen.getByText('DEC2022')).toBeInTheDocument()
             );
             assertInputValue('Amount', '');
             assertInputValue('Bond Price', '96.85');
@@ -138,16 +138,16 @@ describe('Landing Component', () => {
             });
             clickAdvancedButton();
 
-            expect(await screen.findByText('DEC22')).toBeInTheDocument();
+            expect(await screen.findByText('DEC2022')).toBeInTheDocument();
 
             assertInputValue('Bond Price', '96.85');
 
             changeInputValue('Amount', '1');
             changeInputValue('Bond Price', '80');
 
-            fireEvent.click(screen.getByRole('button', { name: 'DEC22' }));
-            fireEvent.click(screen.getByText('MAR23'));
-            expect(await screen.findByText('MAR23')).toBeInTheDocument();
+            fireEvent.click(screen.getByRole('button', { name: 'DEC2022' }));
+            fireEvent.click(screen.getByText('MAR2023'));
+            expect(await screen.findByText('MAR2023')).toBeInTheDocument();
 
             assertInputValue('Amount', '1');
             assertInputValue('Bond Price', '96.83');
@@ -164,7 +164,7 @@ describe('Landing Component', () => {
             clickAdvancedButton();
             await waitFor(() =>
                 expect(
-                    screen.getByRole('button', { name: 'DEC22' })
+                    screen.getByRole('button', { name: 'DEC2022' })
                 ).toBeInTheDocument()
             );
 
@@ -194,14 +194,14 @@ describe('Landing Component', () => {
             });
             clickAdvancedButton();
 
-            expect(await screen.findByText('DEC22')).toBeInTheDocument();
+            expect(await screen.findByText('DEC2022')).toBeInTheDocument();
 
             assertInputValue('Bond Price', '96.85');
             changeInputValue('Amount', '1');
             changeInputValue('Bond Price', '80');
             clickSimpleButton();
             clickAdvancedButton();
-            expect(await screen.findByText('DEC22')).toBeInTheDocument();
+            expect(await screen.findByText('DEC2022')).toBeInTheDocument();
 
             assertInputValue('Bond Price', '96.85');
         });
@@ -248,11 +248,11 @@ describe('Landing Component', () => {
             });
         });
 
-        expect(await screen.findByText('DEC22')).toBeInTheDocument();
+        expect(await screen.findByText('DEC2022')).toBeInTheDocument();
 
-        fireEvent.click(screen.getByText('DEC22'));
-        expect(screen.getByText('MAR23')).toBeInTheDocument();
-        expect(screen.queryByText('DEC24')).not.toBeInTheDocument();
+        fireEvent.click(screen.getByText('DEC2022'));
+        expect(screen.getByText('MAR2023')).toBeInTheDocument();
+        expect(screen.queryByText('DEC2024')).not.toBeInTheDocument();
     });
 
     it.skip('should change the amount slider when amount input changes and user has balance', async () => {
@@ -263,7 +263,7 @@ describe('Landing Component', () => {
             });
         });
         clickAdvancedButton();
-        expect(await screen.findByText('DEC22')).toBeInTheDocument();
+        expect(await screen.findByText('DEC2022')).toBeInTheDocument();
         expect(screen.getByRole('slider')).toHaveValue('0');
         fireEvent.click(screen.getByRole('radio', { name: 'Lend' }));
         await waitFor(() =>
@@ -290,7 +290,7 @@ describe('Landing Component', () => {
             });
         });
         clickAdvancedButton();
-        expect(await screen.findByText('DEC22')).toBeInTheDocument();
+        expect(await screen.findByText('DEC2022')).toBeInTheDocument();
         expect(screen.getByRole('slider')).toHaveValue('0');
         waitFor(() => {
             fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
