@@ -130,13 +130,13 @@ describe('LendingCard Component', () => {
         await waitFor(() => render(<Default />));
         fireEvent.click(
             screen.getByRole('button', {
-                name: 'DEC22',
+                name: 'DEC2022',
             })
         );
-        fireEvent.click(screen.getByText('MAR23'));
+        fireEvent.click(screen.getByText('MAR2023'));
         const dateWithTimezone = formatDate(mar23Fixture.toNumber());
         expect(track).toHaveBeenCalledWith(ButtonEvents.TERM_CHANGE, {
-            [ButtonProperties.TERM]: 'MAR23',
+            [ButtonProperties.TERM]: 'MAR2023',
         });
         expect(screen.getByText(dateWithTimezone)).toBeInTheDocument();
     });
