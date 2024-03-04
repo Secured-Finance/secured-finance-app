@@ -19,7 +19,7 @@ export type Order = {
     unitPrice: bigint;
     amount: bigint;
     createdAt: bigint;
-    maker?: string;
+    user?: string;
 };
 
 export type OrderList = Array<Order>;

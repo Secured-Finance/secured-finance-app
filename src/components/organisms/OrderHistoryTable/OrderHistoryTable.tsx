@@ -6,7 +6,7 @@ import {
     TableActionMenu,
 } from 'src/components/molecules';
 import { useBlockExplorerUrl, useBreakpoint, useLastPrices } from 'src/hooks';
-import { Order, OrderHistoryList } from 'src/types';
+import { Order } from 'src/types';
 import {
     amountColumnDefinition,
     contractColumnDefinition,
@@ -35,7 +35,7 @@ export const OrderHistoryTable = ({
     pagination,
     variant = 'default',
 }: {
-    data: OrderHistoryList;
+    data: Order[];
     pagination?: Pagination;
     variant?: 'contractOnly' | 'default';
 }) => {

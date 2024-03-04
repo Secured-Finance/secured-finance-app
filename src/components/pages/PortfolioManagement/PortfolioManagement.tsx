@@ -33,18 +33,16 @@ import {
     usePagination,
     usePositions,
 } from 'src/hooks';
-import { TradeHistory } from 'src/types';
 import {
     checkOrderIsFilled,
     computeNetValue,
     formatOrders,
+    getMappedOrderStatus,
     hexToCurrencySymbol,
     sortOrders,
     usdFormat,
 } from 'src/utils';
 import { useAccount } from 'wagmi';
-
-export type Trade = TradeHistory[0];
 
 export enum TableType {
     ACTIVE_POSITION = 0,
@@ -134,11 +132,11 @@ export const PortfolioManagement = () => {
     const dataUser = useMemo(() => {
         if (selectedTable === TableType.MY_TRANSACTIONS)
             return (
-                userTransactionHistory.data?.transactions[0]?.taker.id ??
+                userTransactionHistory.data?.transactions[0]?.user.id ??
                 undefined
             );
         if (selectedTable === TableType.ORDER_HISTORY)
-            return userOrderHistory.data?.orders[0]?.maker.id ?? undefined;
+            return userOrderHistory.data?.orders[0]?.user.id ?? undefined;
     }, [
         selectedTable,
         userOrderHistory.data?.orders,
@@ -166,17 +164,11 @@ export const PortfolioManagement = () => {
                         status: 'Filled' as const,
                         filledAmount: order.inputAmount,
                     };
-                } else if (
-                    !order.lendingMarket.isActive &&
-                    (order.status === 'Open' ||
-                        order.status === 'PartiallyFilled')
-                ) {
+                } else {
                     return {
                         ...order,
-                        status: 'Expired' as const,
-                    };
-                } else {
-                    return order;
+                        status: getMappedOrderStatus(order),
+                    } as typeof order & { status: string };
                 }
             })
             .sort((a, b) => sortOrders(a, b));
@@ -198,7 +190,7 @@ export const PortfolioManagement = () => {
         const borrowedPV = positions
             ? computeNetValue(
                   positions.positions.filter(
-                      position => position.forwardValue < 0
+                      position => position.futureValue < 0
                   ),
                   priceMap
               )
@@ -206,7 +198,7 @@ export const PortfolioManagement = () => {
         const lentPV = positions
             ? computeNetValue(
                   positions.positions.filter(
-                      position => position.forwardValue > 0
+                      position => position.futureValue > 0
                   ),
                   priceMap
               )
@@ -356,7 +348,7 @@ export const PortfolioManagement = () => {
                                                       Number(
                                                           position.marketPrice
                                                       ),
-                                                      position.forwardValue > 0
+                                                      position.futureValue > 0
                                                           ? OrderSide.LEND
                                                           : OrderSide.BORROW
                                                   ),
