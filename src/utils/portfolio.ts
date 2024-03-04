@@ -1,18 +1,26 @@
 import { OrderList, Position } from 'src/hooks';
-import { AssetPriceMap, Order, TradeHistory } from 'src/types';
+import {
+    AssetPriceMap,
+    Order,
+    Transaction,
+    TransactionHistoryList,
+} from 'src/types';
 import { ZERO_BI } from './collateral';
 import { currencyMap, hexToCurrencySymbol } from './currencyList';
 import { LoanValue } from './entities';
 import { Rate } from './rate';
 
-export const computeWeightedAverageRate = (trades: TradeHistory) => {
+export const computeWeightedAverageRate = (trades: TransactionHistoryList) => {
     if (!trades.length) {
         return new Rate(0);
     }
 
-    const totalAmount = trades.reduce((acc, trade) => acc + trade.amount, 0);
+    const totalAmount = trades.reduce(
+        (acc: number, trade: Transaction) => acc + trade.amount,
+        0
+    );
     const total = trades.reduce(
-        (acc, trade) =>
+        (acc: number, trade: Transaction) =>
             acc +
             LoanValue.fromPrice(
                 Number(trade.averagePrice),
@@ -42,11 +50,11 @@ export type TradeSummary = {
     currency: string;
     maturity: string;
     amount: bigint;
-    forwardValue: bigint;
+    futureValue: bigint;
     averagePrice: bigint;
 };
 
-export const calculateForwardValue = (
+export const calculateFutureValue = (
     amount: bigint,
     unitPrice: bigint
 ): bigint => {
@@ -57,19 +65,19 @@ export const calculateAveragePrice = (unitPrice: bigint): number => {
     return Number(unitPrice) / 10000;
 };
 
-export const formatOrders = (orders: OrderList): TradeHistory => {
+export const formatOrders = (orders: OrderList): TransactionHistoryList => {
     return orders?.map(order => ({
         amount: order.amount,
         side: order.side,
-        orderPrice: order.unitPrice,
+        executionPrice: order.unitPrice,
         createdAt: order.createdAt,
         currency: order.currency,
         maturity: order.maturity,
-        forwardValue: calculateForwardValue(order.amount, order.unitPrice),
+        futureValue: calculateFutureValue(order.amount, order.unitPrice),
         averagePrice: calculateAveragePrice(order.unitPrice),
         feeInFV: ZERO_BI,
-        taker: {
-            id: order.maker ?? '',
+        user: {
+            id: order.user ?? '',
         },
     }));
 };
@@ -106,4 +114,29 @@ export const getMaxAmount = (orders: { amount: bigint }[]) => {
         (prev, current) => (prev > current.amount ? prev : current.amount),
         orders[0].amount
     );
+};
+
+export const getMappedOrderStatus = (order: Order): string => {
+    if (!order.lendingMarket.isActive && order.status === 'Open') {
+        return 'Expired';
+    } else if (
+        !order.lendingMarket.isActive &&
+        order.status === 'PartiallyFilled'
+    ) {
+        return 'Partially Filled & Expired';
+    } else if (order.status === 'Killed' && order.isCircuitBreakerTriggered) {
+        if (Number(order.filledAmount) === 0) {
+            return 'Blocked';
+        } else {
+            return 'Partially Filled & Blocked';
+        }
+    } else if (
+        order.status === 'Filled' ||
+        order.status === 'PartiallyFilled' ||
+        Number(order.filledAmount) === 0
+    ) {
+        return order.status;
+    } else {
+        return `Partially Filled & ${order.status}`;
+    }
 };

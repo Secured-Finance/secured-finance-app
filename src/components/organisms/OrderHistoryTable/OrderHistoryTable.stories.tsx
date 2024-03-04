@@ -7,7 +7,7 @@ import {
     orderHistoryList,
     wfilBytes32,
 } from 'src/stories/mocks/fixtures';
-import { OrderHistoryList, OrderType } from 'src/types';
+import { Order, OrderType } from 'src/types';
 import { OrderHistoryTable } from './OrderHistoryTable';
 
 export default {
@@ -47,11 +47,12 @@ const PaginatedTemplate: StoryFn<typeof OrderHistoryTable> = args => {
                 id: '1',
                 isActive: true,
             },
-            maker: {
+            user: {
                 id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
             },
+            isCircuitBreakerTriggered: false,
         }));
-    const [data, setData] = useState<OrderHistoryList>(initialData);
+    const [data, setData] = useState<Order[]>(initialData);
 
     return (
         <OrderHistoryTable
@@ -78,9 +79,10 @@ const PaginatedTemplate: StoryFn<typeof OrderHistoryTable> = args => {
                                 id: '1',
                                 isActive: true,
                             },
-                            maker: {
+                            user: {
                                 id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
                             },
+                            isCircuitBreakerTriggered: false,
                         }));
 
                     const updatedData = [...data, ...newData];
