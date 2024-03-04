@@ -130,11 +130,9 @@ export const getMappedOrderStatus = (order: Order): string => {
         } else {
             return 'Partially Filled & Blocked';
         }
-    } else if (
-        order.status === 'Filled' ||
-        order.status === 'PartiallyFilled' ||
-        Number(order.filledAmount) === 0
-    ) {
+    } else if (order.status === 'PartiallyFilled') {
+        return 'Partially Filled';
+    } else if (order.status === 'Filled' || Number(order.filledAmount) === 0) {
         return order.status;
     } else {
         return `Partially Filled & ${order.status}`;

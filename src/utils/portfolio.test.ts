@@ -462,6 +462,31 @@ describe('getMappedOrderStatus', () => {
         expect(getMappedOrderStatus(order)).toBe('Filled');
     });
 
+    it('returns the mapped status as Partially Filled when order status is PartiallyFilled', () => {
+        const order = {
+            orderId: 6,
+            currency: ethBytes32,
+            side: 0,
+            maturity: dec22Fixture,
+            inputUnitPrice: BigInt('9800'),
+            filledAmount: BigInt('100000000000000000000'),
+            inputAmount: BigInt('1000000000000000000000'),
+            status: 'PartiallyFilled' as const,
+            type: OrderType.LIMIT,
+            createdAt: BigInt('1'),
+            txHash: toBytes32('hash'),
+            lendingMarket: {
+                id: '1',
+                isActive: true,
+            },
+            user: {
+                id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+            },
+            isCircuitBreakerTriggered: false,
+        };
+        expect(getMappedOrderStatus(order)).toBe('Partially Filled');
+    });
+
     it('returns the mapped status as Killed when order status is Killed and filled amount is 0', () => {
         const order = {
             orderId: 6,

@@ -4,17 +4,17 @@ import type { Meta, StoryFn } from '@storybook/react';
 import { useState } from 'react';
 import {
     dec22Fixture,
-    orderHistoryList,
+    mappedOrderHistoryList,
     wfilBytes32,
 } from 'src/stories/mocks/fixtures';
-import { Order, OrderType } from 'src/types';
+import { OrderHistoryList, OrderType } from 'src/types';
 import { OrderHistoryTable } from './OrderHistoryTable';
 
 export default {
     title: 'Organism/OrderHistoryTable',
     component: OrderHistoryTable,
     args: {
-        data: orderHistoryList,
+        data: mappedOrderHistoryList,
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,
@@ -52,7 +52,7 @@ const PaginatedTemplate: StoryFn<typeof OrderHistoryTable> = args => {
             },
             isCircuitBreakerTriggered: false,
         }));
-    const [data, setData] = useState<Order[]>(initialData);
+    const [data, setData] = useState<OrderHistoryList>(initialData);
 
     return (
         <OrderHistoryTable
