@@ -562,7 +562,7 @@ describe('getMappedOrderStatus', () => {
         expect(getMappedOrderStatus(order)).toBe('Cancelled');
     });
 
-    it('returns the mapped status as Partially Filled & Killed when order status is Killed and filled amount is not 0', () => {
+    it('returns the mapped status as Partially Filled & Cancelled when order status is Cancelled and filled amount is not 0', () => {
         const order = {
             orderId: 6,
             currency: ethBytes32,
