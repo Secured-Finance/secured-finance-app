@@ -119,32 +119,24 @@ export const getMaxAmount = (orders: { amount: bigint }[]) => {
 export const getMappedOrderStatus = (order: Order): string => {
     switch (order.status) {
         case 'Open':
-            if (!order.lendingMarket.isActive) {
-                return 'Expired';
-            }
-            break;
+            return order.lendingMarket.isActive ? 'Open' : 'Expired';
         case 'PartiallyFilled':
-            if (!order.lendingMarket.isActive) {
-                return 'Partially Filled & Expired';
-            } else {
-                return 'Partially Filled';
-            }
+            return order.lendingMarket.isActive
+                ? 'Partially Filled'
+                : 'Partially Filled & Expired';
         case 'Killed':
-            if (order.isCircuitBreakerTriggered) {
-                if (Number(order.filledAmount) === 0) {
-                    return 'Blocked';
-                } else {
-                    return 'Partially Filled & Blocked';
-                }
-            } else if (Number(order.filledAmount) !== 0) {
-                return 'Partially Filled & Killed';
-            }
-            break;
+            return order.isCircuitBreakerTriggered
+                ? Number(order.filledAmount) === 0
+                    ? 'Blocked'
+                    : 'Partially Filled & Blocked'
+                : Number(order.filledAmount) === 0
+                ? 'Killed'
+                : 'Partially Filled & Killed';
         case 'Cancelled':
-            if (Number(order.filledAmount) !== 0) {
-                return 'Partially Filled & Cancelled';
-            }
-            break;
+            return Number(order.filledAmount) === 0
+                ? 'Cancelled'
+                : 'Partially Filled & Cancelled';
+        default:
+            return order.status;
     }
-    return order.status;
 };
