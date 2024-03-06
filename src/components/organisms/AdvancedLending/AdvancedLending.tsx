@@ -25,7 +25,6 @@ import {
     emptyOrderList,
     useCurrencies,
     useGraphClientHook,
-    useHistoricalChartData,
     useIsUnderCollateralThreshold,
     useLastPrices,
     useMarket,
@@ -61,7 +60,6 @@ import {
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { trackButtonEvent } from 'src/utils/events';
 import { useAccount } from 'wagmi';
-import { graphTypeOptions } from '../HistoricalWidget/constants';
 
 const useTradeHistoryDetails = (
     transactions: TransactionList,
@@ -120,8 +118,6 @@ export const AdvancedLending = ({
     const { data: orderList = emptyOrderList } = useOrderList(address, [
         currency,
     ]);
-
-    const dataSet = useHistoricalChartData();
 
     const { data: positions } = usePositions(address, [currency]);
 
@@ -350,12 +346,7 @@ export const AdvancedLending = ({
                             }
                         />
                     </div>
-                    <div>
-                        <HistoricalWidget
-                            chartType={graphTypeOptions}
-                            {...dataSet}
-                        />
-                    </div>
+                    <HistoricalWidget />
                 </Tab>
                 <HorizontalTab
                     tabTitles={[

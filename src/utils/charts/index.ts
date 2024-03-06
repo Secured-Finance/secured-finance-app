@@ -1,12 +1,4 @@
 import { createChart } from 'lightweight-charts';
-export interface TradingData {
-    time: number;
-    open: number;
-    high: number;
-    low: number;
-    close: number;
-    vol: number;
-}
 
 const commonOptions = {
     autoSize: true,

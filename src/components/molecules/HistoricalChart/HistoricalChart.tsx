@@ -13,12 +13,13 @@ import {
 } from 'lightweight-charts';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useLastPrices } from 'src/hooks';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { createCandlestickChart, createVolumeChart } from 'src/utils/charts';
 
 export interface ITradingData {
-    time: number;
+    time: string;
     open: number;
     high: number;
     low: number;
@@ -70,6 +71,8 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
     const { currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
+    const { data: prices } = useLastPrices();
+    const usdPrice = prices[currency];
     const prettyMaturity = getUTCMonthYear(+maturity);
     const VOLUME_KEY_NAME = `Vol(${currency} ${prettyMaturity})`;
 
@@ -80,23 +83,26 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
         C: '',
         VOLUME_KEY_NAME: '',
         Change: '',
+        usdVol: '',
     });
 
     const setupCharts = useCallback(
         (candlestickSeries: TSeries, volumeSeries: TSeries) => {
-            volumeSeries.applyOptions({ baseLineVisible: false });
+            volumeSeries.applyOptions({
+                baseLineVisible: false,
+            });
 
             const candleData = data.map(item => ({
-                time: Math.floor(item.time) as UTCTimestamp,
-                open: Number(item.open),
-                high: Number(item.high),
-                low: Number(item.low),
-                close: Number(item.close),
+                time: Number(item.time) as UTCTimestamp,
+                open: +item.open,
+                high: +item.high,
+                low: +item.low,
+                close: +item.close,
             }));
 
             const volumeData = data.map(item => ({
-                time: Math.floor(item.time) as UTCTimestamp,
-                value: Number(item.vol),
+                time: Number(item.time) as UTCTimestamp,
+                value: +item.vol,
                 color: item.open > item.close ? '#FF9FAE' : '#09A8B7',
             }));
 
@@ -132,24 +138,23 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
             } as Omit<ITradingData, 'vol'> & { value: number };
 
             const date = new Date(Number(candleData?.time) * 1000);
-            const formattedDate =
-                date.getFullYear() +
-                '/' +
-                ('0' + (date.getMonth() + 1)).slice(-2) +
-                '/' +
-                ('0' + date.getDate()).slice(-2);
+            const formattedDate = `${date.getFullYear()}/${(
+                '0' +
+                (date.getMonth() + 1)
+            ).slice(-2)}/${('0' + date.getDate()).slice(-2)}`;
             setHoverTime(formattedDate);
 
             setLegendData({
-                O: `${mergeData?.open}`,
-                H: `${mergeData?.high}`,
-                L: `${mergeData?.low}`,
-                C: `${mergeData?.close}`,
-                VOLUME_KEY_NAME: mergeData?.value?.toFixed(2),
+                O: `${mergeData?.open.toFixed(2)}`,
+                H: `${mergeData?.high.toFixed(2)}`,
+                L: `${mergeData?.low.toFixed(2)}`,
+                C: `${mergeData?.close.toFixed(2)}`,
+                VOLUME_KEY_NAME: `${mergeData?.value}`,
                 Change: `${(
                     ((mergeData?.close - mergeData?.open) / mergeData?.open) *
                     100
                 ).toFixed(2)}%`,
+                usdVol: `${usdPrice * mergeData.value}`,
             });
         };
 
@@ -220,7 +225,7 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
             const volumeData = volumeSeries.dataByIndex(index);
             if (sourceChart === 'candlestick') {
                 syncCrosshair(volumeChart, volumeSeries, candleData);
-            } else if (sourceChart === 'volume') {
+            } else {
                 syncCrosshair(candleStickChart, candlestickSeries, volumeData);
             }
             const mergeData = {
@@ -229,24 +234,24 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
             } as Omit<ITradingData, 'vol'> & { value: number };
 
             const date = new Date(Number(candleData?.time) * 1000);
-            const formattedDate =
-                date.getFullYear() +
-                '/' +
-                ('0' + (date.getMonth() + 1)).slice(-2) +
-                '/' +
-                ('0' + date.getDate()).slice(-2);
+            const formattedDate = `${date.getFullYear()}/${(
+                '0' +
+                (date.getMonth() + 1)
+            ).slice(-2)}/${('0' + date.getDate()).slice(-2)}`;
+
             setHoverTime(formattedDate);
 
             setLegendData({
-                O: `${mergeData?.open}`,
-                H: `${mergeData?.high}`,
-                L: `${mergeData?.low}`,
-                C: `${mergeData?.close}`,
-                VOLUME_KEY_NAME: mergeData?.value?.toFixed(2),
+                O: `${mergeData?.open.toFixed(2)}`,
+                H: `${mergeData?.high.toFixed(2)}`,
+                L: `${mergeData?.low.toFixed(2)}`,
+                C: `${mergeData?.close.toFixed(2)}`,
+                VOLUME_KEY_NAME: `${mergeData?.value}`,
                 Change: `${(
                     ((mergeData?.close - mergeData?.open) / mergeData?.open) *
                     100
                 ).toFixed(2)}%`,
+                usdVol: `${usdPrice * mergeData.value}`,
             });
         };
 
@@ -261,15 +266,25 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
         return () => {
             candleStickChart.remove();
             volumeChart.remove();
+            setLegendData({
+                O: '',
+                H: '',
+                L: '',
+                C: '',
+                VOLUME_KEY_NAME: '',
+                Change: '',
+                usdVol: '',
+            });
+            setHoverTime('');
         };
     }, [data, setupCharts]);
 
     const titleOfChartClass =
         'z-10 flex gap-4 text-2xs text-neutral-4 font-medium leading-4 pt-[0.375rem] px-4';
     return (
-        <div className={clsx(className, 'bg-neutral-900 pt-[0.625rem]')}>
+        <div className={clsx(className, 'pt-[0.625rem] bg-neutral-900')}>
             <div className={clsx(titleOfChartClass)}>
-                <div>{hoverTime}</div>
+                {hoverTime && <span>{hoverTime}</span>}
                 {Object.entries(legendData)
                     .filter(([key, _]) =>
                         ['O', 'H', 'L', 'C', 'Change'].includes(key)
@@ -277,7 +292,7 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
                     .map(([key, value]) => {
                         return (
                             <div key={key} className='flex gap-1'>
-                                <div className='text-neutral-4'>{key}</div>
+                                <span className='text-neutral-4'>{key}</span>
                                 <div
                                     className={clsx('font-normal', {
                                         'text-[#F5F6FF]': key !== 'Change',
@@ -297,27 +312,32 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
             </div>
             <div
                 ref={chartContainerRef}
-                className='relative h-[260px] w-full'
+                data-testid='candlestick-chart'
+                className='h-[297px] relative w-full'
             ></div>
             <div className={clsx(titleOfChartClass)}>
                 <div>
                     <span>{VOLUME_KEY_NAME}:</span>
-                    <span className='ml-[0.375rem] text-[#FF9FAE]'>
-                        {(Number(legendData.VOLUME_KEY_NAME) / 1000).toFixed(3)}
-                        K
-                    </span>
+                    {legendData.VOLUME_KEY_NAME && (
+                        <span className='ml-[0.375rem] text-galacticOrange'>
+                            {legendData.VOLUME_KEY_NAME}
+                        </span>
+                    )}
                 </div>
                 <div>
                     <span>Vol(USDT):</span>
-                    <span className='text-[#FF9FAE]'>
-                        {/* TODO: Add vol(USDT) */}
-                    </span>
+                    {legendData.usdVol && (
+                        <span className='ml-[0.375rem] text-galacticOrange'>
+                            {Number(legendData.usdVol).toFixed(2)}
+                        </span>
+                    )}
                 </div>
             </div>
 
             <div
                 ref={secondContainerRef}
-                className={clsx(className, 'relative h-[170px] w-full')}
+                data-testid='volume-chart'
+                className={clsx(className, 'h-[144px] relative w-full')}
             ></div>
         </div>
     );

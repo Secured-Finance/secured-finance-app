@@ -10,7 +10,6 @@ export * from './useCurrencyDelistedStatus';
 export * from './useDecimals';
 export * from './useGraphClientHook';
 export * from './useHandleContractTransaction';
-export * from './useHistoricalChartData';
 export * from './useIsGlobalItayose';
 export * from './useIsMarketTerminated';
 export * from './useIsUnderCollateralThreshold';
