@@ -282,7 +282,7 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
     const titleOfChartClass =
         'z-10 flex gap-4 text-2xs text-neutral-4 font-medium leading-4 pt-[0.375rem] px-4';
     return (
-        <div className={clsx(className, 'pt-[0.625rem] bg-neutral-900')}>
+        <div className={clsx(className, 'bg-neutral-900 pt-[0.625rem]')}>
             <div className={clsx(titleOfChartClass)}>
                 {hoverTime && <span>{hoverTime}</span>}
                 {Object.entries(legendData)
@@ -313,7 +313,7 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
             <div
                 ref={chartContainerRef}
                 data-testid='candlestick-chart'
-                className='h-[297px] relative w-full'
+                className='relative h-[297px] w-full'
             ></div>
             <div className={clsx(titleOfChartClass)}>
                 <div>
@@ -337,7 +337,7 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
             <div
                 ref={secondContainerRef}
                 data-testid='volume-chart'
-                className={clsx(className, 'h-[144px] relative w-full')}
+                className={clsx(className, 'relative h-[144px] w-full')}
             ></div>
         </div>
     );
