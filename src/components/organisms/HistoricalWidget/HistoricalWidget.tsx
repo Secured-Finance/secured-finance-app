@@ -83,7 +83,7 @@ export const HistoricalWidget = () => {
                     onChange={(time: string) => onTimeScaleChange(time)}
                 />
             </div>
-            <HistoricalChart data={data} />
+            <HistoricalChart data={data} timeScale={selectedTimeScale} />
         </>
     );
 };

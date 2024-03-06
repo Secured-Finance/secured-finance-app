@@ -13,9 +13,10 @@ import {
 } from 'lightweight-charts';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useLastPrices } from 'src/hooks';
+import { useBreakpoint, useLastPrices } from 'src/hooks';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
+import { HistoricalDataIntervals } from 'src/types';
 import { createCandlestickChart, createVolumeChart } from 'src/utils/charts';
 
 export interface ITradingData {
@@ -29,7 +30,7 @@ export interface ITradingData {
 
 export interface HistoricalChartProps {
     data: ITradingData[];
-    className?: string;
+    timeScale?: HistoricalDataIntervals;
 }
 
 type TSeries = ISeriesApi<
@@ -64,7 +65,10 @@ function syncCrosshair(
     chart.clearCrosshairPosition();
 }
 
-export function HistoricalChart({ data, className }: HistoricalChartProps) {
+export function HistoricalChart({
+    data,
+    timeScale = HistoricalDataIntervals['15M'],
+}: HistoricalChartProps) {
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const secondContainerRef = useRef<HTMLDivElement>(null);
     const [hoverTime, setHoverTime] = useState('');
@@ -75,6 +79,10 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
     const usdPrice = prices[currency];
     const prettyMaturity = getUTCMonthYear(+maturity);
     const VOLUME_KEY_NAME = `Vol(${currency} ${prettyMaturity})`;
+    const isMobile = useBreakpoint('tablet');
+    const legendArray = isMobile
+        ? ['H', 'L', 'Change']
+        : ['O', 'H', 'L', 'C', 'Change'];
 
     const [legendData, setLegendData] = useState({
         O: '',
@@ -191,7 +199,8 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
             createCandlestickChart(chartContainerRef.current);
 
         const { volumeSeries, chart: volumeChart } = createVolumeChart(
-            secondContainerRef.current
+            secondContainerRef.current,
+            timeScale
         );
 
         setupCharts(candlestickSeries, volumeSeries);
@@ -277,18 +286,17 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
             });
             setHoverTime('');
         };
-    }, [data, setupCharts]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [data, setupCharts, timeScale]);
 
     const titleOfChartClass =
         'z-10 flex gap-4 text-2xs text-neutral-4 font-medium leading-4 pt-[0.375rem] px-4';
     return (
-        <div className={clsx(className, 'bg-neutral-900 pt-[0.625rem]')}>
+        <div className='bg-neutral-900 pt-[0.625rem]'>
             <div className={clsx(titleOfChartClass)}>
                 {hoverTime && <span>{hoverTime}</span>}
                 {Object.entries(legendData)
-                    .filter(([key, _]) =>
-                        ['O', 'H', 'L', 'C', 'Change'].includes(key)
-                    )
+                    .filter(([key, _]) => legendArray.includes(key))
                     .map(([key, value]) => {
                         return (
                             <div key={key} className='flex gap-1'>
@@ -337,7 +345,7 @@ export function HistoricalChart({ data, className }: HistoricalChartProps) {
             <div
                 ref={secondContainerRef}
                 data-testid='volume-chart'
-                className={clsx(className, 'relative h-[144px] w-full')}
+                className='relative h-[144px] w-full'
             ></div>
         </div>
     );

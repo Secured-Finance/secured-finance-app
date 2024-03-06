@@ -1,4 +1,5 @@
 import { createChart } from 'lightweight-charts';
+import { HistoricalDataIntervals } from 'src/types';
 
 const commonOptions = {
     autoSize: true,
@@ -66,7 +67,10 @@ export const createCandlestickChart = (ref: HTMLDivElement) => {
     return { chart, candlestickSeries };
 };
 
-export const createVolumeChart = (ref: HTMLDivElement) => {
+export const createVolumeChart = (
+    ref: HTMLDivElement,
+    timeInterval: HistoricalDataIntervals
+) => {
     const chart = createChart(ref, {
         ...commonOptions,
         grid: {
@@ -88,6 +92,7 @@ export const createVolumeChart = (ref: HTMLDivElement) => {
         },
         timeScale: {
             ticksVisible: true,
+            timeVisible: timeInterval !== HistoricalDataIntervals['1D'],
         },
     });
     const volumeSeries = chart.addHistogramSeries({

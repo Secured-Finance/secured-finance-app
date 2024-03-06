@@ -29,7 +29,7 @@ export const CurveHeader = ({
     }, [priceList, dailyVolumes]);
 
     return (
-        <div className='w-[585px] flex h-20 flex-row justify-between p-4'>
+        <div className='flex h-20 w-[585px] flex-row justify-between p-4'>
             <CurveHeaderAsset
                 ccy={asset}
                 value={priceList[asset]}
