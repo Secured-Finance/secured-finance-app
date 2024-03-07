@@ -87,7 +87,7 @@ export const HamburgerMenu = ({
             {({ close }) => (
                 <>
                     <Menu.Button aria-label='Hamburger Menu'>
-                        <Burger className='h-6 w-6 tablet:h-8 tablet:w-8' />
+                        <Burger className='h-6 w-6' />
                     </Menu.Button>
                     <Transition
                         className='fixed inset-0 z-50'
