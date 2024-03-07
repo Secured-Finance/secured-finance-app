@@ -22,13 +22,13 @@ const generateMyTransactions = (amount: string, maturity = mar23Fixture) => {
             amount: amount,
             averagePrice: '0.8000',
             side: 1,
-            orderPrice: '9543',
+            executionPrice: '9543',
             createdAt: '1671080520',
             feeInFV: '3213742117859654893',
-            forwardValue: '520000000000000000000',
+            futureValue: '520000000000000000000',
             currency: wfilBytes32,
             maturity: maturity.toString(),
-            taker: {
+            user: {
                 id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
             },
         });
@@ -55,9 +55,10 @@ const generateMyOrderHistory = (amount: string, maturity = dec22Fixture) =>
                 id: '1',
                 isActive: true,
             },
-            maker: {
+            user: {
                 id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
             },
+            isCircuitBreakerTriggered: false,
         }));
 
 export const mockUserTransactionHistory = [

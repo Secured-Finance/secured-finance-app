@@ -57,9 +57,10 @@ export type OrderHistoryList = NonNullable<
     UserOrderHistoryQuery['user']
 >['orders'];
 export type Order = OrderHistoryList[0];
-export type TradeHistory = NonNullable<
+export type TransactionHistoryList = NonNullable<
     UserTransactionHistoryQuery['user']
 >['transactions'];
+export type Transaction = TransactionHistoryList[0];
 export type DailyVolumes = DailyVolumesQuery['dailyVolumes'];
 export type TransactionList = TransactionsQuery['transactionHistory'];
 

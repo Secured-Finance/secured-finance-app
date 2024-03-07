@@ -34,7 +34,7 @@ const Template: StoryFn<typeof ActiveTradeTable> = args => {
         {
             amount: BigInt('500000000000000000000'),
             currency: wfilBytes32,
-            forwardValue: BigInt('500000000000000000000'),
+            futureValue: BigInt('500000000000000000000'),
             maturity: new Maturity(
                 getTimestampRelativeToNow(22, true)
             ).toString(),
@@ -43,7 +43,7 @@ const Template: StoryFn<typeof ActiveTradeTable> = args => {
         {
             amount: BigInt('500000000000000000000'),
             currency: wfilBytes32,
-            forwardValue: BigInt('500000000000000000000'),
+            futureValue: BigInt('500000000000000000000'),
             maturity: new Maturity(
                 getTimestampRelativeToNow(28, true)
             ).toString(),
@@ -52,28 +52,28 @@ const Template: StoryFn<typeof ActiveTradeTable> = args => {
         {
             amount: BigInt('-500000000000000000000'),
             currency: wfilBytes32,
-            forwardValue: BigInt('-500000000000000000000'),
+            futureValue: BigInt('-500000000000000000000'),
             maturity: new Maturity(getTimestampRelativeToNow(120)).toString(),
             marketPrice: BigInt(10000),
         },
         {
             amount: BigInt('-500000000000000000000'),
             currency: wfilBytes32,
-            forwardValue: BigInt('-500000000000000000000'),
+            futureValue: BigInt('-500000000000000000000'),
             maturity: new Maturity(getTimestampRelativeToNow(200)).toString(),
             marketPrice: BigInt(10000),
         },
         {
             amount: BigInt('500000000000000000000'),
             currency: wfilBytes32,
-            forwardValue: BigInt('500000000000000000000'),
+            futureValue: BigInt('500000000000000000000'),
             maturity: new Maturity(getTimestampRelativeToNow(160)).toString(),
             marketPrice: BigInt(10000),
         },
         {
             amount: BigInt('500000000000000000000'),
             currency: wfilBytes32,
-            forwardValue: BigInt('500000000000000000000'),
+            futureValue: BigInt('500000000000000000000'),
             maturity: new Maturity(getTimestampRelativeToNow(200)).toString(),
             marketPrice: BigInt(10000),
         },
@@ -96,7 +96,7 @@ UnderMinimumCollateralThreshold.args = {
         {
             amount: BigInt('-500000000'),
             currency: usdcBytes32,
-            forwardValue: BigInt('-50000000'),
+            futureValue: BigInt('-50000000'),
             maturity: dec22Fixture.toString(),
             marketPrice: BigInt(5000),
             underMinimalCollateral: true,

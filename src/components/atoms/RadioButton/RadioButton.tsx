@@ -13,7 +13,7 @@ export function RadioButton({ options, value, onChange }: ButtonSelectProps) {
                 <button
                     key={option.value}
                     className={clsx(
-                        'typography-caption h-[34px] flex cursor-pointer items-center justify-center rounded-lg px-3 py-1.5 text-sm transition-colors duration-300 ease-in-out',
+                        'typography-caption flex h-[34px] cursor-pointer items-center justify-center rounded-lg px-3 py-1.5 text-sm transition-colors duration-300 ease-in-out',
                         'border border-transparent',
                         {
                             'border-starBlue bg-starBlue text-white':
