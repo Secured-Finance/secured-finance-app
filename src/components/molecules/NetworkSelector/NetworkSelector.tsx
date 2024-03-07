@@ -101,7 +101,7 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
                         data-cy='network-selector-button'
                         aria-label='Network Selector Button'
                         className={clsx(
-                            'flex items-center gap-2 rounded-[6px] bg-neutral-800 px-3 py-2 ring-1 ring-neutral-500 focus:outline-none tablet:rounded-xl tablet:py-3 tablet:pl-4 tablet:pr-3 tablet:ring-[1.5px]',
+                            'flex items-center gap-2 rounded-[6px] bg-neutral-800 p-2 ring-1 ring-neutral-500 focus:outline-none tablet:rounded-xl tablet:p-3 tablet:ring-[1.5px]',
                             {
                                 'pr-2': !selectedNetwork,
                             }
@@ -112,13 +112,15 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
                         ) : (
                             <>
                                 <ExclamationCircleIcon className='h-4 w-4 tablet:h-5 tablet:w-5' />
-                                <span className='text-[0.6875rem] leading-4 text-neutral-50 tablet:text-xs tablet:leading-5'>
-                                    Network
-                                </span>
-                                <ExpandIndicator
-                                    expanded={open}
-                                    variant='solid'
-                                />
+                                <div className='hidden'>
+                                    <span className='text-[0.6875rem] leading-4 text-neutral-50 tablet:text-xs tablet:leading-5'>
+                                        Network
+                                    </span>
+                                    <ExpandIndicator
+                                        expanded={open}
+                                        variant='solid'
+                                    />
+                                </div>
                             </>
                         )}
                     </Popover.Button>

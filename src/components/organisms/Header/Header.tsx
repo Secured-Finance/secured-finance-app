@@ -1,4 +1,3 @@
-import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,7 +23,7 @@ import { useAccount } from 'wagmi';
 
 const PRODUCTION_LINKS = [
     {
-        text: 'OTC Lending',
+        text: 'Lend / Borrow',
         link: '/',
         alternateLinks: ['/advanced', '/global-itayose', '/itayose'],
         dataCy: 'lending',
@@ -139,10 +138,6 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                             <SFLogoSmall className='inline h-7 w-7 tablet:hidden' />
                         </a>
                     </Link>
-                    <button className='hidden h-full items-center gap-1 px-5 text-sm text-neutral-50 tablet:flex laptop:hidden'>
-                        Menu{' '}
-                        <ChevronDownIcon className='h-4 w-4 text-neutral-400' />
-                    </button>
                     {showNavigation && (
                         <div className='hidden h-full flex-row laptop:flex'>
                             {LINKS.map(link => (
@@ -186,7 +181,7 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                         </Button>
                     )}
 
-                    <div className='flex tablet:hidden'>
+                    <div className='flex laptop:hidden'>
                         <HamburgerMenu
                             links={LINKS.map(link => ({
                                 label: link.text,
