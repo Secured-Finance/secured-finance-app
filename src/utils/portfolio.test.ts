@@ -6,16 +6,17 @@ import {
     wbtcBytes32,
     wfilBytes32,
 } from 'src/stories/mocks/fixtures';
-import { OrderType, TradeHistory } from 'src/types';
+import { OrderType, TransactionHistoryList } from 'src/types';
 import timemachine from 'timemachine';
 import { createCurrencyMap } from './currencyList';
 import {
     calculateAveragePrice,
-    calculateForwardValue,
+    calculateFutureValue,
     checkOrderIsFilled,
     computeNetValue,
     computeWeightedAverageRate,
     formatOrders,
+    getMappedOrderStatus,
     getMaxAmount,
     sortOrders,
 } from './portfolio';
@@ -46,7 +47,7 @@ describe('computeWeightedAverage', () => {
         ];
         expect(
             computeWeightedAverageRate(
-                trades as unknown as TradeHistory
+                trades as unknown as TransactionHistoryList
             ).toNumber()
         ).toEqual(196748);
     });
@@ -70,14 +71,14 @@ describe('computeNetValue', () => {
             {
                 amount: BigInt('400000000000000000000'),
                 currency: wfilBytes32,
-                forwardValue: BigInt('500000000000000000000'),
+                futureValue: BigInt('500000000000000000000'),
                 maturity: dec22Fixture.toString(),
                 marketPrice: BigInt(8000),
             },
             {
                 amount: BigInt('-500000000000000000000'),
                 currency: wfilBytes32,
-                forwardValue: BigInt('-1000000000000000000000'),
+                futureValue: BigInt('-1000000000000000000000'),
                 maturity: dec22Fixture.toString(),
                 marketPrice: BigInt(5000),
             },
@@ -94,27 +95,27 @@ describe('computeNetValue', () => {
             {
                 amount: BigInt('400000000000000000000'),
                 currency: wfilBytes32,
-                forwardValue: BigInt('500000000000000000000'),
+                futureValue: BigInt('500000000000000000000'),
                 maturity: dec22Fixture.toString(),
                 marketPrice: BigInt(8000),
             },
             {
                 amount: BigInt('-500000000000000000000'),
                 currency: wfilBytes32,
-                forwardValue: BigInt('-1000000000000000000000'),
+                futureValue: BigInt('-1000000000000000000000'),
                 maturity: dec22Fixture.toString(),
                 marketPrice: BigInt(5000),
             },
             {
                 amount: BigInt('-500000000'),
-                forwardValue: BigInt('-1000000000'),
+                futureValue: BigInt('-1000000000'),
                 currency: wbtcBytes32,
                 maturity: dec22Fixture.toString(),
                 marketPrice: BigInt(50),
             },
             {
                 amount: BigInt('505000000'),
-                forwardValue: BigInt('505000000'),
+                futureValue: BigInt('505000000'),
                 currency: wbtcBytes32,
                 maturity: dec22Fixture.toString(),
                 marketPrice: BigInt(100),
@@ -122,14 +123,14 @@ describe('computeNetValue', () => {
         ];
         expect(
             computeNetValue(
-                positions.filter(position => position.forwardValue < 0),
+                positions.filter(position => position.futureValue < 0),
                 priceMap
             )
         ).toEqual(-153000);
 
         expect(
             computeNetValue(
-                positions.filter(position => position.forwardValue > 0),
+                positions.filter(position => position.futureValue > 0),
                 priceMap
             )
         ).toEqual(153900);
@@ -138,7 +139,7 @@ describe('computeNetValue', () => {
 
 describe('formatOrders', () => {
     it('should return forward value', () => {
-        expect(calculateForwardValue(BigInt(900), BigInt(9000))).toEqual(
+        expect(calculateFutureValue(BigInt(900), BigInt(9000))).toEqual(
             BigInt(1000)
         );
     });
@@ -157,7 +158,7 @@ describe('formatOrders', () => {
                 unitPrice: BigInt('9000'),
                 amount: BigInt('900'),
                 createdAt: BigInt('1609295092'),
-                maker: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+                user: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
             },
             {
                 orderId: BigInt(2),
@@ -173,26 +174,26 @@ describe('formatOrders', () => {
             {
                 amount: BigInt('900'),
                 side: 0,
-                orderPrice: BigInt('9000'),
+                executionPrice: BigInt('9000'),
                 createdAt: BigInt('1609295092'),
                 currency: ethBytes32,
                 maturity: dec22Fixture.toString(),
-                forwardValue: BigInt(1000),
+                futureValue: BigInt(1000),
                 averagePrice: 0.9,
                 feeInFV: BigInt(0),
-                taker: { id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D' },
+                user: { id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D' },
             },
             {
                 amount: BigInt('10000'),
                 side: 1,
-                orderPrice: BigInt('8000'),
+                executionPrice: BigInt('8000'),
                 createdAt: BigInt('1609295092'),
                 currency: wfilBytes32,
                 maturity: dec22Fixture.toString(),
-                forwardValue: BigInt(12500),
+                futureValue: BigInt(12500),
                 averagePrice: 0.8,
                 feeInFV: BigInt(0),
-                taker: { id: '' },
+                user: { id: '' },
             },
         ];
 
@@ -265,9 +266,10 @@ describe('checkOrderIsFilled', () => {
                 id: '1',
                 isActive: true,
             },
-            maker: {
+            user: {
                 id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
             },
+            isCircuitBreakerTriggered: false,
         };
 
         expect(checkOrderIsFilled(order, orders)).toEqual(true);
@@ -280,7 +282,7 @@ describe('checkOrderIsFilled', () => {
             side: 0,
             maturity: dec22Fixture,
             inputUnitPrice: BigInt('9800'),
-            filledAmount: BigInt('1000000000000000000000'),
+            filledAmount: BigInt('0'),
             inputAmount: BigInt('1000000000000000000000'),
             status: 'Open' as const,
             type: OrderType.LIMIT,
@@ -290,9 +292,10 @@ describe('checkOrderIsFilled', () => {
                 id: '1',
                 isActive: true,
             },
-            maker: {
+            user: {
                 id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
             },
+            isCircuitBreakerTriggered: false,
         };
 
         expect(checkOrderIsFilled(order, orders)).toEqual(false);
@@ -330,5 +333,259 @@ describe('getMaxAmount', () => {
         const orders: { amount: bigint }[] = [];
         const maxAmount = getMaxAmount(orders);
         expect(maxAmount.toString()).toBe('0');
+    });
+});
+
+describe('getMappedOrderStatus', () => {
+    it('returns the mapped status as Expired when lending market is inactive and order is Open', () => {
+        const order = {
+            orderId: 6,
+            currency: ethBytes32,
+            side: 0,
+            maturity: dec22Fixture,
+            inputUnitPrice: BigInt('9800'),
+            filledAmount: BigInt('0'),
+            inputAmount: BigInt('1000000000000000000000'),
+            status: 'Open' as const,
+            type: OrderType.LIMIT,
+            createdAt: BigInt('1'),
+            txHash: toBytes32('hash'),
+            lendingMarket: {
+                id: '1',
+                isActive: false,
+            },
+            user: {
+                id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+            },
+            isCircuitBreakerTriggered: false,
+        };
+        expect(getMappedOrderStatus(order)).toBe('Expired');
+    });
+
+    it('returns the mapped status as Partially Filled & Expired when lending market is inactive and order is PartiallyFilled', () => {
+        const order = {
+            orderId: 6,
+            currency: ethBytes32,
+            side: 0,
+            maturity: dec22Fixture,
+            inputUnitPrice: BigInt('9800'),
+            filledAmount: BigInt('100000000000000000000'),
+            inputAmount: BigInt('1000000000000000000000'),
+            status: 'PartiallyFilled' as const,
+            type: OrderType.LIMIT,
+            createdAt: BigInt('1'),
+            txHash: toBytes32('hash'),
+            lendingMarket: {
+                id: '1',
+                isActive: false,
+            },
+            user: {
+                id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+            },
+            isCircuitBreakerTriggered: false,
+        };
+        expect(getMappedOrderStatus(order)).toBe('Partially Filled & Expired');
+    });
+
+    it('returns the mapped status as Blocked when order is completely Killed because of circuit breaker', () => {
+        const order = {
+            orderId: 6,
+            currency: ethBytes32,
+            side: 0,
+            maturity: dec22Fixture,
+            inputUnitPrice: BigInt('9800'),
+            filledAmount: BigInt('0'),
+            inputAmount: BigInt('1000000000000000000000'),
+            status: 'Killed' as const,
+            type: OrderType.LIMIT,
+            createdAt: BigInt('1'),
+            txHash: toBytes32('hash'),
+            lendingMarket: {
+                id: '1',
+                isActive: false,
+            },
+            user: {
+                id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+            },
+            isCircuitBreakerTriggered: true,
+        };
+        expect(getMappedOrderStatus(order)).toBe('Blocked');
+    });
+
+    it('returns the mapped status as Partially Filled & Blocked when order is partially Killed because of circuit breaker', () => {
+        const order = {
+            orderId: 6,
+            currency: ethBytes32,
+            side: 0,
+            maturity: dec22Fixture,
+            inputUnitPrice: BigInt('9800'),
+            filledAmount: BigInt('100000000000000000000'),
+            inputAmount: BigInt('1000000000000000000000'),
+            status: 'Killed' as const,
+            type: OrderType.LIMIT,
+            createdAt: BigInt('1'),
+            txHash: toBytes32('hash'),
+            lendingMarket: {
+                id: '1',
+                isActive: false,
+            },
+            user: {
+                id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+            },
+            isCircuitBreakerTriggered: true,
+        };
+        expect(getMappedOrderStatus(order)).toBe('Partially Filled & Blocked');
+    });
+
+    it('returns the mapped status as Filled when order status is Filled', () => {
+        const order = {
+            orderId: 6,
+            currency: ethBytes32,
+            side: 0,
+            maturity: dec22Fixture,
+            inputUnitPrice: BigInt('9800'),
+            filledAmount: BigInt('1000000000000000000000'),
+            inputAmount: BigInt('1000000000000000000000'),
+            status: 'Filled' as const,
+            type: OrderType.LIMIT,
+            createdAt: BigInt('1'),
+            txHash: toBytes32('hash'),
+            lendingMarket: {
+                id: '1',
+                isActive: false,
+            },
+            user: {
+                id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+            },
+            isCircuitBreakerTriggered: false,
+        };
+        expect(getMappedOrderStatus(order)).toBe('Filled');
+    });
+
+    it('returns the mapped status as Partially Filled when order status is PartiallyFilled', () => {
+        const order = {
+            orderId: 6,
+            currency: ethBytes32,
+            side: 0,
+            maturity: dec22Fixture,
+            inputUnitPrice: BigInt('9800'),
+            filledAmount: BigInt('100000000000000000000'),
+            inputAmount: BigInt('1000000000000000000000'),
+            status: 'PartiallyFilled' as const,
+            type: OrderType.LIMIT,
+            createdAt: BigInt('1'),
+            txHash: toBytes32('hash'),
+            lendingMarket: {
+                id: '1',
+                isActive: true,
+            },
+            user: {
+                id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+            },
+            isCircuitBreakerTriggered: false,
+        };
+        expect(getMappedOrderStatus(order)).toBe('Partially Filled');
+    });
+
+    it('returns the mapped status as Killed when order status is Killed and filled amount is 0', () => {
+        const order = {
+            orderId: 6,
+            currency: ethBytes32,
+            side: 0,
+            maturity: dec22Fixture,
+            inputUnitPrice: BigInt('9800'),
+            filledAmount: BigInt('0'),
+            inputAmount: BigInt('1000000000000000000000'),
+            status: 'Killed' as const,
+            type: OrderType.MARKET,
+            createdAt: BigInt('1'),
+            txHash: toBytes32('hash'),
+            lendingMarket: {
+                id: '1',
+                isActive: false,
+            },
+            user: {
+                id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+            },
+            isCircuitBreakerTriggered: false,
+        };
+        expect(getMappedOrderStatus(order)).toBe('Killed');
+    });
+
+    it('returns the mapped status as Partially Filled & Killed when order status is Killed and filled amount is not 0', () => {
+        const order = {
+            orderId: 6,
+            currency: ethBytes32,
+            side: 0,
+            maturity: dec22Fixture,
+            inputUnitPrice: BigInt('9800'),
+            filledAmount: BigInt('100000000000000000000'),
+            inputAmount: BigInt('1000000000000000000000'),
+            status: 'Killed' as const,
+            type: OrderType.MARKET,
+            createdAt: BigInt('1'),
+            txHash: toBytes32('hash'),
+            lendingMarket: {
+                id: '1',
+                isActive: false,
+            },
+            user: {
+                id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+            },
+            isCircuitBreakerTriggered: false,
+        };
+        expect(getMappedOrderStatus(order)).toBe('Partially Filled & Killed');
+    });
+
+    it('returns the mapped status as Cancelled when order status is Cancelled and filled amount is 0', () => {
+        const order = {
+            orderId: 6,
+            currency: ethBytes32,
+            side: 0,
+            maturity: dec22Fixture,
+            inputUnitPrice: BigInt('9800'),
+            filledAmount: BigInt('0'),
+            inputAmount: BigInt('1000000000000000000000'),
+            status: 'Cancelled' as const,
+            type: OrderType.LIMIT,
+            createdAt: BigInt('1'),
+            txHash: toBytes32('hash'),
+            lendingMarket: {
+                id: '1',
+                isActive: false,
+            },
+            user: {
+                id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+            },
+            isCircuitBreakerTriggered: false,
+        };
+        expect(getMappedOrderStatus(order)).toBe('Cancelled');
+    });
+
+    it('returns the mapped status as Partially Filled & Cancelled when order status is Cancelled and filled amount is not 0', () => {
+        const order = {
+            orderId: 6,
+            currency: ethBytes32,
+            side: 0,
+            maturity: dec22Fixture,
+            inputUnitPrice: BigInt('9800'),
+            filledAmount: BigInt('100000000000000000000'),
+            inputAmount: BigInt('1000000000000000000000'),
+            status: 'Cancelled' as const,
+            type: OrderType.LIMIT,
+            createdAt: BigInt('1'),
+            txHash: toBytes32('hash'),
+            lendingMarket: {
+                id: '1',
+                isActive: false,
+            },
+            user: {
+                id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+            },
+            isCircuitBreakerTriggered: false,
+        };
+        expect(getMappedOrderStatus(order)).toBe(
+            'Partially Filled & Cancelled'
+        );
     });
 });
