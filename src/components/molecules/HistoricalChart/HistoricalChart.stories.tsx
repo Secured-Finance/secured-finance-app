@@ -12,7 +12,9 @@ export default {
 } as Meta<typeof HistoricalChart>;
 
 const Template: StoryFn<typeof HistoricalChart> = args => (
-    <HistoricalChart {...args} />
+    <div className='w-[600px]'>
+        <HistoricalChart {...args} />
+    </div>
 );
 
 export const Default = Template.bind({});

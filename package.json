@@ -14,7 +14,7 @@
     "@reduxjs/toolkit": "^1.8.1",
     "@secured-finance/sf-client": "0.2.0-beta.153",
     "@secured-finance/sf-core": "0.2.0-beta.152",
-    "@secured-finance/sf-graph-client": "0.2.0-beta.154",
+    "@secured-finance/sf-graph-client": "^0.2.0-beta.154",
     "@svgr/webpack": "^6.2.1",
     "@tanstack/react-query": "^4.32.0",
     "@tanstack/react-table": "^8.5.13",
@@ -60,7 +60,11 @@
     "cypress:run": "cypress run"
   },
   "browserslist": {
-    "production": [">0.2%", "not dead", "not op_mini all"],
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
@@ -131,7 +135,6 @@
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "tailwindcss": "^3.3.2",
-    "tailwindcss-theme-variants": "^2.0.0-beta.0",
     "timemachine": "^0.3.2",
     "typescript": "^5.1.6",
     "url": "^0.11.0",

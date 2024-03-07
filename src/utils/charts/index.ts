@@ -9,7 +9,6 @@ const commonOptions = {
     },
     grid: {
         vertLines: {
-            color: '#23262F',
             visible: false,
         },
         horzLines: {
@@ -24,12 +23,12 @@ const commonOptions = {
     crosshair: {
         mode: 1,
         vertLine: {
-            color: 'rgba(230, 232, 236, 1)',
-            labelBackgroundColor: '#5162FF',
+            color: '#CBD5E1',
+            labelBackgroundColor: '#475569',
         },
         horzLine: {
-            color: 'rgba(230, 232, 236, 1)',
-            labelBackgroundColor: '#5162FF',
+            color: '#CBD5E1',
+            labelBackgroundColor: '#475569',
         },
     },
 };
