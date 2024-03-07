@@ -52,7 +52,7 @@ export const EmergencyGlobalSettlement = () => {
             lendOrders.push({
                 amount: v,
                 currency: k,
-                forwardValue: ZERO_BI,
+                futureValue: ZERO_BI,
                 maturity: '0',
                 type: 'lending-order' as const,
             });
@@ -71,7 +71,7 @@ export const EmergencyGlobalSettlement = () => {
                 .map(([key, value]) => ({
                     amount: value,
                     currency: toHex(key),
-                    forwardValue: ZERO_BI,
+                    futureValue: ZERO_BI,
                     maturity: '0',
                     type: 'collateral' as const,
                 })),
