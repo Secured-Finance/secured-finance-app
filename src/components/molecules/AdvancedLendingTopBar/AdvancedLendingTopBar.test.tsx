@@ -1,13 +1,13 @@
 import { composeStories } from '@storybook/react';
 import { render, screen } from 'src/test-utils.js';
-import { formatTimestampWithMonth } from 'src/utils';
+import { formatTimeStampWithTimezone } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import * as stories from './AdvancedLendingTopBar.stories';
 
 const { Default, Values } = composeStories(stories);
 
 describe('AdvancedLendingTopBar Component', () => {
-    it('should render a default AdvancedLendingTopBar with lastTradePrice', () => {
+    it('should render a default AdvancedLendingTopBar with lastTradePrice and last block timestamp', () => {
         render(<Default />);
 
         expect(
@@ -22,6 +22,7 @@ describe('AdvancedLendingTopBar Component', () => {
         expect(screen.getAllByText('0')).toHaveLength(5);
         expect(screen.getByText('80.00')).toBeInTheDocument();
         expect(screen.getByText('25.03% APR')).toBeInTheDocument();
+        expect(screen.getByText('13:50:00 UTC +06')).toBeInTheDocument();
     });
 
     it('should render the values on the AdvancedLendingTopBar', () => {
@@ -60,6 +61,9 @@ describe('AdvancedLendingTopBar Component', () => {
                 />
             );
             expect(screen.getByText('Opening Price')).toBeInTheDocument();
+            expect(
+                screen.queryByText(`${formatTimeStampWithTimezone(1643713200)}`)
+            ).not.toBeInTheDocument();
         });
 
         it('should show that the current market is a last block price if indicated', () => {
@@ -73,7 +77,7 @@ describe('AdvancedLendingTopBar Component', () => {
                 />
             );
             expect(
-                screen.getByText(`${formatTimestampWithMonth(1643713200)}`)
+                screen.getByText(`${formatTimeStampWithTimezone(1643713200)}`)
             ).toBeInTheDocument();
         });
 
