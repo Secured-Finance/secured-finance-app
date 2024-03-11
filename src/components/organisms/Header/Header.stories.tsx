@@ -7,6 +7,9 @@ import type { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
 import { Header } from './';
 
+const FIGMA_STORYBOOK_LINK =
+    'https://www.figma.com/file/YIBsk1ihFbPlDb8XldGj1T/SF-Design-System?type=design&node-id=182-2672&mode=dev';
+
 export default {
     title: 'Organism/Header',
     component: Header,
@@ -16,6 +19,13 @@ export default {
     decorators: [withWalletProvider],
     parameters: {
         ...RESPONSIVE_PARAMETERS,
+        viewport: {
+            disable: true,
+        },
+        design: {
+            type: 'figma',
+            url: FIGMA_STORYBOOK_LINK,
+        },
     },
 } as Meta<typeof Header>;
 
