@@ -14,7 +14,7 @@ export const Chip = ({
     return (
         <div
             className={clsx(
-                'inline-flex items-center justify-center rounded py-0.5',
+                'inline-flex items-center justify-center py-0.5',
                 colorStyle[color],
                 sizeStyle[size]
             )}
