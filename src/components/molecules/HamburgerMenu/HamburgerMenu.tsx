@@ -1,5 +1,6 @@
 import { Menu, Transition } from '@headlessui/react';
-import { ArrowUpIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
+import { ChevronRightIcon } from '@heroicons/react/20/solid';
+import { ArrowUpIcon } from '@heroicons/react/24/solid';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { HTMLAttributes, LegacyRef, forwardRef, useState } from 'react';
@@ -8,6 +9,9 @@ import SFLogoSmall from 'src/assets/img/small-logo.svg';
 import { Closable } from 'src/components/templates';
 import { LinkList } from 'src/utils';
 import { UrlObject } from 'url';
+
+const mobileLinkClassName =
+    'text-[1.25rem] font-semibold -tracking-[0.0125rem] text-primary-50';
 
 const NextLink = forwardRef(
     (
@@ -33,9 +37,10 @@ const MenuItemLink = ({ text, link }: { text: string; link: string }) => {
                 <NextLink
                     href={link}
                     className={clsx(
-                        'flex h-16 w-full items-center justify-start whitespace-nowrap px-9 py-4 text-center',
+                        'flex w-full items-center justify-start whitespace-nowrap px-2 py-2 text-center',
+                        mobileLinkClassName,
                         {
-                            'border-l-4 border-starBlue bg-gradient-to-r from-[#6A76B159] via-[#4A5BAF1F] to-[#394DAE00] text-neutral-8':
+                            'text-primary-8 border-l-4 border-starBlue bg-gradient-to-r from-[#6A76B159] via-[#4A5BAF1F] to-[#394DAE00]':
                                 active,
                         }
                     )}
@@ -53,7 +58,8 @@ const MobileItemLink = ({ text, href }: { text: string; href: string }) => {
             {({ active }) => (
                 <a
                     className={clsx(
-                        'flex h-16 w-full flex-row items-center justify-start gap-3 whitespace-nowrap p-4 text-center',
+                        'flex w-full flex-row items-center justify-start gap-3 whitespace-nowrap px-3 py-2 text-center',
+                        mobileLinkClassName,
                         {
                             'rounded-2xl bg-[#233447] text-neutral-8': active,
                         }
@@ -84,13 +90,16 @@ export const HamburgerMenu = ({
 
     return (
         <Menu>
-            {({ close }) => (
+            {({ open, close }) => (
                 <>
                     <Menu.Button aria-label='Hamburger Menu'>
                         <Burger className='h-6 w-6' />
                     </Menu.Button>
+                    {open && (
+                        <div className='fixed inset-0 z-40 hidden bg-neutral-800 opacity-50 tablet:block' />
+                    )}
                     <Transition
-                        className='fixed inset-0 z-50'
+                        className='fixed inset-0 z-50 tablet:left-auto tablet:right-0 tablet:w-[52%] tablet:min-w-[25rem] tablet:max-w-[37.5rem]'
                         enter='transition duration-100 ease-out'
                         enterFrom='transform scale-95 opacity-0'
                         enterTo='transform scale-100 opacity-100'
@@ -101,12 +110,12 @@ export const HamburgerMenu = ({
                         <Menu.Items
                             as='div'
                             className={clsx(
-                                'typography-body-1 flex h-screen w-full flex-col gap-4 overflow-y-auto bg-neutral-900 p-8 text-neutral-4'
+                                'flex h-screen w-full flex-col gap-8 overflow-y-auto bg-neutral-900 p-4 text-neutral-4'
                             )}
                         >
                             <Closable onClose={close}>
-                                <div className='fixed'>
-                                    <SFLogoSmall className='h-7 w-7' />
+                                <div className='fixed tablet:mt-1'>
+                                    <SFLogoSmall className='h-5 w-[22.75px]' />
                                 </div>
                                 <div className='w-full flex-col items-start'>
                                     {links.map(link => (
@@ -117,7 +126,13 @@ export const HamburgerMenu = ({
                                         />
                                     ))}
 
-                                    <Menu.Item as='div' className='w-full'>
+                                    <Menu.Item
+                                        as='div'
+                                        className={clsx(
+                                            'flex w-full items-center',
+                                            mobileLinkClassName
+                                        )}
+                                    >
                                         {({ active }) => (
                                             <button
                                                 onClick={e => {
@@ -126,7 +141,7 @@ export const HamburgerMenu = ({
                                                 }}
                                                 aria-label='Show More'
                                                 className={clsx(
-                                                    'flex h-16 w-full items-center justify-between px-9 py-4 text-center focus:outline-none',
+                                                    'flex items-center justify-between gap-2 px-2 py-2 text-center focus:outline-none',
                                                     {
                                                         'border-l-4 border-starBlue bg-gradient-to-r from-[#6A76B159] via-[#4A5BAF1F] to-[#394DAE00] text-neutral-8':
                                                             active,
@@ -134,11 +149,11 @@ export const HamburgerMenu = ({
                                                 )}
                                             >
                                                 More
-                                                <ChevronDownIcon
+                                                <ChevronRightIcon
                                                     className={clsx(
-                                                        'mt-2 inline h-6 w-6 text-neutral-4',
+                                                        'relative top-[1px] inline h-6 w-6',
                                                         {
-                                                            'rotate-180':
+                                                            'rotate-90':
                                                                 showMore,
                                                         }
                                                     )}

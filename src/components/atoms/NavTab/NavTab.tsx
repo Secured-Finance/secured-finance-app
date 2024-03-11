@@ -28,7 +28,7 @@ export const NavTab = ({ text, active = false, highlight }: NavTabProps) => {
             >
                 <p
                     className={clsx(
-                        'typography-nav-menu-default h-4 whitespace-nowrap text-neutral-8 duration-300 group-hover:opacity-100 group-hover:ease-in-out',
+                        'typography-nav-menu-default h-4 whitespace-nowrap text-neutral-50 duration-300 group-hover:opacity-100 group-hover:ease-in-out',
                         {
                             'opacity-100': active,
                             'opacity-70': !active,
