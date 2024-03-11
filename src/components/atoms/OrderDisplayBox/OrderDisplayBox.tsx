@@ -3,7 +3,7 @@ import { InfoToolTip } from 'src/components/molecules';
 interface OrderDisplayBoxProps {
     field: string;
     value: number | string;
-    informationText?: string;
+    informationText?: React.ReactNode;
 }
 
 export const OrderDisplayBox = ({

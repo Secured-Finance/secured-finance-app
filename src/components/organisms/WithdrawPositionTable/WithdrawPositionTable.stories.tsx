@@ -15,14 +15,14 @@ export default {
         data: [
             {
                 amount: BigInt('400000000000000000000'),
-                forwardValue: BigInt('0'),
+                futureValue: BigInt('0'),
                 currency: wfilBytes32,
                 maturity: 0,
                 type: 'lending-order',
             },
             {
                 amount: BigInt('400000000000000000000'),
-                forwardValue: BigInt('500000000000000000000'),
+                futureValue: BigInt('500000000000000000000'),
                 currency: wfilBytes32,
                 maturity: jun23Fixture.toString(),
                 type: 'position',
@@ -30,14 +30,14 @@ export default {
             {
                 amount: BigInt('-500000000000000000000'),
                 currency: ethBytes32,
-                forwardValue: BigInt('-1000000000000000000000'),
+                futureValue: BigInt('-1000000000000000000000'),
                 maturity: mar23Fixture.toString(),
                 type: 'position',
             },
             {
                 amount: BigInt('50000000'),
                 currency: wbtcBytes32,
-                forwardValue: BigInt('0'),
+                futureValue: BigInt('0'),
                 maturity: 0,
                 type: 'collateral',
             },

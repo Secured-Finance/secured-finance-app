@@ -83,6 +83,7 @@ export function AdvancedLendingOrderCard({
         selectLandingOrderForm(state.landingOrderForm)
     );
 
+    const { address, isConnected } = useAccount();
     const { amountInput, unitPriceInput } = useSelector((state: RootState) =>
         selectLandingOrderInputs(state.landingOrderForm)
     );
@@ -110,11 +111,11 @@ export function AdvancedLendingOrderCard({
             return unitPriceInput;
         }
         if (!marketPrice) return undefined;
+        if (!isConnected) return undefined;
         return (marketPrice / 100.0).toString();
-    }, [maturity, marketPrice, unitPriceInput]);
+    }, [maturity, marketPrice, unitPriceInput, isConnected]);
 
     const dispatch = useDispatch();
-    const { address } = useAccount();
 
     const collateralUsagePercent = useMemo(() => {
         return collateralBook.coverage / 100.0;
@@ -176,9 +177,12 @@ export function AdvancedLendingOrderCard({
         selectedWalletSource.source,
     ]);
 
-    const handleAmountChange = (percentage: number) => {
+    const handleSliderChange = (percentage: number) => {
         const available =
             side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
+        track(InteractionEvents.SLIDER, {
+            [InteractionProperties.SLIDER_VALUE]: percentage,
+        });
         dispatch(
             setAmount(
                 (
@@ -243,6 +247,10 @@ export function AdvancedLendingOrderCard({
         isInvalidBondPrice ||
         showPreOrderError;
 
+    const isMarketOrderType = orderType === OrderType.MARKET;
+
+    const isBondPriceFieldDisabled = isMarketOrderType || !isConnected;
+
     return (
         <div className='h-full rounded-b-xl border border-white-10 bg-cardBackground bg-opacity-60 pb-7'>
             <RadioGroupSelector
@@ -264,9 +272,27 @@ export function AdvancedLendingOrderCard({
                     );
                 }}
                 variant='NavTab'
+                optionsStyles={[
+                    {
+                        bgColorActive: 'bg-nebulaTeal',
+                        textClassActive: 'text-secondary3 font-semibold',
+                        gradient: {
+                            from: 'from-tabGradient-4',
+                            to: 'to-tabGradient-3',
+                        },
+                    },
+                    {
+                        bgColorActive: 'bg-galacticOrange',
+                        textClassActive: 'text-[#FFE5E8] font-semibold',
+                        gradient: {
+                            from: 'from-tabGradient-6',
+                            to: 'to-tabGradient-5',
+                        },
+                    },
+                ]}
             />
 
-            <div className='flex w-full flex-col justify-center gap-6 px-4 pt-5'>
+            <div className='flex w-full flex-col justify-center gap-4 px-4 pt-5'>
                 {!isItayose && (
                     <RadioGroupSelector
                         options={OrderTypeOptions}
@@ -304,8 +330,10 @@ export function AdvancedLendingOrderCard({
                 <div className='flex flex-col gap-10px'>
                     <OrderInputBox
                         field='Bond Price'
-                        disabled={orderType === OrderType.MARKET}
-                        initialValue={unitPriceValue}
+                        disabled={isBondPriceFieldDisabled}
+                        initialValue={
+                            isMarketOrderType ? 'Market' : unitPriceValue
+                        }
                         onValueChange={v => {
                             v !== undefined
                                 ? dispatch(setUnitPrice(v.toString()))
@@ -318,12 +346,17 @@ export function AdvancedLendingOrderCard({
                         informationText='Input value greater than or equal to 0.01 and up to and including 100.'
                         decimalPlacesAllowed={2}
                         maxLimit={100}
+                        bgClassName={
+                            isBondPriceFieldDisabled
+                                ? 'bg-neutral-700'
+                                : undefined
+                        }
                     />
                     <ErrorInfo
                         errorMessage='Invalid bond price'
                         showError={isInvalidBondPrice}
                     />
-                    {orderType === OrderType.MARKET && (
+                    {isMarketOrderType && (
                         <div className='mx-10px'>
                             <OrderDisplayBox
                                 field='Max Slippage'
@@ -338,9 +371,6 @@ export function AdvancedLendingOrderCard({
                             value={formatLoanValue(loanValue, 'rate')}
                         />
                     </div>
-                </div>
-                <div className='mx-10px'>
-                    <Slider onChange={handleAmountChange} value={sliderValue} />
                 </div>
                 {side === OrderSide.BORROW && (
                     <div className='typography-caption mx-10px flex flex-row justify-between'>
@@ -357,8 +387,17 @@ export function AdvancedLendingOrderCard({
                     unit={currency}
                     initialValue={amountInput}
                     onValueChange={v => handleInputChange((v as string) ?? '')}
+                    disabled={!isConnected}
+                    bgClassName={!isConnected ? 'bg-neutral-700' : undefined}
                 />
-                <div className='mx-10px flex flex-col gap-6'>
+                <div className='mx-10px'>
+                    <Slider
+                        onChange={handleSliderChange}
+                        value={sliderValue}
+                        disabled={!isConnected}
+                    />
+                </div>
+                <div className='mx-10px flex flex-col gap-2'>
                     <OrderDisplayBox
                         field='Est. Present Value'
                         value={usdFormat(orderAmount?.toUSD(price) ?? 0, 2)}
