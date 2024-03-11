@@ -22,7 +22,7 @@ describe('Header component', () => {
             pathname: '/',
         });
         render(<Primary />);
-        expect(screen.getByText('OTC Lending')).toBeInTheDocument();
+        expect(screen.getByText('Lend / Borrow')).toBeInTheDocument();
         expect(screen.getByText('Markets')).toBeInTheDocument();
         expect(screen.getByText('Portfolio')).toBeInTheDocument();
         expect(screen.getByText('Connect Wallet')).toBeInTheDocument();
@@ -33,7 +33,7 @@ describe('Header component', () => {
             pathname: '/',
         });
         render(<Primary />);
-        const textElement = screen.getByText('OTC Lending');
+        const textElement = screen.getByText('Lend / Borrow');
         expect(textElement.parentNode).toHaveClass(
             'bg-gradient-to-b from-tabGradient2 to-tabGradient1'
         );
@@ -44,7 +44,7 @@ describe('Header component', () => {
             pathname: '/global-itayose',
         });
         render(<Primary />);
-        const textElement = screen.getByText('OTC Lending');
+        const textElement = screen.getByText('Lend / Borrow');
         expect(textElement.parentNode).toHaveClass(
             'bg-gradient-to-b from-tabGradient2 to-tabGradient1'
         );
@@ -72,7 +72,7 @@ describe('Header component', () => {
         }));
 
         render(<Primary />);
-        const textElement = screen.getByText('OTC Lending');
+        const textElement = screen.getByText('Lend / Borrow');
         expect(textElement.parentNode).toHaveClass(
             'bg-gradient-to-b from-tabGradient2 to-tabGradient1'
         );

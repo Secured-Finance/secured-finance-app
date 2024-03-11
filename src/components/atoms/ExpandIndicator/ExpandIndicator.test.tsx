@@ -23,7 +23,7 @@ describe('Opaque ExpandIndicator Component', () => {
         render(<Collapsed variant='opaque' />);
         const chevron = screen.getByTestId('chevron-down-icon');
         expect(chevron).toBeInTheDocument();
-        expect(chevron).toHaveClass('opacity-50');
+        expect(chevron).toHaveClass('text-neutral-400');
         expect(chevron).not.toHaveClass('rotate-180');
     });
 
@@ -31,6 +31,6 @@ describe('Opaque ExpandIndicator Component', () => {
         render(<Expanded variant='opaque' />);
         const chevron = screen.getByTestId('chevron-down-icon');
         expect(chevron).toBeInTheDocument();
-        expect(chevron).toHaveClass('opacity-50 rotate-180');
+        expect(chevron).toHaveClass('text-neutral-400 rotate-180');
     });
 });

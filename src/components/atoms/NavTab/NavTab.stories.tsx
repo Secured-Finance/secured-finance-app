@@ -5,7 +5,7 @@ export default {
     title: 'Atoms/NavTab',
     component: NavTab,
     args: {
-        text: 'OTC Lending',
+        text: 'Lend / Borrow',
         active: true,
     },
     parameters: {
