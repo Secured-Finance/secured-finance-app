@@ -276,8 +276,8 @@ export const loanTypeColumnDefinition = <T extends SideProperty>(
                     <Chip
                         color={
                             value.toString() === '1'
-                                ? ChipColors.Green
-                                : ChipColors.Red
+                                ? ChipColors.Red
+                                : ChipColors.Green
                         }
                         label={value.toString() === '1' ? 'Borrow' : 'Lend'}
                     />
@@ -304,8 +304,8 @@ export const loanTypeFromFVColumnDefinition = <T extends ForwardValueProperty>(
                     <Chip
                         color={
                             info.getValue() < 0
-                                ? ChipColors.Green
-                                : ChipColors.Red
+                                ? ChipColors.Red
+                                : ChipColors.Green
                         }
                         label={info.getValue() < 0 ? 'Borrow' : 'Lend'}
                     />
