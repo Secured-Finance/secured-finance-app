@@ -40,7 +40,7 @@ const MenuItemLink = ({ text, link }: { text: string; link: string }) => {
                         'flex w-full items-center justify-start whitespace-nowrap px-2 py-2 text-center',
                         mobileLinkClassName,
                         {
-                            'text-primary-8 border-l-4 border-starBlue bg-gradient-to-r from-[#6A76B159] via-[#4A5BAF1F] to-[#394DAE00]':
+                            'laptop:text-primary-8 via-[#4A5BAF1F] text-primary-300 laptop:border-l-4 laptop:border-starBlue laptop:bg-gradient-to-r laptop:from-[#6A76B159] laptop:to-[#394DAE00]':
                                 active,
                         }
                     )}
@@ -61,7 +61,8 @@ const MobileItemLink = ({ text, href }: { text: string; href: string }) => {
                         'flex w-full flex-row items-center justify-start gap-3 whitespace-nowrap px-3 py-2 text-center',
                         mobileLinkClassName,
                         {
-                            'rounded-2xl bg-[#233447] text-neutral-8': active,
+                            'laptop:rounded-2xl laptop:bg-[#233447] laptop:text-neutral-8':
+                                active,
                         }
                     )}
                     href={href}
@@ -70,10 +71,13 @@ const MobileItemLink = ({ text, href }: { text: string; href: string }) => {
                 >
                     <p>{text}</p>
                     <ArrowUpIcon
-                        className={clsx('mt-1 h-4 w-4 rotate-45 text-white', {
-                            inline: active,
-                            hidden: !active,
-                        })}
+                        className={clsx(
+                            'mt-1 hidden h-4 w-4 rotate-45 text-white laptop:inline',
+                            {
+                                inline: active,
+                                hidden: !active,
+                            }
+                        )}
                     />
                 </a>
             )}
@@ -143,7 +147,7 @@ export const HamburgerMenu = ({
                                                 className={clsx(
                                                     'flex items-center justify-between gap-2 px-2 py-2 text-center focus:outline-none',
                                                     {
-                                                        'border-l-4 border-starBlue bg-gradient-to-r from-[#6A76B159] via-[#4A5BAF1F] to-[#394DAE00] text-neutral-8':
+                                                        'laptop:border-l-4 laptop:border-starBlue laptop:bg-gradient-to-r laptop:from-[#6A76B159] laptop:via-[#4A5BAF1F] laptop:to-[#394DAE00] laptop:text-neutral-8':
                                                             active,
                                                     }
                                                 )}

@@ -108,12 +108,10 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
                 {selectedNetwork ? (
                     <div>{selectedNetwork.icon}</div>
                 ) : (
-                    <>
-                        <ExclamationCircleIcon
-                            data-testid='exclamation-circle-icon'
-                            className='h-4 w-4 tablet:h-5 tablet:w-5'
-                        />
-                    </>
+                    <ExclamationCircleIcon
+                        data-testid='exclamation-circle-icon'
+                        className='h-4 w-4 tablet:h-5 tablet:w-5'
+                    />
                 )}
             </Popover.Button>
             <Transition
