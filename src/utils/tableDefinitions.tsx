@@ -54,11 +54,11 @@ type StatusProperty = {
     status: string;
 };
 
-type ForwardValueProperty = {
-    forwardValue: bigint;
+type FutureValueProperty = {
+    futureValue: bigint;
 };
 
-type AmountColumnType = (AmountProperty | SideProperty | ForwardValueProperty) &
+type AmountColumnType = (AmountProperty | SideProperty | FutureValueProperty) &
     CurrencyProperty & { underMinimalCollateral?: boolean };
 
 type InputAmountColumnType = InputAmountProperty &
@@ -74,10 +74,10 @@ function hasAmountProperty<T extends AmountColumnType>(
     return (obj as AmountProperty).amount !== undefined;
 }
 
-function hasForwardValueProperty<T extends AmountColumnType>(
+function hasFutureValueProperty<T extends AmountColumnType>(
     obj: T
-): obj is T & ForwardValueProperty {
-    return (obj as ForwardValueProperty).forwardValue !== undefined;
+): obj is T & FutureValueProperty {
+    return (obj as FutureValueProperty).futureValue !== undefined;
 }
 
 function hasSideProperty<T extends AmountColumnType>(
@@ -206,7 +206,7 @@ export const inputAmountColumnDefinition = <T extends InputAmountColumnType>(
     });
 };
 
-export const forwardValueColumnDefinition = <T extends AmountColumnType>(
+export const futureValueColumnDefinition = <T extends AmountColumnType>(
     columnHelper: ColumnHelper<T>,
     title: string,
     id: string,
@@ -227,11 +227,9 @@ export const forwardValueColumnDefinition = <T extends AmountColumnType>(
             let color: ColorFormat['color'];
             if (hasSideProperty(info.row.original)) {
                 color = info.row.original.side === 1 ? 'negative' : 'positive';
-            } else if (hasForwardValueProperty(info.row.original)) {
+            } else if (hasFutureValueProperty(info.row.original)) {
                 color =
-                    info.row.original.forwardValue < 0
-                        ? 'negative'
-                        : 'positive';
+                    info.row.original.futureValue < 0 ? 'negative' : 'positive';
             } else {
                 // do nothing
             }
@@ -282,12 +280,12 @@ export const loanTypeColumnDefinition = <T extends SideProperty>(
     });
 };
 
-export const loanTypeFromFVColumnDefinition = <T extends ForwardValueProperty>(
+export const loanTypeFromFVColumnDefinition = <T extends FutureValueProperty>(
     columnHelper: ColumnHelper<T>,
     title: string,
     id: string
 ) => {
-    const assessorFn: AccessorFn<T, bigint> = row => row.forwardValue;
+    const assessorFn: AccessorFn<T, bigint> = row => row.futureValue;
 
     return columnHelper.accessor(assessorFn, {
         id: id,
@@ -307,7 +305,7 @@ export const contractColumnDefinition = <
     T extends {
         maturity: string | number;
         currency: string;
-        forwardValue?: bigint;
+        futureValue?: bigint;
     }
 >(
     columnHelper: ColumnHelper<T>,
@@ -333,7 +331,7 @@ export const contractColumnDefinition = <
                     ? delistedCurrencySet.has(currency)
                     : false;
             const side =
-                BigInt(info.row.original.forwardValue ?? 0) < 0
+                BigInt(info.row.original.futureValue ?? 0) < 0
                     ? OrderSide.BORROW
                     : OrderSide.LEND;
             return (

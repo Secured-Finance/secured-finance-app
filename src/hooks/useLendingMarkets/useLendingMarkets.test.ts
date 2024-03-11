@@ -49,6 +49,6 @@ describe('useLendingMarkets', () => {
 
         const newValue = result.current;
 
-        expect(newValue.data.ETH[10000].name).toEqual('DEC22-1');
+        expect(newValue.data.ETH[10000].name).toEqual('DEC2022-1');
     });
 });

@@ -233,7 +233,7 @@ export const LendingCard = ({
                             trackButtonEvent(
                                 ButtonEvents.TERM_CHANGE,
                                 ButtonProperties.TERM,
-                                v
+                                selectedTerm.label
                             );
                         }}
                         transformLabel={getTransformMaturityOption(

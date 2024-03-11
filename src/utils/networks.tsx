@@ -1,6 +1,7 @@
 import Arbitrum from 'src/assets/icons/arbitrum-network.svg';
 import Avalanche from 'src/assets/icons/avalanche-network.svg';
 import Ethereum from 'src/assets/icons/ethereum-network.svg';
+import Polygon from 'src/assets/icons/polygon-network.svg';
 import {
     Chain,
     arbitrum,
@@ -8,6 +9,7 @@ import {
     avalanche,
     avalancheFuji,
     mainnet,
+    polygonZkEvm,
     sepolia,
 } from 'viem/chains';
 import { isProdEnv } from './displayUtils';
@@ -21,7 +23,7 @@ type ChainInformation = {
 const testnetNetworks: Chain[] = [sepolia, arbitrumSepolia, avalancheFuji];
 
 // it is important to keep mainnet as first chain in this list
-const mainnetNetworks: Chain[] = [mainnet, arbitrum, avalanche];
+const mainnetNetworks: Chain[] = [mainnet, arbitrum, avalanche, polygonZkEvm];
 
 export const getSupportedNetworks = () => {
     return isProdEnv()
@@ -46,6 +48,12 @@ export const SupportedChainsList: ChainInformation[] = [
         chain: avalanche,
         icon: (
             <Avalanche className='h-4 w-4 rounded-full tablet:h-5 tablet:w-5' />
+        ),
+    },
+    {
+        chain: polygonZkEvm,
+        icon: (
+            <Polygon className='h-4 w-4 rounded-full tablet:h-5 tablet:w-5' />
         ),
     },
     {

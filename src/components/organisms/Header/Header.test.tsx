@@ -35,7 +35,7 @@ describe('Header component', () => {
         render(<Primary />);
         const textElement = screen.getByText('OTC Lending');
         expect(textElement.parentNode).toHaveClass(
-            'bg-gradient-to-b from-tabGradient2 to-tabGradient1'
+            'bg-gradient-to-b from-tabGradient-2 to-tabGradient-1'
         );
     });
 
@@ -46,7 +46,7 @@ describe('Header component', () => {
         render(<Primary />);
         const textElement = screen.getByText('OTC Lending');
         expect(textElement.parentNode).toHaveClass(
-            'bg-gradient-to-b from-tabGradient2 to-tabGradient1'
+            'bg-gradient-to-b from-tabGradient-2 to-tabGradient-1'
         );
     });
 
@@ -61,7 +61,7 @@ describe('Header component', () => {
 
         const textElement = screen.getByText('Markets');
         expect(textElement.parentNode).toHaveClass(
-            'bg-gradient-to-b from-tabGradient2 to-tabGradient1'
+            'bg-gradient-to-b from-tabGradient-2 to-tabGradient-1'
         );
     });
 
@@ -74,7 +74,7 @@ describe('Header component', () => {
         render(<Primary />);
         const textElement = screen.getByText('OTC Lending');
         expect(textElement.parentNode).toHaveClass(
-            'bg-gradient-to-b from-tabGradient2 to-tabGradient1'
+            'bg-gradient-to-b from-tabGradient-2 to-tabGradient-1'
         );
     });
 
@@ -91,7 +91,7 @@ describe('Header component', () => {
         ).toBeInTheDocument();
     });
 
-    it.skip('should render testnet alert header on chainError true', () => {
+    it('should render testnet alert header on chainError true', () => {
         (useRouter as jest.Mock).mockImplementation(() => ({
             pathname: '/',
             push: jest.fn(),
@@ -100,7 +100,7 @@ describe('Header component', () => {
         render(<Primary />, {
             preloadedState: {
                 blockchain: {
-                    chainId: 5,
+                    chainId: 11155111,
                     chainError: true,
                 },
             },

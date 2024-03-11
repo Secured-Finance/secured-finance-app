@@ -119,6 +119,7 @@ module.exports = {
             },
             // TODO: handle neutral 1-8 as figma variables
             neutral: {
+                DEFAULT: '#353945',
                 1: '#141416',
                 2: '#23262F',
                 3: '#353945',
@@ -176,19 +177,24 @@ module.exports = {
             galacticOrange: '#FF9FAE',
             moonGrey: '#E6E6E6',
             slateGray: '#777E90',
+            secondary3: '#96EAF1',
             secondary7: '#B9BDEA',
+            error5: '#FF324B',
             grayScale: '#FAFAFA',
-
-            tabGradient2: 'rgba(106, 118, 177, 0.35)',
-            tabGradient1: 'rgba(57, 77, 174, 0)',
+            tabGradient: {
+                1: 'rgba(57, 77, 174, 0)',
+                2: 'rgba(106, 118, 177, 0.35)',
+                3: 'rgba(21, 214, 232, 0)',
+                4: 'rgba(47, 174, 186, 0.35)',
+                5: 'rgba(255, 50, 75, 0)',
+                6: 'rgba(255, 50, 75, 0.35)',
+            },
             backgroundBlur: 'rgba(35, 43, 56, 0.6)',
             cardBackground: '#161E2E',
             panelStroke: 'rgb(45, 64, 100)',
-
             progressBarStart: 'rgba(21, 214, 232, 1)',
             progressBarVia: 'rgba(255, 188, 107, 1)',
             progressBarEnd: 'rgba(255, 101, 138, 1)',
-
             transparent: 'transparent',
             starBlue: {
                 '80': 'rgba(81, 98, 255, 0.8)',
@@ -199,7 +205,6 @@ module.exports = {
                 '10': 'rgba(81, 98, 255, 0.1)',
                 DEFAULT: '#5162FF',
             },
-
             black: {
                 DEFAULT: '#000000',
                 '90': 'rgba(0, 0, 0, 0.9)',
