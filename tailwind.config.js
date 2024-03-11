@@ -110,13 +110,6 @@ module.exports = {
                 700: '#09A8B7',
                 900: '#017E8A',
             },
-            tertiary: {
-                50: '#F5F6FF',
-                300: '#C4CAFF',
-                500: '#5162FF',
-                700: '#BD47FB',
-                900: '#0213A5',
-            },
             // TODO: handle neutral 1-8 as figma variables
             neutral: {
                 1: '#141416',

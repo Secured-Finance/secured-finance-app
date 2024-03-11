@@ -7,8 +7,12 @@ import {
     Row,
 } from '@tanstack/react-table';
 import clsx from 'clsx';
-import { Chip, CurrencyItem, PriceYieldItem } from 'src/components/atoms';
-import { ChipColors } from 'src/components/atoms/Chip/types';
+import {
+    Chip,
+    ChipColors,
+    CurrencyItem,
+    PriceYieldItem,
+} from 'src/components/atoms';
 import { TableContractCell, TableHeader } from 'src/components/molecules';
 import { Alignment, AssetPriceMap, ColorFormat } from 'src/types';
 import { ZERO_BI, formatTimestamp } from 'src/utils';

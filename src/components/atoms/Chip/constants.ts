@@ -5,9 +5,9 @@ export const FIGMA_STORYBOOK_LINK =
 
 export const colorStyle: { [key in ChipColors]: string } = {
     [ChipColors.Gray]: 'text-neutral-900 bg-neutral-100',
-    [ChipColors.Green]: 'text-success-700 bg-success-50',
-    [ChipColors.Red]: 'text-error-500 bg-error-50',
-    [ChipColors.Yellow]: 'text-warning-700 bg-warning-50',
+    [ChipColors.Green]: 'text-success-900 bg-success-50',
+    [ChipColors.Red]: 'text-error-700 bg-error-50',
+    [ChipColors.Yellow]: 'text-warning-900 bg-warning-50',
     [ChipColors.Blue]: 'text-primary-500 bg-primary-50',
 };
 
