@@ -98,3 +98,23 @@ export const formatTimestampWithMonth = (timestamp: number) => {
 
     return `${month} ${day}, ${year} ${time}`;
 };
+
+export const formatTimeStampWithTimezone = (timestamp: number) => {
+    const date = new Date(timestamp * 1000);
+
+    const hours = date.getUTCHours().toString().padStart(2, '0');
+    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+    const seconds = date.getUTCSeconds().toString().padStart(2, '0');
+    const formattedTime = `${hours}:${minutes}:${seconds}`;
+
+    const timezoneOffsetMinutes = date.getTimezoneOffset();
+    const timezoneOffsetHours = Math.abs(
+        Math.floor(timezoneOffsetMinutes / 60)
+    );
+    const timezoneOffsetSign = timezoneOffsetMinutes >= 0 ? '-' : '+';
+    const formattedTimezone = `${timezoneOffsetSign}${timezoneOffsetHours
+        .toString()
+        .padStart(2, '0')}`;
+
+    return `${formattedTime} UTC ${formattedTimezone}`;
+};
