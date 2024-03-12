@@ -90,10 +90,6 @@ const closeToMaturityWithZeroAprMarkets = [
 beforeEach(() => mock.getOrderBookDetails.mockClear());
 
 describe('useYieldCurveMarketRates', () => {
-    afterEach(() => {
-        mock.getOrderBookDetails.mockClear();
-    });
-
     it('should return empty index set for no itayose market', async () => {
         jest.spyOn(mock, 'getOrderBookDetails').mockResolvedValueOnce([
             ...noItayoseMarkets,
@@ -105,10 +101,9 @@ describe('useYieldCurveMarketRates', () => {
         expect(result.current.rates).toHaveLength(8);
         expect(result.current.maturityList).toHaveLength(8);
         expect(result.current.itayoseMarketIndexSet).toEqual(new Set());
-        mock.getOrderBookDetails.mockReset();
     });
 
-    it.skip('should return correct itayose index for default mocks', async () => {
+    it('should return correct itayose index for default mocks', async () => {
         const { result } = renderHook(() => useYieldCurveMarketRates());
 
         await waitFor(() =>

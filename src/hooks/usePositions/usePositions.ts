@@ -13,7 +13,7 @@ export type Position = {
     currency: string;
     maturity: string;
     amount: bigint;
-    forwardValue: bigint;
+    futureValue: bigint;
     marketPrice: bigint;
 };
 
@@ -53,7 +53,7 @@ export const usePositions = (
                     currency: position.ccy,
                     maturity: position.maturity.toString(),
                     amount: position.presentValue,
-                    forwardValue: position.futureValue,
+                    futureValue: position.futureValue,
                     marketPrice: calculateMarketPrice(
                         position.presentValue,
                         position.futureValue
