@@ -55,6 +55,9 @@ jobs:
           NEXT_PUBLIC_SUPPORTED_CHAIN_IDS=${{ vars.SUPPORTED_CHAIN_IDS }}
           EOF
 
+      - name: Print Prettier version
+        run: npx prettier --version
+
       - name: Check Syntax with Prettier
         run: npm run prettier:check
 
