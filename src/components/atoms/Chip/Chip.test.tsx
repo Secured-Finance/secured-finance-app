@@ -20,8 +20,9 @@ describe('Chip Component', () => {
             <Default color={ChipColors.Red} size={ChipSizes.lg} label='Test' />
         );
         const chip = screen.getByText('Test');
-        expect(chip).toHaveClass('text-error-500 bg-error-50');
-        expect(chip).toHaveClass('h-5 px-2 text-xs rounded-3xl');
+        expect(chip).toHaveClass(
+            'text-error-700 bg-error-50 h-5 px-2 text-xs rounded-3xl'
+        );
     });
 
     it('should render the custom label', () => {
