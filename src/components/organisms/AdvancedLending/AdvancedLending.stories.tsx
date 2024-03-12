@@ -65,8 +65,8 @@ OpenOrdersConnectedToWallet.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const openOrdersTab = canvas.getByTestId('Open Orders');
     await userEvent.click(openOrdersTab);
-    canvas.getByRole('button', { name: 'DEC22' }).click();
-    canvas.getByRole('menuitem', { name: 'JUN23' }).click();
+    canvas.getByRole('button', { name: 'DEC2022' }).click();
+    canvas.getByRole('menuitem', { name: 'JUN2023' }).click();
 };
 OpenOrdersConnectedToWallet.args = {
     collateralBook: collateralBook37,

@@ -50,6 +50,7 @@ import {
     currencyMap,
     formatLoanValue,
     formatOrders,
+    getMappedOrderStatus,
     hexToCurrencySymbol,
     ordinaryFormat,
     sortOrders,
@@ -167,17 +168,11 @@ export const AdvancedLending = ({
                         status: 'Filled' as const,
                         filledAmount: order.inputAmount,
                     };
-                } else if (
-                    !order.lendingMarket.isActive &&
-                    (order.status === 'Open' ||
-                        order.status === 'PartiallyFilled')
-                ) {
+                } else {
                     return {
                         ...order,
-                        status: 'Expired' as const,
-                    };
-                } else {
-                    return order;
+                        status: getMappedOrderStatus(order),
+                    } as typeof order & { status: string };
                 }
             })
             .sort((a, b) => sortOrders(a, b));
@@ -276,10 +271,10 @@ export const AdvancedLending = ({
             trackButtonEvent(
                 ButtonEvents.TERM_CHANGE,
                 ButtonProperties.TERM,
-                v
+                selectedTerm.label
             );
         },
-        [dispatch]
+        [dispatch, selectedTerm.label]
     );
 
     return (
@@ -376,7 +371,7 @@ export const AdvancedLending = ({
                                                       Number(
                                                           position.marketPrice
                                                       ),
-                                                      position.forwardValue > 0
+                                                      position.futureValue > 0
                                                           ? OrderSide.LEND
                                                           : OrderSide.BORROW
                                                   ),

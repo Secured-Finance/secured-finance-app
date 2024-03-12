@@ -14,7 +14,7 @@ import {
 
 export type WithdrawablePosition = Pick<
     Position,
-    'currency' | 'maturity' | 'amount' | 'forwardValue'
+    'currency' | 'maturity' | 'amount' | 'futureValue'
 > & { type: 'position' | 'collateral' | 'lending-order' };
 
 const columnHelper = createColumnHelper<WithdrawablePosition>();
