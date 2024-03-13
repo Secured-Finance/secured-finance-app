@@ -1,8 +1,7 @@
 import { TextLink } from 'src/components/atoms';
-import { Alert } from 'src/components/molecules';
+import { Alert, AlertSeverity } from 'src/components/molecules';
 import { generateDelistedCurrencyText } from 'src/components/pages';
 import { CurrencySymbol } from 'src/utils';
-import { AlertSeverity } from '../Alert/types';
 
 export const DELISTED_CURRENCIES_KEY = 'DELISTED_CURRENCIES_KEY';
 

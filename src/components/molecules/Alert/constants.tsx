@@ -30,6 +30,6 @@ export const alertIconMapping: { [key in AlertSeverity]: JSX.Element } = {
         <CheckCircleIcon className='text-success-300 light:text-success-700' />
     ),
     [AlertSeverity.Warning]: (
-        <InformationCircleIcon className='text-warning-300 light:text-error-700' />
+        <InformationCircleIcon className='text-warning-300 light:text-warning-700' />
     ),
 };
