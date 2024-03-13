@@ -4,11 +4,11 @@ import { useEffect, useMemo, useState } from 'react';
 import { Spinner } from 'src/components/atoms';
 import {
     Alert,
+    AlertSeverity,
     DELISTED_CURRENCIES_KEY,
     HorizontalTab,
     StatsBar,
 } from 'src/components/molecules';
-import { AlertSeverity } from 'src/components/molecules/Alert/types';
 import {
     ActiveTradeTable,
     CollateralOrganism,

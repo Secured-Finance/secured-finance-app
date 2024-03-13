@@ -5,8 +5,11 @@ import Link from 'next/link';
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ViewType } from 'src/components/atoms';
-import { Alert, DelistedCurrencyDisclaimer } from 'src/components/molecules';
-import { AlertSeverity } from 'src/components/molecules/Alert/types';
+import {
+    Alert,
+    AlertSeverity,
+    DelistedCurrencyDisclaimer,
+} from 'src/components/molecules';
 import {
     AdvancedLending,
     LendingCard,

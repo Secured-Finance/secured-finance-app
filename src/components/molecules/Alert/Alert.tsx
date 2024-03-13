@@ -11,6 +11,7 @@ export const Alert = ({
     onClose,
     localStorageKey,
     localStorageValue,
+    showCloseButton = false,
 }: {
     severity?: AlertSeverity;
     title: React.ReactNode;
@@ -18,6 +19,7 @@ export const Alert = ({
     onClose?: () => void;
     localStorageKey?: string;
     localStorageValue?: string;
+    showCloseButton: boolean;
 }) => {
     const value =
         typeof window !== 'undefined' && localStorageKey
@@ -50,20 +52,15 @@ export const Alert = ({
             aria-label={severity}
             role='alert'
             className={clsx(
-                'flex w-full flex-row items-start justify-between gap-1 rounded-md border text-sm text-white light:text-neutral-900',
+                'flex w-full flex-row items-start justify-between gap-1 rounded-md border px-2.5 text-sm text-white light:text-neutral-900',
                 severityStyle[severity],
                 {
-                    'px-4 py-2': !subtitle,
-                    'px-6 py-5': subtitle,
+                    'py-1.5': !subtitle,
+                    'py-2': subtitle,
                 }
             )}
         >
-            <div
-                className={clsx('flex items-start pr-4', {
-                    'gap-2': !subtitle,
-                    'gap-4': subtitle,
-                })}
-            >
+            <div className='flex items-start gap-2 pr-4'>
                 {alertIcon && (
                     <span>
                         {cloneElement(alertIcon, {
@@ -74,25 +71,27 @@ export const Alert = ({
                         })}
                     </span>
                 )}
-                <div className='flex flex-col gap-1'>
+                <div className='flex flex-col gap-1 leading-[1.57]'>
                     {title && (
-                        <div
+                        <h2
                             className={clsx({
-                                'text-base': subtitle,
+                                'text-base leading-normal': subtitle,
                             })}
                         >
                             {title}
-                        </div>
+                        </h2>
                     )}
                     {subtitle && <p>{subtitle}</p>}
                 </div>
             </div>
-            <button
-                onClick={handleClose}
-                className='h-4 w-4 flex-shrink-0 text-neutral-200 light:text-neutral-500'
-            >
-                <XMarkIcon />
-            </button>
+            {showCloseButton && (
+                <button
+                    onClick={handleClose}
+                    className='h-4 w-4 flex-shrink-0 text-neutral-200 light:text-neutral-500'
+                >
+                    <XMarkIcon />
+                </button>
+            )}
         </section>
     ) : null;
 };

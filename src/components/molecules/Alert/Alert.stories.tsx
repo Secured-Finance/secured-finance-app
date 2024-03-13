@@ -9,6 +9,7 @@ export default {
     args: {
         title: 'Alert',
         severity: AlertSeverity.Info,
+        showCloseButton: true,
     },
     argTypes: {
         subtitle: { control: 'text' },
