@@ -3,6 +3,7 @@ import {
     formatAmount,
     formatCollateralRatio,
     formatLoanValue,
+    formatTimeStampWithTimezone,
     formatTimestamp,
     formatTimestampWithMonth,
     formatWithCurrency,
@@ -188,5 +189,22 @@ describe('formatLoanValue', () => {
     it('should return "--.--%" when value is undefined and type is "rate"', () => {
         const result = formatLoanValue(undefined, 'rate');
         expect(result).toEqual('--.--%');
+    });
+});
+
+describe('formatTimestampWithTimezone', () => {
+    it('should format timestamp with correct time and timezone', () => {
+        const timestamp = 1678643696;
+        const expectedOutput = '23:24:56 UTC+06';
+        expect(formatTimeStampWithTimezone(timestamp)).toBe(expectedOutput);
+    });
+
+    it('should handle negative timezone offsets', () => {
+        const timestamp = 1678643696;
+        const expectedOutput = '23:24:56 UTC-05';
+        const originalGetTimezoneOffset = Date.prototype.getTimezoneOffset;
+        Date.prototype.getTimezoneOffset = jest.fn(() => 300);
+        expect(formatTimeStampWithTimezone(timestamp)).toBe(expectedOutput);
+        Date.prototype.getTimezoneOffset = originalGetTimezoneOffset;
     });
 });

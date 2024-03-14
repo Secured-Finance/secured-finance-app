@@ -116,5 +116,5 @@ export const formatTimeStampWithTimezone = (timestamp: number) => {
         .toString()
         .padStart(2, '0')}`;
 
-    return `${formattedTime} UTC ${formattedTimezone}`;
+    return `${formattedTime} UTC${formattedTimezone}`;
 };
