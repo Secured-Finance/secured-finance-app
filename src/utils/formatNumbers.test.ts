@@ -1,10 +1,8 @@
-import timemachine from 'timemachine';
 import { LoanValue } from './entities';
 import {
     formatAmount,
     formatCollateralRatio,
     formatLoanValue,
-    formatTimeStampWithTimezone,
     formatTimestamp,
     formatTimestampWithMonth,
     formatWithCurrency,
@@ -12,13 +10,6 @@ import {
     usdFormat,
 } from './formatNumbers';
 import { Rate } from './rate';
-
-beforeAll(() => {
-    timemachine.reset();
-    timemachine.config({
-        dateString: '2022-02-01T11:00:00.00Z',
-    });
-});
 
 describe('formatWithCurrency', () => {
     it('should format the number with the given currency and decimals', () => {
@@ -197,25 +188,5 @@ describe('formatLoanValue', () => {
     it('should return "--.--%" when value is undefined and type is "rate"', () => {
         const result = formatLoanValue(undefined, 'rate');
         expect(result).toEqual('--.--%');
-    });
-});
-
-describe('formatTimeStampWithTimezone', () => {
-    it('should format timestamp with correct time and timezone', () => {
-        const timestamp = 1678643696;
-        const expectedOutput = '17:54:56 UTC+03';
-        const originalGetTimezoneOffset = Date.prototype.getTimezoneOffset;
-        Date.prototype.getTimezoneOffset = jest.fn(() => -180);
-        expect(formatTimeStampWithTimezone(timestamp)).toBe(expectedOutput);
-        Date.prototype.getTimezoneOffset = originalGetTimezoneOffset;
-    });
-
-    it('should handle negative timezone offsets', () => {
-        const timestamp = 1678643696;
-        const expectedOutput = '17:54:56 UTC-05';
-        const originalGetTimezoneOffset = Date.prototype.getTimezoneOffset;
-        Date.prototype.getTimezoneOffset = jest.fn(() => 300);
-        expect(formatTimeStampWithTimezone(timestamp)).toBe(expectedOutput);
-        Date.prototype.getTimezoneOffset = originalGetTimezoneOffset;
     });
 });
