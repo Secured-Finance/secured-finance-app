@@ -30,7 +30,10 @@ const TitleChip = ({
             {tooltip && (
                 <Tooltip
                     iconElement={
-                        <TooltipIcon className='h-[12.8px] w-[12.8px]' />
+                        <TooltipIcon
+                            className='h-[12.8px] w-[12.8px]'
+                            data-testid={`${title}-tooltip`}
+                        />
                     }
                     severity='warning'
                     align='right'
