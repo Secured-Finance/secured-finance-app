@@ -29,6 +29,7 @@ const noOpenMarkets = [
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy: ethBytes32,
         preOpeningDate: BigInt('1684982800'),
+        lastBlockUnitPriceTimestamp: BigInt('1646920200'),
     },
     {
         name: 'MAR2023',
@@ -48,6 +49,7 @@ const noOpenMarkets = [
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy: ethBytes32,
         preOpeningDate: BigInt('1684982800'),
+        lastBlockUnitPriceTimestamp: BigInt('1646920200'),
     },
     {
         name: 'JUN2023',
@@ -67,6 +69,7 @@ const noOpenMarkets = [
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy: ethBytes32,
         preOpeningDate: BigInt('1684982800'),
+        lastBlockUnitPriceTimestamp: BigInt('1646920200'),
     },
 ];
 
