@@ -99,7 +99,6 @@ export const formatTimestampWithMonth = (timestamp: number) => {
     return `${month} ${day}, ${year} ${time}`;
 };
 
-// TODO: Add tests
 export const formatTimeStampWithTimezone = (timestamp: number) => {
     const date = new Date(timestamp * 1000);
     return new Intl.DateTimeFormat('en-GB', {
