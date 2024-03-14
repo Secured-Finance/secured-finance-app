@@ -348,7 +348,7 @@ describe('Landing Component', () => {
         await waitFor(() => {
             expect(
                 screen.getByText(
-                    'Market WFIL-DEC2024 is open for pre-orders now until June 1, 2023 00:00 (UTC)'
+                    'Market WFIL-DEC2024 is open for pre-orders now until May 31, 2023 23:00 (UTC)'
                 )
             ).toBeInTheDocument();
         });
