@@ -1,3 +1,4 @@
+import timemachine from 'timemachine';
 import { LoanValue } from './entities';
 import {
     formatAmount,
@@ -11,6 +12,13 @@ import {
     usdFormat,
 } from './formatNumbers';
 import { Rate } from './rate';
+
+beforeAll(() => {
+    timemachine.reset();
+    timemachine.config({
+        dateString: '2022-02-01T11:00:00.00Z',
+    });
+});
 
 describe('formatWithCurrency', () => {
     it('should format the number with the given currency and decimals', () => {
@@ -192,7 +200,18 @@ describe('formatLoanValue', () => {
     });
 });
 
-describe('formatTimestampWithTimezone', () => {
+describe('formatTimeStampWithTimezone', () => {
+    beforeAll(() => {
+        timemachine.reset();
+        timemachine.config({
+            dateString: '2022-02-01T11:00:00.00Z',
+        });
+    });
+
+    afterAll(() => {
+        timemachine.reset();
+    });
+
     it('should format timestamp with correct time and timezone', () => {
         const timestamp = 1678643696;
         const expectedOutput = '23:24:56 UTC+06';
