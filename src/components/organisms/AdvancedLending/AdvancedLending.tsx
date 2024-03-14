@@ -11,6 +11,7 @@ import {
 import {
     ActiveTradeTable,
     AdvancedLendingOrderCard,
+    HistoricalWidget,
     LineChartTab,
     MyTransactionsTable,
     OrderBookWidget,
@@ -324,7 +325,9 @@ export const AdvancedLending = ({
             />
 
             <div className='flex h-full flex-grow flex-col gap-4'>
-                <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
+                <Tab
+                    tabDataArray={[{ text: 'Yield Curve' }, { text: 'Price' }]}
+                >
                     <div className='h-[410px] w-full px-2 py-4'>
                         <LineChartTab
                             rates={rates}
@@ -337,6 +340,7 @@ export const AdvancedLending = ({
                             }
                         />
                     </div>
+                    <HistoricalWidget />
                 </Tab>
                 <HorizontalTab
                     tabTitles={[
