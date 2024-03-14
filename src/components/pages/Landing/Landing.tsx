@@ -155,18 +155,23 @@ const WithBanner = ({
                 <Alert severity='info'>
                     <div className='typography-caption text-white'>
                         <p>
-                            {`Itayose market for ${ccy}-${getUTCMonthYear(
+                            {`Market ${ccy}-${getUTCMonthYear(
                                 market.maturity,
                                 true
-                            )} is now open until ${Intl.DateTimeFormat(
+                            )} is open for pre-orders now until ${Intl.DateTimeFormat(
                                 'en-US',
                                 {
-                                    weekday: 'long',
                                     year: 'numeric',
                                     month: 'long',
                                     day: 'numeric',
                                 }
-                            ).format(market.utcOpeningDate * 1000)}`}
+                            ).format(
+                                market.utcOpeningDate * 1000
+                            )} ${Intl.DateTimeFormat('en-GB', {
+                                timeZone: 'UTC',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                            }).format(market.utcOpeningDate * 1000)} (UTC)`}
                             <span className='pl-4'>
                                 <Link href='itayose' passHref>
                                     <a
