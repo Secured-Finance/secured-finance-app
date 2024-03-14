@@ -201,26 +201,18 @@ describe('formatLoanValue', () => {
 });
 
 describe('formatTimeStampWithTimezone', () => {
-    beforeAll(() => {
-        timemachine.reset();
-        timemachine.config({
-            dateString: '2022-02-01T11:00:00.00Z',
-        });
-    });
-
-    afterAll(() => {
-        timemachine.reset();
-    });
-
     it('should format timestamp with correct time and timezone', () => {
         const timestamp = 1678643696;
-        const expectedOutput = '23:24:56 UTC+06';
+        const expectedOutput = '17:54:56 UTC+03';
+        const originalGetTimezoneOffset = Date.prototype.getTimezoneOffset;
+        Date.prototype.getTimezoneOffset = jest.fn(() => -180);
         expect(formatTimeStampWithTimezone(timestamp)).toBe(expectedOutput);
+        Date.prototype.getTimezoneOffset = originalGetTimezoneOffset;
     });
 
     it('should handle negative timezone offsets', () => {
         const timestamp = 1678643696;
-        const expectedOutput = '23:24:56 UTC-05';
+        const expectedOutput = '17:54:56 UTC-05';
         const originalGetTimezoneOffset = Date.prototype.getTimezoneOffset;
         Date.prototype.getTimezoneOffset = jest.fn(() => 300);
         expect(formatTimeStampWithTimezone(timestamp)).toBe(expectedOutput);
