@@ -43,6 +43,8 @@ export const emptyOptionList = [
     },
 ];
 
+const ITAYOSE_PERIOD = 60 * 60 * 1000; // 1 hour in milli-seconds
+
 export const Landing = ({ view }: { view?: ViewType }) => {
     const { address } = useAccount();
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
@@ -148,6 +150,9 @@ const WithBanner = ({
     delistedCurrencySet: Set<CurrencySymbol>;
     children: React.ReactNode;
 }) => {
+    const preOrderTimeLimit = market
+        ? market.utcOpeningDate * 1000 - ITAYOSE_PERIOD
+        : 0;
     return (
         <div className='flex flex-col justify-center gap-5'>
             <DelistedCurrencyDisclaimer currencies={delistedCurrencySet} />
@@ -161,17 +166,19 @@ const WithBanner = ({
                             )} is open for pre-orders now until ${Intl.DateTimeFormat(
                                 'en-US',
                                 {
+                                    timeZone: 'UTC',
                                     year: 'numeric',
                                     month: 'long',
                                     day: 'numeric',
                                 }
-                            ).format(
-                                market.utcOpeningDate * 1000
-                            )} ${Intl.DateTimeFormat('en-GB', {
-                                timeZone: 'UTC',
-                                hour: '2-digit',
-                                minute: '2-digit',
-                            }).format(market.utcOpeningDate * 1000)} (UTC)`}
+                            ).format(preOrderTimeLimit)} ${Intl.DateTimeFormat(
+                                'en-GB',
+                                {
+                                    timeZone: 'UTC',
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                }
+                            ).format(preOrderTimeLimit)} (UTC)`}
                             <span className='pl-4'>
                                 <Link href='itayose' passHref>
                                     <a
