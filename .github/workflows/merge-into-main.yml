@@ -3,12 +3,23 @@ name: Merge into main
 on:
   workflow_dispatch:
     inputs:
-      commit:
-        description: 'Commit ID'
-        required: false
-        type: string
+      branch:
+        description: 'Branch'
+        required: true
+        default: 'develop'
+        type: choice
+        options:
+          - develop
+          - weekly-release
 
 jobs:
+  print-env:
+    runs-on: ubuntu-latest
+    name: Print Merge parameters
+    steps:
+      - name: Print Merge parameters
+        run: echo "Merging ${{ github.event.inputs.branch }} to main"
+
   deploy:
     name: Merge into main
     runs-on: ubuntu-latest
@@ -22,13 +33,13 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          ref: develop
+          ref: ${{ github.event.inputs.branch }}
           token: ${{ steps.generate_token.outputs.token }}
-      - name: Merge into main and tag the version
+      - name: Merge into main
         shell: bash
         run: |
           git config user.name "SF Machine User[bot]"
           git config user.email "${{ secrets.MACHINE_USER_APP_ID }}+sf-machine-user[bot]@users.noreply.github.com"
           git switch main
-          git merge ${{ github.event.inputs.commit || 'develop' }}
+          git merge ${{ github.event.inputs.branch }}
           git push
