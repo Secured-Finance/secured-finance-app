@@ -1,3 +1,5 @@
+import * as amplitude from '@amplitude/analytics-browser';
+import { pageViewTrackingPlugin } from '@amplitude/plugin-page-view-tracking-browser';
 import { GraphClientProvider } from '@secured-finance/sf-graph-client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -14,6 +16,7 @@ import store from 'src/store';
 import { selectNetworkName } from 'src/store/blockchain';
 import { RootState } from 'src/store/types';
 import {
+    getAmplitudeApiKey,
     getSupportedChainIds,
     getSupportedNetworks,
     getWalletConnectId,
@@ -29,6 +32,19 @@ import '../assets/css/index.css';
 const projectId = getWalletConnectId();
 
 const queryClient = new QueryClient();
+
+if (typeof window !== 'undefined') {
+    const pageViewTracking = pageViewTrackingPlugin({
+        trackOn: undefined,
+        trackHistoryChanges: undefined,
+    });
+
+    amplitude.add(pageViewTracking);
+    amplitude.init(getAmplitudeApiKey(), {
+        appVersion: process.env.SF_ENV,
+        logLevel: amplitude.Types.LogLevel.None,
+    });
+}
 
 const chainIds = getSupportedChainIds();
 const networks = getSupportedNetworks().filter(chain =>

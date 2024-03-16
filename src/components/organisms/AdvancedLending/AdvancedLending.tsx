@@ -51,6 +51,7 @@ import {
     currencyMap,
     formatLoanValue,
     formatOrders,
+    getMappedOrderStatus,
     hexToCurrencySymbol,
     ordinaryFormat,
     sortOrders,
@@ -168,17 +169,11 @@ export const AdvancedLending = ({
                         status: 'Filled' as const,
                         filledAmount: order.inputAmount,
                     };
-                } else if (
-                    !order.lendingMarket.isActive &&
-                    (order.status === 'Open' ||
-                        order.status === 'PartiallyFilled')
-                ) {
+                } else {
                     return {
                         ...order,
-                        status: 'Expired' as const,
-                    };
-                } else {
-                    return order;
+                        status: getMappedOrderStatus(order),
+                    } as typeof order & { status: string };
                 }
             })
             .sort((a, b) => sortOrders(a, b));
@@ -239,8 +234,7 @@ export const AdvancedLending = ({
         if (marketUnitPrice) {
             return {
                 value: LoanValue.fromPrice(marketUnitPrice, maturity),
-                // TODO: get the time from the block
-                time: 0,
+                time: data?.lastBlockUnitPriceTimestamp ?? 0,
                 type: 'block' as const,
             };
         }
@@ -251,7 +245,12 @@ export const AdvancedLending = ({
                 type: 'opening' as const,
             };
         }
-    }, [marketUnitPrice, maturity, openingUnitPrice]);
+    }, [
+        data?.lastBlockUnitPriceTimestamp,
+        marketUnitPrice,
+        maturity,
+        openingUnitPrice,
+    ]);
 
     const selectedAsset = useMemo(() => {
         return assetList.find(option => option.value === currency);
@@ -382,7 +381,7 @@ export const AdvancedLending = ({
                                                       Number(
                                                           position.marketPrice
                                                       ),
-                                                      position.forwardValue > 0
+                                                      position.futureValue > 0
                                                           ? OrderSide.LEND
                                                           : OrderSide.BORROW
                                                   ),

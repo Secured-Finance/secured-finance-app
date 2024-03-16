@@ -24,7 +24,7 @@ import { Amount, Maturity } from 'src/utils/entities';
 import {
     amountColumnDefinition,
     contractColumnDefinition,
-    forwardValueColumnDefinition,
+    futureValueColumnDefinition,
     loanTypeFromFVColumnDefinition,
     priceYieldColumnDefinition,
     tableHeaderDefinition,
@@ -207,7 +207,7 @@ export const ActiveTradeTable = ({
                     const maturityTimestamp = Number(info.getValue());
 
                     const side =
-                        BigInt(info.row.original.forwardValue) < 0
+                        BigInt(info.row.original.futureValue) < 0
                             ? OrderSide.BORROW
                             : OrderSide.LEND;
 
@@ -238,11 +238,11 @@ export const ActiveTradeTable = ({
                     'Maturity of a loan contract is the date on which the contract is set to expire.'
                 ),
             }),
-            forwardValueColumnDefinition(
+            futureValueColumnDefinition(
                 columnHelper,
                 'FV',
-                'forwardValue',
-                row => row.forwardValue,
+                'futureValue',
+                row => row.futureValue,
                 { color: true, priceList: priceList, compact: false },
                 'Future Value (FV) of a loan contract is the obligation value of the contract at time of maturity.'
             ),
@@ -279,7 +279,7 @@ export const ActiveTradeTable = ({
                     const amount = BigInt(info.row.original.amount);
                     const absAmount = amount < 0 ? -amount : amount;
                     const side =
-                        BigInt(info.row.original.forwardValue) < 0
+                        BigInt(info.row.original.futureValue) < 0
                             ? OrderSide.LEND
                             : OrderSide.BORROW; // side is reversed as unwind
                     if (!ccy) return null;

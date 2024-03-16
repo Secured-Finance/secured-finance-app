@@ -57,10 +57,10 @@ describe('Advanced Lending Component', () => {
             })
         );
         expect(store.getState().landingOrderForm.amount).toEqual('1');
-        fireEvent.click(screen.getByRole('button', { name: 'DEC22' }));
-        fireEvent.click(screen.getByText('MAR23'));
+        fireEvent.click(screen.getByRole('button', { name: 'DEC2022' }));
+        fireEvent.click(screen.getByText('MAR2023'));
         expect(track).toHaveBeenCalledWith(ButtonEvents.TERM_CHANGE, {
-            [ButtonProperties.TERM]: 'MAR23',
+            [ButtonProperties.TERM]: 'MAR2023',
         });
         await waitFor(() => {
             expect(store.getState().landingOrderForm.amount).toEqual('1');
@@ -75,7 +75,7 @@ describe('Advanced Lending Component', () => {
             apolloMocks: Default.parameters?.apolloClient.mocks,
         });
         expect(
-            await screen.findByRole('button', { name: 'DEC22' })
+            await screen.findByRole('button', { name: 'DEC2022' })
         ).toBeInTheDocument();
         expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
     });
@@ -141,11 +141,9 @@ describe('Advanced Lending Component', () => {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
             })
         );
-        await waitFor(() =>
-            fireEvent.click(screen.getByRole('tab', { name: 'Open Orders' }))
-        );
+        fireEvent.click(screen.getByRole('tab', { name: 'Open Orders' }));
         expect(
-            within(screen.getByTestId('open-order-table')).queryAllByRole('row')
+            await screen.findAllByTestId('open-order-table-row')
         ).toHaveLength(1);
     });
 

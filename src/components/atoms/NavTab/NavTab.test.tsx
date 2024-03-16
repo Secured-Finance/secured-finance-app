@@ -9,7 +9,7 @@ describe('NavTab component', () => {
         render(<Default />);
         const textElement = screen.getByText('OTC Lending');
         expect(textElement.parentNode).toHaveClass(
-            'bg-gradient-to-b from-tabGradient2 to-tabGradient1'
+            'bg-gradient-to-b from-tabGradient-2 to-tabGradient-1'
         );
         expect(screen.getByTestId('OTC Lending-tab')).toBeInTheDocument();
     });
@@ -18,7 +18,7 @@ describe('NavTab component', () => {
         render(<MarketDashboard />);
         const textElement = screen.getByText('Market Dashboard');
         expect(textElement.parentNode).not.toHaveClass(
-            'bg-gradient-to-b from-tabGradient2 to-tabGradient1'
+            'bg-gradient-to-b from-tabGradient-2 to-tabGradient-1'
         );
     });
 });
