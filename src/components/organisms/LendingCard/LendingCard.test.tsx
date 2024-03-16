@@ -4,7 +4,7 @@ import { composeStories } from '@storybook/react';
 import { mar23Fixture } from 'src/stories/mocks/fixtures';
 import { initialStore } from 'src/stories/mocks/mockStore';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { act, fireEvent, render, screen, waitFor } from 'src/test-utils.js';
+import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import {
     ButtonEvents,
     ButtonProperties,
@@ -76,9 +76,8 @@ describe('LendingCard Component', () => {
         const placeOrderButton = await screen.findByRole('button', {
             name: 'Borrow',
         });
-        act(() => {
-            fireEvent.click(placeOrderButton);
-        });
+        fireEvent.click(placeOrderButton);
+
         expect(await screen.findByRole('dialog')).toBeInTheDocument();
         expect(screen.getByText('Confirm Borrow')).toBeInTheDocument();
         const button = screen.getByTestId('dialog-action-button');
@@ -151,9 +150,7 @@ describe('LendingCard Component', () => {
         const placeOrderButton = await screen.findByRole('button', {
             name: 'Borrow',
         });
-        act(() => {
-            fireEvent.click(placeOrderButton);
-        });
+        fireEvent.click(placeOrderButton);
         expect(screen.getByText('Confirm Borrow')).toBeInTheDocument();
     });
 
