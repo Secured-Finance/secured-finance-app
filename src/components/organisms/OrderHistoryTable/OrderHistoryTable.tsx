@@ -19,17 +19,6 @@ import {
 
 const columnHelper = createColumnHelper<Order>();
 
-const getStatus = (status: string) => {
-    switch (status) {
-        case 'PartiallyBlocked':
-            return 'Partially Blocked';
-        case 'PartiallyFilled':
-            return 'Partially Filled';
-        default:
-            return status;
-    }
-};
-
 export const OrderHistoryTable = ({
     data,
     pagination,
@@ -74,9 +63,7 @@ export const OrderHistoryTable = ({
             ),
             columnHelper.accessor('status', {
                 cell: info => (
-                    <div className='typography-caption'>
-                        {getStatus(info.getValue())}
-                    </div>
+                    <div className='typography-caption'>{info.getValue()}</div>
                 ),
                 header: tableHeaderDefinition('Status'),
             }),

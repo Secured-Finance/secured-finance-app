@@ -45,5 +45,6 @@ module.exports = async () => {
         '\\.svg': '<rootDir>/src/stories/mocks/svgrMock.js',
         ...config.moduleNameMapper,
     };
+    process.env.TZ = 'GMT';
     return config;
 };

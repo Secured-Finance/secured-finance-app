@@ -16,7 +16,7 @@ import {
 import timemachine from 'timemachine';
 import * as stories from './AdvancedLendingOrderCard.stories';
 
-const { Default } = composeStories(stories);
+const { Default, WalletNotConnected } = composeStories(stories);
 
 const preloadedState = {
     landingOrderForm: {
@@ -90,17 +90,17 @@ describe('AdvancedLendingOrderCard Component', () => {
 
     it('should render CollateralManagementConciseTab', async () => {
         render(<Default />, { preloadedState });
-        await waitFor(() =>
-            expect(
-                screen.getByText('Collateral Management')
-            ).toBeInTheDocument()
-        );
+        expect(screen.getByText('Collateral Management')).toBeInTheDocument();
         expect(screen.getByText('Collateral Utilization')).toBeInTheDocument();
-        expect(screen.getByText('37%')).toBeInTheDocument();
-        expect(screen.getByTestId('collateral-progress-bar-track')).toHaveStyle(
-            'width: calc(100% * 0.37)'
-        );
-        expect(screen.getByText('Available: $5,203.15')).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.getByText('37%')).toBeInTheDocument();
+            expect(
+                screen.getByTestId('collateral-progress-bar-track')
+            ).toHaveStyle('width: calc(100% * 0.37)');
+            expect(
+                screen.getByText('Available: $5,203.15')
+            ).toBeInTheDocument();
+        });
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
         expect(screen.getByText('Low')).toBeInTheDocument();
@@ -183,7 +183,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         render(<Default />, { preloadedState });
         const lendTab = screen.getByText('Lend');
         fireEvent.click(lendTab);
-        expect(screen.getByText('Lending Source')).toBeInTheDocument();
+        expect(screen.getByText('Available')).toBeInTheDocument();
         expect(await screen.findByText('4,000')).toBeInTheDocument();
 
         const walletSourceButton = screen.getByTestId(
@@ -197,33 +197,34 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(screen.getByText('0.1')).toBeInTheDocument();
     });
 
-    it('should change amount when slider is moved', async () => {
+    it('should change amount when slider is moved and trigger SLIDER event for Amplitude', async () => {
+        const track = jest.spyOn(analytics, 'track');
         render(<Default />, {
-            preloadedState: {
-                ...preloadedState,
-                landingOrderForm: {
-                    ...preloadedState.landingOrderForm,
-                    currency: CurrencySymbol.WFIL,
-                    side: OrderSide.LEND,
-                },
-            },
+            preloadedState,
         });
 
-        const walletSourceButton = screen.getByTestId(
-            'wallet-source-selector-button'
-        );
-        fireEvent.click(walletSourceButton);
-
-        expect(screen.getByText('SF Vault')).toBeInTheDocument();
-        const option = screen.getByTestId('option-1');
-        fireEvent.click(option);
+        await waitFor(() => {
+            expect(
+                screen.getByText('Available: $5,203.15')
+            ).toBeInTheDocument();
+        });
 
         const slider = screen.getByRole('slider');
         const input = screen.getByRole('textbox', { name: 'Amount' });
-        fireEvent.change(slider, { target: { value: 50 } });
-        expect(input).toHaveValue('50');
+
+        await waitFor(() => {
+            fireEvent.change(slider, { target: { value: 50 } });
+            expect(input).toHaveValue('2,601.5749');
+        });
+
+        expect(track).toHaveBeenCalledWith(InteractionEvents.SLIDER, {
+            [InteractionProperties.SLIDER_VALUE]: 50,
+        });
         fireEvent.change(slider, { target: { value: 100 } });
-        expect(input).toHaveValue('100');
+        expect(input).toHaveValue('5,203.1499');
+        expect(track).toHaveBeenCalledWith(InteractionEvents.SLIDER, {
+            [InteractionProperties.SLIDER_VALUE]: 100,
+        });
     });
 
     it('should not reset amount and slider to 0 when wallet source is changed', async () => {
@@ -273,9 +274,8 @@ describe('AdvancedLendingOrderCard Component', () => {
             })
         );
 
-        expect(screen.getByText('Lending Source')).toBeInTheDocument();
+        expect(screen.getByText('Available')).toBeInTheDocument();
         expect(await screen.findByText('10,000')).toBeInTheDocument();
-
         const slider = screen.getByRole('slider');
         const input = screen.getByRole('textbox', { name: 'Amount' });
 
@@ -302,7 +302,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(input).toHaveValue('50');
     });
 
-    it.skip('amount should be set to max wallet amount if input amount is greater than wallet amount and wallet source is changed', async () => {
+    it('amount should be set to max wallet amount if input amount is greater than wallet amount and wallet source is changed', async () => {
         await waitFor(() =>
             render(<Default />, {
                 preloadedState: {
@@ -316,6 +316,8 @@ describe('AdvancedLendingOrderCard Component', () => {
             })
         );
 
+        expect(screen.getByText('Available')).toBeInTheDocument();
+        expect(await screen.findByText('10,000')).toBeInTheDocument();
         const slider = screen.getByRole('slider');
         const input = screen.getByRole('textbox', { name: 'Amount' });
 
@@ -424,6 +426,26 @@ describe('AdvancedLendingOrderCard Component', () => {
         });
         expect(
             screen.queryByText('Available To Borrow (WFIL)')
+        ).not.toBeInTheDocument();
+    });
+
+    it('should disable elements and hide order inputs when wallet is not connected', async () => {
+        render(<WalletNotConnected />, { preloadedState });
+
+        // lending side
+        fireEvent.click(screen.getByRole('radio', { name: 'Lend' }));
+        expect(
+            screen.getByTestId('wallet-source-selector-button')
+        ).toBeDisabled();
+        expect(
+            screen.queryByRole('input', { name: 'Bond Price' })
+        ).not.toBeInTheDocument();
+
+        // borrow side
+        fireEvent.click(screen.getByRole('radio', { name: 'Borrow' }));
+
+        expect(
+            screen.queryByRole('textbox', { name: 'Amount' })
         ).not.toBeInTheDocument();
     });
 
@@ -701,7 +723,7 @@ describe('AdvancedLendingOrderCard Component', () => {
             assertBondPriceInputValue('92');
         });
 
-        it('should be reset to market price when changing order type from LIMIT to MARKET', () => {
+        it('should be reset to Market display when changing order type from LIMIT to MARKET', async () => {
             render(<Default marketPrice={9600} />, {
                 preloadedState: {
                     ...preloadedState,
@@ -713,9 +735,17 @@ describe('AdvancedLendingOrderCard Component', () => {
                 },
             });
             assertBondPriceInputValue('92');
+            expect(screen.getAllByText('Market')).toHaveLength(1);
 
-            fireEvent.click(screen.getByText('Market'));
-            expect(screen.getByText('96')).toBeInTheDocument();
+            const marketButton = screen.getByRole('radio', {
+                name: 'Market',
+            });
+
+            fireEvent.click(marketButton);
+
+            const spanInput = screen.getByTestId('disabled-input');
+            expect(spanInput).toBeInTheDocument();
+            expect(spanInput).toHaveTextContent('Market');
         });
 
         it('should calculate the APR from the user input bond price', async () => {
