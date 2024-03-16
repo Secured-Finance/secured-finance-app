@@ -1,5 +1,5 @@
 import { composeStories } from '@storybook/react';
-import { act, render, screen, waitFor } from 'src/test-utils.js';
+import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './MyWalletCard.stories';
 
 const { Default, HideBridge } = composeStories(stories);
@@ -13,10 +13,7 @@ describe('test MyWalletCard component', () => {
 
     it('should show bridge dialog by default', async () => {
         await waitFor(() => render(<Default />));
-        act(() => {
-            screen.getByRole('button', { name: 'Bridge' }).click();
-        });
-
+        fireEvent.click(screen.getByRole('button', { name: 'Bridge' }));
         expect(await screen.findByRole('dialog')).toBeInTheDocument();
     });
 

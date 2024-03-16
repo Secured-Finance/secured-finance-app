@@ -30,11 +30,6 @@ const projectId = getWalletConnectId();
 
 const queryClient = new QueryClient();
 
-// init(getAmplitudeApiKey(), undefined, {
-//     appVersion: process.env.SF_ENV,
-//     logLevel: LogLevel.None,
-// });
-
 const chainIds = getSupportedChainIds();
 const networks = getSupportedNetworks().filter(chain =>
     chainIds.includes(chain.id)

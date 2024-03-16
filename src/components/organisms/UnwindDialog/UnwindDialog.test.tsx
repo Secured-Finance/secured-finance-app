@@ -1,7 +1,7 @@
 import * as analytics from '@amplitude/analytics-browser';
 import { composeStories } from '@storybook/react';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { act, render, screen, waitFor } from 'src/test-utils.js';
+import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { ButtonEvents, ButtonProperties } from 'src/utils';
 import * as stories from './UnwindDialog.stories';
 
@@ -22,7 +22,7 @@ describe('UnwindDialog Component', () => {
 
     it('should call the unwind function when the button is clicked', async () => {
         render(<Default />);
-        act(() => screen.getByText('OK').click());
+        fireEvent.click(screen.getByText('OK'));
         await waitFor(() =>
             expect(mockSecuredFinance.unwindPosition).toHaveBeenCalled()
         );
@@ -31,7 +31,7 @@ describe('UnwindDialog Component', () => {
     it('should update the lastActionTimestamp in the store when the transaction receipt is received', async () => {
         const { store } = render(<Default />);
         expect(store.getState().blockchain.lastActionTimestamp).toEqual(0);
-        act(() => screen.getByText('OK').click());
+        fireEvent.click(screen.getByText('OK'));
         expect(await screen.findByText('Success!')).toBeInTheDocument();
         expect(store.getState().blockchain.lastActionTimestamp).toBeTruthy();
     });
@@ -43,7 +43,7 @@ describe('UnwindDialog Component', () => {
         const spy = jest.spyOn(console, 'error').mockImplementation();
         render(<Default />);
 
-        act(() => screen.getByText('OK').click());
+        fireEvent.click(screen.getByText('OK'));
         await waitFor(() =>
             expect(mockSecuredFinance.unwindPosition).toHaveBeenCalled()
         );
@@ -57,7 +57,7 @@ describe('UnwindDialog Component', () => {
     it('should open repay dialog when type is REPAY', async () => {
         await waitFor(() => render(<Repay />));
         expect(screen.getByText('Repay Position')).toBeInTheDocument();
-        act(() => screen.getByText('OK').click());
+        fireEvent.click(screen.getByText('OK'));
         await waitFor(() =>
             expect(mockSecuredFinance.executeRepayment).toHaveBeenCalled()
         );
@@ -66,7 +66,7 @@ describe('UnwindDialog Component', () => {
     it('should open redeem dialog when type is REDEEM', async () => {
         await waitFor(() => render(<Redeem />));
         expect(screen.getByText('Redeem Position')).toBeInTheDocument();
-        act(() => screen.getByText('OK').click());
+        fireEvent.click(screen.getByText('OK'));
         await waitFor(() =>
             expect(mockSecuredFinance.executeRedemption).toHaveBeenCalled()
         );
@@ -79,7 +79,7 @@ describe('UnwindDialog Component', () => {
         const cancelButton = screen.getByRole('button', {
             name: 'Cancel',
         });
-        act(() => cancelButton.click());
+        fireEvent.click(cancelButton);
         expect(track).toHaveBeenCalledWith(ButtonEvents.CANCEL_BUTTON, {
             [ButtonProperties.CANCEL_ACTION]: 'Cancel Unwind Order',
         });
@@ -92,7 +92,7 @@ describe('UnwindDialog Component', () => {
             name: 'Cancel',
         });
         expect(cancelButton).toBeInTheDocument();
-        act(() => screen.getByText('OK').click());
+        fireEvent.click(screen.getByText('OK'));
 
         await waitFor(() => expect(cancelButton).not.toBeInTheDocument());
     });
