@@ -33,7 +33,7 @@ export interface HistoricalChartProps {
     timeScale?: HistoricalDataIntervals;
 }
 
-type TSeries = ISeriesApi<
+export type TSeries = ISeriesApi<
     'Line' | 'Area' | 'Histogram' | 'Candlestick' | 'Bar'
 >;
 
@@ -45,7 +45,7 @@ function getCrosshairDataPoint(series: TSeries, param: MouseEventParams) {
     return dataPoint || null;
 }
 
-function syncCrosshair(
+export function syncCrosshair(
     chart: IChartApi,
     series: TSeries,
     dataPoint:
@@ -281,7 +281,7 @@ export function HistoricalChart({
     return (
         <div className='bg-neutral-900 pt-[0.625rem]'>
             <div className={clsx(titleOfChartClass)}>
-                {hoverTime && <span>{hoverTime}</span>}
+                {hoverTime && <span data-testid='hover-time'>{hoverTime}</span>}
                 {Object.entries(legendData)
                     .filter(([key, _]) => legendArray.includes(key))
                     .map(([key, value]) => {
