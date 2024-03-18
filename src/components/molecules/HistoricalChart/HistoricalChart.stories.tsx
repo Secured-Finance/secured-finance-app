@@ -1,5 +1,6 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import { tradingData } from 'src/stories/mocks/historicalchart';
+import { mockTransactionCandleStick } from 'src/stories/mocks/queries';
 import { HistoricalChart } from '.';
 
 export default {
@@ -8,6 +9,11 @@ export default {
     args: {
         className: 'font-bold w-[600px]',
         data: tradingData,
+    },
+    parameters: {
+        apolloClient: {
+            mocks: [...mockTransactionCandleStick],
+        },
     },
 } as Meta<typeof HistoricalChart>;
 
