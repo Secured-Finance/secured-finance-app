@@ -10,9 +10,9 @@ import WarningCircleIcon from 'src/assets/icons/warning-circle.svg';
 import {
     ColorBar,
     DropdownSelector,
-    NavTab,
     Option,
     Spinner,
+    Tab,
 } from 'src/components/atoms';
 import { CoreTable, InfoToolTip, TableHeader } from 'src/components/molecules';
 import {
@@ -379,7 +379,7 @@ export const OrderBookWidget = ({
     return (
         <div className='flex h-full w-full flex-col justify-start gap-y-3 rounded-b-2xl border border-white-10 bg-cardBackground/60 px-3 shadow-tab'>
             <div className='-mx-3 h-[60px] w-1/2'>
-                <NavTab text='Order Book' active={true} />
+                <Tab text='Order Book' active={true} />
             </div>
             {isCurrencyDelisted && (
                 <div className='-mx-3 flex h-9 flex-row items-center gap-3 bg-black-20 px-4'>

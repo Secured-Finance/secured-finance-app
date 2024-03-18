@@ -1,25 +1,21 @@
 import { Tab as HeadlessTab } from '@headlessui/react';
 import { Children, useState } from 'react';
-import { NavTab } from 'src/components/atoms';
+import { Tab } from 'src/components/atoms';
 
-export type TabHighlight = {
-    text: string;
-    size: 'small' | 'large';
-    visible: boolean;
-};
-
-export type TabData = {
+export type TabSelectorData = {
     text: string;
     disabled?: boolean;
-    highlight?: TabHighlight;
     util?: React.ReactNode;
 };
 
-interface TabProps {
-    tabDataArray: TabData[];
+interface TabSelectorProps {
+    tabDataArray: TabSelectorData[];
 }
 
-export const Tab: React.FC<TabProps> = ({ tabDataArray, children }) => {
+export const TabSelector: React.FC<TabSelectorProps> = ({
+    tabDataArray,
+    children,
+}) => {
     const arrayChildren = Children.toArray(children);
     const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -42,11 +38,10 @@ export const Tab: React.FC<TabProps> = ({ tabDataArray, children }) => {
                                 disabled={tabData.disabled}
                                 data-testid={tabData.text}
                             >
-                                <NavTab
+                                <Tab
                                     text={tabData.text}
                                     active={selectedIndex === index}
-                                    highlight={tabData.highlight}
-                                ></NavTab>
+                                />
                             </HeadlessTab>
                         );
                     })}

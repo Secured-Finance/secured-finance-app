@@ -3,7 +3,8 @@ import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     ErrorInfo,
-    RadioGroupSelector,
+    TabGroup,
+    TabVariant,
     WalletSourceSelector,
 } from 'src/components/atoms';
 import {
@@ -154,10 +155,15 @@ export const LendingCard = ({
 
     const { data: availableToBorrow } = useBorrowableAmount(address, currency);
 
+    const orderSideOptions = Object.values(OrderSideMap).map(option => ({
+        text: option,
+        variant: TabVariant.Blue,
+    }));
+
     return (
         <div className='w-[345px] flex-shrink-0 space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-7 shadow-deep'>
-            <RadioGroupSelector
-                options={Object.values(OrderSideMap)}
+            <TabGroup
+                options={orderSideOptions}
                 selectedOption={OrderSideMap[side]}
                 handleClick={option => {
                     dispatch(
@@ -174,7 +180,6 @@ export const LendingCard = ({
                         option
                     );
                 }}
-                variant='NavTab'
             />
 
             <div className='flex h-[480px] flex-col justify-between px-4'>
