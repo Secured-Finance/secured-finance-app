@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import SFLogo from 'src/assets/img/logo.svg';
 import SFLogoSmall from 'src/assets/img/small-logo.svg';
-import { Button, NavTab, SupportedNetworks } from 'src/components/atoms';
+import { Button, SupportedNetworks, Tab } from 'src/components/atoms';
 import {
     HamburgerMenu,
     MenuPopover,
@@ -208,8 +208,8 @@ const ItemLink = ({
     };
     return (
         <Link href={link} className='h-full' passHref>
-            <a className='h-full' href='_' data-cy={dataCy.toLowerCase()}>
-                <NavTab text={text} active={useCheckActive()} />
+            <a className='block h-full' href='_' data-cy={dataCy.toLowerCase()}>
+                <Tab text={text} active={useCheckActive()} isFullHeight />
             </a>
         </Link>
     );

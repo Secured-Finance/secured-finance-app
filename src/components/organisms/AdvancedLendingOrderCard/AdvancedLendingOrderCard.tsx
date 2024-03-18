@@ -8,11 +8,13 @@ import {
     ErrorInfo,
     OrderDisplayBox,
     OrderInputBox,
-    RadioGroupSelector,
     Separator,
     Slider,
+    TabGroup,
+    TabVariant,
     WalletSourceSelector,
 } from 'src/components/atoms';
+import { SubtabGroup } from 'src/components/molecules/SubtabGroup';
 import { OrderAction } from 'src/components/organisms';
 import {
     CollateralBook,
@@ -251,10 +253,15 @@ export function AdvancedLendingOrderCard({
 
     const isBondPriceFieldDisabled = isMarketOrderType || !isConnected;
 
+    const orderSideOptions = Object.values(OrderSideMap).map(option => ({
+        text: option,
+        variant: TabVariant[option],
+    }));
+
     return (
         <div className='h-full rounded-b-xl border border-white-10 bg-cardBackground bg-opacity-60 pb-7'>
-            <RadioGroupSelector
-                options={Object.values(OrderSideMap)}
+            <TabGroup
+                options={orderSideOptions}
                 selectedOption={OrderSideMap[side]}
                 handleClick={option => {
                     dispatch(
@@ -271,30 +278,11 @@ export function AdvancedLendingOrderCard({
                         option
                     );
                 }}
-                variant='NavTab'
-                optionsStyles={[
-                    {
-                        bgColorActive: 'bg-nebulaTeal',
-                        textClassActive: 'text-secondary3 font-semibold',
-                        gradient: {
-                            from: 'from-tabGradient-4',
-                            to: 'to-tabGradient-3',
-                        },
-                    },
-                    {
-                        bgColorActive: 'bg-galacticOrange',
-                        textClassActive: 'text-[#FFE5E8] font-semibold',
-                        gradient: {
-                            from: 'from-tabGradient-6',
-                            to: 'to-tabGradient-5',
-                        },
-                    },
-                ]}
             />
 
             <div className='flex w-full flex-col justify-center gap-4 px-4 pt-5'>
                 {!isItayose && (
-                    <RadioGroupSelector
+                    <SubtabGroup
                         options={OrderTypeOptions}
                         selectedOption={orderType}
                         handleClick={option => {
@@ -306,7 +294,6 @@ export function AdvancedLendingOrderCard({
                                 option
                             );
                         }}
-                        variant='StyledButton'
                     />
                 )}
                 {side === OrderSide.LEND && (

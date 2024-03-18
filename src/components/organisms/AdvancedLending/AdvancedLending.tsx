@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     AdvancedLendingTopBar,
     HorizontalTab,
-    Tab,
+    TabSelector,
 } from 'src/components/molecules';
 import {
     ActiveTradeTable,
@@ -324,7 +324,7 @@ export const AdvancedLending = ({
             />
 
             <div className='flex h-full flex-grow flex-col gap-4'>
-                <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
+                <TabSelector tabDataArray={[{ text: 'Yield Curve' }]}>
                     <div className='h-[410px] w-full px-2 py-4'>
                         <LineChartTab
                             rates={rates}
@@ -337,7 +337,7 @@ export const AdvancedLending = ({
                             }
                         />
                     </div>
-                </Tab>
+                </TabSelector>
                 <HorizontalTab
                     tabTitles={[
                         'Active Positions',

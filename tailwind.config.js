@@ -188,6 +188,24 @@ module.exports = {
                 4: 'rgba(47, 174, 186, 0.35)',
                 5: 'rgba(255, 50, 75, 0)',
                 6: 'rgba(255, 50, 75, 0.35)',
+                lend: {
+                    start: 'rgba(23, 152, 164, 0.35)',
+                    end: 'rgba(21, 214, 232, 0.00)',
+                },
+                borrow: {
+                    start: 'rgba(255, 50, 75, 0.35)',
+                    end: 'rgba(255, 50, 75, 0.00)',
+                },
+                neutral: {
+                    start: 'rgba(148, 163, 184, 0.35)',
+                    end: 'rgba(148, 163, 184, 0.00)',
+                },
+                blue: {
+                    start: 'rgba(111, 116, 176, 0.35)',
+                    end: 'rgba(111, 116, 176, 0.00)',
+                    startLight: 'rgba(117, 130, 255, 0.35)',
+                    startEnd: 'rgba(81, 98, 255, 0.00)',
+                },
             },
             backgroundBlur: 'rgba(35, 43, 56, 0.6)',
             cardBackground: '#161E2E',
