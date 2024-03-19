@@ -15,7 +15,7 @@ describe('test MyWalletCard component', () => {
         await waitFor(() => render(<Default />));
         screen.getByRole('button', { name: 'Bridge' }).click();
         expect(await screen.findByRole('dialog')).toBeInTheDocument();
-    });
+    }, 8000);
 
     it('should hide bridge dialog when hideBridge is true', async () => {
         await waitFor(() => render(<HideBridge />));

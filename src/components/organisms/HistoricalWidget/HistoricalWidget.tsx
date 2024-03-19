@@ -34,7 +34,7 @@ export const HistoricalWidget = () => {
         selectLandingOrderForm(state.landingOrderForm)
     );
     const [selectedTimeScale, setSelectedTimeScale] =
-        useState<HistoricalDataIntervals>(HistoricalDataIntervals['15M']);
+        useState<HistoricalDataIntervals>(HistoricalDataIntervals['30M']);
 
     const historicalTradeData = useGraphClientHook(
         {
