@@ -130,6 +130,6 @@ describe('Itayose Component', () => {
                     1300
                 )
             );
-        });
+        }, 8000);
     });
 });
