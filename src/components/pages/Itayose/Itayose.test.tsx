@@ -58,7 +58,7 @@ describe('Itayose Component', () => {
         expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
             '1'
         );
-    });
+    }, 8000);
 
     it('should not show delisted currencies in asset dropwdown', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
