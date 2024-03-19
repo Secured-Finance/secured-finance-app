@@ -17,7 +17,7 @@ describe('HistoricalWidget', () => {
         render(<Default />, {
             apolloMocks: Default.parameters?.apolloClient.mocks,
         });
-        const timeScale = screen.getByText('15M');
+        const timeScale = screen.getByText('30M');
         expect(timeScale).toBeInTheDocument();
         expect(timeScale).toHaveClass('bg-starBlue');
     });
