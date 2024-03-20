@@ -13,6 +13,7 @@ interface TabProps {
     };
     variant?: TabVariant;
     isFullHeight?: boolean;
+    className?: string;
 }
 
 // TODO: handle disabled state as in TabSelector (Default) story
@@ -22,25 +23,29 @@ export const Tab = ({
     highlight,
     variant = TabVariant.Blue,
     isFullHeight,
+    className,
 }: TabProps) => {
     return (
         <div
-            className={clsx('group flex w-full flex-col text-center', {
-                'h-full': isFullHeight,
-            })}
+            className={clsx(
+                'group relative flex h-full w-full flex-col px-[1.61rem] pb-3.5 pt-3.5 text-center laptop:px-[1.2rem] laptop:pb-[1.375rem] laptop:pt-[1.375rem]',
+                className,
+                {
+                    [`${bgGradientStyle[variant]} bg-gradient-to-b`]: active,
+                    'h-full': isFullHeight,
+                }
+            )}
         >
             <div
-                className={clsx('h-1 w-full', {
+                className={clsx('absolute left-0 top-0 h-1 w-full', {
                     [lineStyle[variant]]: active,
                     'bg-transparent': !active,
                 })}
             ></div>
             <div
                 className={clsx(
-                    'flex h-full items-center justify-center gap-2 px-[1.61rem] pb-3.5 pt-2.5 laptop:px-[1.2rem] laptop:pb-[1.375rem] laptop:pt-[1.125rem]',
+                    'flex h-full items-center justify-center gap-2',
                     {
-                        [`${bgGradientStyle[variant]} bg-gradient-to-b`]:
-                            active,
                         'h-full': isFullHeight,
                         'h-auto': !isFullHeight,
                     }

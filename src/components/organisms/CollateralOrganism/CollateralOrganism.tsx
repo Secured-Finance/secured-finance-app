@@ -1,4 +1,4 @@
-import { Tab } from 'src/components/molecules';
+import { TabSelector } from 'src/components/molecules';
 import { CollateralTab } from 'src/components/organisms';
 import { CollateralBook } from 'src/hooks';
 
@@ -13,12 +13,12 @@ export const CollateralOrganism = ({
 }) => {
     return (
         <div className='h-fit w-full'>
-            <Tab tabDataArray={tabDataArray}>
+            <TabSelector tabDataArray={tabDataArray}>
                 <CollateralTab
                     collateralBook={collateralBook}
                     netAssetValue={netAssetValue}
                 />
-            </Tab>
+            </TabSelector>
         </div>
     );
 };

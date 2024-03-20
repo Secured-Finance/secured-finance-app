@@ -49,10 +49,3 @@ export const GroupOfFour = Template.bind({});
 GroupOfFour.args = {
     options: ['Label', 'Label 2', 'Label 3', 'Label 4'],
 };
-
-// export const StyledButton = Template.bind({});
-// StyledButton.args = {
-//     options: ['Limit', 'Market', 'Stop'],
-//     selectedOption: 'Market',
-//     variant: 'StyledButton',
-// };

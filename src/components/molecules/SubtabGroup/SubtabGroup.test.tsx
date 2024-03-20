@@ -2,7 +2,7 @@ import { composeStories } from '@storybook/react';
 import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './SubtabGroup.stories';
 
-const { Default, GroupOfThree, GroupOfFour } = composeStories(stories);
+const { Default, GroupOfThree } = composeStories(stories);
 
 describe('SubtabGroup component', () => {
     it('should render two buttons', () => {
