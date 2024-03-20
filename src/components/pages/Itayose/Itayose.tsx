@@ -1,4 +1,5 @@
 import { OrderSide } from '@secured-finance/sf-client';
+import * as dayjs from 'dayjs';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -12,7 +13,7 @@ import {
     Alert,
     HorizontalAssetSelector,
     HorizontalTab,
-    Tab,
+    TabSelector,
 } from 'src/components/molecules';
 import {
     AdvancedLendingOrderCard,
@@ -48,7 +49,6 @@ import { RootState } from 'src/store/types';
 import { CurrencySymbol, ZERO_BI, toOptions, usdFormat } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
-import * as dayjs from 'dayjs';
 
 const Toolbar = ({
     selectedAsset,
@@ -310,7 +310,7 @@ export const Itayose = () => {
                 />
 
                 <div className='flex h-full flex-col items-stretch justify-stretch gap-6'>
-                    <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
+                    <TabSelector tabDataArray={[{ text: 'Yield Curve' }]}>
                         <div className='h-[410px] w-full px-6 py-4'>
                             <LineChartTab
                                 rates={rates}
@@ -322,7 +322,7 @@ export const Itayose = () => {
                                 }
                             />
                         </div>
-                    </Tab>
+                    </TabSelector>
 
                     <HorizontalTab tabTitles={['Open Orders']}>
                         <OrderTable

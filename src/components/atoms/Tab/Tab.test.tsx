@@ -8,7 +8,7 @@ describe('Tab component', () => {
     it('should render an active Tab', () => {
         render(<Default />);
         const textElement = screen.getByText('Blue');
-        expect(textElement.parentNode).toHaveClass(
+        expect(textElement.parentNode?.parentNode).toHaveClass(
             'from-tabGradient-blue-start to-tabGradient-blue-end light:from-tabGradient-blue-startLight light:to-tabGradient-blue-endLight'
         );
         expect(screen.getByTestId('Blue-tab')).toBeInTheDocument();
@@ -17,7 +17,7 @@ describe('Tab component', () => {
     it('should render an inactive Tab', () => {
         render(<Inactive />);
         const textElement = screen.getByText('Inactive');
-        expect(textElement.parentNode).not.toHaveClass(
+        expect(textElement.parentNode?.parentNode).not.toHaveClass(
             'from-tabGradient-blue-start to-tabGradient-blue-end light:from-tabGradient-blue-startLight light:to-tabGradient-blue-endLight'
         );
     });

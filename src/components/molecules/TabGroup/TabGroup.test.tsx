@@ -16,12 +16,12 @@ describe('TabGroup component', () => {
     it('should render lend button as active', () => {
         render(<Default />);
         const lendButton = screen.getByText('Lend');
-        expect(lendButton.parentNode).toHaveClass(
+        expect(lendButton.parentNode?.parentNode).toHaveClass(
             'from-tabGradient-lend-start to-tabGradient-lend-end'
         );
 
         const borrowButton = screen.getByText('Borrow');
-        expect(borrowButton.parentNode).not.toHaveClass(
+        expect(borrowButton.parentNode?.parentNode).not.toHaveClass(
             'from-tabGradient-borrow-start to-tabGradient-borrow-end'
         );
     });
@@ -31,14 +31,14 @@ describe('TabGroup component', () => {
         render(<Default handleClick={handleClick} />);
 
         const borrowButton = screen.getByText('Borrow');
-        expect(borrowButton.parentNode).not.toHaveClass(
+        expect(borrowButton.parentNode?.parentNode).not.toHaveClass(
             'from-tabGradient-borrow-start to-tabGradient-borrow-end'
         );
 
         fireEvent.click(borrowButton);
         expect(handleClick).toBeCalledTimes(1);
         expect(handleClick).toHaveBeenCalledWith('Borrow');
-        expect(borrowButton.parentNode).toHaveClass(
+        expect(borrowButton.parentNode?.parentNode).toHaveClass(
             'from-tabGradient-borrow-start to-tabGradient-borrow-end'
         );
     });

@@ -34,7 +34,7 @@ describe('Header component', () => {
         });
         render(<Primary />);
         const textElement = screen.getByText('OTC Lending');
-        expect(textElement.parentNode).toHaveClass(
+        expect(textElement.parentNode?.parentNode).toHaveClass(
             'from-tabGradient-blue-start to-tabGradient-blue-end light:from-tabGradient-blue-startLight light:to-tabGradient-blue-endLight'
         );
     });
@@ -45,7 +45,7 @@ describe('Header component', () => {
         });
         render(<Primary />);
         const textElement = screen.getByText('OTC Lending');
-        expect(textElement.parentNode).toHaveClass(
+        expect(textElement.parentNode?.parentNode).toHaveClass(
             'from-tabGradient-blue-start to-tabGradient-blue-end light:from-tabGradient-blue-startLight light:to-tabGradient-blue-endLight'
         );
     });
@@ -60,7 +60,7 @@ describe('Header component', () => {
         fireEvent.click(screen.getByText('Markets'));
 
         const textElement = screen.getByText('Markets');
-        expect(textElement.parentNode).toHaveClass(
+        expect(textElement.parentNode?.parentNode).toHaveClass(
             'from-tabGradient-blue-start to-tabGradient-blue-end light:from-tabGradient-blue-startLight light:to-tabGradient-blue-endLight'
         );
     });
@@ -73,7 +73,7 @@ describe('Header component', () => {
 
         render(<Primary />);
         const textElement = screen.getByText('OTC Lending');
-        expect(textElement.parentNode).toHaveClass(
+        expect(textElement.parentNode?.parentNode).toHaveClass(
             'from-tabGradient-blue-start to-tabGradient-blue-end light:from-tabGradient-blue-startLight light:to-tabGradient-blue-endLight'
         );
     });

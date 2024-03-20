@@ -209,7 +209,12 @@ const ItemLink = ({
     return (
         <Link href={link} className='h-full' passHref>
             <a className='block h-full' href='_' data-cy={dataCy.toLowerCase()}>
-                <Tab text={text} active={useCheckActive()} isFullHeight />
+                <Tab
+                    text={text}
+                    active={useCheckActive()}
+                    isFullHeight
+                    className='laptop:px-[1.875rem]'
+                />
             </a>
         </Link>
     );
