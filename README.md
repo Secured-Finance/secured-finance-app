@@ -1,6 +1,7 @@
 <div align="center">
 
-<img src="https://assets-global.website-files.com/64083b97a8837a1e7f5a3a33/64083b97a8837a05b25a3a57_logo.svg" width="328" style="margin-bottom: 20px"/>
+<img src="https://assets-global.website-files.com/64083b97a8837a1e7f5a3a33/64083b97a8837a05b25a3a57_logo.svg" width="328" />
+<br/>
 
 [![badge](https://img.shields.io/badge/submit%20for-HackFS-blue)](https://hack.ethglobal.co/showcase/secured-finance-recTkx6c1RDoLeaQm) [![badge](https://img.shields.io/badge/submit%20for-ETHOnline-ffe4b4)](https://hack.ethglobal.co/showcase/secured-finance-recJiyE8KWrV5VyHi) ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/Secured-Finance/secured-finance-app) ![GitHub License](https://img.shields.io/github/license/Secured-Finance/secured-finance-app)
 
