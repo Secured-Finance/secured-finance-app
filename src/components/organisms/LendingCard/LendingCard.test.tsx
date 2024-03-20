@@ -28,7 +28,7 @@ beforeAll(() => {
     });
 });
 
-describe.skip('LendingCard Component', () => {
+describe('LendingCard Component', () => {
     const preloadedState = {
         ...initialStore,
         wallet: {
