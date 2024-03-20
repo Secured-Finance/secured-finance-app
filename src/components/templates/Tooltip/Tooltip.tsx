@@ -8,7 +8,7 @@ export const Tooltip = ({
     children,
     align = 'center',
     maxWidth = 'large',
-    severity,
+    severity = 'info',
 }: {
     iconElement: React.ReactNode;
     children: React.ReactNode;
