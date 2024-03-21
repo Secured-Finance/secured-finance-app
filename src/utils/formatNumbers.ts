@@ -98,3 +98,10 @@ export const formatTimestampWithMonth = (timestamp: number) => {
 
     return `${month} ${day}, ${year} ${time}`;
 };
+
+export const formatTimeStampWithTimezone = (timestamp: number) => {
+    const date = new Date(timestamp * 1000);
+    return new Intl.DateTimeFormat('en-GB', {
+        timeStyle: 'long',
+    }).format(date);
+};

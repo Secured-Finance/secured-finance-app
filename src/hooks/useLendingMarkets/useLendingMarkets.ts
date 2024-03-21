@@ -28,6 +28,7 @@ export type LendingMarket = {
     minBorrowUnitPrice: number;
     maxLendUnitPrice: number;
     currentMinDebtUnitPrice: number;
+    lastBlockUnitPriceTimestamp: number;
 };
 
 const baseContract: { 0: LendingMarket } = {
@@ -49,6 +50,7 @@ const baseContract: { 0: LendingMarket } = {
         minBorrowUnitPrice: 0,
         maxLendUnitPrice: 0,
         currentMinDebtUnitPrice: 0,
+        lastBlockUnitPriceTimestamp: 0,
     },
 };
 
@@ -99,6 +101,8 @@ export const useLendingMarkets = () => {
                         ccy,
                         currentMinDebtUnitPrice,
                         preOpeningDate,
+                        lastBlockUnitPriceTimestamp,
+
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     } = market as any;
                     const currency = fromBytes32(ccy) as CurrencySymbol;
@@ -134,6 +138,9 @@ export const useLendingMarkets = () => {
                             maxLendUnitPrice: Number(maxLendUnitPrice),
                             currentMinDebtUnitPrice: Number(
                                 currentMinDebtUnitPrice
+                            ),
+                            lastBlockUnitPriceTimestamp: Number(
+                                lastBlockUnitPriceTimestamp
                             ),
                         },
                     };
