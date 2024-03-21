@@ -80,6 +80,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
         preOpeningDate: preOpeningDate,
+        lastBlockUnitPriceTimestamp: BigInt(1646920200),
     },
     {
         name: 'MAR2023',
@@ -99,6 +100,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
         preOpeningDate: preOpeningDate,
+        lastBlockUnitPriceTimestamp: BigInt(1646920200),
     },
     {
         name: 'JUN2023',
@@ -118,6 +120,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
         preOpeningDate: preOpeningDate,
+        lastBlockUnitPriceTimestamp: BigInt(1646920200),
     },
     {
         name: 'SEP2023',
@@ -137,6 +140,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
         preOpeningDate: preOpeningDate,
+        lastBlockUnitPriceTimestamp: BigInt(1646920200),
     },
     {
         name: 'DEC2023',
@@ -156,6 +160,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
         preOpeningDate: preOpeningDate,
+        lastBlockUnitPriceTimestamp: BigInt(1646920200),
     },
     {
         name: 'MAR2024',
@@ -175,6 +180,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
         preOpeningDate: preOpeningDate,
+        lastBlockUnitPriceTimestamp: BigInt(1646920200),
     },
     {
         name: 'JUN2024',
@@ -194,6 +200,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
         preOpeningDate: preOpeningDate,
+        lastBlockUnitPriceTimestamp: BigInt(1646920200),
     },
     {
         name: 'SEP2024',
@@ -213,6 +220,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
         preOpeningDate: preOpeningDate,
+        lastBlockUnitPriceTimestamp: BigInt(1646920200),
     },
     {
         name: 'DEC2024',
@@ -232,6 +240,7 @@ export const maturitiesMockFromContract = (ccy: string) => [
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
         preOpeningDate: BigInt(1684972800),
+        lastBlockUnitPriceTimestamp: BigInt(1646920200),
     },
 ];
 
@@ -254,6 +263,7 @@ export const maturities = {
         minBorrowUnitPrice: 9672,
         maxLendUnitPrice: 9700,
         currentMinDebtUnitPrice: 9500,
+        lastBlockUnitPriceTimestamp: 1646920200,
     },
     [mar23Fixture.toNumber()]: {
         name: 'MAR2023',
@@ -273,6 +283,7 @@ export const maturities = {
         minBorrowUnitPrice: 9670,
         maxLendUnitPrice: 9698,
         currentMinDebtUnitPrice: 9500,
+        lastBlockUnitPriceTimestamp: 1646920200,
     },
     [jun23Fixture.toNumber()]: {
         name: 'JUN2023',
@@ -292,6 +303,7 @@ export const maturities = {
         minBorrowUnitPrice: 9664,
         maxLendUnitPrice: 9692,
         currentMinDebtUnitPrice: 9500,
+        lastBlockUnitPriceTimestamp: 1646920200,
     },
     [sep23Fixture.toNumber()]: {
         name: 'SEP2023',
@@ -311,6 +323,7 @@ export const maturities = {
         minBorrowUnitPrice: 9659,
         maxLendUnitPrice: 9687,
         currentMinDebtUnitPrice: 9500,
+        lastBlockUnitPriceTimestamp: 1646920200,
     },
     [dec23Fixture.toNumber()]: {
         name: 'DEC2023',
@@ -330,6 +343,7 @@ export const maturities = {
         minBorrowUnitPrice: 9638,
         maxLendUnitPrice: 9666,
         currentMinDebtUnitPrice: 9500,
+        lastBlockUnitPriceTimestamp: 1646920200,
     },
     [mar24Fixture.toNumber()]: {
         name: 'MAR2024',
@@ -349,6 +363,7 @@ export const maturities = {
         minBorrowUnitPrice: 9628,
         maxLendUnitPrice: 9656,
         currentMinDebtUnitPrice: 9500,
+        lastBlockUnitPriceTimestamp: 1646920200,
     },
     [jun24Fixture.toNumber()]: {
         name: 'JUN2024',
@@ -368,6 +383,7 @@ export const maturities = {
         minBorrowUnitPrice: 9612,
         maxLendUnitPrice: 9640,
         currentMinDebtUnitPrice: 9500,
+        lastBlockUnitPriceTimestamp: 1646920200,
     },
     [sep24Fixture.toNumber()]: {
         name: 'SEP2024',
@@ -387,6 +403,7 @@ export const maturities = {
         minBorrowUnitPrice: 9602,
         maxLendUnitPrice: 9630,
         currentMinDebtUnitPrice: 9500,
+        lastBlockUnitPriceTimestamp: 1646920200,
     },
     [dec24Fixture.toNumber()]: {
         name: 'DEC2024',
@@ -406,6 +423,7 @@ export const maturities = {
         minBorrowUnitPrice: 9602,
         maxLendUnitPrice: 9630,
         currentMinDebtUnitPrice: 9500,
+        lastBlockUnitPriceTimestamp: 1646920200,
     },
 };
 

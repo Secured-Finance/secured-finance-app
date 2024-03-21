@@ -13,7 +13,7 @@ describe('HistoricalWidget', () => {
         expect(timeScalesContainer).toBeInTheDocument();
     });
 
-    it('should render 15M as the initial time scale', () => {
+    it('should render 30M as the initial time scale', () => {
         render(<Default />, {
             apolloMocks: Default.parameters?.apolloClient.mocks,
         });
@@ -26,8 +26,13 @@ describe('HistoricalWidget', () => {
         render(<Default />, {
             apolloMocks: Default.parameters?.apolloClient.mocks,
         });
-        const timeScale = screen.getByText('1H');
-        fireEvent.click(timeScale);
-        expect(timeScale).toHaveClass('bg-starBlue');
+        const initialTimeScale = screen.getByText('30M');
+        expect(initialTimeScale).toBeInTheDocument();
+        expect(initialTimeScale).toHaveClass('bg-starBlue');
+
+        const selectedTimeScale = screen.getByText('1H');
+        fireEvent.click(selectedTimeScale);
+        expect(selectedTimeScale).toHaveClass('bg-starBlue');
+        expect(initialTimeScale).not.toHaveClass('bg-starBlue');
     });
 });
