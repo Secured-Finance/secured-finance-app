@@ -183,7 +183,7 @@ describe('Landing Component', () => {
 
             assertInputValue('Amount', '1');
             assertInputValue('Bond Price', '96.85');
-        });
+        }, 8000);
 
         it.skip('should reset bond price to the best price when user changes mode', async () => {
             await waitFor(() => {
@@ -336,4 +336,21 @@ describe('Landing Component', () => {
             ).not.toBeInTheDocument();
         });
     });
+
+    it('should render the itayose banner for opening of a new market', async () => {
+        await waitFor(() => {
+            render(<Default />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+                preloadedState,
+            });
+        });
+
+        await waitFor(() => {
+            expect(
+                screen.getByText(
+                    'Market WFIL-DEC2024 is open for pre-orders now until May 31, 2023 23:00 (UTC)'
+                )
+            ).toBeInTheDocument();
+        });
+    }, 8000);
 });

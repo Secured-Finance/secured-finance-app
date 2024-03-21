@@ -32,7 +32,7 @@ const WalletOption = ({
                         {checked ? (
                             <CheckIcon className='h-6 w-6' />
                         ) : (
-                            <div className='border-neutral rounded-full border'>
+                            <div className='rounded-full border border-neutral'>
                                 <CircleOutline className='h-[22px] w-[22px]' />
                             </div>
                         )}
@@ -56,7 +56,7 @@ export const WalletRadioGroup = ({
         <RadioGroup
             value={value}
             onChange={onChange}
-            className='border-neutral w-full rounded-lg border py-4'
+            className='w-full rounded-lg border border-neutral py-4'
             data-cy='radio-group'
         >
             {options.map(option => (
