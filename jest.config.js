@@ -43,5 +43,6 @@ module.exports = async () => {
     config.transformIgnorePatterns = [
         'node_modules/(?!(wagmi|@wagmi|@web3modal|@0xsquid|isows)/)',
     ];
+    process.env.TZ = 'GMT';
     return config;
 };

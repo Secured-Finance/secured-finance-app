@@ -234,8 +234,7 @@ export const AdvancedLending = ({
         if (marketUnitPrice) {
             return {
                 value: LoanValue.fromPrice(marketUnitPrice, maturity),
-                // TODO: get the time from the block
-                time: 0,
+                time: data?.lastBlockUnitPriceTimestamp ?? 0,
                 type: 'block' as const,
             };
         }
@@ -246,7 +245,12 @@ export const AdvancedLending = ({
                 type: 'opening' as const,
             };
         }
-    }, [marketUnitPrice, maturity, openingUnitPrice]);
+    }, [
+        data?.lastBlockUnitPriceTimestamp,
+        marketUnitPrice,
+        maturity,
+        openingUnitPrice,
+    ]);
 
     const selectedAsset = useMemo(() => {
         return assetList.find(option => option.value === currency);
