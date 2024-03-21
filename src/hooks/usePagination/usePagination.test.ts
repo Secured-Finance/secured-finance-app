@@ -6,7 +6,7 @@ describe('usePagination', () => {
         const { result } = renderHook(
             props => usePagination(props, '0x', '0x1'),
             {
-                initialProps: ['A', 'B'],
+                initialProps: [{ id: 1 }, { id: 2 }],
             }
         );
         expect(result.current).toEqual([]);
@@ -16,38 +16,39 @@ describe('usePagination', () => {
         const { result, rerender } = renderHook(
             props => usePagination(props, '0x1', '0x1'),
             {
-                initialProps: ['A', 'B'],
+                initialProps: [{ id: 1 }, { id: 2 }],
             }
         );
-        expect(result.current).toEqual(['A', 'B']);
+        expect(result.current).toEqual([{ id: 1 }, { id: 2 }]);
 
         act(() => {
-            rerender(['C']);
+            rerender([{ id: 3 }]);
         });
 
-        expect(result.current).toEqual(['A', 'B', 'C']);
+        expect(result.current).toEqual([{ id: 1 }, { id: 2 }, { id: 3 }]);
     });
 
     it('should not update the array when data remains the same', () => {
         const { result, rerender } = renderHook(
             props => usePagination(props, '0x1', '0x1'),
             {
-                initialProps: ['A', 'B'],
+                initialProps: [{ id: 1 }, { id: 2 }],
             }
         );
-        expect(result.current).toEqual(['A', 'B']);
+        expect(result.current).toEqual([{ id: 1 }, { id: 2 }]);
 
         act(() => {
-            rerender(['A', 'B']);
+            rerender([{ id: 1 }, { id: 2 }]);
         });
 
-        expect(result.current).toEqual(['A', 'B']);
+        expect(result.current).toEqual([{ id: 1 }, { id: 2 }]);
     });
 
     it('should process large amount of data', () => {
         const initialProps = Array(1000)
             .fill(null)
-            .map(_ => ({
+            .map((_, index) => ({
+                id: index,
                 name: 'SF',
                 age: 10,
                 english: 80,
@@ -67,7 +68,8 @@ describe('usePagination', () => {
             rerender(
                 Array(1000)
                     .fill(null)
-                    .map(_ => ({
+                    .map((_, index) => ({
+                        id: index + 1000,
                         name: 'SF',
                         age: 20,
                         english: 80,
@@ -82,7 +84,8 @@ describe('usePagination', () => {
         expect(result.current).toEqual([
             ...Array(1000)
                 .fill(null)
-                .map(_ => ({
+                .map((_, index) => ({
+                    id: index,
                     name: 'SF',
                     age: 10,
                     english: 80,
@@ -92,7 +95,8 @@ describe('usePagination', () => {
                 })),
             ...Array(1000)
                 .fill(null)
-                .map(_ => ({
+                .map((_, index) => ({
+                    id: index + 1000,
                     name: 'SF',
                     age: 20,
                     english: 80,
@@ -106,7 +110,8 @@ describe('usePagination', () => {
             rerender(
                 Array(1000)
                     .fill(null)
-                    .map(_ => ({
+                    .map((_, index) => ({
+                        id: index + 1000,
                         name: 'SF',
                         age: 20,
                         english: 80,
@@ -121,7 +126,8 @@ describe('usePagination', () => {
         expect(result.current).toEqual([
             ...Array(1000)
                 .fill(null)
-                .map(_ => ({
+                .map((_, index) => ({
+                    id: index,
                     name: 'SF',
                     age: 10,
                     english: 80,
@@ -131,7 +137,8 @@ describe('usePagination', () => {
                 })),
             ...Array(1000)
                 .fill(null)
-                .map(_ => ({
+                .map((_, index) => ({
+                    id: index + 1000,
                     name: 'SF',
                     age: 20,
                     english: 80,
