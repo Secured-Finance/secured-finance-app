@@ -1,4 +1,5 @@
 import { OrderSide } from '@secured-finance/sf-client';
+import * as dayjs from 'dayjs';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -48,7 +49,6 @@ import { RootState } from 'src/store/types';
 import { CurrencySymbol, ZERO_BI, toOptions, usdFormat } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
-import * as dayjs from 'dayjs';
 
 const Toolbar = ({
     selectedAsset,
@@ -202,7 +202,7 @@ export const Itayose = () => {
         currency,
         maturity,
         o => o.isPreOrder
-    ).map(o => {
+    ).activeOrdersPerMaturity.map(o => {
         return {
             ...o,
             calculationDate: lendingContracts[maturity].utcOpeningDate,

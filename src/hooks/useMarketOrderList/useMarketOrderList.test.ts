@@ -13,8 +13,10 @@ describe('useOrderList', () => {
             useMarketOrderList('0x1', CurrencySymbol.ETH, 123)
         );
 
-        expect(result.current).toEqual([]);
-        await waitFor(() => expect(result.current).toEqual([]));
+        expect(result.current.activeOrdersPerMaturity).toEqual([]);
+        await waitFor(() =>
+            expect(result.current.activeOrdersPerMaturity).toEqual([])
+        );
     });
 
     it('should return an array of orders that match the given criteria', async () => {
@@ -26,7 +28,9 @@ describe('useOrderList', () => {
             )
         );
 
-        await waitFor(() => expect(result.current).toHaveLength(21));
+        await waitFor(() =>
+            expect(result.current.activeOrdersPerMaturity).toHaveLength(21)
+        );
     });
 
     it('should filter the orders by the given filter function', async () => {
@@ -65,7 +69,7 @@ describe('useOrderList', () => {
         );
 
         await waitFor(() =>
-            expect(result.current).toEqual([
+            expect(result.current.activeOrdersPerMaturity).toEqual([
                 {
                     orderId: BigInt(4),
                     currency: wfilBytes32,

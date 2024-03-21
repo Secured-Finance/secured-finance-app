@@ -204,7 +204,11 @@ export const AdvancedLending = ({
         maturity
     );
 
-    const filteredOrderList = useMarketOrderList(address, currency, maturity);
+    const { activeOrdersPerMaturity, ordersPerCurrency } = useMarketOrderList(
+        address,
+        currency,
+        maturity
+    );
 
     const transactionHistory = useGraphClientHook(
         {
@@ -282,7 +286,7 @@ export const AdvancedLending = ({
         [dispatch, selectedTerm.label]
     );
 
-    const maximumOpenOrderLimit = filteredOrderList.length >= 20;
+    const maximumOpenOrderLimit = ordersPerCurrency[currency] >= 20;
 
     const tooltipMap: Record<number, string> = {};
 
@@ -412,7 +416,7 @@ export const AdvancedLending = ({
                             variant='contractOnly'
                         />
                         <OrderTable
-                            data={filteredOrderList}
+                            data={activeOrdersPerMaturity}
                             variant='compact'
                             height={350}
                         />

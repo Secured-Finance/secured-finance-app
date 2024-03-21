@@ -24,10 +24,22 @@ export type Order = {
 
 export type OrderList = Array<Order>;
 
+export const emptyOrdersPerCurrency = {
+    [CurrencySymbol.ETH]: 0,
+    [CurrencySymbol.WETHe]: 0,
+    [CurrencySymbol.WFIL]: 0,
+    [CurrencySymbol.USDC]: 0,
+    [CurrencySymbol.WBTC]: 0,
+    [CurrencySymbol.BTCb]: 0,
+    [CurrencySymbol.aUSDC]: 0,
+    [CurrencySymbol.axlFIL]: 0,
+};
+
 export const emptyOrderList = {
     activeOrderList: [],
     inactiveOrderList: [],
     totalPVOfOpenOrdersInUSD: 0,
+    ordersPerCurrency: emptyOrdersPerCurrency,
 };
 
 const sortOrders = (a: Order, b: Order) => {
@@ -64,55 +76,65 @@ export const useOrderList = (
         select: orderList => {
             const { activeOrders, inactiveOrders } = orderList;
 
-            const { activeOrderList, totalPVOfOpenOrdersInUSD } =
-                activeOrders.reduce(
-                    (result, order) => {
-                        const {
-                            orderId,
-                            ccy,
-                            maturity,
-                            side,
-                            unitPrice,
-                            amount,
-                            timestamp,
-                            isPreOrder,
-                        } = order;
+            const {
+                activeOrderList,
+                totalPVOfOpenOrdersInUSD,
+                ordersPerCurrency,
+            } = activeOrders.reduce(
+                (result, order) => {
+                    const {
+                        orderId,
+                        ccy,
+                        maturity,
+                        side,
+                        unitPrice,
+                        amount,
+                        timestamp,
+                        isPreOrder,
+                    } = order;
 
-                        result.activeOrderList.push({
-                            orderId: BigInt(orderId),
-                            currency: ccy,
-                            maturity: maturity.toString(),
-                            side,
-                            unitPrice: unitPrice,
-                            amount: amount,
-                            createdAt: timestamp,
-                            isPreOrder,
-                        });
+                    result.activeOrderList.push({
+                        orderId: BigInt(orderId),
+                        currency: ccy,
+                        maturity: maturity.toString(),
+                        side,
+                        unitPrice: unitPrice,
+                        amount: amount,
+                        createdAt: timestamp,
+                        isPreOrder,
+                    });
 
-                        const currency = hexToCurrencySymbol(ccy);
+                    const currency = hexToCurrencySymbol(ccy);
 
-                        if (currency && side === OrderSide.LEND) {
-                            result.totalPVOfOpenOrdersInUSD +=
-                                assetPriceMap[currency] *
-                                amountFormatterFromBase[currency](amount);
-                        }
-
-                        return result;
-                    },
-                    {
-                        activeOrderList: [] as {
-                            orderId: bigint;
-                            currency: string;
-                            maturity: string;
-                            side: number;
-                            unitPrice: bigint;
-                            amount: bigint;
-                            createdAt: bigint;
-                            isPreOrder: boolean;
-                        }[],
-                        totalPVOfOpenOrdersInUSD: 0,
+                    if (currency && side === OrderSide.LEND) {
+                        result.totalPVOfOpenOrdersInUSD +=
+                            assetPriceMap[currency] *
+                            amountFormatterFromBase[currency](amount);
                     }
-                );
+
+                    const ccySymbol = hexToCurrencySymbol(ccy);
+
+                    if (ccySymbol) {
+                        result.ordersPerCurrency[ccySymbol] += 1;
+                    }
+
+                    return result;
+                },
+                {
+                    activeOrderList: [] as {
+                        orderId: bigint;
+                        currency: string;
+                        maturity: string;
+                        side: number;
+                        unitPrice: bigint;
+                        amount: bigint;
+                        createdAt: bigint;
+                        isPreOrder: boolean;
+                    }[],
+                    totalPVOfOpenOrdersInUSD: 0,
+                    ordersPerCurrency: { ...emptyOrdersPerCurrency },
+                }
+            );
 
             const sortedActiveOrderList = activeOrderList.sort((a, b) =>
                 sortOrders(a, b)
@@ -135,6 +157,7 @@ export const useOrderList = (
                 activeOrderList: sortedActiveOrderList,
                 inactiveOrderList,
                 totalPVOfOpenOrdersInUSD,
+                ordersPerCurrency,
             };
         },
         enabled: !!securedFinance && !!account && !!usedCurrencyKey,

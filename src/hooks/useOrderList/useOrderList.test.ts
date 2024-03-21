@@ -29,6 +29,16 @@ describe('useOrderList', () => {
 
             const newValue = result.current;
             expect(newValue.data.activeOrderList.length).toBe(45);
+            expect(newValue.data.ordersPerCurrency).toEqual({
+                [CurrencySymbol.ETH]: 2,
+                [CurrencySymbol.WETHe]: 0,
+                [CurrencySymbol.WFIL]: 42,
+                [CurrencySymbol.USDC]: 0,
+                [CurrencySymbol.WBTC]: 1,
+                [CurrencySymbol.BTCb]: 0,
+                [CurrencySymbol.aUSDC]: 0,
+                [CurrencySymbol.axlFIL]: 0,
+            });
             expect(newValue.data.totalPVOfOpenOrdersInUSD).toEqual(252440.374);
             for (let i = 0; i < newValue.data.activeOrderList.length - 1; i++) {
                 expect(

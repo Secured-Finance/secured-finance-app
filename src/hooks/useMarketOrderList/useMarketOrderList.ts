@@ -16,10 +16,15 @@ export const useMarketOrderList = (
 ) => {
     const { data: orderList = emptyOrderList } = useOrderList(account, [ccy]);
 
-    return useMemo(() => {
+    const activeOrdersPerMaturity = useMemo(() => {
         return orderList.activeOrderList
             .filter(o => o.maturity === maturity.toString())
             .filter(o => filterFn(o));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(orderList), maturity]);
+
+    return {
+        activeOrdersPerMaturity,
+        ordersPerCurrency: orderList.ordersPerCurrency,
+    };
 };
