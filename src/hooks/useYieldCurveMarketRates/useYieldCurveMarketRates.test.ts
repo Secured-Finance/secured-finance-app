@@ -30,6 +30,7 @@ const preOrderMarket = {
     currentMinDebtUnitPrice: BigInt('9500'),
     ccy: wfilBytes32,
     preOpeningDate: BigInt('1684982800'),
+    lastBlockUnitPriceTimestamp: BigInt('1646920200'),
 };
 
 const closedMarket = {
@@ -63,6 +64,7 @@ const marketWithZeroAPR = {
     currentMinDebtUnitPrice: BigInt('0'),
     ccy: wfilBytes32,
     preOpeningDate: BigInt('1684972800'),
+    lastBlockUnitPriceTimestamp: BigInt('1646920200'),
 };
 
 const noItayoseMarkets = maturitiesMockFromContract(wfilBytes32).slice(0, 8);
