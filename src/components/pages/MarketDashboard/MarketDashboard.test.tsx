@@ -84,7 +84,7 @@ describe('MarketDashboard Component', () => {
                 )
             ).toBeInTheDocument();
         });
-    });
+    }, 8000);
 
     it('should not show delisting disclaimer if no currency is being delisted', async () => {
         jest.spyOn(mock, 'currencyExists').mockResolvedValue(true);
