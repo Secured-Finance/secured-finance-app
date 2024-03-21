@@ -97,11 +97,8 @@ export type UserAccount = ReturnType<typeof useAccount>['address'];
 export type AssetPriceMap = Record<CurrencySymbol, number>;
 
 export enum HistoricalDataIntervals {
-    '30M' = '1800',
+    '15M' = '900',
     '1H' = '3600',
-    '4H' = '14400',
+    '6H' = '21600',
     '1D' = '86400',
-    '3D' = '259200',
-    '1W' = '604800',
-    '1M' = '2629800',
 }
