@@ -67,7 +67,7 @@ export function syncCrosshair(
 
 export function HistoricalChart({
     data,
-    timeScale = HistoricalDataIntervals['30M'],
+    timeScale = HistoricalDataIntervals['15M'],
 }: HistoricalChartProps) {
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const secondContainerRef = useRef<HTMLDivElement>(null);
