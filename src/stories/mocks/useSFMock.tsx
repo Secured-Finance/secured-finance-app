@@ -56,7 +56,7 @@ function generateOrderbook(depth: number) {
     };
 }
 
-function generateSimpleOrders(
+export function generateSimpleOrders(
     maturity: number,
     currency: string,
     isPreOrder: boolean,
