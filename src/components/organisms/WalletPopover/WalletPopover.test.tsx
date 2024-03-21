@@ -30,7 +30,7 @@ describe('WalletPopover component', () => {
         fireEvent.mouseEnter(alertIcon);
         const tooltip = screen.getByRole('tooltip');
         expect(tooltip).toHaveTextContent(
-            'Secured Finance only supported on Sepolia'
+            'Secured Finance is not supported on this network. Please switch to a supported network.'
         );
     });
 
