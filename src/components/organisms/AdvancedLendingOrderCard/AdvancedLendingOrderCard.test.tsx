@@ -183,7 +183,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         render(<Default />, { preloadedState });
         const lendTab = screen.getByText('Lend');
         fireEvent.click(lendTab);
-        expect(screen.getByText('Lending Source')).toBeInTheDocument();
+        expect(screen.getByText('Available')).toBeInTheDocument();
         expect(await screen.findByText('4,000')).toBeInTheDocument();
 
         const walletSourceButton = screen.getByTestId(
@@ -274,7 +274,7 @@ describe('AdvancedLendingOrderCard Component', () => {
             })
         );
 
-        expect(screen.getByText('Lending Source')).toBeInTheDocument();
+        expect(screen.getByText('Available')).toBeInTheDocument();
         expect(await screen.findByText('10,000')).toBeInTheDocument();
         const slider = screen.getByRole('slider');
         const input = screen.getByRole('textbox', { name: 'Amount' });
@@ -316,7 +316,7 @@ describe('AdvancedLendingOrderCard Component', () => {
             })
         );
 
-        expect(screen.getByText('Lending Source')).toBeInTheDocument();
+        expect(screen.getByText('Available')).toBeInTheDocument();
         expect(await screen.findByText('10,000')).toBeInTheDocument();
         const slider = screen.getByRole('slider');
         const input = screen.getByRole('textbox', { name: 'Amount' });
