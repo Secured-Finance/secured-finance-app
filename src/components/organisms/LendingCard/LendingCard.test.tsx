@@ -182,7 +182,7 @@ describe('LendingCard Component', () => {
         const lendTab = screen.getByText('Lend');
         fireEvent.click(lendTab);
         await waitFor(() =>
-            expect(screen.getByText('Lending Source')).toBeInTheDocument()
+            expect(screen.getByText('Available')).toBeInTheDocument()
         );
         expect(screen.getByText('10,000')).toBeInTheDocument();
 
@@ -216,7 +216,7 @@ describe('LendingCard Component', () => {
         fireEvent.click(lendTab);
 
         await waitFor(() =>
-            expect(screen.getByText('Lending Source')).toBeInTheDocument()
+            expect(screen.getByText('Available')).toBeInTheDocument()
         );
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '200' } });

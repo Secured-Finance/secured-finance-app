@@ -25,7 +25,7 @@ export default {
                 lastTradePrice,
                 maturityOptions[0].value.toNumber()
             ),
-            time: 0,
+            time: 1646920200,
             type: 'block',
         },
 

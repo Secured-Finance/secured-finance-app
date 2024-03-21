@@ -13,8 +13,8 @@ export default {
             { label: 'Option 3', value: 'option3' },
         ],
         value: 'option1',
+        onChange: () => {},
     },
-    argTypes: {},
 } as Meta<typeof RadioButton>;
 
 const StatefulTemplate: StoryFn<typeof RadioButton> = args => {
