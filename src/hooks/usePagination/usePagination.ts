@@ -6,7 +6,25 @@ const arraysAreEqual = <Q>(arr1: Q[], arr2: Q[]) =>
         (value, index) => JSON.stringify(value) === JSON.stringify(arr2[index])
     );
 
-export const usePagination = <T>(
+const updateData = <T extends { id: string | number }>(
+    prevData: T[],
+    newData: T[]
+): T[] => {
+    const updatedData = [...prevData];
+    newData.forEach(newItem => {
+        const index = updatedData.findIndex(
+            oldItem => oldItem.id === newItem.id
+        );
+        if (index !== -1) {
+            updatedData[index] = newItem;
+        } else {
+            updatedData.push(newItem);
+        }
+    });
+    return updatedData;
+};
+
+export const usePagination = <T extends { id: string | number }>(
     data: T[],
     dataUser: string | undefined,
     currentUser: string | undefined
@@ -26,7 +44,7 @@ export const usePagination = <T>(
             const currentData = data;
             const previousData = prevDataRef.current ?? [];
             if (!arraysAreEqual(previousData, currentData)) {
-                const updatedTotalData = [...totalData, ...currentData];
+                const updatedTotalData = updateData(previousData, currentData);
                 setTotalData(updatedTotalData);
                 prevDataRef.current = currentData;
             }

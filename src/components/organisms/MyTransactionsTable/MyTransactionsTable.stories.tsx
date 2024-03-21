@@ -32,6 +32,7 @@ const PaginationTemplate: StoryFn<typeof MyTransactionsTable> = args => {
     const initialData = Array(20)
         .fill(null)
         .map(_ => ({
+            id: '0',
             amount: '1000000000000000000000',
             averagePrice: '0.8000',
             side: 0,
@@ -58,6 +59,7 @@ const PaginationTemplate: StoryFn<typeof MyTransactionsTable> = args => {
                         const newData = Array(20)
                             .fill(null)
                             .map(_ => ({
+                                id: '0',
                                 amount: '1000000000000000000000',
                                 averagePrice: '0.8000',
                                 side: 0,
