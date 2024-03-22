@@ -101,7 +101,7 @@ module.exports = {
             green: '#5CD167',
             orange: '#F9AA4B',
             yellow: {
-                default: '#FAAD14',
+                DEFAULT: '#FAAD14',
                 '900': '#BD7003',
             },
             red: '#FA2256',

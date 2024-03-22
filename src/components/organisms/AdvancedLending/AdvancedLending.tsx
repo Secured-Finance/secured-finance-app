@@ -282,7 +282,7 @@ export const AdvancedLending = ({
         [dispatch, selectedTerm.label]
     );
 
-    const maximumOpenOrderLimit = filteredOrderList.length >= 20;
+    const maximumOpenOrderLimit = orderList.activeOrderList.length >= 20;
 
     const tooltipMap: Record<number, string> = {};
 
@@ -294,7 +294,7 @@ export const AdvancedLending = ({
         <div className='grid gap-2'>
             {maximumOpenOrderLimit && (
                 <Alert severity='warning'>
-                    <div className='text-neutral-50'>
+                    <div className='typography-caption text-neutral-50'>
                         You will not be able to place additional orders as you
                         currently have the maximum number of 20 orders. Please
                         wait for your order to be filled or cancel existing
