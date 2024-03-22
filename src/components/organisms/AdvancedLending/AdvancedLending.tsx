@@ -282,7 +282,7 @@ export const AdvancedLending = ({
         [dispatch, selectedTerm.label]
     );
 
-    const maximumOpenOrderLimit = filteredOrderList.length >= 20;
+    const maximumOpenOrderLimit = orderList.activeOrderList.length >= 20;
 
     const tooltipMap: Record<number, string> = {};
 
