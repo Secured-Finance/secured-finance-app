@@ -49,7 +49,7 @@ describe('usePagination', () => {
             .fill(null)
             .map((_, index) => ({
                 id: index,
-                name: 'SF',
+                name: 'AB',
                 age: 10,
                 english: 80,
                 maths: 60,
@@ -70,7 +70,7 @@ describe('usePagination', () => {
                     .fill(null)
                     .map((_, index) => ({
                         id: index + 1000,
-                        name: 'SF',
+                        name: 'CD',
                         age: 20,
                         english: 80,
                         maths: 60,
@@ -86,7 +86,7 @@ describe('usePagination', () => {
                 .fill(null)
                 .map((_, index) => ({
                     id: index,
-                    name: 'SF',
+                    name: 'AB',
                     age: 10,
                     english: 80,
                     maths: 60,
@@ -97,7 +97,7 @@ describe('usePagination', () => {
                 .fill(null)
                 .map((_, index) => ({
                     id: index + 1000,
-                    name: 'SF',
+                    name: 'CD',
                     age: 20,
                     english: 80,
                     maths: 60,
@@ -112,7 +112,7 @@ describe('usePagination', () => {
                     .fill(null)
                     .map((_, index) => ({
                         id: index + 1000,
-                        name: 'SF',
+                        name: 'EF',
                         age: 20,
                         english: 80,
                         maths: 60,
@@ -128,7 +128,7 @@ describe('usePagination', () => {
                 .fill(null)
                 .map((_, index) => ({
                     id: index,
-                    name: 'SF',
+                    name: 'AB',
                     age: 10,
                     english: 80,
                     maths: 60,
@@ -139,7 +139,7 @@ describe('usePagination', () => {
                 .fill(null)
                 .map((_, index) => ({
                     id: index + 1000,
-                    name: 'SF',
+                    name: 'EF',
                     age: 20,
                     english: 80,
                     maths: 60,
