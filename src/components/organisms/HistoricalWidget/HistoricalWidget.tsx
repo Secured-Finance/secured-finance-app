@@ -46,7 +46,6 @@ export const HistoricalWidget = () => {
         },
         queries.TransactionCandleStickDocument
     );
-
     const data = useMemo(() => {
         return (historicalTradeData.data?.transactionCandleSticks || []).map(
             (item: Transaction) => {
@@ -64,8 +63,8 @@ export const HistoricalWidget = () => {
                     vol: volAdjusted,
                 };
             }
-        ); // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedTimeScale, historicalTradeData]);
+        );
+    }, [historicalTradeData]);
 
     const onTimeScaleChange = (time: string) => {
         setSelectedTimeScale(time as HistoricalDataIntervals);
@@ -75,7 +74,7 @@ export const HistoricalWidget = () => {
         <>
             <div
                 data-testid='timescale-selector'
-                className='flex justify-between border-b border-t border-neutral-2 bg-[#292D3F99] px-4 py-2'
+                className='flex justify-between border-b border-t border-neutral-2 bg-gunMetal/60 px-4 py-2'
             >
                 <RadioButton
                     options={timeScales}

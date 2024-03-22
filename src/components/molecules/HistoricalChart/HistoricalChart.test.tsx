@@ -1,4 +1,5 @@
 import { composeStories } from '@storybook/react';
+import { dec22Fixture } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './HistoricalChart.stories';
@@ -33,7 +34,10 @@ describe('HistoricalChart component', () => {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
             })
         );
-        expect(store.getState().landingOrderForm.maturity).toEqual(1669852800);
+
+        expect(store.getState().landingOrderForm.maturity).toEqual(
+            dec22Fixture.toNumber()
+        );
         expect(store.getState().landingOrderForm.currency).toEqual('WFIL');
     });
 

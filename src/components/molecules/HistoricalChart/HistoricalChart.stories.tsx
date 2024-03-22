@@ -7,7 +7,7 @@ export default {
     title: 'Molecules/HistoricalChart',
     component: HistoricalChart,
     args: {
-        className: 'font-bold w-[600px]',
+        className: 'w-[600px]',
         data: tradingData,
     },
     parameters: {

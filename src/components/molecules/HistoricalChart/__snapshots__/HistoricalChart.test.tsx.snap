@@ -21,7 +21,7 @@ exports[`HistoricalChart component should match snapshot 1`] = `
             O
           </span>
           <div
-            class="font-normal text-[#F5F6FF]"
+            class="font-normal text-palePurple"
           />
         </div>
         <div
@@ -33,7 +33,7 @@ exports[`HistoricalChart component should match snapshot 1`] = `
             H
           </span>
           <div
-            class="font-normal text-[#F5F6FF]"
+            class="font-normal text-palePurple"
           />
         </div>
         <div
@@ -45,7 +45,7 @@ exports[`HistoricalChart component should match snapshot 1`] = `
             L
           </span>
           <div
-            class="font-normal text-[#F5F6FF]"
+            class="font-normal text-palePurple"
           />
         </div>
         <div
@@ -57,7 +57,7 @@ exports[`HistoricalChart component should match snapshot 1`] = `
             C
           </span>
           <div
-            class="font-normal text-[#F5F6FF]"
+            class="font-normal text-palePurple"
           />
         </div>
         <div

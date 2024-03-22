@@ -108,6 +108,7 @@ module.exports = {
             // Secondary
             galacticOrange: '#FF9FAE',
             planetaryPurple: '#ADB6FF',
+            palePurple: '#F5F6FF',
             nebulaTeal: '#15D6E8',
             secondaryPurple: '#AE72FF',
             moonGrey: '#E6E6E6',

@@ -19,6 +19,7 @@ const commonOptions = {
         textColor: '#CBD5E1',
         borderColor: 'rgba(119, 126, 144, 1)',
         borderVisible: false,
+        minimumWidth: 58,
     },
     crosshair: {
         mode: 1,
