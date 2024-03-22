@@ -108,92 +108,98 @@ export function HistoricalChart({
         [data]
     );
 
-    const handleDisplayLegend = (
-        candleData: WhitespaceData<Time> | CandlestickData<Time> | null,
-        volumeData: WhitespaceData<Time> | HistogramData<Time> | null
-    ) => {
-        const mergeData = {
-            ...candleData,
-            ...volumeData,
-        } as Omit<ITradingData, 'vol'> & { value: number };
+    useEffect(() => {
+        const handleDisplayLegend = (
+            candleData: WhitespaceData<Time> | CandlestickData<Time> | null,
+            volumeData: WhitespaceData<Time> | HistogramData<Time> | null
+        ) => {
+            const mergeData = {
+                ...candleData,
+                ...volumeData,
+            } as Omit<ITradingData, 'vol'> & { value: number };
 
-        const date = new Date(Number(candleData?.time) * 1000);
-        const formattedDate = `${date.getFullYear()}/${(
-            '0' +
-            (date.getMonth() + 1)
-        ).slice(-2)}/${('0' + date.getDate()).slice(-2)}`;
+            const date = new Date(Number(candleData?.time) * 1000);
+            const formattedDate = `${date.getFullYear()}/${(
+                '0' +
+                (date.getMonth() + 1)
+            ).slice(-2)}/${('0' + date.getDate()).slice(-2)}`;
 
-        setHoverTime(formattedDate);
+            setHoverTime(formattedDate);
 
-        const isNegative = mergeData?.close < mergeData?.open;
+            const isNegative = mergeData?.close < mergeData?.open;
 
-        setLegendData({
-            O: `${mergeData?.open.toFixed(2)}`,
-            H: `${mergeData?.high.toFixed(2)}`,
-            L: `${mergeData?.low.toFixed(2)}`,
-            C: `${mergeData?.close.toFixed(2)}`,
-            VOLUME_KEY_NAME: `${mergeData?.value}`,
-            Change: `${(
-                ((mergeData?.close - mergeData?.open) / mergeData?.open) *
-                100
-            ).toFixed(2)}%`,
-            usdVol: `${isNegative ? '-' : ''}${usdPrice * mergeData.value}`,
-        });
-    };
-
-    const subscribeToChartEvents = (
-        candleStickChart: IChartApi,
-        volumeChart: IChartApi,
-        candlestickSeries: TSeries,
-        volumeSeries: TSeries
-    ) => {
-        const updateLegendData = (param: MouseEventParams<Time>) => {
-            if (!param.seriesData.size) return;
-
-            let index = 0;
-            if (param.time) {
-                index = candlestickSeries
-                    .data()
-                    .findIndex(
-                        (item: Record<'time', Time>) => item.time === param.time
-                    );
-            }
-
-            if (index < 0) return;
-
-            const candleData = candlestickSeries.dataByIndex(index);
-            const volumeData = volumeSeries.dataByIndex(index);
-            handleDisplayLegend(candleData, volumeData);
+            setLegendData({
+                O: `${mergeData?.open.toFixed(2)}`,
+                H: `${mergeData?.high.toFixed(2)}`,
+                L: `${mergeData?.low.toFixed(2)}`,
+                C: `${mergeData?.close.toFixed(2)}`,
+                VOLUME_KEY_NAME: `${mergeData?.value}`,
+                Change: `${(
+                    ((mergeData?.close - mergeData?.open) / mergeData?.open) *
+                    100
+                ).toFixed(2)}%`,
+                usdVol: `${isNegative ? '-' : ''}${usdPrice * mergeData.value}`,
+            });
         };
 
-        candleStickChart.subscribeCrosshairMove(function (param) {
-            const dataPoint = getCrosshairDataPoint(candlestickSeries, param);
-            syncCrosshair(volumeChart, volumeSeries, dataPoint);
-            updateLegendData(param);
-        });
+        const subscribeToChartEvents = (
+            candleStickChart: IChartApi,
+            volumeChart: IChartApi,
+            candlestickSeries: TSeries,
+            volumeSeries: TSeries
+        ) => {
+            const updateLegendData = (param: MouseEventParams<Time>) => {
+                if (!param.seriesData.size) return;
 
-        volumeChart.subscribeCrosshairMove(function (param) {
-            const dataPoint = getCrosshairDataPoint(volumeSeries, param);
-            syncCrosshair(candleStickChart, candlestickSeries, dataPoint);
-            updateLegendData(param);
-        });
+                let index = 0;
+                if (param.time) {
+                    index = candlestickSeries
+                        .data()
+                        .findIndex(
+                            (item: Record<'time', Time>) =>
+                                item.time === param.time
+                        );
+                }
 
-        candleStickChart
-            .timeScale()
-            .subscribeVisibleLogicalRangeChange(range => {
-                volumeChart
-                    .timeScale()
-                    .setVisibleLogicalRange(range as LogicalRange);
+                if (index < 0) return;
+
+                const candleData = candlestickSeries.dataByIndex(index);
+                const volumeData = volumeSeries.dataByIndex(index);
+                handleDisplayLegend(candleData, volumeData);
+            };
+
+            candleStickChart.subscribeCrosshairMove(function (param) {
+                const dataPoint = getCrosshairDataPoint(
+                    candlestickSeries,
+                    param
+                );
+                syncCrosshair(volumeChart, volumeSeries, dataPoint);
+                updateLegendData(param);
             });
 
-        volumeChart.timeScale().subscribeVisibleLogicalRangeChange(range => {
+            volumeChart.subscribeCrosshairMove(function (param) {
+                const dataPoint = getCrosshairDataPoint(volumeSeries, param);
+                syncCrosshair(candleStickChart, candlestickSeries, dataPoint);
+                updateLegendData(param);
+            });
+
             candleStickChart
                 .timeScale()
-                .setVisibleLogicalRange(range as LogicalRange);
-        });
-    };
+                .subscribeVisibleLogicalRangeChange(range => {
+                    volumeChart
+                        .timeScale()
+                        .setVisibleLogicalRange(range as LogicalRange);
+                });
 
-    useEffect(() => {
+            volumeChart
+                .timeScale()
+                .subscribeVisibleLogicalRangeChange(range => {
+                    candleStickChart
+                        .timeScale()
+                        .setVisibleLogicalRange(range as LogicalRange);
+                });
+        };
+
         if (!chartContainerRef.current || !secondContainerRef.current) return;
         const { candlestickSeries, chart: candleStickChart } =
             createCandlestickChart(chartContainerRef.current);
@@ -265,8 +271,7 @@ export function HistoricalChart({
             });
             setHoverTime('');
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [data, setupCharts, timeScale]);
+    }, [data, setupCharts, timeScale, usdPrice]);
 
     const titleOfChartClass =
         'z-10 flex gap-4 text-2xs text-neutral-4 font-medium leading-4 pt-[0.4375rem] px-4';
