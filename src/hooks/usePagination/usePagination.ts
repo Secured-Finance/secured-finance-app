@@ -10,18 +10,11 @@ const updateData = <T extends { id: string | number }>(
     prevData: T[],
     newData: T[]
 ): T[] => {
-    const updatedData = [...prevData];
-    newData.forEach(newItem => {
-        const index = updatedData.findIndex(
-            oldItem => oldItem.id === newItem.id
-        );
-        if (index !== -1) {
-            updatedData[index] = newItem;
-        } else {
-            updatedData.push(newItem);
-        }
-    });
-    return updatedData;
+    const idToItemMap = new Map(prevData.map(item => [item.id, item]));
+    for (const newItem of newData) {
+        idToItemMap.set(newItem.id, newItem);
+    }
+    return Array.from(idToItemMap.values());
 };
 
 export const usePagination = <T extends { id: string | number }>(
