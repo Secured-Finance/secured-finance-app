@@ -37,7 +37,7 @@ export const usePagination = <T extends { id: string | number }>(
             const currentData = data;
             const previousData = prevDataRef.current ?? [];
             if (!arraysAreEqual(previousData, currentData)) {
-                const updatedTotalData = updateData(previousData, currentData);
+                const updatedTotalData = updateData(totalData, currentData);
                 setTotalData(updatedTotalData);
                 prevDataRef.current = currentData;
             }
