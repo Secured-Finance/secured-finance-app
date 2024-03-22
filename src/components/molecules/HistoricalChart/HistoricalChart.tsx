@@ -277,9 +277,9 @@ export function HistoricalChart({
     }, [data, setupCharts, timeScale]);
 
     const titleOfChartClass =
-        'z-10 flex gap-4 text-2xs text-neutral-4 font-medium leading-4 pt-[0.375rem] px-4';
+        'z-10 flex gap-4 text-2xs text-neutral-4 font-medium leading-4 pt-[0.4375rem] px-4';
     return (
-        <div className='bg-neutral-900 pt-[0.625rem]'>
+        <div className='bg-neutral-900 pt-[0.5625rem]'>
             <div className={clsx(titleOfChartClass)}>
                 {hoverTime && <span data-testid='hover-time'>{hoverTime}</span>}
                 {Object.entries(legendData)
@@ -290,7 +290,7 @@ export function HistoricalChart({
                                 <span className='text-neutral-4'>{key}</span>
                                 <div
                                     className={clsx('font-normal', {
-                                        'text-[#F5F6FF]': key !== 'Change',
+                                        'text-palePurple': key !== 'Change',
                                         'text-nebulaTeal':
                                             key === 'Change' &&
                                             !value.includes('-'),
