@@ -1,12 +1,11 @@
 import * as analytics from '@amplitude/analytics-browser';
 import { composeStories } from '@storybook/react';
-import { dec22Fixture, wfilBytes32 } from 'src/stories/mocks/fixtures';
 import {
     emptyTransaction,
     mockFilteredUserOrderHistory,
     mockFilteredUserTransactionHistory,
 } from 'src/stories/mocks/queries';
-import { generateSimpleOrders, mockUseSF } from 'src/stories/mocks/useSFMock';
+import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor, within } from 'src/test-utils.js';
 import { ButtonEvents, ButtonProperties } from 'src/utils';
 import * as stories from './AdvancedLending.stories';
@@ -171,49 +170,20 @@ describe('Advanced Lending Component', () => {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
             })
         );
-        expect(
-            screen.queryByText(
-                'You will not be able to place additional orders as you currently have the maximum number of 20 orders. Please wait for your order to be filled or cancel existing orders before adding more.'
-            )
-        ).not.toBeInTheDocument();
-    });
 
-    it('should show disclaimer for maximum open order limit if user has 20 open orders', async () => {
-        jest.spyOn(mockSecuredFinance, 'getOrderList').mockResolvedValueOnce({
-            activeOrders: [
-                ...generateSimpleOrders(
-                    dec22Fixture.toNumber(),
-                    wfilBytes32,
-                    true,
-                    20
-                ),
-            ],
-            inactiveOrders: [],
-        });
+        fireEvent.click(screen.getByRole('button', { name: 'WFIL' }));
+        fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
+
         await waitFor(() =>
-            render(<OpenOrdersConnectedToWallet />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
-            })
+            expect(
+                screen.queryByText(
+                    'You will not be able to place additional orders as you currently have the maximum number of 20 orders. Please wait for your order to be filled or cancel existing orders before adding more.'
+                )
+            ).not.toBeInTheDocument()
         );
-        expect(
-            await screen.findByText(
-                'You will not be able to place additional orders as you currently have the maximum number of 20 orders. Please wait for your order to be filled or cancel existing orders before adding more.'
-            )
-        ).toBeInTheDocument();
     });
 
-    it('should show tooltip on open orders for maximum open order limit if user has 20 open orders', async () => {
-        jest.spyOn(mockSecuredFinance, 'getOrderList').mockResolvedValueOnce({
-            activeOrders: [
-                ...generateSimpleOrders(
-                    dec22Fixture.toNumber(),
-                    wfilBytes32,
-                    true,
-                    20
-                ),
-            ],
-            inactiveOrders: [],
-        });
+    it('should show disclaimer and tooltip for maximum open order limit if user has 20 open orders', async () => {
         await waitFor(() =>
             render(<OpenOrdersConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
