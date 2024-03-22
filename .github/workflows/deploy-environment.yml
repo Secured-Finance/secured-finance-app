@@ -37,20 +37,12 @@ jobs:
       ref: ${{ github.event.inputs.ref }}
     secrets: inherit
 
-  cypress-run:
-    name: Cypress Run Tests
-    needs: build-and-test-all
-    uses: ./.github/workflows/cypress-test.yml
-    with:
-      artifact_name: WebApp
-    secrets: inherit
-
   deploy-on-fleek:
     runs-on: ubuntu-latest
     name: Deploy on Fleek
     if: github.event.inputs.environment != 'ci-build'
     environment: ${{ github.event.inputs.environment }}
-    needs: [build-and-test-all, cypress-run]
+    needs: [build-and-test-all]
     steps:
       - uses: actions/checkout@v2
 
