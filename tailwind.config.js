@@ -197,6 +197,9 @@ module.exports = {
                 eth: 'rgba(131, 131, 133, 0.7)',
                 usdc: '#2775CA',
             },
+            secondary: {
+                700: '#09A8B7',
+            },
         },
     },
     plugins: [],
