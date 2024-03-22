@@ -79,6 +79,10 @@ export const HistoricalWidget = () => {
                 <div className='flex w-[65px] laptop:w-[75px] desktop:hidden'>
                     <DropdownSelector
                         optionList={timeScales}
+                        selected={{
+                            value: selectedTimeScale as string,
+                            label: selectedTimeScale as string,
+                        }}
                         onChange={(time: string) => onTimeScaleChange(time)}
                         variant='fullWidth'
                     />
