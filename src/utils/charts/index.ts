@@ -1,35 +1,40 @@
 import { createChart } from 'lightweight-charts';
 import { HistoricalDataIntervals } from 'src/types';
+import tailwindConfig from 'tailwind.config';
+
+const intervalsToCheck = ['5M', '15M', '30M', '1H', '4H'];
+
+const { colors } = tailwindConfig.theme;
 
 const commonOptions = {
     autoSize: true,
     layout: {
         background: { color: '#052132' },
-        textColor: '#777E90',
+        textColor: colors.slateGray,
     },
     grid: {
         vertLines: {
             visible: false,
         },
         horzLines: {
-            color: '#334155',
+            color: colors.neutral['700'],
         },
     },
     rightPriceScale: {
-        textColor: '#CBD5E1',
-        borderColor: 'rgba(119, 126, 144, 1)',
+        textColor: colors.neutral['300'],
+        borderColor: colors.slateGray,
         borderVisible: false,
         minimumWidth: 58,
     },
     crosshair: {
         mode: 1,
         vertLine: {
-            color: '#CBD5E1',
-            labelBackgroundColor: '#475569',
+            color: colors.neutral['300'],
+            labelBackgroundColor: colors.neutral['600'],
         },
         horzLine: {
-            color: '#CBD5E1',
-            labelBackgroundColor: '#475569',
+            color: colors.neutral['300'],
+            labelBackgroundColor: colors.neutral['600'],
         },
     },
 };
@@ -50,16 +55,17 @@ export const createCandlestickChart = (ref: HTMLDivElement) => {
         },
     });
     if (ref.querySelector('canvas')) {
-        (ref.querySelector('canvas') as HTMLCanvasElement).style.borderBottom =
-            '2px solid #334155';
+        (
+            ref.querySelector('canvas') as HTMLCanvasElement
+        ).style.borderBottom = `2px solid ${colors.neutral['700']}`;
     }
 
     const candlestickSeries = chart.addCandlestickSeries({
-        upColor: '#15D6E8',
-        downColor: '#FF9FAE',
+        upColor: colors.nebulaTeal,
+        downColor: colors.galacticOrange,
         borderVisible: false,
-        wickUpColor: '#15D6E8',
-        wickDownColor: '#FF9FAE',
+        wickUpColor: colors.nebulaTeal,
+        wickDownColor: colors.galacticOrange,
         priceFormat: {
             type: 'volume',
         },
@@ -92,11 +98,11 @@ export const createVolumeChart = (
         },
         timeScale: {
             ticksVisible: true,
-            timeVisible: timeInterval !== HistoricalDataIntervals['1D'],
+            timeVisible: !intervalsToCheck.includes(timeInterval),
         },
     });
     const volumeSeries = chart.addHistogramSeries({
-        color: '#09A8B7',
+        color: colors.secondary['700'],
         priceLineWidth: 1,
         priceLineVisible: true,
         priceFormat: {

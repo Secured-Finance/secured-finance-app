@@ -4,7 +4,6 @@ import {
     CandlestickData,
     HistogramData,
     IChartApi,
-    ISeriesApi,
     LogicalRange,
     MouseEventParams,
     Time,
@@ -18,24 +17,10 @@ import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { HistoricalDataIntervals } from 'src/types';
 import { createCandlestickChart, createVolumeChart } from 'src/utils/charts';
+import tailwindConfig from 'tailwind.config';
+import { HistoricalChartProps, ITradingData, TSeries } from './types';
 
-export interface ITradingData {
-    time: string;
-    open: number;
-    high: number;
-    low: number;
-    close: number;
-    vol: number;
-}
-
-export interface HistoricalChartProps {
-    data: ITradingData[];
-    timeScale?: HistoricalDataIntervals;
-}
-
-export type TSeries = ISeriesApi<
-    'Line' | 'Area' | 'Histogram' | 'Candlestick' | 'Bar'
->;
+const { colors } = tailwindConfig.theme;
 
 function getCrosshairDataPoint(series: TSeries, param: MouseEventParams) {
     if (!param.time) {
@@ -67,7 +52,7 @@ export function syncCrosshair(
 
 export function HistoricalChart({
     data,
-    timeScale = HistoricalDataIntervals['15M'],
+    timeScale = HistoricalDataIntervals['5M'],
 }: HistoricalChartProps) {
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const secondContainerRef = useRef<HTMLDivElement>(null);
@@ -111,7 +96,10 @@ export function HistoricalChart({
             const volumeData = data.map(item => ({
                 time: Number(item.time) as UTCTimestamp,
                 value: +item.vol,
-                color: item.open > item.close ? '#FF9FAE' : '#09A8B7',
+                color:
+                    item.open > item.close
+                        ? colors.galacticOrange
+                        : colors.secondary['700'],
             }));
 
             candlestickSeries.setData(candleData);
@@ -170,6 +158,8 @@ export function HistoricalChart({
                         (item: Record<'time', Time>) => item.time === param.time
                     );
             }
+
+            if (index < 0) return;
 
             const candleData = candlestickSeries.dataByIndex(index);
             const volumeData = volumeSeries.dataByIndex(index);
@@ -239,6 +229,8 @@ export function HistoricalChart({
                         (item: Record<'time', Time>) => item.time === param.time
                     );
             }
+
+            if (index < 0) return;
 
             const candleData = candlestickSeries.dataByIndex(index);
             const volumeData = volumeSeries.dataByIndex(index);

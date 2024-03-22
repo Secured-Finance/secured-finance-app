@@ -2,7 +2,7 @@ import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { RadioButton } from 'src/components/atoms';
+import { DropdownSelector, RadioButton } from 'src/components/atoms';
 import { HistoricalChart } from 'src/components/molecules/HistoricalChart';
 import { useGraphClientHook } from 'src/hooks';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
@@ -34,7 +34,7 @@ export const HistoricalWidget = () => {
         selectLandingOrderForm(state.landingOrderForm)
     );
     const [selectedTimeScale, setSelectedTimeScale] =
-        useState<HistoricalDataIntervals>(HistoricalDataIntervals['15M']);
+        useState<HistoricalDataIntervals>(HistoricalDataIntervals['5M']);
 
     const historicalTradeData = useGraphClientHook(
         {
@@ -76,11 +76,20 @@ export const HistoricalWidget = () => {
                 data-testid='timescale-selector'
                 className='flex justify-between border-b border-t border-neutral-2 bg-gunMetal/60 px-4 py-2'
             >
-                <RadioButton
-                    options={timeScales}
-                    value={selectedTimeScale}
-                    onChange={(time: string) => onTimeScaleChange(time)}
-                />
+                <div className='flex max-w-[65px] desktop:hidden'>
+                    <DropdownSelector
+                        optionList={timeScales}
+                        onChange={(time: string) => onTimeScaleChange(time)}
+                        variant='fullWidth'
+                    />
+                </div>
+                <div className='hidden desktop:flex'>
+                    <RadioButton
+                        options={timeScales}
+                        value={selectedTimeScale}
+                        onChange={(time: string) => onTimeScaleChange(time)}
+                    />
+                </div>
             </div>
             <HistoricalChart data={data} timeScale={selectedTimeScale} />
         </>

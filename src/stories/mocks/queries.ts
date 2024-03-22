@@ -740,7 +740,7 @@ export const mockTransactionCandleStick = [
         request: {
             query: queries.TransactionCandleStickDocument,
             variables: {
-                interval: '900',
+                interval: '300',
                 currency: wfilBytes32,
                 maturity: dec22Fixture.toNumber(),
                 first: 1000,
