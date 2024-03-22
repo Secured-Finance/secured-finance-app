@@ -2,7 +2,7 @@ import { createChart } from 'lightweight-charts';
 import { HistoricalDataIntervals } from 'src/types';
 import tailwindConfig from 'tailwind.config';
 
-const intervalsToCheck = ['5M', '15M', '30M', '1H', '4H'];
+const intervalsToCheck = ['300', '900', '1800', '3600', '14400'];
 
 const { colors } = tailwindConfig.theme;
 
@@ -98,7 +98,7 @@ export const createVolumeChart = (
         },
         timeScale: {
             ticksVisible: true,
-            timeVisible: !intervalsToCheck.includes(timeInterval),
+            timeVisible: intervalsToCheck.includes(timeInterval as string),
         },
     });
     const volumeSeries = chart.addHistogramSeries({
