@@ -31,8 +31,8 @@ export const Default = Template.bind({});
 const PaginationTemplate: StoryFn<typeof MyTransactionsTable> = args => {
     const initialData = Array(20)
         .fill(null)
-        .map(_ => ({
-            id: '0',
+        .map((_, index) => ({
+            id: index.toString(),
             amount: '1000000000000000000000',
             averagePrice: '0.8000',
             side: 0,
@@ -58,8 +58,8 @@ const PaginationTemplate: StoryFn<typeof MyTransactionsTable> = args => {
                     getMoreData: () => {
                         const newData = Array(20)
                             .fill(null)
-                            .map(_ => ({
-                                id: '0',
+                            .map((_, index) => ({
+                                id: (data.length + index).toString(),
                                 amount: '1000000000000000000000',
                                 averagePrice: '0.8000',
                                 side: 0,

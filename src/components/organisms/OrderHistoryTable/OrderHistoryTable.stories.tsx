@@ -32,7 +32,7 @@ const PaginatedTemplate: StoryFn<typeof OrderHistoryTable> = args => {
     const initialData = Array(20)
         .fill(null)
         .map((_, index) => ({
-            id: wfilBytes32 + dec22Fixture.toString() + index.toString(),
+            id: index.toString(),
             orderId: index,
             currency: wfilBytes32,
             side: 1,
@@ -65,10 +65,7 @@ const PaginatedTemplate: StoryFn<typeof OrderHistoryTable> = args => {
                     const newData = Array(20)
                         .fill(null)
                         .map((_, index) => ({
-                            id:
-                                wfilBytes32 +
-                                dec22Fixture.toString() +
-                                index.toString(),
+                            id: (data.length + index).toString(),
                             orderId: index,
                             currency: wfilBytes32,
                             side: 1,
