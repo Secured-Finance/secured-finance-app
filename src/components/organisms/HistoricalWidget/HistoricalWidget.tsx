@@ -74,9 +74,9 @@ export const HistoricalWidget = () => {
         <>
             <div
                 data-testid='timescale-selector'
-                className='flex justify-between border-b border-t border-neutral-2 bg-gunMetal/60 px-4 py-2'
+                className='flex justify-between border-b border-t border-neutral-700 bg-gunMetal/60 px-4 py-2'
             >
-                <div className='flex max-w-[65px] desktop:hidden'>
+                <div className='flex w-[65px] laptop:w-[75px] desktop:hidden'>
                     <DropdownSelector
                         optionList={timeScales}
                         onChange={(time: string) => onTimeScaleChange(time)}

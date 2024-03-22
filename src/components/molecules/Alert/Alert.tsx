@@ -61,7 +61,7 @@ export const Alert = ({
             aria-label={severity}
             role='alert'
             className={clsx('rounded-xl', {
-                'border-2 border-yellow bg-yellow/20': variant === 'outlined', // should be changed to handle different colors
+                'border-yellow bg-yellow/20 border-2': variant === 'outlined', // should be changed to handle different colors
                 'bg-[rgba(41, 45, 63, 0.60)] border border-white-10 shadow-tab':
                     variant === 'solid',
             })}
