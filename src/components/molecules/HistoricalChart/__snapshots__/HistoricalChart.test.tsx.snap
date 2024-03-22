@@ -6,10 +6,10 @@ exports[`HistoricalChart component should match snapshot 1`] = `
     class="w-[600px]"
   >
     <div
-      class="bg-neutral-900 pt-[0.625rem]"
+      class="bg-neutral-900 pt-[0.5625rem]"
     >
       <div
-        class="z-10 flex gap-4 text-2xs text-neutral-4 font-medium leading-4 pt-[0.375rem] px-4"
+        class="z-10 flex gap-4 text-2xs text-neutral-4 font-medium leading-4 pt-[0.4375rem] px-4"
       >
         
         <div
@@ -107,13 +107,13 @@ exports[`HistoricalChart component should match snapshot 1`] = `
                 style="padding: 0px;"
               >
                 <div
-                  style="height: 260px; overflow: hidden; width: 0px; left: 0px; position: relative;"
+                  style="height: 260px; overflow: hidden; width: 58px; left: 0px; position: relative;"
                 >
                   <canvas
-                    style="width: 0px; height: 260px; position: absolute; z-index: 1; left: 0px; top: 0px;"
+                    style="width: 58px; height: 260px; position: absolute; z-index: 1; left: 0px; top: 0px;"
                   />
                   <canvas
-                    style="width: 0px; height: 260px; position: absolute; z-index: 2; left: 0px; top: 0px;"
+                    style="width: 58px; height: 260px; position: absolute; z-index: 2; left: 0px; top: 0px;"
                   />
                 </div>
               </td>
@@ -154,7 +154,7 @@ exports[`HistoricalChart component should match snapshot 1`] = `
         </div>
       </div>
       <div
-        class="z-10 flex gap-4 text-2xs text-neutral-4 font-medium leading-4 pt-[0.375rem] px-4"
+        class="z-10 flex gap-4 text-2xs text-neutral-4 font-medium leading-4 pt-[0.4375rem] px-4"
       >
         <div>
           <span>
@@ -204,13 +204,13 @@ exports[`HistoricalChart component should match snapshot 1`] = `
                 style="padding: 0px;"
               >
                 <div
-                  style="height: 142px; overflow: hidden; width: 0px; left: 0px; position: relative;"
+                  style="height: 142px; overflow: hidden; width: 58px; left: 0px; position: relative;"
                 >
                   <canvas
-                    style="width: 0px; height: 142px; position: absolute; z-index: 1; left: 0px; top: 0px;"
+                    style="width: 58px; height: 142px; position: absolute; z-index: 1; left: 0px; top: 0px;"
                   />
                   <canvas
-                    style="width: 0px; height: 142px; position: absolute; z-index: 2; left: 0px; top: 0px;"
+                    style="width: 58px; height: 142px; position: absolute; z-index: 2; left: 0px; top: 0px;"
                   />
                 </div>
               </td>
@@ -237,10 +237,12 @@ exports[`HistoricalChart component should match snapshot 1`] = `
                 style="padding: 0px;"
               >
                 <div
-                  style="width: 0px; height: 28px; overflow: hidden;"
+                  style="width: 58px; height: 28px; overflow: hidden;"
                 >
                   <canvas
-                    style="width: 0px; height: 28px;"
+                    height="28"
+                    style="width: 58px; height: 28px;"
+                    width="58"
                   />
                 </div>
               </td>
