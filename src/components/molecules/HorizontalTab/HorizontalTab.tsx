@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { Children, useState } from 'react';
 import TooltipIcon from 'src/assets/icons/information-circle-block.svg';
 import { DropdownSelector } from 'src/components/atoms';
-import { Tooltip } from 'src/components/templates';
+import { Tooltip, TooltipMode } from 'src/components/molecules';
 
 const TitleChip = ({
     title,
@@ -35,7 +35,7 @@ const TitleChip = ({
                             data-testid={`${title}-tooltip`}
                         />
                     }
-                    severity='warning'
+                    mode={TooltipMode.Warning}
                     align='right'
                 >
                     <div className='grid grid-cols-10'>
