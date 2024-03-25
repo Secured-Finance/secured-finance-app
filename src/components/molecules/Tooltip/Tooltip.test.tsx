@@ -17,7 +17,7 @@ describe('Tooltip Component', () => {
         expect(screen.getByRole('tooltip')).toBeInTheDocument();
         expect(
             screen.getByText(
-                'This is tooltip content. This is tooltip content.'
+                'If the conditions are fulfilled, the trade will be executed.'
             )
         ).toBeInTheDocument();
         expect(screen.getByRole('tooltip')).toBeInTheDocument();
@@ -31,7 +31,7 @@ describe('Tooltip Component', () => {
 
         expect(
             screen.queryByText(
-                'This is tooltip content. This is tooltip content.'
+                'If the conditions are fulfilled, the trade will be executed.'
             )
         ).not.toBeInTheDocument();
         expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
