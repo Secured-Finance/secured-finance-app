@@ -5,6 +5,7 @@ import {
 import type { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
 import { Tooltip } from './Tooltip';
+import { TooltipMode } from './types';
 
 const ButtonIcon = (
     <button
@@ -23,13 +24,11 @@ const InformationIcon = (
 );
 
 const children = (
-    <div className='text-white'>
-        <p>This is tooltip content. This is tooltip content.</p>
-    </div>
+    <p>If the conditions are fulfilled, the trade will be executed.</p>
 );
 
 export default {
-    title: 'Templates/Tooltip',
+    title: 'Molecules/Tooltip',
     component: Tooltip,
     args: {
         children: children,
@@ -50,42 +49,11 @@ Default.play = async ({ canvasElement }) => {
     await userEvent.hover(button);
 };
 
-export const WithIcon = Template.bind({});
-WithIcon.args = {
-    iconElement: ButtonIcon,
+export const Success = Template.bind({});
+Success.args = {
+    mode: TooltipMode.Success,
 };
-
-WithIcon.play = async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const button = canvas.getByTestId('button-icon');
-    await userEvent.hover(button);
-};
-
-export const LeftAligned = Template.bind({});
-LeftAligned.args = {
-    align: 'left',
-};
-LeftAligned.play = async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const button = canvas.getByTestId('information-circle');
-    await userEvent.hover(button);
-};
-
-export const RightAligned = Template.bind({});
-RightAligned.args = {
-    align: 'right',
-};
-RightAligned.play = async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const button = canvas.getByTestId('information-circle');
-    await userEvent.hover(button);
-};
-
-export const SmallWidth = Template.bind({});
-SmallWidth.args = {
-    maxWidth: 'small',
-};
-SmallWidth.play = async ({ canvasElement }) => {
+Success.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const button = canvas.getByTestId('information-circle');
     await userEvent.hover(button);
@@ -93,10 +61,31 @@ SmallWidth.play = async ({ canvasElement }) => {
 
 export const Warning = Template.bind({});
 Warning.args = {
-    severity: 'warning',
+    mode: TooltipMode.Warning,
 };
 Warning.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const button = canvas.getByTestId('information-circle');
+    await userEvent.hover(button);
+};
+
+export const Error = Template.bind({});
+Error.args = {
+    mode: TooltipMode.Error,
+};
+Error.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = canvas.getByTestId('information-circle');
+    await userEvent.hover(button);
+};
+
+export const WithCustomHoverIcon = Template.bind({});
+WithCustomHoverIcon.args = {
+    iconElement: ButtonIcon,
+};
+
+WithCustomHoverIcon.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = canvas.getByTestId('button-icon');
     await userEvent.hover(button);
 };

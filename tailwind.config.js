@@ -18,7 +18,7 @@ module.exports = {
             },
             boxShadow: {
                 deep: '0px 34px 64px 0px rgba(0, 0, 0, 0.45)',
-                dropdown: '0px 16px 64px -48px rgba(31, 47, 70, 0.4)',
+                dropdown: '0px 0px 4px 0px rgba(0, 0, 0, 0.20)',
                 tab: '0px 46px 64px 0px rgba(31, 47, 70, 0.4)',
                 selector: 'inset 0px 2px 4px rgba(0, 0, 0, 0.25)',
                 sliderthumb: '0px 4px 16px -8px rgba(15, 15, 15, 0.1)',
@@ -108,7 +108,7 @@ module.exports = {
                 300: '#96EAF1',
                 500: '#15D6E8',
                 700: '#09A8B7',
-                900: '#017E8A',
+                900: '#01747F',
             },
             tertiary: {
                 50: '#F5F6FF',
