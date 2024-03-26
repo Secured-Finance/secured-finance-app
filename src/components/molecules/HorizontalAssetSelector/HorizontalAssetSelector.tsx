@@ -39,27 +39,38 @@ export const HorizontalAssetSelector = <T extends string = string>({
     );
 
     return (
-        <div className='typography-caption-2 grid min-w-fit grid-cols-2 gap-x-5 gap-y-1 text-neutral-4'>
-            <CurrencyDropdown
-                currencyOptionList={assetList}
-                selected={selectedAsset}
-                onChange={onAssetChange}
-            />
-            <DropdownSelector
-                optionList={options}
-                onChange={handleTermChange}
-                selected={selected}
-            />
-            <div>
-                {selectedAsset
-                    ? currencyMap[selectedAsset.value].name
-                    : undefined}
+        <div className='grid grid-cols-2 gap-x-3 gap-y-1 text-neutral-4 desktop:gap-x-5'>
+            <div className='flex flex-col items-center'>
+                <div className='flex w-full flex-col gap-1'>
+                    <CurrencyDropdown
+                        currencyOptionList={assetList}
+                        selected={selectedAsset}
+                        onChange={onAssetChange}
+                    />
+                    <p className='text-[0.6875rem] leading-4 tablet:text-xs'>
+                        {selectedAsset
+                            ? currencyMap[selectedAsset.value].name
+                            : undefined}
+                    </p>
+                </div>
             </div>
-            <div className='whitespace-nowrap'>
-                {`Maturity ${
-                    selectedTerm &&
-                    getTransformMaturityOption(options)(selectedTerm.label)
-                }`}
+            <div className='flex flex-col items-center'>
+                <div className='flex w-full flex-col gap-1'>
+                    <DropdownSelector
+                        optionList={options}
+                        onChange={handleTermChange}
+                        selected={selected}
+                        variant='fullWidth'
+                    />
+                    <p className='whitespace-nowrap text-[0.6875rem] leading-4 tablet:text-xs'>
+                        {`Maturity ${
+                            selectedTerm &&
+                            getTransformMaturityOption(options)(
+                                selectedTerm.label
+                            )
+                        }`}
+                    </p>
+                </div>
             </div>
         </div>
     );

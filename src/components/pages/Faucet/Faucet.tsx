@@ -179,21 +179,23 @@ export const Faucet = () => {
                         </h1>
                         <div className='flex flex-col gap-10'>
                             <div className='grid h-14 grid-flow-col items-center justify-start gap-x-3 rounded-xl border border-neutral-3 bg-black-20 px-2 tablet:justify-stretch'>
-                                <CurrencyDropdown
-                                    currencyOptionList={assetList}
-                                    selected={assetList[0]}
-                                    onChange={ccy => {
-                                        if (
-                                            assetList
-                                                .map(item => item.label)
-                                                .includes(ccy)
-                                        ) {
-                                            setCcy(ccy as CurrencySymbol);
-                                        } else {
-                                            setCcy(null);
-                                        }
-                                    }}
-                                />
+                                <div className='w-36'>
+                                    <CurrencyDropdown
+                                        currencyOptionList={assetList}
+                                        selected={assetList[0]}
+                                        onChange={ccy => {
+                                            if (
+                                                assetList
+                                                    .map(item => item.label)
+                                                    .includes(ccy)
+                                            ) {
+                                                setCcy(ccy as CurrencySymbol);
+                                            } else {
+                                                setCcy(null);
+                                            }
+                                        }}
+                                    />
+                                </div>
                                 <div className='typography-caption text-white-60'>
                                     <div className='hidden tablet:flex tablet:w-full tablet:flex-row tablet:items-center  tablet:justify-between'>
                                         <div>{address}</div>

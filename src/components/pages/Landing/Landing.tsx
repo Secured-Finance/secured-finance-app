@@ -157,41 +157,42 @@ const WithBanner = ({
         <div className='flex flex-col justify-center gap-5'>
             <DelistedCurrencyDisclaimer currencies={delistedCurrencySet} />
             {market && (
-                <Alert severity='info'>
-                    <div className='typography-caption text-white'>
-                        <p>
-                            {`Market ${ccy}-${getUTCMonthYear(
-                                market.maturity,
-                                true
-                            )} is open for pre-orders now until ${Intl.DateTimeFormat(
-                                'en-US',
-                                {
-                                    timeZone: 'UTC',
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric',
-                                }
-                            ).format(preOrderTimeLimit)} ${Intl.DateTimeFormat(
-                                'en-GB',
-                                {
+                <div className='px-3 tablet:px-0'>
+                    <Alert severity='info'>
+                        <div className='typography-caption text-white'>
+                            <p>
+                                {`Market ${ccy}-${getUTCMonthYear(
+                                    market.maturity,
+                                    true
+                                )} is open for pre-orders now until ${Intl.DateTimeFormat(
+                                    'en-US',
+                                    {
+                                        timeZone: 'UTC',
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric',
+                                    }
+                                ).format(
+                                    preOrderTimeLimit
+                                )} ${Intl.DateTimeFormat('en-GB', {
                                     timeZone: 'UTC',
                                     hour: '2-digit',
                                     minute: '2-digit',
-                                }
-                            ).format(preOrderTimeLimit)} (UTC)`}
-                            <span className='pl-4'>
-                                <Link href='itayose' passHref>
-                                    <a
-                                        href='_'
-                                        className='text-planetaryPurple underline'
-                                    >
-                                        Place Order Now
-                                    </a>
-                                </Link>
-                            </span>
-                        </p>
-                    </div>
-                </Alert>
+                                }).format(preOrderTimeLimit)} (UTC)`}
+                                <span className='pl-4'>
+                                    <Link href='itayose' passHref>
+                                        <a
+                                            href='_'
+                                            className='text-planetaryPurple underline'
+                                        >
+                                            Place Order Now
+                                        </a>
+                                    </Link>
+                                </span>
+                            </p>
+                        </div>
+                    </Alert>
+                </div>
             )}
             {children}
         </div>

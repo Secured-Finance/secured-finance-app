@@ -26,11 +26,11 @@ export const MarketTab = ({
         >
             <span
                 className={clsx({
-                    'typography-button-3 whitespace-nowrap leading-7 text-nebulaTeal':
+                    'typography-button-3 whitespace-nowrap leading-8 text-nebulaTeal':
                         variant === 'green-name',
-                    'typography-button-3 whitespace-nowrap leading-7 text-slateGray':
+                    'typography-button-3 whitespace-nowrap leading-8 text-slateGray':
                         variant === 'gray-name',
-                    'typography-caption-2 whitespace-nowrap text-slateGray':
+                    'whitespace-nowrap text-[0.6875rem] leading-4 text-slateGray':
                         variant === 'default',
                 })}
             >
@@ -43,7 +43,7 @@ export const MarketTab = ({
                             variant === 'green-name',
                         'typography-caption whitespace-nowrap text-slateGray':
                             variant === 'gray-name',
-                        'typography-caption text-neutral-8':
+                        'text-xs font-semibold leading-5 text-neutral-8':
                             variant === 'default',
                     },
                     'flex items-center'
