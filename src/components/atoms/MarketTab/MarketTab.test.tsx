@@ -10,7 +10,7 @@ describe('test Market Tab component', () => {
         expect(screen.getByLabelText('24h Volume')).toBeInTheDocument();
         expect(screen.getByText('24h Volume')).toBeInTheDocument();
         expect(screen.getByText('24h Volume')).toHaveClass(
-            'whitespace-nowrap text-[0.6875rem] leading-4 text-slateGray'
+            'whitespace-nowrap text-[0.625rem] leading-4 text-slateGray'
         );
         expect(screen.getByText('10,000')).toBeInTheDocument();
         expect(screen.getByText('10,000')).toHaveClass(
@@ -23,11 +23,11 @@ describe('test Market Tab component', () => {
         expect(screen.getByLabelText('Green Market Tab')).toBeInTheDocument();
         expect(screen.getByText('7977.00')).toBeInTheDocument();
         expect(screen.getByText('7977.00')).toHaveClass(
-            'typography-button-3 whitespace-nowrap leading-8 text-nebulaTeal'
+            'whitespace-nowrap text-sm font-semibold leading-[1.57] text-nebulaTeal'
         );
         expect(screen.getByText('25.00% APR')).toBeInTheDocument();
         expect(screen.getByText('25.00% APR')).toHaveClass(
-            'typography-caption text-white'
+            'whitespace-nowrap text-[0.625rem] text-white flex items-center'
         );
     });
 

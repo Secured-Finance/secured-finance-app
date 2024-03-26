@@ -83,7 +83,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                             variant={currentMarket ? 'green-name' : 'gray-name'}
                             label='Current Market'
                         />
-                        <div className='typography-caption-2 whitespace-nowrap text-neutral-4'>
+                        <div className='whitespace-nowrap pt-[1px] text-[0.625rem] leading-4 text-neutral-4'>
                             {getTime()}
                         </div>
                     </div>

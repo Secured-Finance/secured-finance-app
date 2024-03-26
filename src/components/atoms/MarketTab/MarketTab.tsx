@@ -21,16 +21,17 @@ export const MarketTab = ({
         <section
             className={clsx('flex h-fit flex-grow flex-col', {
                 'gap-1': variant === 'default',
+                'gap-[1.5px]': variant === 'green-name',
             })}
             aria-label={label ?? name}
         >
             <span
                 className={clsx({
-                    'typography-button-3 whitespace-nowrap leading-8 text-nebulaTeal':
+                    'whitespace-nowrap text-sm font-semibold leading-[1.57] text-nebulaTeal':
                         variant === 'green-name',
                     'typography-button-3 whitespace-nowrap leading-8 text-slateGray':
                         variant === 'gray-name',
-                    'whitespace-nowrap text-[0.6875rem] leading-4 text-slateGray':
+                    'whitespace-nowrap text-[0.625rem] leading-4 text-slateGray':
                         variant === 'default',
                 })}
             >
@@ -39,7 +40,7 @@ export const MarketTab = ({
             <span
                 className={clsx(
                     {
-                        'typography-caption whitespace-nowrap text-white':
+                        'whitespace-nowrap text-[0.625rem] text-white':
                             variant === 'green-name',
                         'typography-caption whitespace-nowrap text-slateGray':
                             variant === 'gray-name',
