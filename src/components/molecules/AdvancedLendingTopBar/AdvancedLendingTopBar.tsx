@@ -58,7 +58,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
 
     return (
         <GradientBox shape='rectangle'>
-            <div className='grid grid-cols-12 gap-y-2 px-4 pb-[1.1875rem] pt-4 tablet:px-5 laptop:flex laptop:pt-4 '>
+            <div className='grid grid-cols-12 gap-y-3 px-4 pb-[1.1875rem] pt-4 tablet:px-5 laptop:flex laptop:pt-4 '>
                 <section className='col-span-12 grid grid-cols-12 gap-3 tablet:col-span-6 tablet:gap-y-6 laptop:w-[43%] laptop:gap-y-0'>
                     <div className='col-span-8 tablet:col-span-12 tablet:pr-9 laptop:col-span-8 laptop:pr-0'>
                         <HorizontalAssetSelector
@@ -83,7 +83,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                             variant={currentMarket ? 'green-name' : 'gray-name'}
                             label='Current Market'
                         />
-                        <div className='whitespace-nowrap pt-[1px] text-[0.625rem] leading-4 text-neutral-4'>
+                        <div className='whitespace-nowrap pt-[1px] text-[11px] leading-4 text-neutral-4'>
                             {getTime()}
                         </div>
                     </div>
