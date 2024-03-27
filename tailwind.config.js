@@ -165,13 +165,17 @@ module.exports = {
             teal: '#11CABE',
             green: '#5CD167',
             orange: '#F9AA4B',
-            yellow: '#FAAD14',
+            yellow: {
+                DEFAULT: '#FAAD14',
+                '900': '#BD7003',
+            },
             red: '#FA2256',
             purple: '#BD47FB',
             gunMetal: '#292D3F',
 
             // Secondary
             planetaryPurple: '#ADB6FF',
+            palePurple: '#F5F6FF',
             nebulaTeal: '#15D6E8',
             horizonBlue: '#3555AC',
             galacticOrange: '#FF9FAE',

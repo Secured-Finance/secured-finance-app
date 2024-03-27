@@ -146,7 +146,7 @@ export const DropdownSelector = <T extends string = string>({
     }, [onChange, selectedOptionValue, selected.label, selected.value]);
 
     return (
-        <Menu as='div' className='relative'>
+        <Menu as='div' className='relative w-full'>
             {({ open }) => (
                 <>
                     <Menu.Button

@@ -102,3 +102,15 @@ export enum ButtonSizes {
     md = 'md',
     lg = 'lg',
 }
+
+export enum HistoricalDataIntervals {
+    '5M' = '300',
+    '15M' = '900',
+    '30M' = '1800',
+    '1H' = '3600',
+    '4H' = '14400',
+    '1D' = '86400',
+    '3D' = '259200',
+    '1W' = '604800',
+    '1MTH' = '2592000',
+}

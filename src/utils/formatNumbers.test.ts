@@ -3,6 +3,7 @@ import {
     formatAmount,
     formatCollateralRatio,
     formatLoanValue,
+    formatTimeStampWithTimezone,
     formatTimestamp,
     formatTimestampWithMonth,
     formatWithCurrency,
@@ -188,5 +189,13 @@ describe('formatLoanValue', () => {
     it('should return "--.--%" when value is undefined and type is "rate"', () => {
         const result = formatLoanValue(undefined, 'rate');
         expect(result).toEqual('--.--%');
+    });
+});
+
+describe('formatTimeStampWithTimezone', () => {
+    it('should format timestamp with correct time and timezone', () => {
+        const timestamp = 1678643696;
+        const expectedOutput = '17:54:56 GMT';
+        expect(formatTimeStampWithTimezone(timestamp)).toBe(expectedOutput);
     });
 });

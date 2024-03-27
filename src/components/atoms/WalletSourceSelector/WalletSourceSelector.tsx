@@ -56,11 +56,7 @@ export const WalletSourceSelector = ({
     );
 
     return (
-        <div className='flex h-20 w-full flex-col justify-between'>
-            <div className='typography-caption-2 mx-2 flex flex-row justify-between text-secondary7'>
-                <span>Lending Source</span>
-                <span>Available</span>
-            </div>
+        <div className='flex w-full flex-col justify-between'>
             <div className='w-full'>
                 <Listbox
                     value={selectedOption}
@@ -109,7 +105,10 @@ export const WalletSourceSelector = ({
                                             }
                                         />
                                     </div>
-                                    <div className='typography-caption w-fit max-w-[200px] text-white-60'>
+                                    <div className='typography-caption flex w-fit max-w-[200px] flex-col text-right text-planetaryPurple'>
+                                        <span className='block gap-[1px] whitespace-nowrap text-right text-xs leading-tight text-slateGray'>
+                                            Available
+                                        </span>
                                         {account
                                             ? ordinaryFormat(
                                                   Math.floor(
@@ -119,7 +118,7 @@ export const WalletSourceSelector = ({
                                                   0,
                                                   6
                                               )
-                                            : '0.00'}
+                                            : '--'}
                                     </div>
                                 </Listbox.Button>
                                 <Transition
