@@ -27,11 +27,11 @@ export const MarketTab = ({
         >
             <span
                 className={clsx({
-                    'whitespace-nowrap text-sm font-semibold leading-[1.57] text-nebulaTeal':
+                    'whitespace-nowrap text-base font-semibold leading-[1.57] text-nebulaTeal':
                         variant === 'green-name',
                     'typography-button-3 whitespace-nowrap leading-8 text-slateGray':
                         variant === 'gray-name',
-                    'whitespace-nowrap text-[0.625rem] leading-4 text-slateGray':
+                    'whitespace-nowrap text-[11px] leading-4 text-slateGray':
                         variant === 'default',
                 })}
             >
@@ -40,11 +40,11 @@ export const MarketTab = ({
             <span
                 className={clsx(
                     {
-                        'whitespace-nowrap text-[0.625rem] text-white':
+                        'whitespace-nowrap text-[11px] text-white':
                             variant === 'green-name',
                         'typography-caption whitespace-nowrap text-slateGray':
                             variant === 'gray-name',
-                        'text-xs font-semibold leading-5 text-neutral-8':
+                        'text-sm font-semibold leading-5 text-neutral-8':
                             variant === 'default',
                     },
                     'flex items-center'

@@ -47,7 +47,7 @@ export const HorizontalAssetSelector = <T extends string = string>({
                         selected={selectedAsset}
                         onChange={onAssetChange}
                     />
-                    <p className='text-[0.625rem] leading-4 tablet:text-xs'>
+                    <p className='text-[11px] leading-4 tablet:text-xs'>
                         {selectedAsset
                             ? currencyMap[selectedAsset.value].name
                             : undefined}
@@ -62,7 +62,7 @@ export const HorizontalAssetSelector = <T extends string = string>({
                         selected={selected}
                         variant='fullWidth'
                     />
-                    <p className='whitespace-nowrap text-[0.625rem] leading-4 tablet:text-xs'>
+                    <p className='whitespace-nowrap text-[11px] leading-4 tablet:text-xs'>
                         {`Maturity ${
                             selectedTerm &&
                             getTransformMaturityOption(options)(
