@@ -17,25 +17,27 @@ const WalletOption = ({
             className='relative flex cursor-pointer rounded-lg px-5 py-4 focus:outline-none'
         >
             {({ checked }) => (
-                <div className='flex w-full items-center justify-between space-x-12'>
-                    <div className='flex items-center'>
-                        <RadioGroup.Label>
-                            <span className='flex'>
-                                <Icon className='h-8 w-8' />
-                                <p className='typography-body-2 ml-6 text-grayScale'>
-                                    {name}
-                                </p>
-                            </span>
-                        </RadioGroup.Label>
-                    </div>
-                    {checked ? (
-                        <CheckIcon className='h-6 w-6' />
-                    ) : (
-                        <div className='rounded-full border border-neutral'>
-                            <CircleOutline className='h-[22px] w-[22px]' />
+                <>
+                    <div className='flex w-full items-center justify-between space-x-12'>
+                        <div className='flex items-center'>
+                            <RadioGroup.Label>
+                                <span className='flex'>
+                                    <Icon className='h-8 w-8' />
+                                    <p className='typography-body-2 ml-6 text-grayScale'>
+                                        {name}
+                                    </p>
+                                </span>
+                            </RadioGroup.Label>
                         </div>
-                    )}
-                </div>
+                        {checked ? (
+                            <CheckIcon className='h-6 w-6' />
+                        ) : (
+                            <div className='rounded-full border border-neutral'>
+                                <CircleOutline className='h-[22px] w-[22px]' />
+                            </div>
+                        )}
+                    </div>
+                </>
             )}
         </RadioGroup.Option>
     );
