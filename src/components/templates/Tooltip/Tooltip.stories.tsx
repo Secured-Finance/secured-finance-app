@@ -90,3 +90,13 @@ SmallWidth.play = async ({ canvasElement }) => {
     const button = canvas.getByTestId('information-circle');
     await userEvent.hover(button);
 };
+
+export const Warning = Template.bind({});
+Warning.args = {
+    severity: 'warning',
+};
+Warning.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = canvas.getByTestId('information-circle');
+    await userEvent.hover(button);
+};
