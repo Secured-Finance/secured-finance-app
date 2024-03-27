@@ -9,6 +9,7 @@ export * from './DepositCollateral';
 export * from './EmergencyRedeemDialog';
 export * from './GlobalItayoseMultiCurveChart';
 export * from './Header';
+export * from './HistoricalWidget';
 export * from './LendingCard';
 export * from './LineChartTab';
 export * from './MarketLoanWidget';
