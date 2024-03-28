@@ -64,7 +64,7 @@ export const InputBase = ({
     return (
         <NumericFormat
             className={clsx(
-                'bg-transparent placeholder-opacity-50 focus:outline-none',
+                'bg-red placeholder-opacity-50 focus:outline-none',
                 className,
                 fontSizeClass
             )}
