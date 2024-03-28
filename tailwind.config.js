@@ -111,6 +111,7 @@ module.exports = {
             // Secondary
             galacticOrange: '#FF9FAE',
             planetaryPurple: '#ADB6FF',
+            palePurple: '#F5F6FF',
             nebulaTeal: '#15D6E8',
             secondaryPurple: '#AE72FF',
             moonGrey: '#E6E6E6',
@@ -198,6 +199,9 @@ module.exports = {
                 btc: 'rgba(249, 159, 50, 0.7)',
                 eth: 'rgba(131, 131, 133, 0.7)',
                 usdc: '#2775CA',
+            },
+            secondary: {
+                700: '#09A8B7',
             },
         },
     },

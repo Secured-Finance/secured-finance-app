@@ -13,6 +13,7 @@ import {
     usdcBytes32,
     wfilBytes32,
 } from './fixtures';
+import { mockCandleStickData } from './historicalchart';
 
 const generateMyTransactions = (
     amount: string,
@@ -764,4 +765,107 @@ function getQueryForCurrency(currency: string, transactions: TransactionList) {
 export const mockTrades = [
     ...getQueryForCurrency(usdcBytes32, tradesUSDC),
     ...getQueryForCurrency(wfilBytes32, tradesWFIL),
+];
+
+export const mockTransactionCandleStick = [
+    {
+        request: {
+            query: queries.TransactionCandleStickDocument,
+            variables: {
+                interval: '300',
+                currency: wfilBytes32,
+                maturity: dec22Fixture.toNumber(),
+                first: 1000,
+                skip: 0,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                transactionCandleSticks: mockCandleStickData,
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    transactionCandleSticks: mockCandleStickData,
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.TransactionCandleStickDocument,
+            variables: {
+                interval: '3600',
+                currency: wfilBytes32,
+                maturity: dec22Fixture.toNumber(),
+                first: 1000,
+                skip: 0,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                transactionCandleSticks: mockCandleStickData,
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    transactionCandleSticks: mockCandleStickData,
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.TransactionCandleStickDocument,
+            variables: {
+                interval: '21600',
+                currency: wfilBytes32,
+                maturity: dec22Fixture.toNumber(),
+                first: 1000,
+                skip: 0,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                transactionCandleSticks: mockCandleStickData,
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    transactionCandleSticks: mockCandleStickData,
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.TransactionCandleStickDocument,
+            variables: {
+                interval: '86400',
+                currency: wfilBytes32,
+                maturity: dec22Fixture.toNumber(),
+                first: 1000,
+                skip: 0,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                transactionCandleSticks: mockCandleStickData,
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    transactionCandleSticks: mockCandleStickData,
+                },
+            };
+        },
+    },
 ];
