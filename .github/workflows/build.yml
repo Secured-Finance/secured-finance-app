@@ -36,9 +36,8 @@ jobs:
           fetch-depth: 0
           ref: ${{ inputs.ref }}
 
-      - name: Cache Dependencies
+      - name: Use Cache
         uses: actions/cache@v4
-        id: cache-dependencies
         with:
           path: |
             ~/.npm
@@ -53,7 +52,6 @@ jobs:
           cache: 'npm'
 
       - name: Install Dependencies
-        if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: npm ci
         env:
           NPM_AUTH_TOKEN: ${{ secrets.PAT }}
