@@ -73,7 +73,7 @@ export const HorizontalTab = ({
             selectedIndex={selectedIndex}
             onChange={onChange}
             as='div'
-            className='h-full px-3 tablet:px-0'
+            className='h-full'
         >
             <div className='flex flex-col border border-white-10 bg-gunMetal/40 shadow-tab tablet:rounded-b-2xl'>
                 <HeadlessTab.List className='h-16 justify-start border-b border-white-10 p-3'>

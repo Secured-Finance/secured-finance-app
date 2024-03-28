@@ -12,7 +12,7 @@ export const DelistedCurrencyDisclaimer = ({
 }) => {
     const currencyArray = Array.from(currencies);
     return (
-        <>
+        <div className='px-3 tablet:px-0'>
             {currencyArray.length > 0 && (
                 <Alert
                     severity='warning'
@@ -31,6 +31,6 @@ export const DelistedCurrencyDisclaimer = ({
                     </p>
                 </Alert>
             )}
-        </>
+        </div>
     );
 };
