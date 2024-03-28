@@ -57,7 +57,7 @@ export const Slider = ({
                         ),
                     },
                     rail: {
-                        className: 'bg-neutral-3 h-2px w-full',
+                        className: 'bg-red h-2px w-full',
                     },
                     track: {
                         className: 'bg-starBlue h-2px absolute',
