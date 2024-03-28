@@ -122,7 +122,9 @@ export const MarketDashboard = () => {
 
     return (
         <Page title='Market Dashboard' name='dashboard-page'>
-            <DelistedCurrencyDisclaimer currencies={delistedCurrencySet} />
+            <div className='px-3 tablet:px-0'>
+                <DelistedCurrencyDisclaimer currencies={delistedCurrencySet} />
+            </div>
             <TwoColumns>
                 <div className='grid grid-cols-1 gap-y-7'>
                     <StatsBar
