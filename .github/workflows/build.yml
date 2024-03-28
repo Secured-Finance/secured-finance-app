@@ -92,6 +92,9 @@ jobs:
           onlyChanged: true
           externals: |
             src/assets/**
+          untraced: |
+            src/bigIntPatch.ts
+            src/stories/mocks/mockWallet.tsx
 
       - name: Publish Web App
         uses: actions/upload-artifact@v3
