@@ -43,7 +43,7 @@ export const usePagination = <T extends { id: string | number }>(
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentUser, data, dataUser]);
+    }, [currentUser, JSON.stringify(data), dataUser]);
 
     return totalData;
 };
