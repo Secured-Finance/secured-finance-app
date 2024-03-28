@@ -75,7 +75,7 @@ jobs:
         run: npm run build
 
       - name: Build Storybook
-        uses: chromaui/action@v1
+        uses: chromaui/action@v11
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
 
