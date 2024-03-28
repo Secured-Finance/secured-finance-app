@@ -294,14 +294,16 @@ export const AdvancedLending = ({
     return (
         <div className='grid gap-2'>
             {maximumOpenOrderLimit && (
-                <Alert severity='warning'>
-                    <div className='typography-caption text-neutral-50'>
-                        You will not be able to place additional orders as you
-                        currently have the maximum number of 20 orders. Please
-                        wait for your order to be filled or cancel existing
-                        orders before adding more.
-                    </div>
-                </Alert>
+                <div className='px-3 tablet:px-0'>
+                    <Alert severity='warning'>
+                        <div className='typography-caption text-neutral-50'>
+                            You will not be able to place additional orders as
+                            you currently have the maximum number of 20 orders.
+                            Please wait for your order to be filled or cancel
+                            existing orders before adding more.
+                        </div>
+                    </Alert>
+                </div>
             )}
             <ThreeColumnsWithTopBar
                 topBar={

@@ -155,7 +155,9 @@ const WithBanner = ({
         : 0;
     return (
         <div className='flex flex-col justify-center gap-5'>
-            <DelistedCurrencyDisclaimer currencies={delistedCurrencySet} />
+            <div className='px-3 tablet:px-0'>
+                <DelistedCurrencyDisclaimer currencies={delistedCurrencySet} />
+            </div>
             {market && (
                 <div className='px-3 tablet:px-0'>
                     <Alert severity='info'>
