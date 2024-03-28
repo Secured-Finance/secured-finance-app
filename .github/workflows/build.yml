@@ -90,11 +90,11 @@ jobs:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           exitOnceUploaded: true
           onlyChanged: true
+          traceChanged: 'expanded'
+          diagnostics: true
+          debug: true
           externals: |
             src/assets/**
-          untraced: |
-            src/bigIntPatch.ts
-            src/stories/mocks/mockWallet.tsx
 
       - name: Publish Web App
         uses: actions/upload-artifact@v3
@@ -103,3 +103,12 @@ jobs:
           path: build
           retention-days: 10
           if-no-files-found: error
+
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: chromatic-build-artifacts-${{ github.run_id }}
+          path: |
+            chromatic-diagnostics.json
+            preview-stats.json
+            **/build-storybook.log
