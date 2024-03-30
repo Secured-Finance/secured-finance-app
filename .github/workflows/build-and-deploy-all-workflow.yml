@@ -13,7 +13,7 @@ jobs:
     name: Identify the environment
     uses: ./.github/workflows/identify-env.yml
     with:
-      branch_name: ${{ github.ref }}
+      branch_name: ${{ github.event.pull_request.head.ref }}
 
   build-and-test-all:
     name: Build and Test
