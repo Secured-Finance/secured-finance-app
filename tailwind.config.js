@@ -100,7 +100,10 @@ module.exports = {
             teal: '#11CABE',
             green: '#5CD167',
             orange: '#F9AA4B',
-            yellow: '#FAAD14',
+            yellow: {
+                DEFAULT: '#FAAD14',
+                '900': '#BD7003',
+            },
             red: '#FA2256',
             purple: '#BD47FB',
             gunMetal: '#292D3F',
@@ -108,6 +111,7 @@ module.exports = {
             // Secondary
             galacticOrange: '#FF9FAE',
             planetaryPurple: '#ADB6FF',
+            palePurple: '#F5F6FF',
             nebulaTeal: '#15D6E8',
             secondaryPurple: '#AE72FF',
             moonGrey: '#E6E6E6',
@@ -195,6 +199,9 @@ module.exports = {
                 btc: 'rgba(249, 159, 50, 0.7)',
                 eth: 'rgba(131, 131, 133, 0.7)',
                 usdc: '#2775CA',
+            },
+            secondary: {
+                700: '#09A8B7',
             },
         },
     },
