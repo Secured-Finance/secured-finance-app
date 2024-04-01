@@ -43,6 +43,8 @@ export const emptyOptionList = [
     },
 ];
 
+const ITAYOSE_PERIOD = 60 * 60 * 1000; // 1 hour in milli-seconds
+
 export const Landing = ({ view }: { view?: ViewType }) => {
     const { address } = useAccount();
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
@@ -148,39 +150,47 @@ const WithBanner = ({
     delistedCurrencySet: Set<CurrencySymbol>;
     children: React.ReactNode;
 }) => {
+    const preOrderTimeLimit = market
+        ? market.utcOpeningDate * 1000 - ITAYOSE_PERIOD
+        : 0;
     return (
         <div className='flex flex-col justify-center gap-5'>
             <DelistedCurrencyDisclaimer currencies={delistedCurrencySet} />
             {market && (
-                <div className='px-4 tablet:px-0'>
-                    <Alert severity='info'>
-                        <div className='typography-caption text-white'>
-                            <p>
-                                {`Itayose market for ${ccy}-${getUTCMonthYear(
-                                    market.maturity
-                                )} is now open until ${Intl.DateTimeFormat(
-                                    'en-US',
-                                    {
-                                        weekday: 'long',
-                                        year: 'numeric',
-                                        month: 'long',
-                                        day: 'numeric',
-                                    }
-                                ).format(market.utcOpeningDate * 1000)}`}
-                                <span className='pl-4'>
-                                    <Link href='itayose' passHref>
-                                        <a
-                                            href='_'
-                                            className='text-planetaryPurple underline'
-                                        >
-                                            Place Order Now
-                                        </a>
-                                    </Link>
-                                </span>
-                            </p>
-                        </div>
-                    </Alert>
-                </div>
+                <Alert severity='info'>
+                    <div className='typography-caption text-white'>
+                        <p>
+                            {`Market ${ccy}-${getUTCMonthYear(
+                                market.maturity
+                            )} is open for pre-orders now until ${Intl.DateTimeFormat(
+                                'en-US',
+                                {
+                                    timeZone: 'UTC',
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric',
+                                }
+                            ).format(preOrderTimeLimit)} ${Intl.DateTimeFormat(
+                                'en-GB',
+                                {
+                                    timeZone: 'UTC',
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                }
+                            ).format(preOrderTimeLimit)} (UTC)`}
+                            <span className='pl-4'>
+                                <Link href='itayose' passHref>
+                                    <a
+                                        href='_'
+                                        className='text-planetaryPurple underline'
+                                    >
+                                        Place Order Now
+                                    </a>
+                                </Link>
+                            </span>
+                        </p>
+                    </div>
+                </Alert>
             )}
             {children}
         </div>

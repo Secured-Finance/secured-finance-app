@@ -1,5 +1,5 @@
 import { Popover } from '@headlessui/react';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { cloneElement, useState } from 'react';
 import { Alignment } from 'src/types';
 
@@ -8,11 +8,13 @@ export const Tooltip = ({
     children,
     align = 'center',
     maxWidth = 'large',
+    severity = 'info',
 }: {
     iconElement: React.ReactNode;
     children: React.ReactNode;
     align?: Alignment;
     maxWidth?: 'small' | 'large';
+    severity?: 'info' | 'warning';
 }) => {
     const [open, setOpen] = useState(false);
     return (
@@ -37,7 +39,7 @@ export const Tooltip = ({
                     </Popover.Button>
                     {open && children && (
                         <Popover.Panel
-                            className={classNames(
+                            className={clsx(
                                 'absolute z-50 mt-2 flex w-screen justify-center',
                                 {
                                     'max-w-[256px]': maxWidth === 'large',
@@ -51,7 +53,15 @@ export const Tooltip = ({
                             role='tooltip'
                             static
                         >
-                            <div className='typography-caption-3 relative w-fit overflow-hidden whitespace-normal rounded-lg border border-black-20 bg-gunMetal p-4 text-left text-neutral-8 shadow-dropdown'>
+                            <div
+                                className={clsx(
+                                    'typography-caption-3 relative w-fit overflow-hidden whitespace-normal rounded-lg border border-black-20 bg-gunMetal p-4 text-left text-neutral-8 shadow-dropdown',
+                                    {
+                                        'border-none bg-yellow-900 text-neutral-50':
+                                            severity === 'warning',
+                                    }
+                                )}
+                            >
                                 {children}
                             </div>
                         </Popover.Panel>

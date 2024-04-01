@@ -30,6 +30,7 @@ const preOrderMarket = {
     currentMinDebtUnitPrice: BigInt('9500'),
     ccy: wfilBytes32,
     preOpeningDate: BigInt('1684982800'),
+    lastBlockUnitPriceTimestamp: BigInt('1646920200'),
 };
 
 const closedMarket = {
@@ -63,6 +64,7 @@ const marketWithZeroAPR = {
     currentMinDebtUnitPrice: BigInt('0'),
     ccy: wfilBytes32,
     preOpeningDate: BigInt('1684972800'),
+    lastBlockUnitPriceTimestamp: BigInt('1646920200'),
 };
 
 const noItayoseMarkets = maturitiesMockFromContract(wfilBytes32).slice(0, 8);
@@ -90,10 +92,6 @@ const closeToMaturityWithZeroAprMarkets = [
 beforeEach(() => mock.getOrderBookDetails.mockClear());
 
 describe('useYieldCurveMarketRates', () => {
-    afterEach(() => {
-        mock.getOrderBookDetails.mockClear();
-    });
-
     it('should return empty index set for no itayose market', async () => {
         jest.spyOn(mock, 'getOrderBookDetails').mockResolvedValueOnce([
             ...noItayoseMarkets,
@@ -105,10 +103,9 @@ describe('useYieldCurveMarketRates', () => {
         expect(result.current.rates).toHaveLength(8);
         expect(result.current.maturityList).toHaveLength(8);
         expect(result.current.itayoseMarketIndexSet).toEqual(new Set());
-        mock.getOrderBookDetails.mockReset();
     });
 
-    it.skip('should return correct itayose index for default mocks', async () => {
+    it('should return correct itayose index for default mocks', async () => {
         const { result } = renderHook(() => useYieldCurveMarketRates());
 
         await waitFor(() =>
@@ -134,11 +131,8 @@ describe('useYieldCurveMarketRates', () => {
 
     it('should return empty lists for no markets', async () => {
         jest.spyOn(mock, 'getOrderBookDetails').mockResolvedValue([]);
-        const { result, waitForNextUpdate } = renderHook(() =>
-            useYieldCurveMarketRates()
-        );
-        await waitForNextUpdate();
-        expect(result.current.rates).toHaveLength(0);
+        const { result } = renderHook(() => useYieldCurveMarketRates());
+        await waitFor(() => expect(result.current.rates).toHaveLength(0));
         expect(result.current.maturityList).toHaveLength(0);
         expect(result.current.itayoseMarketIndexSet).toEqual(new Set());
     });
@@ -188,11 +182,10 @@ describe('useYieldCurveMarketRates', () => {
     });
 
     it('should return 0 marketCloseToMaturityOriginalRate if no market is near maturity', async () => {
-        const { result, waitForNextUpdate } = renderHook(() =>
-            useYieldCurveMarketRates()
+        const { result } = renderHook(() => useYieldCurveMarketRates());
+        await waitFor(() =>
+            expect(result.current.marketCloseToMaturityOriginalRate).toEqual(0)
         );
-        await waitForNextUpdate();
-        expect(result.current.marketCloseToMaturityOriginalRate).toEqual(0);
     });
 
     it('should not change first market yield chart rate if its not close to maturity', async () => {

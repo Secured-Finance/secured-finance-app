@@ -22,7 +22,12 @@ import {
     amountFormatterToBase,
     formatAmount,
 } from 'src/utils';
-import { trackCollateralEvent } from 'src/utils/events';
+import {
+    ButtonEvents,
+    ButtonProperties,
+    trackButtonEvent,
+    trackCollateralEvent,
+} from 'src/utils/events';
 
 enum Step {
     depositCollateral = 1,
@@ -122,17 +127,26 @@ export const DepositCollateral = ({
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
+        if (state.currentStep === Step.depositCollateral) {
+            trackButtonEvent(
+                ButtonEvents.CANCEL_BUTTON,
+                ButtonProperties.CANCEL_ACTION,
+                'Cancel Deposit Collateral'
+            );
+        }
         onClose();
-    }, [onClose]);
+    }, [onClose, state.currentStep]);
 
     const optionList = Object.values(collateralList);
     const defaultCcyIndex = optionList.findIndex(
         col => col.symbol === CurrencySymbol.USDC
     );
-    [optionList[0], optionList[defaultCcyIndex]] = [
-        optionList[defaultCcyIndex],
-        optionList[0],
-    ];
+    if (defaultCcyIndex >= 0) {
+        [optionList[0], optionList[defaultCcyIndex]] = [
+            optionList[defaultCcyIndex],
+            optionList[0],
+        ];
+    }
 
     const isDisabled = useCallback(() => {
         return (

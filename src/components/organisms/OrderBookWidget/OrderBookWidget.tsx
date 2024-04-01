@@ -1,6 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { createColumnHelper } from '@tanstack/react-table';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Fragment, useEffect, useMemo, useReducer, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import ShowFirstIcon from 'src/assets/icons/orderbook-first.svg';
@@ -56,7 +56,7 @@ const OrderBookCell = ({
     fontWeight?: 'normal' | 'semibold';
 } & ColorFormat) => (
     <span
-        className={classNames('typography-caption-2 z-[1] text-right', {
+        className={clsx('typography-caption-2 z-[1] text-right', {
             'text-galacticOrange': color === 'negative',
             'text-nebulaTeal': color === 'positive',
             'text-neutral-6': color === 'neutral',
@@ -119,7 +119,7 @@ const PriceCell = ({
 
     return (
         <div
-            className={classNames(
+            className={clsx(
                 'typography-caption-2 relative flex items-center overflow-visible font-bold text-neutral-6',
                 {
                     'justify-start': align === 'left',
@@ -149,7 +149,7 @@ const AprCell = ({
 }) => {
     return (
         <div
-            className={classNames('typography-caption-2 flex', {
+            className={clsx('typography-caption-2 flex', {
                 'justify-start': align === 'left',
                 'justify-end': align === 'right',
             })}
@@ -263,12 +263,13 @@ export const OrderBookWidget = ({
         aggregationFactor
     );
 
-    const maxBorrowAmount = useMemo(
-        () => getMaxAmount(borrowOrders),
-        [borrowOrders]
-    );
-
-    const maxLendAmount = useMemo(() => getMaxAmount(lendOrders), [lendOrders]);
+    const maxAmountInOrderbook = useMemo(() => {
+        const maxLendAmount = getMaxAmount(lendOrders);
+        const maxBorrowAmount = getMaxAmount(borrowOrders);
+        return maxLendAmount > maxBorrowAmount
+            ? maxLendAmount
+            : maxBorrowAmount;
+    }, [borrowOrders, lendOrders]);
 
     const buyColumns = useMemo(
         () => [
@@ -278,7 +279,7 @@ export const OrderBookWidget = ({
                     <PriceCell
                         value={info.getValue()}
                         amount={info.row.original.amount}
-                        totalAmount={maxBorrowAmount}
+                        totalAmount={maxAmountInOrderbook}
                         aggregationFactor={aggregationFactor}
                         position='borrow'
                         align='left'
@@ -305,7 +306,7 @@ export const OrderBookWidget = ({
                 header: () => <TableHeader title='APR' align='right' />,
             }),
         ],
-        [aggregationFactor, currency, maxBorrowAmount]
+        [aggregationFactor, currency, maxAmountInOrderbook]
     );
 
     const sellColumns = useMemo(
@@ -334,7 +335,7 @@ export const OrderBookWidget = ({
                     <PriceCell
                         value={info.getValue()}
                         amount={info.row.original.amount}
-                        totalAmount={maxLendAmount}
+                        totalAmount={maxAmountInOrderbook}
                         aggregationFactor={aggregationFactor}
                         position='lend'
                         align='left'
@@ -343,7 +344,7 @@ export const OrderBookWidget = ({
                 header: () => <TableHeader title='Price' align='left' />,
             }),
         ],
-        [aggregationFactor, currency, maxLendAmount]
+        [aggregationFactor, currency, maxAmountInOrderbook]
     );
 
     const handleClick = (rowId: string, side: OrderSide): void => {
@@ -431,7 +432,7 @@ export const OrderBookWidget = ({
                 ) : (
                     <>
                         <div
-                            className={classNames('flex pb-3', {
+                            className={clsx('flex pb-3', {
                                 'h-fit': state.showBorrow && state.showLend,
                                 'h-[40px]': !state.showBorrow,
                             })}
@@ -457,7 +458,7 @@ export const OrderBookWidget = ({
                         {state.showTicker && (
                             <div className='typography-portfolio-heading -mx-3 flex h-14 flex-row items-center justify-between bg-black-20 px-4'>
                                 <span
-                                    className={classNames('font-semibold', {
+                                    className={clsx('font-semibold', {
                                         'flex flex-row items-center gap-2 text-white':
                                             variant === 'itayose',
                                         'text-nebulaTeal':
@@ -488,7 +489,7 @@ export const OrderBookWidget = ({
                             </div>
                         )}
                         <div
-                            className={classNames('flex pt-3', {
+                            className={clsx('flex pt-3', {
                                 'h-fit': state.showBorrow && state.showLend,
                                 'h-0': !state.showLend,
                             })}
@@ -533,7 +534,7 @@ const OrderBookIcon = ({
     <button
         key={name}
         aria-label={name}
-        className={classNames('px-[10px] py-[11px] hover:bg-universeBlue', {
+        className={clsx('px-[10px] py-[11px] hover:bg-universeBlue', {
             'bg-universeBlue': active,
         })}
         onClick={onClick}

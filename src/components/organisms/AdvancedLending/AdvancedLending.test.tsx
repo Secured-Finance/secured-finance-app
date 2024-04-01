@@ -1,3 +1,4 @@
+import * as analytics from '@amplitude/analytics-browser';
 import { composeStories } from '@storybook/react';
 import {
     emptyTransaction,
@@ -6,15 +7,18 @@ import {
 } from 'src/stories/mocks/queries';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor, within } from 'src/test-utils.js';
+import { ButtonEvents, ButtonProperties } from 'src/utils';
 import * as stories from './AdvancedLending.stories';
 
-const { Default, ConnectedToWallet, Delisted } = composeStories(stories);
+const { Default, ConnectedToWallet, Delisted, OpenOrdersConnectedToWallet } =
+    composeStories(stories);
 
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('Advanced Lending Component', () => {
-    it('should convert the amount to new currency when the user change the currency', async () => {
+    it('should convert the amount to new currency and track CURRENCY_CHANGE when the user change the currency', async () => {
+        const track = jest.spyOn(analytics, 'track');
         const { store } = await waitFor(() =>
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
@@ -29,6 +33,9 @@ describe('Advanced Lending Component', () => {
         expect(store.getState().landingOrderForm.amount).toEqual('1');
         fireEvent.click(screen.getByRole('button', { name: 'WFIL' }));
         fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
+        expect(track).toHaveBeenCalledWith(ButtonEvents.CURRENCY_CHANGE, {
+            [ButtonProperties.CURRENCY]: 'USDC',
+        });
         await waitFor(() => {
             expect(store.getState().landingOrderForm.amount).toEqual('1');
             expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
@@ -37,7 +44,8 @@ describe('Advanced Lending Component', () => {
         });
     });
 
-    it('should not reset the amount when the user change the maturity', async () => {
+    it('should not reset the amount and emit TERM_CHANGE event when the user change the maturity', async () => {
+        const track = jest.spyOn(analytics, 'track');
         const { store } = await waitFor(() =>
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
@@ -50,8 +58,11 @@ describe('Advanced Lending Component', () => {
             })
         );
         expect(store.getState().landingOrderForm.amount).toEqual('1');
-        fireEvent.click(screen.getByRole('button', { name: 'DEC22' }));
-        fireEvent.click(screen.getByText('MAR23'));
+        fireEvent.click(screen.getByRole('button', { name: 'DEC2022' }));
+        fireEvent.click(screen.getByText('MAR2023'));
+        expect(track).toHaveBeenCalledWith(ButtonEvents.TERM_CHANGE, {
+            [ButtonProperties.TERM]: 'MAR2023',
+        });
         await waitFor(() => {
             expect(store.getState().landingOrderForm.amount).toEqual('1');
             expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
@@ -65,7 +76,7 @@ describe('Advanced Lending Component', () => {
             apolloMocks: Default.parameters?.apolloClient.mocks,
         });
         expect(
-            await screen.findByRole('button', { name: 'DEC22' })
+            await screen.findByRole('button', { name: 'DEC2022' })
         ).toBeInTheDocument();
         expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
     });
@@ -125,17 +136,15 @@ describe('Advanced Lending Component', () => {
         ).toBeInTheDocument();
     });
 
-    it.skip('should only show the orders of the user related to orderbook', async () => {
+    it('should only show the orders of the user related to orderbook', async () => {
         await waitFor(() =>
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
             })
         );
-        await waitFor(() =>
-            fireEvent.click(screen.getByRole('tab', { name: 'Open Orders' }))
-        );
+        fireEvent.click(screen.getByRole('tab', { name: 'Open Orders' }));
         expect(
-            within(screen.getByTestId('open-order-table')).queryAllByRole('row')
+            await screen.findAllByTestId('open-order-table-row')
         ).toHaveLength(1);
     });
 
@@ -153,6 +162,46 @@ describe('Advanced Lending Component', () => {
         expect(
             screen.queryByText('WFIL will be delisted')
         ).not.toBeInTheDocument();
+    });
+
+    it('should not show disclaimer for maximum open order limit if user has less than 20 open orders', async () => {
+        await waitFor(() =>
+            render(<OpenOrdersConnectedToWallet />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+            })
+        );
+
+        fireEvent.click(screen.getByRole('button', { name: 'WFIL' }));
+        fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
+
+        await waitFor(() =>
+            expect(
+                screen.queryByText(
+                    'You will not be able to place additional orders as you currently have the maximum number of 20 orders. Please wait for your order to be filled or cancel existing orders before adding more.'
+                )
+            ).not.toBeInTheDocument()
+        );
+    });
+
+    it('should show disclaimer and tooltip for maximum open order limit if user has 20 open orders', async () => {
+        await waitFor(() =>
+            render(<OpenOrdersConnectedToWallet />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+            })
+        );
+        expect(
+            await screen.findByText(
+                'You will not be able to place additional orders as you currently have the maximum number of 20 orders. Please wait for your order to be filled or cancel existing orders before adding more.'
+            )
+        ).toBeInTheDocument();
+        const tooltip = await screen.findByTestId('Open Orders-tooltip');
+        fireEvent.mouseEnter(tooltip);
+
+        expect(
+            screen.getByText(
+                'You have too many open orders. Please ensure that you have fewer than 20 orders to place more orders.'
+            )
+        ).toBeInTheDocument();
     });
 
     describe('Dynamic orderbook depth', () => {

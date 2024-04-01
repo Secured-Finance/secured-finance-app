@@ -4,7 +4,7 @@ import type { Meta, StoryFn } from '@storybook/react';
 import { useState } from 'react';
 import {
     dec22Fixture,
-    orderHistoryList,
+    mappedOrderHistoryList,
     wfilBytes32,
 } from 'src/stories/mocks/fixtures';
 import { OrderHistoryList, OrderType } from 'src/types';
@@ -14,7 +14,7 @@ export default {
     title: 'Organism/OrderHistoryTable',
     component: OrderHistoryTable,
     args: {
-        data: orderHistoryList,
+        data: mappedOrderHistoryList,
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,
@@ -32,6 +32,7 @@ const PaginatedTemplate: StoryFn<typeof OrderHistoryTable> = args => {
     const initialData = Array(20)
         .fill(null)
         .map((_, index) => ({
+            id: index.toString(),
             orderId: index,
             currency: wfilBytes32,
             side: 1,
@@ -47,9 +48,10 @@ const PaginatedTemplate: StoryFn<typeof OrderHistoryTable> = args => {
                 id: '1',
                 isActive: true,
             },
-            maker: {
+            user: {
                 id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
             },
+            isCircuitBreakerTriggered: false,
         }));
     const [data, setData] = useState<OrderHistoryList>(initialData);
 
@@ -63,6 +65,7 @@ const PaginatedTemplate: StoryFn<typeof OrderHistoryTable> = args => {
                     const newData = Array(20)
                         .fill(null)
                         .map((_, index) => ({
+                            id: (data.length + index).toString(),
                             orderId: index,
                             currency: wfilBytes32,
                             side: 1,
@@ -78,9 +81,10 @@ const PaginatedTemplate: StoryFn<typeof OrderHistoryTable> = args => {
                                 id: '1',
                                 isActive: true,
                             },
-                            maker: {
+                            user: {
                                 id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
                             },
+                            isCircuitBreakerTriggered: false,
                         }));
 
                     const updatedData = [...data, ...newData];

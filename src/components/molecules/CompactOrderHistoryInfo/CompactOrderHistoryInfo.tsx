@@ -1,5 +1,5 @@
 import { getUTCMonthYear } from '@secured-finance/sf-core';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { CurrencyIcon } from 'src/components/atoms';
 import { getStatus } from 'src/components/organisms';
 import { Order, OrderHistoryList } from 'src/types';
@@ -65,7 +65,7 @@ export default function CompactOrderHistoryInfo({ data }: Props) {
                 return (
                     <div className='px-5' key={`order-info-${i}`}>
                         <div
-                            className={classNames(
+                            className={clsx(
                                 'flex flex-col gap-4 border-neutral-600 py-4 text-[#FBFAFC]',
                                 { 'border-b': i !== data.length - 1 }
                             )}
@@ -81,7 +81,7 @@ export default function CompactOrderHistoryInfo({ data }: Props) {
                                             {contract}
                                         </h2>
                                         <span
-                                            className={classNames(
+                                            className={clsx(
                                                 'flex w-[45px] items-center justify-center rounded-full px-[0.375rem] py-[0.125rem] text-[0.625rem]',
                                                 {
                                                     'bg-[#FFE5E8] text-[#FF324B]':

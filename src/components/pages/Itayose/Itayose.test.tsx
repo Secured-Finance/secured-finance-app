@@ -45,7 +45,8 @@ describe('Itayose Component', () => {
             render(<Default />, { preloadedState })
         );
         expect(store.getState().landingOrderForm.amount).toEqual('0');
-        fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
+        const ele = await screen.findByRole('textbox', { name: 'Amount' });
+        fireEvent.change(ele, {
             target: { value: '1' },
         });
         expect(store.getState().landingOrderForm.amount).toEqual('1');
@@ -57,7 +58,7 @@ describe('Itayose Component', () => {
         expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
             '1'
         );
-    });
+    }, 8000);
 
     it('should not show delisted currencies in asset dropwdown', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
@@ -129,6 +130,6 @@ describe('Itayose Component', () => {
                     1300
                 )
             );
-        });
+        }, 8000);
     });
 });

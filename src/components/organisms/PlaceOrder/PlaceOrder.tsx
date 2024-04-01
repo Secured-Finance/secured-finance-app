@@ -25,6 +25,11 @@ import {
     formatAmount,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
+import {
+    ButtonEvents,
+    ButtonProperties,
+    trackButtonEvent,
+} from 'src/utils/events';
 import { useAccount } from 'wagmi';
 
 enum Step {
@@ -149,8 +154,15 @@ export const PlaceOrder = ({
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
+        if (state.currentStep === Step.orderConfirm) {
+            trackButtonEvent(
+                ButtonEvents.CANCEL_BUTTON,
+                ButtonProperties.CANCEL_ACTION,
+                'Cancel Place Order'
+            );
+        }
         onClose();
-    }, [onClose]);
+    }, [onClose, state.currentStep]);
 
     useEffect(() => {
         if (state.currentStep === Step.orderConfirm) {
@@ -187,7 +199,8 @@ export const PlaceOrder = ({
                         [OrderProperties.ORDER_TYPE]: orderType,
                         [OrderProperties.ASSET_TYPE]: ccy,
                         [OrderProperties.ORDER_MATURITY]: getUTCMonthYear(
-                            maturity.toNumber()
+                            maturity.toNumber(),
+                            true
                         ),
                         [OrderProperties.ORDER_AMOUNT]: orderAmount.value,
                         [OrderProperties.ORDER_PRICE]: unitPrice ?? 0,

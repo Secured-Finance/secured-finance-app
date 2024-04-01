@@ -13,21 +13,27 @@ import {
     usdcBytes32,
     wfilBytes32,
 } from './fixtures';
+import { mockCandleStickData } from './historicalchart';
 
-const generateMyTransactions = (amount: string, maturity = mar23Fixture) => {
+const generateMyTransactions = (
+    amount: string,
+    skip: number,
+    maturity = mar23Fixture
+) => {
     const myTransactions = [];
     for (let i = 0; i < 20; i++) {
         myTransactions.push({
+            id: (skip + i).toString(),
             amount: amount,
             averagePrice: '0.8000',
             side: 1,
-            orderPrice: '9543',
+            executionPrice: '9543',
             createdAt: '1671080520',
             feeInFV: '3213742117859654893',
-            forwardValue: '520000000000000000000',
+            futureValue: '520000000000000000000',
             currency: wfilBytes32,
             maturity: maturity.toString(),
-            taker: {
+            user: {
                 id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
             },
         });
@@ -35,10 +41,15 @@ const generateMyTransactions = (amount: string, maturity = mar23Fixture) => {
     return myTransactions;
 };
 
-const generateMyOrderHistory = (amount: string, maturity = dec22Fixture) =>
+const generateMyOrderHistory = (
+    amount: string,
+    skip: number,
+    maturity = dec22Fixture
+) =>
     Array(20)
         .fill(null)
         .map((_, index) => ({
+            id: (skip + index).toString(),
             orderId: index,
             currency: wfilBytes32,
             side: 1,
@@ -54,9 +65,10 @@ const generateMyOrderHistory = (amount: string, maturity = dec22Fixture) =>
                 id: '1',
                 isActive: true,
             },
-            maker: {
+            user: {
                 id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
             },
+            isCircuitBreakerTriggered: false,
         }));
 
 export const mockUserTransactionHistory = [
@@ -163,7 +175,8 @@ export const mockUserTransactionHistory = [
                 user: {
                     transactionCount: 80,
                     transactions: generateMyTransactions(
-                        '500000000000000000000'
+                        '500000000000000000000',
+                        0
                     ),
                 },
             },
@@ -174,7 +187,8 @@ export const mockUserTransactionHistory = [
                     user: {
                         transactionCount: 80,
                         transactions: generateMyTransactions(
-                            '500000000000000000000'
+                            '500000000000000000000',
+                            0
                         ),
                     },
                 },
@@ -196,7 +210,8 @@ export const mockUserTransactionHistory = [
                 user: {
                     transactionCount: 80,
                     transactions: generateMyTransactions(
-                        '600000000000000000000'
+                        '600000000000000000000',
+                        20
                     ),
                 },
             },
@@ -207,7 +222,8 @@ export const mockUserTransactionHistory = [
                     user: {
                         transactionCount: 80,
                         transactions: generateMyTransactions(
-                            '600000000000000000000'
+                            '600000000000000000000',
+                            20
                         ),
                     },
                 },
@@ -229,7 +245,8 @@ export const mockUserTransactionHistory = [
                 user: {
                     transactionCount: 80,
                     transactions: generateMyTransactions(
-                        '700000000000000000000'
+                        '700000000000000000000',
+                        40
                     ),
                 },
             },
@@ -240,7 +257,8 @@ export const mockUserTransactionHistory = [
                     user: {
                         transactionCount: 80,
                         transactions: generateMyTransactions(
-                            '700000000000000000000'
+                            '700000000000000000000',
+                            40
                         ),
                     },
                 },
@@ -262,7 +280,8 @@ export const mockUserTransactionHistory = [
                 user: {
                     transactionCount: 80,
                     transactions: generateMyTransactions(
-                        '800000000000000000000'
+                        '800000000000000000000',
+                        60
                     ),
                 },
             },
@@ -273,7 +292,8 @@ export const mockUserTransactionHistory = [
                     user: {
                         transactionCount: 80,
                         transactions: generateMyTransactions(
-                            '800000000000000000000'
+                            '800000000000000000000',
+                            60
                         ),
                     },
                 },
@@ -325,6 +345,7 @@ export const mockFilteredUserTransactionHistory = [
                 user: {
                     transactions: generateMyTransactions(
                         '800000000000000000000',
+                        0,
                         dec22Fixture
                     ),
                 },
@@ -336,6 +357,7 @@ export const mockFilteredUserTransactionHistory = [
                     user: {
                         transactions: generateMyTransactions(
                             '800000000000000000000',
+                            0,
                             dec22Fixture
                         ),
                     },
@@ -405,7 +427,7 @@ export const mockFilteredUserOrderHistory = [
         result: {
             data: {
                 user: {
-                    orders: generateMyOrderHistory('800000000000000000000'),
+                    orders: generateMyOrderHistory('800000000000000000000', 0),
                 },
             },
         },
@@ -413,7 +435,10 @@ export const mockFilteredUserOrderHistory = [
             return {
                 data: {
                     user: {
-                        orders: generateMyOrderHistory('800000000000000000000'),
+                        orders: generateMyOrderHistory(
+                            '800000000000000000000',
+                            0
+                        ),
                     },
                 },
             };
@@ -523,7 +548,7 @@ export const mockUserOrderHistory = [
             data: {
                 user: {
                     orderCount: 60,
-                    orders: generateMyOrderHistory('1000000000000000000000'),
+                    orders: generateMyOrderHistory('1000000000000000000000', 0),
                 },
             },
         },
@@ -533,7 +558,8 @@ export const mockUserOrderHistory = [
                     user: {
                         orderCount: 60,
                         orders: generateMyOrderHistory(
-                            '1000000000000000000000'
+                            '1000000000000000000000',
+                            0
                         ),
                     },
                 },
@@ -554,7 +580,10 @@ export const mockUserOrderHistory = [
             data: {
                 user: {
                     orderCount: 60,
-                    orders: generateMyOrderHistory('2000000000000000000000'),
+                    orders: generateMyOrderHistory(
+                        '2000000000000000000000',
+                        20
+                    ),
                 },
             },
         },
@@ -564,7 +593,8 @@ export const mockUserOrderHistory = [
                     user: {
                         orderCount: 60,
                         orders: generateMyOrderHistory(
-                            '2000000000000000000000'
+                            '2000000000000000000000',
+                            20
                         ),
                     },
                 },
@@ -585,7 +615,10 @@ export const mockUserOrderHistory = [
             data: {
                 user: {
                     orderCount: 60,
-                    orders: generateMyOrderHistory('3000000000000000000000'),
+                    orders: generateMyOrderHistory(
+                        '3000000000000000000000',
+                        40
+                    ),
                 },
             },
         },
@@ -595,7 +628,8 @@ export const mockUserOrderHistory = [
                     user: {
                         orderCount: 60,
                         orders: generateMyOrderHistory(
-                            '3000000000000000000000'
+                            '3000000000000000000000',
+                            40
                         ),
                     },
                 },
@@ -731,4 +765,107 @@ function getQueryForCurrency(currency: string, transactions: TransactionList) {
 export const mockTrades = [
     ...getQueryForCurrency(usdcBytes32, tradesUSDC),
     ...getQueryForCurrency(wfilBytes32, tradesWFIL),
+];
+
+export const mockTransactionCandleStick = [
+    {
+        request: {
+            query: queries.TransactionCandleStickDocument,
+            variables: {
+                interval: '300',
+                currency: wfilBytes32,
+                maturity: dec22Fixture.toNumber(),
+                first: 1000,
+                skip: 0,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                transactionCandleSticks: mockCandleStickData,
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    transactionCandleSticks: mockCandleStickData,
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.TransactionCandleStickDocument,
+            variables: {
+                interval: '3600',
+                currency: wfilBytes32,
+                maturity: dec22Fixture.toNumber(),
+                first: 1000,
+                skip: 0,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                transactionCandleSticks: mockCandleStickData,
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    transactionCandleSticks: mockCandleStickData,
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.TransactionCandleStickDocument,
+            variables: {
+                interval: '21600',
+                currency: wfilBytes32,
+                maturity: dec22Fixture.toNumber(),
+                first: 1000,
+                skip: 0,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                transactionCandleSticks: mockCandleStickData,
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    transactionCandleSticks: mockCandleStickData,
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.TransactionCandleStickDocument,
+            variables: {
+                interval: '86400',
+                currency: wfilBytes32,
+                maturity: dec22Fixture.toNumber(),
+                first: 1000,
+                skip: 0,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                transactionCandleSticks: mockCandleStickData,
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    transactionCandleSticks: mockCandleStickData,
+                },
+            };
+        },
+    },
 ];

@@ -6,7 +6,7 @@ import {
     CurrencySymbol,
     currencyMap,
     formatLoanValue,
-    formatTimestampWithMonth,
+    formatTimeStampWithTimezone,
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 
@@ -49,14 +49,9 @@ export const AdvancedLendingTopBar = <T extends string = string>({
         if (currentMarket) {
             if (currentMarket.type === 'opening') {
                 return 'Opening Price';
+            } else {
+                return formatTimeStampWithTimezone(currentMarket.time);
             }
-
-            if (currentMarket.type === 'block' && currentMarket.time) {
-                return formatTimestampWithMonth(currentMarket.time);
-            }
-
-            // TODO: replace this '-' with the block time
-            return '-';
         }
         return '-';
     };
@@ -123,6 +118,9 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                             value={getValue(values, 4)}
                             source={handleSource(selectedAsset?.value)}
                         />
+                    </div>
+                    <div className='typography-caption-2 whitespace-nowrap text-neutral-400'>
+                        {getTime()}
                     </div>
                 </div>
             </div>

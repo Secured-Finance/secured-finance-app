@@ -1,3 +1,4 @@
+import { track } from '@amplitude/analytics-browser';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
@@ -21,7 +22,6 @@ import {
     useMarket,
     useYieldCurveMarketRates,
 } from 'src/hooks';
-import { OrderBookEntry } from 'src/hooks/useOrderbook';
 import {
     resetUnitPrice,
     selectLandingOrderForm,
@@ -35,6 +35,8 @@ import {
 import { RootState } from 'src/store/types';
 import { OrderSideMap, OrderType, OrderTypeOptions } from 'src/types';
 import {
+    ButtonEvents,
+    ButtonProperties,
     CurrencySymbol,
     ZERO_BI,
     amountFormatterFromBase,
@@ -47,12 +49,12 @@ import {
     prefixTilde,
     usdFormat,
 } from 'src/utils';
+import { AMOUNT_PRECISION, Amount, LoanValue } from 'src/utils/entities';
 import {
-    AMOUNT_PRECISION,
-    Amount,
-    LoanValue,
-    Maturity,
-} from 'src/utils/entities';
+    InteractionEvents,
+    InteractionProperties,
+    trackButtonEvent,
+} from 'src/utils/events';
 import { useAccount } from 'wagmi';
 
 // TODO: reconcile location of imported OrderBook for mobile
@@ -126,6 +128,7 @@ export function AdvancedLendingOrderCard({
         marketCloseToMaturityOriginalRate,
     } = useYieldCurveMarketRates();
 
+    const { address, isConnected } = useAccount();
     const { amountInput, unitPriceInput } = useSelector((state: RootState) =>
         selectLandingOrderInputs(state.landingOrderForm)
     );
@@ -153,11 +156,11 @@ export function AdvancedLendingOrderCard({
             return unitPriceInput;
         }
         if (!marketPrice) return undefined;
+        if (!isConnected) return undefined;
         return (marketPrice / 100.0).toString();
-    }, [maturity, marketPrice, unitPriceInput]);
+    }, [maturity, marketPrice, unitPriceInput, isConnected]);
 
     const dispatch = useDispatch();
-    const { address } = useAccount();
 
     const collateralUsagePercent = useMemo(() => {
         return collateralBook.coverage / 100.0;
@@ -217,9 +220,12 @@ export function AdvancedLendingOrderCard({
         selectedWalletSource.source,
     ]);
 
-    const handleAmountChange = (percentage: number) => {
+    const handleSliderChange = (percentage: number) => {
         const available =
             side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
+        track(InteractionEvents.SLIDER, {
+            [InteractionProperties.SLIDER_VALUE]: percentage,
+        });
         dispatch(
             setAmount(
                 (
@@ -284,89 +290,9 @@ export function AdvancedLendingOrderCard({
         isInvalidBondPrice ||
         showPreOrderError;
 
-    const maturityMar23 = new Maturity(1675252800);
+    const isMarketOrderType = orderType === OrderType.MARKET;
 
-    const ZERO_ENTRY = {
-        amount: ZERO_BI,
-        value: LoanValue.fromPrice(0, maturityMar23.toNumber()),
-    };
-
-    const ethEntries: Array<OrderBookEntry> = [
-        {
-            amount: BigInt('12000000000000000000'),
-            value: LoanValue.fromPrice(9653, maturityMar23.toNumber()),
-        },
-        {
-            amount: BigInt('12301100000000000000'),
-            value: LoanValue.fromPrice(9674, maturityMar23.toNumber()),
-        },
-        {
-            amount: BigInt('10034003400000000000'),
-            value: LoanValue.fromPrice(9679, maturityMar23.toNumber()),
-        },
-        {
-            amount: BigInt('100000000000000000000'),
-            value: LoanValue.fromPrice(9679, maturityMar23.toNumber()),
-        },
-        {
-            amount: BigInt('100200000000000000000'),
-            value: LoanValue.fromPrice(9679, maturityMar23.toNumber()),
-        },
-    ];
-
-    // const borrowEntries: Array<OrderBookEntry> = [
-    //     {
-    //         amount: BigInt('4300320000000'),
-    //         value: LoanValue.fromPrice(9850, maturityMar23.toNumber()),
-    //     },
-    //     {
-    //         amount: BigInt('23000005200000'),
-    //         value: LoanValue.fromPrice(9700, maturityMar23.toNumber()),
-    //     },
-    //     {
-    //         amount: BigInt('1500000000000'),
-    //         value: LoanValue.fromPrice(9500, maturityMar23.toNumber()),
-    //     },
-    //     {
-    //         amount: BigInt('1200000000000'),
-    //         value: LoanValue.fromPrice(9475, maturityMar23.toNumber()),
-    //     },
-    //     {
-    //         amount: BigInt('180000000000'),
-    //         value: LoanValue.fromPrice(9400, maturityMar23.toNumber()),
-    //     },
-    //     {
-    //         amount: BigInt('0'),
-    //         value: LoanValue.fromPrice(9200, maturityMar23.toNumber()),
-    //     },
-    // ];
-
-    // const lendEntries: Array<OrderBookEntry> = [
-    //     {
-    //         amount: BigInt('4300000000000'),
-    //         value: LoanValue.fromPrice(9200, maturityMar23.toNumber()),
-    //     },
-    //     {
-    //         amount: BigInt('5500000000000'),
-    //         value: LoanValue.fromPrice(9110, maturityMar23.toNumber()),
-    //     },
-    //     {
-    //         amount: BigInt('300000000000'),
-    //         value: LoanValue.fromPrice(9050, maturityMar23.toNumber()),
-    //     },
-    //     {
-    //         amount: BigInt('1500000000000'),
-    //         value: LoanValue.fromPrice(9010, maturityMar23.toNumber()),
-    //     },
-    //     {
-    //         amount: BigInt('2100000000000'),
-    //         value: LoanValue.fromPrice(8980, maturityMar23.toNumber()),
-    //     },
-    //     {
-    //         amount: BigInt('5100000000000'),
-    //         value: LoanValue.fromPrice(8960, maturityMar23.toNumber()),
-    //     },
-    // ];
+    const isBondPriceFieldDisabled = isMarketOrderType || !isConnected;
 
     return (
         <>
@@ -398,8 +324,31 @@ export function AdvancedLendingOrderCard({
                             )
                         );
                         dispatch(setSourceAccount(WalletSource.METAMASK));
+                        trackButtonEvent(
+                            ButtonEvents.ORDER_SIDE,
+                            ButtonProperties.ORDER_SIDE,
+                            option
+                        );
                     }}
                     variant='NavTab'
+                    optionsStyles={[
+                        {
+                            bgColorActive: 'bg-nebulaTeal',
+                            textClassActive: 'text-secondary3 font-semibold',
+                            gradient: {
+                                from: 'from-tabGradient-4',
+                                to: 'to-tabGradient-3',
+                            },
+                        },
+                        {
+                            bgColorActive: 'bg-galacticOrange',
+                            textClassActive: 'text-[#FFE5E8] font-semibold',
+                            gradient: {
+                                from: 'from-tabGradient-6',
+                                to: 'to-tabGradient-5',
+                            },
+                        },
+                    ]}
                 />
 
                 <div className='flex w-full flex-col justify-center gap-6 px-4 pt-4'>
@@ -477,12 +426,12 @@ export function AdvancedLendingOrderCard({
                                     />
                                 </div>
                             </div>
-                            <div className='mx-10px'>
+                            {/* <div className='mx-10px'>
                                 <Slider
                                     onChange={handleAmountChange}
                                     value={sliderValue}
                                 />
-                            </div>
+                            </div> */}
                             {side === OrderSide.BORROW && (
                                 <div className='typography-caption mx-10px flex flex-row justify-between'>
                                     <div className='text-slateGray'>{`Available To Borrow (${currency.toString()})`}</div>
@@ -558,29 +507,12 @@ export function AdvancedLendingOrderCard({
                                 />
                             </div>
                             <CompactOrderBookWidget
-                                // orderbook={orderBook}
-                                // marketPrice={currentMarket?.value}
-                                // isCurrencyDelisted={delistedCurrencySet.has(
-                                //     currency
-                                // )}
-                                // currency={currency}
-                                orderbook={{
-                                    data: {
-                                        borrowOrderbook: [
-                                            ...ethEntries,
-                                            ZERO_ENTRY,
-                                            ZERO_ENTRY,
-                                            ZERO_ENTRY,
-                                        ],
-                                        lendOrderbook: [
-                                            ...ethEntries,
-                                            ZERO_ENTRY,
-                                        ],
-                                    },
-                                    isLoading: false,
-                                }}
-                                currency={CurrencySymbol.ETH}
-                                isCurrencyDelisted={false}
+                                orderbook={orderBook}
+                                marketPrice={currentMarket?.value}
+                                isCurrencyDelisted={delistedCurrencySet.has(
+                                    currency
+                                )}
+                                currency={currency}
                                 onFilterChange={state =>
                                     setIsShowingAll(
                                         state.showBorrow && state.showLend
@@ -595,6 +527,61 @@ export function AdvancedLendingOrderCard({
                         errorMessage='Simultaneous borrow and lend orders are not allowed during the pre-open market period.'
                         align='left'
                         showError={showPreOrderError}
+                    />
+                    <ErrorInfo
+                        errorMessage='Invalid bond price'
+                        showError={isInvalidBondPrice}
+                    />
+                    {isMarketOrderType && (
+                        <div className='mx-10px'>
+                            <OrderDisplayBox
+                                field='Max Slippage'
+                                value={divide(slippage, 100)}
+                                informationText='A bond price limit, triggering a circuit breaker if exceeded within a single block due to price fluctuations.'
+                            />
+                        </div>
+                    )}
+                    <div className='mx-10px'>
+                        <OrderDisplayBox
+                            field='Fixed Rate (APR)'
+                            value={formatLoanValue(loanValue, 'rate')}
+                        />
+                    </div>
+                </div>
+                {side === OrderSide.BORROW && (
+                    <div className='typography-caption mx-10px flex flex-row justify-between'>
+                        <div className='text-slateGray'>{`Available To Borrow (${currency.toString()})`}</div>
+                        <div className='text-right text-planetaryPurple'>
+                            {prefixTilde(
+                                ordinaryFormat(availableToBorrow, 0, 6)
+                            )}
+                        </div>
+                    </div>
+                )}
+                <OrderInputBox
+                    field='Amount'
+                    unit={currency}
+                    initialValue={amountInput}
+                    onValueChange={v => handleInputChange((v as string) ?? '')}
+                    disabled={!isConnected}
+                    bgClassName={!isConnected ? 'bg-neutral-700' : undefined}
+                />
+                <div className='mx-10px'>
+                    <Slider
+                        onChange={handleSliderChange}
+                        value={sliderValue}
+                        disabled={!isConnected}
+                    />
+                </div>
+                <div className='mx-10px flex flex-col gap-2'>
+                    <OrderDisplayBox
+                        field='Est. Present Value'
+                        value={usdFormat(orderAmount?.toUSD(price) ?? 0, 2)}
+                    />
+                    <OrderDisplayBox
+                        field='Future Value'
+                        value='--' // todo after apy -> apr
+                        informationText='Future Value is the expected return value of the contract at time of maturity.'
                     />
 
                     <div className='hidden tablet:block'>

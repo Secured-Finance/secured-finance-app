@@ -1,6 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { createColumnHelper } from '@tanstack/react-table';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Fragment, useEffect, useMemo, useReducer, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import OrderbookToggleIcon from 'src/assets/icons/orderbook-toggle.svg';
@@ -42,7 +42,7 @@ const OrderBookCell = ({
     fontWeight?: 'normal' | 'semibold';
 } & ColorFormat) => (
     <span
-        className={classNames(
+        className={clsx(
             'z-[1] flex h-[1.375rem] items-center text-right text-xs laptop:h-auto',
             {
                 'text-galacticOrange': color === 'negative',
@@ -108,7 +108,7 @@ const PriceCell = ({
 
     return (
         <div
-            className={classNames(
+            className={clsx(
                 'relative flex items-center overflow-visible text-neutral-6',
                 {
                     'justify-start': align === 'left',
@@ -347,7 +347,7 @@ export const CompactOrderBookWidget = ({
                 ) : (
                     <>
                         <div
-                            className={classNames('flex pb-3', {
+                            className={clsx('flex pb-3', {
                                 'h-fit': state.showBorrow && state.showLend,
                                 'h-[40px]': !state.showBorrow,
                             })}
@@ -373,7 +373,7 @@ export const CompactOrderBookWidget = ({
                         {state.showTicker && (
                             <div className='flex h-14 flex-row items-center justify-between text-[1.125rem]'>
                                 <span
-                                    className={classNames('font-semibold', {
+                                    className={clsx('font-semibold', {
                                         'flex flex-row items-center gap-2 text-white':
                                             variant === 'itayose',
                                         'text-nebulaTeal':
@@ -404,7 +404,7 @@ export const CompactOrderBookWidget = ({
                             </div>
                         )}
                         <div
-                            className={classNames('flex pt-3', {
+                            className={clsx('flex pt-3', {
                                 'h-fit': state.showBorrow && state.showLend,
                                 'h-0': !state.showLend,
                             })}

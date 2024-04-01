@@ -10,13 +10,11 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 describe('useMarket', () => {
     it('should return the corresponding market', async () => {
         const maturity = dec22Fixture.toNumber();
-        const { result, waitForNextUpdate } = renderHook(() =>
+        const { result } = renderHook(() =>
             useMarket(CurrencySymbol.ETH, maturity)
         );
         const value = result.current;
         expect(value).toEqual(undefined);
-
-        await waitForNextUpdate();
 
         await waitFor(() =>
             expect(mock.getOrderBookDetails).toHaveBeenCalledTimes(1)

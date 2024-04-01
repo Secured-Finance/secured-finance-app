@@ -1,10 +1,16 @@
+import * as analytics from '@amplitude/analytics-browser';
 import { formatDate } from '@secured-finance/sf-core';
 import { composeStories } from '@storybook/react';
 import { mar23Fixture } from 'src/stories/mocks/fixtures';
 import { initialStore } from 'src/stories/mocks/mockStore';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
-import { CurrencySymbol, currencyMap } from 'src/utils';
+import {
+    ButtonEvents,
+    ButtonProperties,
+    CurrencySymbol,
+    currencyMap,
+} from 'src/utils';
 import timemachine from 'timemachine';
 import * as stories from './LendingCard.stories';
 
@@ -35,15 +41,16 @@ describe('LendingCard Component', () => {
     };
 
     const selectEthereum = async () => {
-        await waitFor(() => {
+        await waitFor(() =>
             fireEvent.click(
                 screen.getByRole('button', {
                     name: DEFAULT_CHOICE.symbol,
                 })
-            );
-            fireEvent.click(screen.getByRole('menuitem', { name: 'ETH' }));
-        });
+            )
+        );
+        fireEvent.click(screen.getByRole('menuitem', { name: 'ETH' }));
     };
+
     it('should render a LendingCard', async () => {
         await waitFor(() => render(<Default />));
     });
@@ -100,10 +107,14 @@ describe('LendingCard Component', () => {
         ).toBeInTheDocument();
     });
 
-    it('should switch to Ethereum when selecting it from the option', async () => {
+    it('should switch to Ethereum and emit CURRENCY_CHANGE event when selecting it from the option', async () => {
+        const track = jest.spyOn(analytics, 'track');
         await waitFor(() => render(<Default />));
         await selectEthereum();
         expect(screen.getByText('ETH')).toBeInTheDocument();
+        expect(track).toHaveBeenCalledWith(ButtonEvents.CURRENCY_CHANGE, {
+            [ButtonProperties.CURRENCY]: 'ETH',
+        });
     });
 
     it('should display the amount inputted by the user in USD', async () => {
@@ -114,15 +125,19 @@ describe('LendingCard Component', () => {
         expect(await screen.findByText(`~ $${6 * 10}`)).toBeInTheDocument();
     });
 
-    it('should transform the contract label to a date', async () => {
+    it('should transform the contract label to a date and emit TERM_CHANGE event when term is changed', async () => {
+        const track = jest.spyOn(analytics, 'track');
         await waitFor(() => render(<Default />));
         fireEvent.click(
             screen.getByRole('button', {
-                name: 'DEC22',
+                name: 'DEC2022',
             })
         );
-        fireEvent.click(screen.getByText('MAR23'));
+        fireEvent.click(screen.getByText('MAR2023'));
         const dateWithTimezone = formatDate(mar23Fixture.toNumber());
+        expect(track).toHaveBeenCalledWith(ButtonEvents.TERM_CHANGE, {
+            [ButtonProperties.TERM]: 'MAR2023',
+        });
         expect(screen.getByText(dateWithTimezone)).toBeInTheDocument();
     });
 
@@ -167,7 +182,7 @@ describe('LendingCard Component', () => {
         const lendTab = screen.getByText('Lend');
         fireEvent.click(lendTab);
         await waitFor(() =>
-            expect(screen.getByText('Lending Source')).toBeInTheDocument()
+            expect(screen.getByText('Available')).toBeInTheDocument()
         );
         expect(screen.getByText('10,000')).toBeInTheDocument();
 
@@ -201,7 +216,7 @@ describe('LendingCard Component', () => {
         fireEvent.click(lendTab);
 
         await waitFor(() =>
-            expect(screen.getByText('Lending Source')).toBeInTheDocument()
+            expect(screen.getByText('Available')).toBeInTheDocument()
         );
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '200' } });
@@ -218,5 +233,16 @@ describe('LendingCard Component', () => {
         expect(
             screen.queryByText('Insufficient amount in source')
         ).toBeInTheDocument();
+    });
+
+    it('should track ORDER_SIDE event when order side is changes', async () => {
+        const track = jest.spyOn(analytics, 'track');
+        await waitFor(() => render(<Default />, { preloadedState }));
+
+        const lendTab = screen.getByText('Lend');
+        fireEvent.click(lendTab);
+        expect(track).toHaveBeenCalledWith(ButtonEvents.ORDER_SIDE, {
+            [ButtonProperties.ORDER_SIDE]: 'Lend',
+        });
     });
 });

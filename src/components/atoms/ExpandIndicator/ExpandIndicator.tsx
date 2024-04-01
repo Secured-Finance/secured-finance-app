@@ -1,5 +1,5 @@
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 export const ExpandIndicator = ({
     expanded,
@@ -14,7 +14,7 @@ export const ExpandIndicator = ({
             : 'h-3 w-3 text-white opacity-50';
     return (
         <ChevronDownIcon
-            className={classNames(className, {
+            className={clsx(className, {
                 'rotate-180': expanded,
             })}
             data-testid='chevron-down-icon'

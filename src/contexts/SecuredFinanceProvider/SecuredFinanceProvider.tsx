@@ -11,8 +11,16 @@ import {
     updateLatestBlock,
 } from 'src/store/blockchain';
 import { RootState } from 'src/store/types';
-import { getSupportedChainIds, readWalletFromStore } from 'src/utils';
-import { InterfaceEvents, associateWallet } from 'src/utils/events';
+import {
+    getSupportedChainIds,
+    getSupportedNetworks,
+    readWalletFromStore,
+} from 'src/utils';
+import {
+    InterfaceEvents,
+    InterfaceProperties,
+    associateWallet,
+} from 'src/utils/events';
 import { hexToNumber } from 'viem';
 import {
     PublicClient,
@@ -58,13 +66,20 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
 
     useEthereumWalletStore();
 
-    const handleAccountChanged = useCallback((accounts: string[]) => {
-        track(InterfaceEvents.WALLET_CHANGED_THROUGH_PROVIDER);
-        reset();
-        if (accounts.length > 0) {
-            associateWallet(accounts[0]);
-        }
-    }, []);
+    const chainName = getSupportedNetworks().find(n => n.id === chainId)?.name;
+
+    const handleAccountChanged = useCallback(
+        (accounts: string[]) => {
+            track(InterfaceEvents.WALLET_CHANGED_THROUGH_PROVIDER, {
+                [InterfaceProperties.CHAIN]: chainName,
+            });
+            reset();
+            if (accounts.length > 0) {
+                associateWallet(accounts[0], chainName);
+            }
+        },
+        [chainName]
+    );
 
     const dispatchChainError = useCallback(
         (chainId: number) => {
@@ -79,8 +94,11 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
     const handleChainChanged = useCallback(
         (chainId: string) => {
             dispatchChainError(hexToNumber(chainId as `0x${string}`));
+            track(InterfaceEvents.CHAIN_CONNECTED, {
+                [InterfaceProperties.CHAIN]: chainName,
+            });
         },
-        [dispatchChainError]
+        [chainName, dispatchChainError]
     );
 
     useEffect(() => {
@@ -117,6 +135,10 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
             setSecuredFinance(previous => {
                 if (!previous) {
                     return securedFinanceLib;
+                }
+
+                if (securedFinanceLib.config.chain.id !== chainId) {
+                    return previous;
                 }
 
                 if (
@@ -157,11 +179,12 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
         publicClient?.transport,
         publicClient?.chain,
         publicClient,
+        chainId,
     ]);
 
     useEffect(() => {
         if (address) {
-            associateWallet(address, false);
+            associateWallet(address, chainName, false);
             return;
         }
 
@@ -172,7 +195,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
             );
             if (connector) connect({ connector: connector });
         }
-    }, [connect, address, connectors]);
+    }, [connect, address, connectors, chainName]);
 
     useEffect(() => {
         if (!publicClient) return;

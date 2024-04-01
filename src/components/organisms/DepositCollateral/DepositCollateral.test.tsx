@@ -2,7 +2,13 @@ import * as analytics from '@amplitude/analytics-browser';
 import { composeStories } from '@storybook/react';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
-import { CollateralEvents, CollateralProperties } from 'src/utils';
+import {
+    ButtonEvents,
+    ButtonProperties,
+    CollateralEvents,
+    CollateralProperties,
+    CurrencySymbol,
+} from 'src/utils';
 import * as stories from './DepositCollateral.stories';
 
 const { Default } = composeStories(stories);
@@ -121,6 +127,24 @@ describe('DepositCollateral component', () => {
         expect(screen.queryByText('WBTC Available')).not.toBeInTheDocument();
     });
 
+    it('should not open with USDC as default currency if USDC is not available as collateral', () => {
+        render(
+            <Default
+                collateralList={{
+                    [CurrencySymbol.ETH]: {
+                        symbol: CurrencySymbol.ETH,
+                        available: 10,
+                        name: 'Ethereum',
+                    },
+                }}
+            />
+        );
+        expect(screen.getByText('Ethereum')).toBeInTheDocument();
+        expect(screen.getByText('10 Ethereum Available')).toBeInTheDocument();
+        expect(screen.queryByText('USDC')).not.toBeInTheDocument();
+        expect(screen.queryByText('USDC Available')).not.toBeInTheDocument();
+    });
+
     it('should reach failure screen when transaction fails', async () => {
         mockSecuredFinance.depositCollateral.mockRejectedValueOnce(
             new Error('error')
@@ -166,8 +190,8 @@ describe('DepositCollateral component', () => {
     });
 
     it('should track the deposit collateral', async () => {
-        const track = jest.spyOn(analytics, 'track');
         const onClose = jest.fn();
+        const track = jest.spyOn(analytics, 'track');
         render(<Default onClose={onClose} source='Source Of Deposit' />);
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
         fireEvent.click(screen.getByTestId('option-0'));
@@ -187,13 +211,17 @@ describe('DepositCollateral component', () => {
         );
     });
 
-    it('should call onClose when cancel button is clicked', () => {
+    it('should call onClose when cancel button and emit CANCEL_BUTTON event is clicked', () => {
+        const track = jest.spyOn(analytics, 'track');
         const onClose = jest.fn();
         render(<Default onClose={onClose} />);
         const cancelButton = screen.getByRole('button', {
             name: 'Cancel',
         });
         fireEvent.click(cancelButton);
+        expect(track).toHaveBeenCalledWith(ButtonEvents.CANCEL_BUTTON, {
+            [ButtonProperties.CANCEL_ACTION]: 'Cancel Deposit Collateral',
+        });
         expect(onClose).toHaveBeenCalled();
     });
 

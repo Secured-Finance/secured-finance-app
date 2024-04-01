@@ -1,5 +1,5 @@
 import { Menu } from '@headlessui/react';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import {
     ReactNode,
     useCallback,
@@ -172,10 +172,14 @@ export const DropdownSelector = <T extends string = string>({
     }, [onChange, selectedOptionValue, selected.label, selected.value]);
 
     return (
-        <Menu as='div' className='relative'>
+        <Menu as='div' className='relative w-full'>
             {({ open }) => (
                 <>
-                    <Menu.Button className={classNames('w-full')}>
+                    <Menu.Button
+                        className={clsx({
+                            'w-full': variant === 'fullWidth',
+                        })}
+                    >
                         {() => {
                             switch (variant) {
                                 case 'default':
@@ -213,7 +217,7 @@ export const DropdownSelector = <T extends string = string>({
                         }}
                     </Menu.Button>
                     <Menu.Items
-                        className={classNames(
+                        className={clsx(
                             'scrollbar-dropdown absolute z-40 mt-2 flex flex-col overflow-y-auto rounded-lg bg-gunMetal p-2 shadow-sm',
                             {
                                 'right-0': variant === 'noLabel',
@@ -237,7 +241,7 @@ export const DropdownSelector = <T extends string = string>({
                                 {({ active }) => (
                                     <div>
                                         <div
-                                            className={classNames(
+                                            className={clsx(
                                                 'flex flex-row items-center justify-between space-x-2 rounded-lg p-3 text-white-80',
                                                 {
                                                     'bg-horizonBlue': active,

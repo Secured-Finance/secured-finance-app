@@ -1,6 +1,6 @@
 import { Listbox, Transition } from '@headlessui/react';
 import { WalletSource } from '@secured-finance/sf-client';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Fragment, useMemo } from 'react';
 import { ExpandIndicator, Separator } from 'src/components/atoms';
 import { SvgIcon } from 'src/types';
@@ -56,11 +56,7 @@ export const WalletSourceSelector = ({
     );
 
     return (
-        <div className='flex h-20 w-full flex-col justify-between'>
-            <div className='typography-caption-2 mx-2 flex flex-row justify-between text-secondary7'>
-                <span>Lending Source</span>
-                <span>Available to Lend</span>
-            </div>
+        <div className='flex w-full flex-col justify-between'>
             <div className='w-full'>
                 <Listbox
                     value={selectedOption}
@@ -99,7 +95,7 @@ export const WalletSourceSelector = ({
                                                           selectedOption.source,
                                                           account
                                                       )
-                                                    : 'Select Source'}
+                                                    : 'Connect'}
                                             </span>
                                         </div>
                                         <ExpandIndicator
@@ -109,7 +105,10 @@ export const WalletSourceSelector = ({
                                             }
                                         />
                                     </div>
-                                    <div className='typography-caption w-fit max-w-[200px] text-white-60'>
+                                    <div className='typography-caption flex w-fit max-w-[200px] flex-col text-right text-planetaryPurple'>
+                                        <span className='block gap-[1px] whitespace-nowrap text-right text-xs leading-tight text-slateGray'>
+                                            Available
+                                        </span>
                                         {account
                                             ? ordinaryFormat(
                                                   Math.floor(
@@ -138,7 +137,7 @@ export const WalletSourceSelector = ({
                                                 {({ active }) => (
                                                     <div>
                                                         <div
-                                                            className={classNames(
+                                                            className={clsx(
                                                                 'flex flex-row items-center justify-between rounded-lg p-2',
                                                                 {
                                                                     'bg-horizonBlue':

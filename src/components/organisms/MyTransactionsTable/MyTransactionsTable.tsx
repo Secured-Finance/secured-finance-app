@@ -2,7 +2,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { useMemo } from 'react';
 import { CoreTable, Pagination } from 'src/components/molecules';
 import { useBreakpoint } from 'src/hooks';
-import { TradeHistory } from 'src/types';
+import { Transaction, TransactionHistoryList } from 'src/types';
 import { formatLoanValue } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import {
@@ -12,7 +12,7 @@ import {
     tableHeaderDefinition,
 } from 'src/utils/tableDefinitions';
 
-const columnHelper = createColumnHelper<TradeHistory[0]>();
+const columnHelper = createColumnHelper<Transaction>();
 
 const priceYieldColumnDef = (
     headerTitle: string,
@@ -40,11 +40,11 @@ const priceYieldColumnDef = (
     });
 };
 
-const getFVWithFee = (forwardValue: bigint, fee: bigint, side: number) => {
+const getFVWithFee = (futureValue: bigint, fee: bigint, side: number) => {
     if (side === 0) {
-        return forwardValue - fee;
+        return futureValue - fee;
     }
-    return forwardValue + fee;
+    return futureValue + fee;
 };
 
 export const MyTransactionsTable = ({
@@ -52,7 +52,7 @@ export const MyTransactionsTable = ({
     pagination,
     variant = 'compact',
 }: {
-    data: TradeHistory;
+    data: TransactionHistoryList;
     pagination?: Pagination;
     variant?: 'contractOnly' | 'compact';
 }) => {
@@ -79,10 +79,10 @@ export const MyTransactionsTable = ({
             amountColumnDefinition(
                 columnHelper,
                 'FV',
-                'forwardValue',
+                'futureValue',
                 row =>
                     getFVWithFee(
-                        BigInt(row.forwardValue),
+                        BigInt(row.futureValue),
                         BigInt(row.feeInFV),
                         row.side
                     ),

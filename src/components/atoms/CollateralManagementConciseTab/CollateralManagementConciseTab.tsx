@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import Tick from 'src/assets/icons/tick.svg';
 import { Separator } from 'src/components/atoms';
 import { percentFormat, usdFormat } from 'src/utils';
@@ -59,7 +59,7 @@ export const CollateralManagementConciseTab = ({
                 <div className='typography-caption mb-1 flex flex-row justify-between'>
                     <span className='text-grayScale'>Liquidation Risk</span>
                     <span
-                        className={classNames(info.color, {
+                        className={clsx(info.color, {
                             'font-semibold': collateralCoverage > 20,
                         })}
                     >
@@ -84,7 +84,7 @@ export const CollateralManagementConciseTab = ({
                         return (
                             <li
                                 key={`mobile-threshold-${i}`}
-                                className={classNames(
+                                className={clsx(
                                     'h-[6px] overflow-hidden rounded-xl bg-gradient-to-r',
                                     block.className
                                 )}

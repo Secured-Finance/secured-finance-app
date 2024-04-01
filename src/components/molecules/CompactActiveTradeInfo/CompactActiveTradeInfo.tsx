@@ -1,6 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { getUTCMonthYear } from '@secured-finance/sf-core';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -172,7 +172,7 @@ export default function CompactActiveTradeInfo({ data }: Props) {
                     return (
                         <div className='px-5' key={`active-trade-info-${i}`}>
                             <div
-                                className={classNames(
+                                className={clsx(
                                     'flex flex-col gap-4 border-neutral-600 py-4 text-[#FBFAFC]',
                                     { 'border-b': i !== data.length - 1 }
                                 )}
@@ -189,7 +189,7 @@ export default function CompactActiveTradeInfo({ data }: Props) {
                                             </h2>
                                             {forwardValue !== ZERO_BI ? (
                                                 <span
-                                                    className={classNames(
+                                                    className={clsx(
                                                         'flex w-[45px] items-center justify-center rounded-full px-[0.375rem] py-[0.125rem] text-[0.625rem]',
                                                         {
                                                             'bg-[#FFE5E8] text-[#FF324B]':

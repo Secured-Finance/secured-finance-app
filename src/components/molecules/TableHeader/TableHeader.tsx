@@ -1,5 +1,5 @@
 import { SortDirection } from '@tanstack/react-table';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { SortArrows } from 'src/components/atoms';
 import { Tooltip } from 'src/components/templates';
 import { Alignment } from 'src/types';
@@ -54,7 +54,7 @@ const Container = ({
     return (
         <div
             data-testid='table-header-wrapper'
-            className={classNames('flex tablet:px-3', {
+            className={clsx('flex px-3', {
                 'justify-start': align === 'left',
                 'justify-center': align === 'center',
                 'justify-end': align === 'right',

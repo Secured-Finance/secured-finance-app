@@ -7,6 +7,10 @@ const { Default } = composeStories(stories);
 describe('SupportedNetworks Component', () => {
     it('should render a SupportedNetworks', () => {
         render(<Default />);
-        expect(screen.getByText('Sepolia')).toBeInTheDocument();
+        expect(
+            screen.getByText(
+                'Secured Finance is not supported on this network. Please switch to a supported network.'
+            )
+        ).toBeInTheDocument();
     });
 });

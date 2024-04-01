@@ -100,21 +100,25 @@ module.exports = {
             teal: '#11CABE',
             green: '#5CD167',
             orange: '#F9AA4B',
-            yellow: '#FAAD14',
+            yellow: {
+                DEFAULT: '#FAAD14',
+                '900': '#BD7003',
+            },
             red: '#FA2256',
             purple: '#BD47FB',
             gunMetal: '#292D3F',
             primary7: '#11CABE',
-
             // Secondary
             galacticOrange: '#FF9FAE',
             planetaryPurple: '#ADB6FF',
+            palePurple: '#F5F6FF',
             nebulaTeal: '#15D6E8',
             secondaryPurple: '#AE72FF',
             moonGrey: '#E6E6E6',
             slateGray: '#777E90',
+            secondary3: '#96EAF1',
             secondary7: '#B9BDEA',
-
+            error5: '#FF324B',
             neutral: {
                 DEFAULT: '#353945',
                 '1': '#141416',
@@ -127,6 +131,7 @@ module.exports = {
                 '8': '#FCFCFD',
                 '50': '#FBFAFC',
                 '300': '#CBD5E1',
+                '400': '#94A3B8',
                 '500': '#64748B',
                 '600': '#475569',
                 '700': '#334155',
@@ -134,17 +139,20 @@ module.exports = {
                 '900': '#002133',
             },
             grayScale: '#FAFAFA',
-
-            tabGradient2: 'rgba(106, 118, 177, 0.35)',
-            tabGradient1: 'rgba(57, 77, 174, 0)',
+            tabGradient: {
+                1: 'rgba(57, 77, 174, 0)',
+                2: 'rgba(106, 118, 177, 0.35)',
+                3: 'rgba(21, 214, 232, 0)',
+                4: 'rgba(47, 174, 186, 0.35)',
+                5: 'rgba(255, 50, 75, 0)',
+                6: 'rgba(255, 50, 75, 0.35)',
+            },
             backgroundBlur: 'rgba(35, 43, 56, 0.6)',
             cardBackground: '#161E2E',
             panelStroke: 'rgb(45, 64, 100)',
-
             progressBarStart: 'rgba(21, 214, 232, 1)',
             progressBarVia: 'rgba(255, 188, 107, 1)',
             progressBarEnd: 'rgba(255, 101, 138, 1)',
-
             transparent: 'transparent',
             starBlue: {
                 '80': 'rgba(81, 98, 255, 0.8)',
@@ -155,7 +163,6 @@ module.exports = {
                 '10': 'rgba(81, 98, 255, 0.1)',
                 DEFAULT: '#5162FF',
             },
-
             black: {
                 DEFAULT: '#000000',
                 '90': 'rgba(0, 0, 0, 0.9)',
@@ -192,6 +199,9 @@ module.exports = {
                 btc: 'rgba(249, 159, 50, 0.7)',
                 eth: 'rgba(131, 131, 133, 0.7)',
                 usdc: '#2775CA',
+            },
+            secondary: {
+                700: '#09A8B7',
             },
         },
     },

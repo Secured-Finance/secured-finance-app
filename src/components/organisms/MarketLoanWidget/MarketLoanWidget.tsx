@@ -111,7 +111,7 @@ export const MarketLoanWidget = ({
                     return (
                         <div className='flex flex-col justify-center text-left'>
                             <div className='typography-caption text-neutral-8'>
-                                {getUTCMonthYear(info.getValue())}
+                                {getUTCMonthYear(info.getValue(), true)}
                             </div>
                             <div className='typography-caption text-slateGray'>
                                 {formatDate(info.getValue())}

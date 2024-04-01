@@ -27,13 +27,11 @@ describe('useMarketPhase', () => {
 
     it('should return the market phase as Pre Order', async () => {
         const maturity = dec24Fixture.toNumber();
-        const { result, waitForNextUpdate } = renderHook(() =>
+        const { result } = renderHook(() =>
             useMarketPhase(CurrencySymbol.ETH, maturity)
         );
         const value = result.current;
         expect(value).toEqual('Not Found');
-
-        await waitForNextUpdate();
 
         await waitFor(() =>
             expect(mock.getOrderBookDetails).toHaveBeenCalledTimes(1)

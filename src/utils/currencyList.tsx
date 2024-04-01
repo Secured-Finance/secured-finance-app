@@ -102,10 +102,10 @@ export const currencyMap: Readonly<
         fromBaseUnit: (amount: bigint) =>
             convertFromBlockchainUnit(amount, WETHE.onChain()),
         toCurrency: () => WETHE.onChain(),
-        chartColor: tailwindConfig.theme.colors.chart.fil,
-        pillColor: tailwindConfig.theme.colors.pill.fil,
-        roundingDecimal: 0,
-        longName: 'Wrapped Filecoin',
+        chartColor: tailwindConfig.theme.colors.chart.eth,
+        pillColor: tailwindConfig.theme.colors.pill.eth,
+        roundingDecimal: 3,
+        longName: 'Wrapped Ether',
     },
     [CurrencySymbol.WFIL]: {
         index: 4,

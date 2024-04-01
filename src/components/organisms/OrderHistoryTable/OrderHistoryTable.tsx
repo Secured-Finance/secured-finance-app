@@ -77,9 +77,7 @@ export const OrderHistoryTable = ({
             ),
             columnHelper.accessor('status', {
                 cell: info => (
-                    <div className='typography-caption'>
-                        {getStatus(info.getValue())}
-                    </div>
+                    <div className='typography-caption'>{info.getValue()}</div>
                 ),
                 header: tableHeaderDefinition('Status'),
             }),

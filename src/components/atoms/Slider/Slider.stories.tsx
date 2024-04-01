@@ -6,6 +6,7 @@ export default {
     component: Slider,
     args: {
         onChange: () => {},
+        disabled: false,
     },
 } as Meta<typeof Slider>;
 
@@ -18,3 +19,8 @@ const Template: StoryFn<typeof Slider> = args => {
 };
 
 export const Default = Template.bind({});
+
+export const Disabled = Template.bind({});
+Disabled.args = {
+    disabled: true,
+};
