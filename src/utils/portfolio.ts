@@ -67,6 +67,7 @@ export const calculateAveragePrice = (unitPrice: bigint): number => {
 
 export const formatOrders = (orders: OrderList): TransactionHistoryList => {
     return orders?.map(order => ({
+        id: '0',
         amount: order.amount,
         side: order.side,
         executionPrice: order.unitPrice,

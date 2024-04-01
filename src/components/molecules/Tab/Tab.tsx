@@ -54,7 +54,7 @@ export const Tab: React.FC<TabProps> = ({ tabDataArray, children }) => {
                 </HeadlessTab.List>
                 {util && <div className='col-span-1 h-full w-full'>{util}</div>}
             </div>
-            <HeadlessTab.Panels className='min-h-[25vh] rounded-b-2xl bg-cardBackground'>
+            <HeadlessTab.Panels className='min-h-[25vh] overflow-hidden rounded-b-2xl bg-cardBackground'>
                 {arrayChildren[selectedIndex]}
             </HeadlessTab.Panels>
         </HeadlessTab.Group>
