@@ -1,4 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
+import { toBytes32 } from '@secured-finance/sf-graph-client';
+import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -18,8 +20,10 @@ import {
     AdvancedLendingOrderCard,
     LineChartTab,
     OrderBookWidget,
+    OrderHistoryTable,
     OrderTable,
 } from 'src/components/organisms';
+import { TabSpinner } from 'src/components/pages';
 import { Page, ThreeColumnsWithTopBar } from 'src/components/templates';
 import {
     MarketPhase,
@@ -30,6 +34,7 @@ import {
     useCurrencies,
     useCurrencyDelistedStatus,
     useItayoseEstimation,
+    useGraphClientHook,
     useLastPrices,
     useLendOrderBook,
     useLendingMarkets,
@@ -45,7 +50,14 @@ import {
     setMaturity,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { CurrencySymbol, ZERO_BI, toOptions, usdFormat } from 'src/utils';
+import {
+    CurrencySymbol,
+    ZERO_BI,
+    getMappedOrderStatus,
+    sortOrders,
+    toOptions,
+    usdFormat,
+} from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 import * as dayjs from 'dayjs';
@@ -150,6 +162,27 @@ export const Itayose = () => {
             ),
         [currencies, currency, delistedCurrencySet]
     );
+
+    const userOrderHistory = useGraphClientHook(
+        {
+            address: address?.toLowerCase() ?? '',
+            currency: toBytes32(currency),
+            maturity: maturity,
+        },
+        queries.FilteredUserOrderHistoryDocument,
+        'user'
+    );
+
+    const sortedOrderHistory = useMemo(() => {
+        return (userOrderHistory.data?.orders || [])
+            .map(order => {
+                return {
+                    ...order,
+                    status: getMappedOrderStatus(order),
+                } as typeof order & { status: string };
+            })
+            .sort((a, b) => sortOrders(a, b));
+    }, [userOrderHistory.data?.orders]);
 
     const estimatedOpeningUnitPrice = lendingMarkets[currency][maturity]
         ?.openingUnitPrice
@@ -324,12 +357,25 @@ export const Itayose = () => {
                         </div>
                     </Tab>
 
-                    <HorizontalTab tabTitles={['Open Orders']}>
+                    <HorizontalTab tabTitles={['Open Orders', 'Order History']}>
                         <OrderTable
                             data={filteredOrderList}
                             variant='compact'
                             height={350}
                         />
+                        {userOrderHistory.loading ? (
+                            <TabSpinner />
+                        ) : (
+                            <OrderHistoryTable
+                                data={sortedOrderHistory}
+                                pagination={{
+                                    totalData: sortedOrderHistory.length,
+                                    getMoreData: () => {},
+                                    containerHeight: 350,
+                                }}
+                                variant='contractOnly'
+                            />
+                        )}
                     </HorizontalTab>
                 </div>
             </ThreeColumnsWithTopBar>

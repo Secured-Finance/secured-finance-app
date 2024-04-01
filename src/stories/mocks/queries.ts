@@ -5,6 +5,7 @@ import { Maturity } from 'src/utils/entities';
 import {
     dailyVolumes,
     dec22Fixture,
+    dec24Fixture,
     mar23Fixture,
     orderHistoryList,
     tradesUSDC,
@@ -421,6 +422,85 @@ export const mockFilteredUserOrderHistory = [
                 address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
                 currency: wfilBytes32,
                 maturity: dec22Fixture.toNumber(),
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    orders: generateMyOrderHistory('800000000000000000000', 0),
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        orders: generateMyOrderHistory(
+                            '800000000000000000000',
+                            0
+                        ),
+                    },
+                },
+            };
+        },
+    },
+];
+
+export const mockItayoseFilteredUserOrderHistory = [
+    {
+        request: {
+            query: queries.FilteredUserOrderHistoryDocument,
+            variables: {
+                address: '',
+                currency: wfilBytes32,
+                maturity: dec24Fixture.toNumber(),
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: null,
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: null,
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.FilteredUserOrderHistoryDocument,
+            variables: {
+                address: '',
+                currency: wfilBytes32,
+                maturity: 0,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: null,
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: null,
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.FilteredUserOrderHistoryDocument,
+            variables: {
+                address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                currency: wfilBytes32,
+                maturity: dec24Fixture.toNumber(),
                 awaitRefetchQueries: true,
             },
         },

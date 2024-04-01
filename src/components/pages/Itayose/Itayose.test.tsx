@@ -76,6 +76,14 @@ describe('Itayose Component', () => {
         expect(openOrders).toHaveLength(1);
     });
 
+    it('should only show the orders of the user related to orderbook', async () => {
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
+        fireEvent.click(screen.getByRole('tab', { name: 'Order History' }));
+        expect(await screen.findAllByRole('row')).toHaveLength(1);
+    });
+
     describe('Dynamic orderbook depth', () => {
         it('should retrieve more data when the user select only one side of the orderbook', async () => {
             render(<Default />);
