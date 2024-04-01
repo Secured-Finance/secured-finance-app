@@ -3,7 +3,7 @@ import { Landing } from 'src/components/pages';
 import { useIsGlobalItayose, useIsMarketTerminated } from 'src/hooks';
 
 const Advanced = () => {
-    const { data: isTerminated, isLoading: isLoadingMarketTerminated } =
+    const { data: isTerminated, isPending: isLoadingMarketTerminated } =
         useIsMarketTerminated();
 
     const { data: isGlobalItayose, isLoading: isLoadingGlobalItayose } =

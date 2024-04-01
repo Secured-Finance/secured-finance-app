@@ -8,7 +8,7 @@ import {
 } from 'src/hooks';
 
 const Itayose = () => {
-    const { data: isTerminated, isLoading: isLoadingMarketTerminated } =
+    const { data: isTerminated, isPending: isLoadingMarketTerminated } =
         useIsMarketTerminated();
     const { data: currencies = [] } = useCurrencies();
 
@@ -16,7 +16,7 @@ const Itayose = () => {
 
     const {
         data: lendingMarkets = baseContracts,
-        isLoading: isLoadingLendingMarkets,
+        isPending: isLoadingLendingMarkets,
     } = useLendingMarkets();
 
     if (isLoadingLendingMarkets || isLoadingMarketTerminated) {

@@ -3,7 +3,7 @@ import { PortfolioManagement } from 'src/components/pages';
 import { useIsMarketTerminated } from 'src/hooks';
 
 const Portfolio = () => {
-    const { data: isTerminated, isLoading: isLoadingMarketTerminated } =
+    const { data: isTerminated, isPending: isLoadingMarketTerminated } =
         useIsMarketTerminated();
 
     const router = useRouter();

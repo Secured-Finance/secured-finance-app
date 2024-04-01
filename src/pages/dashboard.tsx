@@ -4,7 +4,7 @@ import { useIsMarketTerminated } from 'src/hooks';
 
 const Dashboard = () => {
     const router = useRouter();
-    const { data: isTerminated, isLoading: isLoadingMarketTerminated } =
+    const { data: isTerminated, isPending: isLoadingMarketTerminated } =
         useIsMarketTerminated();
 
     if (isLoadingMarketTerminated) {

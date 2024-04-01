@@ -9,7 +9,7 @@ const Faucet = () => {
         return null;
     }
 
-    const { data: isTerminated, isLoading: isLoadingMarketTerminated } =
+    const { data: isTerminated, isPending: isLoadingMarketTerminated } =
         // eslint-disable-next-line react-hooks/rules-of-hooks
         useIsMarketTerminated();
 

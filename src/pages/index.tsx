@@ -1,11 +1,9 @@
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 import { Landing } from 'src/components/pages';
 import { useIsGlobalItayose, useIsMarketTerminated } from 'src/hooks';
 
 function EntryPoint() {
-    const [isMounted, setIsMounted] = useState(false);
-    const { data: isTerminated, isLoading: isLoadingMarketTerminated } =
+    const { data: isTerminated, isPending: isLoadingMarketTerminated } =
         useIsMarketTerminated();
 
     const { data: isGlobalItayose, isLoading: isLoadingGlobalItayose } =
@@ -13,11 +11,7 @@ function EntryPoint() {
 
     const router = useRouter();
 
-    useEffect(() => {
-        setIsMounted(true);
-    }, []);
-
-    if (!isMounted || isLoadingGlobalItayose || isLoadingMarketTerminated) {
+    if (isLoadingGlobalItayose || isLoadingMarketTerminated) {
         return null;
     }
 
