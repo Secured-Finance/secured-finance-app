@@ -250,7 +250,7 @@ export function AdvancedLendingOrderCard({
     const isBondPriceFieldDisabled = isMarketOrderType || !isConnected;
 
     return (
-        <div className='h-full rounded-b-xl border-white-10 bg-opacity-60 pb-7 tablet:border tablet:bg-cardBackground'>
+        <div className='h-full rounded-b-xl border-white-10 bg-opacity-60 pb-7 laptop:border laptop:bg-cardBackground'>
             <RadioGroupSelector
                 options={Object.values(OrderSideMap)}
                 selectedOption={OrderSideMap[side]}

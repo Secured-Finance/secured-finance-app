@@ -331,7 +331,7 @@ export const AdvancedLending = ({
                     />
                 </div>
                 {/* Yield curve + Historical chart in mobile */}
-                <div className='block tablet:hidden'>
+                <div className='block tablet:col-span-2 laptop:hidden'>
                     <Tab
                         tabDataArray={[
                             { text: 'Yield Curve' },
@@ -374,7 +374,7 @@ export const AdvancedLending = ({
                 </div>
                 <div className='col-span-1 tablet:col-span-2'>
                     <div className='flex h-full flex-grow flex-col gap-4'>
-                        <div className='hidden tablet:block'>
+                        <div className='hidden laptop:block'>
                             <Tab
                                 tabDataArray={[
                                     { text: 'Yield Curve' },
