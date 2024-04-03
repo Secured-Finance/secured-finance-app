@@ -59,6 +59,21 @@
     src: url('./../fonts/suisse-intl/SuisseIntl-BoldItalic-WebS.woff2') format('woff2'), url('./../fonts/suisse-intl/SuisseIntl-BoldItalic-WebS.woff') format('woff');
   }
 
+  @font-face {
+    font-family: 'Roboto Mono';
+    font-style: normal;
+    font-weight: 400;
+    src: url('./../fonts/roboto-mono/RobotoMono-Regular.woff2') format('woff2'), url('./../fonts/roboto-mono/RobotoMono-Regular.woff') format('woff');
+  }
+
+  @font-face {
+    font-family: 'Roboto Mono';
+    font-style: italic;
+    font-weight: 400;
+    src: url('./../fonts/roboto-mono/RobotoMono-Italic.woff2') format('woff2'), url('./../fonts/roboto-mono/RobotoMono-Italic.woff') format('woff');
+  }
+
+
   body {
     @apply font-secondary;
     background-image: url(../img/app-bg.jpg);
