@@ -294,7 +294,7 @@ export const AdvancedLending = ({
     return (
         <div className='grid gap-2'>
             {maximumOpenOrderLimit && (
-                <div className='px-3 tablet:px-0'>
+                <div className='px-3 laptop:px-0'>
                     <Alert severity='warning'>
                         <div className='typography-caption text-neutral-50'>
                             You will not be able to place additional orders as

@@ -155,11 +155,11 @@ const WithBanner = ({
         : 0;
     return (
         <div className='flex flex-col justify-center gap-5'>
-            <div className='px-3 tablet:px-0'>
+            <div className='px-3 laptop:px-0'>
                 <DelistedCurrencyDisclaimer currencies={delistedCurrencySet} />
             </div>
             {market && (
-                <div className='px-3 tablet:px-0'>
+                <div className='px-3 laptop:px-0'>
                     <Alert severity='info'>
                         <div className='typography-caption text-white'>
                             <p>

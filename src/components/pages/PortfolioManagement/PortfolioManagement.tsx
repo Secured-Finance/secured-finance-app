@@ -261,7 +261,7 @@ export const PortfolioManagement = () => {
     return (
         <Page title='Portfolio Management' name='portfolio-management'>
             {userDelistedCurrenciesArray.length > 0 && (
-                <div className='px-3 tablet:px-0'>
+                <div className='px-3 laptop:px-0'>
                     <Alert
                         severity='error'
                         showCloseButton={true}
