@@ -93,8 +93,9 @@ describe('ActiveTradeTable Component', () => {
     });
 
     it('should display hours and minutes when maturity is less than 24 hours', async () => {
-        render(<Default />);
+        render(<Delisted />);
         const closeToMaturityRow = screen.getAllByRole('row')[5];
+
         expect(closeToMaturityRow).toHaveTextContent('Feb 2, 2022');
         waitFor(() => {
             expect(closeToMaturityRow).toHaveTextContent('21h-59m');
