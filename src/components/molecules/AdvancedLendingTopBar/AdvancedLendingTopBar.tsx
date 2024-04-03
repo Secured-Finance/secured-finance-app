@@ -57,10 +57,10 @@ export const AdvancedLendingTopBar = <T extends string = string>({
     };
 
     return (
-        <>
+        <div>
             <div className='h-1 bg-starBlue'></div>
-            <div className='border-white-10 laptop:border-x laptop:border-b laptop:bg-black-20'>
-                <div className='grid-col-3 tablet:grid-col-6 grid gap-y-6 px-5 pb-3 pt-6 laptop:grid-flow-col laptop:place-content-around laptop:items-start laptop:pt-4'>
+            <div className='border-white-10 tablet:bg-black-20 laptop:border-x laptop:border-b'>
+                <div className='grid grid-cols-3 gap-y-6 px-5 pb-3 pt-6 tablet:grid-cols-6 laptop:grid-flow-col laptop:place-content-around laptop:items-start laptop:pt-4'>
                     <div className='col-span-3 pr-5'>
                         <HorizontalAssetSelector
                             selectedAsset={selectedAsset}
@@ -119,7 +119,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

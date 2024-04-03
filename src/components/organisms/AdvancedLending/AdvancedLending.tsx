@@ -302,6 +302,7 @@ export const AdvancedLending = ({
                     </div>
                 </Alert>
             )}
+
             <div className='grid h-fit grid-cols-1 place-items-stretch gap-x-3 gap-y-4 tablet:grid-cols-2 laptop:grid-cols-4'>
                 <div className='tablet:col-span-2 laptop:col-span-4'>
                     <AdvancedLendingTopBar
@@ -329,6 +330,29 @@ export const AdvancedLending = ({
                         ]}
                     />
                 </div>
+                {/* Yield curve + Historical chart in mobile */}
+                <div className='block tablet:hidden'>
+                    <Tab
+                        tabDataArray={[
+                            { text: 'Yield Curve' },
+                            { text: 'Historical Chart' },
+                        ]}
+                    >
+                        <div className='h-[410px] w-full px-2 py-4'>
+                            <LineChartTab
+                                rates={rates}
+                                maturityList={maturityList}
+                                itayoseMarketIndexSet={itayoseMarketIndexSet}
+                                followLinks={false}
+                                maximumRate={maximumRate}
+                                marketCloseToMaturityOriginalRate={
+                                    marketCloseToMaturityOriginalRate
+                                }
+                            />
+                        </div>
+                        <HistoricalWidget />
+                    </Tab>
+                </div>
                 <div className='tablet:col-span-2 laptop:col-span-1'>
                     <AdvancedLendingOrderCard
                         collateralBook={collateralBook}
@@ -348,9 +372,9 @@ export const AdvancedLending = ({
                         onAggregationChange={setMultiplier}
                     />
                 </div>
-                <div className='col-span-2 laptop:col-span-2'>
+                <div className='col-span-1 tablet:col-span-2'>
                     <div className='flex h-full flex-grow flex-col gap-4'>
-                        <div className='hidden laptop:block'>
+                        <div className='hidden tablet:block'>
                             <Tab
                                 tabDataArray={[
                                     { text: 'Yield Curve' },
