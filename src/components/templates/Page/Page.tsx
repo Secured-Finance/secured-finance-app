@@ -13,10 +13,10 @@ export const Page = ({
 }) => {
     return (
         <div
-            className='mt-6 flex flex-col gap-4 tablet:min-w-[728px] tablet:px-5 laptop:min-w-[970px] laptop:px-7 desktop:min-w-[1120px] desktop:px-40'
+            className='mt-6 flex flex-col gap-4 tablet:min-w-[728px] laptop:min-w-[970px] laptop:px-7 desktop:min-w-[1120px] desktop:px-40'
             data-testid={name}
         >
-            <div className='flex justify-between border-b-[0.5px] border-panelStroke px-3 pb-5 tablet:px-0 tablet:pb-7'>
+            <div className='flex justify-between border-b-[0.5px] border-panelStroke px-3 pb-5 tablet:pb-7 laptop:px-0'>
                 <span className='font-secondary text-smd font-light leading-7 text-white tablet:text-md laptop:text-lg'>
                     {title}
                 </span>
