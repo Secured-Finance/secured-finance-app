@@ -13,10 +13,10 @@ export const Page = ({
 }) => {
     return (
         <div
-            className='mt-6 flex flex-col gap-4 tablet:min-w-[728px] laptop:min-w-[970px] laptop:px-7 desktop:min-w-[1120px] desktop:px-40'
+            className='mt-3 flex flex-col gap-2 tablet:min-w-[728px] laptop:mt-6 laptop:min-w-[970px] laptop:gap-4 laptop:px-7 desktop:min-w-[1120px] desktop:px-40'
             data-testid={name}
         >
-            <div className='flex justify-between border-b-[0.5px] border-panelStroke px-3 pb-5 tablet:pb-7 laptop:px-0'>
+            <div className='flex items-center justify-between border-panelStroke px-4 pb-3 laptop:border-b-[0.5px] laptop:px-0 laptop:pb-7'>
                 <span className='font-secondary text-smd font-light leading-7 text-white tablet:text-md laptop:text-lg'>
                     {title}
                 </span>
@@ -24,11 +24,9 @@ export const Page = ({
             </div>
             <div className='flex flex-col gap-6'>
                 {Children.map(children, (child, index) => {
-                    return (
-                        <div className='' key={`page-${name}-${index}`}>
-                            {child}
-                        </div>
-                    );
+                    if (child) {
+                        return <div key={`page-${name}-${index}`}>{child}</div>;
+                    }
                 })}
             </div>
         </div>

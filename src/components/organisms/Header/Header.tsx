@@ -111,10 +111,9 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     return (
         <div className='relative'>
             <HeaderMessage chainId={currentChainId} chainError={chainError} />
-
             <nav
                 data-cy='header'
-                className='grid h-20 w-full grid-flow-col border-b border-neutral-1 px-5 laptop:grid-flow-col'
+                className='grid h-14 w-full grid-flow-col border-b border-neutral-1 px-5 tablet:h-20 laptop:grid-flow-col'
             >
                 <div className='col-span-2 flex flex-row items-center gap-3'>
                     <Link href='/' passHref>
@@ -165,6 +164,7 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                         </>
                     ) : (
                         <Button
+                            size={isMobile ? 'sm' : undefined}
                             data-cy='wallet'
                             data-testid='connect-wallet'
                             onClick={() => dispatch(setWalletDialogOpen(true))}
@@ -173,7 +173,7 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                         </Button>
                     )}
 
-                    <div className='inline laptop:hidden'>
+                    <div className='flex laptop:hidden'>
                         <HamburgerMenu
                             links={LINKS.map(link => ({
                                 label: link.text,

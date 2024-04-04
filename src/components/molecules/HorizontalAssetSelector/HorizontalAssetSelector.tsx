@@ -41,13 +41,13 @@ export const HorizontalAssetSelector = <T extends string = string>({
     return (
         <div className='grid grid-cols-2 gap-x-3 gap-y-1 text-neutral-4 desktop:gap-x-5'>
             <div className='flex flex-col items-center'>
-                <div className='flex w-full flex-col gap-1'>
+                <div className='flex w-full flex-col gap-1 laptop:max-w-[200px]'>
                     <CurrencyDropdown
                         currencyOptionList={assetList}
                         selected={selectedAsset}
                         onChange={onAssetChange}
                     />
-                    <p className='text-[11px] leading-4 tablet:text-xs'>
+                    <p className='text-[11px] leading-4 tablet:text-xs laptop:text-xs'>
                         {selectedAsset
                             ? currencyMap[selectedAsset.value].name
                             : undefined}
@@ -55,14 +55,14 @@ export const HorizontalAssetSelector = <T extends string = string>({
                 </div>
             </div>
             <div className='flex flex-col items-center'>
-                <div className='flex w-full flex-col gap-1'>
+                <div className='flex w-full flex-col gap-1 laptop:max-w-[200px]'>
                     <DropdownSelector
                         optionList={options}
                         onChange={handleTermChange}
                         selected={selected}
                         variant='fullWidth'
                     />
-                    <p className='whitespace-nowrap text-[11px] leading-4 tablet:text-xs'>
+                    <p className='whitespace-nowrap text-[11px] leading-4 tablet:text-xs laptop:text-xs'>
                         {`Maturity ${
                             selectedTerm &&
                             getTransformMaturityOption(options)(
