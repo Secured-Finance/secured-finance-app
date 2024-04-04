@@ -5,6 +5,7 @@ import { CurrencySymbol } from 'src/utils';
 
 export const DELISTED_CURRENCIES_KEY = 'DELISTED_CURRENCIES_KEY';
 
+// TODO: add a way to pass currencies as array
 export const DelistedCurrencyDisclaimer = ({
     currencies,
 }: {

@@ -556,6 +556,7 @@ export const activeOrders: Order[] = [
 
 export const orderHistoryList: OrderHistoryList = [
     {
+        id: '0',
         orderId: 1,
         currency: wfilBytes32,
         side: 1,
@@ -577,6 +578,7 @@ export const orderHistoryList: OrderHistoryList = [
         isCircuitBreakerTriggered: false,
     },
     {
+        id: '0',
         orderId: 2,
         currency: wfilBytes32,
         side: 1,
@@ -598,6 +600,7 @@ export const orderHistoryList: OrderHistoryList = [
         isCircuitBreakerTriggered: false,
     },
     {
+        id: '0',
         orderId: 1,
         currency: wbtcBytes32,
         side: 0,
@@ -619,6 +622,7 @@ export const orderHistoryList: OrderHistoryList = [
         isCircuitBreakerTriggered: false,
     },
     {
+        id: '0',
         orderId: 1,
         currency: ethBytes32,
         side: 1,
@@ -640,6 +644,7 @@ export const orderHistoryList: OrderHistoryList = [
         isCircuitBreakerTriggered: false,
     },
     {
+        id: '0',
         orderId: 1,
         currency: wfilBytes32,
         side: 1,
@@ -661,6 +666,7 @@ export const orderHistoryList: OrderHistoryList = [
         isCircuitBreakerTriggered: false,
     },
     {
+        id: '0',
         orderId: 2,
         currency: ethBytes32,
         side: 1,
@@ -682,6 +688,7 @@ export const orderHistoryList: OrderHistoryList = [
         isCircuitBreakerTriggered: true,
     },
     {
+        id: '0',
         orderId: 1,
         currency: wbtcBytes32,
         side: 0,
@@ -703,6 +710,7 @@ export const orderHistoryList: OrderHistoryList = [
         isCircuitBreakerTriggered: false,
     },
     {
+        id: '0',
         orderId: 1,
         currency: ethBytes32,
         side: 0,
@@ -724,6 +732,7 @@ export const orderHistoryList: OrderHistoryList = [
         isCircuitBreakerTriggered: false,
     },
     {
+        id: '0',
         orderId: 3,
         currency: wfilBytes32,
         side: 1,
@@ -745,6 +754,7 @@ export const orderHistoryList: OrderHistoryList = [
         isCircuitBreakerTriggered: true,
     },
     {
+        id: '0',
         orderId: 3,
         currency: wfilBytes32,
         side: 1,
@@ -766,6 +776,7 @@ export const orderHistoryList: OrderHistoryList = [
         isCircuitBreakerTriggered: false,
     },
     {
+        id: '0',
         orderId: 5,
         currency: wfilBytes32,
         side: 1,
@@ -787,6 +798,7 @@ export const orderHistoryList: OrderHistoryList = [
         isCircuitBreakerTriggered: false,
     },
     {
+        id: '0',
         orderId: 6,
         currency: wfilBytes32,
         side: 1,
@@ -818,6 +830,7 @@ export const mappedOrderHistoryList = orderHistoryList.map(order => {
 
 export const transactions: TransactionHistoryList = [
     {
+        id: '0',
         amount: '1000000000000000000000',
         averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
         side: 0,
@@ -832,6 +845,7 @@ export const transactions: TransactionHistoryList = [
         },
     },
     {
+        id: '0',
         amount: '500000000000000000000',
         averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
         side: 1,
@@ -846,6 +860,7 @@ export const transactions: TransactionHistoryList = [
         },
     },
     {
+        id: '0',
         amount: '500000000000000000000',
         averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
         side: 1,
@@ -860,6 +875,7 @@ export const transactions: TransactionHistoryList = [
         },
     },
     {
+        id: '0',
         amount: '1000000000',
         averagePrice: '0.9000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
         side: 1,
@@ -874,6 +890,7 @@ export const transactions: TransactionHistoryList = [
         },
     },
     {
+        id: '0',
         amount: '500000000',
         averagePrice: '0.98', // TODO: rework the unit in the graph. This is changed only for a dirty fix
         side: 0,
