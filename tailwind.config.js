@@ -120,6 +120,16 @@ module.exports = {
             secondary3: '#96EAF1',
             secondary7: '#B9BDEA',
             error5: '#FF324B',
+            error: {
+                '300': '#FF9FAE',
+            },
+            success: {
+                '300': '#96EAF1',
+                '500': '#15D6E8',
+            },
+            warning: {
+                300: '#FFDB93',
+            },
             neutral: {
                 DEFAULT: '#353945',
                 '1': '#141416',
@@ -131,6 +141,7 @@ module.exports = {
                 '7': '#F4F5F6',
                 '8': '#FCFCFD',
                 '50': '#FBFAFC',
+                '100': '#F1F5F9',
                 '300': '#CBD5E1',
                 '400': '#94A3B8',
                 '500': '#64748B',

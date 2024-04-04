@@ -15,7 +15,7 @@ import {
     HistoricalWidget,
     LineChartTab,
     MyTransactionsTable,
-    OrderBookWidget,
+    NewOrderBookWidget,
     OrderHistoryTable,
     OrderTable,
 } from 'src/components/organisms';
@@ -337,11 +337,10 @@ export const AdvancedLending = ({
                     delistedCurrencySet={delistedCurrencySet}
                 />
 
-                <OrderBookWidget
+                <NewOrderBookWidget
                     orderbook={orderBook}
                     currency={currency}
                     marketPrice={currentMarket?.value}
-                    isCurrencyDelisted={delistedCurrencySet.has(currency)}
                     onFilterChange={state =>
                         setIsShowingAll(state.showBorrow && state.showLend)
                     }

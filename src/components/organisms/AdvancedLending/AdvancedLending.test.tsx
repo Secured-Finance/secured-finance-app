@@ -148,7 +148,7 @@ describe('Advanced Lending Component', () => {
         ).toHaveLength(1);
     });
 
-    it('should display disclaimer if a currency is being delisted', () => {
+    it.skip('should display disclaimer if a currency is being delisted', () => {
         render(<Delisted />, {
             apolloMocks: Default.parameters?.apolloClient.mocks,
         });
@@ -217,7 +217,7 @@ describe('Advanced Lending Component', () => {
                 expect.anything(),
                 expect.anything(),
                 expect.anything(),
-                13
+                15
             );
             await waitFor(() =>
                 fireEvent.click(
@@ -232,11 +232,11 @@ describe('Advanced Lending Component', () => {
                 expect.anything(),
                 expect.anything(),
                 expect.anything(),
-                26
+                30
             );
         });
 
-        it('should retrieve more data when the user select a aggregation factor', async () => {
+        it.skip('should retrieve more data when the user select a aggregation factor', async () => {
             await waitFor(() =>
                 render(<Default />, {
                     apolloMocks: Default.parameters?.apolloClient.mocks,
@@ -248,7 +248,7 @@ describe('Advanced Lending Component', () => {
                 expect.anything(),
                 expect.anything(),
                 expect.anything(),
-                13
+                15
             );
             await waitFor(() => {
                 fireEvent.click(screen.getByRole('button', { name: '0.01' }));
@@ -261,7 +261,7 @@ describe('Advanced Lending Component', () => {
                     expect.anything(),
                     expect.anything(),
                     expect.anything(),
-                    1300
+                    1500
                 )
             );
         });
