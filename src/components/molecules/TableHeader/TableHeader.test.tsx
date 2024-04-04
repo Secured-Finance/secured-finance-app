@@ -32,6 +32,18 @@ describe('TableHeader Component', () => {
         );
     });
 
+    it('should add horizontal padding by default', () => {
+        render(<Default />);
+        expect(screen.getByTestId('table-header-wrapper')).toHaveClass('px-3');
+    });
+
+    it('should remove horizontal padding when horizontalPadding is falsy', () => {
+        render(<Default horizontalPadding={false} />);
+        expect(screen.getByTestId('table-header-wrapper')).not.toHaveClass(
+            'px-3'
+        );
+    });
+
     it('should align the text to the right when align is right', () => {
         render(<Default align='right' />);
         expect(screen.getByTestId('table-header-wrapper')).toHaveClass(
