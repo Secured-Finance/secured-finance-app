@@ -422,7 +422,7 @@ export const NewOrderBookWidget = ({
     };
 
     return (
-        <div className='flex h-full w-full flex-col justify-start gap-y-1 overflow-hidden border-neutral-600 laptop:flex-col-reverse laptop:gap-y-0 laptop:rounded-b-xl laptop:border laptop:bg-cardBackground/60 laptop:shadow-tab'>
+        <div className='flex h-full w-full flex-col justify-start gap-y-1 overflow-hidden border-white-10 laptop:flex-col-reverse laptop:gap-y-0 laptop:rounded-b-xl laptop:border laptop:bg-cardBackground/60 laptop:shadow-tab'>
             <div className='table h-full'>
                 {orderbook.isLoading ? (
                     <div className='table-cell text-center align-middle'>
