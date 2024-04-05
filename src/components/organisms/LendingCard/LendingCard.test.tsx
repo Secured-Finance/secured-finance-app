@@ -76,7 +76,12 @@ describe('LendingCard Component', () => {
         await waitFor(() => {
             fireEvent.click(screen.getByTestId('place-order-button'));
         });
-        expect(await screen.findByRole('dialog')).toBeInTheDocument();
+        await waitFor(
+            () => {
+                expect(screen.queryByRole('dialog')).toBeInTheDocument();
+            },
+            { timeout: 300 }
+        ); // wait 300ms
         expect(screen.getByText('Confirm Borrow')).toBeInTheDocument();
         const button = screen.getByTestId('dialog-action-button');
         expect(button).toHaveTextContent('OK');

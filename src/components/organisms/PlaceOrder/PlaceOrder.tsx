@@ -241,8 +241,7 @@ export const PlaceOrder = ({
                             walletSource
                         );
                     } else {
-                        throw new Error('Invalid order type');
-                        // console.error('Invalid order type');
+                        console.error('Invalid order type');
                     }
 
                     break;
