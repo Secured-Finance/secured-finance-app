@@ -30,7 +30,7 @@ jobs:
     secrets: inherit
 
   deploy-on-fleek:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04.3
     name: Deploy on Fleek
     environment: ${{ needs.identify-env.outputs.environment_name }}
     needs: [identify-env, build-and-test-all]

@@ -28,7 +28,7 @@ on:
 jobs:
   build-and-test-all:
     name: Build and Test
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04.3
     environment: ${{ inputs.environment_name }}
     steps:
       - uses: actions/checkout@v3
