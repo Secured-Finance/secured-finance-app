@@ -281,7 +281,34 @@ export function AdvancedLendingOrderCard({
 
     const isBondPriceFieldDisabled = isMarketOrderType || !isConnected;
 
-    // TODO: handle height of orderbook based off of OrderSideMap[side], orderType values
+    const [rowsToRenderMobile, setRowsToRenderMobile] = useState<
+        10 | 12 | 14 | 16 | 18 | 20 | 22
+    >(14);
+
+    useEffect(() => {
+        switch (side) {
+            case OrderSide.LEND:
+                switch (isMarketOrderType) {
+                    case true:
+                        setRowsToRenderMobile(20);
+                        break;
+                    case false:
+                        setRowsToRenderMobile(18);
+                        break;
+                }
+                break;
+            case OrderSide.BORROW:
+                switch (isMarketOrderType) {
+                    case true:
+                        setRowsToRenderMobile(18);
+                        break;
+                    case false:
+                        setRowsToRenderMobile(16);
+                        break;
+                }
+                break;
+        }
+    }, [side, isMarketOrderType]);
 
     return (
         <div className='h-full rounded-b-xl border-white-10 pb-7 laptop:border laptop:bg-cardBackground laptop:bg-opacity-60'>
@@ -473,13 +500,15 @@ export function AdvancedLendingOrderCard({
                             orderbook={orderBook}
                             currency={currency}
                             marketPrice={currentMarket?.value}
+                            maxLendUnitPrice={market?.maxLendUnitPrice}
+                            minBorrowUnitPrice={market?.minBorrowUnitPrice}
                             onFilterChange={state =>
                                 setIsShowingAll(
                                     state.showBorrow && state.showLend
                                 )
                             }
                             onAggregationChange={setMultiplier}
-                            rowsToRenderMobile={18}
+                            rowsToRenderMobile={rowsToRenderMobile}
                         />
                     )}
                 </div>
