@@ -128,9 +128,7 @@ export default {
 } as Meta<typeof NewOrderBookWidget>;
 
 const Template: StoryFn<typeof NewOrderBookWidget> = args => (
-    <div className='h-[280px] w-[124px] laptop:h-[900px] laptop:w-full'>
-        <NewOrderBookWidget {...args} />
-    </div>
+    <NewOrderBookWidget {...args} />
 );
 
 export const Default = Template.bind({});
