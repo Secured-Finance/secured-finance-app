@@ -87,8 +87,6 @@
   }
 }
 
-
-
 @layer utilities {
   .bg-gradient-primary {
     @apply bg-gradient-to-l from-horizonBlue to-starBlue;

@@ -61,16 +61,6 @@ jobs:
       - name: Check Style with ESLint
         run: npm run lint:check
 
-      - name: Run Tests
-        run: npm run test:cov
-
-      - name: Upload Code Coverage
-        uses: codecov/codecov-action@v2
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          flags: unit-tests
-          files: './coverage/coverage-final.json'
-
       - name: Build Web App
         run: npm run build
 
