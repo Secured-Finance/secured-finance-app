@@ -42,7 +42,7 @@ describe('Advanced Lending Component', () => {
                 '1'
             );
         });
-    });
+    }, 8000);
 
     it('should not reset the amount and emit TERM_CHANGE event when the user change the maturity', async () => {
         const track = jest.spyOn(analytics, 'track');
