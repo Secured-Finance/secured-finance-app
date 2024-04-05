@@ -3,6 +3,7 @@ import { WalletSource } from '@secured-finance/sf-client';
 import clsx from 'clsx';
 import { Fragment, useMemo } from 'react';
 import { ExpandIndicator, Separator } from 'src/components/atoms';
+import { useBreakpoint } from 'src/hooks';
 import { SvgIcon } from 'src/types';
 import { AddressUtils, CurrencySymbol, ordinaryFormat } from 'src/utils';
 import { AMOUNT_PRECISION } from 'src/utils/entities';
@@ -41,6 +42,7 @@ export const WalletSourceSelector = ({
     account,
     onChange,
 }: WalletSourceSelectorProps) => {
+    const isTablet = useBreakpoint('laptop');
     const list = useMemo(
         () =>
             optionList.filter(
@@ -67,7 +69,7 @@ export const WalletSourceSelector = ({
                         <>
                             <div className='relative h-full rounded-lg ring-inset ring-starBlue focus-within:ring-2'>
                                 <Listbox.Button
-                                    className='flex w-full cursor-text flex-row items-center justify-between rounded-lg bg-black-20 py-1.5 pl-3 pr-4 laptop:py-2 laptop:pl-2'
+                                    className='flex w-full cursor-text flex-row items-center justify-between rounded-lg bg-black-20 py-2 pl-3 pr-4 laptop:pl-2'
                                     data-testid='wallet-source-selector-button'
                                 >
                                     <div
@@ -98,17 +100,6 @@ export const WalletSourceSelector = ({
                                                     : 'Connect'}
                                             </span>
                                         </div>
-                                        {/* <ChevronDownIcon
-                                            className={clsx(
-                                                account
-                                                    ? 'h-5 w-5 text-white'
-                                                    : 'h-3 w-3 text-white opacity-50',
-                                                {
-                                                    'rotate-180': open,
-                                                }
-                                            )}
-                                            data-testid='chevron-down-icon'
-                                        /> */}
                                         <ExpandIndicator
                                             expanded={open}
                                             variant={
@@ -116,9 +107,9 @@ export const WalletSourceSelector = ({
                                             }
                                         />
                                     </div>
-                                    <div className='typography-caption flex w-fit max-w-[200px] flex-col text-right text-planetaryPurple'>
-                                        <span className='block gap-[1px] whitespace-nowrap text-right text-xs leading-tight text-slateGray'>
-                                            Available
+                                    <div className='flex w-fit max-w-[200px] flex-col gap-0.5 text-right text-xs leading-5 text-planetaryPurple laptop:gap-[1px] laptop:text-sm laptop:leading-normal'>
+                                        <span className='block gap-[1px] whitespace-nowrap text-right text-[11px] leading-4 text-slateGray laptop:text-xs laptop:leading-tight'>
+                                            {isTablet ? 'Avl.' : 'Available'}
                                         </span>
                                         {account
                                             ? ordinaryFormat(
