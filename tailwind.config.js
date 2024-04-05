@@ -150,6 +150,7 @@ module.exports = {
                 '800': '#1E293B',
                 '900': '#002133',
             },
+            'z-neutral-100': '#F1F5F9',
             grayScale: '#FAFAFA',
             tabGradient: {
                 1: 'rgba(57, 77, 174, 0)',
