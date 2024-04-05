@@ -12,7 +12,7 @@ on:
 
 jobs:
   identify-env:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04.3
     name: Identify the environment
     outputs:
       environment_name: ${{ steps.identify-env.outputs.environment_name }}
