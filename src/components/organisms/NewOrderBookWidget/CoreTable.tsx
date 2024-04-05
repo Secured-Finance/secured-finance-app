@@ -8,10 +8,11 @@ import {
     useReactTable,
 } from '@tanstack/react-table';
 import clsx from 'clsx';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 type CoreTableOptions = {
     name: string;
+    hoverDirection: 'up' | 'down';
     onLineClick?: (rowId: string) => void;
     hoverRow?: (rowId: string) => boolean;
     hideColumnIds?: string[];
@@ -22,6 +23,7 @@ type CoreTableOptions = {
 
 const DEFAULT_OPTIONS: CoreTableOptions = {
     name: 'core-table',
+    hoverDirection: 'up',
     onLineClick: undefined,
     hoverRow: undefined,
     hideColumnIds: undefined,
@@ -43,6 +45,16 @@ export const CoreTable = <T,>({
         ...DEFAULT_OPTIONS,
         ...options,
     };
+
+    const onHoverBackground = useCallback(
+        (rowId: string) => {
+            if (coreTableOptions.hoverDirection === 'up') {
+                return activeRow && Number(rowId) >= Number(activeRow);
+            }
+            return activeRow && Number(rowId) <= Number(activeRow);
+        },
+        [activeRow, coreTableOptions.hoverDirection]
+    );
 
     const filteredColumns = columns.filter(column => {
         if (
@@ -115,19 +127,21 @@ export const CoreTable = <T,>({
                         <tr
                             key={row.id}
                             className={clsx(
-                                'box-border h-4 w-full laptop:h-[23px]',
+                                'h-4 w-full border-transparent laptop:h-[23px]',
                                 {
+                                    'border-t':
+                                        coreTableOptions.hoverDirection ===
+                                        'up',
+                                    'border-b':
+                                        coreTableOptions.hoverDirection ===
+                                        'down',
                                     'cursor-pointer bg-neutral-100/10':
-                                        Number(row.id) <=
-                                            Number(activeRow ?? -1) &&
-                                        coreTableOptions.hoverRow?.(row.id),
-                                    'border-dashed border-neutral-100':
-                                        Number(row.id) ===
-                                            Number(activeRow ?? -1) &&
-                                        coreTableOptions.hoverRow?.(row.id),
-                                    'border-transparent':
-                                        Number(row.id) !==
-                                        Number(activeRow ?? -1),
+                                        coreTableOptions.hoverRow?.(row.id) &&
+                                        onHoverBackground(row.id),
+                                    'border-dashed border-z-neutral-100':
+                                        coreTableOptions.hoverRow?.(row.id) &&
+                                        activeRow &&
+                                        Number(row.id) === Number(activeRow),
                                 }
                             )}
                             onClick={() =>
