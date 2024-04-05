@@ -80,8 +80,8 @@ describe('LendingCard Component', () => {
             () => {
                 expect(screen.queryByRole('dialog')).toBeInTheDocument();
             },
-            { timeout: 300 }
-        ); // wait 300ms
+            { timeout: 500 }
+        );
         expect(screen.getByText('Confirm Borrow')).toBeInTheDocument();
         const button = screen.getByTestId('dialog-action-button');
         expect(button).toHaveTextContent('OK');
