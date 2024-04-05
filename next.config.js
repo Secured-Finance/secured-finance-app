@@ -15,7 +15,7 @@ module.exports = withTM(
     withBundleAnalyzer({
         reactStrictMode: true,
         trailingSlash: true,
-        staticPageGenerationTimeout: 240,
+        staticPageGenerationTimeout: 1000,
 
         experimental: {
             esmExternals: false,
