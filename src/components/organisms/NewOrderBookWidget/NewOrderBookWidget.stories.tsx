@@ -116,9 +116,11 @@ export default {
             },
             isLoading: false,
         },
+        maxLendUnitPrice: 9730,
+        minBorrowUnitPrice: 9808,
         marketPrice: LoanValue.fromPrice(9300, maturityMar23.toNumber()),
         currency: CurrencySymbol.WFIL,
-        isCurrencyDelisted: false,
+        rowsToRenderMobile: 12,
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,
