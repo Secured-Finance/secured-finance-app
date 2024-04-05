@@ -5,8 +5,8 @@ import { divide, multiply } from 'src/utils';
 import { ZERO_BI, calculatePercentage } from 'src/utils/collateral';
 
 const COLORBAR_MIN_WIDTH = 5;
-const COLORBAR_MAX_WIDTH = 308;
-const COLORBAR_MAX_WIDTH_MOBILE = 124;
+const COLORBAR_MAX_WIDTH = 324;
+const COLORBAR_MAX_WIDTH_MOBILE = 201;
 
 export const ColorBar = ({
     value,
