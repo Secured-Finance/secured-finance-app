@@ -16,6 +16,7 @@ export * from './MarketLoanWidget';
 export * from './MultiCurveChart';
 export * from './MyTransactionsTable';
 export * from './MyWalletWidget';
+export * from './NewOrderBookWidget';
 export * from './OrderAction';
 export * from './OrderBookWidget';
 export * from './OrderDetails';

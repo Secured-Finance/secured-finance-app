@@ -15,7 +15,7 @@ import {
     HistoricalWidget,
     LineChartTab,
     MyTransactionsTable,
-    OrderBookWidget,
+    NewOrderBookWidget,
     OrderHistoryTable,
     OrderTable,
 } from 'src/components/organisms';
@@ -23,6 +23,7 @@ import { TabSpinner, TableType } from 'src/components/pages';
 import {
     CollateralBook,
     emptyOrderList,
+    useBreakpoint,
     useCurrencies,
     useGraphClientHook,
     useIsUnderCollateralThreshold,
@@ -105,6 +106,7 @@ export const AdvancedLending = ({
     marketPrice: number | undefined;
     delistedCurrencySet: Set<CurrencySymbol>;
 }) => {
+    const isTablet = useBreakpoint('laptop');
     const { currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
@@ -363,16 +365,19 @@ export const AdvancedLending = ({
                     />
                 </div>
                 <div className='hidden laptop:col-span-1 laptop:block'>
-                    <OrderBookWidget
-                        orderbook={orderBook}
-                        currency={currency}
-                        marketPrice={currentMarket?.value}
-                        isCurrencyDelisted={delistedCurrencySet.has(currency)}
-                        onFilterChange={state =>
-                            setIsShowingAll(state.showBorrow && state.showLend)
-                        }
-                        onAggregationChange={setMultiplier}
-                    />
+                    {!isTablet && (
+                        <NewOrderBookWidget
+                            orderbook={orderBook}
+                            currency={currency}
+                            marketPrice={currentMarket?.value}
+                            onFilterChange={state =>
+                                setIsShowingAll(
+                                    state.showBorrow && state.showLend
+                                )
+                            }
+                            onAggregationChange={setMultiplier}
+                        />
+                    )}
                 </div>
                 <div className='col-span-1 tablet:col-span-2'>
                     <div className='flex h-full flex-grow flex-col gap-4'>

@@ -164,7 +164,7 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                         </>
                     ) : (
                         <Button
-                            size={isMobile ? 'sm' : undefined}
+                            size={!!isMobile ? 'sm' : 'md'}
                             data-cy='wallet'
                             data-testid='connect-wallet'
                             onClick={() => dispatch(setWalletDialogOpen(true))}

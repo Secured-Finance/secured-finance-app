@@ -11,14 +11,16 @@ import {
     Slider,
     WalletSourceSelector,
 } from 'src/components/atoms';
-import { OrderAction } from 'src/components/organisms';
+import { NewOrderBookWidget, OrderAction } from 'src/components/organisms';
 import {
     CollateralBook,
     useBalances,
     useBorrowableAmount,
+    useBreakpoint,
     useLastPrices,
     useMarket,
 } from 'src/hooks';
+import { useOrderbook } from 'src/hooks/useOrderbook';
 import {
     resetUnitPrice,
     selectLandingOrderForm,
@@ -81,6 +83,11 @@ export function AdvancedLendingOrderCard({
         selectLandingOrderForm(state.landingOrderForm)
     );
 
+    const [orderBook, setMultiplier, setIsShowingAll] = useOrderbook(
+        currency,
+        maturity
+    );
+
     const { address, isConnected } = useAccount();
     const { amountInput, unitPriceInput } = useSelector((state: RootState) =>
         selectLandingOrderInputs(state.landingOrderForm)
@@ -89,6 +96,7 @@ export function AdvancedLendingOrderCard({
     const [sliderValue, setSliderValue] = useState(0.0);
 
     const balanceRecord = useBalances();
+    const isTablet = useBreakpoint('laptop');
 
     const loanValue = useMemo(() => {
         if (!maturity) return LoanValue.ZERO;
@@ -123,6 +131,30 @@ export function AdvancedLendingOrderCard({
     const price = priceList[currency];
 
     const market = useMarket(currency, maturity);
+    const marketUnitPrice = market?.marketUnitPrice;
+    const openingUnitPrice = market?.openingUnitPrice;
+
+    const currentMarket = useMemo(() => {
+        if (marketUnitPrice) {
+            return {
+                value: LoanValue.fromPrice(marketUnitPrice, maturity),
+                time: market?.lastBlockUnitPriceTimestamp ?? 0,
+                type: 'block' as const,
+            };
+        }
+        if (openingUnitPrice) {
+            return {
+                value: LoanValue.fromPrice(openingUnitPrice, maturity),
+                time: 0,
+                type: 'opening' as const,
+            };
+        }
+    }, [
+        market?.lastBlockUnitPriceTimestamp,
+        marketUnitPrice,
+        maturity,
+        openingUnitPrice,
+    ]);
 
     const slippage = useMemo(() => {
         if (!market) {
@@ -249,6 +281,8 @@ export function AdvancedLendingOrderCard({
 
     const isBondPriceFieldDisabled = isMarketOrderType || !isConnected;
 
+    // TODO: handle height of orderbook based off of OrderSideMap[side], orderType values
+
     return (
         <div className='h-full rounded-b-xl border-white-10 pb-7 laptop:border laptop:bg-cardBackground laptop:bg-opacity-60'>
             <RadioGroupSelector
@@ -291,7 +325,7 @@ export function AdvancedLendingOrderCard({
             />
 
             <div className='grid w-full grid-cols-12 gap-5 px-4 pb-8 pt-4 laptop:pb-4 laptop:pt-5'>
-                <div className='col-span-7 flex flex-col justify-center gap-2 laptop:col-span-12 laptop:gap-4'>
+                <div className='col-span-7 flex flex-col justify-start gap-2 laptop:col-span-12 laptop:gap-4'>
                     {!isItayose && (
                         <div className='mb-1 laptop:mb-0'>
                             <RadioGroupSelector
@@ -416,7 +450,7 @@ export function AdvancedLendingOrderCard({
                         />
                     </div>
 
-                    <div className='mt-4 laptop:mt-0'>
+                    <div className=''>
                         <OrderAction
                             loanValue={loanValue}
                             collateralBook={collateralBook}
@@ -434,7 +468,20 @@ export function AdvancedLendingOrderCard({
                     />
                 </div>
                 <div className='col-span-5 laptop:hidden'>
-                    {/* new orderbook here */}
+                    {isTablet && (
+                        <NewOrderBookWidget
+                            orderbook={orderBook}
+                            currency={currency}
+                            marketPrice={currentMarket?.value}
+                            onFilterChange={state =>
+                                setIsShowingAll(
+                                    state.showBorrow && state.showLend
+                                )
+                            }
+                            onAggregationChange={setMultiplier}
+                            rowsToRenderMobile={18}
+                        />
+                    )}
                 </div>
             </div>
             <section className='px-4'>
