@@ -157,7 +157,7 @@ const WithBanner = ({
     const currencyArray = Array.from(delistedCurrencySet);
 
     return (
-        <div className='flex flex-col justify-center'>
+        <div className='flex flex-col justify-center gap-5'>
             {currencyArray.length > 0 && (
                 <div className='px-3 laptop:px-0'>
                     <DelistedCurrencyDisclaimer
