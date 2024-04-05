@@ -198,8 +198,6 @@ const aggregationFactor = 1;
 export const NewOrderBookWidget = ({
     orderbook,
     currency,
-    maxLendUnitPrice,
-    minBorrowUnitPrice,
     marketPrice,
     onFilterChange,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -272,7 +270,7 @@ export const NewOrderBookWidget = ({
                         amount={info.row.original.amount}
                         aggregationFactor={aggregationFactor}
                         position='borrow'
-                        cbLimit={info.getValue().price < minBorrowUnitPrice}
+                        cbLimit={false}
                     />
                 ),
                 header: () => (
@@ -308,9 +306,7 @@ export const NewOrderBookWidget = ({
                         totalAmount={maxAmountInOrderbook}
                         position='borrow'
                         currency={currency}
-                        cbLimit={
-                            info.row.original.value.price < minBorrowUnitPrice
-                        }
+                        cbLimit={false}
                     />
                 ),
                 header: () => (
@@ -322,7 +318,7 @@ export const NewOrderBookWidget = ({
                 ),
             }),
         ],
-        [currency, maxAmountInOrderbook, minBorrowUnitPrice]
+        [currency, maxAmountInOrderbook]
     );
 
     const sellColumns = useMemo(
@@ -336,9 +332,7 @@ export const NewOrderBookWidget = ({
                         totalAmount={maxAmountInOrderbook}
                         position='lend'
                         currency={currency}
-                        cbLimit={
-                            info.row.original.value.price > maxLendUnitPrice
-                        }
+                        cbLimit={false}
                     />
                 ),
                 header: () => (
@@ -373,7 +367,7 @@ export const NewOrderBookWidget = ({
                         amount={info.row.original.amount}
                         aggregationFactor={aggregationFactor}
                         position='lend'
-                        cbLimit={info.getValue().price > maxLendUnitPrice}
+                        cbLimit={false}
                     />
                 ),
                 header: () => (
@@ -385,7 +379,7 @@ export const NewOrderBookWidget = ({
                 ),
             }),
         ],
-        [currency, maxAmountInOrderbook, maxLendUnitPrice]
+        [currency, maxAmountInOrderbook]
     );
 
     const handleClick = (rowId: string, side: OrderSide): void => {
@@ -456,6 +450,7 @@ export const NewOrderBookWidget = ({
                                             ? isLoadingMap[OrderSide.BORROW]
                                             : false,
                                     hideColumnIds: isTablet ? ['apr'] : [],
+                                    hoverDirection: 'up',
                                 }}
                             />
                         </div>
@@ -489,6 +484,7 @@ export const NewOrderBookWidget = ({
                                             ? isLoadingMap[OrderSide.LEND]
                                             : false,
                                     hideColumnIds: isTablet ? ['apr'] : [],
+                                    hoverDirection: 'down',
                                 }}
                             />
                         </div>
