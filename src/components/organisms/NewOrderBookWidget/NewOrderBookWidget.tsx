@@ -198,20 +198,24 @@ const aggregationFactor = 1;
 export const NewOrderBookWidget = ({
     orderbook,
     currency,
+    maxLendUnitPrice,
+    minBorrowUnitPrice,
     marketPrice,
     onFilterChange,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     onAggregationChange,
     isLoadingMap,
-    rowsToRenderMobile = 12,
+    rowsToRenderMobile = 10,
 }: {
     orderbook: Pick<ReturnType<typeof useOrderbook>[0], 'data' | 'isLoading'>;
     currency: CurrencySymbol;
+    maxLendUnitPrice: number;
+    minBorrowUnitPrice: number;
     marketPrice?: LoanValue;
     onFilterChange?: (filter: VisibilityState) => void;
     onAggregationChange?: (multiplier: number) => void;
     isLoadingMap?: Record<OrderSide, boolean>;
-    rowsToRenderMobile?: 10 | 12 | 14 | 16 | 18 | 22;
+    rowsToRenderMobile?: 10 | 12 | 14 | 16 | 18 | 20 | 22;
 }) => {
     const isTablet = useBreakpoint('laptop');
     const singleMaxLines = isTablet
@@ -268,7 +272,7 @@ export const NewOrderBookWidget = ({
                         amount={info.row.original.amount}
                         aggregationFactor={aggregationFactor}
                         position='borrow'
-                        cbLimit={false}
+                        cbLimit={info.getValue().price < minBorrowUnitPrice}
                     />
                 ),
                 header: () => (
@@ -304,7 +308,9 @@ export const NewOrderBookWidget = ({
                         totalAmount={maxAmountInOrderbook}
                         position='borrow'
                         currency={currency}
-                        cbLimit={false}
+                        cbLimit={
+                            info.row.original.value.price < minBorrowUnitPrice
+                        }
                     />
                 ),
                 header: () => (
@@ -316,7 +322,7 @@ export const NewOrderBookWidget = ({
                 ),
             }),
         ],
-        [currency, maxAmountInOrderbook]
+        [currency, maxAmountInOrderbook, minBorrowUnitPrice]
     );
 
     const sellColumns = useMemo(
@@ -330,7 +336,9 @@ export const NewOrderBookWidget = ({
                         totalAmount={maxAmountInOrderbook}
                         position='lend'
                         currency={currency}
-                        cbLimit={false}
+                        cbLimit={
+                            info.row.original.value.price > maxLendUnitPrice
+                        }
                     />
                 ),
                 header: () => (
@@ -365,7 +373,7 @@ export const NewOrderBookWidget = ({
                         amount={info.row.original.amount}
                         aggregationFactor={aggregationFactor}
                         position='lend'
-                        cbLimit={false}
+                        cbLimit={info.getValue().price > maxLendUnitPrice}
                     />
                 ),
                 header: () => (
@@ -377,7 +385,7 @@ export const NewOrderBookWidget = ({
                 ),
             }),
         ],
-        [currency, maxAmountInOrderbook]
+        [currency, maxAmountInOrderbook, maxLendUnitPrice]
     );
 
     const handleClick = (rowId: string, side: OrderSide): void => {
@@ -420,7 +428,7 @@ export const NewOrderBookWidget = ({
     };
 
     return (
-        <div className='flex h-full w-full flex-col justify-start gap-y-1 overflow-hidden laptop:flex-col-reverse laptop:gap-y-0 laptop:rounded-b-xl laptop:bg-cardBackground/60 laptop:shadow-tab'>
+        <div className='flex h-full w-full flex-col justify-start gap-y-1 overflow-hidden border-neutral-600 laptop:flex-col-reverse laptop:gap-y-0 laptop:rounded-b-xl laptop:border laptop:bg-cardBackground/60 laptop:shadow-tab'>
             <div className='table h-full'>
                 {orderbook.isLoading ? (
                     <div className='table-cell text-center align-middle'>
@@ -429,7 +437,7 @@ export const NewOrderBookWidget = ({
                         </div>
                     </div>
                 ) : (
-                    <div className='flex h-full flex-col laptop:gap-y-0'>
+                    <div className='flex flex-col gap-1 laptop:gap-y-0'>
                         <div
                             className={clsx('flex', {
                                 'h-fit': state.showBorrow && state.showLend,
@@ -451,14 +459,14 @@ export const NewOrderBookWidget = ({
                                 }}
                             />
                         </div>
-                        <div className='flex h-auto flex-row items-center justify-between py-1.5 laptop:h-fit laptop:bg-black-20 laptop:px-4 laptop:py-3'>
+                        <div className='flex h-6 flex-row items-center justify-between py-1 font-secondary font-semibold text-neutral-50 laptop:h-fit laptop:bg-black-20 laptop:px-4 laptop:py-3'>
                             <span
-                                className='font-secondary text-[18px] font-semibold leading-6 text-neutral-50'
+                                className='text-base leading-6'
                                 data-testid='current-market-price'
                             >
                                 <p>{formatLoanValue(marketPrice, 'price')}</p>
                             </span>
-                            <span className='font-secondary text-sm font-semibold leading-5 text-[#D4FCFF] laptop:text-sm laptop:leading-[22px]'>
+                            <span className='text-xs leading-5 laptop:text-sm laptop:leading-[22px]'>
                                 {formatLoanValue(marketPrice, 'rate')}
                             </span>
                         </div>
@@ -488,8 +496,8 @@ export const NewOrderBookWidget = ({
                 )}
             </div>
             <div className='flex flex-col laptop:flex-col-reverse'>
-                <div className='flex flex-row items-center justify-between gap-1 border-neutral-700 laptop:flex-row-reverse laptop:border-b laptop:px-3 laptop:py-2'>
-                    <div className='flex flex-1 rounded border-0.5 border-neutral-500 bg-neutral-700 px-2 py-1 font-secondary text-[11px] leading-4 text-neutral-400 laptop:w-fit laptop:flex-none laptop:border-none laptop:bg-neutral-600 laptop:py-[2px] laptop:text-xs laptop:leading-5'>
+                <div className='flex flex-row items-center justify-between gap-1 border-neutral-600 laptop:flex-row-reverse laptop:border-b-0.5 laptop:px-3 laptop:py-2'>
+                    <div className='flex flex-1 rounded border-0.5 border-neutral-500 bg-neutral-700 px-2 py-1 font-secondary text-2xs leading-4 text-neutral-400 laptop:w-fit laptop:flex-none laptop:px-3 laptop:py-[6px] laptop:text-xs laptop:leading-5'>
                         {aggregationFactor / 100}
                     </div>
                     {isTablet ? (
@@ -528,7 +536,7 @@ export const NewOrderBookWidget = ({
                         </div>
                     )}
                 </div>
-                <div className='hidden border-neutral-700 laptop:block laptop:border-b'>
+                <div className='hidden border-neutral-600 laptop:block laptop:border-b-0.5'>
                     <div className='h-[60px] w-1/2'>
                         <NavTab text='Order Book' active={true} />
                     </div>
@@ -587,12 +595,12 @@ const OrderBookIconMobile = ({
         {showBorrow && showLend ? (
             <div className='flex flex-col gap-[2px]'>
                 <span className='h-6px w-14px rounded-sm bg-error-300'></span>
-                <span className='h-6px w-14px rounded-sm bg-success-500'></span>
+                <span className='h-6px w-14px rounded-sm bg-success-300'></span>
             </div>
         ) : (
             <span
                 className={clsx('h-14px w-14px rounded-sm', {
-                    'bg-success-500': !showBorrow && showLend,
+                    'bg-success-300': !showBorrow && showLend,
                     'bg-error-300': showBorrow && !showLend,
                 })}
             ></span>

@@ -78,7 +78,7 @@ export const CoreTable = <T,>({
             data-testid={coreTableOptions.name}
         >
             {coreTableOptions.showHeaders ? (
-                <thead className='font-secondary text-[11px] leading-4 text-neutral-300 laptop:h-7 laptop:py-1 laptop:text-xs laptop:leading-5'>
+                <thead className='font-secondary text-2xs leading-4 text-neutral-400 laptop:h-7 laptop:py-1 laptop:text-xs laptop:leading-5 laptop:text-neutral-300'>
                     {table.getHeaderGroups().map(headerGroup => (
                         <tr
                             key={headerGroup.id}
@@ -115,7 +115,7 @@ export const CoreTable = <T,>({
                         <tr
                             key={row.id}
                             className={clsx(
-                                'box-border h-4 w-full border-b laptop:h-[23px]',
+                                'box-border h-4 w-full laptop:h-[23px]',
                                 {
                                     'cursor-pointer bg-neutral-100/10':
                                         Number(row.id) <=
@@ -141,7 +141,7 @@ export const CoreTable = <T,>({
                             {row.getVisibleCells().map(cell => (
                                 <td
                                     key={cell.id}
-                                    className='min-w-fit whitespace-nowrap pb-0 font-normal laptop:px-5 laptop:pb-1'
+                                    className='min-w-fit whitespace-nowrap font-normal laptop:px-5'
                                 >
                                     {flexRender(
                                         cell.column.columnDef.cell,

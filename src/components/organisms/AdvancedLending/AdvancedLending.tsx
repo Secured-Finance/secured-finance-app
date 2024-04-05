@@ -370,6 +370,8 @@ export const AdvancedLending = ({
                             orderbook={orderBook}
                             currency={currency}
                             marketPrice={currentMarket?.value}
+                            maxLendUnitPrice={data?.maxLendUnitPrice}
+                            minBorrowUnitPrice={data?.minBorrowUnitPrice}
                             onFilterChange={state =>
                                 setIsShowingAll(
                                     state.showBorrow && state.showLend
