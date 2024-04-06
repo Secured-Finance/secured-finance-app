@@ -33,7 +33,7 @@ jobs:
     secrets: inherit
 
   publish:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     name: Publish to Cloudflare Pages
     permissions:
       contents: read
