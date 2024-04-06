@@ -50,7 +50,7 @@ const OrderBookCell = ({
 } & ColorFormat) => (
     <span
         className={clsx(
-            'z-[1] font-tertiary text-xs font-normal leading-[14px] laptop:text-xs laptop:leading-4',
+            'z-[1] font-tertiary text-xs font-normal leading-[14px] laptop:px-5 laptop:text-xs laptop:leading-4',
             {
                 'text-error-300': color === 'negative',
                 'text-success-300': color === 'positive',
@@ -98,12 +98,7 @@ const AmountCell = ({
                 value={val}
                 color={cbLimit ? 'warning' : 'neutral'}
             />
-            <ColorBar
-                value={amount}
-                total={totalAmount}
-                color={color}
-                align='right'
-            />
+            <ColorBar value={amount} total={totalAmount} color={color} />
         </div>
     );
 };
