@@ -155,7 +155,7 @@ export const CoreTable = <T,>({
                             {row.getVisibleCells().map(cell => (
                                 <td
                                     key={cell.id}
-                                    className='min-w-fit whitespace-nowrap font-normal laptop:px-5'
+                                    className='min-w-fit whitespace-nowrap font-normal'
                                 >
                                     {flexRender(
                                         cell.column.columnDef.cell,
