@@ -62,10 +62,12 @@ describe('useCollateralBook hook', () => {
             expect(mock.tokenVault.getCollateralBook).toHaveBeenCalledTimes(1)
         );
         const colBook = result.current.data as CollateralBook;
-        expect(colBook.usdNonCollateral).toEqual(
-            amountFormatterFromBase[CurrencySymbol.WFIL](
-                colBook.nonCollateral.WFIL ?? BigInt(0)
-            ) * FIL_PRICE
+        await waitFor(() =>
+            expect(colBook.usdNonCollateral).toEqual(
+                amountFormatterFromBase[CurrencySymbol.WFIL](
+                    colBook.nonCollateral.WFIL ?? BigInt(0)
+                ) * FIL_PRICE
+            )
         );
     });
 });
