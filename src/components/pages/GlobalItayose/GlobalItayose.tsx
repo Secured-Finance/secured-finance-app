@@ -66,6 +66,7 @@ export const GlobalItayose = () => {
                         currencyOptionList={assetList}
                         selected={assetList[0]}
                         onChange={handleCurrencyChange}
+                        variant='fixedWidth'
                     />
                     <Button
                         size='md'

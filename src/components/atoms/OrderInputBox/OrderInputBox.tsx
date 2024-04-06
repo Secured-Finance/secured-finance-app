@@ -43,7 +43,7 @@ export const OrderInputBox = ({
             )}
         >
             <div className='flex flex-row items-center gap-2'>
-                <div className='typography-caption whitespace-nowrap text-planetaryPurple'>
+                <div className='laptop:typography-caption whitespace-nowrap text-xs text-planetaryPurple'>
                     {field}
                 </div>
                 {informationText && !disabled && (
@@ -63,7 +63,7 @@ export const OrderInputBox = ({
                 ) : (
                     <InputBase
                         value={initialValue}
-                        className='col col-span-2 flex text-right text-[1.125rem] font-semibold leading-6 text-neutral-8'
+                        className='col col-span-2 flex text-right text-base font-semibold leading-6 text-neutral-8 laptop:text-[1.125rem]'
                         label={field}
                         onValueChange={handleAmountChange}
                         decimalPlacesAllowed={decimalPlacesAllowed}
