@@ -50,8 +50,9 @@ export const CoreTable = <T,>({
         (rowId: string) => {
             if (coreTableOptions.hoverDirection === 'up') {
                 return activeRow && Number(rowId) >= Number(activeRow);
+            } else if (coreTableOptions.hoverDirection === 'down') {
+                return activeRow && Number(rowId) <= Number(activeRow);
             }
-            return activeRow && Number(rowId) <= Number(activeRow);
         },
         [activeRow, coreTableOptions.hoverDirection]
     );
@@ -137,10 +138,17 @@ export const CoreTable = <T,>({
                                         'down',
                                     'cursor-pointer bg-neutral-100/10':
                                         coreTableOptions.hoverRow?.(row.id) &&
+                                        activeRow &&
+                                        coreTableOptions.hoverRow?.(
+                                            activeRow
+                                        ) &&
                                         onHoverBackground(row.id),
                                     'border-dashed border-z-neutral-100':
                                         coreTableOptions.hoverRow?.(row.id) &&
                                         activeRow &&
+                                        coreTableOptions.hoverRow?.(
+                                            activeRow
+                                        ) &&
                                         Number(row.id) === Number(activeRow),
                                 }
                             )}
