@@ -281,35 +281,6 @@ export function AdvancedLendingOrderCard({
 
     const isBondPriceFieldDisabled = isMarketOrderType || !isConnected;
 
-    // const [rowsToRenderMobile, setRowsToRenderMobile] = useState<
-    //     10 | 12 | 14 | 16 | 18 | 20 | 22
-    // >(14);
-
-    // useEffect(() => {
-    //     switch (side) {
-    //         case OrderSide.LEND:
-    //             switch (isMarketOrderType) {
-    //                 case true:
-    //                     setRowsToRenderMobile(18);
-    //                     break;
-    //                 case false:
-    //                     setRowsToRenderMobile(18);
-    //                     break;
-    //             }
-    //             break;
-    //         case OrderSide.BORROW:
-    //             switch (isMarketOrderType) {
-    //                 case true:
-    //                     setRowsToRenderMobile(16);
-    //                     break;
-    //                 case false:
-    //                     setRowsToRenderMobile(14);
-    //                     break;
-    //             }
-    //             break;
-    //     }
-    // }, [side, isMarketOrderType]);
-
     const rowsToRenderMobile = useMemo(() => {
         switch (side) {
             case OrderSide.LEND:
