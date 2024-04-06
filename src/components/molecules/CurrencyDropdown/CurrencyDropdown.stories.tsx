@@ -9,6 +9,7 @@ export default {
         currencyOptionList: currencyList,
         selected: currencyList[0],
         onChange: () => {},
+        variant: 'fixedWidth',
     },
 } as Meta<typeof CurrencyDropdown>;
 
@@ -17,3 +18,8 @@ const Template: StoryFn<typeof CurrencyDropdown> = args => (
 );
 
 export const Default = Template.bind({});
+
+export const FullWidth = Template.bind({});
+FullWidth.args = {
+    variant: 'fullWidth',
+};
