@@ -42,7 +42,7 @@ export const WalletSourceSelector = ({
     account,
     onChange,
 }: WalletSourceSelectorProps) => {
-    const isTablet = useBreakpoint('laptop');
+    const isLaptop = useBreakpoint('desktop');
     const list = useMemo(
         () =>
             optionList.filter(
@@ -73,7 +73,7 @@ export const WalletSourceSelector = ({
                                     data-testid='wallet-source-selector-button'
                                 >
                                     <div
-                                        className={`flex h-7 w-auto flex-row items-center justify-between gap-1 rounded-lg bg-white-5 px-2 laptop:h-10 laptop:w-[156px] ${
+                                        className={`flex h-7 w-auto flex-row items-center justify-between gap-1 rounded-lg bg-white-5 px-2 laptop:h-10 desktop:w-[156px] ${
                                             account
                                                 ? 'cursor-pointer'
                                                 : 'cursor-default'
@@ -82,11 +82,11 @@ export const WalletSourceSelector = ({
                                         <div className='flex flex-row items-center gap-1 laptop:gap-2'>
                                             {account && (
                                                 <span>
-                                                    <selectedOption.iconSVG className='h-3.5 w-3.5 laptop:h-5 laptop:w-5' />
+                                                    <selectedOption.iconSVG className='h-3.5 w-3.5 desktop:h-5 desktop:w-5' />
                                                 </span>
                                             )}
                                             <span
-                                                className={`laptop:typography-caption-2 text-[11px] leading-4 ${
+                                                className={`desktop:typography-caption-2 text-[11px] leading-4 ${
                                                     account
                                                         ? 'text-grayScale'
                                                         : 'text-grayScale/50'
@@ -109,7 +109,7 @@ export const WalletSourceSelector = ({
                                     </div>
                                     <div className='flex w-fit max-w-[200px] flex-col gap-0.5 text-right text-xs leading-5 text-planetaryPurple laptop:gap-[1px] laptop:text-sm laptop:leading-normal'>
                                         <span className='block gap-[1px] whitespace-nowrap text-right text-[11px] leading-4 text-slateGray laptop:text-xs laptop:leading-tight'>
-                                            {isTablet ? 'Avl.' : 'Available'}
+                                            {isLaptop ? 'Avl.' : 'Available'}
                                         </span>
                                         {account
                                             ? ordinaryFormat(

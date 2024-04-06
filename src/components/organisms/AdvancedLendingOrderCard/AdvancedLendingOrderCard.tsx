@@ -281,32 +281,51 @@ export function AdvancedLendingOrderCard({
 
     const isBondPriceFieldDisabled = isMarketOrderType || !isConnected;
 
-    const [rowsToRenderMobile, setRowsToRenderMobile] = useState<
-        10 | 12 | 14 | 16 | 18 | 20 | 22
-    >(14);
+    // const [rowsToRenderMobile, setRowsToRenderMobile] = useState<
+    //     10 | 12 | 14 | 16 | 18 | 20 | 22
+    // >(14);
 
-    useEffect(() => {
+    // useEffect(() => {
+    //     switch (side) {
+    //         case OrderSide.LEND:
+    //             switch (isMarketOrderType) {
+    //                 case true:
+    //                     setRowsToRenderMobile(18);
+    //                     break;
+    //                 case false:
+    //                     setRowsToRenderMobile(18);
+    //                     break;
+    //             }
+    //             break;
+    //         case OrderSide.BORROW:
+    //             switch (isMarketOrderType) {
+    //                 case true:
+    //                     setRowsToRenderMobile(16);
+    //                     break;
+    //                 case false:
+    //                     setRowsToRenderMobile(14);
+    //                     break;
+    //             }
+    //             break;
+    //     }
+    // }, [side, isMarketOrderType]);
+
+    const rowsToRenderMobile = useMemo(() => {
         switch (side) {
             case OrderSide.LEND:
                 switch (isMarketOrderType) {
                     case true:
-                        setRowsToRenderMobile(20);
-                        break;
+                        return 18;
                     case false:
-                        setRowsToRenderMobile(18);
-                        break;
+                        return 18;
                 }
-                break;
             case OrderSide.BORROW:
                 switch (isMarketOrderType) {
                     case true:
-                        setRowsToRenderMobile(18);
-                        break;
+                        return 16;
                     case false:
-                        setRowsToRenderMobile(16);
-                        break;
+                        return 14;
                 }
-                break;
         }
     }, [side, isMarketOrderType]);
 
@@ -351,7 +370,7 @@ export function AdvancedLendingOrderCard({
                 ]}
             />
 
-            <div className='grid w-full grid-cols-12 gap-5 px-4 pb-8 pt-4 laptop:pb-4 laptop:pt-5'>
+            <div className='grid w-full grid-cols-12 gap-5 px-4 pb-8 pt-4 laptop:gap-0 laptop:pb-4 laptop:pt-5'>
                 <div className='col-span-7 flex flex-col justify-start gap-2 laptop:col-span-12 laptop:gap-4'>
                     {!isItayose && (
                         <div className='mb-1 laptop:mb-0'>
