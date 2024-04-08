@@ -1,5 +1,6 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import {
     CollateralManagementConciseTab,
     GradientBox,
@@ -27,6 +28,7 @@ import {
     useLendingMarkets,
     useValueLockedByCurrency,
 } from 'src/hooks';
+import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
     Environment,
@@ -36,6 +38,7 @@ import {
     computeTotalDailyVolumeInUSD,
     currencyMap,
     getEnvironment,
+    getNonSubgraphSupportedChainIds,
     ordinaryFormat,
     usdFormat,
 } from 'src/utils';
@@ -65,6 +68,14 @@ export const MarketDashboard = () => {
     const { data: currencies = [] } = useCurrencies();
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
 
+    const currentChainId = useSelector(
+        (state: RootState) => state.blockchain.chainId
+    );
+    const isSubgraphSupported = useMemo(
+        () => !getNonSubgraphSupportedChainIds().includes(currentChainId),
+        [currentChainId]
+    );
+
     currencies.forEach(ccy => {
         const unitPrices = getLoanValues(
             lendingContracts[ccy],
@@ -80,12 +91,14 @@ export const MarketDashboard = () => {
     const totalUser = useGraphClientHook(
         {}, // no variables
         queries.UserCountDocument,
-        'protocol'
+        'protocol',
+        isSubgraphSupported
     );
     const dailyVolumes = useGraphClientHook(
         {}, // no variables
         queries.DailyVolumesDocument,
-        'dailyVolumes'
+        'dailyVolumes',
+        isSubgraphSupported
     );
 
     const { data: priceList } = useLastPrices();
@@ -150,16 +163,20 @@ export const MarketDashboard = () => {
                                     'compact'
                                 ),
                             },
-                            {
-                                name: 'Total Volume',
-                                value: totalVolume,
-                            },
-                            {
-                                name: 'Total Users',
-                                value: computeTotalUsers(
-                                    totalUser.data?.totalUsers
-                                ),
-                            },
+                            ...(isSubgraphSupported
+                                ? [
+                                      {
+                                          name: 'Total Volume',
+                                          value: totalVolume,
+                                      },
+                                      {
+                                          name: 'Total Users',
+                                          value: computeTotalUsers(
+                                              totalUser.data?.totalUsers
+                                          ),
+                                      },
+                                  ]
+                                : []),
                         ]}
                     />
                     {!isGlobalItayose ? (

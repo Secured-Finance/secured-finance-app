@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import {
     GradientBox,
     Separator,
@@ -15,7 +16,12 @@ export const StatsBar = ({
     return (
         <GradientBox data-testid={`${testid}-table`}>
             <div
-                className='grid grid-cols-2 grid-rows-2 tablet:grid-cols-4 tablet:grid-rows-1 '
+                className={clsx(
+                    `grid grid-cols-2 grid-rows-1`,
+                    values.length > 2
+                        ? 'grid-rows-2 tablet:grid-cols-4  tablet:grid-rows-1'
+                        : ''
+                )}
                 role='grid'
             >
                 {values.map((item, index) => (

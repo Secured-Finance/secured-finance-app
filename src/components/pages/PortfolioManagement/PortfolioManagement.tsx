@@ -1,6 +1,7 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Spinner } from 'src/components/atoms';
 import {
     Alert,
@@ -33,11 +34,13 @@ import {
     usePagination,
     usePositions,
 } from 'src/hooks';
+import { RootState } from 'src/store/types';
 import {
     checkOrderIsFilled,
     computeNetValue,
     formatOrders,
     getMappedOrderStatus,
+    getNonSubgraphSupportedChainIds,
     hexToCurrencySymbol,
     sortOrders,
     usdFormat,
@@ -67,6 +70,15 @@ export const PortfolioManagement = () => {
     );
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
     const { data: lendingMarkets = { ...baseContracts } } = useLendingMarkets();
+
+    const currentChainId = useSelector(
+        (state: RootState) => state.blockchain.chainId
+    );
+
+    const isSubgraphSupported = useMemo(
+        () => !getNonSubgraphSupportedChainIds().includes(currentChainId),
+        [currentChainId]
+    );
 
     const userOrderHistory = useGraphClientHook(
         {
@@ -325,12 +337,16 @@ export const PortfolioManagement = () => {
                         netAssetValue={portfolioAnalytics.netAssetValue}
                     />
                     <HorizontalTab
-                        tabTitles={[
-                            'Active Positions',
-                            'Open Orders',
-                            'Order History',
-                            'My Transactions',
-                        ]}
+                        tabTitles={
+                            isSubgraphSupported
+                                ? [
+                                      'Active Positions',
+                                      'Open Orders',
+                                      'Order History',
+                                      'My Transactions',
+                                  ]
+                                : ['Active Positions', 'Open Orders']
+                        }
                         onTabChange={setSelectedTable}
                     >
                         <ActiveTradeTable

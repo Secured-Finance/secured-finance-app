@@ -17,16 +17,16 @@ import { AUSDC } from './currencies/ausdc';
 import { AXLFIL } from './currencies/axlfil';
 import { BTCB } from './currencies/btcb';
 import { WFIL } from './currencies/filecoin';
+import { TFIL } from './currencies/tfil';
 import { USDC } from './currencies/usdc';
 import { WBTC } from './currencies/wbtc';
 import { WETHE } from './currencies/wethe';
 
 BigNumberJS.set({ EXPONENTIAL_AT: 30 }); // setting to a decent limit
 
-const ETH = Ether.onChain();
-
 export enum CurrencySymbol {
     ETH = 'ETH',
+    tFIL = 'tFIL',
     WETHe = 'WETH.e',
     WFIL = 'WFIL',
     USDC = 'USDC',
@@ -81,14 +81,32 @@ export const currencyMap: Readonly<
         name: 'Ether',
         coinGeckoId: 'ethereum',
         isCollateral: true,
-        toBaseUnit: (amount: number) => convertToBlockchainUnit(amount, ETH),
+        toBaseUnit: (amount: number) =>
+            convertToBlockchainUnit(amount, Ether.onChain()),
         fromBaseUnit: (amount: bigint) =>
-            convertFromBlockchainUnit(amount, ETH),
-        toCurrency: () => ETH,
+            convertFromBlockchainUnit(amount, Ether.onChain()),
+        toCurrency: () => Ether.onChain(),
         chartColor: tailwindConfig.theme.colors.chart.eth,
         pillColor: tailwindConfig.theme.colors.pill.eth,
         roundingDecimal: 3,
         longName: 'Ethereum',
+    },
+    [CurrencySymbol.tFIL]: {
+        index: 2,
+        icon: FilIcon,
+        symbol: CurrencySymbol.tFIL,
+        name: 'Filecoin',
+        coinGeckoId: 'filecoin',
+        isCollateral: true,
+        toBaseUnit: (amount: number) =>
+            convertToBlockchainUnit(amount, TFIL.onChain()),
+        fromBaseUnit: (amount: bigint) =>
+            convertFromBlockchainUnit(amount, TFIL.onChain()),
+        toCurrency: () => TFIL.onChain(),
+        chartColor: tailwindConfig.theme.colors.chart.fil,
+        pillColor: tailwindConfig.theme.colors.pill.fil,
+        roundingDecimal: 0,
+        longName: 'Filecoin',
     },
     [CurrencySymbol.WETHe]: {
         index: 3,
@@ -234,6 +252,8 @@ export function toCurrencySymbol(ccy: string) {
     switch (ccy) {
         case CurrencySymbol.ETH:
             return CurrencySymbol.ETH;
+        case CurrencySymbol.tFIL:
+            return CurrencySymbol.tFIL;
         case CurrencySymbol.WETHe:
             return CurrencySymbol.WETHe;
         case CurrencySymbol.WFIL:
