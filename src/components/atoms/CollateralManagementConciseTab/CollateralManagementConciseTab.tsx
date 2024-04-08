@@ -1,5 +1,5 @@
 import Tick from 'src/assets/icons/tick.svg';
-import { Separator } from 'src/components/atoms';
+import { emptyCollateralBook, useCollateralBook } from 'src/hooks';
 import { percentFormat, usdFormat } from 'src/utils';
 
 interface CollateralManagementConciseTabProps {
@@ -20,31 +20,55 @@ export const CollateralManagementConciseTab = ({
         padding = 1;
     }
     const info = getLiquidationInformation(collateralCoverage);
+    const { data: collateralBook = emptyCollateralBook } =
+        useCollateralBook(account);
+
+    // TODO: check if this is the "Locked" collateral value
+    const totalCollateralInUSD = account ? collateralBook.usdCollateral : 0;
 
     return (
-        <div className='flex h-fit w-full flex-col rounded-b bg-black-20 pb-4 pt-2'>
-            <div className='mx-4 mb-5 mt-4 flex flex-col'>
-                <div className='typography-caption mb-3 flex flex-row justify-between text-grayScale'>
+        <div className='flex h-fit w-full flex-col gap-3 rounded-b'>
+            <div className='flex flex-col gap-3 rounded-xl border border-neutral-600 bg-neutral-900 p-4'>
+                <div className='flex flex-row justify-between text-sm leading-6 text-grayScale'>
                     <span>Collateral Utilization</span>
-                    <span>{percentFormat(collateralCoverage, 100)}</span>
+                    <span className='font-semibold text-secondary-500'>
+                        {percentFormat(collateralCoverage, 100)}
+                    </span>
                 </div>
-                <div className='h-6px w-full overflow-hidden rounded-full bg-[#2A313C]'>
-                    <div
-                        className='h-full rounded-full bg-nebulaTeal transition-width duration-700 ease-in'
-                        style={{
-                            width: `calc(100% * ${padding})`,
-                        }}
-                        data-testid='collateral-progress-bar-track'
-                    ></div>
-                </div>
-                <div className='typography-caption-2 mt-1 leading-6 text-planetaryPurple'>
-                    {account
-                        ? `Available: ${usdFormat(availableToBorrow, 2)}`
-                        : 'N/A'}
+                <div className='flex flex-col gap-2'>
+                    <div className='h-6px w-full overflow-hidden rounded-full bg-[#2A313C]'>
+                        <div
+                            className='h-full rounded-full bg-secondary-500 transition-width duration-700 ease-in'
+                            style={{
+                                width: `calc(100% * ${padding})`,
+                            }}
+                            data-testid='collateral-progress-bar-track'
+                        ></div>
+                    </div>
+                    <div className='flex items-center justify-between text-[11px] leading-[15px]'>
+                        <span className='text-neutral-400'>
+                            Locked:{' '}
+                            <span className='font-semibold'>
+                                {usdFormat(totalCollateralInUSD, 2)}
+                            </span>
+                        </span>
+                        <span className='typography-caption-2 text-secondary-700'>
+                            {account ? (
+                                <>
+                                    Available:{' '}
+                                    <span className='font-semibold'>
+                                        {usdFormat(availableToBorrow, 2)}
+                                    </span>
+                                </>
+                            ) : (
+                                'N/A'
+                            )}
+                        </span>
+                    </div>
                 </div>
             </div>
-            <Separator color='neutral-3' />
-            <div className='mx-4 mb-4 mt-5 flex flex-col'>
+
+            <div className='flex flex-col rounded-xl border border-neutral-600 bg-neutral-900 p-4'>
                 <div className='typography-caption mb-1 flex flex-row justify-between'>
                     <span className='text-grayScale'>Liquidation Risk</span>
                     <span className={`${info.color}`}>{info.risk}</span>

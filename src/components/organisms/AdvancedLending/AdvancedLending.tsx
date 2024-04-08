@@ -382,7 +382,7 @@ export const AdvancedLending = ({
                     )}
                 </div>
                 <div className='col-span-1 tablet:col-span-2'>
-                    <div className='flex h-full flex-grow flex-col gap-4'>
+                    <div className='flex h-full flex-grow flex-col gap-4 px-4 laptop:px-0'>
                         <div className='hidden laptop:block'>
                             <Tab
                                 tabDataArray={[
