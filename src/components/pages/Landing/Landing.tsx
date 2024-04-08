@@ -32,7 +32,7 @@ import {
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { OrderType } from 'src/types';
-import { CurrencySymbol } from 'src/utils';
+import { CurrencySymbol, getNonSubgraphSupportedChainIds } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
@@ -63,6 +63,15 @@ export const Landing = ({ view }: { view?: ViewType }) => {
         market => market.isOpened
     );
 
+    const currentChainId = useSelector(
+        (state: RootState) => state.blockchain.chainId
+    );
+
+    const isSubgraphSupported = useMemo(
+        () => !getNonSubgraphSupportedChainIds().includes(currentChainId),
+        [currentChainId]
+    );
+
     const itayoseMarket = Object.entries(lendingContracts).find(
         ([, market]) => market.isPreOrderPeriod || market.isItayosePeriod
     )?.[1];
@@ -83,7 +92,8 @@ export const Landing = ({ view }: { view?: ViewType }) => {
     const dailyVolumes = useGraphClientHook(
         {}, // no variables
         queries.DailyVolumesDocument,
-        'dailyVolumes'
+        'dailyVolumes',
+        !isSubgraphSupported
     );
 
     return (
@@ -104,7 +114,11 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                         />
                         <YieldChart
                             asset={currency}
-                            dailyVolumes={dailyVolumes.data ?? []}
+                            dailyVolumes={
+                                isSubgraphSupported
+                                    ? dailyVolumes.data ?? []
+                                    : undefined
+                            }
                         />
                     </div>
                 </WithBanner>

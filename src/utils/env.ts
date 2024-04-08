@@ -7,6 +7,16 @@ export const getSupportedChainIds = (): number[] => {
     return supportedChainIds.split(',').map(n => parseInt(n, 10));
 };
 
+export const getNonSubgraphSupportedChainIds = (): number[] => {
+    const nonSupportedChainIds =
+        process.env.NEXT_PUBLIC_NON_SUBGRAPH_SUPPORTED_CHAIN_IDS;
+    assert(
+        nonSupportedChainIds,
+        'NEXT_PUBLIC_NON_SUBGRAPH_SUPPORTED_CHAIN_IDS is not set'
+    );
+    return nonSupportedChainIds.split(',').map(n => parseInt(n, 10));
+};
+
 export const getWalletConnectId = () => {
     const walletConnectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_ID;
     assert(walletConnectId, 'NEXT_PUBLIC_WALLET_CONNECT_ID is not set');
