@@ -34,7 +34,8 @@ describe('CollateralManagementConciseTab component', () => {
         expect(screen.getByTestId('collateral-progress-bar-track')).toHaveStyle(
             'width: calc(100% * 0)'
         );
-        expect(screen.getByText('Available: $0.00')).toBeInTheDocument();
+        expect(screen.getByText('Available:')).toBeInTheDocument();
+        expect(screen.getByText('$0.00')).toBeInTheDocument();
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
         expect(screen.getByText('Low')).toBeInTheDocument();
@@ -52,7 +53,8 @@ describe('CollateralManagementConciseTab component', () => {
         expect(screen.getByTestId('collateral-progress-bar-track')).toHaveStyle(
             'width: calc(100% * 0)'
         );
-        expect(screen.getByText('Available: $80.00')).toBeInTheDocument();
+        expect(screen.getByText('Available:')).toBeInTheDocument();
+        expect(screen.getByText('$80.00')).toBeInTheDocument();
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
         expect(screen.getByText('Low')).toBeInTheDocument();
@@ -70,7 +72,8 @@ describe('CollateralManagementConciseTab component', () => {
         expect(screen.getByTestId('collateral-progress-bar-track')).toHaveStyle(
             'width: calc(100% * 0.37)'
         );
-        expect(screen.getByText('Available: $43.00')).toBeInTheDocument();
+        expect(screen.getByText('Available:')).toBeInTheDocument();
+        expect(screen.getByText('$43.00')).toBeInTheDocument();
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
         expect(screen.getByText('Low')).toBeInTheDocument();

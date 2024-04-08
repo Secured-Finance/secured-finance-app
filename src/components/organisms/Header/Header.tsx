@@ -81,7 +81,7 @@ const HeaderMessage = ({
     return <></>;
 };
 
-export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
+const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     const dispatch = useDispatch();
     const isMobile = useBreakpoint('tablet');
     const { address, isConnected } = useAccount();
@@ -164,7 +164,7 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                         </>
                     ) : (
                         <Button
-                            size={!!isMobile ? 'sm' : 'md'}
+                            size={isMobile ? 'sm' : undefined}
                             data-cy='wallet'
                             data-testid='connect-wallet'
                             onClick={() => dispatch(setWalletDialogOpen(true))}
@@ -214,3 +214,5 @@ const ItemLink = ({
         </Link>
     );
 };
+
+export default Header;

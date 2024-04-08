@@ -20,7 +20,7 @@ export const CollateralManagementConciseTab = ({
         padding = 1;
     }
     const info = getLiquidationInformation(collateralCoverage);
-    const { data: collateralBook = emptyCollateralBook } =
+    const { data: collateralBook = emptyCollateralBook, isLoading } =
         useCollateralBook(account);
 
     // TODO: check if this is the "Locked" collateral value
@@ -48,9 +48,11 @@ export const CollateralManagementConciseTab = ({
                     <div className='flex items-center justify-between text-[11px] leading-[15px]'>
                         <span className='text-neutral-400'>
                             Locked:{' '}
-                            <span className='font-semibold'>
-                                {usdFormat(totalCollateralInUSD, 2)}
-                            </span>
+                            {!isLoading && (
+                                <span className='font-semibold'>
+                                    {usdFormat(totalCollateralInUSD, 2)}
+                                </span>
+                            )}
                         </span>
                         <span className='typography-caption-2 text-secondary-700'>
                             {account ? (
