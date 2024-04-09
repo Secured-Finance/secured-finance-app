@@ -48,11 +48,11 @@ export const NavTab = ({
             >
                 <p
                     className={clsx(
-                        'typography-nav-menu-default h-4 whitespace-nowrap duration-300 group-hover:opacity-100 group-hover:ease-in-out',
+                        'h-4 whitespace-nowrap text-xs duration-300 group-hover:opacity-100 group-hover:ease-in-out laptop:text-sm',
                         {
                             [navStyles?.textClassActive || '']: active,
                             'text-neutral-8': !active || !navStyles,
-                            'opacity-100': active,
+                            'font-semibold opacity-100': active,
                             'opacity-70': !active,
                         }
                     )}

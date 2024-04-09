@@ -33,7 +33,7 @@ export const Tab: React.FC<TabProps> = ({ tabDataArray, children }) => {
             className='border-white-10 bg-gunMetal/40 shadow-tab laptop:rounded-b-2xl laptop:border'
         >
             <div className='grid w-full grid-cols-1 border-b border-neutral-600 tablet:grid-cols-2'>
-                <HeadlessTab.List className='col-span-1 flex h-[60px] w-full'>
+                <HeadlessTab.List className='col-span-1 flex h-11 w-full'>
                     {tabDataArray.map((tabData, index) => {
                         return (
                             <HeadlessTab

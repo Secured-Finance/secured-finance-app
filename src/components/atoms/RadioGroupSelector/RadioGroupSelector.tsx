@@ -21,7 +21,7 @@ export const RadioGroupSelector = ({
             onChange={handleClick}
             as='div'
             className={clsx('flex flex-row items-center', {
-                'h-16': variant === 'NavTab',
+                'h-11 laptop:h-16': variant === 'NavTab',
                 'h-12 gap-1 rounded-lg bg-black-20 p-2':
                     variant === 'StyledButton',
             })}
