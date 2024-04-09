@@ -62,6 +62,7 @@ import {
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { trackButtonEvent } from 'src/utils/events';
 import { useAccount } from 'wagmi';
+import { MOBILE_TAB_OPTIONS, TAB_OPTIONS } from './constants';
 
 const useTradeHistoryDetails = (
     transactions: TransactionList,
@@ -107,6 +108,8 @@ export const AdvancedLending = ({
     delistedCurrencySet: Set<CurrencySymbol>;
 }) => {
     const isTablet = useBreakpoint('laptop');
+    const isLaptop = useBreakpoint('desktop');
+    const tabOptions = isLaptop ? MOBILE_TAB_OPTIONS : TAB_OPTIONS;
     const { currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
@@ -408,14 +411,8 @@ export const AdvancedLending = ({
                             </Tab>
                         </div>
                         <HorizontalTab
-                            tabTitles={[
-                                'Active Positions',
-                                'Open Orders',
-                                'Order History',
-                                'My Transactions',
-                            ]}
+                            tabTitles={tabOptions}
                             onTabChange={setSelectedTable}
-                            useCustomBreakpoint={true}
                             tooltipMap={tooltipMap}
                         >
                             <ActiveTradeTable

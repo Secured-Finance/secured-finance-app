@@ -3,7 +3,6 @@ import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Children, useState } from 'react';
 import TooltipIcon from 'src/assets/icons/information-circle-block.svg';
-import { DropdownSelector } from 'src/components/atoms';
 import { Tooltip } from 'src/components/templates';
 
 const TitleChip = ({
@@ -19,10 +18,10 @@ const TitleChip = ({
         <div
             data-testid={title}
             className={clsx(
-                'typography-caption-2 flex w-fit items-center justify-center gap-2 whitespace-nowrap px-5 py-3',
+                'flex w-fit min-w-[92px] items-center justify-center gap-2 whitespace-nowrap rounded-3xl px-5 py-2 text-xs leading-4 laptop:py-3',
                 {
-                    'rounded-3xl bg-black-30 text-neutral-8': selected,
-                    'text-neutral-4': !selected,
+                    'bg-primary-500 font-semibold text-neutral-8': selected,
+                    'bg-neutral-700 text-neutral-300': !selected,
                 }
             )}
         >
@@ -51,13 +50,11 @@ export const HorizontalTab = ({
     tabTitles,
     children,
     onTabChange,
-    useCustomBreakpoint = false,
     tooltipMap,
 }: {
     tabTitles: string[];
     children?: React.ReactNode;
     onTabChange?: (v: number) => void;
-    useCustomBreakpoint?: boolean;
     tooltipMap?: Record<number, string>;
 }) => {
     const arrayChildren = Children.toArray(children);
@@ -75,35 +72,9 @@ export const HorizontalTab = ({
             as='div'
             className='h-full'
         >
-            <div className='flex flex-col border border-white-10 bg-gunMetal/40 shadow-tab tablet:rounded-b-2xl'>
-                <HeadlessTab.List className='h-16 justify-start border-b border-white-10 p-3'>
-                    <div
-                        className={clsx('w-full', {
-                            'horizontalTab:hidden': useCustomBreakpoint,
-                            'tablet:hidden': !useCustomBreakpoint,
-                        })}
-                    >
-                        <DropdownSelector
-                            optionList={tabTitles.map((title, index) => ({
-                                label: title,
-                                value: index.toString(),
-                            }))}
-                            selected={{
-                                label: tabTitles[selectedIndex],
-                                value: selectedIndex.toString(),
-                            }}
-                            onChange={option =>
-                                setSelectedIndex(parseInt(option) || 0)
-                            }
-                            variant='fullWidth'
-                        />
-                    </div>
-                    <div
-                        className={clsx('hidden', {
-                            'horizontalTab:block': useCustomBreakpoint,
-                            'tablet:block': !useCustomBreakpoint,
-                        })}
-                    >
+            <div className='flex flex-col rounded-xl border border-neutral-600 bg-neutral-900 shadow-tab'>
+                <HeadlessTab.List className='flex h-auto justify-center border-b border-neutral-600 p-3 laptop:h-16 laptop:justify-start'>
+                    <div className='flex gap-3'>
                         {tabTitles.map((title, index) => {
                             return (
                                 <HeadlessTab
@@ -122,7 +93,7 @@ export const HorizontalTab = ({
                         })}
                     </div>
                 </HeadlessTab.List>
-                <HeadlessTab.Panels className='h-full min-h-[25vh] bg-cardBackground pb-2 tablet:rounded-b-2xl'>
+                <HeadlessTab.Panels className='h-full min-h-[25vh] rounded-b-xl bg-cardBackground pb-2'>
                     {arrayChildren[selectedIndex]}
                 </HeadlessTab.Panels>
             </div>

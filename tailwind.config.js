@@ -96,6 +96,9 @@ module.exports = {
         },
         colors: {
             // Primary
+            primary: {
+                500: '#5162FF',
+            },
             universeBlue: '#002133',
             horizonBlue: '#3555AC',
             teal: '#11CABE',

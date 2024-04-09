@@ -1,6 +1,8 @@
+import clsx from 'clsx';
 import Tick from 'src/assets/icons/tick.svg';
 import { emptyCollateralBook, useCollateralBook } from 'src/hooks';
 import { percentFormat, usdFormat } from 'src/utils';
+import { TRESHOLD_BLOCKS } from './constants';
 
 interface CollateralManagementConciseTabProps {
     collateralCoverage: number;
@@ -22,6 +24,10 @@ export const CollateralManagementConciseTab = ({
     const info = getLiquidationInformation(collateralCoverage);
     const { data: collateralBook = emptyCollateralBook, isLoading } =
         useCollateralBook(account);
+    const treshold =
+        collateralThreshold && collateralThreshold > collateralCoverage
+            ? collateralThreshold - collateralCoverage
+            : 0;
 
     // TODO: check if this is the "Locked" collateral value
     const totalCollateralInUSD = account ? collateralBook.usdCollateral : 0;
@@ -73,8 +79,9 @@ export const CollateralManagementConciseTab = ({
             <div className='flex flex-col rounded-xl border border-neutral-600 bg-neutral-900 p-4'>
                 <div className='typography-caption mb-1 flex flex-row justify-between'>
                     <span className='text-grayScale'>Liquidation Risk</span>
-                    <span className={`${info.color}`}>{info.risk}</span>
+                    <span className={info.color}>{info.risk}</span>
                 </div>
+                {/* TODO: handle positioning of arrow to avoid blanks */}
                 <div
                     style={{
                         width: `calc(100% * ${padding} + 4px )`,
@@ -84,19 +91,95 @@ export const CollateralManagementConciseTab = ({
                 >
                     <Tick className='float-right h-5px w-2'></Tick>
                 </div>
-                <div className='mt-2 h-6px w-full rounded-full bg-gradient-to-r from-progressBarStart from-0% via-progressBarVia via-45% to-progressBarEnd to-80%'></div>
-                <div className='typography-caption-2 mt-1 leading-6 text-planetaryPurple'>
-                    {account
-                        ? `Threshold: ${percentFormat(
-                              collateralThreshold &&
-                                  collateralThreshold > collateralCoverage
-                                  ? collateralThreshold - collateralCoverage
-                                  : 0
-                          )}`
-                        : 'N/A'}
+
+                <ul className='grid grid-cols-5 gap-[7.25px]'>
+                    {TRESHOLD_BLOCKS.map((block, i) => {
+                        return (
+                            <li
+                                key={`mobile-threshold-${i}`}
+                                className={clsx(
+                                    'h-[6px] overflow-hidden rounded-xl bg-gradient-to-r',
+                                    block.className
+                                )}
+                            ></li>
+                        );
+                    })}
+                </ul>
+                <div className='mt-1 text-[11px] leading-6 text-planetaryPurple'>
+                    {account ? (
+                        <>
+                            Threshold:{' '}
+                            <span className='font-semibold'>
+                                {percentFormat(treshold)}
+                            </span>
+                        </>
+                    ) : (
+                        'N/A'
+                    )}
                 </div>
+                {account && <Notification percentage={'61%'} />}
             </div>
         </div>
+    );
+};
+
+const Notification = ({ percentage }: { percentage: string }) => {
+    const percentageNumber = +percentage.replace('%', '');
+
+    const getRiskLevel = () => {
+        if (percentageNumber >= 80) {
+            return {
+                text: 'very high risk',
+                color: '#FF324B',
+            };
+        }
+
+        if (percentageNumber >= 60) {
+            return {
+                text: 'high risk',
+                color: '#FF9FAE',
+            };
+        }
+
+        if (percentageNumber >= 40) {
+            return {
+                text: 'medium risk',
+                color: '#FAAD14',
+            };
+        }
+
+        return {
+            text: 'lower risk',
+            color: '#00C096',
+        };
+    };
+
+    const riskLevel = getRiskLevel();
+
+    if (percentageNumber >= 20) {
+        return (
+            <div className='flex flex-col pt-[0.375rem] text-xs text-secondary7 tablet:hidden'>
+                <p>
+                    Your funds are currently at{' '}
+                    <span style={{ color: riskLevel.color }}>
+                        {riskLevel.text}
+                    </span>{' '}
+                    of liquidation.
+                </p>
+                <p>
+                    <span className='font-semibold text-nebulaTeal underline'>
+                        Add more funds
+                    </span>{' '}
+                    to increase your trading capacity.
+                </p>
+            </div>
+        );
+    }
+
+    return (
+        <p className='text-xs text-secondary7 tablet:hidden'>
+            Your funds are currently not at risk of liquidation.
+        </p>
     );
 };
 

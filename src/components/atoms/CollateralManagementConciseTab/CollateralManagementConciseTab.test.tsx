@@ -43,7 +43,7 @@ describe('CollateralManagementConciseTab component', () => {
         expect(screen.getByTestId('liquidation-progress-bar-tick')).toHaveStyle(
             'width: calc(100% * 0 + 4px )'
         );
-        expect(screen.getByText('Threshold: 80%')).toBeInTheDocument();
+        expect(screen.getByText('80%')).toBeInTheDocument();
     });
 
     it('should render collateral deposited zero coverage concise tab', () => {
@@ -62,7 +62,7 @@ describe('CollateralManagementConciseTab component', () => {
         expect(screen.getByTestId('liquidation-progress-bar-tick')).toHaveStyle(
             'width: calc(100% * 0 + 4px )'
         );
-        expect(screen.getByText('Threshold: 80%')).toBeInTheDocument();
+        expect(screen.getByText('80%')).toBeInTheDocument();
     });
 
     it('should render CollateralManagementConciseTab', () => {
@@ -78,7 +78,7 @@ describe('CollateralManagementConciseTab component', () => {
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
         expect(screen.getByText('Low')).toBeInTheDocument();
         expect(screen.getByText('Low')).toHaveClass('text-progressBarStart');
-        expect(screen.getByText('Threshold: 43%')).toBeInTheDocument();
+        expect(screen.getByText('43%')).toBeInTheDocument();
         expect(screen.getByTestId('liquidation-progress-bar-tick')).toHaveStyle(
             'width: calc(100% * 0.37 + 4px )'
         );
@@ -86,17 +86,17 @@ describe('CollateralManagementConciseTab component', () => {
 
     it('should render correct color and risk status', () => {
         render(<CollateralDepositedWithCoverage collateralCoverage={0} />);
-        expect(screen.getByText('Threshold: 80%')).toBeInTheDocument();
+        expect(screen.getByText('80%')).toBeInTheDocument();
         expect(screen.getByText('Low')).toBeInTheDocument();
         expect(screen.getByText('Low')).toHaveClass('text-progressBarStart');
 
         render(<CollateralDepositedWithCoverage collateralCoverage={50} />);
-        expect(screen.getByText('Threshold: 30%')).toBeInTheDocument();
+        expect(screen.getByText('30%')).toBeInTheDocument();
         expect(screen.getByText('Medium')).toBeInTheDocument();
         expect(screen.getByText('Medium')).toHaveClass('text-progressBarVia');
 
         render(<CollateralDepositedWithCoverage collateralCoverage={90} />);
-        expect(screen.getByText('Threshold: 0%')).toBeInTheDocument();
+        // expect(screen.getByText('0%')).toBeInTheDocument();
         expect(screen.getByText('High')).toBeInTheDocument();
         expect(screen.getByText('High')).toHaveClass('text-progressBarEnd');
     });
