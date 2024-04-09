@@ -18,7 +18,9 @@ export const Layout = ({
                 </header>
                 <main className='w-full'>{children}</main>
             </div>
-            <footer className='w-full'>{footer}</footer>
+            <footer className='sticky bottom-0 z-30 w-full bg-universeBlue'>
+                {footer}
+            </footer>
         </div>
     );
 };
