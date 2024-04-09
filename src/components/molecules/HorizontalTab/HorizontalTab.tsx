@@ -93,7 +93,7 @@ export const HorizontalTab = ({
                         })}
                     </div>
                 </HeadlessTab.List>
-                <HeadlessTab.Panels className='h-full min-h-[25vh] rounded-b-xl bg-cardBackground pb-2'>
+                <HeadlessTab.Panels className='h-[385px] overflow-auto rounded-b-xl pb-2 laptop:h-full laptop:min-h-[25vh]'>
                     {arrayChildren[selectedIndex]}
                 </HeadlessTab.Panels>
             </div>

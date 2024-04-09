@@ -10,6 +10,7 @@ import {
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { useBreakpoint } from 'src/hooks';
 
 export interface Pagination {
     getMoreData: () => void;
@@ -50,11 +51,14 @@ export const CoreTable = <T,>({
     data,
     columns,
     options = DEFAULT_OPTIONS,
+    CustomRowComponent,
 }: {
     data: Array<T>;
     columns: ColumnDef<T, any>[];
     options?: Partial<CoreTableOptions>;
+    CustomRowComponent?: React.ReactNode;
 }) => {
+    const isTablet = useBreakpoint('laptop');
     const [sorting, setSorting] = useState<SortingState>([]);
     const coreTableOptions: CoreTableOptions = {
         ...DEFAULT_OPTIONS,
@@ -240,18 +244,22 @@ export const CoreTable = <T,>({
                     coreTableOptions.responsive,
             })}
         >
-            <PaginatedScrolling
-                data={data}
-                fetchMoreData={fetchMoreData}
-                hasMoreData={hasMoreData}
-                containerHeight={
-                    coreTableOptions?.pagination?.containerHeight
-                        ? coreTableOptions.pagination.containerHeight
-                        : undefined
-                }
-            >
-                {coreTable}
-            </PaginatedScrolling>
+            {isTablet && CustomRowComponent ? (
+                CustomRowComponent
+            ) : (
+                <PaginatedScrolling
+                    data={data}
+                    fetchMoreData={fetchMoreData}
+                    hasMoreData={hasMoreData}
+                    containerHeight={
+                        coreTableOptions?.pagination?.containerHeight
+                            ? coreTableOptions.pagination.containerHeight
+                            : undefined
+                    }
+                >
+                    {coreTable}
+                </PaginatedScrolling>
+            )}
         </div>
     );
 };
