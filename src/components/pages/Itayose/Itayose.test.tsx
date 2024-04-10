@@ -91,7 +91,7 @@ describe('Itayose Component', () => {
                 expect.anything(),
                 expect.anything(),
                 expect.anything(),
-                13
+                15
             );
             await waitFor(() =>
                 fireEvent.click(
@@ -107,7 +107,7 @@ describe('Itayose Component', () => {
                     expect.anything(),
                     expect.anything(),
                     expect.anything(),
-                    26
+                    30
                 )
             );
         });
@@ -120,7 +120,7 @@ describe('Itayose Component', () => {
                 expect.anything(),
                 expect.anything(),
                 expect.anything(),
-                13
+                15
             );
             await waitFor(() => {
                 fireEvent.click(screen.getByRole('button', { name: '0.01' }));
@@ -133,7 +133,7 @@ describe('Itayose Component', () => {
                     expect.anything(),
                     expect.anything(),
                     expect.anything(),
-                    1300
+                    1500
                 )
             );
         }, 8000);

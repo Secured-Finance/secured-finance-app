@@ -65,7 +65,7 @@ export type DailyVolumes = DailyVolumesQuery['dailyVolumes'];
 export type TransactionList = TransactionsQuery['transactionHistory'];
 
 export interface ColorFormat {
-    color?: 'neutral' | 'positive' | 'negative';
+    color?: 'neutral' | 'positive' | 'negative' | 'disabled' | 'warning';
 }
 
 export type Alignment = 'left' | 'center' | 'right';

@@ -9,8 +9,9 @@ const { colors } = tailwindConfig.theme;
 const commonOptions = {
     autoSize: true,
     layout: {
-        background: { color: '#052132' },
+        background: { color: colors.neutral['900'] },
         textColor: colors.slateGray,
+        fontFamily: "'Roboto Mono', sans-serif",
     },
     grid: {
         vertLines: {
@@ -39,9 +40,16 @@ const commonOptions = {
     },
 };
 
-export const createCandlestickChart = (ref: HTMLDivElement) => {
+export const createCandlestickChart = (
+    ref: HTMLDivElement,
+    isMobile: boolean
+) => {
     const chart = createChart(ref, {
         ...commonOptions,
+        layout: {
+            ...commonOptions.layout,
+            fontSize: isMobile ? 10 : 12,
+        },
         height: 260,
         timeScale: {
             visible: false,
@@ -75,10 +83,15 @@ export const createCandlestickChart = (ref: HTMLDivElement) => {
 
 export const createVolumeChart = (
     ref: HTMLDivElement,
-    timeInterval: HistoricalDataIntervals
+    timeInterval: HistoricalDataIntervals,
+    isMobile: boolean
 ) => {
     const chart = createChart(ref, {
         ...commonOptions,
+        layout: {
+            ...commonOptions.layout,
+            fontSize: isMobile ? 10 : 12,
+        },
         grid: {
             ...commonOptions.grid,
             vertLines: {
