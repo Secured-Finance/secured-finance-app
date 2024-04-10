@@ -51,14 +51,16 @@ const FillWidthButton = ({
 }) => {
     return (
         <div className='flex h-10 w-full flex-row items-center justify-between space-x-2 rounded-lg bg-white-5 px-2'>
-            {selectedOption?.iconSVG ? (
-                <span>
-                    <selectedOption.iconSVG className='h-6 w-6' />
+            <div className='flex space-x-2'>
+                {selectedOption?.iconSVG ? (
+                    <span>
+                        <selectedOption.iconSVG className='h-6 w-6' />
+                    </span>
+                ) : null}
+                <span className='typography-caption whitespace-nowrap text-white'>
+                    {selectedOption?.label}
                 </span>
-            ) : null}
-            <span className='typography-caption text-white'>
-                {selectedOption?.label}
-            </span>
+            </div>
             <span data-cy={`asset-expand-${selectedOption?.label}`}>
                 <ExpandIndicator expanded={open} />
             </span>
@@ -146,7 +148,7 @@ export const DropdownSelector = <T extends string = string>({
     }, [onChange, selectedOptionValue, selected.label, selected.value]);
 
     return (
-        <Menu as='div' className='relative w-full'>
+        <Menu as='div' className='relative'>
             {({ open }) => (
                 <>
                     <Menu.Button

@@ -77,14 +77,16 @@ const Toolbar = ({
     return (
         <GradientBox shape='rectangle'>
             <div className='flex min-w-fit flex-row items-center justify-start gap-10 px-6 py-3 tablet:justify-between'>
-                <HorizontalAssetSelector
-                    assetList={assetList}
-                    selectedAsset={selectedAsset}
-                    options={options}
-                    selected={selected}
-                    onAssetChange={handleAssetChange}
-                    onTermChange={handleTermChange}
-                />
+                <div className='w-full tablet:w-1/2'>
+                    <HorizontalAssetSelector
+                        assetList={assetList}
+                        selectedAsset={selectedAsset}
+                        options={options}
+                        selected={selected}
+                        onAssetChange={handleAssetChange}
+                        onTermChange={handleTermChange}
+                    />
+                </div>
                 <div className='hidden w-full flex-row items-center justify-start gap-40 tablet:flex'>
                     <div className='typography-caption w-40 text-nebulaTeal'>
                         <p className=' typography-caption-2 text-slateGray'>

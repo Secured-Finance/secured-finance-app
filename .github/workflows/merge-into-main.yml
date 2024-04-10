@@ -11,7 +11,7 @@ on:
 jobs:
   deploy:
     name: Merge into main
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Generate token
         id: generate_token
