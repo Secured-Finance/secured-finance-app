@@ -51,11 +51,11 @@ export const AdvancedView = Template.bind({});
 AdvancedView.play = async () => {
     screen.getByText('Advanced').click();
     await waitFor(async () => {
-        screen.getByRole('button', { name: 'DEC22' }).click();
+        screen.getByRole('button', { name: 'DEC2022' }).click();
     });
 
     await waitFor(() => {
-        screen.getByRole('menuitem', { name: 'JUN23' }).click();
+        screen.getByRole('menuitem', { name: 'JUN2023' }).click();
     });
 };
 AdvancedView.parameters = {

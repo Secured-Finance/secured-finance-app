@@ -64,9 +64,9 @@ OpenOrdersConnectedToWallet.parameters = {
 OpenOrdersConnectedToWallet.play = async () => {
     const openOrdersTab = screen.getByTestId('Open Orders');
     await userEvent.click(openOrdersTab);
-    screen.getByRole('button', { name: 'DEC22' }).click();
+    screen.getByRole('button', { name: 'DEC2022' }).click();
     await waitFor(async () => {
-        const jun23Button = await screen.findByText('JUN23');
+        const jun23Button = await screen.findByText('JUN2023');
         userEvent.click(jun23Button);
     });
 };
