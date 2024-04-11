@@ -343,6 +343,7 @@ export const AdvancedLending = ({
                         onAssetChange={handleCurrencyChange}
                         onTermChange={handleTermChange}
                         currentMarket={currentMarket}
+                        currencyPrice={usdFormat(currencyPrice, 2)}
                         values={
                             isSubgraphSupported
                                 ? [
@@ -354,21 +355,14 @@ export const AdvancedLending = ({
                                           tradeHistoryDetails.min,
                                           'price'
                                       ),
-                                      tradeHistoryDetails.count,
+                                      tradeHistoryDetails.count.toString(),
                                       tradeHistoryDetails.sum
                                           ? ordinaryFormat(
                                                 tradeHistoryDetails.sum
                                             )
                                           : '-',
-                                      usdFormat(currencyPrice, 2),
                                   ]
-                                : [
-                                      '-',
-                                      '-',
-                                      '-',
-                                      '-',
-                                      usdFormat(currencyPrice, 2),
-                                  ]
+                                : undefined
                         }
                     />
                 </div>

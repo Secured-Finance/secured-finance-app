@@ -9,7 +9,8 @@ const DECIMALS = 8;
 
 export const useLastPrices = () => {
     const securedFinance = useSF();
-    const { data: currencies, isSuccess: isCurrencySuccess } = useCurrencies();
+    const { data: currencies, isSuccess: isCurrencySuccess } =
+        useCurrencies(true);
 
     return useQuery({
         queryKey: [QueryKeys.LAST_PRICES, currencies],
