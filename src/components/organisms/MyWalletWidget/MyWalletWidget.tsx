@@ -10,7 +10,7 @@ export const MyWalletWidget = ({
     hideBridge?: boolean;
 }) => {
     const { address, isConnected } = useAccount();
-    const { data: currencies = [] } = useCurrencies();
+    const { data: currencies = [] } = useCurrencies(true);
     const walletInformation = {
         [WalletSource.METAMASK]: currencies,
     };

@@ -15,7 +15,7 @@ export const useBalances = () => {
     const { address, ethBalance } = useSelector(
         (state: RootState) => state.wallet
     );
-    const { data } = useCurrencies();
+    const { data } = useCurrencies(true);
 
     const nativeCurrencies = useMemo(() => {
         return (
