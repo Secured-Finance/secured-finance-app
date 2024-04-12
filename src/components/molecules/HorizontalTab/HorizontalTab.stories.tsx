@@ -1,6 +1,5 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import type { Meta, StoryFn } from '@storybook/react';
-import { within } from '@storybook/testing-library';
 import { HorizontalTab } from './HorizontalTab';
 
 export default {
@@ -34,8 +33,4 @@ MobileViewport.parameters = {
     viewport: {
         defaultViewport: 'mobile',
     },
-};
-MobileViewport.play = async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    canvas.getByRole('button', { hidden: true }).click();
 };
