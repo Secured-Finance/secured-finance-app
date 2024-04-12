@@ -77,31 +77,48 @@ export const CollateralManagementConciseTab = ({
             </div>
 
             <div className='flex flex-col rounded-xl border border-neutral-600 bg-neutral-900 p-4'>
-                <div className='typography-caption mb-1 flex flex-row justify-between'>
+                <div className='typography-caption mb-4 flex flex-row justify-between'>
                     <span className='text-grayScale'>Liquidation Risk</span>
                     <span className={info.color}>{info.risk}</span>
                 </div>
-                {/* TODO: handle positioning of arrow to avoid blanks */}
-                <div
-                    style={{
-                        width: `calc(100% * ${padding} + 4px )`,
-                    }}
-                    className='transition-width duration-700 ease-in'
-                    data-testid='liquidation-progress-bar-tick'
-                >
-                    <Tick className='float-right h-5px w-2'></Tick>
-                </div>
-
                 <ul className='grid grid-cols-5 gap-[7.25px]'>
                     {TRESHOLD_BLOCKS.map((block, i) => {
+                        const min = i * 20;
+                        const max = (i + 1) * 20;
+
+                        const offset = Math.round(
+                            ((collateralCoverage - min) / (max - min)) * 100
+                        );
+
                         return (
                             <li
                                 key={`mobile-threshold-${i}`}
                                 className={clsx(
-                                    'h-[6px] overflow-hidden rounded-xl bg-gradient-to-r',
+                                    'relative h-[6px] overflow-visible rounded-xl bg-gradient-to-r',
                                     block.className
                                 )}
-                            ></li>
+                            >
+                                {collateralCoverage === 0 && !i ? (
+                                    <Tick
+                                        className='absolute -top-[9px] h-5px w-2.5'
+                                        style={{
+                                            left: `calc(0% - 4px)`,
+                                        }}
+                                        data-testid='liquidation-progress-bar-tick'
+                                    />
+                                ) : (
+                                    collateralCoverage > min &&
+                                    collateralCoverage <= max && (
+                                        <Tick
+                                            className='absolute -top-[9px] h-5px w-2.5'
+                                            style={{
+                                                left: `calc(${offset}% - 4px)`,
+                                            }}
+                                            data-testid='liquidation-progress-bar-tick'
+                                        />
+                                    )
+                                )}
+                            </li>
                         );
                     })}
                 </ul>
@@ -167,10 +184,10 @@ const Notification = ({ percentage }: { percentage: string }) => {
                     of liquidation.
                 </p>
                 <p>
-                    <span className='font-semibold text-nebulaTeal underline'>
-                        Add more funds
+                    <span className='font-semibold text-neutral-50 underline'>
+                        Deposit collateral
                     </span>{' '}
-                    to increase your trading capacity.
+                    to prevent liquidation.
                 </p>
             </div>
         );

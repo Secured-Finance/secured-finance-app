@@ -61,9 +61,6 @@ const CompactOrderHistoryInfo = ({ data }: { data: OrderHistoryList }) => {
                         ? order.filledAmount
                         : order.inputAmount;
 
-                // TODO: handle status
-                // const status = getStatus(order.status);
-
                 const amount =
                     currencyMap[ccy as CurrencySymbol].fromBaseUnit(
                         inputAmount
@@ -94,16 +91,16 @@ const CompactOrderHistoryInfo = ({ data }: { data: OrderHistoryList }) => {
                                         variant='large'
                                     />
                                     <div className='flex flex-col items-start gap-1'>
-                                        <h2 className='text-[0.9375rem] font-semibold'>
+                                        <h2 className='text-[15px] font-semibold'>
                                             {contract}
                                         </h2>
                                         <span
                                             className={clsx(
-                                                'flex w-[45px] items-center justify-center rounded-full px-[0.375rem] py-[0.125rem] text-[0.625rem]',
+                                                'flex h-[17px] w-[45px] items-center justify-center rounded-[5px] border px-[0.375rem] py-[0.125rem] text-2xs',
                                                 {
-                                                    'bg-[#FFE5E8] text-[#FF324B]':
+                                                    'border-error-300 bg-error-300/10 text-error-300':
                                                         side === '1',
-                                                    'bg-[#E4FFE7] text-[#10991D]':
+                                                    'border-success-300 bg-success-300/10 text-success-300':
                                                         side !== '1',
                                                 }
                                             )}
@@ -113,14 +110,14 @@ const CompactOrderHistoryInfo = ({ data }: { data: OrderHistoryList }) => {
                                     </div>
                                 </div>
                                 <div className='flex flex-col items-end gap-1'>
-                                    {/* {!!status && (
-                                        <span className='text-xs font-semibold'>
-                                            {status}
+                                    {!!order.status && (
+                                        <span className='text-xs font-semibold text-neutral-50'>
+                                            {order.status}
                                         </span>
-                                    )} */}
+                                    )}
                                     {!!formattedLoanApr && (
-                                        <p className='flex items-center gap-1 text-xs text-[#94A3B8]'>
-                                            APR:{' '}
+                                        <p className='flex items-center gap-1 text-xs leading-[18px] text-[#94A3B8]'>
+                                            APR{' '}
                                             <span className='text-sm font-semibold text-[#C4CAFF]'>
                                                 {formattedLoanApr}
                                             </span>
@@ -128,20 +125,16 @@ const CompactOrderHistoryInfo = ({ data }: { data: OrderHistoryList }) => {
                                     )}
                                 </div>
                             </div>
-                            <div className='text-xs text-[#E2E8F0]'>
+                            <div className='text-xs leading-4 text-[#E2E8F0]'>
                                 <ul className='flex w-full flex-col gap-[0.375rem]'>
-                                    {!!formattedLoanValue && (
-                                        <li className='flex justify-between'>
-                                            <span>Market Price</span>
-                                            <span>{formattedLoanValue}</span>
-                                        </li>
-                                    )}
-                                    {!!contract && (
-                                        <li className='flex justify-between'>
-                                            <span>Contract</span>
-                                            <span>{contract}</span>
-                                        </li>
-                                    )}
+                                    <li className='flex justify-between'>
+                                        <span>Price</span>
+                                        <span>
+                                            {Number(formattedLoanValue) === 0
+                                                ? 'Market Price'
+                                                : formattedLoanValue}
+                                        </span>
+                                    </li>
                                     {!!amountDisplay && (
                                         <li className='flex justify-between'>
                                             <span>Amount</span>

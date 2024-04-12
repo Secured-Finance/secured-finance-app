@@ -90,7 +90,6 @@ describe('AdvancedLendingOrderCard Component', () => {
 
     it('should render CollateralManagementConciseTab', async () => {
         render(<Default />, { preloadedState });
-        // expect(screen.getByText('Collateral Management')).toBeInTheDocument();
         expect(screen.getByText('Collateral Utilization')).toBeInTheDocument();
         await waitFor(() => {
             expect(screen.getByText('37%')).toBeInTheDocument();
@@ -106,7 +105,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(screen.getByText('Low')).toHaveClass('text-progressBarStart');
         expect(screen.getByText('43%')).toBeInTheDocument();
         expect(screen.getByTestId('liquidation-progress-bar-tick')).toHaveStyle(
-            'width: calc(100% * 0.37 + 4px )'
+            'left: calc(85% - 4px)'
         );
     });
 

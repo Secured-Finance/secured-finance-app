@@ -287,6 +287,27 @@ export const AdvancedLending = ({
         [dispatch, selectedTerm.label]
     );
 
+    const activeTradeData = positions
+        ? positions.positions
+              .filter(position => position.maturity === maturity.toString())
+              .map(position => {
+                  const ccy = hexToCurrencySymbol(position.currency);
+                  if (!ccy) return position;
+                  return {
+                      ...position,
+                      underMinimalCollateralThreshold:
+                          isUnderCollateralThreshold(
+                              ccy,
+                              Number(position.maturity),
+                              Number(position.marketPrice),
+                              position.futureValue > 0
+                                  ? OrderSide.LEND
+                                  : OrderSide.BORROW
+                          ),
+                  };
+              })
+        : [];
+
     const maximumOpenOrderLimit = orderList.activeOrderList.length >= 20;
 
     const tooltipMap: Record<number, string> = {};
@@ -416,40 +437,7 @@ export const AdvancedLending = ({
                             tooltipMap={tooltipMap}
                         >
                             <ActiveTradeTable
-                                data={
-                                    positions
-                                        ? positions.positions
-                                              .filter(
-                                                  position =>
-                                                      position.maturity ===
-                                                      maturity.toString()
-                                              )
-                                              .map(position => {
-                                                  const ccy =
-                                                      hexToCurrencySymbol(
-                                                          position.currency
-                                                      );
-                                                  if (!ccy) return position;
-                                                  return {
-                                                      ...position,
-                                                      underMinimalCollateralThreshold:
-                                                          isUnderCollateralThreshold(
-                                                              ccy,
-                                                              Number(
-                                                                  position.maturity
-                                                              ),
-                                                              Number(
-                                                                  position.marketPrice
-                                                              ),
-                                                              position.futureValue >
-                                                                  0
-                                                                  ? OrderSide.LEND
-                                                                  : OrderSide.BORROW
-                                                          ),
-                                                  };
-                                              })
-                                        : []
-                                }
+                                data={activeTradeData}
                                 height={350}
                                 delistedCurrencySet={delistedCurrencySet}
                                 variant='contractOnly'

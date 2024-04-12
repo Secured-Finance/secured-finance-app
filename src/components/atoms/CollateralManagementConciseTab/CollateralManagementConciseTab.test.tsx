@@ -22,7 +22,7 @@ describe('CollateralManagementConciseTab component', () => {
         expect(screen.getByText('Low')).toBeInTheDocument();
         expect(screen.getByText('Low')).toHaveClass('text-progressBarStart');
         expect(screen.getByTestId('liquidation-progress-bar-tick')).toHaveStyle(
-            'width: calc(100% * 0 + 4px )'
+            'left: calc(0% - 4px)'
         );
         expect(screen.getAllByText('N/A')).toHaveLength(2);
     });
@@ -41,7 +41,7 @@ describe('CollateralManagementConciseTab component', () => {
         expect(screen.getByText('Low')).toBeInTheDocument();
         expect(screen.getByText('Low')).toHaveClass('text-progressBarStart');
         expect(screen.getByTestId('liquidation-progress-bar-tick')).toHaveStyle(
-            'width: calc(100% * 0 + 4px )'
+            'left: calc(0% - 4px)'
         );
         expect(screen.getByText('80%')).toBeInTheDocument();
     });
@@ -60,7 +60,7 @@ describe('CollateralManagementConciseTab component', () => {
         expect(screen.getByText('Low')).toBeInTheDocument();
         expect(screen.getByText('Low')).toHaveClass('text-progressBarStart');
         expect(screen.getByTestId('liquidation-progress-bar-tick')).toHaveStyle(
-            'width: calc(100% * 0 + 4px )'
+            'left: calc(0% - 4px)'
         );
         expect(screen.getByText('80%')).toBeInTheDocument();
     });
@@ -80,7 +80,7 @@ describe('CollateralManagementConciseTab component', () => {
         expect(screen.getByText('Low')).toHaveClass('text-progressBarStart');
         expect(screen.getByText('43%')).toBeInTheDocument();
         expect(screen.getByTestId('liquidation-progress-bar-tick')).toHaveStyle(
-            'width: calc(100% * 0.37 + 4px )'
+            'left: calc(85% - 4px)'
         );
     });
 

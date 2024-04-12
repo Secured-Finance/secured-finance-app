@@ -127,7 +127,7 @@ module.exports = {
                 '300': '#FF9FAE',
             },
             success: {
-                '300': '#96EAF1',
+                '300': '#AAE8B0',
                 '500': '#15D6E8',
             },
             warning: {

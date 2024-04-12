@@ -253,6 +253,24 @@ export const PortfolioManagement = () => {
     const userDelistedCurrenciesArray = Array.from(userDelistedCurrenciesSet);
     const isUnderCollateralThreshold = useIsUnderCollateralThreshold(address);
 
+    const activeTradeData = positions
+        ? positions.positions.map(position => {
+              const ccy = hexToCurrencySymbol(position.currency);
+              if (!ccy) return position;
+              return {
+                  ...position,
+                  underMinimalCollateralThreshold: isUnderCollateralThreshold(
+                      ccy,
+                      Number(position.maturity),
+                      Number(position.marketPrice),
+                      position.futureValue > 0
+                          ? OrderSide.LEND
+                          : OrderSide.BORROW
+                  ),
+              };
+          })
+        : [];
+
     useEffect(() => {
         setOffsetOrders(0);
         setOffsetTransactions(0);
@@ -334,30 +352,7 @@ export const PortfolioManagement = () => {
                         onTabChange={setSelectedTable}
                     >
                         <ActiveTradeTable
-                            data={
-                                positions
-                                    ? positions.positions.map(position => {
-                                          const ccy = hexToCurrencySymbol(
-                                              position.currency
-                                          );
-                                          if (!ccy) return position;
-                                          return {
-                                              ...position,
-                                              underMinimalCollateralThreshold:
-                                                  isUnderCollateralThreshold(
-                                                      ccy,
-                                                      Number(position.maturity),
-                                                      Number(
-                                                          position.marketPrice
-                                                      ),
-                                                      position.futureValue > 0
-                                                          ? OrderSide.LEND
-                                                          : OrderSide.BORROW
-                                                  ),
-                                          };
-                                      })
-                                    : []
-                            }
+                            data={activeTradeData}
                             delistedCurrencySet={delistedCurrencySet}
                         />
                         <OrderTable data={activeOrderList} />

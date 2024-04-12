@@ -191,6 +191,12 @@ const CompactActiveTradeInfo = ({
 
                     const text = futureValue < 0 ? 'Borrow' : 'Lend';
 
+                    const maturityVal = getMaturityDisplayValue(
+                        maturityTimestamp,
+                        side,
+                        ccy
+                    );
+
                     return (
                         <div className='px-5' key={`active-trade-info-${i}`}>
                             <div
@@ -212,11 +218,11 @@ const CompactActiveTradeInfo = ({
                                             {futureValue !== ZERO_BI ? (
                                                 <span
                                                     className={clsx(
-                                                        'flex w-[45px] items-center justify-center rounded-full px-[0.375rem] py-[0.125rem] text-[0.625rem]',
+                                                        'flex h-[17px] w-[45px] items-center justify-center rounded-[5px] border px-[0.375rem] py-[0.125rem] text-2xs',
                                                         {
-                                                            'bg-[#FFE5E8] text-[#FF324B]':
+                                                            'border-error-300 bg-error-300/10 text-error-300':
                                                                 futureValue < 0,
-                                                            'bg-[#E4FFE7] text-[#10991D]':
+                                                            'border-success-300 bg-success-300/10 text-success-300':
                                                                 futureValue >=
                                                                 1,
                                                         }
@@ -244,17 +250,11 @@ const CompactActiveTradeInfo = ({
                                         )}
                                     </div>
                                 </div>
-                                <div className='text-xs text-[#E2E8F0]'>
+                                <div className='text-xs leading-4 text-[#E2E8F0]'>
                                     <ul className='flex w-full flex-col gap-1.5'>
                                         <li className='flex justify-between'>
                                             <span>Maturity</span>
-                                            <span>
-                                                {getMaturityDisplayValue(
-                                                    maturityTimestamp,
-                                                    side,
-                                                    ccy
-                                                )}
-                                            </span>
+                                            <span>{maturityVal}</span>
                                         </li>
                                         {!!forwardValueDisplayValue && (
                                             <li className='flex justify-between'>
@@ -299,6 +299,7 @@ const CompactActiveTradeInfo = ({
                                 <div className='flex flex-col gap-2.5'>
                                     <button
                                         className='rounded-lg bg-[#5162FF] px-3 py-1.5 text-xs font-semibold leading-4 text-white'
+                                        disabled={isPastDate(Number(maturity))}
                                         onClick={() => {
                                             setUnwindDialogData({
                                                 maturity: new Maturity(
@@ -626,17 +627,11 @@ export const ActiveTradeTable = ({
         ]
     );
 
-    const columnsForTabletMobile = [
-        columns[1],
-        columns[0],
-        ...columns.slice(2),
-    ];
-
     return (
         <>
             <CoreTable
                 data={data}
-                columns={isTablet ? columnsForTabletMobile : columns}
+                columns={columns}
                 options={{
                     name: 'active-trade-table',
                     stickyFirstColumn: true,
