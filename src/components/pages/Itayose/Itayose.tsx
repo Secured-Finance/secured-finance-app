@@ -326,7 +326,14 @@ export const Itayose = () => {
                         </div>
                     </Tab>
 
-                    <HorizontalTab tabTitles={['Open Orders']}>
+                    <HorizontalTab
+                        tabTitles={[
+                            {
+                                title: 'Open Orders',
+                                testId: 'open-orders',
+                            },
+                        ]}
+                    >
                         <OrderTable
                             data={filteredOrderList}
                             variant='compact'

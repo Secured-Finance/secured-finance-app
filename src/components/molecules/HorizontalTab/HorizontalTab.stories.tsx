@@ -6,7 +6,10 @@ export default {
     title: 'Molecules/HorizontalTab',
     component: HorizontalTab,
     args: {
-        tabTitles: ['Active Contracts', 'Trade History'],
+        tabTitles: [
+            { title: 'Active Contracts', testId: 'active-contracts' },
+            { title: 'Trade History', testId: 'trade-history' },
+        ],
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,

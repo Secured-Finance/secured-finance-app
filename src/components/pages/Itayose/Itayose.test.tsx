@@ -70,7 +70,7 @@ describe('Itayose Component', () => {
 
     it('should only show the pre-order orders of the user when they are connected', async () => {
         render(<Default />);
-        fireEvent.click(screen.getByRole('tab', { name: 'Open Orders' }));
+        fireEvent.click(screen.getByTestId('open-orders'));
 
         const openOrders = await screen.findAllByRole('row');
         expect(openOrders).toHaveLength(1);

@@ -63,7 +63,7 @@ OpenOrdersConnectedToWallet.parameters = {
 };
 OpenOrdersConnectedToWallet.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const openOrdersTab = canvas.getByTestId('Open Orders');
+    const openOrdersTab = canvas.getByTestId('open-orders');
     await userEvent.click(openOrdersTab);
     canvas.getByRole('button', { name: 'DEC2022' }).click();
     canvas.getByRole('menuitem', { name: 'JUN2023' }).click();
@@ -78,7 +78,7 @@ OrderHistoryConnectedToWallet.parameters = {
 };
 OrderHistoryConnectedToWallet.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const orderHistoryTab = canvas.getByTestId('Order History');
+    const orderHistoryTab = canvas.getByTestId('order-history');
     await userEvent.click(orderHistoryTab);
 };
 OrderHistoryConnectedToWallet.args = {
@@ -89,11 +89,7 @@ export const MyTransactionsConnectedToWallet = Template.bind({});
 MyTransactionsConnectedToWallet.parameters = {
     connected: true,
 };
-MyTransactionsConnectedToWallet.play = async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const orderHistoryTab = canvas.getByTestId('My Transactions');
-    await userEvent.click(orderHistoryTab);
-};
+
 MyTransactionsConnectedToWallet.args = {
     collateralBook: collateralBook37,
 };

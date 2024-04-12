@@ -44,25 +44,25 @@ export const ConnectedToWallet = Template.bind({});
 export const DisplayOpenOrders = Template.bind({});
 DisplayOpenOrders.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const openOrdersTab = canvas.getByTestId('Open Orders');
+    const openOrdersTab = canvas.getByTestId('open-orders');
     openOrdersTab.click();
 };
-export const DisplayMyTransactions = Template.bind({});
-DisplayMyTransactions.play = async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const myTransactionsTab = canvas.getByTestId('My Transactions');
-    myTransactionsTab.click();
-};
+// export const DisplayMyTransactions = Template.bind({});
+// DisplayMyTransactions.play = async ({ canvasElement }) => {
+//     const canvas = within(canvasElement);
+//     const myTransactionsTab = canvas.getByTestId('My Transactions');
+//     myTransactionsTab.click();
+// };
 
 export const ActivePosition = Template.bind({});
 ActivePosition.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    canvas.getByTestId('Active Positions').click();
+    canvas.getByTestId('active-positions').click();
 };
 
 export const DisplayOrderHistory = Template.bind({});
 DisplayOrderHistory.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const orderHistoryTab = canvas.getByTestId('Order History');
+    const orderHistoryTab = canvas.getByTestId('order-history');
     orderHistoryTab.click();
 };

@@ -9,14 +9,16 @@ const TitleChip = ({
     title,
     selected,
     tooltip,
+    testId,
 }: {
     title: string;
     selected: boolean;
     tooltip?: string;
+    testId?: string;
 }) => {
     return (
         <div
-            data-testid={title}
+            data-testid={testId ?? title}
             className={clsx(
                 'flex w-fit min-w-[92px] items-center justify-center gap-2 whitespace-nowrap rounded-3xl px-5 py-2 text-xs leading-4 laptop:py-3',
                 {
@@ -52,7 +54,7 @@ export const HorizontalTab = ({
     onTabChange,
     tooltipMap,
 }: {
-    tabTitles: string[];
+    tabTitles: { title: string; testId: string }[];
     children?: React.ReactNode;
     onTabChange?: (v: number) => void;
     tooltipMap?: Record<number, string>;
@@ -83,9 +85,10 @@ export const HorizontalTab = ({
                                 >
                                     {({ selected }) => (
                                         <TitleChip
-                                            title={title}
+                                            title={title.title}
                                             selected={selected}
                                             tooltip={tooltipMap?.[index]}
+                                            testId={title.testId}
                                         />
                                     )}
                                 </HeadlessTab>

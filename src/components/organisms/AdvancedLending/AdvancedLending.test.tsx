@@ -142,7 +142,7 @@ describe('Advanced Lending Component', () => {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
             })
         );
-        fireEvent.click(screen.getByRole('tab', { name: 'Open Orders' }));
+        fireEvent.click(screen.getByTestId('open-orders'));
         expect(
             await screen.findAllByTestId('open-order-table-row')
         ).toHaveLength(1);
