@@ -19,10 +19,12 @@ interface NavTabProps {
         visible: boolean;
     };
     navStyles?: NavStylesProps;
+    suffixIcon?: React.ReactNode;
 }
 
 export const NavTab = ({
     text,
+    suffixIcon,
     active = false,
     highlight,
     navStyles,
@@ -48,7 +50,7 @@ export const NavTab = ({
             >
                 <p
                     className={clsx(
-                        'h-4 whitespace-nowrap text-xs duration-300 group-hover:opacity-100 group-hover:ease-in-out laptop:text-sm',
+                        'flex h-4 items-center whitespace-nowrap text-xs duration-300 group-hover:opacity-100 group-hover:ease-in-out laptop:text-sm',
                         {
                             [navStyles?.textClassActive || '']: active,
                             'text-neutral-8': !active || !navStyles,
@@ -59,6 +61,7 @@ export const NavTab = ({
                     data-testid={`${text}-tab`}
                 >
                     {text}
+                    {suffixIcon}
                 </p>
                 {highlight && highlight.visible && (
                     <HighlightChip

@@ -308,6 +308,18 @@ export const AdvancedLending = ({
               })
         : [];
 
+    const tabData = [
+        { text: 'Yield Curve' },
+        {
+            text: 'Historical Chart',
+            suffixIcon: (
+                <span className='ml-2.5 block h-[17px] rounded-[5px] border border-warning-300 bg-warning-300/10 px-1.5 text-2xs text-warning-300'>
+                    New
+                </span>
+            ),
+        },
+    ];
+
     const maximumOpenOrderLimit = orderList.activeOrderList.length >= 20;
 
     const tooltipMap: Record<number, string> = {};
@@ -358,14 +370,8 @@ export const AdvancedLending = ({
                         ]}
                     />
                 </div>
-                {/* Yield curve + Historical chart in mobile */}
                 <div className='mb-4 block tablet:col-span-2 laptop:mb-0 laptop:hidden'>
-                    <Tab
-                        tabDataArray={[
-                            { text: 'Yield Curve' },
-                            { text: 'Historical Chart' },
-                        ]}
-                    >
+                    <Tab tabDataArray={tabData}>
                         <div className='h-[410px] w-full px-2 py-4'>
                             <LineChartTab
                                 rates={rates}
@@ -408,12 +414,7 @@ export const AdvancedLending = ({
                 <div className='col-span-1 tablet:col-span-2'>
                     <div className='flex h-full flex-grow flex-col gap-4 px-4 laptop:px-0'>
                         <div className='hidden laptop:block'>
-                            <Tab
-                                tabDataArray={[
-                                    { text: 'Yield Curve' },
-                                    { text: 'Historical Chart' },
-                                ]}
-                            >
+                            <Tab tabDataArray={tabData}>
                                 <div className='h-[410px] w-full px-2 py-4'>
                                     <LineChartTab
                                         rates={rates}

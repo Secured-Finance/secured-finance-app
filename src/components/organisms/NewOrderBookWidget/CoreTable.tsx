@@ -91,17 +91,18 @@ export const CoreTable = <T,>({
             data-testid={coreTableOptions.name}
         >
             {coreTableOptions.showHeaders ? (
-                <thead className='font-secondary text-2xs leading-4 text-neutral-400 laptop:h-7 laptop:py-1 laptop:text-xs laptop:leading-5 laptop:text-neutral-300'>
+                <thead className='font-secondary text-2xs leading-4 text-neutral-400 after:table-row after:h-1 after:content-[""] laptop:h-7 laptop:py-1 laptop:text-xs laptop:leading-5 laptop:text-neutral-300 laptop:after:content-none'>
                     {table.getHeaderGroups().map(headerGroup => (
                         <tr
                             key={headerGroup.id}
                             data-testid={`${coreTableOptions.name}-header`}
+                            className='border-b border-neutral-600 laptop:border-b-0'
                         >
                             {headerGroup.headers.map(header => (
                                 <th
                                     data-testid={`${coreTableOptions.name}-header-cell`}
                                     key={header.id}
-                                    className='whitespace-nowrap pb-1 text-center font-normal laptop:px-5 laptop:pb-0'
+                                    className='whitespace-nowrap text-center font-normal laptop:px-5'
                                 >
                                     {header.isPlaceholder
                                         ? null

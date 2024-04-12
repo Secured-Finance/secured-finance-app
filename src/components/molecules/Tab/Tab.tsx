@@ -13,6 +13,7 @@ export type TabData = {
     disabled?: boolean;
     highlight?: TabHighlight;
     util?: React.ReactNode;
+    suffixIcon?: React.ReactNode;
 };
 
 interface TabProps {
@@ -46,6 +47,7 @@ export const Tab: React.FC<TabProps> = ({ tabDataArray, children }) => {
                                     text={tabData.text}
                                     active={selectedIndex === index}
                                     highlight={tabData.highlight}
+                                    suffixIcon={tabData.suffixIcon}
                                 ></NavTab>
                             </HeadlessTab>
                         );

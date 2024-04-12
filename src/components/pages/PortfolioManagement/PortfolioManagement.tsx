@@ -22,6 +22,7 @@ import {
     baseContracts,
     emptyCollateralBook,
     emptyOrderList,
+    useBreakpoint,
     useCollateralBook,
     useCurrenciesForOrders,
     useCurrencyDelistedStatus,
@@ -43,6 +44,7 @@ import {
     usdFormat,
 } from 'src/utils';
 import { useAccount } from 'wagmi';
+import { MOBILE_TAB_OPTIONS, TAB_OPTIONS } from './constants';
 
 export enum TableType {
     ACTIVE_POSITION = 0,
@@ -67,6 +69,9 @@ export const PortfolioManagement = () => {
     );
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
     const { data: lendingMarkets = { ...baseContracts } } = useLendingMarkets();
+
+    const isLaptop = useBreakpoint('desktop');
+    const tabOptions = isLaptop ? MOBILE_TAB_OPTIONS : TAB_OPTIONS;
 
     const userOrderHistory = useGraphClientHook(
         {
@@ -343,12 +348,7 @@ export const PortfolioManagement = () => {
                         netAssetValue={portfolioAnalytics.netAssetValue}
                     />
                     <HorizontalTab
-                        tabTitles={[
-                            'Active Positions',
-                            'Open Orders',
-                            'Order History',
-                            'My Transactions',
-                        ]}
+                        tabTitles={tabOptions}
                         onTabChange={setSelectedTable}
                     >
                         <ActiveTradeTable
