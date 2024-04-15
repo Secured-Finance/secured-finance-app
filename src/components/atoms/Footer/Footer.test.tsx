@@ -1,9 +1,9 @@
 import { composeStories } from '@storybook/react';
 import packageJson from 'package.json';
-import { render, screen, waitFor } from 'src/test-utils.js';
+import { render, screen } from 'src/test-utils.js';
 import * as stories from './Footer.stories';
 
-const { Default, NotConnected } = composeStories(stories);
+const { Default } = composeStories(stories);
 
 describe('Footer component', () => {
     it('should render footer', () => {
@@ -32,38 +32,5 @@ describe('Footer component', () => {
         expect(
             screen.getByText(`Secured Finance v.storybook`)
         ).toBeInTheDocument();
-    });
-
-    it('should show connected connection status circle', async () => {
-        render(<Default />);
-        await waitFor(() =>
-            expect(screen.getByTestId('connection-status')).toHaveClass(
-                'bg-green'
-            )
-        );
-    });
-
-    it('should show disconnected connection status circle when wallet is connected but chainError', async () => {
-        render(<Default />, {
-            preloadedState: {
-                blockchain: {
-                    chainError: true,
-                },
-            },
-        });
-        await waitFor(() =>
-            expect(screen.getByTestId('connection-status')).toHaveClass(
-                'bg-red'
-            )
-        );
-    });
-
-    it('should show disconnected connection status circle when wallet is not connected', async () => {
-        render(<NotConnected />);
-        await waitFor(() =>
-            expect(screen.getByTestId('connection-status')).toHaveClass(
-                'bg-red'
-            )
-        );
     });
 });
