@@ -49,9 +49,9 @@ export const Button = ({
                 variantStyle[variant],
                 {
                     'text-neutral-50':
-                        variant !== ButtonVariants.primaryBuy &&
-                        variant !== ButtonVariants.tertiaryBuy &&
-                        variant !== ButtonVariants.tertiarySell,
+                        variant === ButtonVariants.primary ||
+                        variant === ButtonVariants.tertiary,
+                    'text-primary-300': variant === ButtonVariants.secondary,
                     'w-full': fullWidth,
                     'w-fit': !fullWidth,
                 }
@@ -65,10 +65,10 @@ export const Button = ({
             )}
             <p
                 className={clsx('whitespace-nowrap', {
-                    'text-xs': size === ButtonSizes.xs,
-                    'text-sm': size === ButtonSizes.sm,
-                    'text-base':
-                        size === ButtonSizes.md || size === ButtonSizes.lg,
+                    'text-2xs leading-[14px]': size === ButtonSizes.xs,
+                    'text-xs leading-4': size === ButtonSizes.sm,
+                    'text-sm leading-[18px]': size === ButtonSizes.md,
+                    'text-base leading-5': size === ButtonSizes.lg,
                 })}
             >
                 {text}
