@@ -9,5 +9,6 @@ export enum ChipColors {
     Green = 'Green',
     Red = 'Red',
     Yellow = 'Yellow',
+    Teal = 'Teal',
     Blue = 'Blue',
 }
