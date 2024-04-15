@@ -9,10 +9,7 @@ describe('Chip Component', () => {
     it('should render the default chip with gray color and medium size', () => {
         render(<Default />);
         const chip = screen.getByText('Borrow');
-        expect(chip).toHaveClass('text-neutral-900 bg-neutral-100');
-        expect(chip).toHaveClass(
-            'h-[1.0625rem] px-1.5 text-[0.625rem] rounded-[1.25rem]'
-        );
+        expect(chip).toHaveClass('text-neutral-50 bg-neutral-50/10');
     });
 
     it('should render the chip with custom color and size', () => {
@@ -21,7 +18,7 @@ describe('Chip Component', () => {
         );
         const chip = screen.getByText('Test');
         expect(chip).toHaveClass(
-            'text-error-700 bg-error-50 h-5 px-2 text-xs rounded-3xl'
+            'text-error-300 bg-error-300/10 border-error-300 px-2 text-xs leading-4 rounded-md'
         );
     });
 

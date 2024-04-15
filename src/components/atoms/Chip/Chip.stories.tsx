@@ -36,6 +36,7 @@ export const Chips = () => {
             <Chip color={ChipColors.Green} label='Label' />
             <Chip color={ChipColors.Red} label='Label' size={ChipSizes.lg} />
             <Chip color={ChipColors.Yellow} label='Label' />
+            <Chip color={ChipColors.Teal} label='Label' />
             <Chip color={ChipColors.Blue} label='Label' />
         </div>
     );
@@ -69,6 +70,11 @@ Red.args = {
 export const Yellow = Template.bind({});
 Yellow.args = {
     color: ChipColors.Yellow,
+};
+
+export const Teal = Template.bind({});
+Teal.args = {
+    color: ChipColors.Teal,
 };
 
 export const Blue = Template.bind({});
