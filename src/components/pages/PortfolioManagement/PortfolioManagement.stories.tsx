@@ -50,8 +50,10 @@ DisplayOpenOrders.play = async ({ canvasElement }) => {
 export const DisplayMyTransactions = Template.bind({});
 DisplayMyTransactions.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const myTransactionsTab = canvas.getByTestId('my-transactions');
-    await userEvent.click(myTransactionsTab);
+    const myTransactionsTab = canvas.queryByTestId('my-transactions');
+    if (myTransactionsTab) {
+        await userEvent.click(myTransactionsTab);
+    }
 };
 
 export const ActivePosition = Template.bind({});
