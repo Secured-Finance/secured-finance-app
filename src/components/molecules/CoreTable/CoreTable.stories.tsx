@@ -2,6 +2,9 @@ import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import type { Meta, StoryFn } from '@storybook/react';
 import { createColumnHelper } from '@tanstack/react-table';
 import { useState } from 'react';
+import { CompactOrderHistoryInfo } from 'src/components/organisms';
+import { mappedOrderHistoryList } from 'src/stories/mocks/fixtures';
+import { OrderHistoryList } from 'src/types';
 import { CoreTable } from './CoreTable';
 
 const columnHelper = createColumnHelper<{
@@ -142,4 +145,18 @@ SkeletonRows.args = {
         isLastRowLoading: true,
         isFirstRowLoading: true,
     },
+};
+
+export const MobileCustomComponent = Template.bind({});
+MobileCustomComponent.parameters = {
+    viewport: {
+        defaultViewport: 'mobile',
+    },
+};
+MobileCustomComponent.args = {
+    CustomRowComponent: (
+        <CompactOrderHistoryInfo
+            data={mappedOrderHistoryList as OrderHistoryList}
+        />
+    ),
 };

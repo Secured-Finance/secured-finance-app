@@ -1,6 +1,6 @@
 import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
 import type { Meta, StoryFn } from '@storybook/react';
-import { within } from '@storybook/testing-library';
+import { userEvent, within } from '@storybook/testing-library';
 import {
     withAppLayout,
     withEthBalance,
@@ -45,24 +45,25 @@ export const DisplayOpenOrders = Template.bind({});
 DisplayOpenOrders.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const openOrdersTab = canvas.getByTestId('open-orders');
-    openOrdersTab.click();
+    await userEvent.click(openOrdersTab);
 };
-// export const DisplayMyTransactions = Template.bind({});
-// DisplayMyTransactions.play = async ({ canvasElement }) => {
-//     const canvas = within(canvasElement);
-//     const myTransactionsTab = canvas.getByTestId('My Transactions');
-//     myTransactionsTab.click();
-// };
+export const DisplayMyTransactions = Template.bind({});
+DisplayMyTransactions.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const myTransactionsTab = canvas.getByTestId('my-transactions');
+    await userEvent.click(myTransactionsTab);
+};
 
 export const ActivePosition = Template.bind({});
 ActivePosition.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    canvas.getByTestId('active-positions').click();
+    const activePositionsTab = canvas.getByTestId('active-positions');
+    await userEvent.click(activePositionsTab);
 };
 
 export const DisplayOrderHistory = Template.bind({});
 DisplayOrderHistory.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const orderHistoryTab = canvas.getByTestId('order-history');
-    orderHistoryTab.click();
+    await userEvent.click(orderHistoryTab);
 };

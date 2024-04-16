@@ -96,7 +96,7 @@ export const CoreTable = <T,>({
                         <tr
                             key={headerGroup.id}
                             data-testid={`${coreTableOptions.name}-header`}
-                            className='border-b border-neutral-600 laptop:border-b-0'
+                            className='border-b-[0.5px] border-neutral-600 laptop:border-b-0'
                         >
                             {headerGroup.headers.map(header => (
                                 <th

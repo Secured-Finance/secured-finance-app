@@ -2,7 +2,7 @@ import { composeStories } from '@storybook/react';
 import { render, screen } from 'src/test-utils.js';
 import * as stories from './NavTab.stories';
 
-const { Default, MarketDashboard } = composeStories(stories);
+const { Default, MarketDashboard, WithSuffixIcon } = composeStories(stories);
 
 describe('NavTab component', () => {
     it('should render an active NavTab', () => {
@@ -20,5 +20,11 @@ describe('NavTab component', () => {
         expect(textElement.parentNode).not.toHaveClass(
             'bg-gradient-to-b from-tabGradient-2 to-tabGradient-1'
         );
+    });
+
+    it('should render a suffix icon', () => {
+        render(<WithSuffixIcon />);
+        const suffixIcon = screen.getByText('New');
+        expect(suffixIcon).toBeInTheDocument();
     });
 });

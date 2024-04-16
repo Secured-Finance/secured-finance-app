@@ -10,7 +10,6 @@ import { useRouter } from 'next/router';
 import { Provider, useSelector } from 'react-redux';
 import 'src/bigIntPatch';
 import { Footer } from 'src/components/atoms';
-// import { Header } from 'src/components/organisms';
 import { Layout } from 'src/components/templates';
 import SecuredFinanceProvider from 'src/contexts/SecuredFinanceProvider';
 import store from 'src/store';

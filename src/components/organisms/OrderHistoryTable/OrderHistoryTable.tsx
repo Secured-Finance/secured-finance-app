@@ -31,7 +31,11 @@ import {
 
 const columnHelper = createColumnHelper<Order>();
 
-const CompactOrderHistoryInfo = ({ data }: { data: OrderHistoryList }) => {
+export const CompactOrderHistoryInfo = ({
+    data,
+}: {
+    data: OrderHistoryList;
+}) => {
     if (!data || data.length === 0) return null;
 
     return (
@@ -109,7 +113,7 @@ const CompactOrderHistoryInfo = ({ data }: { data: OrderHistoryList }) => {
                                         </span>
                                     </div>
                                 </div>
-                                <div className='flex flex-col items-end gap-1'>
+                                <div className='flex flex-col items-end gap-1 text-right'>
                                     {!!order.status && (
                                         <span className='text-xs font-semibold text-neutral-50'>
                                             {order.status}

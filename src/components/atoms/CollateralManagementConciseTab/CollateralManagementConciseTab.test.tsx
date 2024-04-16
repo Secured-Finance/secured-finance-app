@@ -95,8 +95,8 @@ describe('CollateralManagementConciseTab component', () => {
         expect(screen.getByText('Medium')).toBeInTheDocument();
         expect(screen.getByText('Medium')).toHaveClass('text-progressBarVia');
 
-        render(<CollateralDepositedWithCoverage collateralCoverage={90} />);
-        // expect(screen.getByText('0%')).toBeInTheDocument();
+        render(<CollateralDepositedWithCoverage collateralCoverage={70} />);
+        expect(screen.getByText('10%')).toBeInTheDocument();
         expect(screen.getByText('High')).toBeInTheDocument();
         expect(screen.getByText('High')).toHaveClass('text-progressBarEnd');
     });

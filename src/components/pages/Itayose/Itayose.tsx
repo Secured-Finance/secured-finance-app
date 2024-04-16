@@ -22,6 +22,7 @@ import {
     OrderTable,
 } from 'src/components/organisms';
 import { Page, ThreeColumnsWithTopBar } from 'src/components/templates';
+import { tabData } from 'src/constants';
 import {
     MarketPhase,
     baseContracts,
@@ -312,7 +313,7 @@ export const Itayose = () => {
                 />
 
                 <div className='flex h-full flex-col items-stretch justify-stretch gap-6'>
-                    <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
+                    <Tab tabDataArray={[tabData[0]]}>
                         <div className='h-[410px] w-full px-6 py-4'>
                             <LineChartTab
                                 rates={rates}

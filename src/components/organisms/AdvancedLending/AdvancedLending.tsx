@@ -20,6 +20,7 @@ import {
     OrderTable,
 } from 'src/components/organisms';
 import { TabSpinner, TableType } from 'src/components/pages';
+import { tabData } from 'src/constants';
 import {
     CollateralBook,
     emptyOrderList,
@@ -287,13 +288,11 @@ export const AdvancedLending = ({
         [dispatch, selectedTerm.label]
     );
 
-    const activeTradeData = positions
-        ? positions.positions
-              .filter(position => position.maturity === maturity.toString())
-              .map(position => {
-                  const ccy = hexToCurrencySymbol(position.currency);
-                  if (!ccy) return position;
-                  return {
+    const activeTradeData =
+        positions?.positions.map(position => {
+            const ccy = hexToCurrencySymbol(position.currency);
+            return ccy
+                ? {
                       ...position,
                       underMinimalCollateralThreshold:
                           isUnderCollateralThreshold(
@@ -304,21 +303,9 @@ export const AdvancedLending = ({
                                   ? OrderSide.LEND
                                   : OrderSide.BORROW
                           ),
-                  };
-              })
-        : [];
-
-    const tabData = [
-        { text: 'Yield Curve' },
-        {
-            text: 'Historical Chart',
-            suffixIcon: (
-                <span className='ml-2.5 block h-[17px] rounded-[5px] border border-warning-300 bg-warning-300/10 px-1.5 text-2xs text-warning-300'>
-                    New
-                </span>
-            ),
-        },
-    ];
+                  }
+                : position;
+        }) ?? [];
 
     const maximumOpenOrderLimit = orderList.activeOrderList.length >= 20;
 

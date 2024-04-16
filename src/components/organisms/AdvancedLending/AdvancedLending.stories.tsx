@@ -89,6 +89,13 @@ export const MyTransactionsConnectedToWallet = Template.bind({});
 MyTransactionsConnectedToWallet.parameters = {
     connected: true,
 };
+MyTransactionsConnectedToWallet.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const myTransactionsTab = canvas.queryByTestId('my-transactions');
+    if (myTransactionsTab) {
+        await userEvent.click(myTransactionsTab);
+    }
+};
 
 MyTransactionsConnectedToWallet.args = {
     collateralBook: collateralBook37,

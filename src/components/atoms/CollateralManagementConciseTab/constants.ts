@@ -1,4 +1,4 @@
-export const TRESHOLD_BLOCKS = [
+export const THRESHOLD_BLOCKS = [
     {
         className: 'to-[#01747F] from-[#01747F00] border border-[#09A8B780]',
     },

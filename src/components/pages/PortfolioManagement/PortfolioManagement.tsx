@@ -258,23 +258,24 @@ export const PortfolioManagement = () => {
     const userDelistedCurrenciesArray = Array.from(userDelistedCurrenciesSet);
     const isUnderCollateralThreshold = useIsUnderCollateralThreshold(address);
 
-    const activeTradeData = positions
-        ? positions.positions.map(position => {
-              const ccy = hexToCurrencySymbol(position.currency);
-              if (!ccy) return position;
-              return {
-                  ...position,
-                  underMinimalCollateralThreshold: isUnderCollateralThreshold(
-                      ccy,
-                      Number(position.maturity),
-                      Number(position.marketPrice),
-                      position.futureValue > 0
-                          ? OrderSide.LEND
-                          : OrderSide.BORROW
-                  ),
-              };
-          })
-        : [];
+    const activeTradeData =
+        positions?.positions.map(position => {
+            const ccy = hexToCurrencySymbol(position.currency);
+            return ccy
+                ? {
+                      ...position,
+                      underMinimalCollateralThreshold:
+                          isUnderCollateralThreshold(
+                              ccy,
+                              Number(position.maturity),
+                              Number(position.marketPrice),
+                              position.futureValue > 0
+                                  ? OrderSide.LEND
+                                  : OrderSide.BORROW
+                          ),
+                  }
+                : position;
+        }) ?? [];
 
     useEffect(() => {
         setOffsetOrders(0);

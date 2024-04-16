@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import Tick from 'src/assets/icons/tick.svg';
 import { emptyCollateralBook, useCollateralBook } from 'src/hooks';
 import { percentFormat, usdFormat } from 'src/utils';
-import { TRESHOLD_BLOCKS } from './constants';
+import { THRESHOLD_BLOCKS } from './constants';
 
 interface CollateralManagementConciseTabProps {
     collateralCoverage: number;
@@ -24,7 +24,7 @@ export const CollateralManagementConciseTab = ({
     const info = getLiquidationInformation(collateralCoverage);
     const { data: collateralBook = emptyCollateralBook, isLoading } =
         useCollateralBook(account);
-    const treshold =
+    const threshold =
         collateralThreshold && collateralThreshold > collateralCoverage
             ? collateralThreshold - collateralCoverage
             : 0;
@@ -82,7 +82,7 @@ export const CollateralManagementConciseTab = ({
                     <span className={info.color}>{info.risk}</span>
                 </div>
                 <ul className='grid grid-cols-5 gap-[7.25px]'>
-                    {TRESHOLD_BLOCKS.map((block, i) => {
+                    {THRESHOLD_BLOCKS.map((block, i) => {
                         const min = i * 20;
                         const max = (i + 1) * 20;
 
@@ -127,7 +127,7 @@ export const CollateralManagementConciseTab = ({
                         <>
                             Threshold:{' '}
                             <span className='font-semibold'>
-                                {percentFormat(treshold)}
+                                {percentFormat(threshold)}
                             </span>
                         </>
                     ) : (
