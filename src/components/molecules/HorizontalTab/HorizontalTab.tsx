@@ -20,7 +20,7 @@ const TitleChip = ({
         <div
             data-testid={testId ?? title}
             className={clsx(
-                'flex w-fit min-w-[92px] items-center justify-center gap-2 whitespace-nowrap rounded-3xl px-5 py-2 text-xs leading-4 laptop:py-3',
+                'flex w-fit items-center justify-center gap-2 whitespace-nowrap rounded-3xl px-5 py-2 text-xs leading-4 tablet:min-w-[92px] laptop:py-3',
                 {
                     'bg-primary-500 font-semibold text-neutral-8': selected,
                     'bg-neutral-700 text-neutral-300': !selected,
@@ -74,8 +74,8 @@ export const HorizontalTab = ({
             as='div'
             className='h-full'
         >
-            <div className='flex flex-col rounded-xl border border-neutral-600 bg-neutral-900 shadow-tab laptop:bg-gunMetal/40'>
-                <HeadlessTab.List className='flex h-auto justify-center border-b border-neutral-600 p-3 laptop:h-16 laptop:justify-start'>
+            <div className='flex flex-col rounded-xl border border-neutral-600 bg-neutral-900 shadow-tab laptop:rounded-b-2xl laptop:rounded-t-none laptop:bg-gunMetal/40'>
+                <HeadlessTab.List className='flex h-auto justify-center border-b border-neutral-600 p-3 tablet:justify-start laptop:h-16'>
                     <div className='flex gap-3'>
                         {tabTitles.map((title, index) => {
                             return (
@@ -96,7 +96,7 @@ export const HorizontalTab = ({
                         })}
                     </div>
                 </HeadlessTab.List>
-                <HeadlessTab.Panels className='h-[385px] overflow-auto rounded-b-xl pb-2 laptop:h-full laptop:min-h-[25vh] laptop:bg-cardBackground'>
+                <HeadlessTab.Panels className='h-[385px] overflow-auto rounded-b-xl pb-2 laptop:h-full laptop:min-h-[25vh] laptop:rounded-b-2xl laptop:bg-cardBackground'>
                     {arrayChildren[selectedIndex]}
                 </HeadlessTab.Panels>
             </div>

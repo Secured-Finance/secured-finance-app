@@ -221,7 +221,7 @@ export const MarketLoanWidget = ({
 
     return (
         <div className='h-fit min-h-[300px] rounded-b-2xl border border-white-10 bg-black-20 shadow-tab'>
-            <Tab tabDataArray={tabDataArray}>
+            <Tab tabDataArray={tabDataArray} tabClassName='h-14 laptop:h-16'>
                 {!isGlobalItayose && (
                     <CoreTable
                         columns={columns}

@@ -1,4 +1,5 @@
 import { Tab as HeadlessTab } from '@headlessui/react';
+import clsx from 'clsx';
 import { Children, useState } from 'react';
 import { NavTab } from 'src/components/atoms';
 
@@ -18,9 +19,14 @@ export type TabData = {
 
 interface TabProps {
     tabDataArray: TabData[];
+    tabClassName?: string;
 }
 
-export const Tab: React.FC<TabProps> = ({ tabDataArray, children }) => {
+export const Tab: React.FC<TabProps> = ({
+    tabDataArray,
+    children,
+    tabClassName,
+}) => {
     const arrayChildren = Children.toArray(children);
     const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -33,8 +39,17 @@ export const Tab: React.FC<TabProps> = ({ tabDataArray, children }) => {
             as='div'
             className='border-white-10 bg-gunMetal/40 shadow-tab laptop:rounded-b-2xl laptop:border'
         >
-            <div className='grid w-full grid-cols-1 border-b border-neutral-600 tablet:grid-cols-2'>
-                <HeadlessTab.List className='col-span-1 flex h-11 w-full laptop:h-16'>
+            <div
+                className={clsx(
+                    'grid w-full grid-cols-1 border-b border-neutral-600 tablet:grid-cols-2'
+                )}
+            >
+                <HeadlessTab.List
+                    className={clsx(
+                        'col-span-1 flex w-full laptop:h-16',
+                        tabClassName
+                    )}
+                >
                     {tabDataArray.map((tabData, index) => {
                         return (
                             <HeadlessTab
@@ -53,7 +68,11 @@ export const Tab: React.FC<TabProps> = ({ tabDataArray, children }) => {
                         );
                     })}
                 </HeadlessTab.List>
-                {util && <div className='col-span-1 h-full w-full'>{util}</div>}
+                {util && (
+                    <div className='col-span-1 flex h-full w-full items-center justify-end'>
+                        {util}
+                    </div>
+                )}
             </div>
             <HeadlessTab.Panels className='min-h-[25vh] overflow-hidden bg-cardBackground laptop:rounded-b-2xl'>
                 {arrayChildren[selectedIndex]}

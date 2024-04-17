@@ -96,8 +96,10 @@ describe('AdvancedLendingOrderCard Component', () => {
             expect(
                 screen.getByTestId('collateral-progress-bar-track')
             ).toHaveStyle('width: calc(100% * 0.37)');
-            expect(screen.getByText('Available:')).toBeInTheDocument();
             expect(screen.getByText('$5,203.15')).toBeInTheDocument();
+            expect(
+                screen.getByText('of $12,100.34 available')
+            ).toBeInTheDocument();
         });
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
@@ -202,8 +204,10 @@ describe('AdvancedLendingOrderCard Component', () => {
         });
 
         await waitFor(() => {
-            expect(screen.getByText('Available:')).toBeInTheDocument();
             expect(screen.getByText('$5,203.15')).toBeInTheDocument();
+            expect(
+                screen.getByText('of $12,100.34 available')
+            ).toBeInTheDocument();
         });
 
         const slider = screen.getByRole('slider');

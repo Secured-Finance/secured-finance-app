@@ -238,7 +238,7 @@ export const ActiveTradeTable = ({
                         const forwardValueDisplayValue = ordinaryFormat(
                             fv,
                             minDecimals,
-                            maxDecimals
+                            maxDecimals ?? 2
                         );
 
                         const pv = isPastDate(Number(maturity))
@@ -252,6 +252,12 @@ export const ActiveTradeTable = ({
                                 ccy as CurrencySymbol
                             ].fromBaseUnit(pv as bigint);
                         }
+
+                        const pvDisplayValue = ordinaryFormat(
+                            Number(pvDisplay),
+                            minDecimals,
+                            maxDecimals ?? 2
+                        );
 
                         const amountColumnValue = isPastDate(Number(maturity))
                             ? BigInt(10000)
@@ -373,7 +379,7 @@ export const ActiveTradeTable = ({
                                                         PV
                                                     </span>
                                                     <span>
-                                                        {pvDisplay} {ccy}
+                                                        {pvDisplayValue} {ccy}
                                                     </span>
                                                 </li>
                                             )}
@@ -392,7 +398,6 @@ export const ActiveTradeTable = ({
                                     </div>
                                     <div className='flex flex-col gap-2.5'>
                                         {buttonItems.map((item, i) => (
-                                            // TODO: import Button from design-system
                                             <button
                                                 key={`active-trade-btn-${i}`}
                                                 disabled={item.disabled}

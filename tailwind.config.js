@@ -217,6 +217,7 @@ module.exports = {
                 usdc: '#2775CA',
             },
             secondary: {
+                300: '#96EAF1',
                 500: '#15D6E8',
                 700: '#09A8B7',
             },

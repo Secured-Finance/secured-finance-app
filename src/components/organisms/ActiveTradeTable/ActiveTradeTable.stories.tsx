@@ -25,7 +25,14 @@ export default {
             viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
         },
     },
-    decorators: [withWalletProvider],
+    decorators: [
+        Story => (
+            <div className='max-h-[385px] overflow-auto'>
+                <Story />
+            </div>
+        ),
+        withWalletProvider,
+    ],
 } as Meta<typeof ActiveTradeTable>;
 
 const Template: StoryFn<typeof ActiveTradeTable> = args => {

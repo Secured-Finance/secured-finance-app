@@ -79,9 +79,17 @@ export const OrderTable = ({
                     const amount = currencyMap[
                         ccy as CurrencySymbol
                     ].fromBaseUnit(order.amount as bigint);
-                    const formattedAmount = ordinaryFormat(amount, 0, 2);
+                    const minDecimals =
+                        currencyMap[ccy as CurrencySymbol].roundingDecimal;
+                    const maxDecimals =
+                        currencyMap[ccy as CurrencySymbol].roundingDecimal;
+                    const formattedAmount = ordinaryFormat(
+                        amount,
+                        minDecimals,
+                        maxDecimals
+                    );
 
-                    const text = side.toString() === '1' ? 'Borrow' : 'Lend';
+                    const text = side === 1 ? 'Borrow' : 'Lend';
 
                     return (
                         <div className='px-5' key={`order-info-${i}`}>
@@ -119,7 +127,7 @@ export const OrderTable = ({
                                         </div>
                                     </div>
                                     <button
-                                        className='h-[22px] overflow-hidden rounded-md border border-neutral-600 bg-neutral-50 px-2.5 py-1 text-2xs font-semibold leading-none text-neutral-600'
+                                        className='flex h-[22px] items-center overflow-hidden rounded-md border border-neutral-600 bg-neutral-50 px-2.5 py-1 text-2xs font-semibold leading-none text-neutral-600'
                                         onClick={() => {
                                             const amount = BigInt(order.amount);
                                             setRemoveOrderDialogData({

@@ -1,4 +1,4 @@
-import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
+import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import { withWalletProvider } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
@@ -88,6 +88,9 @@ OrderHistoryConnectedToWallet.args = {
 export const MyTransactionsConnectedToWallet = Template.bind({});
 MyTransactionsConnectedToWallet.parameters = {
     connected: true,
+    chromatic: {
+        viewports: [VIEWPORTS.DESKTOP],
+    },
 };
 MyTransactionsConnectedToWallet.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);

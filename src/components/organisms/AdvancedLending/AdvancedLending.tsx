@@ -358,7 +358,7 @@ export const AdvancedLending = ({
                     />
                 </div>
                 <div className='mb-4 block tablet:col-span-2 laptop:mb-0 laptop:hidden'>
-                    <Tab tabDataArray={tabData}>
+                    <Tab tabDataArray={tabData} tabClassName='h-11'>
                         <div className='h-[410px] w-full px-2 py-4'>
                             <LineChartTab
                                 rates={rates}
@@ -401,7 +401,10 @@ export const AdvancedLending = ({
                 <div className='col-span-1 tablet:col-span-2'>
                     <div className='flex h-full flex-grow flex-col gap-4 px-4 laptop:px-0'>
                         <div className='hidden laptop:block'>
-                            <Tab tabDataArray={tabData}>
+                            <Tab
+                                tabDataArray={tabData}
+                                tabClassName='laptop:h-[60px]'
+                            >
                                 <div className='h-[410px] w-full px-2 py-4'>
                                     <LineChartTab
                                         rates={rates}
