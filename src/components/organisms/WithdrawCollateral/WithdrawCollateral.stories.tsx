@@ -1,7 +1,6 @@
 import type { Meta, StoryFn } from '@storybook/react';
-// import { userEvent } from '@storybook/testing-library';
+import { screen, userEvent } from '@storybook/testing-library';
 import { withWalletProvider } from 'src/../.storybook/decorators';
-// import { screen } from 'src/test-utils.js';
 import { CurrencySymbol } from 'src/utils';
 import { WithdrawCollateral } from './WithdrawCollateral';
 
@@ -44,10 +43,10 @@ const Template: StoryFn<typeof WithdrawCollateral> = args => {
 
 export const Default = Template.bind({});
 
-// export const LongInput = Template.bind({});
-// LongInput.play = async () => {
-//     const input = screen.getByRole('textbox');
-//     await userEvent.type(input, '123456789.123', {
-//         delay: 100,
-//     });
-// };
+export const LongInput = Template.bind({});
+LongInput.play = async () => {
+    const input = screen.getByRole('textbox');
+    await userEvent.type(input, '123456789.123', {
+        delay: 100,
+    });
+};
