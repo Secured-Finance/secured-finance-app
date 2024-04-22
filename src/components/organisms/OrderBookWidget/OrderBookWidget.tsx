@@ -217,7 +217,7 @@ export const OrderBookWidget = ({
     isCurrencyDelisted,
     isLoadingMap,
 }: {
-    orderbook: Pick<ReturnType<typeof useOrderbook>[0], 'data' | 'isLoading'>;
+    orderbook: Pick<ReturnType<typeof useOrderbook>[0], 'data' | 'isPending'>;
     currency: CurrencySymbol;
     marketPrice?: LoanValue;
     onFilterChange?: (filter: VisibilityState) => void;
@@ -425,7 +425,7 @@ export const OrderBookWidget = ({
                 </div>
             </div>
             <div className='h-[800px] tablet:h-full'>
-                {orderbook.isLoading ? (
+                {orderbook.isPending ? (
                     <div className='flex h-full w-full items-center justify-center'>
                         <Spinner />
                     </div>

@@ -37,7 +37,8 @@ const Itayose = () => {
         }
     }
 
-    return router.push('/');
+    router.push('/');
+    return null;
 };
 
 export default Itayose;

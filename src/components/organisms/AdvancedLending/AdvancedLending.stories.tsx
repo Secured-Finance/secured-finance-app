@@ -65,7 +65,7 @@ OpenOrdersConnectedToWallet.play = async () => {
     const openOrdersTab = screen.getByTestId('Open Orders');
     await userEvent.click(openOrdersTab);
 
-    const dec22Btn = await screen.getByRole('button', { name: 'DEC2022' });
+    const dec22Btn = await screen.findByRole('button', { name: 'DEC2022' });
     await userEvent.click(dec22Btn);
 
     const jun23Button = await screen.findByText('JUN2023');
