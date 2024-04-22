@@ -49,13 +49,13 @@ ConnectedToWallet.parameters = {
 
 export const AdvancedView = Template.bind({});
 AdvancedView.play = async () => {
-    const advancedBtn = await screen.getByText('Advanced');
+    const advancedBtn = await screen.findByText('Advanced');
     await userEvent.click(advancedBtn);
 
     const dec22Btn = await screen.findByRole('button', { name: 'DEC2022' });
     await userEvent.click(dec22Btn);
 
-    const jun23Btn = await screen.getByRole('menuitem', { name: 'JUN2023' });
+    const jun23Btn = await screen.findByRole('menuitem', { name: 'JUN2023' });
     await userEvent.click(jun23Btn);
 };
 AdvancedView.parameters = {
