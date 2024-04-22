@@ -114,7 +114,7 @@ export default {
                 borrowOrderbook: borrowEntries,
                 lendOrderbook: lendEntries,
             },
-            isLoading: false,
+            isPending: false,
         },
         maxLendUnitPrice: 9730,
         minBorrowUnitPrice: 9808,
@@ -139,7 +139,7 @@ Bitcoin.args = {
             borrowOrderbook: btcEntriesBorrow,
             lendOrderbook: btcEntriesLend,
         },
-        isLoading: false,
+        isPending: false,
     },
     currency: CurrencySymbol.WBTC,
 };
@@ -159,7 +159,7 @@ Eth.args = {
             ],
             lendOrderbook: [...ethEntries, ZERO_ENTRY, ZERO_ENTRY, ZERO_ENTRY],
         },
-        isLoading: false,
+        isPending: false,
     },
     currency: CurrencySymbol.ETH,
 };
@@ -174,7 +174,7 @@ Loading.args = {
             borrowOrderbook: [],
             lendOrderbook: [],
         },
-        isLoading: true,
+        isPending: true,
     },
 };
 Loading.parameters = {
