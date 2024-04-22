@@ -13,13 +13,13 @@ describe('useOrderFee hook', () => {
         const { result } = renderHook(() => useOrderFee(CurrencySymbol.WFIL));
         const value = result.current;
         expect(value.data).toEqual(undefined);
-        expect(value.isLoading).toEqual(true);
+        expect(value.isPending).toEqual(true);
 
         await waitFor(() => {
             expect(mock.getOrderFeeRate).toHaveBeenCalledTimes(1);
             const newValue = result.current;
             expect(newValue.data).toEqual(1);
-            expect(newValue.isLoading).toEqual(false);
+            expect(newValue.isPending).toEqual(false);
         });
     });
 

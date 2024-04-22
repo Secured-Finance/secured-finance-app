@@ -3,16 +3,16 @@ import { GlobalItayose as GlobalItayoseComponent } from 'src/components/pages';
 import { useIsGlobalItayose } from 'src/hooks';
 
 const GlobalItayose = () => {
-    const { data: isGlobalItayose, isLoading: isLoadingGlobalItayose } =
+    const { data: isGlobalItayose, isPending: isPendingGlobalItayose } =
         useIsGlobalItayose();
 
     const router = useRouter();
 
-    if (isLoadingGlobalItayose) {
+    if (isPendingGlobalItayose) {
         return null;
     }
 
-    if (!isGlobalItayose && typeof window !== 'undefined') {
+    if (!isGlobalItayose) {
         router.push('/');
         return null;
     }

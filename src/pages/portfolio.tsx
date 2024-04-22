@@ -3,16 +3,16 @@ import { PortfolioManagement } from 'src/components/pages';
 import { useIsMarketTerminated } from 'src/hooks';
 
 const Portfolio = () => {
-    const { data: isTerminated, isPending: isLoadingMarketTerminated } =
+    const { data: isTerminated, isPending: isPendingMarketTerminated } =
         useIsMarketTerminated();
 
     const router = useRouter();
 
-    if (isLoadingMarketTerminated) {
+    if (isPendingMarketTerminated) {
         return null;
     }
 
-    if (isTerminated && typeof window !== 'undefined') {
+    if (isTerminated) {
         router.push('/emergency');
         return null;
     }

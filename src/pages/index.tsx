@@ -3,30 +3,27 @@ import { Landing } from 'src/components/pages';
 import { useIsGlobalItayose, useIsMarketTerminated } from 'src/hooks';
 
 function EntryPoint() {
-    const { data: isTerminated, isPending: isLoadingMarketTerminated } =
+    const { data: isTerminated, isPending: isPendingMarketTerminated } =
         useIsMarketTerminated();
 
-    const { data: isGlobalItayose, isLoading: isLoadingGlobalItayose } =
+    const { data: isGlobalItayose, isPending: isPendingGlobalItayose } =
         useIsGlobalItayose();
 
     const router = useRouter();
 
-    if (isLoadingGlobalItayose || isLoadingMarketTerminated) {
+    if (isPendingGlobalItayose || isPendingMarketTerminated) {
         return null;
     }
 
-    if (typeof window !== 'undefined') {
-        if (isTerminated) {
-            router.push('/emergency');
-            return null;
-        }
-
-        if (isGlobalItayose) {
-            router.push('/global-itayose');
-            return null;
-        }
+    if (isTerminated) {
+        router.push('/emergency');
+        return null;
     }
 
+    if (isGlobalItayose) {
+        router.push('/global-itayose');
+        return null;
+    }
     return <Landing />;
 }
 

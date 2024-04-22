@@ -4,10 +4,10 @@ import { useIsMarketTerminated } from 'src/hooks';
 
 const Emergency = () => {
     const router = useRouter();
-    const { data: isTerminated, isPending: isLoadingMarketTerminated } =
+    const { data: isTerminated, isPending: isPendingMarketTerminated } =
         useIsMarketTerminated();
 
-    if (isLoadingMarketTerminated) {
+    if (isPendingMarketTerminated) {
         return null;
     }
 
@@ -15,11 +15,7 @@ const Emergency = () => {
         return <EmergencyGlobalSettlement />;
     }
 
-    if (typeof window !== 'undefined') {
-        router.push('/');
-    }
-
-    return null;
+    return router.push('/');
 };
 
 export default Emergency;

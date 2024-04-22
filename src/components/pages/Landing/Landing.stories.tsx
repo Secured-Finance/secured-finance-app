@@ -1,5 +1,5 @@
 import type { Meta, StoryFn } from '@storybook/react';
-import { screen, waitFor } from '@storybook/testing-library';
+import { screen, userEvent } from '@storybook/testing-library';
 import { RESPONSIVE_PARAMETERS } from 'src/../.storybook/constants';
 import {
     withAppLayout,
@@ -49,14 +49,14 @@ ConnectedToWallet.parameters = {
 
 export const AdvancedView = Template.bind({});
 AdvancedView.play = async () => {
-    screen.getByText('Advanced').click();
-    await waitFor(async () => {
-        screen.getByRole('button', { name: 'DEC2022' }).click();
-    });
+    const advancedBtn = await screen.getByText('Advanced');
+    await userEvent.click(advancedBtn);
 
-    await waitFor(() => {
-        screen.getByRole('menuitem', { name: 'JUN2023' }).click();
-    });
+    const dec22Btn = await screen.getByRole('button', { name: 'DEC2022' });
+    await userEvent.click(dec22Btn);
+
+    const jun23Btn = await screen.getByRole('menuitem', { name: 'JUN2023' });
+    await userEvent.click(jun23Btn);
 };
 AdvancedView.parameters = {
     connected: true,

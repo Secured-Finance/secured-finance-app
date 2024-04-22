@@ -169,7 +169,7 @@ export const Itayose = () => {
 
     const {
         data: borrowAmount,
-        isLoading: isLoadingBorrow,
+        isPending: isPendingBorrow,
         fetchStatus: borrowFetchStatus,
     } = useBorrowOrderBook(
         currency,
@@ -179,7 +179,7 @@ export const Itayose = () => {
 
     const {
         data: lendAmount,
-        isLoading: isLoadingLend,
+        isPending: isPendingLend,
         fetchStatus: lendFetchStatus,
     } = useLendOrderBook(
         currency,
@@ -222,8 +222,8 @@ export const Itayose = () => {
     );
 
     const isLoadingMap = {
-        [OrderSide.BORROW]: isLoadingBorrow && borrowFetchStatus !== 'idle',
-        [OrderSide.LEND]: isLoadingLend && lendFetchStatus !== 'idle',
+        [OrderSide.BORROW]: isPendingBorrow && borrowFetchStatus !== 'idle',
+        [OrderSide.LEND]: isPendingLend && lendFetchStatus !== 'idle',
     };
 
     const preOrderDays = useMemo(() => {
