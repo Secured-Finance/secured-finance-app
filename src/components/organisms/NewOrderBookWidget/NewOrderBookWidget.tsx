@@ -13,7 +13,12 @@ import { useDispatch } from 'react-redux';
 import ShowFirstIcon from 'src/assets/icons/orderbook-first.svg';
 import ShowAllIcon from 'src/assets/icons/orderbook-full.svg';
 import ShowLastIcon from 'src/assets/icons/orderbook-last.svg';
-import { NavTab, Spinner } from 'src/components/atoms';
+import {
+    DropdownSelector,
+    NavTab,
+    Option,
+    Spinner,
+} from 'src/components/atoms';
 import { TableHeader } from 'src/components/molecules';
 import {
     AggregationFactorType,
@@ -36,6 +41,14 @@ import {
 import { LoanValue } from 'src/utils/entities';
 import { ColorBar } from './ColorBar';
 import { CoreTable } from './CoreTable';
+
+const AGGREGATION_OPTIONS: (Option<string> & { multiplier: number })[] = [
+    { label: '0.01', value: '1', multiplier: 1 },
+    { label: '0.1', value: '10', multiplier: 10 },
+    { label: '1', value: '100', multiplier: 100 },
+    { label: '5', value: '500', multiplier: 500 },
+    { label: '10', value: '1000', multiplier: 1000 },
+];
 
 const ORDERBOOK_DOUBLE_MAX_LINES = 15;
 const ORDERBOOK_SINGLE_MAX_LINES = 30;
@@ -188,14 +201,11 @@ const reducer = (
     }
 };
 
-const aggregationFactor = 1;
-
 export const NewOrderBookWidget = ({
     orderbook,
     currency,
     marketPrice,
     onFilterChange,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     onAggregationChange,
     isLoadingMap,
     rowsToRenderMobile = 10,
@@ -219,6 +229,12 @@ export const NewOrderBookWidget = ({
         : ORDERBOOK_DOUBLE_MAX_LINES;
 
     const [state, dispatch] = useReducer(reducer, initialState);
+    const [aggregationFactor, setAggregationFactor] =
+        useState<AggregationFactorType>(1);
+
+    useEffect(() => {
+        onAggregationChange?.(aggregationFactor);
+    }, [onAggregationChange, aggregationFactor]);
 
     useEffect(() => {
         onFilterChange?.(state);
@@ -313,7 +329,7 @@ export const NewOrderBookWidget = ({
                 ),
             }),
         ],
-        [currency, maxAmountInOrderbook]
+        [aggregationFactor, currency, maxAmountInOrderbook]
     );
 
     const sellColumns = useMemo(
@@ -374,7 +390,7 @@ export const NewOrderBookWidget = ({
                 ),
             }),
         ],
-        [currency, maxAmountInOrderbook]
+        [aggregationFactor, currency, maxAmountInOrderbook]
     );
 
     const handleClick = (rowId: string, side: OrderSide): void => {
@@ -490,8 +506,16 @@ export const NewOrderBookWidget = ({
             </div>
             <div className='flex flex-col laptop:flex-col-reverse'>
                 <div className='flex flex-row items-center justify-between gap-1 border-neutral-600 laptop:flex-row-reverse laptop:border-b-0.5 laptop:px-3 laptop:py-2'>
-                    <div className='flex flex-1 rounded border-0.5 border-neutral-500 bg-neutral-700 px-2 py-1 font-secondary text-2xs leading-4 text-neutral-400 laptop:w-fit laptop:flex-none laptop:px-3 laptop:py-[6px] laptop:text-xs laptop:leading-5'>
-                        {aggregationFactor / 100}
+                    <div className='w-full laptop:w-fit'>
+                        <DropdownSelector
+                            optionList={AGGREGATION_OPTIONS}
+                            onChange={v =>
+                                setAggregationFactor(
+                                    Number(v) as AggregationFactorType
+                                )
+                            }
+                            variant='orderBook'
+                        />
                     </div>
                     {isTablet ? (
                         <OrderBookIconMobile
@@ -530,7 +554,7 @@ export const NewOrderBookWidget = ({
                     )}
                 </div>
                 <div className='hidden border-neutral-600 laptop:block laptop:border-b-0.5'>
-                    <div className='h-[60px] w-1/2'>
+                    <div className='h-[60px]'>
                         <NavTab text='Order Book' active={true} />
                     </div>
                 </div>
