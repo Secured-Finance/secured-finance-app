@@ -17,6 +17,7 @@ export type TabData = {
 
 interface TabProps {
     tabDataArray: TabData[];
+    children: React.ReactNode;
 }
 
 export const Tab: React.FC<TabProps> = ({ tabDataArray, children }) => {

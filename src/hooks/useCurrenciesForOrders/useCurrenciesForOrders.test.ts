@@ -12,7 +12,7 @@ describe('useCurrenciesForOrders', () => {
         const { result } = renderHook(() => useCurrenciesForOrders('0x1'));
         const value = result.current;
         expect(value.data).toEqual(undefined);
-        expect(value.isLoading).toEqual(true);
+        expect(value.isPending).toEqual(true);
 
         await waitFor(() => {
             expect(mock.getUsedCurrenciesForOrders).toHaveBeenCalledTimes(1);
@@ -23,7 +23,7 @@ describe('useCurrenciesForOrders', () => {
             expect(newValue.data[2]).toEqual(CurrencySymbol.WBTC);
             expect(newValue.data[3]).toEqual(CurrencySymbol.USDC);
 
-            expect(newValue.isLoading).toEqual(false);
+            expect(newValue.isPending).toEqual(false);
         });
     });
 

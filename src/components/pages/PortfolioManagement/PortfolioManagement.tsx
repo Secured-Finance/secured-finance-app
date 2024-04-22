@@ -176,11 +176,11 @@ export const PortfolioManagement = () => {
 
     const { data: priceMap } = useLastPrices();
 
-    const { data: collateralBook = emptyCollateralBook, isLoading } =
+    const { data: collateralBook = emptyCollateralBook, isPending } =
         useCollateralBook(address);
 
     const portfolioAnalytics = useMemo(() => {
-        if (isLoading) {
+        if (isPending) {
             return {
                 borrowedPV: 0,
                 lentPV: 0,
@@ -216,7 +216,7 @@ export const PortfolioManagement = () => {
         collateralBook.totalPresentValue,
         collateralBook.usdCollateral,
         collateralBook.usdNonCollateral,
-        isLoading,
+        isPending,
         orderList.totalPVOfOpenOrdersInUSD,
         positions,
         priceMap,

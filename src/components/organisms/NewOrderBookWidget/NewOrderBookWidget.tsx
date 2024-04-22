@@ -210,7 +210,7 @@ export const NewOrderBookWidget = ({
     isLoadingMap,
     rowsToRenderMobile = 10,
 }: {
-    orderbook: Pick<ReturnType<typeof useOrderbook>[0], 'data' | 'isLoading'>;
+    orderbook: Pick<ReturnType<typeof useOrderbook>[0], 'data' | 'isPending'>;
     currency: CurrencySymbol;
     maxLendUnitPrice: number;
     minBorrowUnitPrice: number;
@@ -435,7 +435,7 @@ export const NewOrderBookWidget = ({
     return (
         <div className='flex h-full w-full flex-col justify-start gap-y-1 overflow-hidden border-white-10 laptop:flex-col-reverse laptop:gap-y-0 laptop:rounded-b-xl laptop:border laptop:bg-cardBackground/60 laptop:shadow-tab'>
             <div className='h-full'>
-                {orderbook.isLoading ? (
+                {orderbook.isPending ? (
                     <div className='table h-full w-full'>
                         <div className='table-cell text-center align-middle'>
                             <div className='inline-block'>

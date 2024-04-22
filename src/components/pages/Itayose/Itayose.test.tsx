@@ -50,14 +50,16 @@ describe('Itayose Component', () => {
             target: { value: '1' },
         });
         expect(store.getState().landingOrderForm.amount).toEqual('1');
+
+        fireEvent.click(screen.getByRole('button', { name: 'WBTC' }));
+        fireEvent.click(screen.getByRole('menuitem', { name: 'WFIL' }));
+
         await waitFor(() => {
-            fireEvent.click(screen.getByRole('button', { name: 'WBTC' }));
-            fireEvent.click(screen.getByRole('menuitem', { name: 'WFIL' }));
+            expect(store.getState().landingOrderForm.amount).toEqual('1');
+            expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
+                '1'
+            );
         });
-        expect(store.getState().landingOrderForm.amount).toEqual('1');
-        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
-            '1'
-        );
     }, 8000);
 
     it('should not show delisted currencies in asset dropwdown', async () => {
