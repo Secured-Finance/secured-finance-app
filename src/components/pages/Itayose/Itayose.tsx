@@ -1,4 +1,5 @@
 import { OrderSide } from '@secured-finance/sf-client';
+import { VisibilityState } from '@tanstack/table-core';
 import * as dayjs from 'dayjs';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -168,7 +169,7 @@ export const Itayose = () => {
 
     const {
         data: borrowAmount,
-        isLoading: isLoadingBorrow,
+        isPending: isPendingBorrow,
         fetchStatus: borrowFetchStatus,
     } = useBorrowOrderBook(
         currency,
@@ -178,7 +179,7 @@ export const Itayose = () => {
 
     const {
         data: lendAmount,
-        isLoading: isLoadingLend,
+        isPending: isPendingLend,
         fetchStatus: lendFetchStatus,
     } = useLendOrderBook(
         currency,
@@ -221,8 +222,8 @@ export const Itayose = () => {
     );
 
     const isLoadingMap = {
-        [OrderSide.BORROW]: isLoadingBorrow && borrowFetchStatus !== 'idle',
-        [OrderSide.LEND]: isLoadingLend && lendFetchStatus !== 'idle',
+        [OrderSide.BORROW]: isPendingBorrow && borrowFetchStatus !== 'idle',
+        [OrderSide.LEND]: isPendingLend && lendFetchStatus !== 'idle',
     };
 
     const preOrderDays = useMemo(() => {
@@ -233,6 +234,13 @@ export const Itayose = () => {
             ? dayjs.unix(openingDate).diff(preOpeningDate * 1000, 'days')
             : undefined;
     }, [lendingContracts, selectedTerm.value]);
+
+    const handleFilterChange = useCallback(
+        (state: VisibilityState) => {
+            setIsShowingAll(state.showBorrow && state.showLend);
+        },
+        [setIsShowingAll]
+    );
 
     return (
         <Page title='Pre-Open Order Book'>
@@ -303,9 +311,7 @@ export const Itayose = () => {
                     orderbook={orderBook}
                     variant='itayose'
                     marketPrice={estimatedOpeningUnitPrice}
-                    onFilterChange={state =>
-                        setIsShowingAll(state.showBorrow && state.showLend)
-                    }
+                    onFilterChange={handleFilterChange}
                     isLoadingMap={isLoadingMap}
                     onAggregationChange={setMultiplier}
                     isCurrencyDelisted={delistedCurrencySet.has(currency)}

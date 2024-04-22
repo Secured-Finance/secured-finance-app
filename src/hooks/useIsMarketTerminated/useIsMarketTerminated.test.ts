@@ -11,11 +11,11 @@ describe('useIsMarketTerminated hook', () => {
     it('should return the status of the market', async () => {
         mock.isTerminated.mockResolvedValueOnce(true);
         const { result } = renderHook(() => useIsMarketTerminated());
-        expect(result.current.isLoading).toEqual(true);
+        expect(result.current.isPending).toEqual(true);
 
         await waitFor(() => {
             expect(mock.isTerminated).toHaveBeenCalledTimes(1);
-            expect(result.current.isLoading).toEqual(false);
+            expect(result.current.isPending).toEqual(false);
             expect(result.current.data).toEqual(true);
         });
     });
@@ -24,11 +24,11 @@ describe('useIsMarketTerminated hook', () => {
         mock.isTerminated.mockResolvedValueOnce(false);
         const { result } = renderHook(() => useIsMarketTerminated());
 
-        expect(result.current.isLoading).toEqual(true);
+        expect(result.current.isPending).toEqual(true);
 
         await waitFor(() => {
             expect(mock.isTerminated).toHaveBeenCalledTimes(1);
-            expect(result.current.isLoading).toEqual(false);
+            expect(result.current.isPending).toEqual(false);
             expect(result.current.data).toEqual(false);
         });
     });

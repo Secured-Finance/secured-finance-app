@@ -25,10 +25,6 @@ const customJestConfig = {
         '!src/stories/**/*.*',
         '!src/pages/**/*.tsx',
     ],
-    moduleNameMapper: {
-        // .svg should have high priority
-        '\\.svg$': '<rootDir>/src/stories/mocks/svgrMock.js',
-    },
     testPathIgnorePatterns: ['<rootDir>/cypress/'],
     coverageProvider: 'v8',
     coverageReporters: ['json', 'lcov', 'text', 'text-summary'],
@@ -43,6 +39,12 @@ module.exports = async () => {
     config.transformIgnorePatterns = [
         'node_modules/(?!(wagmi|@wagmi|@web3modal|@0xsquid|isows)/)',
     ];
+    config.moduleNameMapper = {
+        // We cannot depend on the exact key used by Next.js
+        // so we inject an SVG key higher up on the mapping tree
+        '\\.svg': '<rootDir>/src/stories/mocks/svgrMock.js',
+        ...config.moduleNameMapper,
+    };
     process.env.TZ = 'GMT';
     return config;
 };
