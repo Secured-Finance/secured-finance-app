@@ -104,8 +104,12 @@ describe('usePrepareOrderbookData', () => {
                     value: LoanValue.fromPrice(9855, maturity),
                 },
                 {
+                    value: LoanValue.fromPrice(9860, maturity),
+                    amount: BigInt('4'),
+                },
+                {
                     value: LoanValue.fromPrice(9850, maturity),
-                    amount: BigInt(5),
+                    amount: BigInt('1'),
                 },
             ]);
         });

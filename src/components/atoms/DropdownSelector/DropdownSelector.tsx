@@ -68,6 +68,25 @@ const FillWidthButton = ({
     );
 };
 
+const OrderBookButton = ({
+    selectedOption,
+    open,
+}: {
+    selectedOption: Option<string> | undefined;
+    open: boolean;
+}) => {
+    return (
+        <div className='flex h-6 w-full flex-row items-center justify-between gap-1 rounded border-0.5 border-neutral-500 bg-neutral-800 py-1 pl-2 pr-2 laptop:h-8 laptop:pr-1'>
+            <span className='whitespace-nowrap font-secondary text-[10px] leading-4 text-neutral-7 laptop:text-xs laptop:leading-5'>
+                {selectedOption?.label}
+            </span>
+            <span data-cy={`asset-expand-${selectedOption?.label}`}>
+                <ExpandIndicator expanded={open} variant='opaque' />
+            </span>
+        </div>
+    );
+};
+
 const RoundedExpandButton = ({
     selectedOption,
     open,
@@ -114,7 +133,8 @@ export const DropdownSelector = <T extends string = string>({
         | 'roundedExpandButton'
         | 'noLabel'
         | 'fullWidth'
-        | 'fixedWidth';
+        | 'fixedWidth'
+        | 'orderBook';
 }) => {
     const [selectedOptionValue, setSelectedOptionValue] = useState<T>(
         selected.value
@@ -154,6 +174,7 @@ export const DropdownSelector = <T extends string = string>({
                     <Menu.Button
                         className={clsx({
                             'w-full': variant === 'fullWidth',
+                            'flex w-full': variant === 'orderBook',
                         })}
                     >
                         {() => {
@@ -182,6 +203,13 @@ export const DropdownSelector = <T extends string = string>({
                                             selectedOption={selectedOption}
                                         />
                                     );
+                                case 'orderBook':
+                                    return (
+                                        <OrderBookButton
+                                            open={open}
+                                            selectedOption={selectedOption}
+                                        />
+                                    );
                             }
                         }}
                     </Menu.Button>
@@ -193,6 +221,8 @@ export const DropdownSelector = <T extends string = string>({
                                 'max-h-[196px] w-52 tablet:max-h-60':
                                     variant !== 'fullWidth',
                                 'w-full': variant === 'fullWidth',
+                                'bottom-0 mb-7 w-full origin-top-right laptop:bottom-auto laptop:right-0 laptop:w-fit':
+                                    variant === 'orderBook',
                                 'w-72': variant === 'fixedWidth',
                             }
                         )}
