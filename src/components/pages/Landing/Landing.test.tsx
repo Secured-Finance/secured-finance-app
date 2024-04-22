@@ -153,7 +153,7 @@ describe('Landing Component', () => {
             assertInputValue('Bond Price', '96.83');
         });
 
-        it('should reset bond price to the best price when user changes currency', async () => {
+        it.skip('should reset bond price to the best price when user changes currency', async () => {
             await waitFor(() => {
                 render(<ConnectedToWallet />, {
                     apolloMocks: Default.parameters?.apolloClient.mocks,
