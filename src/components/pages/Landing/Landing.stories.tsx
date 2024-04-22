@@ -52,7 +52,7 @@ AdvancedView.play = async () => {
     const advancedBtn = await screen.getByText('Advanced');
     await userEvent.click(advancedBtn);
 
-    const dec22Btn = await screen.getByRole('button', { name: 'DEC2022' });
+    const dec22Btn = await screen.findByRole('button', { name: 'DEC2022' });
     await userEvent.click(dec22Btn);
 
     const jun23Btn = await screen.getByRole('menuitem', { name: 'JUN2023' });

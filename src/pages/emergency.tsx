@@ -15,7 +15,8 @@ const Emergency = () => {
         return <EmergencyGlobalSettlement />;
     }
 
-    return router.push('/');
+    router.push('/');
+    return null;
 };
 
 export default Emergency;
