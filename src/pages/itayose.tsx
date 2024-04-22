@@ -8,7 +8,7 @@ import {
 } from 'src/hooks';
 
 const Itayose = () => {
-    const { data: isTerminated, isPending: isLoadingMarketTerminated } =
+    const { data: isTerminated, isPending: isPendingMarketTerminated } =
         useIsMarketTerminated();
     const { data: currencies = [] } = useCurrencies();
 
@@ -16,14 +16,14 @@ const Itayose = () => {
 
     const {
         data: lendingMarkets = baseContracts,
-        isPending: isLoadingLendingMarkets,
+        isPending: isPendingLendingMarkets,
     } = useLendingMarkets();
 
-    if (isLoadingLendingMarkets || isLoadingMarketTerminated) {
+    if (isPendingLendingMarkets || isPendingMarketTerminated) {
         return null;
     }
 
-    if (isTerminated && typeof window !== 'undefined') {
+    if (isTerminated) {
         router.push('/emergency');
         return null;
     }
@@ -37,11 +37,7 @@ const Itayose = () => {
         }
     }
 
-    if (typeof window !== 'undefined') {
-        router.push('/');
-    }
-
-    return null;
+    return router.push('/');
 };
 
 export default Itayose;

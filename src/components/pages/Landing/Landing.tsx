@@ -191,7 +191,6 @@ const WithBanner = ({
                                 <span className='pl-4'>
                                     <Link
                                         href='itayose'
-                                        passHref
                                         className='text-planetaryPurple underline'
                                     >
                                         Place Order Now

@@ -9,15 +9,15 @@ const Faucet = () => {
         return null;
     }
 
-    const { data: isTerminated, isPending: isLoadingMarketTerminated } =
+    const { data: isTerminated, isPending: isPendingMarketTerminated } =
         // eslint-disable-next-line react-hooks/rules-of-hooks
         useIsMarketTerminated();
 
-    if (isLoadingMarketTerminated) {
+    if (isPendingMarketTerminated) {
         return null;
     }
 
-    if (isTerminated && typeof window !== 'undefined') {
+    if (isTerminated) {
         router.push('/emergency');
         return null;
     }

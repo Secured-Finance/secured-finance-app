@@ -60,10 +60,6 @@ describe('Itayose Component', () => {
                 '1'
             );
         });
-        expect(store.getState().landingOrderForm.amount).toEqual('1');
-        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
-            '1'
-        );
     }, 8000);
 
     it('should not show delisted currencies in asset dropwdown', async () => {

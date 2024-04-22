@@ -152,9 +152,10 @@ describe('LendingCard Component', () => {
         await waitFor(() => render(<Default />, { preloadedState }));
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '10' } });
-        const placeOrderButton = await screen.findByRole('button', {
-            name: 'Borrow',
-        });
+
+        const placeOrderButton = await screen.findByTestId(
+            'place-order-button'
+        );
         fireEvent.click(placeOrderButton);
         expect(screen.getByText('Confirm Borrow')).toBeInTheDocument();
     });
