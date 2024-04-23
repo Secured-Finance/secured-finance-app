@@ -58,7 +58,7 @@ export const Tooltip = ({
                         >
                             <div
                                 className={clsx(
-                                    'relative flex w-fit gap-2.5 overflow-hidden whitespace-normal rounded-lg px-3 py-2.5 text-left text-[0.6875rem] leading-[1.36] text-neutral-50 shadow-dropdown light:text-neutral-900 laptop:text-xs laptop:leading-[1.66]',
+                                    'light:text-neutral-900 relative flex w-fit gap-2.5 overflow-hidden whitespace-normal rounded-lg px-3 py-2.5 text-left text-[0.6875rem] leading-[1.36] text-neutral-50 shadow-dropdown laptop:text-xs laptop:leading-[1.66]',
                                     modeStyles[mode]
                                 )}
                             >
