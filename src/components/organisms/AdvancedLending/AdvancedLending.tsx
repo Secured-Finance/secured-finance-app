@@ -1,6 +1,7 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
+import { VisibilityState } from '@tanstack/react-table';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -284,6 +285,13 @@ export const AdvancedLending = ({
         [dispatch, selectedTerm.label]
     );
 
+    const handleFilterChange = useCallback(
+        (state: VisibilityState) => {
+            setIsShowingAll(state.showBorrow && state.showLend);
+        },
+        [setIsShowingAll]
+    );
+
     const maximumOpenOrderLimit = orderList.activeOrderList.length >= 20;
 
     const tooltipMap: Record<number, string> = {};
@@ -334,7 +342,6 @@ export const AdvancedLending = ({
                         ]}
                     />
                 </div>
-                {/* Yield curve + Historical chart in mobile */}
                 <div className='mb-4 block tablet:col-span-2 laptop:mb-0 laptop:hidden'>
                     <Tab
                         tabDataArray={[
@@ -372,11 +379,7 @@ export const AdvancedLending = ({
                             marketPrice={currentMarket?.value}
                             maxLendUnitPrice={data?.maxLendUnitPrice}
                             minBorrowUnitPrice={data?.minBorrowUnitPrice}
-                            onFilterChange={state =>
-                                setIsShowingAll(
-                                    state.showBorrow && state.showLend
-                                )
-                            }
+                            onFilterChange={handleFilterChange}
                             onAggregationChange={setMultiplier}
                         />
                     )}

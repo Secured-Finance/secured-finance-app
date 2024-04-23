@@ -75,7 +75,7 @@ export const HorizontalTab = ({
             as='div'
             className='h-full'
         >
-            <div className='flex flex-col border border-white-10 bg-gunMetal/40 shadow-tab tablet:rounded-b-2xl'>
+            <div className='flex h-full flex-col border border-white-10 bg-gunMetal/40 shadow-tab tablet:rounded-b-2xl'>
                 <HeadlessTab.List className='h-16 justify-start border-b border-white-10 p-3'>
                     <div
                         className={clsx('w-full', {
