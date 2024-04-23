@@ -38,16 +38,16 @@ WalletNotConnected.parameters = {
 export const Lend = Template.bind({});
 Lend.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const lendTab = canvas.getByRole('radio', { name: 'Lend' });
-    lendTab.click();
+    const lendTab = await canvas.findByRole('radio', { name: 'Lend' });
+    await userEvent.click(lendTab);
 };
 
 export const FailedAmountValidation = Template.bind({});
 FailedAmountValidation.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const lendTab = canvas.getByRole('radio', { name: 'Lend' });
-    lendTab.click();
-    const input = canvas.getByRole('textbox', { name: 'Amount' });
+    const lendTab = await canvas.findByRole('radio', { name: 'Lend' });
+    await userEvent.click(lendTab);
+    const input = await canvas.findByRole('textbox', { name: 'Amount' });
     await userEvent.type(input, '999999999', {
         delay: 100,
     });
@@ -59,9 +59,9 @@ BondPriceFailedValidation.args = {
 };
 BondPriceFailedValidation.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const limitTab = canvas.getByRole('radio', { name: 'Limit' });
+    const limitTab = await canvas.findByRole('radio', { name: 'Limit' });
     await userEvent.click(limitTab);
-    const input = canvas.getByRole('textbox', { name: 'Bond Price' });
+    const input = await canvas.findByRole('textbox', { name: 'Bond Price' });
     await userEvent.clear(input);
     await userEvent.type(input, '0', {
         delay: 100,

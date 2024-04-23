@@ -21,7 +21,7 @@ on:
 
 jobs:
   print-env:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     name: Print Environment
     steps:
       - name: Print Environment
@@ -46,7 +46,7 @@ jobs:
     secrets: inherit
 
   deploy-on-fleek:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     name: Deploy on Fleek
     if: github.event.inputs.environment != 'ci-build'
     environment: ${{ github.event.inputs.environment }}

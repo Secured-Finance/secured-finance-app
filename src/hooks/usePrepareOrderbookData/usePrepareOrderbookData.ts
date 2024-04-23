@@ -24,9 +24,12 @@ export const usePrepareOrderbookData = <
         data[orderbookType]
             .filter(order => order.amount > 0)
             .forEach(order => {
+                const priceFactor =
+                    Number(order.value.price) / aggregationFactor;
                 const price =
-                    Math.trunc(Number(order.value.price) / aggregationFactor) *
-                    aggregationFactor;
+                    orderbookType === 'borrowOrderbook'
+                        ? Math.ceil(priceFactor) * aggregationFactor
+                        : Math.floor(priceFactor) * aggregationFactor;
                 if (!result[price]) {
                     result[price] = {
                         amount: order.amount,

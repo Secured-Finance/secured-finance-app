@@ -11,7 +11,9 @@ export const ThreeColumnsWithTopBar = ({
             <div className='tablet:col-span-2 laptop:col-span-1'>
                 {children[0]}
             </div>
-            <div className='laptop:col-span-1'>{children[1]}</div>
+            <div className='hidden laptop:col-span-1 laptop:block'>
+                {children[1]}
+            </div>
             <div className='laptop:col-span-2'>{children[2]}</div>
         </div>
     );

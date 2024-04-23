@@ -50,14 +50,16 @@ describe('Itayose Component', () => {
             target: { value: '1' },
         });
         expect(store.getState().landingOrderForm.amount).toEqual('1');
+
+        fireEvent.click(screen.getByRole('button', { name: 'WBTC' }));
+        fireEvent.click(screen.getByRole('menuitem', { name: 'WFIL' }));
+
         await waitFor(() => {
-            fireEvent.click(screen.getByRole('button', { name: 'WBTC' }));
-            fireEvent.click(screen.getByRole('menuitem', { name: 'WFIL' }));
+            expect(store.getState().landingOrderForm.amount).toEqual('1');
+            expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
+                '1'
+            );
         });
-        expect(store.getState().landingOrderForm.amount).toEqual('1');
-        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
-            '1'
-        );
     }, 8000);
 
     it('should not show delisted currencies in asset dropwdown', async () => {
@@ -85,7 +87,7 @@ describe('Itayose Component', () => {
                 expect.anything(),
                 expect.anything(),
                 expect.anything(),
-                13
+                15
             );
             await waitFor(() =>
                 fireEvent.click(
@@ -101,7 +103,7 @@ describe('Itayose Component', () => {
                     expect.anything(),
                     expect.anything(),
                     expect.anything(),
-                    26
+                    30
                 )
             );
         });
@@ -114,7 +116,7 @@ describe('Itayose Component', () => {
                 expect.anything(),
                 expect.anything(),
                 expect.anything(),
-                13
+                15
             );
             await waitFor(() => {
                 fireEvent.click(screen.getByRole('button', { name: '0.01' }));
@@ -127,7 +129,7 @@ describe('Itayose Component', () => {
                     expect.anything(),
                     expect.anything(),
                     expect.anything(),
-                    1300
+                    1500
                 )
             );
         }, 8000);

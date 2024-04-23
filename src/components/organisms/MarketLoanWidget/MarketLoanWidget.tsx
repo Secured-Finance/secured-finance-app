@@ -187,7 +187,7 @@ export const MarketLoanWidget = ({
     };
 
     const openMarketUtil = (
-        <div className=' flex flex-row items-center justify-end gap-4 px-3 py-2 tablet:justify-end'>
+        <div className=' flex flex-row items-center justify-between gap-4 px-3 py-2 tablet:justify-end'>
             <AssetDropdown
                 handleSelectedCurrency={(ccy: CurrencySymbol | undefined) =>
                     setSelectedCurrency(ccy)
