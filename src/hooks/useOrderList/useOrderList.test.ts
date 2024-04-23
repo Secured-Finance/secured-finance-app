@@ -22,7 +22,7 @@ describe('useOrderList', () => {
 
         const value = result.current;
         expect(value.data).toEqual(undefined);
-        expect(value.isLoading).toEqual(true);
+        expect(value.isPending).toEqual(true);
 
         await waitFor(() => {
             expect(mock.getOrderList).toHaveBeenCalledTimes(1);
@@ -44,7 +44,7 @@ describe('useOrderList', () => {
             expect(newValue.data.inactiveOrderList[1].currency).toBe(
                 wfilBytes32
             );
-            expect(newValue.isLoading).toEqual(false);
+            expect(newValue.isPending).toEqual(false);
         });
     });
 });

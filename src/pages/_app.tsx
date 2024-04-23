@@ -119,7 +119,7 @@ function App({ Component, pageProps }: AppProps) {
     );
 }
 
-const Providers: React.FC = ({ children }) => {
+const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const currentNetwork = useSelector((state: RootState) =>
         selectNetworkName(state)
     );

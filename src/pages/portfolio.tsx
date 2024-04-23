@@ -1,17 +1,19 @@
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import { PortfolioManagement } from 'src/components/pages';
 import { useIsMarketTerminated } from 'src/hooks';
 
 const Portfolio = () => {
-    const { data: isTerminated, isLoading: isLoadingMarketTerminated } =
+    const { data: isTerminated, isPending: isPendingMarketTerminated } =
         useIsMarketTerminated();
 
-    if (isLoadingMarketTerminated) {
+    const router = useRouter();
+
+    if (isPendingMarketTerminated) {
         return null;
     }
 
     if (isTerminated) {
-        Router.push('/emergency');
+        router.push('/emergency');
         return null;
     }
 

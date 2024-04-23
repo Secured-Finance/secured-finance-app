@@ -193,7 +193,9 @@ export const Faucet = () => {
                                             setCcy(null);
                                         }
                                     }}
+                                    variant='fixedWidth'
                                 />
+
                                 <div className='typography-caption text-white-60'>
                                     <div className='hidden tablet:flex tablet:w-full tablet:flex-row tablet:items-center  tablet:justify-between'>
                                         <div>{address}</div>

@@ -73,10 +73,17 @@ describe('LendingCard Component', () => {
         await waitFor(() => render(<Default />, { preloadedState }));
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '10' } });
-        await waitFor(() => {
-            fireEvent.click(screen.getByTestId('place-order-button'));
+        const placeOrderButton = await screen.findByRole('button', {
+            name: 'Borrow',
         });
-        expect(await screen.findByRole('dialog')).toBeInTheDocument();
+        fireEvent.click(placeOrderButton);
+
+        await waitFor(
+            () => {
+                expect(screen.queryByRole('dialog')).toBeInTheDocument();
+            },
+            { timeout: 500 }
+        );
         expect(screen.getByText('Confirm Borrow')).toBeInTheDocument();
         const button = screen.getByTestId('dialog-action-button');
         expect(button).toHaveTextContent('OK');
@@ -145,10 +152,12 @@ describe('LendingCard Component', () => {
         await waitFor(() => render(<Default />, { preloadedState }));
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '10' } });
-        await waitFor(() => {
-            fireEvent.click(screen.getByTestId('place-order-button'));
-            expect(screen.getByText('Confirm Borrow')).toBeInTheDocument();
-        });
+
+        const placeOrderButton = await screen.findByTestId(
+            'place-order-button'
+        );
+        fireEvent.click(placeOrderButton);
+        expect(screen.getByText('Confirm Borrow')).toBeInTheDocument();
     });
 
     it('should support orders with decimal amounts', async () => {

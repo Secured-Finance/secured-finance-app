@@ -2,14 +2,14 @@ import { baseContracts, useLendingMarkets } from 'src/hooks/useLendingMarkets';
 import { useCurrencies } from '../useCurrencies';
 
 export const useIsGlobalItayose = () => {
-    const { data: lendingContracts = baseContracts, isLoading } =
+    const { data: lendingContracts = baseContracts, isPending } =
         useLendingMarkets();
     const { data: currencies } = useCurrencies();
 
-    if (isLoading || !currencies) {
+    if (isPending || !currencies) {
         return {
             data: false,
-            isLoading: isLoading,
+            isPending: isPending,
         };
     }
 
@@ -34,6 +34,6 @@ export const useIsGlobalItayose = () => {
 
     return {
         data: !openMarketExists && itayoseMarketCount >= 1,
-        isLoading: false,
+        isPending: false,
     };
 };

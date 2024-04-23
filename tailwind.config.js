@@ -72,6 +72,7 @@ module.exports = {
                 'Suisse International',
                 ...defaultTheme.fontFamily.sans,
             ],
+            tertiary: ['Roboto Mono', ...defaultTheme.fontFamily.sans],
         },
 
         screens: {
@@ -117,7 +118,6 @@ module.exports = {
                 700: '#BD47FB',
                 900: '#0213A5',
             },
-            // TODO: handle neutral 1-8 as figma variables
             neutral: {
                 DEFAULT: '#353945',
                 1: '#141416',
@@ -184,6 +184,11 @@ module.exports = {
             secondary3: '#96EAF1',
             secondary7: '#B9BDEA',
             error5: '#FF324B',
+            success: {
+                '300': '#96EAF1',
+                '500': '#15D6E8',
+            },
+            'z-neutral-100': '#F1F5F9',
             grayScale: '#FAFAFA',
             tabGradient: {
                 1: 'rgba(57, 77, 174, 0)',
