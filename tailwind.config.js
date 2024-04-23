@@ -1,7 +1,5 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 
-const { themeVariants } = require('tailwindcss-theme-variants');
-
 module.exports = {
     content: ['./src/**/*.{ts,tsx,js,jsx}', './public/index.html'],
     safelist: [
@@ -188,6 +186,26 @@ module.exports = {
                 '300': '#96EAF1',
                 '500': '#15D6E8',
             },
+            neutral: {
+                DEFAULT: '#353945',
+                '1': '#141416',
+                '2': '#23262F',
+                '3': '#353945',
+                '4': '#777E91',
+                '5': '#B1B5C4',
+                '6': '#E6E8EC',
+                '7': '#F4F5F6',
+                '8': '#FCFCFD',
+                '50': '#FBFAFC',
+                '100': '#F1F5F9',
+                '300': '#CBD5E1',
+                '400': '#94A3B8',
+                '500': '#64748B',
+                '600': '#475569',
+                '700': '#334155',
+                '800': '#1E293B',
+                '900': '#002133',
+            },
             'z-neutral-100': '#F1F5F9',
             grayScale: '#FAFAFA',
             tabGradient: {
@@ -253,13 +271,4 @@ module.exports = {
             },
         },
     },
-    plugins: [
-        themeVariants({
-            themes: {
-                light: {
-                    selector: '.light',
-                },
-            },
-        }),
-    ],
 };
