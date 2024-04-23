@@ -1,7 +1,6 @@
 import { track } from '@amplitude/analytics-browser';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
-import { VisibilityState } from '@tanstack/react-table';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     CollateralManagementConciseTab,
@@ -301,12 +300,12 @@ export function AdvancedLendingOrderCard({
         }
     }, [side, isMarketOrderType]);
 
-    const handleFilterChange = useCallback(
-        (state: VisibilityState) => {
-            setIsShowingAll(state.showBorrow && state.showLend);
-        },
-        [setIsShowingAll]
-    );
+    // const handleFilterChange = useCallback(
+    //     (state: VisibilityState) => {
+    //         setIsShowingAll(state.showBorrow && state.showLend);
+    //     },
+    //     [setIsShowingAll]
+    // );
 
     return (
         <div className='h-full rounded-b-xl border-white-10 pb-7 laptop:border laptop:bg-cardBackground laptop:bg-opacity-60'>
@@ -500,7 +499,11 @@ export function AdvancedLendingOrderCard({
                             marketPrice={currentMarket?.value}
                             maxLendUnitPrice={market?.maxLendUnitPrice}
                             minBorrowUnitPrice={market?.minBorrowUnitPrice}
-                            onFilterChange={handleFilterChange}
+                            onFilterChange={state =>
+                                setIsShowingAll(
+                                    state.showBorrow && state.showLend
+                                )
+                            }
                             onAggregationChange={setMultiplier}
                             rowsToRenderMobile={rowsToRenderMobile}
                         />
