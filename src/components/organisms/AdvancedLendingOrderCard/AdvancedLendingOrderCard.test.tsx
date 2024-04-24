@@ -90,24 +90,24 @@ describe('AdvancedLendingOrderCard Component', () => {
 
     it('should render CollateralManagementConciseTab', async () => {
         render(<Default />, { preloadedState });
-        // expect(screen.getByText('Collateral Management')).toBeInTheDocument();
         expect(screen.getByText('Collateral Utilization')).toBeInTheDocument();
         await waitFor(() => {
             expect(screen.getByText('37%')).toBeInTheDocument();
             expect(
                 screen.getByTestId('collateral-progress-bar-track')
             ).toHaveStyle('width: calc(100% * 0.37)');
+            expect(screen.getByText('$5,203.15')).toBeInTheDocument();
             expect(
-                screen.getByText('Available: $5,203.15')
+                screen.getByText('of $12,100.34 available')
             ).toBeInTheDocument();
         });
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
-        expect(screen.getByText('Low')).toBeInTheDocument();
-        expect(screen.getByText('Low')).toHaveClass('text-progressBarStart');
-        expect(screen.getByText('Threshold: 43%')).toBeInTheDocument();
+        expect(screen.getByText('Medium')).toBeInTheDocument();
+        expect(screen.getByText('Medium')).toHaveClass('text-warning-500');
+        expect(screen.getByText('43%')).toBeInTheDocument();
         expect(screen.getByTestId('liquidation-progress-bar-tick')).toHaveStyle(
-            'width: calc(100% * 0.37 + 4px )'
+            'left: calc(15% - 4px)'
         );
     });
 
@@ -142,15 +142,6 @@ describe('AdvancedLendingOrderCard Component', () => {
             })
         ).toBeInTheDocument();
     });
-
-    // it('should show a button to manage collateral', async () => {
-    //     render(<Default />);
-    //     await waitFor(() =>
-    //         expect(
-    //             screen.getByRole('button', { name: 'Manage »' })
-    //         ).toBeInTheDocument()
-    //     );
-    // });
 
     it('should show both market and limit order when in default mode', async () => {
         render(<Default />, { preloadedState });
@@ -204,8 +195,9 @@ describe('AdvancedLendingOrderCard Component', () => {
         });
 
         await waitFor(() => {
+            expect(screen.getByText('$5,203.15')).toBeInTheDocument();
             expect(
-                screen.getByText('Available: $5,203.15')
+                screen.getByText('of $12,100.34 available')
             ).toBeInTheDocument();
         });
 

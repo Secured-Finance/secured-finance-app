@@ -20,7 +20,6 @@ export const CollateralManagementConciseTab = ({
     if (padding > 1) {
         padding = 1;
     }
-    const info = getLiquidationInformation(collateralCoverage);
 
     const { data: collateralBook = emptyCollateralBook } =
         useCollateralBook(account);
@@ -31,6 +30,8 @@ export const CollateralManagementConciseTab = ({
 
     const totalCollateralInUSD = account ? collateralBook.usdCollateral : 0;
 
+    const info = getLiquidationInformation(threshold);
+
     return (
         <div className='flex h-fit w-full flex-col gap-3 rounded-b'>
             <div className='flex flex-col gap-3 rounded-xl border border-neutral-600 bg-neutral-900 p-4'>
@@ -40,8 +41,6 @@ export const CollateralManagementConciseTab = ({
                         {percentFormat(collateralCoverage, 100)}
                     </span>
                 </div>
-            </div>
-            <div className='flex flex-col gap-2'>
                 <div className='h-6px w-full overflow-hidden rounded-full bg-neutral-700'>
                     <div
                         className='bg-secondary-300 h-full rounded-full transition-width duration-700 ease-in'
@@ -49,7 +48,7 @@ export const CollateralManagementConciseTab = ({
                             width: `calc(100% * ${padding})`,
                         }}
                         data-testid='collateral-progress-bar-track'
-                    ></div>
+                    />
                 </div>
                 <div className='flex items-center justify-start gap-x-1 text-[11px] leading-[15px] text-neutral-300'>
                     {!account && !totalCollateralInUSD ? (
@@ -66,106 +65,129 @@ export const CollateralManagementConciseTab = ({
                         </>
                     )}
                 </div>
+            </div>
+            <div className='flex flex-col rounded-xl border border-neutral-600 bg-neutral-900 p-4'>
+                <div className='typography-caption mb-4 flex flex-row justify-between'>
+                    <span className='text-grayScale'>Liquidation Risk</span>
+                    <span
+                        className={clsx(info.color, {
+                            'font-semibold': threshold > 20,
+                        })}
+                    >
+                        {info.risk}
+                    </span>
+                </div>
+                <ul className='grid grid-cols-5 gap-[7.25px]'>
+                    {THRESHOLD_BLOCKS.map((block, i) => {
+                        const min = i * 20;
+                        const max = (i + 1) * 20;
 
-                <div className='flex flex-col rounded-xl border border-neutral-600 bg-neutral-900 p-4'>
-                    <div className='typography-caption mb-4 flex flex-row justify-between'>
-                        <span className='text-grayScale'>Liquidation Risk</span>
-                        <span className={info.color}>{info.risk}</span>
-                    </div>
-                    <ul className='grid grid-cols-5 gap-[7.25px]'>
-                        {THRESHOLD_BLOCKS.map((block, i) => {
-                            const min = i * 20;
-                            const max = (i + 1) * 20;
+                        const offset = Math.round(
+                            ((threshold - min) / (max - min)) * 100
+                        );
 
-                            const offset = Math.round(
-                                ((collateralCoverage - min) / (max - min)) * 100
-                            );
-
-                            return (
-                                <li
-                                    key={`threshold-bar-${i}`}
-                                    className={clsx(
-                                        'relative h-[6px] overflow-visible rounded-xl bg-gradient-to-r',
-                                        block.className,
-                                        {
-                                            [`border ${block.borderClassName}`]:
-                                                (collateralCoverage === 0 &&
-                                                    !i) ||
-                                                (collateralCoverage > min &&
-                                                    collateralCoverage <= max),
-                                        }
-                                    )}
-                                >
-                                    {collateralCoverage === 0 && !i ? (
+                        return (
+                            <li
+                                key={`threshold-bar-${i}`}
+                                className={clsx(
+                                    'relative h-[6px] overflow-visible rounded-xl bg-gradient-to-r',
+                                    block.className,
+                                    {
+                                        [`border ${block.borderClassName}`]:
+                                            (threshold === 0 && !i) ||
+                                            (threshold > min &&
+                                                threshold <= max),
+                                    }
+                                )}
+                            >
+                                {threshold === 0 && !i ? (
+                                    <Tick
+                                        className='absolute -top-[9px] h-5px w-2.5'
+                                        style={{
+                                            left: `calc(0% - 4px)`,
+                                        }}
+                                        data-testid='liquidation-progress-bar-tick'
+                                    />
+                                ) : (
+                                    threshold > min &&
+                                    threshold <= max && (
                                         <Tick
                                             className='absolute -top-[9px] h-5px w-2.5'
                                             style={{
-                                                left: `calc(0% - 4px)`,
+                                                left: `calc(${offset}% - 4px)`,
                                             }}
                                             data-testid='liquidation-progress-bar-tick'
                                         />
-                                    ) : (
-                                        collateralCoverage > min &&
-                                        collateralCoverage <= max && (
-                                            <Tick
-                                                className='absolute -top-[9px] h-5px w-2.5'
-                                                style={{
-                                                    left: `calc(${offset}% - 4px)`,
-                                                }}
-                                                data-testid='liquidation-progress-bar-tick'
-                                            />
-                                        )
-                                    )}
-                                </li>
-                            );
-                        })}
-                    </ul>
-                    <div className='mt-1 text-[11px] leading-6 text-planetaryPurple'>
-                        {account ? (
-                            <>
-                                Threshold:{' '}
-                                <span className='font-semibold'>
-                                    {percentFormat(threshold)}
-                                </span>
-                            </>
-                        ) : (
-                            'N/A'
-                        )}
-                    </div>
-                    {account && <Notification percentage={threshold} />}
+                                    )
+                                )}
+                            </li>
+                        );
+                    })}
+                </ul>
+                <div className='mt-1 text-[11px] leading-6 text-planetaryPurple'>
+                    {account ? (
+                        <>
+                            Threshold:{' '}
+                            <span className='font-semibold'>
+                                {percentFormat(threshold)}
+                            </span>
+                        </>
+                    ) : (
+                        'N/A'
+                    )}
                 </div>
+                {account && <Notification percentage={threshold} />}
             </div>
         </div>
     );
 };
 
-// TODO: handle update for getLiquidationInformation
 export const getLiquidationInformation = (liquidationPercentage: number) => {
-    if (liquidationPercentage < 40) {
-        return { color: 'text-progressBarStart', risk: 'Low' };
-    } else if (liquidationPercentage >= 40 && liquidationPercentage < 60) {
-        return { color: 'text-progressBarVia', risk: 'Medium' };
+    let color: string;
+    let risk: string;
+
+    switch (true) {
+        case liquidationPercentage <= 20:
+            color = 'text-primary-300';
+            risk = 'Safe';
+            break;
+        case liquidationPercentage <= 40:
+            color = 'text-secondary-500';
+            risk = 'Low';
+            break;
+        case liquidationPercentage <= 60:
+            color = 'text-warning-500';
+            risk = 'Medium';
+            break;
+        case liquidationPercentage <= 80:
+            color = 'text-error-300';
+            risk = 'High';
+            break;
+        default:
+            color = 'text-error-500';
+            risk = 'Very High';
+            break;
     }
-    return { color: 'text-progressBarEnd', risk: 'High' };
+    return { color, risk };
 };
 
 const Notification = ({ percentage }: { percentage: number }) => {
     const getRiskLevel = () => {
-        if (percentage >= 80) {
+        if (percentage > 80) {
             return {
                 text: 'very high risk',
                 className: 'text-error5',
             };
         }
 
-        if (percentage >= 60) {
+        if (percentage > 60) {
             return {
                 text: 'high risk',
                 className: 'text-error-300',
             };
         }
 
-        if (percentage >= 40) {
+        if (percentage > 40) {
             return {
                 text: 'medium risk',
                 className: 'text-yellow',
@@ -174,7 +196,7 @@ const Notification = ({ percentage }: { percentage: number }) => {
 
         return {
             text: 'lower risk',
-            className: 'text-[#00C096]',
+            className: 'text-neutral-50',
         };
     };
 
