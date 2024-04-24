@@ -5,13 +5,11 @@ import { Tooltip } from 'src/components/templates';
 export const InfoToolTip = ({
     iconColor = 'gray',
     iconSize = 'medium',
-    maxWidth,
     align,
     children,
 }: {
     iconColor?: 'gray' | 'white' | 'yellow';
     iconSize?: 'small' | 'medium' | 'large';
-    maxWidth?: Parameters<typeof Tooltip>[0]['maxWidth'];
     align?: Parameters<typeof Tooltip>[0]['align'];
     children: React.ReactNode;
 }) => {
@@ -30,7 +28,7 @@ export const InfoToolTip = ({
     );
 
     return (
-        <Tooltip iconElement={Icon} align={align} maxWidth={maxWidth}>
+        <Tooltip iconElement={Icon} align={align}>
             {children}
         </Tooltip>
     );

@@ -1,5 +1,4 @@
 import { Tab as HeadlessTab } from '@headlessui/react';
-import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Children, useState } from 'react';
 import TooltipIcon from 'src/assets/icons/information-circle-block.svg';
@@ -37,11 +36,9 @@ const TitleChip = ({
                     }
                     mode={TooltipMode.Warning}
                     align='right'
+                    placement='bottom'
                 >
-                    <div className='grid grid-cols-10'>
-                        <InformationCircleIcon className='col-span-1 mt-1 h-3 w-3 text-white' />
-                        <div className='col-span-9'>{tooltip}</div>
-                    </div>
+                    {tooltip}
                 </Tooltip>
             )}
         </div>

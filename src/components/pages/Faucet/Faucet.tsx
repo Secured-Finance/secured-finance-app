@@ -201,6 +201,7 @@ export const Faucet = () => {
                                         <div>{address}</div>
                                         <div className='flex flex-row items-center gap-2'>
                                             <Tooltip
+                                                placement='bottom'
                                                 iconElement={
                                                     <button
                                                         className='flex h-9 w-9 items-center justify-center rounded-2xl bg-gunMetal'
@@ -217,13 +218,20 @@ export const Faucet = () => {
                                                 Copy Contract ID
                                             </Tooltip>
                                             <Tooltip
+                                                placement='bottom'
+                                                disabled={!client}
                                                 iconElement={
                                                     <button
-                                                        className='flex h-9 w-9 items-center justify-center rounded-2xl bg-gunMetal'
+                                                        className={clsx(
+                                                            'flex h-9 w-9 items-center justify-center rounded-2xl bg-gunMetal',
+                                                            {
+                                                                'cursor-default':
+                                                                    !client,
+                                                            }
+                                                        )}
                                                         onClick={() =>
                                                             addToMetamask(token)
                                                         }
-                                                        disabled={!client}
                                                     >
                                                         <WalletIcon
                                                             className={clsx(

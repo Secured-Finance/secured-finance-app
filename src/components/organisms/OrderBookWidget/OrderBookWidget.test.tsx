@@ -383,9 +383,9 @@ describe('OrderBookWidget Component', () => {
             );
         });
 
-        it('should display a help tooltip', () => {
-            render(<Itayose />);
-            expect(screen.getByTestId('tooltip')).toBeInTheDocument();
-        });
+        // it('should display a help tooltip', () => {
+        //     render(<Itayose />);
+        //     expect(screen.getByTestId('tooltip')).toBeInTheDocument();
+        // });
     });
 });

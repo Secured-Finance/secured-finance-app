@@ -88,6 +88,7 @@ export const TableContractCell = ({
                 {delistedContractSide !== undefined && (
                     <Tooltip
                         align='right'
+                        hasIcon={false}
                         iconElement={
                             <div className='mt-1 flex h-3 w-3 items-center justify-center'>
                                 {delistedTooltipIcon}
