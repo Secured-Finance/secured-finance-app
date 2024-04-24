@@ -78,6 +78,7 @@ const EtherScanTooltip = ({
     handleClick: () => void;
 }) => (
     <Tooltip
+        hasIcon={false}
         iconElement={
             <button
                 className='secondary typography-caption cursor-pointer whitespace-nowrap text-planetaryPurple underline'

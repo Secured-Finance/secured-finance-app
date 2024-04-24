@@ -141,6 +141,7 @@ export const WalletPopover = ({
                                                 iconElement={
                                                     <AlertTriangle data-testid='network-alert-triangle' />
                                                 }
+                                                placement='bottom'
                                             >
                                                 <SupportedNetworks />
                                             </Tooltip>
