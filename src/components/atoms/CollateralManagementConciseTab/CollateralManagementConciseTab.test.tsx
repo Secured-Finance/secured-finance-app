@@ -1,8 +1,7 @@
 import { composeStories } from '@storybook/react';
 import { useCollateralBook } from 'src/hooks';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { renderHook, waitFor } from 'src/test-utils';
-import { render, screen } from 'src/test-utils.js';
+import { render, renderHook, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './CollateralManagementConciseTab.stories';
 
 const {
@@ -23,14 +22,12 @@ describe('CollateralManagementConciseTab component', () => {
         expect(screen.getByText('Collateral Utilization')).toBeInTheDocument();
         expect(screen.getByText('0%')).toBeInTheDocument();
         expect(screen.getByTestId('collateral-progress-bar-track')).toHaveStyle(
-            'left: calc(0% - 4px)'
+            'width: calc(100% * 0)'
         );
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
-        expect(screen.getByText('Low')).toBeInTheDocument();
-        expect(screen.getByText('Low')).toHaveClass('text-progressBarStart');
         expect(screen.getByTestId('liquidation-progress-bar-tick')).toHaveStyle(
-            'width: calc(100% * 0 + 4px )'
+            'left: calc(0% - 4px)'
         );
         expect(screen.getAllByText('N/A')).toHaveLength(2);
     });
@@ -40,7 +37,7 @@ describe('CollateralManagementConciseTab component', () => {
 
         const value = result.current;
         expect(value.data).toEqual(undefined);
-        expect(value.isLoading).toEqual(true);
+        expect(value.isPending).toEqual(true);
 
         await waitFor(() =>
             expect(mock.tokenVault.getCollateralBook).toHaveBeenCalledTimes(1)
@@ -55,10 +52,10 @@ describe('CollateralManagementConciseTab component', () => {
         expect(screen.getByText('of $12,100.34 available')).toBeInTheDocument();
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
-        expect(screen.getByText('Low')).toBeInTheDocument();
-        expect(screen.getByText('Low')).toHaveClass('text-progressBarStart');
+        expect(screen.getByText('High')).toBeInTheDocument();
+        expect(screen.getByText('High')).toHaveClass('text-error-300');
         expect(screen.getByTestId('liquidation-progress-bar-tick')).toHaveStyle(
-            'left: calc(0% - 4px)'
+            'left: calc(100% - 4px)'
         );
         expect(screen.getByText('80%')).toBeInTheDocument();
     });
@@ -82,10 +79,11 @@ describe('CollateralManagementConciseTab component', () => {
         expect(screen.getByText('of $12,100.34 available')).toBeInTheDocument();
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
-        expect(screen.getByText('Low')).toBeInTheDocument();
-        expect(screen.getByText('Low')).toHaveClass('text-progressBarStart');
+        expect(screen.getByText('High')).toBeInTheDocument();
+        expect(screen.getByText('High')).toHaveClass('text-error-300');
+
         expect(screen.getByTestId('liquidation-progress-bar-tick')).toHaveStyle(
-            'left: calc(0% - 4px)'
+            'left: calc(100% - 4px)'
         );
         expect(screen.getByText('80%')).toBeInTheDocument();
     });
@@ -108,28 +106,28 @@ describe('CollateralManagementConciseTab component', () => {
         expect(screen.getByText('of $12,100.34 available')).toBeInTheDocument();
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
-        expect(screen.getByText('Low')).toBeInTheDocument();
-        expect(screen.getByText('Low')).toHaveClass('text-progressBarStart');
+        expect(screen.getByText('Medium')).toBeInTheDocument();
+        expect(screen.getByText('Medium')).toHaveClass('text-warning-500');
         expect(screen.getByText('43%')).toBeInTheDocument();
         expect(screen.getByTestId('liquidation-progress-bar-tick')).toHaveStyle(
-            'left: calc(85% - 4px)'
+            'left: calc(15% - 4px)'
         );
     });
 
     it('should render correct color and risk status', () => {
         render(<CollateralDepositedWithCoverage collateralCoverage={0} />);
         expect(screen.getByText('80%')).toBeInTheDocument();
-        expect(screen.getByText('Low')).toBeInTheDocument();
-        expect(screen.getByText('Low')).toHaveClass('text-progressBarStart');
+        expect(screen.getByText('High')).toBeInTheDocument();
+        expect(screen.getByText('High')).toHaveClass('text-error-300');
 
         render(<CollateralDepositedWithCoverage collateralCoverage={50} />);
         expect(screen.getByText('30%')).toBeInTheDocument();
-        expect(screen.getByText('Medium')).toBeInTheDocument();
-        expect(screen.getByText('Medium')).toHaveClass('text-progressBarVia');
+        expect(screen.getByText('Low')).toBeInTheDocument();
+        expect(screen.getByText('Low')).toHaveClass('text-secondary-500');
 
         render(<CollateralDepositedWithCoverage collateralCoverage={70} />);
         expect(screen.getByText('10%')).toBeInTheDocument();
         expect(screen.getByText('High')).toBeInTheDocument();
-        expect(screen.getByText('High')).toHaveClass('text-progressBarEnd');
+        expect(screen.getByText('High')).toHaveClass('text-error-300');
     });
 });
