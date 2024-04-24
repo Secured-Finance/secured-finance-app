@@ -176,11 +176,11 @@ export const PortfolioManagement = () => {
 
     const { data: priceMap } = useLastPrices();
 
-    const { data: collateralBook = emptyCollateralBook, isLoading } =
+    const { data: collateralBook = emptyCollateralBook, isPending } =
         useCollateralBook(address);
 
     const portfolioAnalytics = useMemo(() => {
-        if (isLoading) {
+        if (isPending) {
             return {
                 borrowedPV: 0,
                 lentPV: 0,
@@ -216,7 +216,7 @@ export const PortfolioManagement = () => {
         collateralBook.totalPresentValue,
         collateralBook.usdCollateral,
         collateralBook.usdNonCollateral,
-        isLoading,
+        isPending,
         orderList.totalPVOfOpenOrdersInUSD,
         positions,
         priceMap,
@@ -261,34 +261,36 @@ export const PortfolioManagement = () => {
     return (
         <Page title='Portfolio Management' name='portfolio-management'>
             {userDelistedCurrenciesArray.length > 0 && (
-                <Alert
-                    severity='error'
-                    showCloseButton={true}
-                    localStorageKey={DELISTED_CURRENCIES_KEY}
-                    localStorageValue={Array.from(delistedCurrencySet)
-                        .sort()
-                        .join()}
-                >
-                    <p className='text-white'>
-                        Please note that your contracts for{' '}
-                        {generateDelistedCurrencyText(
-                            userDelistedCurrenciesArray
-                        )}{' '}
-                        will be delisted at maturity on Secured Finance.{' '}
-                        <a
-                            className='whitespace-nowrap text-secondary7 underline'
-                            href='https://docs.secured.finance/product-guide/loan-market-platform/loan-assets/listing-and-delisting'
-                            target='_blank'
-                            rel='noreferrer'
-                            onClick={e => {
-                                e.preventDefault();
-                                scrollToBottom();
-                            }}
-                        >
-                            Learn more
-                        </a>
-                    </p>
-                </Alert>
+                <div className='px-3 laptop:px-0'>
+                    <Alert
+                        severity='error'
+                        showCloseButton={true}
+                        localStorageKey={DELISTED_CURRENCIES_KEY}
+                        localStorageValue={Array.from(delistedCurrencySet)
+                            .sort()
+                            .join()}
+                    >
+                        <p className='text-white'>
+                            Please note that your contracts for{' '}
+                            {generateDelistedCurrencyText(
+                                userDelistedCurrenciesArray
+                            )}{' '}
+                            will be delisted at maturity on Secured Finance.{' '}
+                            <a
+                                className='whitespace-nowrap text-secondary7 underline'
+                                href='https://docs.secured.finance/product-guide/loan-market-platform/loan-assets/listing-and-delisting'
+                                target='_blank'
+                                rel='noreferrer'
+                                onClick={e => {
+                                    e.preventDefault();
+                                    scrollToBottom();
+                                }}
+                            >
+                                Learn more
+                            </a>
+                        </p>
+                    </Alert>
+                </div>
             )}
 
             <TwoColumns>

@@ -72,6 +72,7 @@ module.exports = {
                 'Suisse International',
                 ...defaultTheme.fontFamily.sans,
             ],
+            tertiary: ['Roboto Mono', ...defaultTheme.fontFamily.sans],
         },
 
         screens: {
