@@ -5,7 +5,7 @@ import {
 } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
-import { Header } from './';
+import Header from './Header';
 
 export default {
     title: 'Organism/Header',
