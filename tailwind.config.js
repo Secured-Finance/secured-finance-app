@@ -1,7 +1,13 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 
+// const { nextui } = require('@nextui-org/theme');
+
 module.exports = {
-    content: ['./src/**/*.{ts,tsx,js,jsx}', './public/index.html'],
+    content: [
+        './src/**/*.{ts,tsx,js,jsx}',
+        './public/index.html',
+        './node_modules/@nextui-org/theme/dist/components/tooltip.js',
+    ],
     safelist: [
         {
             pattern: /grid-cols-./,
@@ -137,10 +143,13 @@ module.exports = {
                 800: '#1E293B',
                 900: '#002133',
             },
+            // TODO: check success 300 and 500 values in design system and app
             success: {
                 50: '#DDFFE9',
-                300: '#AFFFCB',
-                500: '#74E37E',
+                '300': '#96EAF1',
+                // 300: '#AFFFCB',
+                '500': '#15D6E8',
+                // 500: '#74E37E',
                 700: '#5CD167',
                 900: '#157637',
             },
@@ -159,6 +168,7 @@ module.exports = {
                 900: '#A50114',
             },
             // Primary
+            universeBlue: '#002133',
 
             teal: '#11CABE',
             green: '#5CD167',
@@ -182,30 +192,6 @@ module.exports = {
             secondary3: '#96EAF1',
             secondary7: '#B9BDEA',
             error5: '#FF324B',
-            success: {
-                '300': '#96EAF1',
-                '500': '#15D6E8',
-            },
-            neutral: {
-                DEFAULT: '#353945',
-                '1': '#141416',
-                '2': '#23262F',
-                '3': '#353945',
-                '4': '#777E91',
-                '5': '#B1B5C4',
-                '6': '#E6E8EC',
-                '7': '#F4F5F6',
-                '8': '#FCFCFD',
-                '50': '#FBFAFC',
-                '100': '#F1F5F9',
-                '300': '#CBD5E1',
-                '400': '#94A3B8',
-                '500': '#64748B',
-                '600': '#475569',
-                '700': '#334155',
-                '800': '#1E293B',
-                '900': '#002133',
-            },
             'z-neutral-100': '#F1F5F9',
             grayScale: '#FAFAFA',
             tabGradient: {
@@ -271,4 +257,5 @@ module.exports = {
             },
         },
     },
+    // plugins: [nextui()], // TODO: add nextui in and default to dark theme
 };

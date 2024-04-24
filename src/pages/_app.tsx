@@ -1,5 +1,6 @@
 import * as amplitude from '@amplitude/analytics-browser';
 import { pageViewTrackingPlugin } from '@amplitude/plugin-page-view-tracking-browser';
+import { NextUIProvider } from '@nextui-org/system';
 import { GraphClientProvider } from '@secured-finance/sf-graph-client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -125,14 +126,18 @@ const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     );
 
     return (
-        <QueryClientProvider client={queryClient}>
-            <GraphClientProvider network={currentNetwork}>
-                <WagmiConfig config={config}>
-                    <SecuredFinanceProvider>{children}</SecuredFinanceProvider>
-                </WagmiConfig>
-            </GraphClientProvider>
-            <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
+        <NextUIProvider>
+            <QueryClientProvider client={queryClient}>
+                <GraphClientProvider network={currentNetwork}>
+                    <WagmiConfig config={config}>
+                        <SecuredFinanceProvider>
+                            {children}
+                        </SecuredFinanceProvider>
+                    </WagmiConfig>
+                </GraphClientProvider>
+                <ReactQueryDevtools initialIsOpen={false} />
+            </QueryClientProvider>
+        </NextUIProvider>
     );
 };
 

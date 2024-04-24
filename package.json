@@ -13,6 +13,7 @@
     "@mui/base": "5.0.0-alpha.106",
     "@nextui-org/system": "^2.1.2",
     "@nextui-org/theme": "^2.2.2",
+    "@nextui-org/tooltip": "^2.0.33",
     "@reduxjs/toolkit": "^1.8.1",
     "@secured-finance/sf-client": "0.2.0-beta.153",
     "@secured-finance/sf-core": "0.2.0-beta.152",
