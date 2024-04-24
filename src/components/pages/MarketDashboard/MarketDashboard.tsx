@@ -120,9 +120,17 @@ export const MarketDashboard = () => {
             ? currencies[0]
             : CurrencySymbol.WBTC;
 
+    const currencyArray = Array.from(delistedCurrencySet);
+
     return (
         <Page title='Market Dashboard' name='dashboard-page'>
-            <DelistedCurrencyDisclaimer currencies={delistedCurrencySet} />
+            {currencyArray.length > 0 && (
+                <div className='px-3 laptop:px-0'>
+                    <DelistedCurrencyDisclaimer
+                        currencies={delistedCurrencySet}
+                    />
+                </div>
+            )}
             <TwoColumns>
                 <div className='grid grid-cols-1 gap-y-7'>
                     <StatsBar

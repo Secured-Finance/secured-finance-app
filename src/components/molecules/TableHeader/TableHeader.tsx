@@ -10,12 +10,14 @@ export const TableHeader = ({
     sortingHandler,
     isSorted,
     align,
+    horizontalPadding = true,
 }: {
     title: string;
     titleHint?: string;
     sortingHandler?: ((event: unknown) => void) | undefined;
     isSorted?: boolean | SortDirection;
     align?: Alignment;
+    horizontalPadding?: boolean;
 }) => {
     const titleComponent = (
         <button
@@ -35,29 +37,36 @@ export const TableHeader = ({
 
     if (titleHint) {
         return (
-            <Container align={align}>
+            <Container align={align} horizontalPadding={horizontalPadding}>
                 <Tooltip iconElement={titleComponent}>{titleHint}</Tooltip>
             </Container>
         );
     }
 
-    return <Container align={align}>{titleComponent}</Container>;
+    return (
+        <Container align={align} horizontalPadding={horizontalPadding}>
+            {titleComponent}
+        </Container>
+    );
 };
 
 const Container = ({
     align = 'center',
+    horizontalPadding,
     children,
 }: {
     align?: Alignment;
+    horizontalPadding: boolean;
     children: React.ReactNode;
 }) => {
     return (
         <div
             data-testid='table-header-wrapper'
-            className={clsx('flex px-3', {
+            className={clsx('flex', {
                 'justify-start': align === 'left',
                 'justify-center': align === 'center',
                 'justify-end': align === 'right',
+                'px-3': horizontalPadding,
             })}
         >
             {children}

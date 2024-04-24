@@ -12,10 +12,10 @@ describe('useItayoseEstimation', () => {
         const { result } = renderHook(() =>
             useItayoseEstimation(CurrencySymbol.WFIL, dec22Fixture.toNumber())
         );
-        expect(result.current.isLoading).toEqual(true);
+        expect(result.current.isPending).toEqual(true);
 
         await waitFor(() => {
-            expect(result.current.isLoading).toEqual(false);
+            expect(result.current.isPending).toEqual(false);
             expect(result.current.data).toEqual({
                 openingUnitPrice: BigInt(9970),
                 lastLendUnitPrice: BigInt(9975),

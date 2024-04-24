@@ -20,14 +20,14 @@ describe('useERC20Balance', () => {
         const queries = result.current as UseQueryResult<unknown>[];
         queries.forEach(query => {
             expect(query.data).toEqual(undefined);
-            expect(query.isLoading).toEqual(true);
+            expect(query.isPending).toEqual(true);
         });
 
         const updatedQueries = result.current as UseQueryResult<unknown>[];
         updatedQueries.forEach(async (query, index) => {
             await waitFor(() => {
                 expect(query.data).toEqual(balanceArray[index]);
-                expect(query.isLoading).toEqual(false);
+                expect(query.isPending).toEqual(false);
             });
         });
     });

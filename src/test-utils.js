@@ -1,8 +1,10 @@
 import { MockedProvider } from '@apollo/client/testing';
 import { configureStore } from '@reduxjs/toolkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { render as rtlRender } from '@testing-library/react';
-import { renderHook as rtlRenderHook } from '@testing-library/react-hooks';
+import {
+    render as rtlRender,
+    renderHook as rtlRenderHook,
+} from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { rootReducers } from 'src/store';
 import { connector, publicClient } from 'src/stories/mocks/mockWallet';

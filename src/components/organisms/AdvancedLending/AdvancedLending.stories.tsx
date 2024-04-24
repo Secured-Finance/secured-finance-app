@@ -1,7 +1,7 @@
 import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
 import { withWalletProvider } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
-import { userEvent, within } from '@storybook/testing-library';
+import { screen, userEvent, within } from '@storybook/testing-library';
 import { defaultDelistedStatusSet, emptyCollateralBook } from 'src/hooks';
 import {
     collateralBook37,
@@ -61,12 +61,15 @@ export const OpenOrdersConnectedToWallet = Template.bind({});
 OpenOrdersConnectedToWallet.parameters = {
     connected: true,
 };
-OpenOrdersConnectedToWallet.play = async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const openOrdersTab = canvas.getByTestId('Open Orders');
+OpenOrdersConnectedToWallet.play = async () => {
+    const openOrdersTab = screen.getByTestId('Open Orders');
     await userEvent.click(openOrdersTab);
-    canvas.getByRole('button', { name: 'DEC2022' }).click();
-    canvas.getByRole('menuitem', { name: 'JUN2023' }).click();
+
+    const dec22Btn = await screen.findByRole('button', { name: 'DEC2022' });
+    await userEvent.click(dec22Btn);
+
+    const jun23Button = await screen.findByText('JUN2023');
+    await userEvent.click(jun23Button);
 };
 OpenOrdersConnectedToWallet.args = {
     collateralBook: collateralBook37,

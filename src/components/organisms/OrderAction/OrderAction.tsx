@@ -12,6 +12,7 @@ import {
     CollateralBook,
     MarketPhase,
     useBorrowableAmount,
+    useBreakpoint,
     useCollateralCurrencies,
     useLastPrices,
     useMarketPhase,
@@ -21,6 +22,7 @@ import { useCollateralBalances } from 'src/hooks/useBalances';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
+import { ButtonSizes } from 'src/types';
 import { ButtonEvents, amountFormatterFromBase } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
@@ -46,6 +48,7 @@ export const OrderAction = ({
     const chainError = useSelector(
         (state: RootState) => state.blockchain.chainError
     );
+    const isMobile = useBreakpoint('tablet');
 
     const [openDepositCollateralDialog, setOpenDepositCollateralDialog] =
         useState(false);
@@ -113,6 +116,7 @@ export const OrderAction = ({
                         data-testid='place-order-button'
                         mobileText='Order'
                         aria-label={getButtonText()}
+                        size={isMobile ? ButtonSizes.md : ButtonSizes.lg}
                     >
                         {getButtonText()}
                     </Button>
@@ -125,8 +129,9 @@ export const OrderAction = ({
                             track(ButtonEvents.DEPOSIT_COLLATERAL_BUTTON);
                         }}
                         data-testid='deposit-collateral-button'
+                        size={isMobile ? ButtonSizes.md : ButtonSizes.lg}
                     >
-                        Deposit collateral to borrow
+                        Deposit collateral
                     </Button>
                 ))}
             {!isConnected && (

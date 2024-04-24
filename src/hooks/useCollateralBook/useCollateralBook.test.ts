@@ -16,7 +16,7 @@ describe('useCollateralBook hook', () => {
 
         const value = result.current;
         expect(value.data).toEqual(undefined);
-        expect(value.isLoading).toEqual(true);
+        expect(value.isPending).toEqual(true);
 
         await waitFor(() =>
             expect(mock.tokenVault.getCollateralBook).toHaveBeenCalledTimes(1)
@@ -46,7 +46,7 @@ describe('useCollateralBook hook', () => {
         expect(colBook.usdCollateral).toEqual(12100.34);
         expect(colBook.usdAvailableToBorrow).toBeCloseTo(5203.1462);
         expect(colBook.totalPresentValue).toEqual(2500);
-        expect(newValue.isLoading).toEqual(false);
+        expect(newValue.isPending).toEqual(false);
     });
 
     it('should return undefined when given an undefined user', async () => {

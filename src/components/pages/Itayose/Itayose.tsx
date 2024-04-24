@@ -1,4 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
+import { VisibilityState } from '@tanstack/table-core';
+import * as dayjs from 'dayjs';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -48,7 +50,6 @@ import { RootState } from 'src/store/types';
 import { CurrencySymbol, ZERO_BI, toOptions, usdFormat } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
-import * as dayjs from 'dayjs';
 
 const Toolbar = ({
     selectedAsset,
@@ -76,14 +77,16 @@ const Toolbar = ({
     return (
         <GradientBox shape='rectangle'>
             <div className='flex min-w-fit flex-row items-center justify-start gap-10 px-6 py-3 tablet:justify-between'>
-                <HorizontalAssetSelector
-                    assetList={assetList}
-                    selectedAsset={selectedAsset}
-                    options={options}
-                    selected={selected}
-                    onAssetChange={handleAssetChange}
-                    onTermChange={handleTermChange}
-                />
+                <div className='w-full tablet:w-1/2'>
+                    <HorizontalAssetSelector
+                        assetList={assetList}
+                        selectedAsset={selectedAsset}
+                        options={options}
+                        selected={selected}
+                        onAssetChange={handleAssetChange}
+                        onTermChange={handleTermChange}
+                    />
+                </div>
                 <div className='hidden w-full flex-row items-center justify-start gap-40 tablet:flex'>
                     <div className='typography-caption w-40 text-nebulaTeal'>
                         <p className=' typography-caption-2 text-slateGray'>
@@ -166,7 +169,7 @@ export const Itayose = () => {
 
     const {
         data: borrowAmount,
-        isLoading: isLoadingBorrow,
+        isPending: isPendingBorrow,
         fetchStatus: borrowFetchStatus,
     } = useBorrowOrderBook(
         currency,
@@ -176,7 +179,7 @@ export const Itayose = () => {
 
     const {
         data: lendAmount,
-        isLoading: isLoadingLend,
+        isPending: isPendingLend,
         fetchStatus: lendFetchStatus,
     } = useLendOrderBook(
         currency,
@@ -219,8 +222,8 @@ export const Itayose = () => {
     );
 
     const isLoadingMap = {
-        [OrderSide.BORROW]: isLoadingBorrow && borrowFetchStatus !== 'idle',
-        [OrderSide.LEND]: isLoadingLend && lendFetchStatus !== 'idle',
+        [OrderSide.BORROW]: isPendingBorrow && borrowFetchStatus !== 'idle',
+        [OrderSide.LEND]: isPendingLend && lendFetchStatus !== 'idle',
     };
 
     const preOrderDays = useMemo(() => {
@@ -231,6 +234,13 @@ export const Itayose = () => {
             ? dayjs.unix(openingDate).diff(preOpeningDate * 1000, 'days')
             : undefined;
     }, [lendingContracts, selectedTerm.value]);
+
+    const handleFilterChange = useCallback(
+        (state: VisibilityState) => {
+            setIsShowingAll(state.showBorrow && state.showLend);
+        },
+        [setIsShowingAll]
+    );
 
     return (
         <Page title='Pre-Open Order Book'>
@@ -301,9 +311,7 @@ export const Itayose = () => {
                     orderbook={orderBook}
                     variant='itayose'
                     marketPrice={estimatedOpeningUnitPrice}
-                    onFilterChange={state =>
-                        setIsShowingAll(state.showBorrow && state.showLend)
-                    }
+                    onFilterChange={handleFilterChange}
                     isLoadingMap={isLoadingMap}
                     onAggregationChange={setMultiplier}
                     isCurrencyDelisted={delistedCurrencySet.has(currency)}

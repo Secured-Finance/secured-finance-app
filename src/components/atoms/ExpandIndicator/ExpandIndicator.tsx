@@ -10,7 +10,7 @@ export const ExpandIndicator = ({
 }) => {
     const className =
         variant === 'solid'
-            ? 'h-5 w-5 text-white'
+            ? 'h-3.5 w-3.5 laptop:h-5 laptop:w-5 text-white'
             : 'h-3 w-3 text-white opacity-50';
     return (
         <ChevronDownIcon

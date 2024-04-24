@@ -21,7 +21,7 @@ describe('usePositions', () => {
 
         const value = result.current;
         expect(value.data).toEqual(undefined);
-        expect(value.isLoading).toEqual(true);
+        expect(value.isPending).toEqual(true);
 
         await waitFor(() => {
             expect(mock.getPositions).toHaveBeenCalledTimes(1);
@@ -31,7 +31,7 @@ describe('usePositions', () => {
             expect(newValue.data.positions[1].currency).toBe(ethBytes32);
             expect(newValue.data.positions[2].currency).toBe(wfilBytes32);
             expect(newValue.data.positions[3].currency).toBe(usdcBytes32);
-            expect(newValue.isLoading).toEqual(false);
+            expect(newValue.isPending).toEqual(false);
         });
     });
 

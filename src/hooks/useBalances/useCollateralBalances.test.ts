@@ -14,7 +14,10 @@ describe('useCollateralBalances', () => {
             preloadedState: preloadedState,
         });
 
-        expect(result.current).toEqual({});
+        await waitFor(() => {
+            expect(result.current).toEqual({});
+        });
+
         await waitFor(() =>
             expect(mock.getERC20Balance).toHaveBeenCalledTimes(3)
         );

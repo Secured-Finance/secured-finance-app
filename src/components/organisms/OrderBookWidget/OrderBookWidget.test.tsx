@@ -361,7 +361,7 @@ describe('OrderBookWidget Component', () => {
                 '98.5',
                 '97.0',
                 '95.0',
-                '94.7',
+                '94.8',
                 '94.0',
             ]);
             expect(getOrderRowTextContent('sellOrders-row')).toEqual([

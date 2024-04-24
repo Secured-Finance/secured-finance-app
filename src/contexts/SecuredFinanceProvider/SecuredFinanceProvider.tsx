@@ -49,7 +49,9 @@ export const Context = createContext<SFContext>({
     securedFinance: undefined,
 });
 
-const SecuredFinanceProvider: React.FC = ({ children }) => {
+const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
+    children,
+}) => {
     const { address, isConnected } = useAccount();
     const { chain } = useNetwork();
     const chainId = useSelector((state: RootState) => state.blockchain.chainId);

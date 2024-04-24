@@ -112,7 +112,7 @@ export const MyWalletCard = ({
                                     </div>
                                     <Button
                                         onClick={() => setIsOpen(true)}
-                                        size={ButtonSizes.xs}
+                                        size={ButtonSizes.sm}
                                     >
                                         Bridge
                                     </Button>
