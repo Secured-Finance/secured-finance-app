@@ -37,20 +37,20 @@ export const CollateralManagementConciseTab = ({
             <div className='flex flex-col gap-3 rounded-xl border border-neutral-600 bg-neutral-900 p-4'>
                 <div className='flex flex-row justify-between text-sm leading-6 text-grayScale'>
                     <span>Collateral Utilization</span>
-                    <span className='text-secondary-300 font-semibold'>
+                    <span className='font-semibold text-secondary-500'>
                         {percentFormat(collateralCoverage, 100)}
                     </span>
                 </div>
                 <div className='h-6px w-full overflow-hidden rounded-full bg-neutral-700'>
                     <div
-                        className='bg-secondary-300 h-full rounded-full transition-width duration-700 ease-in'
+                        className='h-full rounded-full bg-secondary-500 transition-width duration-700 ease-in'
                         style={{
                             width: `calc(100% * ${padding})`,
                         }}
                         data-testid='collateral-progress-bar-track'
                     />
                 </div>
-                <div className='flex items-center justify-start gap-x-1 text-[11px] leading-[15px] text-neutral-300'>
+                <div className='block gap-x-1 text-[11px] leading-[15px] text-neutral-300'>
                     {!account && !totalCollateralInUSD ? (
                         'N/A'
                     ) : (
@@ -71,11 +71,12 @@ export const CollateralManagementConciseTab = ({
                     <span className='text-grayScale'>Liquidation Risk</span>
                     {account && (
                         <span
-                            className={clsx(info.color, {
-                                'font-semibold': threshold > 20,
+                            className={clsx({
+                                [`font-semibold ${info.color}`]: threshold > 20,
+                                'text-primary-300': threshold <= 20,
                             })}
                         >
-                            {info.risk}
+                            {threshold <= 20 ? 'Safe' : info.risk}
                         </span>
                     )}
                 </div>
@@ -126,7 +127,12 @@ export const CollateralManagementConciseTab = ({
                         );
                     })}
                 </ul>
-                <div className='mt-1 text-[11px] leading-6 text-planetaryPurple'>
+                <div
+                    className={clsx('mt-1 text-[11px] leading-6', {
+                        'text-neutral-300': !account,
+                        'text-planetaryPurple': account,
+                    })}
+                >
                     {account ? (
                         <>
                             Threshold:{' '}
@@ -149,10 +155,6 @@ export const getLiquidationInformation = (liquidationPercentage: number) => {
     let risk: string;
 
     switch (true) {
-        case liquidationPercentage <= 20:
-            color = 'text-primary-300';
-            risk = 'Safe';
-            break;
         case liquidationPercentage <= 40:
             color = 'text-secondary-500';
             risk = 'Low';
