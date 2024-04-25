@@ -10,8 +10,8 @@ describe('LiquidationProgressBar Component', () => {
         render(<NotConnectedToWallet />);
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
-        expect(screen.getByText('Safe')).toBeInTheDocument();
-        expect(screen.getByText('Safe')).toHaveClass('text-primary-300');
+        expect(screen.getByText('Low')).toBeInTheDocument();
+        expect(screen.getByText('Low')).toHaveClass('text-secondary-500');
 
         expect(screen.getByText('N/A')).toBeInTheDocument();
 

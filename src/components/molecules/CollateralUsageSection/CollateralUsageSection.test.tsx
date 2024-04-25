@@ -44,11 +44,11 @@ describe('CollateralUsageSection Component', () => {
     it('should render correct color on collateral usage', () => {
         render(<Default collateralCoverage={0} />);
         expect(screen.getByText('0%')).toBeInTheDocument();
-        expect(screen.getByText('0%')).toHaveClass('text-primary-300');
+        expect(screen.getByText('0%')).toHaveClass('text-secondary-500');
 
         render(<Default collateralCoverage={1000} />);
         expect(screen.getByText('10%')).toBeInTheDocument();
-        expect(screen.getByText('10%')).toHaveClass('text-primary-300');
+        expect(screen.getByText('10%')).toHaveClass('text-secondary-500');
 
         render(<Default collateralCoverage={5000} />);
         expect(screen.getByText('50%')).toBeInTheDocument();
