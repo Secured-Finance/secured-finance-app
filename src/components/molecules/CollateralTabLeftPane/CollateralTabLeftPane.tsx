@@ -211,7 +211,6 @@ export const CollateralTabLeftPane = ({
             </div>
             <div className='flex h-24 flex-row items-center justify-center gap-4 px-6'>
                 <Button
-                    // size={ButtonSizes.sm}
                     onClick={() => {
                         onClick('deposit');
                         track(ButtonEvents.DEPOSIT_COLLATERAL_BUTTON);
@@ -223,7 +222,6 @@ export const CollateralTabLeftPane = ({
                     Deposit
                 </Button>
                 <Button
-                    // size={ButtonSizes.sm}
                     disabled={!account || netAssetValue <= 0 || chainError}
                     onClick={() => {
                         onClick('withdraw');
