@@ -1,7 +1,5 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 
-const { themeVariants } = require('tailwindcss-theme-variants');
-
 module.exports = {
     content: ['./src/**/*.{ts,tsx,js,jsx}', './public/index.html'],
     safelist: [
@@ -237,13 +235,4 @@ module.exports = {
             },
         },
     },
-    plugins: [
-        themeVariants({
-            themes: {
-                light: {
-                    selector: '.light',
-                },
-            },
-        }),
-    ],
 };

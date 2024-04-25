@@ -87,11 +87,6 @@
   }
 }
 
-.light body {
-    background-image: none;
-    background-color: #ffffff;
-}
-
 @layer utilities {
   .bg-gradient-primary {
     @apply bg-gradient-to-l from-horizonBlue to-starBlue;
