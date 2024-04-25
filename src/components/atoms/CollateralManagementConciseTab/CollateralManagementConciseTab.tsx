@@ -69,13 +69,15 @@ export const CollateralManagementConciseTab = ({
             <div className='flex flex-col rounded-xl border border-neutral-600 bg-neutral-900 p-4'>
                 <div className='typography-caption mb-4 flex flex-row justify-between'>
                     <span className='text-grayScale'>Liquidation Risk</span>
-                    <span
-                        className={clsx(info.color, {
-                            'font-semibold': threshold > 20,
-                        })}
-                    >
-                        {info.risk}
-                    </span>
+                    {account && (
+                        <span
+                            className={clsx(info.color, {
+                                'font-semibold': threshold > 20,
+                            })}
+                        >
+                            {info.risk}
+                        </span>
+                    )}
                 </div>
                 <ul className='grid grid-cols-5 gap-[7.25px]'>
                     {THRESHOLD_BLOCKS.map((block, i) => {
