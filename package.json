@@ -16,9 +16,11 @@
     "@secured-finance/sf-core": "0.2.0-beta.152",
     "@secured-finance/sf-graph-client": "0.2.0-beta.162",
     "@svgr/webpack": "^8.1.0",
-    "@tanstack/react-query": "^5.20.5",
+    "@tanstack/react-query": "^5.32.0",
     "@tanstack/react-table": "^8.5.13",
-    "@wagmi/connectors": "^3.1.5",
+    "@wagmi/connectors": "^4.1.26",
+    "@wagmi/core": "^2.6.17",
+    "@web3modal/wagmi": "^4.1.11",
     "axios": "^0.21.1",
     "bignumber.js": "^9.0.1",
     "chart.js": "^3.8.0",
@@ -33,8 +35,8 @@
     "react-number-format": "^4.9.1",
     "react-redux": "^7.2.2",
     "react-responsive": "^9.0.2",
-    "viem": "^1.21.1",
-    "wagmi": "^1.4.12"
+    "viem": "^2.9.26",
+    "wagmi": "^2.5.20"
   },
   "scripts": {
     "start": "next dev",
@@ -60,7 +62,11 @@
     "cypress:run": "cypress run"
   },
   "browserslist": {
-    "production": [">0.2%", "not dead", "not op_mini all"],
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
