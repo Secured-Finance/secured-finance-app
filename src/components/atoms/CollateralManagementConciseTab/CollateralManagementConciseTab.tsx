@@ -30,7 +30,7 @@ export const CollateralManagementConciseTab = ({
 
     const totalCollateralInUSD = account ? collateralBook.usdCollateral : 0;
 
-    const info = getLiquidationInformation(threshold);
+    const info = getLiquidationInformation(collateralCoverage);
 
     return (
         <div className='flex h-fit w-full flex-col gap-3 rounded-b'>
@@ -72,11 +72,12 @@ export const CollateralManagementConciseTab = ({
                     {account && (
                         <span
                             className={clsx({
-                                [`font-semibold ${info.color}`]: threshold > 20,
-                                'text-primary-300': threshold <= 20,
+                                [`font-semibold ${info.color}`]:
+                                    collateralCoverage > 20,
+                                'text-primary-300': collateralCoverage <= 20,
                             })}
                         >
-                            {threshold <= 20 ? 'Safe' : info.risk}
+                            {collateralCoverage <= 20 ? 'Safe' : info.risk}
                         </span>
                     )}
                 </div>
@@ -86,7 +87,7 @@ export const CollateralManagementConciseTab = ({
                         const max = (i + 1) * 20;
 
                         const offset = Math.round(
-                            ((threshold - min) / (max - min)) * 100
+                            ((collateralCoverage - min) / (max - min)) * 100
                         );
 
                         return (
@@ -97,13 +98,13 @@ export const CollateralManagementConciseTab = ({
                                     block.className,
                                     {
                                         [`border ${block.borderClassName}`]:
-                                            (threshold === 0 && !i) ||
-                                            (threshold > min &&
-                                                threshold <= max),
+                                            (collateralCoverage === 0 && !i) ||
+                                            (collateralCoverage > min &&
+                                                collateralCoverage <= max),
                                     }
                                 )}
                             >
-                                {threshold === 0 && !i ? (
+                                {collateralCoverage === 0 && !i ? (
                                     <Tick
                                         className='absolute -top-[9px] h-5px w-2.5'
                                         style={{
@@ -112,8 +113,8 @@ export const CollateralManagementConciseTab = ({
                                         data-testid='liquidation-progress-bar-tick'
                                     />
                                 ) : (
-                                    threshold > min &&
-                                    threshold <= max && (
+                                    collateralCoverage > min &&
+                                    collateralCoverage <= max && (
                                         <Tick
                                             className='absolute -top-[9px] h-5px w-2.5'
                                             style={{
@@ -144,7 +145,7 @@ export const CollateralManagementConciseTab = ({
                         'N/A'
                     )}
                 </div>
-                {account && <Notification percentage={threshold} />}
+                {account && <Notification percentage={collateralCoverage} />}
             </div>
         </div>
     );

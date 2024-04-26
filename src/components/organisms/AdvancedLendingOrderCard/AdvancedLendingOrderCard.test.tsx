@@ -103,11 +103,11 @@ describe('AdvancedLendingOrderCard Component', () => {
         });
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
-        expect(screen.getByText('Medium')).toBeInTheDocument();
-        expect(screen.getByText('Medium')).toHaveClass('text-warning-500');
+        expect(screen.getByText('Low')).toBeInTheDocument();
+        expect(screen.getByText('Low')).toHaveClass('text-secondary-500');
         expect(screen.getByText('43%')).toBeInTheDocument();
         expect(screen.getByTestId('liquidation-progress-bar-tick')).toHaveStyle(
-            'left: calc(15% - 4px)'
+            'left: calc(85% - 4px)'
         );
     });
 
