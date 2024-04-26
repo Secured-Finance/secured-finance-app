@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import Tick from 'src/assets/icons/tick.svg';
 import { emptyCollateralBook, useCollateralBook } from 'src/hooks';
 import { percentFormat, usdFormat } from 'src/utils';
-import { THRESHOLD_BLOCKS } from './constants';
+// import { THRESHOLD_BLOCKS } from './constants';
 interface CollateralManagementConciseTabProps {
     collateralCoverage: number;
     availableToBorrow: number;
@@ -67,7 +67,7 @@ export const CollateralManagementConciseTab = ({
                 </div>
             </div>
             <div className='flex flex-col rounded-xl border border-neutral-600 bg-neutral-900 p-4'>
-                <div className='typography-caption mb-4 flex flex-row justify-between'>
+                <div className='typography-caption mb-1 flex flex-row justify-between'>
                     <span className='text-grayScale'>Liquidation Risk</span>
                     {account && (
                         <span
@@ -81,53 +81,16 @@ export const CollateralManagementConciseTab = ({
                         </span>
                     )}
                 </div>
-                <ul className='grid grid-cols-5 gap-[7.25px]'>
-                    {THRESHOLD_BLOCKS.map((block, i) => {
-                        const min = i * 20;
-                        const max = (i + 1) * 20;
-
-                        const offset = Math.round(
-                            ((collateralCoverage - min) / (max - min)) * 100
-                        );
-
-                        return (
-                            <li
-                                key={`threshold-bar-${i}`}
-                                className={clsx(
-                                    'relative h-[6px] overflow-visible rounded-xl bg-gradient-to-r',
-                                    block.className,
-                                    {
-                                        [`border ${block.borderClassName}`]:
-                                            (collateralCoverage === 0 && !i) ||
-                                            (collateralCoverage > min &&
-                                                collateralCoverage <= max),
-                                    }
-                                )}
-                            >
-                                {collateralCoverage === 0 && !i ? (
-                                    <Tick
-                                        className='absolute -top-[9px] h-5px w-2.5'
-                                        style={{
-                                            left: `calc(0% - 4px)`,
-                                        }}
-                                        data-testid='liquidation-progress-bar-tick'
-                                    />
-                                ) : (
-                                    collateralCoverage > min &&
-                                    collateralCoverage <= max && (
-                                        <Tick
-                                            className='absolute -top-[9px] h-5px w-2.5'
-                                            style={{
-                                                left: `calc(${offset}% - 4px)`,
-                                            }}
-                                            data-testid='liquidation-progress-bar-tick'
-                                        />
-                                    )
-                                )}
-                            </li>
-                        );
-                    })}
-                </ul>
+                <div
+                    style={{
+                        width: `calc(100% * ${padding} + 4px )`,
+                    }}
+                    className='transition-width duration-700 ease-in'
+                    data-testid='liquidation-progress-bar-tick'
+                >
+                    <Tick className='float-right h-5px w-2'></Tick>
+                </div>
+                <div className='mt-2 h-6px w-full rounded-full bg-gradient-to-r from-progressBarStart from-0% via-progressBarVia via-45% to-progressBarEnd to-80%' />
                 <div
                     className={clsx('mt-1 text-[11px] leading-6', {
                         'text-neutral-300': !account,

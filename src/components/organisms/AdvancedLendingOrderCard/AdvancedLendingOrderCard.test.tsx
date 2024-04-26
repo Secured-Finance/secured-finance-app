@@ -107,7 +107,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(screen.getByText('Low')).toHaveClass('text-secondary-500');
         expect(screen.getByText('43%')).toBeInTheDocument();
         expect(screen.getByTestId('liquidation-progress-bar-tick')).toHaveStyle(
-            'left: calc(85% - 4px)'
+            'width: calc(100% * 0.37 + 4px )'
         );
     });
 
