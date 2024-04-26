@@ -52,10 +52,10 @@ describe('CollateralManagementConciseTab component', () => {
         expect(screen.getByText('of $12,100.34 available')).toBeInTheDocument();
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
-        expect(screen.getByText('High')).toBeInTheDocument();
-        expect(screen.getByText('High')).toHaveClass('text-error-300');
+        expect(screen.getByText('Safe')).toBeInTheDocument();
+        expect(screen.getByText('Safe')).toHaveClass('text-primary-300');
         expect(screen.getByTestId('liquidation-progress-bar-tick')).toHaveStyle(
-            'left: calc(100% - 4px)'
+            'left: calc(0% - 4px)'
         );
         expect(screen.getByText('80%')).toBeInTheDocument();
     });
@@ -79,11 +79,11 @@ describe('CollateralManagementConciseTab component', () => {
         expect(screen.getByText('of $12,100.34 available')).toBeInTheDocument();
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
-        expect(screen.getByText('High')).toBeInTheDocument();
-        expect(screen.getByText('High')).toHaveClass('text-error-300');
+        expect(screen.getByText('Safe')).toBeInTheDocument();
+        expect(screen.getByText('Safe')).toHaveClass('text-primary-300');
 
         expect(screen.getByTestId('liquidation-progress-bar-tick')).toHaveStyle(
-            'left: calc(100% - 4px)'
+            'left: calc(0% - 4px)'
         );
         expect(screen.getByText('80%')).toBeInTheDocument();
     });
@@ -106,24 +106,24 @@ describe('CollateralManagementConciseTab component', () => {
         expect(screen.getByText('of $12,100.34 available')).toBeInTheDocument();
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
-        expect(screen.getByText('Medium')).toBeInTheDocument();
-        expect(screen.getByText('Medium')).toHaveClass('text-warning-500');
+        expect(screen.getByText('Low')).toBeInTheDocument();
+        expect(screen.getByText('Low')).toHaveClass('text-secondary-500');
         expect(screen.getByText('43%')).toBeInTheDocument();
         expect(screen.getByTestId('liquidation-progress-bar-tick')).toHaveStyle(
-            'left: calc(15% - 4px)'
+            'left: calc(85% - 4px)'
         );
     });
 
     it('should render correct color and risk status', () => {
         render(<CollateralDepositedWithCoverage collateralCoverage={0} />);
         expect(screen.getByText('80%')).toBeInTheDocument();
-        expect(screen.getByText('High')).toBeInTheDocument();
-        expect(screen.getByText('High')).toHaveClass('text-error-300');
+        expect(screen.getByText('Safe')).toBeInTheDocument();
+        expect(screen.getByText('Safe')).toHaveClass('text-primary-300');
 
         render(<CollateralDepositedWithCoverage collateralCoverage={50} />);
         expect(screen.getByText('30%')).toBeInTheDocument();
-        expect(screen.getByText('Low')).toBeInTheDocument();
-        expect(screen.getByText('Low')).toHaveClass('text-secondary-500');
+        expect(screen.getByText('Medium')).toBeInTheDocument();
+        expect(screen.getByText('Medium')).toHaveClass('text-warning-500');
 
         render(<CollateralDepositedWithCoverage collateralCoverage={70} />);
         expect(screen.getByText('10%')).toBeInTheDocument();
