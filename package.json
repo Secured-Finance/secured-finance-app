@@ -1,6 +1,6 @@
 {
   "name": "secured-finance-web",
-  "version": "1.4.3",
+  "version": "1.4.5",
   "private": true,
   "homepage": ".",
   "dependencies": {
@@ -60,7 +60,11 @@
     "cypress:run": "cypress run"
   },
   "browserslist": {
-    "production": [">0.2%", "not dead", "not op_mini all"],
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
@@ -98,7 +102,7 @@
     "axios-mock-adapter": "^1.21.1",
     "buffer": "^6.0.3",
     "canvas": "^2.9.3",
-    "chromatic": "^6.6.2",
+    "chromatic": "^11.3.0",
     "crypto-browserify": "^3.12.0",
     "css-loader": "^6.8.1",
     "cypress": "^9.5.3",
