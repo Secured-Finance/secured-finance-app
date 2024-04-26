@@ -75,9 +75,11 @@ jobs:
         run: npm run build
 
       - name: Build Storybook
-        uses: chromaui/action@v1
+        uses: chromaui/action@v11
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          exitOnceUploaded: true
+          skip: "@(develop|main)"
 
       - name: Publish Web App
         uses: actions/upload-artifact@v3
