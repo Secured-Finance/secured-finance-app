@@ -69,17 +69,16 @@ export const CollateralManagementConciseTab = ({
             <div className='flex flex-col rounded-xl border border-neutral-600 bg-neutral-900 p-4'>
                 <div className='typography-caption mb-1 flex flex-row justify-between'>
                     <span className='text-grayScale'>Liquidation Risk</span>
-                    {account && (
-                        <span
-                            className={clsx({
-                                [`font-semibold ${info.color}`]:
-                                    collateralCoverage > 20,
-                                'text-primary-300': collateralCoverage <= 20,
-                            })}
-                        >
-                            {collateralCoverage <= 20 ? 'Safe' : info.risk}
-                        </span>
-                    )}
+
+                    <span
+                        className={clsx({
+                            [`font-semibold ${info.color}`]:
+                                collateralCoverage > 20,
+                            'text-primary-300': collateralCoverage <= 20,
+                        })}
+                    >
+                        {collateralCoverage <= 20 ? 'Safe' : info.risk}
+                    </span>
                 </div>
                 <div
                     style={{
