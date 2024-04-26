@@ -1,6 +1,5 @@
 import clsx from 'clsx';
 import Tick from 'src/assets/icons/tick.svg';
-import { emptyCollateralBook, useCollateralBook } from 'src/hooks';
 import { percentFormat, usdFormat } from 'src/utils';
 // import { THRESHOLD_BLOCKS } from './constants';
 interface CollateralManagementConciseTabProps {
@@ -8,6 +7,7 @@ interface CollateralManagementConciseTabProps {
     availableToBorrow: number;
     collateralThreshold: number;
     account: string | undefined;
+    totalCollateralInUSD: number;
 }
 
 export const CollateralManagementConciseTab = ({
@@ -15,20 +15,22 @@ export const CollateralManagementConciseTab = ({
     availableToBorrow,
     collateralThreshold,
     account,
+    totalCollateralInUSD,
 }: CollateralManagementConciseTabProps) => {
     let padding = collateralCoverage / 100.0;
+
     if (padding > 1) {
         padding = 1;
     }
 
-    const { data: collateralBook = emptyCollateralBook } =
-        useCollateralBook(account);
+    if (!account) {
+        padding = 0;
+    }
+
     const threshold =
         collateralThreshold && collateralThreshold > collateralCoverage
             ? collateralThreshold - collateralCoverage
             : 0;
-
-    const totalCollateralInUSD = account ? collateralBook.usdCollateral : 0;
 
     const info = getLiquidationInformation(collateralCoverage);
 
@@ -37,9 +39,11 @@ export const CollateralManagementConciseTab = ({
             <div className='flex flex-col gap-3 rounded-xl border border-neutral-600 bg-neutral-900 p-4'>
                 <div className='flex flex-row justify-between text-sm leading-6 text-grayScale'>
                     <span>Collateral Utilization</span>
-                    <span className='font-semibold text-secondary-500'>
-                        {percentFormat(collateralCoverage, 100)}
-                    </span>
+                    {account && (
+                        <span className='font-semibold text-secondary-500'>
+                            {percentFormat(collateralCoverage, 100)}
+                        </span>
+                    )}
                 </div>
                 <div className='h-6px w-full overflow-hidden rounded-full bg-neutral-700'>
                     <div
@@ -51,7 +55,7 @@ export const CollateralManagementConciseTab = ({
                     />
                 </div>
                 <div className='block gap-x-1 text-[11px] leading-[15px] text-neutral-300'>
-                    {!account && !totalCollateralInUSD ? (
+                    {!account || !totalCollateralInUSD ? (
                         'N/A'
                     ) : (
                         <>
@@ -69,16 +73,17 @@ export const CollateralManagementConciseTab = ({
             <div className='flex flex-col rounded-xl border border-neutral-600 bg-neutral-900 p-4'>
                 <div className='typography-caption mb-1 flex flex-row justify-between'>
                     <span className='text-grayScale'>Liquidation Risk</span>
-
-                    <span
-                        className={clsx({
-                            [`font-semibold ${info.color}`]:
-                                collateralCoverage > 20,
-                            'text-primary-300': collateralCoverage <= 20,
-                        })}
-                    >
-                        {collateralCoverage <= 20 ? 'Safe' : info.risk}
-                    </span>
+                    {account && (
+                        <span
+                            className={clsx({
+                                [`font-semibold ${info.color}`]:
+                                    collateralCoverage > 20,
+                                'text-primary-300': collateralCoverage <= 20,
+                            })}
+                        >
+                            {collateralCoverage <= 20 ? 'Safe' : info.risk}
+                        </span>
+                    )}
                 </div>
                 <div
                     style={{
