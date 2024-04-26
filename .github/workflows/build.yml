@@ -28,7 +28,7 @@ on:
 jobs:
   build-and-test-all:
     name: Build and Test
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     environment: ${{ inputs.environment_name }}
     steps:
       - uses: actions/checkout@v3
@@ -72,7 +72,7 @@ jobs:
         run: npm run lint:check
 
       - name: Build Web App
-        run: npm run build --verbose
+        run: npm run build
 
       - name: Build Storybook
         uses: chromaui/action@v1
