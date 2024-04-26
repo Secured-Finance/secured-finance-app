@@ -128,6 +128,8 @@ export function AdvancedLendingOrderCard({
         return collateralBook.coverage / 100.0;
     }, [collateralBook]);
 
+    const totalCollateralInUSD = address ? collateralBook.usdCollateral : 0;
+
     const { data: priceList } = useLastPrices();
     const price = priceList[currency];
 
@@ -514,6 +516,7 @@ export function AdvancedLendingOrderCard({
                         availableToBorrow={collateralBook.usdAvailableToBorrow}
                         collateralThreshold={collateralBook.collateralThreshold}
                         account={address}
+                        totalCollateralInUSD={totalCollateralInUSD}
                     />
                 </div>
             </section>
