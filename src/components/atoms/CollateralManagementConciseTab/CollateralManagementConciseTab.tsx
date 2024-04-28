@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import Tick from 'src/assets/icons/tick.svg';
 import { percentFormat, usdFormat } from 'src/utils';
-// import { THRESHOLD_BLOCKS } from './constants';
+
 interface CollateralManagementConciseTabProps {
     collateralCoverage: number;
     availableToBorrow: number;
@@ -9,6 +9,28 @@ interface CollateralManagementConciseTabProps {
     account: string | undefined;
     totalCollateralInUSD: number;
 }
+
+const getRiskLevel = (percentage: number) => {
+    let text, className;
+    switch (true) {
+        case percentage > 80:
+            text = 'very high risk';
+            className = 'text-error5';
+            break;
+        case percentage > 60:
+            text = 'high risk';
+            className = 'text-error-300';
+            break;
+        case percentage > 40:
+            text = 'medium risk';
+            className = 'text-yellow';
+            break;
+        default:
+            text = 'lower risk';
+            className = 'text-neutral-50';
+    }
+    return { text, className };
+};
 
 export const CollateralManagementConciseTab = ({
     collateralCoverage,
@@ -144,35 +166,7 @@ export const getLiquidationInformation = (liquidationPercentage: number) => {
 };
 
 const Notification = ({ percentage }: { percentage: number }) => {
-    const getRiskLevel = () => {
-        if (percentage > 80) {
-            return {
-                text: 'very high risk',
-                className: 'text-error5',
-            };
-        }
-
-        if (percentage > 60) {
-            return {
-                text: 'high risk',
-                className: 'text-error-300',
-            };
-        }
-
-        if (percentage > 40) {
-            return {
-                text: 'medium risk',
-                className: 'text-yellow',
-            };
-        }
-
-        return {
-            text: 'lower risk',
-            className: 'text-neutral-50',
-        };
-    };
-
-    const riskLevel = getRiskLevel();
+    const riskLevel = getRiskLevel(percentage);
 
     if (percentage >= 20) {
         return (
