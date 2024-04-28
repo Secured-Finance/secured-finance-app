@@ -18,17 +18,17 @@ describe('OrderBookWidget Component', () => {
         render(<Default />);
         const bars = screen.getAllByTestId('color-bar');
         expect(bars[0]).toHaveStyle('width: 2px');
-        expect(bars[1]).toHaveStyle('width: 55.44%');
-        expect(bars[2]).toHaveStyle('width: 308%');
-        expect(bars[3]).toHaveStyle('width: 18.48%');
-        expect(bars[4]).toHaveStyle('width: 15.4%');
+        expect(bars[1]).toHaveStyle('width: 308%');
+        expect(bars[2]).toHaveStyle('width: 261.8%');
+        expect(bars[3]).toHaveStyle('width: 27.72%');
+        expect(bars[4]).toHaveStyle('width: 12.32%');
         expect(bars[5]).toHaveStyle('width: 5%');
-        expect(bars[6]).toHaveStyle('width: 55.44%');
-        expect(bars[7]).toHaveStyle('width: 70.84%');
-        expect(bars[8]).toHaveStyle('width: 5%');
-        expect(bars[9]).toHaveStyle('width: 18.48%');
-        expect(bars[10]).toHaveStyle('width: 27.72%');
-        expect(bars[11]).toHaveStyle('width: 67.76%');
+        expect(bars[6]).toHaveStyle('width: 43.12%');
+        expect(bars[7]).toHaveStyle('width: 98.56%');
+        expect(bars[8]).toHaveStyle('width: 101.64%');
+        expect(bars[9]).toHaveStyle('width: 117.04%');
+        expect(bars[10]).toHaveStyle('width: 138.6%');
+        expect(bars[11]).toHaveStyle('width: 190.96%');
     });
 
     describe('Mid Price', () => {
@@ -312,35 +312,6 @@ describe('OrderBookWidget Component', () => {
             fireEvent.click(options[4]);
             expect(screen.getAllByTestId('buyOrders-row')).toHaveLength(2);
             expect(screen.getAllByTestId('sellOrders-row')).toHaveLength(2);
-        });
-
-        it('should conserve the sum of the amounts when aggregating', () => {
-            render(<Default />);
-            function sumSecondColumn(table: HTMLElement): number {
-                return within(table)
-                    .getAllByRole('row')
-                    .reduce((sum, row) => {
-                        const amount =
-                            row.children[1].children[0].children[0]
-                                .textContent ?? '';
-
-                        return isNaN(parseInt(amount))
-                            ? sum
-                            : sum + parseInt(amount.replace(',', ''), 10);
-                    }, 0);
-            }
-            const sumBefore = sumSecondColumn(screen.getByTestId('buyOrders'));
-            const dropdown = screen.getByRole('button', { name: '0.01' });
-            fireEvent.click(dropdown);
-            const options = screen.getAllByRole('menuitem');
-            fireEvent.click(options[3]);
-            const sumAfter = sumSecondColumn(screen.getByTestId('buyOrders'));
-            expect(sumBefore).toEqual(sumAfter);
-            fireEvent.click(options[4]);
-            const sumAfterAgain = sumSecondColumn(
-                screen.getByTestId('buyOrders')
-            );
-            expect(sumBefore).toEqual(sumAfterAgain);
         });
 
         it('should change the precision of the prices when changing the aggregation factor', () => {

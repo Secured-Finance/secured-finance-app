@@ -221,7 +221,7 @@ export const DropdownSelector = <T extends string = string>({
                                 'max-h-[196px] w-52 tablet:max-h-60':
                                     variant !== 'fullWidth',
                                 'w-full': variant === 'fullWidth',
-                                'bottom-0 mb-7 w-full origin-top-right laptop:bottom-auto laptop:right-0 laptop:w-fit':
+                                'bottom-0 mb-7 w-full origin-top-right laptop:bottom-auto laptop:w-fit':
                                     variant === 'orderBook',
                                 'w-72': variant === 'fixedWidth',
                             }

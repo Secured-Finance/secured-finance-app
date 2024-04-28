@@ -505,7 +505,7 @@ export const NewOrderBookWidget = ({
                 )}
             </div>
             <div className='flex flex-col laptop:flex-col-reverse'>
-                <div className='flex flex-row items-center justify-between gap-1 border-neutral-600 laptop:flex-row-reverse laptop:border-b-0.5 laptop:px-3 laptop:py-2'>
+                <div className='flex flex-row items-center justify-between gap-1 border-neutral-600 laptop:border-b-0.5 laptop:px-3 laptop:py-2'>
                     <div className='w-full laptop:w-fit'>
                         <DropdownSelector
                             optionList={AGGREGATION_OPTIONS}

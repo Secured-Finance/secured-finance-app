@@ -48,6 +48,16 @@ export const usePrepareOrderbookData = <
             sortOrders(a, b, 'desc')
         );
 
+        if (orderbookType === 'lendOrderbook') {
+            for (let i = 1; i < sortedResult.length; i++) {
+                sortedResult[i].amount += sortedResult[i - 1].amount;
+            }
+        } else if (orderbookType === 'borrowOrderbook') {
+            for (let j = sortedResult.length - 1; j > 0; j--) {
+                sortedResult[j - 1].amount += sortedResult[j].amount;
+            }
+        }
+
         return orderbookType === 'lendOrderbook'
             ? [...sortedResult, ...zeroValues].slice(0, limit)
             : [...zeroValues, ...sortedResult].slice(-limit);

@@ -64,19 +64,19 @@ const sortedResults = [
         value: LoanValue.fromPrice(9855, maturity),
     },
     {
-        amount: BigInt('1'),
+        amount: BigInt('5'),
         value: LoanValue.fromPrice(9854, maturity),
     },
     {
-        amount: BigInt('1'),
+        amount: BigInt('4'),
         value: LoanValue.fromPrice(9853, maturity),
     },
     {
-        amount: BigInt('1'),
+        amount: BigInt('3'),
         value: LoanValue.fromPrice(9852, maturity),
     },
     {
-        amount: BigInt('1'),
+        amount: BigInt('2'),
         value: LoanValue.fromPrice(9851, maturity),
     },
     {
@@ -105,7 +105,7 @@ describe('usePrepareOrderbookData', () => {
                 },
                 {
                     value: LoanValue.fromPrice(9860, maturity),
-                    amount: BigInt('4'),
+                    amount: BigInt('5'),
                 },
                 {
                     value: LoanValue.fromPrice(9850, maturity),
@@ -131,7 +131,7 @@ describe('usePrepareOrderbookData', () => {
                     value: LoanValue.fromPrice(9000, maturity),
                 },
                 {
-                    amount: BigInt('2'),
+                    amount: BigInt('12'),
                     value: LoanValue.fromPrice(8000, maturity),
                 },
             ]);
@@ -171,10 +171,22 @@ describe('usePrepareOrderbookData', () => {
                 )
             );
             expect(result.current).toEqual([
-                withZeros[0],
-                withZeros[3],
-                withZeros[1],
-                withZeros[2],
+                {
+                    amount: BigInt('1'),
+                    value: LoanValue.fromPrice(9200, maturity),
+                },
+                {
+                    amount: BigInt('3'),
+                    value: LoanValue.fromPrice(9110, maturity),
+                },
+                {
+                    amount: BigInt('0'),
+                    value: LoanValue.fromPrice(9200, maturity),
+                },
+                {
+                    amount: BigInt('0'),
+                    value: LoanValue.fromPrice(9200, maturity),
+                },
             ]);
         });
 
@@ -191,10 +203,22 @@ describe('usePrepareOrderbookData', () => {
                 )
             );
             expect(result.current).toEqual([
-                withZeros[2],
-                withZeros[1],
-                withZeros[0],
-                withZeros[3],
+                {
+                    amount: BigInt('0'),
+                    value: LoanValue.fromPrice(9200, maturity),
+                },
+                {
+                    amount: BigInt('0'),
+                    value: LoanValue.fromPrice(9200, maturity),
+                },
+                {
+                    amount: BigInt('3'),
+                    value: LoanValue.fromPrice(9200, maturity),
+                },
+                {
+                    amount: BigInt('2'),
+                    value: LoanValue.fromPrice(9110, maturity),
+                },
             ]);
         });
     });
@@ -210,11 +234,11 @@ describe('usePrepareOrderbookData', () => {
                     value: LoanValue.fromPrice(9200, maturity),
                 },
                 {
-                    amount: BigInt('2'),
+                    amount: BigInt('3'),
                     value: LoanValue.fromPrice(9110, maturity),
                 },
                 {
-                    amount: BigInt('3'),
+                    amount: BigInt('6'),
                     value: LoanValue.fromPrice(9050, maturity),
                 },
             ]);
@@ -226,11 +250,11 @@ describe('usePrepareOrderbookData', () => {
             );
             expect(result.current).toEqual([
                 {
-                    amount: BigInt('1'),
+                    amount: BigInt('3'),
                     value: LoanValue.fromPrice(9852, maturity),
                 },
                 {
-                    amount: BigInt('1'),
+                    amount: BigInt('2'),
                     value: LoanValue.fromPrice(9851, maturity),
                 },
                 {
