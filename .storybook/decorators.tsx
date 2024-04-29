@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import 'src/bigIntPatch';
 import { Footer } from 'src/components/atoms';
-import { Header } from 'src/components/organisms';
+import Header from 'src/components/organisms/Header/Header';
 import { Layout } from 'src/components/templates';
 import { updateChainError } from 'src/store/blockchain';
 import { connectEthWallet, updateEthBalance } from 'src/store/wallet';
