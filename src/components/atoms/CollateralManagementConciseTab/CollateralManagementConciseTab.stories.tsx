@@ -6,7 +6,7 @@ export default {
     component: CollateralManagementConciseTab,
     args: {
         collateralCoverage: 0,
-        totalCollateralInUSD: 0,
+        totalCollateralInUSD: 100,
         collateralThreshold: 0,
         account: undefined,
     },
