@@ -81,6 +81,8 @@ export const CollateralTabLeftPane = ({
         return checkAssetQuantityExist(collateralBook.nonCollateral);
     }, [collateralBook.nonCollateral]);
 
+    const totalCollateralInUSD = account ? collateralBook.usdCollateral : 0;
+
     return (
         <div className='flex min-h-[400px] w-full flex-col border-white-10 tablet:w-64 tablet:border-r'>
             <div className='flex-grow tablet:border-b tablet:border-white-10'>
@@ -151,6 +153,7 @@ export const CollateralTabLeftPane = ({
                                     collateralBook.collateralThreshold
                                 }
                                 account={account}
+                                totalCollateralInUSD={totalCollateralInUSD}
                             />
                             {collateralQuantityExist && (
                                 <CollateralInformationTable

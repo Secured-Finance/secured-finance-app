@@ -11,7 +11,8 @@ describe('LiquidationProgressBar Component', () => {
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
         expect(screen.getByText('Low')).toBeInTheDocument();
-        expect(screen.getByText('Low')).toHaveClass('text-progressBarStart');
+        expect(screen.getByText('Low')).toHaveClass('text-secondary-500');
+
         expect(screen.getByText('N/A')).toBeInTheDocument();
 
         expect(screen.getByTestId('liquidation-progress-bar-tick')).toHaveStyle(
@@ -24,9 +25,11 @@ describe('LiquidationProgressBar Component', () => {
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
         expect(screen.getByText('Medium')).toBeInTheDocument();
-        expect(screen.getByText('Medium')).toHaveClass('text-progressBarVia');
+        expect(screen.getByText('Medium')).toHaveClass('text-warning-500');
+
         expect(screen.getByText('35%')).toBeInTheDocument();
-        expect(screen.getByText('35%')).toHaveClass('text-progressBarVia');
+        expect(screen.getByText('35%')).toHaveClass('text-warning-500');
+
         expect(
             screen.getByText('threshold to liquidation')
         ).toBeInTheDocument();
@@ -49,20 +52,22 @@ describe('LiquidationProgressBar Component', () => {
     it('should render correct color and risk status', () => {
         render(<CollateralDepositedWithCoverage liquidationPercentage={30} />);
         expect(screen.getByText('50%')).toBeInTheDocument();
-        expect(screen.getByText('50%')).toHaveClass('text-progressBarStart');
+        expect(screen.getByText('50%')).toHaveClass('text-secondary-500');
+
         expect(screen.getByText('Low')).toBeInTheDocument();
-        expect(screen.getByText('Low')).toHaveClass('text-progressBarStart');
+        expect(screen.getByText('Low')).toHaveClass('text-secondary-500');
 
         render(<CollateralDepositedWithCoverage liquidationPercentage={50} />);
         expect(screen.getByText('30%')).toBeInTheDocument();
-        expect(screen.getByText('30%')).toHaveClass('text-progressBarVia');
+        expect(screen.getByText('30%')).toHaveClass('text-warning-500');
+
         expect(screen.getByText('Medium')).toBeInTheDocument();
-        expect(screen.getByText('Medium')).toHaveClass('text-progressBarVia');
+        expect(screen.getByText('Medium')).toHaveClass('text-warning-500');
 
         render(<CollateralDepositedWithCoverage liquidationPercentage={90} />);
         expect(screen.getByText('0%')).toBeInTheDocument();
-        expect(screen.getByText('0%')).toHaveClass('text-progressBarEnd');
-        expect(screen.getByText('High')).toBeInTheDocument();
-        expect(screen.getByText('High')).toHaveClass('text-progressBarEnd');
+        expect(screen.getByText('0%')).toHaveClass('text-error-500');
+        expect(screen.getByText('Very High')).toBeInTheDocument();
+        expect(screen.getByText('Very High')).toHaveClass('text-error-500');
     });
 });

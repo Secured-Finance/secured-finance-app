@@ -17,11 +17,11 @@ export const FormatCollateralUsage = ({
 
     return (
         <div className='flex flex-row gap-1'>
-            <span className={`${initialColor}`}>
+            <span className={initialColor}>
                 {formatCollateralRatio(initialValue)}
             </span>
             <span className='text-neutral-8'>&#8594;</span>
-            <span className={`${finalColor}`}>
+            <span className={finalColor}>
                 {formatCollateralRatio(finalValue)}
             </span>
         </div>

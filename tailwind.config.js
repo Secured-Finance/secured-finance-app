@@ -120,8 +120,8 @@ module.exports = {
             secondary3: '#96EAF1',
             secondary7: '#B9BDEA',
             error5: '#FF324B',
-            error: {
-                '300': '#FF9FAE',
+            primary: {
+                300: '#C4CAFF',
             },
             success: {
                 '300': '#96EAF1',
@@ -129,6 +129,11 @@ module.exports = {
             },
             warning: {
                 300: '#FFDB93',
+                500: '#FFCD69',
+            },
+            error: {
+                300: '#FF9FAE',
+                500: '#FF324B',
             },
             neutral: {
                 DEFAULT: '#353945',
@@ -214,6 +219,7 @@ module.exports = {
                 usdc: '#2775CA',
             },
             secondary: {
+                500: '#15D6E8',
                 700: '#09A8B7',
             },
         },
