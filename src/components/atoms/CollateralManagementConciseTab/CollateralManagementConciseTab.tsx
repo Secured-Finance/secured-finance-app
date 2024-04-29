@@ -77,7 +77,7 @@ export const CollateralManagementConciseTab = ({
                     />
                 </div>
                 <div className='block gap-x-1 text-[11px] leading-[15px] text-neutral-300'>
-                    {!account || !totalCollateralInUSD ? (
+                    {!account ? (
                         'N/A'
                     ) : (
                         <>

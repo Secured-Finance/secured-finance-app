@@ -33,7 +33,7 @@ describe('CollateralManagementConciseTab component', () => {
             'width: calc(100% * 0)'
         );
         expect(screen.getByText('$0.00')).toBeInTheDocument();
-        expect(screen.getByText('of $100.00 available')).toBeInTheDocument();
+        expect(screen.getByText('of $0.00 available')).toBeInTheDocument();
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
         expect(screen.getByText('Safe')).toBeInTheDocument();
