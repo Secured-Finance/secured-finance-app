@@ -20,6 +20,7 @@ import {
     useCollateralBook,
     useCurrencyDelistedStatus,
     useGraphClientHook,
+    useIsSubgraphSupported,
     useLendingMarkets,
     useLoanValues,
     useMaturityOptions,
@@ -32,7 +33,7 @@ import {
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { OrderType } from 'src/types';
-import { CurrencySymbol, getNonSubgraphSupportedChainIds } from 'src/utils';
+import { CurrencySymbol } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
@@ -67,10 +68,7 @@ export const Landing = ({ view }: { view?: ViewType }) => {
         (state: RootState) => state.blockchain.chainId
     );
 
-    const isSubgraphSupported = useMemo(
-        () => !getNonSubgraphSupportedChainIds().includes(currentChainId),
-        [currentChainId]
-    );
+    const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
 
     const itayoseMarket = Object.entries(lendingContracts).find(
         ([, market]) => market.isPreOrderPeriod || market.isItayosePeriod

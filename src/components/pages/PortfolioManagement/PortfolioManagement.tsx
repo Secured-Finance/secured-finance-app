@@ -27,6 +27,7 @@ import {
     useCurrenciesForOrders,
     useCurrencyDelistedStatus,
     useGraphClientHook,
+    useIsSubgraphSupported,
     useIsUnderCollateralThreshold,
     useLastPrices,
     useLendingMarkets,
@@ -40,7 +41,6 @@ import {
     computeNetValue,
     formatOrders,
     getMappedOrderStatus,
-    getNonSubgraphSupportedChainIds,
     hexToCurrencySymbol,
     sortOrders,
     usdFormat,
@@ -75,10 +75,7 @@ export const PortfolioManagement = () => {
         (state: RootState) => state.blockchain.chainId
     );
 
-    const isSubgraphSupported = useMemo(
-        () => !getNonSubgraphSupportedChainIds().includes(currentChainId),
-        [currentChainId]
-    );
+    const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
 
     const userOrderHistory = useGraphClientHook(
         {
