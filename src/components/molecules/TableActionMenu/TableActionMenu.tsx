@@ -8,7 +8,7 @@ const MenuItem = ({ text, onClick, disabled = false }: MenuItem) => {
         <Button
             onClick={onClick}
             disabled={disabled}
-            size={ButtonSizes.xs}
+            size={ButtonSizes.sm}
             fullWidth
             className='min-w-fit'
         >

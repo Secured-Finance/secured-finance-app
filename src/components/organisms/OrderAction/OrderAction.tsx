@@ -12,7 +12,6 @@ import {
     CollateralBook,
     MarketPhase,
     useBorrowableAmount,
-    useBreakpoint,
     useCollateralCurrencies,
     useLastPrices,
     useMarketPhase,
@@ -48,7 +47,6 @@ export const OrderAction = ({
     const chainError = useSelector(
         (state: RootState) => state.blockchain.chainError
     );
-    const isMobile = useBreakpoint('tablet');
 
     const [openDepositCollateralDialog, setOpenDepositCollateralDialog] =
         useState(false);
@@ -102,10 +100,8 @@ export const OrderAction = ({
         (marketPhase !== MarketPhase.PRE_ORDER &&
             marketPhase !== MarketPhase.OPEN);
 
-    const buttonSize = isMobile ? ButtonSizes.md : ButtonSizes.lg;
-
     return (
-        <div>
+        <>
             {isConnected &&
                 (canBorrow || side === OrderSide.LEND ? (
                     <Button
@@ -118,7 +114,7 @@ export const OrderAction = ({
                         data-testid='place-order-button'
                         mobileText='Order'
                         aria-label={getButtonText()}
-                        size={buttonSize}
+                        size={ButtonSizes.lg}
                     >
                         {getButtonText()}
                     </Button>
@@ -131,7 +127,7 @@ export const OrderAction = ({
                             track(ButtonEvents.DEPOSIT_COLLATERAL_BUTTON);
                         }}
                         data-testid='deposit-collateral-button'
-                        size={buttonSize}
+                        size={ButtonSizes.lg}
                     >
                         Deposit collateral
                     </Button>
@@ -140,7 +136,7 @@ export const OrderAction = ({
                 <Button
                     fullWidth
                     onClick={() => dispatch(setWalletDialogOpen(true))}
-                    size={buttonSize}
+                    size={ButtonSizes.lg}
                 >
                     Connect Wallet
                 </Button>
@@ -171,6 +167,6 @@ export const OrderAction = ({
                 collateralList={depositCollateralList}
                 source='Order Action Button'
             ></DepositCollateral>
-        </div>
+        </>
     );
 };

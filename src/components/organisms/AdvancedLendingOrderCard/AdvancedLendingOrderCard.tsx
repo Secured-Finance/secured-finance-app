@@ -477,16 +477,12 @@ export function AdvancedLendingOrderCard({
                         />
                     </div>
 
-                    <div className=''>
-                        <OrderAction
-                            loanValue={loanValue}
-                            collateralBook={collateralBook}
-                            validation={shouldDisableActionButton}
-                            isCurrencyDelisted={delistedCurrencySet.has(
-                                currency
-                            )}
-                        />
-                    </div>
+                    <OrderAction
+                        loanValue={loanValue}
+                        collateralBook={collateralBook}
+                        validation={shouldDisableActionButton}
+                        isCurrencyDelisted={delistedCurrencySet.has(currency)}
+                    />
 
                     <ErrorInfo
                         errorMessage='Simultaneous borrow and lend orders are not allowed during the pre-open market period.'
