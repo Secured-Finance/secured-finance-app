@@ -98,7 +98,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.tFIL]: {
-        index: 2,
+        index: 3,
         icon: FilIcon,
         symbol: CurrencySymbol.tFIL,
         name: 'Filecoin',
@@ -116,7 +116,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.WETHe]: {
-        index: 3,
+        index: 4,
         icon: EthIcon,
         symbol: CurrencySymbol.WETHe,
         name: WETHE.onChain().name,
@@ -134,7 +134,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.WFIL]: {
-        index: 4,
+        index: 5,
         icon: WFilIcon,
         symbol: CurrencySymbol.WFIL,
         name: WFIL.onChain().name,
@@ -154,7 +154,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.axlFIL]: {
-        index: 5,
+        index: 6,
         symbol: CurrencySymbol.axlFIL,
         name: 'Axelar Wrapped FIL',
         icon: WFilIcon,
@@ -172,7 +172,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.iFIL]: {
-        index: 5,
+        index: 7,
         symbol: CurrencySymbol.iFIL,
         name: 'Infinity Pool Staked FIL',
         icon: WFilIcon,
@@ -190,7 +190,7 @@ export const currencyMap: Readonly<
         hasOrderBook: false,
     },
     [CurrencySymbol.USDC]: {
-        index: 6,
+        index: 8,
         symbol: CurrencySymbol.USDC,
         name: USDC.onChain().name,
         icon: UsdcIcon,
@@ -208,7 +208,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.aUSDC]: {
-        index: 7,
+        index: 9,
         symbol: CurrencySymbol.aUSDC,
         name: 'aUSDC',
         icon: UsdcIcon,
