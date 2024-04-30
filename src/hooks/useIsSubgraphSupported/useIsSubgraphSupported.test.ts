@@ -1,11 +1,11 @@
 import { renderHook } from 'src/test-utils';
 import { useIsSubgraphSupported } from './useIsSubgraphSupported';
 
-describe('useIsSubgraphSupported', () => {
-    beforeAll(() => {
-        process.env.NEXT_PUBLIC_NON_SUBGRAPH_SUPPORTED_CHAIN_IDS = '314,314159';
-    });
+jest.mock('src/utils/env', () => ({
+    getNonSubgraphSupportedChainIds: () => [314, 314159],
+}));
 
+describe('useIsSubgraphSupported', () => {
     it('should return true if the current currency supports subgraphs', async () => {
         const currencyId = 1;
         const { result } = renderHook(() => useIsSubgraphSupported(currencyId));
