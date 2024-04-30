@@ -24,6 +24,7 @@ import {
     useCurrencyDelistedStatus,
     useGraphClientHook,
     useIsGlobalItayose,
+    useIsSubgraphSupported,
     useLastPrices,
     useLendingMarkets,
     useValueLockedByCurrency,
@@ -38,7 +39,6 @@ import {
     computeTotalDailyVolumeInUSD,
     currencyMap,
     getEnvironment,
-    getNonSubgraphSupportedChainIds,
     ordinaryFormat,
     usdFormat,
 } from 'src/utils';
@@ -71,10 +71,7 @@ export const MarketDashboard = () => {
     const currentChainId = useSelector(
         (state: RootState) => state.blockchain.chainId
     );
-    const isSubgraphSupported = useMemo(
-        () => !getNonSubgraphSupportedChainIds().includes(currentChainId),
-        [currentChainId]
-    );
+    const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
 
     currencies.forEach(ccy => {
         const unitPrices = getLoanValues(

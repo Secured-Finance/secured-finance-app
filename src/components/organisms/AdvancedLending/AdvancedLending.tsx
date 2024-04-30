@@ -27,6 +27,7 @@ import {
     useBreakpoint,
     useCurrencies,
     useGraphClientHook,
+    useIsSubgraphSupported,
     useIsUnderCollateralThreshold,
     useLastPrices,
     useMarket,
@@ -54,7 +55,6 @@ import {
     formatLoanValue,
     formatOrders,
     getMappedOrderStatus,
-    getNonSubgraphSupportedChainIds,
     hexToCurrencySymbol,
     ordinaryFormat,
     sortOrders,
@@ -133,10 +133,7 @@ export const AdvancedLending = ({
         (state: RootState) => state.blockchain.chainId
     );
 
-    const isSubgraphSupported = useMemo(
-        () => !getNonSubgraphSupportedChainIds().includes(currentChainId),
-        [currentChainId]
-    );
+    const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
 
     useEffect(() => {
         setTimestamp(Math.round(new Date().getTime() / 1000));
