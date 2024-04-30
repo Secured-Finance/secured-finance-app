@@ -102,6 +102,8 @@ export const OrderAction = ({
         (marketPhase !== MarketPhase.PRE_ORDER &&
             marketPhase !== MarketPhase.OPEN);
 
+    const buttonSize = isMobile ? ButtonSizes.md : ButtonSizes.lg;
+
     return (
         <div>
             {isConnected &&
@@ -116,7 +118,7 @@ export const OrderAction = ({
                         data-testid='place-order-button'
                         mobileText='Order'
                         aria-label={getButtonText()}
-                        size={isMobile ? ButtonSizes.md : ButtonSizes.lg}
+                        size={buttonSize}
                     >
                         {getButtonText()}
                     </Button>
@@ -129,7 +131,7 @@ export const OrderAction = ({
                             track(ButtonEvents.DEPOSIT_COLLATERAL_BUTTON);
                         }}
                         data-testid='deposit-collateral-button'
-                        size={isMobile ? ButtonSizes.md : ButtonSizes.lg}
+                        size={buttonSize}
                     >
                         Deposit collateral
                     </Button>
@@ -138,6 +140,7 @@ export const OrderAction = ({
                 <Button
                     fullWidth
                     onClick={() => dispatch(setWalletDialogOpen(true))}
+                    size={buttonSize}
                 >
                     Connect Wallet
                 </Button>

@@ -26,7 +26,7 @@ describe('CollateralTabRightPane component', () => {
         expect(screen.getAllByText('N/A')).toHaveLength(2);
         expect(screen.getByText('0%')).toBeInTheDocument();
         expect(screen.getByText('Low')).toBeInTheDocument();
-        expect(screen.getByText('Low')).toHaveClass('text-progressBarStart');
+        expect(screen.getByText('Low')).toHaveClass('text-secondary-500');
     });
 
     it('should render the progress bars with appropriate values', () => {
@@ -39,6 +39,6 @@ describe('CollateralTabRightPane component', () => {
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
         expect(screen.getByText('Low')).toBeInTheDocument();
         expect(screen.getByText('43%')).toBeInTheDocument();
-        expect(screen.getByText('Low')).toHaveClass('text-progressBarStart');
+        expect(screen.getByText('Low')).toHaveClass('text-secondary-500');
     });
 });
