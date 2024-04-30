@@ -57,6 +57,8 @@ export const MarketDashboard = () => {
     const { data: collateralBook = emptyCollateralBook } =
         useCollateralBook(address);
 
+    const totalCollateralInUSD = address ? collateralBook.usdCollateral : 0;
+
     const curves: Record<string, Rate[]> = {};
     const { data: lendingContracts = baseContracts } = useLendingMarkets();
     const { data: isGlobalItayose } = useIsGlobalItayose();
@@ -192,6 +194,7 @@ export const MarketDashboard = () => {
                                         collateralBook.collateralThreshold
                                     }
                                     account={address}
+                                    totalCollateralInUSD={totalCollateralInUSD}
                                 />
                             </div>
                         </GradientBox>

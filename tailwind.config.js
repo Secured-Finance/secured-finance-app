@@ -168,9 +168,9 @@ module.exports = {
             galacticOrange: '#FF9FAE',
             moonGrey: '#E6E6E6',
             slateGray: '#777E90',
-            secondary3: '#96EAF1',
             secondary7: '#B9BDEA',
             error5: '#FF324B',
+            'z-neutral-100': '#F1F5F9',
             grayScale: '#FAFAFA',
             tabGradient: {
                 1: 'rgba(57, 77, 174, 0)',

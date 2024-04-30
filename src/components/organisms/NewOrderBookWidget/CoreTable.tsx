@@ -143,7 +143,7 @@ export const CoreTable = <T,>({
                                             activeRow
                                         ) &&
                                         onHoverBackground(row.id),
-                                    'border-z-neutral-100 border-dashed':
+                                    'border-dashed border-z-neutral-100':
                                         coreTableOptions.hoverRow?.(row.id) &&
                                         activeRow &&
                                         coreTableOptions.hoverRow?.(
