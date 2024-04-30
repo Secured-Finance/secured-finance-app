@@ -25,6 +25,7 @@ import {
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { RootState } from 'src/store/types';
+import { ButtonSizes } from 'src/types';
 import {
     AddressUtils,
     CurrencySymbol,
@@ -277,6 +278,7 @@ export const Faucet = () => {
                                     disabled={
                                         !account || isPending || chainError
                                     }
+                                    size={ButtonSizes.lg}
                                 >
                                     {isPending ? 'Minting...' : 'Mint tokens'}
                                 </Button>

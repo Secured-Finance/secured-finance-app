@@ -5,6 +5,7 @@ import { Button } from 'src/components/atoms';
 import { CoreTable } from 'src/components/molecules';
 import { EmergencySettlementStep } from 'src/components/templates';
 import { Position, useTerminationPrices } from 'src/hooks';
+import { ButtonSizes } from 'src/types';
 import { usdFormat } from 'src/utils';
 import {
     amountColumnDefinition,
@@ -97,7 +98,11 @@ export const WithdrawPositionTable = ({
                                 {usdFormat(netValue)}
                             </span>
                         </span>
-                        <Button className='row-start-1' onClick={onRedeem}>
+                        <Button
+                            className='row-start-1'
+                            size={ButtonSizes.lg}
+                            onClick={onRedeem}
+                        >
                             Redeem
                         </Button>
                     </div>

@@ -19,7 +19,6 @@ import {
     useMaturityOptions,
 } from 'src/hooks';
 import { setCurrency, setMaturity } from 'src/store/landingOrderForm';
-import { ButtonSizes } from 'src/types';
 import {
     CurrencySymbol,
     formatLoanValue,
@@ -163,10 +162,7 @@ export const MarketLoanWidget = ({
                 cell: info => {
                     return (
                         <div className='flex justify-end px-4 laptop:px-1'>
-                            <Button
-                                onClick={() => handleClick(info)}
-                                size={ButtonSizes.sm}
-                            >
+                            <Button onClick={() => handleClick(info)}>
                                 {info.row.original.isOpened
                                     ? 'Open Order'
                                     : 'GO'}

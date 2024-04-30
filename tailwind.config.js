@@ -110,7 +110,6 @@ module.exports = {
                 500: '#BD47FB',
                 700: '#8919C4',
             },
-            // TODO: handle neutral 1-8 as figma variables
             neutral: {
                 DEFAULT: '#353945',
                 1: '#141416',
@@ -147,8 +146,6 @@ module.exports = {
                 500: '#FF658A',
                 700: '#C30C38',
             },
-            // Primary
-
             teal: '#11CABE',
             green: '#5CD167',
             orange: '#F9AA4B',
