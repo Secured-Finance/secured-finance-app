@@ -89,13 +89,13 @@ export const MarketDashboard = () => {
         {}, // no variables
         queries.UserCountDocument,
         'protocol',
-        isSubgraphSupported
+        !isSubgraphSupported
     );
     const dailyVolumes = useGraphClientHook(
         {}, // no variables
         queries.DailyVolumesDocument,
         'dailyVolumes',
-        isSubgraphSupported
+        !isSubgraphSupported
     );
 
     const { data: priceList } = useLastPrices();
