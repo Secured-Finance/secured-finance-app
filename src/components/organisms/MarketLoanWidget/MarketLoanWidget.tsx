@@ -281,7 +281,7 @@ const AssetDropdown = ({
     handleSelectedCurrency: (ccy: CurrencySymbol | undefined) => void;
 }) => {
     const { data: currencies } = useCurrencies();
-    const assetList = toOptions(currencies, CurrencySymbol.WBTC);
+    const assetList = toOptions(currencies, CurrencySymbol.USDC);
     return (
         <DropdownSelector<string>
             optionList={[

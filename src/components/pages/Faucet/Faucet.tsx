@@ -98,7 +98,7 @@ export const Faucet = () => {
     const sf = useSF();
 
     const { data: currencies } = useCurrencies();
-    const assetList = toOptions(currencies, CurrencySymbol.WBTC).filter(
+    const assetList = toOptions(currencies, CurrencySymbol.USDC).filter(
         ccy => currencyMap[ccy.value].toCurrency().isToken
     );
 

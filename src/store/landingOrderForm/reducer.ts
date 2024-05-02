@@ -17,7 +17,7 @@ type LandingOrderFormStore = {
 };
 
 const initialStore: LandingOrderFormStore = {
-    currency: CurrencySymbol.WBTC,
+    currency: CurrencySymbol.USDC,
     maturity: 0,
     side: OrderSide.BORROW,
     amount: '',
