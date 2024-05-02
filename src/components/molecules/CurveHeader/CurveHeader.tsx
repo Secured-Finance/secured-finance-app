@@ -15,7 +15,7 @@ interface CurveHeaderProps {
 }
 
 export const CurveHeader = ({
-    asset = CurrencySymbol.WBTC,
+    asset = CurrencySymbol.USDC,
     priceList,
     dailyVolumes,
 }: CurveHeaderProps): JSX.Element => {
