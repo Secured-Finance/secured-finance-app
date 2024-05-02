@@ -120,7 +120,7 @@ export const MarketDashboard = () => {
     const defaultCurrency =
         currencies && currencies.length > 0
             ? currencies[0]
-            : CurrencySymbol.WBTC;
+            : CurrencySymbol.USDC;
 
     const currencyArray = Array.from(delistedCurrencySet);
 
