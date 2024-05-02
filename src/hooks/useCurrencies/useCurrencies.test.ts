@@ -12,10 +12,10 @@ describe('useCurrencies', () => {
         const { result } = renderHook(() => useCurrencies());
         await waitFor(() =>
             expect(result.current.data).toEqual([
-                CurrencySymbol.WBTC,
-                CurrencySymbol.ETH,
-                CurrencySymbol.WFIL,
                 CurrencySymbol.USDC,
+                CurrencySymbol.ETH,
+                CurrencySymbol.WBTC,
+                CurrencySymbol.WFIL,
             ])
         );
     });

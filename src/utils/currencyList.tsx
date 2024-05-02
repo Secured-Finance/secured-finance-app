@@ -42,40 +42,40 @@ export enum CurrencySymbol {
 export const currencyMap: Readonly<
     Record<CurrencySymbol, Readonly<CurrencyInfo>>
 > = {
-    [CurrencySymbol.WBTC]: {
+    [CurrencySymbol.USDC]: {
         index: 0,
-        symbol: CurrencySymbol.WBTC,
-        name: WBTC.onChain().name,
-        icon: BTCIcon,
-        coinGeckoId: 'wrapped-bitcoin',
+        symbol: CurrencySymbol.USDC,
+        name: USDC.onChain().name,
+        icon: UsdcIcon,
+        coinGeckoId: 'usd-coin',
         isCollateral: true,
         toBaseUnit: (amount: number) =>
-            convertToBlockchainUnit(amount, WBTC.onChain()),
+            convertToBlockchainUnit(amount, USDC.onChain()),
         fromBaseUnit: (amount: bigint) =>
-            convertFromBlockchainUnit(amount, WBTC.onChain()),
-        toCurrency: () => WBTC.onChain(),
-        chartColor: tailwindConfig.theme.colors.chart.btc,
-        pillColor: tailwindConfig.theme.colors.pill.btc,
-        roundingDecimal: 4,
-        longName: 'Bitcoin',
+            convertFromBlockchainUnit(amount, USDC.onChain()),
+        toCurrency: () => USDC.onChain(),
+        chartColor: tailwindConfig.theme.colors.chart.usdc,
+        pillColor: tailwindConfig.theme.colors.pill.usdc,
+        roundingDecimal: 0,
+        longName: 'USD Coin',
         hasOrderBook: true,
     },
-    [CurrencySymbol.BTCb]: {
+    [CurrencySymbol.aUSDC]: {
         index: 1,
-        symbol: CurrencySymbol.BTCb,
-        name: BTCB.onChain().name,
-        icon: BTCIcon,
-        coinGeckoId: 'wrapped-bitcoin',
+        symbol: CurrencySymbol.aUSDC,
+        name: 'aUSDC',
+        icon: UsdcIcon,
+        coinGeckoId: 'usd-coin',
         isCollateral: true,
         toBaseUnit: (amount: number) =>
-            convertToBlockchainUnit(amount, BTCB.onChain()),
+            convertToBlockchainUnit(amount, AUSDC.onChain()),
         fromBaseUnit: (amount: bigint) =>
-            convertFromBlockchainUnit(amount, BTCB.onChain()),
-        toCurrency: () => BTCB.onChain(),
-        chartColor: tailwindConfig.theme.colors.chart.btc,
-        pillColor: tailwindConfig.theme.colors.pill.btc,
-        roundingDecimal: 4,
-        longName: 'Bitcoin',
+            convertFromBlockchainUnit(amount, AUSDC.onChain()),
+        toCurrency: () => AUSDC.onChain(),
+        chartColor: tailwindConfig.theme.colors.chart.usdc,
+        pillColor: tailwindConfig.theme.colors.pill.usdc,
+        roundingDecimal: 0,
+        longName: 'USD Coin',
         hasOrderBook: true,
     },
     [CurrencySymbol.ETH]: {
@@ -133,8 +133,44 @@ export const currencyMap: Readonly<
         longName: 'Wrapped Ether',
         hasOrderBook: true,
     },
-    [CurrencySymbol.WFIL]: {
+    [CurrencySymbol.WBTC]: {
         index: 5,
+        symbol: CurrencySymbol.WBTC,
+        name: WBTC.onChain().name,
+        icon: BTCIcon,
+        coinGeckoId: 'wrapped-bitcoin',
+        isCollateral: true,
+        toBaseUnit: (amount: number) =>
+            convertToBlockchainUnit(amount, WBTC.onChain()),
+        fromBaseUnit: (amount: bigint) =>
+            convertFromBlockchainUnit(amount, WBTC.onChain()),
+        toCurrency: () => WBTC.onChain(),
+        chartColor: tailwindConfig.theme.colors.chart.btc,
+        pillColor: tailwindConfig.theme.colors.pill.btc,
+        roundingDecimal: 4,
+        longName: 'Bitcoin',
+        hasOrderBook: true,
+    },
+    [CurrencySymbol.BTCb]: {
+        index: 6,
+        symbol: CurrencySymbol.BTCb,
+        name: BTCB.onChain().name,
+        icon: BTCIcon,
+        coinGeckoId: 'wrapped-bitcoin',
+        isCollateral: true,
+        toBaseUnit: (amount: number) =>
+            convertToBlockchainUnit(amount, BTCB.onChain()),
+        fromBaseUnit: (amount: bigint) =>
+            convertFromBlockchainUnit(amount, BTCB.onChain()),
+        toCurrency: () => BTCB.onChain(),
+        chartColor: tailwindConfig.theme.colors.chart.btc,
+        pillColor: tailwindConfig.theme.colors.pill.btc,
+        roundingDecimal: 4,
+        longName: 'Bitcoin',
+        hasOrderBook: true,
+    },
+    [CurrencySymbol.WFIL]: {
+        index: 7,
         icon: WFilIcon,
         symbol: CurrencySymbol.WFIL,
         name: WFIL.onChain().name,
@@ -154,7 +190,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.axlFIL]: {
-        index: 6,
+        index: 8,
         symbol: CurrencySymbol.axlFIL,
         name: 'Axelar Wrapped FIL',
         icon: WFilIcon,
@@ -172,7 +208,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.iFIL]: {
-        index: 7,
+        index: 9,
         symbol: CurrencySymbol.iFIL,
         name: 'Infinity Pool Staked FIL',
         icon: WFilIcon,
@@ -188,42 +224,6 @@ export const currencyMap: Readonly<
         roundingDecimal: 0,
         longName: 'Infinity Pool Staked FIL',
         hasOrderBook: false,
-    },
-    [CurrencySymbol.USDC]: {
-        index: 8,
-        symbol: CurrencySymbol.USDC,
-        name: USDC.onChain().name,
-        icon: UsdcIcon,
-        coinGeckoId: 'usd-coin',
-        isCollateral: true,
-        toBaseUnit: (amount: number) =>
-            convertToBlockchainUnit(amount, USDC.onChain()),
-        fromBaseUnit: (amount: bigint) =>
-            convertFromBlockchainUnit(amount, USDC.onChain()),
-        toCurrency: () => USDC.onChain(),
-        chartColor: tailwindConfig.theme.colors.chart.usdc,
-        pillColor: tailwindConfig.theme.colors.pill.usdc,
-        roundingDecimal: 0,
-        longName: 'USD Coin',
-        hasOrderBook: true,
-    },
-    [CurrencySymbol.aUSDC]: {
-        index: 9,
-        symbol: CurrencySymbol.aUSDC,
-        name: 'aUSDC',
-        icon: UsdcIcon,
-        coinGeckoId: 'usd-coin',
-        isCollateral: true,
-        toBaseUnit: (amount: number) =>
-            convertToBlockchainUnit(amount, AUSDC.onChain()),
-        fromBaseUnit: (amount: bigint) =>
-            convertFromBlockchainUnit(amount, AUSDC.onChain()),
-        toCurrency: () => AUSDC.onChain(),
-        chartColor: tailwindConfig.theme.colors.chart.usdc,
-        pillColor: tailwindConfig.theme.colors.pill.usdc,
-        roundingDecimal: 0,
-        longName: 'USD Coin',
-        hasOrderBook: true,
     },
 };
 
