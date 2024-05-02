@@ -39,11 +39,10 @@ describe('getNonSubgraphSupportedChainIds ', () => {
         expect(typeof chainIds[1]).toBe('number');
     });
 
-    it('should throw error if variable is not set', () => {
+    it('should return empty array if variable is not set', () => {
         process.env.NEXT_PUBLIC_NON_SUBGRAPH_SUPPORTED_CHAIN_IDS = '';
-        expect(() => getNonSubgraphSupportedChainIds()).toThrowError(
-            'NEXT_PUBLIC_NON_SUBGRAPH_SUPPORTED_CHAIN_IDS is not set'
-        );
+        const chainIds = getNonSubgraphSupportedChainIds();
+        expect(chainIds.length).toBe(0);
     });
 });
 
