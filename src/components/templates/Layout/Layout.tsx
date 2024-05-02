@@ -16,14 +16,14 @@ export const Layout = ({
             data-testid='wrapper-div'
         >
             <div className='w-full'>
-                <header className='sticky top-0 z-30 w-full bg-universeBlue'>
+                <header className='sticky top-0 z-30 w-full bg-neutral-800'>
                     {navBar}
                 </header>
                 <main className='w-full'>{children}</main>
             </div>
             <footer
                 className={clsx('w-full', {
-                    'sticky bottom-0 z-30 bg-universeBlue':
+                    'sticky bottom-0 z-30 bg-neutral-900':
                         getCommitHash() !== '.storybook',
                 })}
             >
