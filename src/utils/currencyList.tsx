@@ -97,26 +97,8 @@ export const currencyMap: Readonly<
         longName: 'Ethereum',
         hasOrderBook: true,
     },
-    [CurrencySymbol.tFIL]: {
-        index: 3,
-        icon: FilIcon,
-        symbol: CurrencySymbol.tFIL,
-        name: 'Filecoin',
-        coinGeckoId: 'filecoin',
-        isCollateral: true,
-        toBaseUnit: (amount: number) =>
-            convertToBlockchainUnit(amount, TFIL.onChain()),
-        fromBaseUnit: (amount: bigint) =>
-            convertFromBlockchainUnit(amount, TFIL.onChain()),
-        toCurrency: () => TFIL.onChain(),
-        chartColor: tailwindConfig.theme.colors.chart.fil,
-        pillColor: tailwindConfig.theme.colors.pill.fil,
-        roundingDecimal: 0,
-        longName: 'Filecoin',
-        hasOrderBook: true,
-    },
     [CurrencySymbol.WETHe]: {
-        index: 4,
+        index: 3,
         icon: EthIcon,
         symbol: CurrencySymbol.WETHe,
         name: WETHE.onChain().name,
@@ -134,7 +116,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.WBTC]: {
-        index: 5,
+        index: 4,
         symbol: CurrencySymbol.WBTC,
         name: WBTC.onChain().name,
         icon: BTCIcon,
@@ -152,7 +134,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.BTCb]: {
-        index: 6,
+        index: 5,
         symbol: CurrencySymbol.BTCb,
         name: BTCB.onChain().name,
         icon: BTCIcon,
@@ -167,6 +149,24 @@ export const currencyMap: Readonly<
         pillColor: tailwindConfig.theme.colors.pill.btc,
         roundingDecimal: 4,
         longName: 'Bitcoin',
+        hasOrderBook: true,
+    },
+    [CurrencySymbol.tFIL]: {
+        index: 6,
+        icon: FilIcon,
+        symbol: CurrencySymbol.tFIL,
+        name: 'Filecoin',
+        coinGeckoId: 'filecoin',
+        isCollateral: true,
+        toBaseUnit: (amount: number) =>
+            convertToBlockchainUnit(amount, TFIL.onChain()),
+        fromBaseUnit: (amount: bigint) =>
+            convertFromBlockchainUnit(amount, TFIL.onChain()),
+        toCurrency: () => TFIL.onChain(),
+        chartColor: tailwindConfig.theme.colors.chart.fil,
+        pillColor: tailwindConfig.theme.colors.pill.fil,
+        roundingDecimal: 0,
+        longName: 'Filecoin',
         hasOrderBook: true,
     },
     [CurrencySymbol.WFIL]: {
