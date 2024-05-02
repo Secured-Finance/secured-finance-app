@@ -15,7 +15,7 @@ interface CurveHeaderProps {
 }
 
 const CurveHeaderNotes = ({
-    asset = CurrencySymbol.WBTC,
+    asset = CurrencySymbol.USDC,
     priceList,
     dailyVolumes,
 }: {
