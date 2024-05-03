@@ -1,6 +1,7 @@
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import SFLogo from 'src/assets/img/logo.svg';
 import SFLogoSmall from 'src/assets/img/small-logo.svg';
 import { Button, NavTab, SupportedNetworks } from 'src/components/atoms';
@@ -13,7 +14,6 @@ import {
 import { WalletDialog, WalletPopover } from 'src/components/organisms';
 import { useBreakpoint, useIsGlobalItayose } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
-import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
 import { getSupportedNetworks } from 'src/utils';
 import { AddressUtils } from 'src/utils/address';
@@ -82,7 +82,8 @@ const HeaderMessage = ({
 };
 
 const Header = ({ showNavigation }: { showNavigation: boolean }) => {
-    const dispatch = useDispatch();
+    const { open } = useWeb3Modal();
+
     const isMobile = useBreakpoint('tablet');
     const { address, isConnected } = useAccount();
     const securedFinance = useSF();
@@ -165,7 +166,9 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                             size={isMobile ? 'sm' : undefined}
                             data-cy='wallet'
                             data-testid='connect-wallet'
-                            onClick={() => dispatch(setWalletDialogOpen(true))}
+                            onClick={() => {
+                                open();
+                            }}
                         >
                             Connect Wallet
                         </Button>
