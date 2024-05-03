@@ -35,14 +35,21 @@ const preloadedState = {
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-describe.skip('Itayose Component', () => {
+describe('Itayose Component', () => {
     it('should render a Itayose', async () => {
-        await waitFor(() => render(<Default />));
+        await waitFor(() =>
+            render(<Default />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+            })
+        );
     });
 
     it('should convert the amount to changed currency when the user change the currency', async () => {
         const { store } = await waitFor(() =>
-            render(<Default />, { preloadedState })
+            render(<Default />, {
+                preloadedState,
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+            })
         );
         expect(store.getState().landingOrderForm.amount).toEqual('0');
         const ele = await screen.findByRole('textbox', { name: 'Amount' });
@@ -63,7 +70,12 @@ describe.skip('Itayose Component', () => {
     }, 8000);
 
     it('should not show delisted currencies in asset dropwdown', async () => {
-        await waitFor(() => render(<Default />, { preloadedState }));
+        await waitFor(() =>
+            render(<Default />, {
+                preloadedState,
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+            })
+        );
         await waitFor(() => {
             fireEvent.click(screen.getByRole('button', { name: 'WBTC' }));
         });
@@ -71,7 +83,9 @@ describe.skip('Itayose Component', () => {
     });
 
     it('should only show the pre-order orders of the user when they are connected', async () => {
-        render(<Default />);
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
         fireEvent.click(screen.getByRole('tab', { name: 'Open Orders' }));
 
         const openOrders = await screen.findAllByRole('row');
@@ -80,7 +94,9 @@ describe.skip('Itayose Component', () => {
 
     describe('Dynamic orderbook depth', () => {
         it('should retrieve more data when the user select only one side of the orderbook', async () => {
-            render(<Default />);
+            render(<Default />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+            });
             expect(
                 mockSecuredFinance.getLendOrderBook
             ).toHaveBeenLastCalledWith(
@@ -109,7 +125,9 @@ describe.skip('Itayose Component', () => {
         });
 
         it('should retrieve more data when the user select a aggregation factor', async () => {
-            render(<Default />);
+            render(<Default />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+            });
             expect(
                 mockSecuredFinance.getLendOrderBook
             ).toHaveBeenLastCalledWith(
