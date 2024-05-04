@@ -21,8 +21,8 @@ function EntryPoint() {
     }
 
     if (isGlobalItayose) {
-        router.push('/global-itayose');
-        return null;
+        // router.push('/global-itayose');
+        // return null;
     }
     return <Landing />;
 }

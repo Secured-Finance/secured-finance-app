@@ -50,8 +50,8 @@ const AGGREGATION_OPTIONS: (Option<string> & { multiplier: number })[] = [
     { label: '10', value: '1000', multiplier: 1000 },
 ];
 
-const ORDERBOOK_DOUBLE_MAX_LINES = 15;
-const ORDERBOOK_SINGLE_MAX_LINES = 30;
+const ORDERBOOK_DOUBLE_MAX_LINES = 6;
+const ORDERBOOK_SINGLE_MAX_LINES = 12;
 
 const columnHelper = createColumnHelper<OrderBookEntry>();
 
