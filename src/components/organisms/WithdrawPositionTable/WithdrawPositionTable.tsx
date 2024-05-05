@@ -1,11 +1,10 @@
 import { InformationCircleIcon } from '@heroicons/react/24/solid';
 import { createColumnHelper } from '@tanstack/react-table';
 import { useMemo } from 'react';
-import { Button } from 'src/components/atoms';
+import { Button, ButtonSizes } from 'src/components/atoms';
 import { CoreTable } from 'src/components/molecules';
 import { EmergencySettlementStep } from 'src/components/templates';
 import { Position, useTerminationPrices } from 'src/hooks';
-import { ButtonSizes } from 'src/types';
 import { usdFormat } from 'src/utils';
 import {
     amountColumnDefinition,

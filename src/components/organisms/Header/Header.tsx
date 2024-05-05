@@ -3,7 +3,12 @@ import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import SFLogo from 'src/assets/img/logo.svg';
 import SFLogoSmall from 'src/assets/img/small-logo.svg';
-import { Button, NavTab, SupportedNetworks } from 'src/components/atoms';
+import {
+    Button,
+    ButtonSizes,
+    NavTab,
+    SupportedNetworks,
+} from 'src/components/atoms';
 import {
     HamburgerMenu,
     MenuPopover,
@@ -15,7 +20,6 @@ import { useBreakpoint, useIsGlobalItayose } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
-import { ButtonSizes } from 'src/types';
 import { getSupportedNetworks } from 'src/utils';
 import { AddressUtils } from 'src/utils/address';
 import { isProdEnv } from 'src/utils/displayUtils';
@@ -163,7 +167,7 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                         </>
                     ) : (
                         <Button
-                            size={isMobile ? ButtonSizes.xs : ButtonSizes.lg}
+                            size={isMobile ? ButtonSizes.sm : ButtonSizes.lg}
                             data-cy='wallet'
                             data-testid='connect-wallet'
                             onClick={() => dispatch(setWalletDialogOpen(true))}

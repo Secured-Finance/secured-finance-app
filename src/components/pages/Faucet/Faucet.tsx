@@ -10,7 +10,12 @@ import clsx from 'clsx';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import MetaMaskIcon from 'src/assets/img/metamask-fox.svg';
-import { Button, GradientBox, Separator } from 'src/components/atoms';
+import {
+    Button,
+    ButtonSizes,
+    GradientBox,
+    Separator,
+} from 'src/components/atoms';
 import {
     CurrencyDropdown,
     Dialog,
@@ -25,7 +30,6 @@ import {
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { RootState } from 'src/store/types';
-import { ButtonSizes } from 'src/types';
 import {
     AddressUtils,
     CurrencySymbol,

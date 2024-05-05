@@ -2,7 +2,7 @@ import { track } from '@amplitude/analytics-browser';
 import { OrderSide } from '@secured-finance/sf-client';
 import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button } from 'src/components/atoms';
+import { Button, ButtonSizes } from 'src/components/atoms';
 import {
     DepositCollateral,
     PlaceOrder,
@@ -21,7 +21,6 @@ import { useCollateralBalances } from 'src/hooks/useBalances';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { ButtonSizes } from 'src/types';
 import { ButtonEvents, amountFormatterFromBase } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
