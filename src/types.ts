@@ -96,13 +96,6 @@ export type Wallet = 'MetaMask' | 'WalletConnect';
 export type UserAccount = ReturnType<typeof useAccount>['address'];
 export type AssetPriceMap = Record<CurrencySymbol, number>;
 
-export enum ButtonSizes {
-    xs = 'xs',
-    sm = 'sm',
-    md = 'md',
-    lg = 'lg',
-}
-
 export enum HistoricalDataIntervals {
     '5M' = '300',
     '15M' = '900',

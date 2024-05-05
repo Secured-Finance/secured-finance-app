@@ -1,5 +1,4 @@
-import { Button } from 'src/components/atoms';
-import { ButtonSizes } from 'src/types';
+import { Button, ButtonSizes } from 'src/components/atoms';
 
 type MenuItem = { text: string; onClick: () => void; disabled?: boolean };
 
