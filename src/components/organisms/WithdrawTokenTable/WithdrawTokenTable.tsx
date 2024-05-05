@@ -89,7 +89,6 @@ export const WithdrawTokenTable = ({ data }: { data: TokenPosition[] }) => {
                                     );
                                     setOpenModal(true);
                                 }}
-                                size='sm'
                             >
                                 Withdraw
                             </Button>

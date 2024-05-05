@@ -5,7 +5,12 @@ import { useMemo, useRef, useState } from 'react';
 import Filecoin from 'src/assets/coins/fil.svg';
 import AxelarFil from 'src/assets/coins/wfil.svg';
 import AxelarSquid from 'src/assets/img/squid+axelar.svg';
-import { Button, GradientBox, Separator } from 'src/components/atoms';
+import {
+    Button,
+    ButtonSizes,
+    GradientBox,
+    Separator,
+} from 'src/components/atoms';
 import {
     AssetDisclosure,
     AssetDisclosureProps,
@@ -41,7 +46,7 @@ const BridgeDialog = ({
             <div className='fixed inset-0 bg-backgroundBlur backdrop-blur-sm' />
             <div className='fixed inset-0 flex items-center justify-center'>
                 <Dialog.Panel
-                    className='h-screen w-full overflow-y-auto rounded-xl bg-universeBlue p-6 shadow-deep tablet:h-fit tablet:w-fit'
+                    className='h-screen w-full overflow-y-auto rounded-xl bg-neutral-900 p-6 shadow-deep tablet:h-fit tablet:w-fit'
                     data-cy='modal'
                 >
                     <div
@@ -111,7 +116,7 @@ export const MyWalletCard = ({
                                     </div>
                                     <Button
                                         onClick={() => setIsOpen(true)}
-                                        size='xs'
+                                        size={ButtonSizes.sm}
                                     >
                                         Bridge
                                     </Button>
