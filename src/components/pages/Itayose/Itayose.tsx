@@ -1,7 +1,9 @@
 import { OrderSide } from '@secured-finance/sf-client';
+import { toBytes32 } from '@secured-finance/sf-graph-client';
+import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
 import { VisibilityState } from '@tanstack/table-core';
 import * as dayjs from 'dayjs';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     GradientBox,
@@ -20,8 +22,10 @@ import {
     AdvancedLendingOrderCard,
     LineChartTab,
     OrderBookWidget,
+    OrderHistoryTable,
     OrderTable,
 } from 'src/components/organisms';
+import { TabSpinner } from 'src/components/pages';
 import { Page, ThreeColumnsWithTopBar } from 'src/components/templates';
 import {
     MarketPhase,
@@ -31,6 +35,7 @@ import {
     useCollateralBook,
     useCurrencies,
     useCurrencyDelistedStatus,
+    useGraphClientHook,
     useItayoseEstimation,
     useLastPrices,
     useLendOrderBook,
@@ -47,9 +52,21 @@ import {
     setMaturity,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { CurrencySymbol, ZERO_BI, toOptions, usdFormat } from 'src/utils';
+import {
+    CurrencySymbol,
+    ZERO_BI,
+    getMappedOrderStatus,
+    sortOrders,
+    toOptions,
+    usdFormat,
+} from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
+
+enum TableType {
+    OPEN_ORDERS = 0,
+    ORDER_HISTORY,
+}
 
 const Toolbar = ({
     selectedAsset,
@@ -112,6 +129,7 @@ export const Itayose = () => {
     const { currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
+    const [selectedTable, setSelectedTable] = useState(TableType.OPEN_ORDERS);
 
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
 
@@ -153,6 +171,27 @@ export const Itayose = () => {
             ),
         [currencies, currency, delistedCurrencySet]
     );
+    const userOrderHistory = useGraphClientHook(
+        {
+            address: address?.toLowerCase() ?? '',
+            currency: toBytes32(currency),
+            maturity: maturity,
+        },
+        queries.FilteredUserOrderHistoryDocument,
+        'user',
+        selectedTable !== TableType.ORDER_HISTORY
+    );
+
+    const sortedOrderHistory = useMemo(() => {
+        return (userOrderHistory.data?.orders || [])
+            .map(order => {
+                return {
+                    ...order,
+                    status: getMappedOrderStatus(order),
+                } as typeof order & { status: string };
+            })
+            .sort((a, b) => sortOrders(a, b));
+    }, [userOrderHistory.data?.orders]);
 
     const estimatedOpeningUnitPrice = lendingMarkets[currency][maturity]
         ?.openingUnitPrice
@@ -332,12 +371,29 @@ export const Itayose = () => {
                         </div>
                     </Tab>
 
-                    <HorizontalTab tabTitles={['Open Orders']}>
+                    <HorizontalTab
+                        tabTitles={['Open Orders', 'Order History']}
+                        onTabChange={setSelectedTable}
+                        useCustomBreakpoint={true}
+                    >
                         <OrderTable
                             data={filteredOrderList}
                             variant='compact'
                             height={350}
                         />
+                        {userOrderHistory.loading ? (
+                            <TabSpinner />
+                        ) : (
+                            <OrderHistoryTable
+                                data={sortedOrderHistory}
+                                pagination={{
+                                    totalData: sortedOrderHistory.length,
+                                    getMoreData: () => {},
+                                    containerHeight: 350,
+                                }}
+                                variant='contractOnly'
+                            />
+                        )}
                     </HorizontalTab>
                 </div>
             </ThreeColumnsWithTopBar>
