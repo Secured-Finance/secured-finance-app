@@ -10,7 +10,12 @@ import clsx from 'clsx';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import MetaMaskIcon from 'src/assets/img/metamask-fox.svg';
-import { Button, GradientBox, Separator } from 'src/components/atoms';
+import {
+    Button,
+    ButtonSizes,
+    GradientBox,
+    Separator,
+} from 'src/components/atoms';
 import {
     CurrencyDropdown,
     Dialog,
@@ -277,6 +282,7 @@ export const Faucet = () => {
                                     disabled={
                                         !account || isPending || chainError
                                     }
+                                    size={ButtonSizes.lg}
                                 >
                                     {isPending ? 'Minting...' : 'Mint tokens'}
                                 </Button>
