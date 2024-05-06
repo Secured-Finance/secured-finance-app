@@ -73,6 +73,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.24.5",
     "@commitlint/cli": "^17.0.0",
     "@commitlint/config-conventional": "^17.0.0",
     "@ethersproject/experimental": "^5.6.0",
@@ -101,6 +102,7 @@
     "assert": "^2.0.0",
     "autoprefixer": "^10.4.7",
     "axios-mock-adapter": "^1.21.1",
+    "babel-jest": "^29.7.0",
     "buffer": "^6.0.3",
     "canvas": "^2.9.3",
     "chromatic": "^11.3.0",

@@ -1,5 +1,6 @@
 import { GraphClientProvider } from '@secured-finance/sf-graph-client';
 import type { StoryContext, StoryFn } from '@storybook/react';
+import { createWeb3Modal } from '@web3modal/wagmi/react';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import 'src/bigIntPatch';
@@ -9,8 +10,9 @@ import { Layout } from 'src/components/templates';
 import { updateChainError } from 'src/store/blockchain';
 import { connectEthWallet, updateEthBalance } from 'src/store/wallet';
 import { account, connector, publicClient } from 'src/stories/mocks/mockWallet';
+import { getWalletConnectId } from 'src/utils';
 import timemachine from 'timemachine';
-import { WagmiConfig, createConfig } from 'wagmi';
+import { WagmiConfig, createConfig, sepolia } from 'wagmi';
 
 export const withAppLayout = (Story: StoryFn) => {
     return (
@@ -27,6 +29,7 @@ export const withWalletProvider = (Story: StoryFn, Context: StoryContext) => {
         publicClient: publicClient,
         connectors: [connector],
     });
+    const projectId = getWalletConnectId();
 
     useEffect(() => {
         const timeoutId = setTimeout(() => {
@@ -35,6 +38,12 @@ export const withWalletProvider = (Story: StoryFn, Context: StoryContext) => {
 
         return () => clearTimeout(timeoutId);
     }, [dispatch]);
+
+    createWeb3Modal({
+        wagmiConfig: config,
+        projectId,
+        chains: [sepolia],
+    });
 
     return (
         <WagmiConfig config={config}>

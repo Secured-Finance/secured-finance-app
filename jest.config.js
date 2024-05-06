@@ -29,13 +29,7 @@ const customJestConfig = {
     coverageProvider: 'v8',
     coverageReporters: ['json', 'lcov', 'text', 'text-summary'],
     transform: {
-        '^.+@web3modal/.*\\.jsx?$': 'babel-jest',
-        '^.+@web3modal/.*\\.tsx?$': 'ts-jest',
-    },
-    globals: {
-        'ts-jest': {
-            useESM: true,
-        },
+        '^.+\\.jsx?$': 'babel-jest',
     },
 };
 
@@ -45,11 +39,9 @@ const asyncConfig = createJestConfig(customJestConfig);
 // and wrap it...
 module.exports = async () => {
     const config = await asyncConfig();
-    // config.transformIgnorePatterns = [
-    //     'node_modules/(?!(wagmi|@wagmi|@web3modal|@0xsquid|isows)/)',
-    // ];
     config.transformIgnorePatterns = [
-        'node_modules/(?!(wagmi|@wagmi|@web3modal|@0xsquid|isows|@web3modal/scaffold)/)',
+        'node_modules/(?!(wagmi|@wagmi|@0xsquid|isows)/)',
+        'node_modules/@web3modal/wagmi/dist/esm/exports/react.js',
     ];
     config.moduleNameMapper = {
         // We cannot depend on the exact key used by Next.js
