@@ -36,7 +36,7 @@ NavTabWithOptionsStyles.args = {
     optionsStyles: [
         {
             bgColorActive: 'bg-nebulaTeal',
-            textClassActive: 'text-secondary3 font-semibold',
+            textClassActive: 'text-secondary-300 font-semibold',
             gradient: {
                 from: 'from-tabGradient-4',
                 to: 'to-tabGradient-3',

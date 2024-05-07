@@ -66,7 +66,7 @@ const OrderBookCell = ({
             'z-[1] font-tertiary text-xs font-normal leading-[14px] laptop:px-5 laptop:text-xs laptop:leading-4',
             {
                 'text-error-300': color === 'negative',
-                'text-success-300': color === 'positive',
+                'text-secondary-300': color === 'positive',
                 'text-neutral-50': color === 'neutral',
                 'text-neutral-400': color === 'disabled',
                 'text-warning-300': color === 'warning',
@@ -612,12 +612,12 @@ const OrderBookIconMobile = ({
         {showBorrow && showLend ? (
             <div className='flex flex-col gap-[2px]'>
                 <span className='h-6px w-14px rounded-sm bg-error-300'></span>
-                <span className='h-6px w-14px rounded-sm bg-success-300'></span>
+                <span className='h-6px w-14px rounded-sm bg-secondary-300'></span>
             </div>
         ) : (
             <span
                 className={clsx('h-14px w-14px rounded-sm', {
-                    'bg-success-300': !showBorrow && showLend,
+                    'bg-secondary-300': !showBorrow && showLend,
                     'bg-error-300': showBorrow && !showLend,
                 })}
             ></span>

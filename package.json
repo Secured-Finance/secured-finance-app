@@ -1,6 +1,6 @@
 {
   "name": "secured-finance-web",
-  "version": "1.4.5",
+  "version": "1.4.6",
   "private": true,
   "homepage": ".",
   "dependencies": {
@@ -79,6 +79,7 @@
     "@storybook/addon-a11y": "^7.6.15",
     "@storybook/addon-actions": "^7.6.15",
     "@storybook/addon-console": "^3.0.0",
+    "@storybook/addon-designs": "^7.0.9",
     "@storybook/addon-essentials": "^7.6.15",
     "@storybook/addon-interactions": "^7.6.15",
     "@storybook/addon-links": "^7.0.27",
