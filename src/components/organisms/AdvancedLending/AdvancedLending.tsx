@@ -316,7 +316,7 @@ export const AdvancedLending = ({
             )}
 
             <div className='grid h-fit grid-cols-1 place-items-stretch gap-x-3 tablet:grid-cols-2 laptop:grid-cols-12 laptop:gap-y-4'>
-                <div className='tablet:col-span-2 laptop:col-span-12'>
+                <div className='order-1 tablet:col-span-2 laptop:col-span-12'>
                     <AdvancedLendingTopBar
                         selectedAsset={selectedAsset}
                         assetList={assetList}
@@ -342,7 +342,7 @@ export const AdvancedLending = ({
                         ]}
                     />
                 </div>
-                <div className='mb-4 block tablet:col-span-2 laptop:mb-0 laptop:hidden'>
+                <div className='order-2 mb-4 block tablet:col-span-2 laptop:mb-0 laptop:hidden'>
                     <Tab
                         tabDataArray={[
                             { text: 'Yield Curve' },
@@ -364,36 +364,34 @@ export const AdvancedLending = ({
                         <HistoricalWidget />
                     </Tab>
                 </div>
-                <div className='grid gap-3 laptop:col-span-9 laptop:grid-cols-12'>
-                    <div className='col-span-1 tablet:col-span-2 laptop:col-span-8'>
+                <div className='order-4 grid grid-cols-12 gap-3 tablet:col-span-2 laptop:col-span-9 laptop:flex laptop:flex-wrap'>
+                    <div className='col-span-1 hidden w-[calc(100%-284px)] laptop:block'>
                         <div className='flex h-full flex-grow flex-col gap-4'>
-                            <div className='hidden laptop:block'>
-                                <Tab
-                                    tabDataArray={[
-                                        { text: 'Yield Curve' },
-                                        { text: 'Historical Chart' },
-                                    ]}
-                                >
-                                    <div className='h-[410px] w-full px-2 py-4'>
-                                        <LineChartTab
-                                            rates={rates}
-                                            maturityList={maturityList}
-                                            itayoseMarketIndexSet={
-                                                itayoseMarketIndexSet
-                                            }
-                                            followLinks={false}
-                                            maximumRate={maximumRate}
-                                            marketCloseToMaturityOriginalRate={
-                                                marketCloseToMaturityOriginalRate
-                                            }
-                                        />
-                                    </div>
-                                    <HistoricalWidget />
-                                </Tab>
-                            </div>
+                            <Tab
+                                tabDataArray={[
+                                    { text: 'Yield Curve' },
+                                    { text: 'Historical Chart' },
+                                ]}
+                            >
+                                <div className='h-[410px] w-full px-2 py-4'>
+                                    <LineChartTab
+                                        rates={rates}
+                                        maturityList={maturityList}
+                                        itayoseMarketIndexSet={
+                                            itayoseMarketIndexSet
+                                        }
+                                        followLinks={false}
+                                        maximumRate={maximumRate}
+                                        marketCloseToMaturityOriginalRate={
+                                            marketCloseToMaturityOriginalRate
+                                        }
+                                    />
+                                </div>
+                                <HistoricalWidget />
+                            </Tab>
                         </div>
                     </div>
-                    <div className='hidden laptop:col-span-4 laptop:block'>
+                    <div className='hidden laptop:block laptop:w-[272px]'>
                         {!isTablet && (
                             <NewOrderBookWidget
                                 orderbook={orderBook}
@@ -406,7 +404,7 @@ export const AdvancedLending = ({
                             />
                         )}
                     </div>
-                    <div className='laptop:col-span-12'>
+                    <div className='col-span-12 laptop:w-full'>
                         <HorizontalTab
                             tabTitles={[
                                 'Active Positions',
@@ -491,7 +489,7 @@ export const AdvancedLending = ({
                         </HorizontalTab>
                     </div>
                 </div>
-                <div className='tablet:col-span-2 laptop:col-span-3'>
+                <div className='order-3 tablet:col-span-2 laptop:order-4 laptop:col-span-3'>
                     <AdvancedLendingOrderCard
                         collateralBook={collateralBook}
                         marketPrice={marketPrice}
