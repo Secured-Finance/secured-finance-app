@@ -12,7 +12,7 @@ export const Colors: Story = () => (
                     Primary
                 </p>
                 <div className='inline-flex items-center justify-start space-x-6'>
-                    <div className='h-10 w-10 rounded-lg bg-universeBlue' />
+                    <div className='h-10 w-10 rounded-lg bg-neutral-900' />
                     <div className='h-10 w-10 rounded-lg bg-starBlue-10' />
                     <div className='h-10 w-10 rounded-lg bg-teal' />
                     <div className='h-10 w-10 rounded-lg bg-green' />
@@ -33,7 +33,6 @@ export const Colors: Story = () => (
                 <div className='h-10 w-10 rounded-lg bg-galacticOrange' />
                 <div className='h-10 w-10 rounded-lg bg-planetaryPurple' />
                 <div className='h-10 w-10 rounded-lg bg-nebulaTeal' />
-                <div className='h-10 w-10 rounded-lg bg-secondaryPurple ' />
                 <div className='h-10 w-10 rounded-lg bg-moonGrey' />
                 <div className='h-10 w-10 rounded-lg bg-slateGray' />
             </div>

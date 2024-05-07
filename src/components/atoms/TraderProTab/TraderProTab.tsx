@@ -10,7 +10,7 @@ export const TraderProTab = ({ text, onClick }: TraderProTabProps) => {
                 {text}
             </div>
             <button
-                className='typography-pill-label h-4 w-[56px] rounded-3xl bg-primary7 text-universeBlue'
+                className='typography-pill-label h-4 w-[56px] rounded-3xl bg-teal text-neutral-900'
                 onClick={onClick}
             >
                 SIGN UP

@@ -21,6 +21,7 @@ import {
     OrderTable,
 } from 'src/components/organisms';
 import { TabSpinner, TableType } from 'src/components/pages';
+import { ThreeColumnsWithTopBar } from 'src/components/templates';
 import {
     CollateralBook,
     emptyOrderList,
@@ -301,7 +302,7 @@ export const AdvancedLending = ({
             'You have too many open orders. Please ensure that you have fewer than 20 orders to place more orders.';
 
     return (
-        <div className='grid gap-2'>
+        <>
             {maximumOpenOrderLimit && (
                 <div className='px-3 laptop:px-0'>
                     <Alert severity='warning'>
@@ -314,9 +315,8 @@ export const AdvancedLending = ({
                     </Alert>
                 </div>
             )}
-
-            <div className='grid h-fit grid-cols-1 place-items-stretch gap-x-3 tablet:grid-cols-2 laptop:grid-cols-12 laptop:gap-y-4'>
-                <div className='order-1 tablet:col-span-2 laptop:col-span-12'>
+            <ThreeColumnsWithTopBar
+                topBar={
                     <AdvancedLendingTopBar
                         selectedAsset={selectedAsset}
                         assetList={assetList}
@@ -341,30 +341,30 @@ export const AdvancedLending = ({
                             usdFormat(currencyPrice, 2),
                         ]}
                     />
-                </div>
-                <div className='order-2 mb-4 block tablet:col-span-2 laptop:mb-0 laptop:hidden'>
-                    <Tab
-                        tabDataArray={[
-                            { text: 'Yield Curve' },
-                            { text: 'Historical Chart' },
-                        ]}
-                    >
-                        <div className='h-[410px] w-full px-2 py-4'>
-                            <LineChartTab
-                                rates={rates}
-                                maturityList={maturityList}
-                                itayoseMarketIndexSet={itayoseMarketIndexSet}
-                                followLinks={false}
-                                maximumRate={maximumRate}
-                                marketCloseToMaturityOriginalRate={
-                                    marketCloseToMaturityOriginalRate
-                                }
-                            />
-                        </div>
-                        <HistoricalWidget />
-                    </Tab>
-                </div>
-                <div className='order-4 grid grid-cols-12 gap-3 tablet:col-span-2 laptop:col-span-9 laptop:flex laptop:flex-wrap'>
+                }
+            >
+                <Tab
+                    tabDataArray={[
+                        { text: 'Yield Curve' },
+                        { text: 'Historical Chart' },
+                    ]}
+                >
+                    <div className='h-[410px] w-full px-2 py-4'>
+                        <LineChartTab
+                            rates={rates}
+                            maturityList={maturityList}
+                            itayoseMarketIndexSet={itayoseMarketIndexSet}
+                            followLinks={false}
+                            maximumRate={maximumRate}
+                            marketCloseToMaturityOriginalRate={
+                                marketCloseToMaturityOriginalRate
+                            }
+                        />
+                    </div>
+                    <HistoricalWidget />
+                </Tab>
+
+                <>
                     <div className='col-span-1 hidden w-[calc(100%-284px)] laptop:block'>
                         <div className='flex h-full flex-grow flex-col gap-4'>
                             <Tab
@@ -488,15 +488,13 @@ export const AdvancedLending = ({
                             )}
                         </HorizontalTab>
                     </div>
-                </div>
-                <div className='order-3 tablet:col-span-2 laptop:order-4 laptop:col-span-3'>
-                    <AdvancedLendingOrderCard
-                        collateralBook={collateralBook}
-                        marketPrice={marketPrice}
-                        delistedCurrencySet={delistedCurrencySet}
-                    />
-                </div>
-            </div>
-        </div>
+                </>
+                <AdvancedLendingOrderCard
+                    collateralBook={collateralBook}
+                    marketPrice={marketPrice}
+                    delistedCurrencySet={delistedCurrencySet}
+                />
+            </ThreeColumnsWithTopBar>
+        </>
     );
 };
