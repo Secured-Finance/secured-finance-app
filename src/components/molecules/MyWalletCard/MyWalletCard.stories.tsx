@@ -1,8 +1,5 @@
 import type { Meta, StoryFn } from '@storybook/react';
-import {
-    withEthBalance,
-    withWalletProvider,
-} from 'src/../.storybook/decorators';
+import { withBalance, withWalletProvider } from 'src/../.storybook/decorators';
 import { CurrencySymbol, WalletSource } from 'src/utils';
 import { MyWalletCard } from './MyWalletCard';
 
@@ -23,7 +20,7 @@ export default {
             ],
         },
     },
-    decorators: [withEthBalance, withWalletProvider],
+    decorators: [withBalance, withWalletProvider],
 } as Meta<typeof MyWalletCard>;
 
 const Template: StoryFn<typeof MyWalletCard> = args => (

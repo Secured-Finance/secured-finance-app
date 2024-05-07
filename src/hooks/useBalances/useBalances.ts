@@ -12,22 +12,21 @@ export const useBalances = () => {
         ...zeroBalances,
     };
 
-    const { address, ethBalance } = useSelector(
+    const { address, balance } = useSelector(
         (state: RootState) => state.wallet
     );
-    const { data } = useCurrencies(true);
+    const { data: currencies } = useCurrencies(true);
 
-    const nativeCurrencies = useMemo(() => {
-        return (
-            data
-                ?.filter(ccy => currencyMap[ccy].toCurrency().isNative)
-                ?.map(ccy => currencyMap[ccy]) ?? []
+    const nativeCurrency = useMemo(() => {
+        const targetCurrency = currencies?.find(
+            currency => currencyMap[currency].toCurrency().isNative
         );
-    }, [data]);
+        return targetCurrency ? currencyMap[targetCurrency] : undefined;
+    }, [currencies]);
 
-    nativeCurrencies.forEach(currency => {
-        balances[currency.symbol] = ethBalance;
-    });
+    if (nativeCurrency) {
+        balances[nativeCurrency.symbol] = balance;
+    }
 
     const balanceQueriesResults = useERC20Balance(address);
     balanceQueriesResults.forEach(value => {
