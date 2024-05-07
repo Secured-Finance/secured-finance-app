@@ -28,9 +28,6 @@ const customJestConfig = {
     testPathIgnorePatterns: ['<rootDir>/cypress/'],
     coverageProvider: 'v8',
     coverageReporters: ['json', 'lcov', 'text', 'text-summary'],
-    transform: {
-        '^.+\\.jsx?$': 'babel-jest',
-    },
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
@@ -40,8 +37,7 @@ const asyncConfig = createJestConfig(customJestConfig);
 module.exports = async () => {
     const config = await asyncConfig();
     config.transformIgnorePatterns = [
-        'node_modules/(?!(wagmi|@wagmi|@0xsquid|isows)/)',
-        'node_modules/@web3modal/wagmi/dist/esm/exports/react.js',
+        '/node_modules/(?!(wagmi|@wagmi|@web3modal|@0xsquid|isows|lit)/)',
     ];
     config.moduleNameMapper = {
         // We cannot depend on the exact key used by Next.js
