@@ -39,9 +39,9 @@ assetPriceMap.WBTC = 50000.0;
 assetPriceMap.aUSDC = 1.0;
 assetPriceMap.axlFIL = 6.0;
 
-export const preloadedEthBalance = {
+export const preloadedBalance = {
     wallet: {
-        ethBalance: 10,
+        balance: 10,
         address: '',
     },
 };
