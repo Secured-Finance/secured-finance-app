@@ -37,6 +37,7 @@ import {
     useYieldCurveMarketRates,
 } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
+import useSF from 'src/hooks/useSecuredFinance';
 import {
     resetUnitPrice,
     selectLandingOrderForm,
@@ -129,9 +130,8 @@ export const AdvancedLending = ({
     const { data: currencies } = useCurrencies();
     const assetList = toOptions(currencies, currency);
 
-    const currentChainId = useSelector(
-        (state: RootState) => state.blockchain.chainId
-    );
+    const securedFinance = useSF();
+    const currentChainId = securedFinance?.config.chain.id;
 
     const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
 

@@ -1,6 +1,5 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import {
     CollateralManagementConciseTab,
     GradientBox,
@@ -29,7 +28,7 @@ import {
     useLendingMarkets,
     useValueLockedByCurrency,
 } from 'src/hooks';
-import { RootState } from 'src/store/types';
+import useSF from 'src/hooks/useSecuredFinance';
 import {
     CurrencySymbol,
     Environment,
@@ -68,9 +67,9 @@ export const MarketDashboard = () => {
     const { data: currencies = [] } = useCurrencies();
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
 
-    const currentChainId = useSelector(
-        (state: RootState) => state.blockchain.chainId
-    );
+    const securedFinance = useSF();
+    const currentChainId = securedFinance?.config.chain.id;
+
     const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
 
     currencies.forEach(ccy => {
