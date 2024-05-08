@@ -25,6 +25,7 @@ import {
     useLoanValues,
     useMaturityOptions,
 } from 'src/hooks';
+import useSF from 'src/hooks/useSecuredFinance';
 import {
     resetUnitPrice,
     selectLandingOrderForm,
@@ -64,9 +65,8 @@ export const Landing = ({ view }: { view?: ViewType }) => {
         market => market.isOpened
     );
 
-    const currentChainId = useSelector(
-        (state: RootState) => state.blockchain.chainId
-    );
+    const securedFinance = useSF();
+    const currentChainId = securedFinance?.config.chain.id;
 
     const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
 

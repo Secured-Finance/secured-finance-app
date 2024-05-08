@@ -1,7 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Spinner } from 'src/components/atoms';
 import {
     Alert,
@@ -35,7 +34,7 @@ import {
     usePagination,
     usePositions,
 } from 'src/hooks';
-import { RootState } from 'src/store/types';
+import useSF from 'src/hooks/useSecuredFinance';
 import {
     checkOrderIsFilled,
     computeNetValue,
@@ -71,9 +70,8 @@ export const PortfolioManagement = () => {
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
     const { data: lendingMarkets = { ...baseContracts } } = useLendingMarkets();
 
-    const currentChainId = useSelector(
-        (state: RootState) => state.blockchain.chainId
-    );
+    const securedFinance = useSF();
+    const currentChainId = securedFinance?.config.chain.id;
 
     const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
 
@@ -417,7 +415,9 @@ export const PortfolioManagement = () => {
                 </div>
                 <div className='my-4 laptop:my-0'>
                     <MyWalletWidget
-                        hideBridge={currentChainId.toString().startsWith('314')}
+                        hideBridge={currentChainId
+                            ?.toString()
+                            .startsWith('314')}
                     />
                 </div>
             </TwoColumns>
