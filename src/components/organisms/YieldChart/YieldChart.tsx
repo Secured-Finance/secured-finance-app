@@ -9,7 +9,7 @@ import { CurrencySymbol } from 'src/utils';
 
 interface YieldChartProps {
     asset: CurrencySymbol;
-    dailyVolumes: DailyVolumes;
+    dailyVolumes?: DailyVolumes;
 }
 
 export const YieldChart = ({

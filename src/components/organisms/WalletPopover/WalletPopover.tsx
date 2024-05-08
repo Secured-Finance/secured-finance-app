@@ -13,7 +13,7 @@ import {
 } from 'src/components/atoms';
 import { Tooltip } from 'src/components/templates';
 import { RootState } from 'src/store/types';
-import { resetEthWallet } from 'src/store/wallet';
+import { resetWallet } from 'src/store/wallet';
 import { formatDataCy, removeWalletFromStore } from 'src/utils';
 import { useAccount, useDisconnect } from 'wagmi';
 
@@ -88,7 +88,7 @@ export const WalletPopover = ({
         resetTracking();
         reset();
         disconnect();
-        dispatch(resetEthWallet());
+        dispatch(resetWallet());
         removeWalletFromStore();
     }, [disconnect, dispatch, reset, isConnected]);
 

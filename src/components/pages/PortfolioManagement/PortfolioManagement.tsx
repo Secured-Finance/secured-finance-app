@@ -26,6 +26,7 @@ import {
     useCurrenciesForOrders,
     useCurrencyDelistedStatus,
     useGraphClientHook,
+    useIsSubgraphSupported,
     useIsUnderCollateralThreshold,
     useLastPrices,
     useLendingMarkets,
@@ -33,6 +34,7 @@ import {
     usePagination,
     usePositions,
 } from 'src/hooks';
+import useSF from 'src/hooks/useSecuredFinance';
 import {
     checkOrderIsFilled,
     computeNetValue,
@@ -67,6 +69,11 @@ export const PortfolioManagement = () => {
     );
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
     const { data: lendingMarkets = { ...baseContracts } } = useLendingMarkets();
+
+    const securedFinance = useSF();
+    const currentChainId = securedFinance?.config.chain.id;
+
+    const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
 
     const userOrderHistory = useGraphClientHook(
         {
@@ -325,12 +332,16 @@ export const PortfolioManagement = () => {
                         netAssetValue={portfolioAnalytics.netAssetValue}
                     />
                     <HorizontalTab
-                        tabTitles={[
-                            'Active Positions',
-                            'Open Orders',
-                            'Order History',
-                            'My Transactions',
-                        ]}
+                        tabTitles={
+                            isSubgraphSupported
+                                ? [
+                                      'Active Positions',
+                                      'Open Orders',
+                                      'Order History',
+                                      'My Transactions',
+                                  ]
+                                : ['Active Positions', 'Open Orders']
+                        }
                         onTabChange={setSelectedTable}
                     >
                         <ActiveTradeTable
@@ -403,7 +414,11 @@ export const PortfolioManagement = () => {
                     />
                 </div>
                 <div className='my-4 laptop:my-0'>
-                    <MyWalletWidget />
+                    <MyWalletWidget
+                        hideBridge={currentChainId
+                            ?.toString()
+                            .startsWith('314')}
+                    />
                 </div>
             </TwoColumns>
         </Page>

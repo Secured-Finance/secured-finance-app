@@ -71,8 +71,11 @@ const HeaderMessage = ({
                 </div>
             );
         } else if (
-            getSupportedNetworks().find(n => n.id === chainId)?.testnet
+            getSupportedNetworks().find(n => n.id === chainId)?.testnet ||
+            getSupportedNetworks().find(n => n.id === chainId)?.id === 314_159
         ) {
+            // NOTE: 314_159 is a testnet chain id but `viem` does not have a testnet flag for it.
+            // So we are checking for the chain id to determine if it is a testnet chain.
             return (
                 <div
                     className='typography-caption-2 w-full bg-horizonBlue p-[1px] text-center text-neutral-8'
