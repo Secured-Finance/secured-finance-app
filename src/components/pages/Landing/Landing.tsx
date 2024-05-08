@@ -47,6 +47,8 @@ export const emptyOptionList = [
     },
 ];
 
+const ITAYOSE_PERIOD = 60 * 60 * 1000; // 1 hour in milli-seconds
+
 export const Landing = ({ view }: { view?: ViewType }) => {
     const { address } = useAccount();
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
@@ -97,7 +99,7 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                     market={itayoseMarket}
                     delistedCurrencySet={delistedCurrencySet}
                 >
-                    <div className='flex flex-row items-center justify-center'>
+                    <div className='flex flex-row items-center justify-center px-3 tablet:px-5 laptop:px-0'>
                         <LendingCard
                             collateralBook={collateralBook}
                             maturitiesOptionList={maturityOptionList}
@@ -152,38 +154,51 @@ const WithBanner = ({
     delistedCurrencySet: Set<CurrencySymbol>;
     children: React.ReactNode;
 }) => {
+    const preOrderTimeLimit = market
+        ? market.utcOpeningDate * 1000 - ITAYOSE_PERIOD
+        : 0;
+
+    const currencyArray = Array.from(delistedCurrencySet);
+
     return (
         <div className='flex flex-col justify-center gap-5'>
-            <DelistedCurrencyDisclaimer currencies={delistedCurrencySet} />
+            {currencyArray.length > 0 && (
+                <div className='px-3 laptop:px-0'>
+                    <DelistedCurrencyDisclaimer
+                        currencies={delistedCurrencySet}
+                    />
+                </div>
+            )}
             {market && (
-                <Alert
-                    title={
-                        <>
-                            {`Itayose market for ${ccy}-${getUTCMonthYear(
-                                market.maturity
-                            )} is now open until ${Intl.DateTimeFormat(
-                                'en-US',
-                                {
-                                    weekday: 'long',
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric',
-                                }
-                            ).format(market.utcOpeningDate * 1000)}`}
-                            <span className='pl-4'>
-                                <Link href='itayose' passHref>
-                                    <a
-                                        href='_'
+                <div className='px-3 laptop:px-0'>
+                    <Alert
+                        title={
+                            <>
+                                {`Market ${ccy}-${getUTCMonthYear(
+                                    market.maturity,
+                                    true
+                                )} is open for pre-orders now until ${Intl.DateTimeFormat(
+                                    'en-US',
+                                    {
+                                        timeZone: 'UTC',
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric',
+                                    }
+                                ).format(preOrderTimeLimit)} (UTC)`}
+                                <span className='pl-4'>
+                                    <Link
+                                        href='itayose'
                                         className='text-planetaryPurple underline'
                                     >
                                         Place Order Now
-                                    </a>
-                                </Link>
-                            </span>
-                        </>
-                    }
-                    severity={AlertSeverity.Info}
-                />
+                                    </Link>
+                                </span>
+                            </>
+                        }
+                        severity={AlertSeverity.Info}
+                    />
+                </div>
             )}
             {children}
         </div>

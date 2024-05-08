@@ -1,9 +1,8 @@
 import { StarIcon } from '@heroicons/react/24/solid';
 import type { Meta, StoryFn } from '@storybook/react';
-import { ButtonSizes } from 'src/types';
 import { Button } from './';
 import { FIGMA_STORYBOOK_LINK } from './constants';
-import { ButtonVariants } from './types';
+import { ButtonSizes, ButtonVariants } from './types';
 
 export default {
     title: 'Atoms/Button',
@@ -60,66 +59,30 @@ export const Primary = Template.bind({});
 
 export const ExtraSmall = Template.bind({});
 ExtraSmall.args = {
-    ...Primary.args,
     size: ButtonSizes.xs,
 };
 
 export const Small = Template.bind({});
 Small.args = {
-    ...Primary.args,
     size: ButtonSizes.sm,
 };
 
 export const Medium = Template.bind({});
 Medium.args = {
-    ...Primary.args,
     size: ButtonSizes.md,
 };
 
 export const Large = Template.bind({});
 Large.args = {
-    ...Primary.args,
     size: ButtonSizes.lg,
-};
-
-export const PrimaryBuy = Template.bind({});
-PrimaryBuy.args = {
-    ...Primary.args,
-    variant: ButtonVariants.primaryBuy,
-};
-
-export const PrimarySell = Template.bind({});
-PrimarySell.args = {
-    ...Primary.args,
-    variant: ButtonVariants.primarySell,
 };
 
 export const Secondary = Template.bind({});
 Secondary.args = {
-    ...Primary.args,
     variant: ButtonVariants.secondary,
-};
-
-export const SecondaryNeutral = Template.bind({});
-SecondaryNeutral.args = {
-    ...Primary.args,
-    variant: ButtonVariants.secondaryNeutral,
 };
 
 export const Tertiary = Template.bind({});
 Tertiary.args = {
-    ...Primary.args,
     variant: ButtonVariants.tertiary,
-};
-
-export const TertiaryBuy = Template.bind({});
-TertiaryBuy.args = {
-    ...Primary.args,
-    variant: ButtonVariants.tertiaryBuy,
-};
-
-export const TertiarySell = Template.bind({});
-TertiarySell.args = {
-    ...Primary.args,
-    variant: ButtonVariants.tertiarySell,
 };

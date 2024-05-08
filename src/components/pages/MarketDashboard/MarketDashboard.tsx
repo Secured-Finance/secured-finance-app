@@ -57,6 +57,8 @@ export const MarketDashboard = () => {
     const { data: collateralBook = emptyCollateralBook } =
         useCollateralBook(address);
 
+    const totalCollateralInUSD = address ? collateralBook.usdCollateral : 0;
+
     const curves: Record<string, Rate[]> = {};
     const { data: lendingContracts = baseContracts } = useLendingMarkets();
     const { data: isGlobalItayose } = useIsGlobalItayose();
@@ -118,11 +120,19 @@ export const MarketDashboard = () => {
     const defaultCurrency =
         currencies && currencies.length > 0
             ? currencies[0]
-            : CurrencySymbol.WBTC;
+            : CurrencySymbol.USDC;
+
+    const currencyArray = Array.from(delistedCurrencySet);
 
     return (
         <Page title='Market Dashboard' name='dashboard-page'>
-            <DelistedCurrencyDisclaimer currencies={delistedCurrencySet} />
+            {currencyArray.length > 0 && (
+                <div className='px-3 laptop:px-0'>
+                    <DelistedCurrencyDisclaimer
+                        currencies={delistedCurrencySet}
+                    />
+                </div>
+            )}
             <TwoColumns>
                 <div className='grid grid-cols-1 gap-y-7'>
                     <StatsBar
@@ -184,6 +194,7 @@ export const MarketDashboard = () => {
                                         collateralBook.collateralThreshold
                                     }
                                     account={address}
+                                    totalCollateralInUSD={totalCollateralInUSD}
                                 />
                             </div>
                         </GradientBox>

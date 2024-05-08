@@ -31,17 +31,18 @@ export const Default = Template.bind({});
 const PaginationTemplate: StoryFn<typeof MyTransactionsTable> = args => {
     const initialData = Array(20)
         .fill(null)
-        .map(_ => ({
+        .map((_, index) => ({
+            id: index.toString(),
             amount: '1000000000000000000000',
             averagePrice: '0.8000',
             side: 0,
-            orderPrice: '9800',
+            executionPrice: '9800',
             createdAt: '1671859344',
             feeInFV: '3213742117851706893',
-            forwardValue: '1020000000000000000000',
+            futureValue: '1020000000000000000000',
             currency: wfilBytes32,
             maturity: jun23Fixture.toString(),
-            taker: {
+            user: {
                 id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
             },
         }));
@@ -57,17 +58,18 @@ const PaginationTemplate: StoryFn<typeof MyTransactionsTable> = args => {
                     getMoreData: () => {
                         const newData = Array(20)
                             .fill(null)
-                            .map(_ => ({
+                            .map((_, index) => ({
+                                id: (data.length + index).toString(),
                                 amount: '1000000000000000000000',
                                 averagePrice: '0.8000',
                                 side: 0,
-                                orderPrice: '9800',
+                                executionPrice: '9800',
                                 createdAt: '1671859344',
                                 feeInFV: '3213742117851706893',
-                                forwardValue: '1020000000000000000000',
+                                futureValue: '1020000000000000000000',
                                 currency: wfilBytes32,
                                 maturity: jun23Fixture.toString(),
-                                taker: {
+                                user: {
                                     id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
                                 },
                             }));

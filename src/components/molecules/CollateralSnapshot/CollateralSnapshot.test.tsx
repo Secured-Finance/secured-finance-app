@@ -12,8 +12,8 @@ describe('CollateralSnapshot Component', () => {
     it('should order the currencies by their index', () => {
         render(<Default />);
         const currencyItems = screen.getAllByTestId('core-table-row');
-        expect(within(currencyItems[0]).getByText('WBTC')).toBeInTheDocument();
+        expect(within(currencyItems[0]).getByText('USDC')).toBeInTheDocument();
         expect(within(currencyItems[1]).getByText('ETH')).toBeInTheDocument();
-        expect(within(currencyItems[2]).getByText('USDC')).toBeInTheDocument();
+        expect(within(currencyItems[2]).getByText('WBTC')).toBeInTheDocument();
     });
 });

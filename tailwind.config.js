@@ -1,7 +1,5 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 
-const { themeVariants } = require('tailwindcss-theme-variants');
-
 module.exports = {
     content: ['./src/**/*.{ts,tsx,js,jsx}', './public/index.html'],
     safelist: [
@@ -72,6 +70,7 @@ module.exports = {
                 'Suisse International',
                 ...defaultTheme.fontFamily.sans,
             ],
+            tertiary: ['Roboto Mono', ...defaultTheme.fontFamily.sans],
         },
 
         screens: {
@@ -97,28 +96,22 @@ module.exports = {
         },
         colors: {
             primary: {
-                50: '#F5F6FF',
-                300: '#C4CAFF',
+                300: '#B9BDEA',
                 500: '#5162FF',
-                700: '#2033DB',
-                900: '#0213A5',
+                700: '#3555AC',
             },
             secondary: {
-                50: '#D4FCFF',
                 300: '#96EAF1',
                 500: '#15D6E8',
                 700: '#09A8B7',
-                900: '#017E8A',
             },
             tertiary: {
-                50: '#F5F6FF',
-                300: '#C4CAFF',
-                500: '#5162FF',
-                700: '#BD47FB',
-                900: '#0213A5',
+                300: '#EDCBFF',
+                500: '#BD47FB',
+                700: '#8919C4',
             },
-            // TODO: handle neutral 1-8 as figma variables
             neutral: {
+                DEFAULT: '#353945',
                 1: '#141416',
                 2: '#23262F',
                 3: '#353945',
@@ -139,56 +132,57 @@ module.exports = {
                 900: '#002133',
             },
             success: {
-                50: '#DDFFE9',
-                300: '#AFFFCB',
-                500: '#74E37E',
-                700: '#5CD167',
-                900: '#157637',
+                300: '#AAE8B0',
+                500: '#5CD167',
+                700: '#0F921B',
             },
             warning: {
-                50: '#FFF1D7',
                 300: '#FFDB93',
-                500: '#FFCD69',
-                700: '#FAAD14',
+                500: '#FAAD14',
+                700: '#C58300',
                 900: '#BD7003',
             },
             error: {
-                50: '#FFE5E8',
                 300: '#FF9FAE',
-                500: '#FF324B',
-                700: '#CE0920',
-                900: '#A50114',
+                500: '#FF658A',
+                700: '#C30C38',
             },
-            // Primary
-
             teal: '#11CABE',
             green: '#5CD167',
             orange: '#F9AA4B',
-            yellow: '#FAAD14',
+            yellow: {
+                DEFAULT: '#FAAD14',
+            },
             red: '#FA2256',
             purple: '#BD47FB',
             gunMetal: '#292D3F',
 
             // Secondary
             planetaryPurple: '#ADB6FF',
+            palePurple: '#F5F6FF',
             nebulaTeal: '#15D6E8',
             horizonBlue: '#3555AC',
             galacticOrange: '#FF9FAE',
             moonGrey: '#E6E6E6',
             slateGray: '#777E90',
             secondary7: '#B9BDEA',
+            error5: '#FF324B',
+            'z-neutral-100': '#F1F5F9',
             grayScale: '#FAFAFA',
-
-            tabGradient2: 'rgba(106, 118, 177, 0.35)',
-            tabGradient1: 'rgba(57, 77, 174, 0)',
+            tabGradient: {
+                1: 'rgba(57, 77, 174, 0)',
+                2: 'rgba(106, 118, 177, 0.35)',
+                3: 'rgba(21, 214, 232, 0)',
+                4: 'rgba(47, 174, 186, 0.35)',
+                5: 'rgba(255, 50, 75, 0)',
+                6: 'rgba(255, 50, 75, 0.35)',
+            },
             backgroundBlur: 'rgba(35, 43, 56, 0.6)',
             cardBackground: '#161E2E',
             panelStroke: 'rgb(45, 64, 100)',
-
             progressBarStart: 'rgba(21, 214, 232, 1)',
             progressBarVia: 'rgba(255, 188, 107, 1)',
             progressBarEnd: 'rgba(255, 101, 138, 1)',
-
             transparent: 'transparent',
             starBlue: {
                 '80': 'rgba(81, 98, 255, 0.8)',
@@ -199,7 +193,6 @@ module.exports = {
                 '10': 'rgba(81, 98, 255, 0.1)',
                 DEFAULT: '#5162FF',
             },
-
             black: {
                 DEFAULT: '#000000',
                 '90': 'rgba(0, 0, 0, 0.9)',
@@ -239,13 +232,4 @@ module.exports = {
             },
         },
     },
-    plugins: [
-        themeVariants({
-            themes: {
-                light: {
-                    selector: '.light',
-                },
-            },
-        }),
-    ],
 };

@@ -1,7 +1,7 @@
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import clsx from 'clsx';
 import { cloneElement, useState } from 'react';
-import { alertIconMapping, severityStyle } from './constants';
+import { alertIconMapping, buttonColorStyle, severityStyle } from './constants';
 import { AlertSeverity } from './types';
 
 export const Alert = ({
@@ -11,7 +11,6 @@ export const Alert = ({
     onClose,
     localStorageKey,
     localStorageValue,
-    showCloseButton = false,
 }: {
     severity?: AlertSeverity;
     title: React.ReactNode;
@@ -19,7 +18,6 @@ export const Alert = ({
     onClose?: () => void;
     localStorageKey?: string;
     localStorageValue?: string;
-    showCloseButton: boolean;
 }) => {
     const value =
         typeof window !== 'undefined' && localStorageKey
@@ -30,10 +28,7 @@ export const Alert = ({
         value ? !(value === localStorageValue) : true
     );
 
-    const iconClass = clsx({
-        'h-6 w-6': subtitle,
-        'h-5 w-5': !subtitle,
-    });
+    const iconClass = 'w-[13px] h-[13px] laptop:w-4 laptop:h-4';
 
     const handleClose = () => {
         setIsVisible(false);
@@ -47,12 +42,14 @@ export const Alert = ({
 
     const alertIcon = alertIconMapping[severity];
 
-    return isVisible ? (
+    if (!isVisible) return null;
+
+    return (
         <section
             aria-label={severity}
             role='alert'
             className={clsx(
-                'flex w-full flex-row items-start justify-between gap-1 rounded-md border px-2.5 text-sm text-white light:text-neutral-900',
+                'flex w-full flex-row items-start justify-between gap-1 rounded-md border px-2.5 text-2xs text-neutral-50 laptop:text-xs',
                 severityStyle[severity],
                 {
                     'py-1.5': !subtitle,
@@ -60,38 +57,46 @@ export const Alert = ({
                 }
             )}
         >
-            <div className='flex items-start gap-2 pr-4'>
+            <div className='flex items-start gap-1.5 pr-4 laptop:gap-2'>
                 {alertIcon && (
                     <span>
                         {cloneElement(alertIcon, {
                             className: clsx(
                                 alertIcon.props.className,
-                                iconClass
+                                iconClass,
+                                'mt-[4px] laptop:mt-0.5'
                             ),
                         })}
                     </span>
                 )}
-                <div className='flex flex-col gap-1 leading-[1.57]'>
+                <div className='flex flex-col'>
                     {title && (
                         <h2
-                            className={clsx({
-                                'text-base leading-normal': subtitle,
+                            className={clsx('text-xs leading-5', {
+                                'laptop:text-sm laptop:leading-[22px]':
+                                    subtitle,
                             })}
                         >
                             {title}
                         </h2>
                     )}
-                    {subtitle && <p>{subtitle}</p>}
+                    {subtitle && (
+                        <div className='leading-4 laptop:leading-5'>
+                            {subtitle}
+                        </div>
+                    )}
                 </div>
             </div>
-            {showCloseButton && (
-                <button
-                    onClick={handleClose}
-                    className='h-4 w-4 flex-shrink-0 text-neutral-200 light:text-neutral-500'
-                >
-                    <XMarkIcon />
-                </button>
-            )}
+            <button
+                onClick={handleClose}
+                className={clsx(
+                    iconClass,
+                    'mt-[3px] flex-shrink-0 laptop:mt-0.5',
+                    buttonColorStyle[severity]
+                )}
+            >
+                <XMarkIcon />
+            </button>
         </section>
-    ) : null;
+    );
 };

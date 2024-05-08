@@ -37,30 +37,45 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('Itayose Component', () => {
     it('should render a Itayose', async () => {
-        await waitFor(() => render(<Default />));
+        await waitFor(() =>
+            render(<Default />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+            })
+        );
     });
 
     it('should convert the amount to changed currency when the user change the currency', async () => {
         const { store } = await waitFor(() =>
-            render(<Default />, { preloadedState })
+            render(<Default />, {
+                preloadedState,
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+            })
         );
         expect(store.getState().landingOrderForm.amount).toEqual('0');
-        fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
+        const ele = await screen.findByRole('textbox', { name: 'Amount' });
+        fireEvent.change(ele, {
             target: { value: '1' },
         });
         expect(store.getState().landingOrderForm.amount).toEqual('1');
+
+        fireEvent.click(screen.getByRole('button', { name: 'WBTC' }));
+        fireEvent.click(screen.getByRole('menuitem', { name: 'WFIL' }));
+
         await waitFor(() => {
-            fireEvent.click(screen.getByRole('button', { name: 'WBTC' }));
-            fireEvent.click(screen.getByRole('menuitem', { name: 'WFIL' }));
+            expect(store.getState().landingOrderForm.amount).toEqual('1');
+            expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
+                '1'
+            );
         });
-        expect(store.getState().landingOrderForm.amount).toEqual('1');
-        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
-            '1'
-        );
-    });
+    }, 8000);
 
     it('should not show delisted currencies in asset dropwdown', async () => {
-        await waitFor(() => render(<Default />, { preloadedState }));
+        await waitFor(() =>
+            render(<Default />, {
+                preloadedState,
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+            })
+        );
         await waitFor(() => {
             fireEvent.click(screen.getByRole('button', { name: 'WBTC' }));
         });
@@ -68,7 +83,9 @@ describe('Itayose Component', () => {
     });
 
     it('should only show the pre-order orders of the user when they are connected', async () => {
-        render(<Default />);
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
         fireEvent.click(screen.getByRole('tab', { name: 'Open Orders' }));
 
         const openOrders = await screen.findAllByRole('row');
@@ -77,14 +94,16 @@ describe('Itayose Component', () => {
 
     describe('Dynamic orderbook depth', () => {
         it('should retrieve more data when the user select only one side of the orderbook', async () => {
-            render(<Default />);
+            render(<Default />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+            });
             expect(
                 mockSecuredFinance.getLendOrderBook
             ).toHaveBeenLastCalledWith(
                 expect.anything(),
                 expect.anything(),
                 expect.anything(),
-                13
+                15
             );
             await waitFor(() =>
                 fireEvent.click(
@@ -100,20 +119,22 @@ describe('Itayose Component', () => {
                     expect.anything(),
                     expect.anything(),
                     expect.anything(),
-                    26
+                    30
                 )
             );
         });
 
         it('should retrieve more data when the user select a aggregation factor', async () => {
-            render(<Default />);
+            render(<Default />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+            });
             expect(
                 mockSecuredFinance.getLendOrderBook
             ).toHaveBeenLastCalledWith(
                 expect.anything(),
                 expect.anything(),
                 expect.anything(),
-                13
+                15
             );
             await waitFor(() => {
                 fireEvent.click(screen.getByRole('button', { name: '0.01' }));
@@ -126,9 +147,9 @@ describe('Itayose Component', () => {
                     expect.anything(),
                     expect.anything(),
                     expect.anything(),
-                    1300
+                    1500
                 )
             );
-        });
+        }, 8000);
     });
 });

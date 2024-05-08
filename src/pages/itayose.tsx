@@ -1,4 +1,4 @@
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import { Itayose as ItayoseComponent } from 'src/components/pages';
 import {
     baseContracts,
@@ -8,21 +8,23 @@ import {
 } from 'src/hooks';
 
 const Itayose = () => {
-    const { data: isTerminated, isLoading: isLoadingMarketTerminated } =
+    const { data: isTerminated, isPending: isPendingMarketTerminated } =
         useIsMarketTerminated();
     const { data: currencies = [] } = useCurrencies();
 
+    const router = useRouter();
+
     const {
         data: lendingMarkets = baseContracts,
-        isLoading: isLoadingLendingMarkets,
+        isPending: isPendingLendingMarkets,
     } = useLendingMarkets();
 
-    if (isLoadingLendingMarkets || isLoadingMarketTerminated) {
+    if (isPendingLendingMarkets || isPendingMarketTerminated) {
         return null;
     }
 
     if (isTerminated) {
-        Router.push('/emergency');
+        router.push('/emergency');
         return null;
     }
 
@@ -35,7 +37,7 @@ const Itayose = () => {
         }
     }
 
-    Router.push('/');
+    router.push('/');
     return null;
 };
 

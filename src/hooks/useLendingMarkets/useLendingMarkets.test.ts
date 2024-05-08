@@ -22,9 +22,10 @@ describe('useLendingMarkets', () => {
         const { result } = renderHook(() => useLendingMarkets());
         const value = result.current;
         expect(value.data).toEqual(undefined);
-        expect(value.isLoading).toEqual(true);
+        expect(value.isPending).toEqual(true);
 
         await waitFor(() => expect(result.current.isSuccess).toEqual(true));
+
         const newValue = result.current;
 
         const expected = createCurrencyMap({});
@@ -34,7 +35,7 @@ describe('useLendingMarkets', () => {
         expected.WFIL = maturities;
 
         expect(newValue.data).toEqual(expected);
-        expect(newValue.isLoading).toEqual(false);
+        expect(newValue.isPending).toEqual(false);
     });
 
     it('should increment the name of the contract if it already exists', async () => {
@@ -49,6 +50,6 @@ describe('useLendingMarkets', () => {
 
         const newValue = result.current;
 
-        expect(newValue.data.ETH[10000].name).toEqual('DEC22-1');
+        expect(newValue.data.ETH[10000].name).toEqual('DEC2022-1');
     });
 });

@@ -34,18 +34,17 @@ import {
     usePagination,
     usePositions,
 } from 'src/hooks';
-import { TradeHistory } from 'src/types';
 import {
+    LOAN_MARKET_PLATFORM_GUIDE_LINK,
     checkOrderIsFilled,
     computeNetValue,
     formatOrders,
+    getMappedOrderStatus,
     hexToCurrencySymbol,
     sortOrders,
     usdFormat,
 } from 'src/utils';
 import { useAccount } from 'wagmi';
-
-export type Trade = TradeHistory[0];
 
 export enum TableType {
     ACTIVE_POSITION = 0,
@@ -135,11 +134,11 @@ export const PortfolioManagement = () => {
     const dataUser = useMemo(() => {
         if (selectedTable === TableType.MY_TRANSACTIONS)
             return (
-                userTransactionHistory.data?.transactions[0]?.taker.id ??
+                userTransactionHistory.data?.transactions[0]?.user.id ??
                 undefined
             );
         if (selectedTable === TableType.ORDER_HISTORY)
-            return userOrderHistory.data?.orders[0]?.maker.id ?? undefined;
+            return userOrderHistory.data?.orders[0]?.user.id ?? undefined;
     }, [
         selectedTable,
         userOrderHistory.data?.orders,
@@ -167,17 +166,11 @@ export const PortfolioManagement = () => {
                         status: 'Filled' as const,
                         filledAmount: order.inputAmount,
                     };
-                } else if (
-                    !order.lendingMarket.isActive &&
-                    (order.status === 'Open' ||
-                        order.status === 'PartiallyFilled')
-                ) {
+                } else {
                     return {
                         ...order,
-                        status: 'Expired' as const,
-                    };
-                } else {
-                    return order;
+                        status: getMappedOrderStatus(order),
+                    } as typeof order & { status: string };
                 }
             })
             .sort((a, b) => sortOrders(a, b));
@@ -185,11 +178,11 @@ export const PortfolioManagement = () => {
 
     const { data: priceMap } = useLastPrices();
 
-    const { data: collateralBook = emptyCollateralBook, isLoading } =
+    const { data: collateralBook = emptyCollateralBook, isPending } =
         useCollateralBook(address);
 
     const portfolioAnalytics = useMemo(() => {
-        if (isLoading) {
+        if (isPending) {
             return {
                 borrowedPV: 0,
                 lentPV: 0,
@@ -199,7 +192,7 @@ export const PortfolioManagement = () => {
         const borrowedPV = positions
             ? computeNetValue(
                   positions.positions.filter(
-                      position => position.forwardValue < 0
+                      position => position.futureValue < 0
                   ),
                   priceMap
               )
@@ -207,7 +200,7 @@ export const PortfolioManagement = () => {
         const lentPV = positions
             ? computeNetValue(
                   positions.positions.filter(
-                      position => position.forwardValue > 0
+                      position => position.futureValue > 0
                   ),
                   priceMap
               )
@@ -225,7 +218,7 @@ export const PortfolioManagement = () => {
         collateralBook.totalPresentValue,
         collateralBook.usdCollateral,
         collateralBook.usdNonCollateral,
-        isLoading,
+        isPending,
         orderList.totalPVOfOpenOrdersInUSD,
         positions,
         priceMap,
@@ -270,34 +263,39 @@ export const PortfolioManagement = () => {
     return (
         <Page title='Portfolio Management' name='portfolio-management'>
             {userDelistedCurrenciesArray.length > 0 && (
-                <Alert
-                    title={
-                        <>
-                            Please note that your contracts for{' '}
-                            {generateDelistedCurrencyText(
-                                userDelistedCurrenciesArray
-                            )}{' '}
-                            will be delisted at maturity on Secured Finance.{' '}
-                            <a
-                                className='whitespace-nowrap text-secondary7 underline'
-                                href='https://docs.secured.finance/product-guide/loan-market-platform/loan-assets/listing-and-delisting'
-                                target='_blank'
-                                rel='noreferrer'
-                                onClick={e => {
-                                    e.preventDefault();
-                                    scrollToBottom();
-                                }}
-                            >
-                                Learn more
-                            </a>
-                        </>
-                    }
-                    severity={AlertSeverity.Error}
-                    localStorageKey={DELISTED_CURRENCIES_KEY}
-                    localStorageValue={Array.from(delistedCurrencySet)
-                        .sort()
-                        .join()}
-                />
+                <div className='px-3 laptop:px-0'>
+                    <Alert
+                        severity={AlertSeverity.Error}
+                        localStorageKey={DELISTED_CURRENCIES_KEY}
+                        localStorageValue={Array.from(delistedCurrencySet)
+                            .sort()
+                            .join()}
+                        title={
+                            <>
+                                <p className='text-white'>
+                                    Please note that your contracts for{' '}
+                                    {generateDelistedCurrencyText(
+                                        userDelistedCurrenciesArray
+                                    )}{' '}
+                                    will be delisted at maturity on Secured
+                                    Finance.{' '}
+                                    <a
+                                        className='whitespace-nowrap text-secondary7 underline'
+                                        href={LOAN_MARKET_PLATFORM_GUIDE_LINK}
+                                        target='_blank'
+                                        rel='noreferrer'
+                                        onClick={e => {
+                                            e.preventDefault();
+                                            scrollToBottom();
+                                        }}
+                                    >
+                                        Learn more
+                                    </a>
+                                </p>
+                            </>
+                        }
+                    />
+                </div>
             )}
 
             <TwoColumns>
@@ -357,7 +355,7 @@ export const PortfolioManagement = () => {
                                                       Number(
                                                           position.marketPrice
                                                       ),
-                                                      position.forwardValue > 0
+                                                      position.futureValue > 0
                                                           ? OrderSide.LEND
                                                           : OrderSide.BORROW
                                                   ),
@@ -456,7 +454,7 @@ const Disclaimer = ({
             <p className='p-3'>
                 For an in-depth understanding of our protocol, please refer to{' '}
                 <a
-                    href='https://docs.secured.finance/product-guide/loan-market-platform/loan-assets/listing-and-delisting'
+                    href={LOAN_MARKET_PLATFORM_GUIDE_LINK}
                     className='whitespace-nowrap text-planetaryPurple underline'
                     target='_blank'
                     rel='noreferrer'

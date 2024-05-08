@@ -1,3 +1,6 @@
+import clsx from 'clsx';
+import { getCommitHash } from 'src/utils';
+
 export const Layout = ({
     navBar,
     children,
@@ -18,7 +21,14 @@ export const Layout = ({
                 </header>
                 <main className='w-full'>{children}</main>
             </div>
-            <footer className='w-full'>{footer}</footer>
+            <footer
+                className={clsx('w-full', {
+                    'sticky bottom-0 z-30 bg-neutral-900':
+                        getCommitHash() !== '.storybook',
+                })}
+            >
+                {footer}
+            </footer>
         </div>
     );
 };

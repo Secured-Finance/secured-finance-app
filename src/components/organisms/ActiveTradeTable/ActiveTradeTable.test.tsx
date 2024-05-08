@@ -36,7 +36,7 @@ describe('ActiveTradeTable Component', () => {
         expect(initialRows[8]).toHaveTextContent('Borrow');
         expect(initialRows[9]).toHaveTextContent('Lend');
         expect(initialRows[10]).toHaveTextContent('Lend');
-        screen.getByText('Type').click();
+        fireEvent.click(screen.getByText('Type'));
         const sortedRowsAsc = screen.getAllByRole('row');
         expect(sortedRowsAsc[1]).toHaveTextContent('Lend');
         expect(sortedRowsAsc[2]).toHaveTextContent('Lend');
@@ -48,7 +48,7 @@ describe('ActiveTradeTable Component', () => {
         expect(sortedRowsAsc[8]).toHaveTextContent('Borrow');
         expect(sortedRowsAsc[9]).toHaveTextContent('Borrow');
         expect(sortedRowsAsc[9]).toHaveTextContent('Borrow');
-        screen.getByText('Type').click();
+        fireEvent.click(screen.getByText('Type'));
         const sortedRowsDesc = screen.getAllByRole('row');
         expect(sortedRowsDesc[1]).toHaveTextContent('Borrow');
         expect(sortedRowsDesc[2]).toHaveTextContent('Borrow');
@@ -95,6 +95,7 @@ describe('ActiveTradeTable Component', () => {
     it('should display hours and minutes when maturity is less than 24 hours', async () => {
         render(<Default />);
         const closeToMaturityRow = screen.getAllByRole('row')[5];
+
         expect(closeToMaturityRow).toHaveTextContent('Feb 2, 2022');
         waitFor(() => {
             expect(closeToMaturityRow).toHaveTextContent('21h-59m');
@@ -146,12 +147,22 @@ describe('ActiveTradeTable Component', () => {
             expect(delistedContractRow).toHaveTextContent('100.00');
         });
 
-        it.skip('should not display PV for matured delisted contracts', () => {
+        it.skip('should not display PV for matured delisted contracts', async () => {
             render(<Delisted />);
             const delistedContractRow = screen.getAllByRole('row')[10];
+            const activeContractRow = screen.getAllByRole('row')[5];
+
             expect(delistedContractRow).toHaveTextContent('Redeemable');
-            const rows = screen.getAllByTestId('currency-amount-item');
-            expect(rows[15]).toHaveValue(undefined);
+            expect(activeContractRow).toHaveTextContent('22h');
+
+            const delistRowOnlyFv = await within(
+                delistedContractRow
+            ).findAllByTestId('currency-amount-item');
+            const activeRowFvAndPv = await within(
+                activeContractRow
+            ).findAllByTestId('currency-amount-item');
+            expect(delistRowOnlyFv).toHaveLength(1);
+            expect(activeRowFvAndPv).toHaveLength(2);
         });
 
         it('should display unwind position till maturity', () => {

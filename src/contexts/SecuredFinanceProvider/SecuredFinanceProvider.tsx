@@ -49,7 +49,9 @@ export const Context = createContext<SFContext>({
     securedFinance: undefined,
 });
 
-const SecuredFinanceProvider: React.FC = ({ children }) => {
+const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
+    children,
+}) => {
     const { address, isConnected } = useAccount();
     const { chain } = useNetwork();
     const chainId = useSelector((state: RootState) => state.blockchain.chainId);
@@ -133,12 +135,12 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
             await securedFinanceLib.init(publicClient, walletClient);
 
             setSecuredFinance(previous => {
-                if (securedFinanceLib.config.chain.id !== chainId) {
-                    return previous;
-                }
-
                 if (!previous) {
                     return securedFinanceLib;
+                }
+
+                if (securedFinanceLib.config.chain.id !== chainId) {
+                    return previous;
                 }
 
                 if (

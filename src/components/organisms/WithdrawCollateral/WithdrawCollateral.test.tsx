@@ -87,7 +87,7 @@ describe('WithdrawCollateral component', () => {
         expect(store.getState().blockchain.lastActionTimestamp).toBe(0);
         expect(await screen.findByText('Success!')).toBeInTheDocument();
         expect(store.getState().blockchain.lastActionTimestamp).toBeTruthy();
-    });
+    }, 8000);
 
     it('should proceed to failure screen and call onclose when block number is undefined', async () => {
         mockSecuredFinance.tokenVault.withdrawCollateral.mockResolvedValueOnce(

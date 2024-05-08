@@ -5,7 +5,7 @@ import useSF from 'src/hooks/useSecuredFinance';
 import { CurrencySymbol, ZERO_BI, toCurrency } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 
-const DEFAULT_ORDERBOOK_DEPTH = 26;
+const DEFAULT_ORDERBOOK_DEPTH = 30;
 
 interface SmartContractOrderbook {
     unitPrices: bigint[];

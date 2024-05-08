@@ -37,3 +37,6 @@ export const LinkList: ExternalLink[] = [
         icon: <Discord className='h-5 w-5 text-white' />,
     },
 ];
+
+export const LOAN_MARKET_PLATFORM_GUIDE_LINK =
+    'https://docs.secured.finance/product-guide/loan-market-platform/loan-assets/listing-and-delisting';
