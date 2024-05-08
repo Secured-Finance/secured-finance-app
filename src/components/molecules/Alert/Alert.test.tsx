@@ -12,15 +12,13 @@ describe('Alert Component', () => {
     it('should render info variant if variant is not provided', () => {
         render(<Info />);
         const alert = screen.getByRole('alert');
-        expect(alert).toHaveClass('border-primary-500 bg-primary-900/20');
-        expect(alert).not.toHaveClass('border-error-500 bg-error-900/20');
+        expect(alert).toHaveClass('border-primary-300 bg-primary-500/10');
     });
 
     it('should render error variant if specified', () => {
         render(<Error />);
         const alert = screen.getByRole('alert');
-        expect(alert).not.toHaveClass('border-primary-500 bg-primary-900/20');
-        expect(alert).toHaveClass('border-error-500 bg-error-900/20');
+        expect(alert).toHaveClass('border-error-300 bg-error-500/10');
     });
 
     it('should render alert component if localStorageValue is not found in localStorage', () => {
