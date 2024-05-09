@@ -28,8 +28,6 @@ export const Alert = ({
         value ? !(value === localStorageValue) : true
     );
 
-    const iconClass = 'w-[13px] h-[13px] laptop:w-4 laptop:h-4';
-
     const handleClose = () => {
         setIsVisible(false);
         if (localStorageKey && localStorageValue) {
@@ -49,7 +47,7 @@ export const Alert = ({
             aria-label={severity}
             role='alert'
             className={clsx(
-                'flex w-full flex-row items-start justify-between gap-1 rounded-md border px-2.5 text-2xs text-neutral-50 laptop:text-xs',
+                'flex w-full flex-row items-start justify-between gap-2 rounded-md border pl-2.5 pr-2 text-neutral-50',
                 severityStyle[severity],
                 {
                     'py-1.5': !subtitle,
@@ -63,8 +61,7 @@ export const Alert = ({
                         {cloneElement(alertIcon, {
                             className: clsx(
                                 alertIcon.props.className,
-                                iconClass,
-                                'mt-[4px] laptop:mt-0.5'
+                                'w-[14.775px] h-[14.775px] laptop:w-4 laptop:h-4 mt-[2.5px]'
                             ),
                         })}
                     </span>
@@ -81,7 +78,7 @@ export const Alert = ({
                         </h2>
                     )}
                     {subtitle && (
-                        <div className='leading-4 laptop:leading-5'>
+                        <div className='text-2xs leading-4 laptop:text-xs laptop:leading-5'>
                             {subtitle}
                         </div>
                     )}
@@ -90,10 +87,13 @@ export const Alert = ({
             <button
                 onClick={handleClose}
                 className={clsx(
-                    iconClass,
-                    'mt-[3px] flex-shrink-0 laptop:mt-0.5',
-                    buttonColorStyle[severity]
+                    buttonColorStyle[severity],
+                    'h-[13px] w-[13px] flex-shrink-0 laptop:h-4 laptop:w-4',
+                    {
+                        'mt-[3px] laptop:mt-0.5': !subtitle,
+                    }
                 )}
+                data-testid='close-button'
             >
                 <XMarkIcon />
             </button>

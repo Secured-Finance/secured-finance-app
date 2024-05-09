@@ -272,7 +272,7 @@ export const PortfolioManagement = () => {
                             .join()}
                         title={
                             <>
-                                <p className='text-white'>
+                                <p>
                                     Please note that your contracts for{' '}
                                     {generateDelistedCurrencyText(
                                         userDelistedCurrenciesArray

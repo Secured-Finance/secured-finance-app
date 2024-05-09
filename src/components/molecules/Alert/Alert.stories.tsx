@@ -1,3 +1,4 @@
+import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
 import { Meta, StoryFn } from '@storybook/react';
 import { Alert } from './Alert';
 import { FIGMA_STORYBOOK_LINK } from './constants';
@@ -8,17 +9,13 @@ export default {
     component: Alert,
     args: {
         title: 'Alert',
-        severity: AlertSeverity.Info,
-        showCloseButton: true,
     },
     argTypes: {
         subtitle: { control: 'text' },
         severity: { control: 'radio', options: Object.values(AlertSeverity) },
     },
     parameters: {
-        viewport: {
-            disable: true,
-        },
+        ...RESPONSIVE_PARAMETERS,
         design: {
             type: 'figma',
             url: FIGMA_STORYBOOK_LINK,
@@ -28,7 +25,7 @@ export default {
 
 const Template: StoryFn<typeof Alert> = args => <Alert {...args} />;
 
-export const Info = Template.bind({});
+export const Default = Template.bind({});
 
 export const Error = Template.bind({});
 Error.args = {

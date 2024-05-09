@@ -185,7 +185,13 @@ const WithBanner = ({
                                         month: 'long',
                                         day: 'numeric',
                                     }
-                                ).format(preOrderTimeLimit)} (UTC)`}
+                                ).format(
+                                    preOrderTimeLimit
+                                )} ${Intl.DateTimeFormat('en-GB', {
+                                    timeZone: 'UTC',
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                }).format(preOrderTimeLimit)} (UTC)`}
                                 <span className='pl-4'>
                                     <Link
                                         href='itayose'
