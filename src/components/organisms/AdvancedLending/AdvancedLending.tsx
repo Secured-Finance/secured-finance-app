@@ -27,6 +27,7 @@ import {
     useBreakpoint,
     useCurrencies,
     useGraphClientHook,
+    useIsSubgraphSupported,
     useIsUnderCollateralThreshold,
     useLastPrices,
     useMarket,
@@ -36,6 +37,7 @@ import {
     useYieldCurveMarketRates,
 } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
+import useSF from 'src/hooks/useSecuredFinance';
 import {
     resetUnitPrice,
     selectLandingOrderForm,
@@ -128,6 +130,11 @@ export const AdvancedLending = ({
     const { data: currencies } = useCurrencies();
     const assetList = toOptions(currencies, currency);
 
+    const securedFinance = useSF();
+    const currentChainId = securedFinance?.config.chain.id;
+
+    const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
+
     useEffect(() => {
         setTimestamp(Math.round(new Date().getTime() / 1000));
     }, []);
@@ -216,11 +223,13 @@ export const AdvancedLending = ({
             from: timestamp - 24 * 3600,
             to: timestamp,
         },
-        queries.TransactionHistoryDocument
+        queries.TransactionHistoryDocument,
+        'transactionHistory',
+        !isSubgraphSupported
     ).data;
 
     const tradeHistoryDetails = useTradeHistoryDetails(
-        transactionHistory?.transactionHistory ?? [],
+        transactionHistory ?? [],
         currency,
         selectedTerm.value
     );
@@ -331,23 +340,39 @@ export const AdvancedLending = ({
                         onAssetChange={handleCurrencyChange}
                         onTermChange={handleTermChange}
                         currentMarket={currentMarket}
-                        values={[
-                            formatLoanValue(tradeHistoryDetails.max, 'price'),
-                            formatLoanValue(tradeHistoryDetails.min, 'price'),
-                            tradeHistoryDetails.count,
-                            tradeHistoryDetails.sum
-                                ? ordinaryFormat(tradeHistoryDetails.sum)
-                                : '-',
-                            usdFormat(currencyPrice, 2),
-                        ]}
+                        currencyPrice={usdFormat(currencyPrice, 2)}
+                        values={
+                            isSubgraphSupported
+                                ? [
+                                      formatLoanValue(
+                                          tradeHistoryDetails.max,
+                                          'price'
+                                      ),
+                                      formatLoanValue(
+                                          tradeHistoryDetails.min,
+                                          'price'
+                                      ),
+                                      tradeHistoryDetails.count.toString(),
+                                      tradeHistoryDetails.sum
+                                          ? ordinaryFormat(
+                                                tradeHistoryDetails.sum
+                                            )
+                                          : '-',
+                                  ]
+                                : undefined
+                        }
                     />
                 </div>
                 <div className='mb-4 block tablet:col-span-2 laptop:mb-0 laptop:hidden'>
                     <Tab
-                        tabDataArray={[
-                            { text: 'Yield Curve' },
-                            { text: 'Historical Chart' },
-                        ]}
+                        tabDataArray={
+                            isSubgraphSupported
+                                ? [
+                                      { text: 'Yield Curve' },
+                                      { text: 'Historical Chart' },
+                                  ]
+                                : [{ text: 'Yield Curve' }]
+                        }
                     >
                         <div className='h-[410px] w-full px-2 py-4'>
                             <LineChartTab
@@ -361,7 +386,7 @@ export const AdvancedLending = ({
                                 }
                             />
                         </div>
-                        <HistoricalWidget />
+                        {isSubgraphSupported && <HistoricalWidget />}
                     </Tab>
                 </div>
                 <div className='tablet:col-span-2 laptop:col-span-1'>
@@ -388,10 +413,14 @@ export const AdvancedLending = ({
                     <div className='flex h-full flex-grow flex-col gap-4'>
                         <div className='hidden laptop:block'>
                             <Tab
-                                tabDataArray={[
-                                    { text: 'Yield Curve' },
-                                    { text: 'Historical Chart' },
-                                ]}
+                                tabDataArray={
+                                    isSubgraphSupported
+                                        ? [
+                                              { text: 'Yield Curve' },
+                                              { text: 'Historical Chart' },
+                                          ]
+                                        : [{ text: 'Yield Curve' }]
+                                }
                             >
                                 <div className='h-[410px] w-full px-2 py-4'>
                                     <LineChartTab
@@ -407,16 +436,20 @@ export const AdvancedLending = ({
                                         }
                                     />
                                 </div>
-                                <HistoricalWidget />
+                                {isSubgraphSupported && <HistoricalWidget />}
                             </Tab>
                         </div>
                         <HorizontalTab
-                            tabTitles={[
-                                'Active Positions',
-                                'Open Orders',
-                                'Order History',
-                                'My Transactions',
-                            ]}
+                            tabTitles={
+                                isSubgraphSupported
+                                    ? [
+                                          'Active Positions',
+                                          'Open Orders',
+                                          'Order History',
+                                          'My Transactions',
+                                      ]
+                                    : ['Active Positions', 'Open Orders']
+                            }
                             onTabChange={setSelectedTable}
                             useCustomBreakpoint={true}
                             tooltipMap={tooltipMap}

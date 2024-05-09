@@ -1,4 +1,4 @@
-import { Button } from 'src/components/atoms';
+import { Button, ButtonSizes } from 'src/components/atoms';
 
 type MenuItem = { text: string; onClick: () => void; disabled?: boolean };
 
@@ -7,7 +7,7 @@ const MenuItem = ({ text, onClick, disabled = false }: MenuItem) => {
         <Button
             onClick={onClick}
             disabled={disabled}
-            size='xs'
+            size={ButtonSizes.sm}
             fullWidth
             className='min-w-fit'
         >

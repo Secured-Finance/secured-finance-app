@@ -63,7 +63,7 @@ export const CollateralTab = ({
 
     const collateralBalances = useCollateralBalances();
     const { data: collateralCurrencies = [] } = useCollateralCurrencies();
-    const { data: currencies = [] } = useCurrencies();
+    const { data: currencies = [] } = useCurrencies(true);
 
     const depositCollateralList = useMemo(
         () =>

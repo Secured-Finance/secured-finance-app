@@ -20,10 +20,12 @@ import {
     useCollateralBook,
     useCurrencyDelistedStatus,
     useGraphClientHook,
+    useIsSubgraphSupported,
     useLendingMarkets,
     useLoanValues,
     useMaturityOptions,
 } from 'src/hooks';
+import useSF from 'src/hooks/useSecuredFinance';
 import {
     resetUnitPrice,
     selectLandingOrderForm,
@@ -63,6 +65,11 @@ export const Landing = ({ view }: { view?: ViewType }) => {
         market => market.isOpened
     );
 
+    const securedFinance = useSF();
+    const currentChainId = securedFinance?.config.chain.id;
+
+    const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
+
     const itayoseMarket = Object.entries(lendingContracts).find(
         ([, market]) => market.isPreOrderPeriod || market.isItayosePeriod
     )?.[1];
@@ -83,7 +90,8 @@ export const Landing = ({ view }: { view?: ViewType }) => {
     const dailyVolumes = useGraphClientHook(
         {}, // no variables
         queries.DailyVolumesDocument,
-        'dailyVolumes'
+        'dailyVolumes',
+        !isSubgraphSupported
     );
 
     return (
@@ -104,7 +112,11 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                         />
                         <YieldChart
                             asset={currency}
-                            dailyVolumes={dailyVolumes.data ?? []}
+                            dailyVolumes={
+                                isSubgraphSupported
+                                    ? dailyVolumes.data ?? []
+                                    : undefined
+                            }
                         />
                     </div>
                 </WithBanner>
