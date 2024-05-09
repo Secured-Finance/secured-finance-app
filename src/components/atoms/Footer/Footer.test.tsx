@@ -23,30 +23,18 @@ describe('Footer component', () => {
         it('should render footer with version', () => {
             process.env.NEXT_PUBLIC_USE_PACKAGE_VERSION = 'true';
             render(<Default />);
-            expect(screen.getByText('Secured Finance App')).toBeInTheDocument();
             expect(
-                screen.getByText(`v${packageJson.version}`)
+                screen.getByText(`Secured Finance v${packageJson.version}`)
             ).toBeInTheDocument();
             expect(screen.getByText('(dev)')).toBeInTheDocument();
-        });
-
-        it('should render correct release link', () => {
-            process.env.NEXT_PUBLIC_USE_PACKAGE_VERSION = 'true';
-            render(<Default />);
-            const links = screen.getAllByRole('link');
-            expect(links[1]).toHaveAttribute(
-                'href',
-                'https://github.com/Secured-Finance/secured-finance-app/releases'
-            );
         });
 
         it('should render correct environment', () => {
             process.env.NEXT_PUBLIC_USE_PACKAGE_VERSION = 'true';
             process.env.SF_ENV = 'staging';
             render(<Default />);
-            expect(screen.getByText('Secured Finance App')).toBeInTheDocument();
             expect(
-                screen.getByText(`v${packageJson.version}`)
+                screen.getByText(`Secured Finance v${packageJson.version}`)
             ).toBeInTheDocument();
             expect(screen.getByText('(stg)')).toBeInTheDocument();
         });
@@ -55,8 +43,9 @@ describe('Footer component', () => {
             process.env.NEXT_PUBLIC_USE_PACKAGE_VERSION = 'true';
             process.env.COMMIT_HASH = '.storybook';
             render(<Default />);
-            expect(screen.getByText('Secured Finance App')).toBeInTheDocument();
-            expect(screen.getByText('v.storybook')).toBeInTheDocument();
+            expect(
+                screen.getByText(`Secured Finance v.storybook`)
+            ).toBeInTheDocument();
         });
     });
 });
