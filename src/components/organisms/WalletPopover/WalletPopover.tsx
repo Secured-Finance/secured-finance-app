@@ -13,7 +13,7 @@ import {
 } from 'src/components/atoms';
 import { Tooltip } from 'src/components/templates';
 import { RootState } from 'src/store/types';
-import { resetEthWallet } from 'src/store/wallet';
+import { resetWallet } from 'src/store/wallet';
 import { formatDataCy, removeWalletFromStore } from 'src/utils';
 import { useAccount, useDisconnect } from 'wagmi';
 
@@ -88,7 +88,7 @@ export const WalletPopover = ({
         resetTracking();
         reset();
         disconnect();
-        dispatch(resetEthWallet());
+        dispatch(resetWallet());
         removeWalletFromStore();
     }, [disconnect, dispatch, reset, isConnected]);
 
@@ -130,7 +130,7 @@ export const WalletPopover = ({
                         leaveTo='opacity-0 translate-y-5'
                     >
                         <Popover.Panel className='absolute right-0 z-10 mt-3 w-64 origin-top-right'>
-                            <div className='relative flex flex-col space-y-2 overflow-hidden rounded-xl border border-black bg-universeBlue p-2 text-white shadow-dropdown'>
+                            <div className='relative flex flex-col space-y-2 overflow-hidden rounded-xl border border-black bg-neutral-900 p-2 text-white shadow-dropdown'>
                                 <MenuItem
                                     label='Network'
                                     text={networkName}

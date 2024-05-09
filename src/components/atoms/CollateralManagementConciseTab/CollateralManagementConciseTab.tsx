@@ -81,7 +81,7 @@ export const CollateralManagementConciseTab = ({
                         'N/A'
                     ) : (
                         <>
-                            <span className='text-secondary-300 font-semibold'>
+                            <span className='font-semibold text-secondary-300'>
                                 {`${usdFormat(availableToBorrow, 2)} `}
                             </span>
                             <span>{`of ${usdFormat(

@@ -69,7 +69,6 @@ export const GlobalItayose = () => {
                         variant='fixedWidth'
                     />
                     <Button
-                        size='md'
                         onClick={() => {
                             router.push('/itayose/');
                         }}

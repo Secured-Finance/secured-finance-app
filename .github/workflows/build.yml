@@ -63,6 +63,7 @@ jobs:
           SF_ENV=${{ vars.SF_ENV }}
           NEXT_PUBLIC_USE_PACKAGE_VERSION=${{ vars.USE_PACKAGE_VERSION }}
           NEXT_PUBLIC_SUPPORTED_CHAIN_IDS=${{ vars.SUPPORTED_CHAIN_IDS }}
+          NEXT_PUBLIC_NON_SUBGRAPH_SUPPORTED_CHAIN_IDS=${{ vars.NON_SUBGRAPH_SUPPORTED_CHAIN_IDS }}
           EOF
 
       - name: Check Syntax with Prettier

@@ -6,7 +6,7 @@ import { useCollateralBalances } from './useCollateralBalances';
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
-const preloadedState = { wallet: { address: '0x1', ethBalance: 0 } };
+const preloadedState = { wallet: { address: '0x1', balance: 0 } };
 
 describe('useCollateralBalances', () => {
     it('should return balances of only collateral currencies', async () => {
