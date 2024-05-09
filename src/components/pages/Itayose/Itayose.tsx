@@ -21,7 +21,7 @@ import {
 import {
     AdvancedLendingOrderCard,
     LineChartTab,
-    OrderBookWidget,
+    NewOrderBookWidget,
     OrderHistoryTable,
     OrderTable,
 } from 'src/components/organisms';
@@ -41,6 +41,7 @@ import {
     useLastPrices,
     useLendOrderBook,
     useLendingMarkets,
+    useMarket,
     useMarketOrderList,
     useMarketPhase,
     useMaturityOptions,
@@ -143,6 +144,7 @@ export const Itayose = () => {
     const lendingContracts = lendingMarkets[currency];
 
     const marketPhase = useMarketPhase(currency, maturity);
+    const data = useMarket(currency, maturity);
 
     const maturityOptionList = useMaturityOptions(
         lendingContracts,
@@ -366,17 +368,16 @@ export const Itayose = () => {
                     </div>
                     <div className='hidden laptop:block laptop:w-[272px]'>
                         {!isTablet && (
-                            <OrderBookWidget
-                                currency={currency}
+                            <NewOrderBookWidget
                                 orderbook={orderBook}
-                                variant='itayose'
+                                currency={currency}
                                 marketPrice={estimatedOpeningUnitPrice}
+                                maxLendUnitPrice={data?.maxLendUnitPrice}
+                                minBorrowUnitPrice={data?.minBorrowUnitPrice}
                                 onFilterChange={handleFilterChange}
-                                isLoadingMap={isLoadingMap}
                                 onAggregationChange={setMultiplier}
-                                isCurrencyDelisted={delistedCurrencySet.has(
-                                    currency
-                                )}
+                                isLoadingMap={isLoadingMap}
+                                isItayose
                             />
                         )}
                     </div>
