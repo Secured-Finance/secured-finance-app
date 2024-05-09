@@ -182,34 +182,41 @@ const WithBanner = ({
                 </div>
             )}
             {market && (
-                <Alert
-                    title={
-                        <>
-                            {`Itayose market for ${ccy}-${getUTCMonthYear(
-                                market.maturity
-                            )} is now open until ${Intl.DateTimeFormat(
-                                'en-US',
-                                {
-                                    weekday: 'long',
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric',
-                                }
-                            ).format(market.utcOpeningDate * 1000)}`}
-                            <span className='pl-4'>
-                                <Link href='itayose' passHref>
-                                    <a
-                                        href='_'
+                <div className='px-3 laptop:px-0'>
+                    <Alert
+                        title={
+                            <>
+                                {`Market ${ccy}-${getUTCMonthYear(
+                                    market.maturity,
+                                    true
+                                )} is open for pre-orders now until ${Intl.DateTimeFormat(
+                                    'en-US',
+                                    {
+                                        timeZone: 'UTC',
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric',
+                                    }
+                                ).format(
+                                    preOrderTimeLimit
+                                )} ${Intl.DateTimeFormat('en-GB', {
+                                    timeZone: 'UTC',
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                }).format(preOrderTimeLimit)} (UTC)`}
+                                <span className='pl-4'>
+                                    <Link
+                                        href='itayose'
                                         className='text-planetaryPurple underline'
                                     >
                                         Place Order Now
-                                    </a>
-                                </Link>
-                            </span>
-                        </>
-                    }
-                    severity={AlertSeverity.Info}
-                />
+                                    </Link>
+                                </span>
+                            </>
+                        }
+                        severity={AlertSeverity.Info}
+                    />
+                </div>
             )}
             {children}
         </div>

@@ -11,7 +11,6 @@ export const Alert = ({
     onClose,
     localStorageKey,
     localStorageValue,
-    showCloseButton = false,
 }: {
     severity?: AlertSeverity;
     title: React.ReactNode;
@@ -19,7 +18,6 @@ export const Alert = ({
     onClose?: () => void;
     localStorageKey?: string;
     localStorageValue?: string;
-    showCloseButton: boolean;
 }) => {
     const value =
         typeof window !== 'undefined' && localStorageKey
@@ -29,11 +27,6 @@ export const Alert = ({
     const [isVisible, setIsVisible] = useState(
         value ? !(value === localStorageValue) : true
     );
-
-    const iconClass = clsx({
-        'h-6 w-6': subtitle,
-        'h-5 w-5': !subtitle,
-    });
 
     const handleClose = () => {
         setIsVisible(false);
@@ -52,7 +45,7 @@ export const Alert = ({
             aria-label={severity}
             role='alert'
             className={clsx(
-                'flex w-full flex-row items-start justify-between gap-1 rounded-md border px-2.5 text-sm text-white light:text-neutral-900',
+                'flex w-full flex-row items-start justify-between gap-2 rounded-md border pl-2.5 pr-2 text-neutral-50',
                 severityStyle[severity],
                 {
                     'py-1.5': !subtitle,
@@ -66,7 +59,7 @@ export const Alert = ({
                         {cloneElement(alertIcon, {
                             className: clsx(
                                 alertIcon.props.className,
-                                iconClass
+                                'w-[14.775px] h-[14.775px] laptop:w-4 laptop:h-4 mt-[2.5px]'
                             ),
                         })}
                     </span>
@@ -81,17 +74,26 @@ export const Alert = ({
                             {title}
                         </h2>
                     )}
-                    {subtitle && <p>{subtitle}</p>}
+                    {subtitle && (
+                        <div className='text-2xs leading-4 laptop:text-xs laptop:leading-5'>
+                            {subtitle}
+                        </div>
+                    )}
                 </div>
             </div>
-            {showCloseButton && (
-                <button
-                    onClick={handleClose}
-                    className='h-4 w-4 flex-shrink-0 text-neutral-200 light:text-neutral-500'
-                >
-                    <XMarkIcon />
-                </button>
-            )}
+            <button
+                onClick={handleClose}
+                className={clsx(
+                    buttonColorStyle[severity],
+                    'h-[13px] w-[13px] flex-shrink-0 laptop:h-4 laptop:w-4',
+                    {
+                        'mt-[3px] laptop:mt-0.5': !subtitle,
+                    }
+                )}
+                data-testid='close-button'
+            >
+                <XMarkIcon />
+            </button>
         </section>
     ) : null;
 };

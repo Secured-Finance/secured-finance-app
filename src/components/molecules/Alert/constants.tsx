@@ -9,27 +9,34 @@ export const FIGMA_STORYBOOK_LINK =
     'https://www.figma.com/file/YIBsk1ihFbPlDb8XldGj1T/SF-Design-System?type=design&node-id=287-8412&mode=dev';
 
 export const severityStyle: { [key in AlertSeverity]: string } = {
-    [AlertSeverity.Error]:
-        'border-error-500 bg-error-900/20 light:border-error-300 light:bg-error-50',
-    [AlertSeverity.Info]:
-        'border-primary-500 bg-primary-900/20 light:bg-primary-50 light:border-primary-300',
-    [AlertSeverity.Success]:
-        'border-success-500 bg-success-900/20 light:bg-success-50 light:border-success-300',
-    [AlertSeverity.Warning]:
-        'border-warning-500 bg-warning-900/20 light:bg-warning-50 light:border-warning-300',
+    [AlertSeverity.Error]: 'border-error-300 bg-error-500/10',
+    [AlertSeverity.Info]: 'border-primary-300 bg-primary-500/10',
+    [AlertSeverity.Success]: 'border-success-300 bg-success-700/10',
+    [AlertSeverity.Warning]: 'border-warning-300 bg-warning-900/10',
+};
+
+export const buttonColorStyle: { [key in AlertSeverity]: string } = {
+    [AlertSeverity.Error]: 'text-error-300',
+    [AlertSeverity.Info]: 'text-primary-300',
+    [AlertSeverity.Success]: 'text-success-300',
+    [AlertSeverity.Warning]: 'text-warning-300',
 };
 
 export const alertIconMapping: { [key in AlertSeverity]: JSX.Element } = {
     [AlertSeverity.Error]: (
-        <XCircleIcon className='text-error-300 light:text-error-500' />
+        <XCircleIcon className={buttonColorStyle[AlertSeverity.Error]} />
     ),
     [AlertSeverity.Info]: (
-        <InformationCircleIcon className='text-primary-300 light:text-primary-500' />
+        <InformationCircleIcon
+            className={buttonColorStyle[AlertSeverity.Info]}
+        />
     ),
     [AlertSeverity.Success]: (
-        <CheckCircleIcon className='text-success-300 light:text-success-700' />
+        <CheckCircleIcon className={buttonColorStyle[AlertSeverity.Success]} />
     ),
     [AlertSeverity.Warning]: (
-        <InformationCircleIcon className='text-warning-300 light:text-warning-700' />
+        <InformationCircleIcon
+            className={buttonColorStyle[AlertSeverity.Warning]}
+        />
     ),
 };
