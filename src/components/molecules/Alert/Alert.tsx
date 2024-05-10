@@ -59,7 +59,11 @@ export const Alert = ({
                         {cloneElement(alertIcon, {
                             className: clsx(
                                 alertIcon.props.className,
-                                'w-[14.775px] h-[14.775px] laptop:w-4 laptop:h-4 mt-[2.5px]'
+                                'w-[14.775px] h-[14.775px] laptop:w-4 laptop:h-4',
+                                {
+                                    'mt-[2.5px] laptop:mt-0.5': !subtitle,
+                                    'mt-[3px] laptop:mt-1': subtitle,
+                                }
                             ),
                         })}
                     </span>
