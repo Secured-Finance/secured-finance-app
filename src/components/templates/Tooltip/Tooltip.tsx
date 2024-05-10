@@ -57,7 +57,7 @@ export const Tooltip = ({
                                 className={clsx(
                                     'typography-caption-3 relative w-fit overflow-hidden whitespace-normal rounded-lg border border-black-20 bg-gunMetal p-4 text-left text-neutral-8 shadow-dropdown',
                                     {
-                                        'border-none bg-yellow-900 text-neutral-50':
+                                        'border-none bg-warning-900 text-neutral-50':
                                             severity === 'warning',
                                     }
                                 )}
