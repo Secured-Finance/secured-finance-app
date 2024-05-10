@@ -50,8 +50,8 @@ const AGGREGATION_OPTIONS: (Option<string> & { multiplier: number })[] = [
     { label: '10', value: '1000', multiplier: 1000 },
 ];
 
-const ORDERBOOK_DOUBLE_MAX_LINES = 15;
-const ORDERBOOK_SINGLE_MAX_LINES = 30;
+const ORDERBOOK_DOUBLE_MAX_LINES = 6;
+const ORDERBOOK_SINGLE_MAX_LINES = 12;
 
 const columnHelper = createColumnHelper<OrderBookEntry>();
 
@@ -63,7 +63,7 @@ const OrderBookCell = ({
 } & ColorFormat) => (
     <span
         className={clsx(
-            'z-[1] font-tertiary text-xs font-normal leading-[14px] laptop:px-5 laptop:text-xs laptop:leading-4',
+            'z-[1] font-tertiary text-[11px] font-normal leading-[14px] laptop:px-4 laptop:text-xs laptop:leading-4',
             {
                 'text-error-300': color === 'negative',
                 'text-secondary-300': color === 'positive',
@@ -433,7 +433,7 @@ export const NewOrderBookWidget = ({
     };
 
     return (
-        <div className='flex h-full w-full flex-col justify-start gap-y-1 overflow-hidden border-white-10 laptop:flex-col-reverse laptop:gap-y-0 laptop:rounded-b-xl laptop:border laptop:bg-cardBackground/60 laptop:shadow-tab'>
+        <div className='flex h-full w-full flex-col justify-start gap-y-1 overflow-hidden border-neutral-600 laptop:flex-col-reverse laptop:gap-y-0 laptop:rounded-b-xl laptop:border laptop:bg-neutral-900 laptop:pb-2 laptop:shadow-tab'>
             <div className='h-full'>
                 {orderbook.isPending ? (
                     <div className='table h-full w-full'>
@@ -448,7 +448,7 @@ export const NewOrderBookWidget = ({
                         <div
                             className={clsx('flex', {
                                 'h-fit': state.showBorrow && state.showLend,
-                                'h-5 laptop:h-7': !state.showBorrow,
+                                'h-[14px] laptop:h-[22px]': !state.showBorrow,
                             })}
                         >
                             <CoreTable
@@ -505,7 +505,7 @@ export const NewOrderBookWidget = ({
                 )}
             </div>
             <div className='flex flex-col laptop:flex-col-reverse'>
-                <div className='flex flex-row items-center justify-between gap-1 border-neutral-600 laptop:flex-row-reverse laptop:border-b-0.5 laptop:px-3 laptop:py-2'>
+                <div className='flex flex-row items-center justify-between gap-1 border-neutral-600 laptop:border-b laptop:px-3 laptop:py-1.5'>
                     <div className='w-full laptop:w-fit'>
                         <DropdownSelector
                             optionList={AGGREGATION_OPTIONS}
@@ -553,7 +553,7 @@ export const NewOrderBookWidget = ({
                         </div>
                     )}
                 </div>
-                <div className='hidden border-neutral-600 laptop:block laptop:border-b-0.5'>
+                <div className='hidden border-neutral-600 laptop:block laptop:border-b'>
                     <div className='h-[60px]'>
                         <NavTab text='Order Book' active={true} />
                     </div>
@@ -578,7 +578,7 @@ const OrderBookIcon = ({
         key={name}
         aria-label={name}
         className={clsx(
-            'rounded border-0.5 border-neutral-500 px-[10px] py-[11px] hover:bg-neutral-700',
+            'rounded border-0.5 border-neutral-500 px-1.5 py-[7px] hover:bg-neutral-700',
             {
                 'bg-neutral-700': active,
                 'bg-neutral-800': !active,
