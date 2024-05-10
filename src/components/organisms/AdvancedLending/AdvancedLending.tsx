@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     AdvancedLendingTopBar,
     Alert,
+    AlertSeverity,
     HorizontalTab,
     Tab,
 } from 'src/components/molecules';
@@ -313,14 +314,13 @@ export const AdvancedLending = ({
         <div className='grid gap-2'>
             {maximumOpenOrderLimit && (
                 <div className='px-3 laptop:px-0'>
-                    <Alert severity='warning'>
-                        <div className='typography-caption text-neutral-50'>
-                            You will not be able to place additional orders as
+                    <Alert
+                        severity={AlertSeverity.Warning}
+                        title='You will not be able to place additional orders as
                             you currently have the maximum number of 20 orders.
                             Please wait for your order to be filled or cancel
-                            existing orders before adding more.
-                        </div>
-                    </Alert>
+                            existing orders before adding more.'
+                    />
                 </div>
             )}
 
