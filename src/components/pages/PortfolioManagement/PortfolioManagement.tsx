@@ -37,6 +37,7 @@ import {
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import {
+    LOAN_MARKET_PLATFORM_GUIDE_LINK,
     checkOrderIsFilled,
     computeNetValue,
     formatOrders,
@@ -468,7 +469,7 @@ const Disclaimer = ({
             <p className='p-3'>
                 For an in-depth understanding of our protocol, please refer to{' '}
                 <a
-                    href='https://docs.secured.finance/product-guide/loan-market-platform/loan-assets/listing-and-delisting'
+                    href={LOAN_MARKET_PLATFORM_GUIDE_LINK}
                     className='whitespace-nowrap text-planetaryPurple underline'
                     target='_blank'
                     rel='noreferrer'

@@ -1,7 +1,7 @@
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import clsx from 'clsx';
 import { cloneElement, useState } from 'react';
-import { alertIconMapping, severityStyle } from './constants';
+import { alertIconMapping, buttonColorStyle, severityStyle } from './constants';
 import { AlertSeverity } from './types';
 
 export const Alert = ({
@@ -40,7 +40,9 @@ export const Alert = ({
 
     const alertIcon = alertIconMapping[severity];
 
-    return isVisible ? (
+    if (!isVisible) return null;
+
+    return (
         <section
             aria-label={severity}
             role='alert'
@@ -53,7 +55,7 @@ export const Alert = ({
                 }
             )}
         >
-            <div className='flex items-start gap-2 pr-4'>
+            <div className='flex items-start gap-1.5 pr-4 laptop:gap-2'>
                 {alertIcon && (
                     <span>
                         {cloneElement(alertIcon, {
@@ -68,11 +70,12 @@ export const Alert = ({
                         })}
                     </span>
                 )}
-                <div className='flex flex-col gap-1 leading-[1.57]'>
+                <div className='flex flex-col'>
                     {title && (
                         <h2
-                            className={clsx({
-                                'text-base leading-normal': subtitle,
+                            className={clsx('text-xs leading-5', {
+                                'laptop:text-sm laptop:leading-[22px]':
+                                    subtitle,
                             })}
                         >
                             {title}
@@ -99,5 +102,5 @@ export const Alert = ({
                 <XMarkIcon />
             </button>
         </section>
-    ) : null;
+    );
 };

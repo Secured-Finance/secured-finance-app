@@ -140,6 +140,7 @@ module.exports = {
                 300: '#FFDB93',
                 500: '#FAAD14',
                 700: '#C58300',
+                900: '#BD7003',
             },
             error: {
                 300: '#FF9FAE',
