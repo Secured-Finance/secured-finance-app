@@ -11,14 +11,18 @@ import {
 interface CurveHeaderProps {
     asset: CurrencySymbol;
     priceList: AssetPriceMap;
-    dailyVolumes: DailyVolumes;
+    dailyVolumes?: DailyVolumes;
 }
 
-export const CurveHeader = ({
+const CurveHeaderNotes = ({
     asset = CurrencySymbol.USDC,
     priceList,
     dailyVolumes,
-}: CurveHeaderProps): JSX.Element => {
+}: {
+    asset: CurrencySymbol;
+    priceList: AssetPriceMap;
+    dailyVolumes: DailyVolumes;
+}) => {
     const totalVolume = useMemo(() => {
         const { volumePerCurrency } = computeTotalDailyVolumeInUSD(
             dailyVolumes,
@@ -29,28 +33,43 @@ export const CurveHeader = ({
     }, [priceList, dailyVolumes]);
 
     return (
+        <div className='flex flex-row gap-2'>
+            <CurveHeaderTotal
+                header='Total Volume (Asset)'
+                footer={formatWithCurrency(
+                    totalVolume.volumePerCurrency[asset],
+                    asset.toString()
+                )}
+            />
+
+            <CurveHeaderTotal
+                header='Total Volume (USD)'
+                footer={usdFormat(
+                    Number(totalVolume.volumePerCurrency[asset]) *
+                        priceList[asset]
+                )}
+            />
+        </div>
+    );
+};
+export const CurveHeader = ({
+    asset = CurrencySymbol.USDC,
+    priceList,
+    dailyVolumes,
+}: CurveHeaderProps): JSX.Element => {
+    return (
         <div className='flex h-20 w-[585px] flex-row justify-between p-4'>
             <CurveHeaderAsset
                 ccy={asset}
                 value={priceList[asset]}
             ></CurveHeaderAsset>
-            <div className='flex flex-row gap-2'>
-                <CurveHeaderTotal
-                    header='Total Volume (Asset)'
-                    footer={formatWithCurrency(
-                        totalVolume.volumePerCurrency[asset],
-                        asset.toString()
-                    )}
+            {dailyVolumes && (
+                <CurveHeaderNotes
+                    asset={asset}
+                    priceList={priceList}
+                    dailyVolumes={dailyVolumes}
                 />
-
-                <CurveHeaderTotal
-                    header='Total Volume (USD)'
-                    footer={usdFormat(
-                        Number(totalVolume.volumePerCurrency[asset]) *
-                            priceList[asset]
-                    )}
-                />
-            </div>
+            )}
         </div>
     );
 };
