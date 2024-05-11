@@ -183,7 +183,9 @@ export const ActiveTradeTable = ({
                     else return `${7 - Math.abs(dayToMaturity)}d left to repay`;
                 } else {
                     if (isMaturityPastDays(maturityTimestamp, 7))
-                        return <span className='text-yellow'>Redeemable</span>;
+                        return (
+                            <span className='text-warning-500'>Redeemable</span>
+                        );
                     else return `${7 - Math.abs(dayToMaturity)}d to redeem`;
                 }
             }

@@ -23,7 +23,7 @@ const getRiskLevel = (percentage: number) => {
             break;
         case percentage > 40:
             text = 'medium risk';
-            className = 'text-yellow';
+            className = 'text-warning-500';
             break;
         default:
             text = 'lower risk';
