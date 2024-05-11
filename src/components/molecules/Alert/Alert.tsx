@@ -1,24 +1,21 @@
-import { InformationCircleIcon } from '@heroicons/react/24/solid';
+import { XMarkIcon } from '@heroicons/react/24/solid';
 import clsx from 'clsx';
-import { useState } from 'react';
-import ErrorCircleIcon from 'src/assets/icons/error-circle.svg';
-import WarningCircleIcon from 'src/assets/icons/warning-circle.svg';
-import { CloseButton } from 'src/components/atoms';
+import { cloneElement, useState } from 'react';
+import { alertIconMapping, buttonColorStyle, severityStyle } from './constants';
+import { AlertSeverity } from './types';
 
 export const Alert = ({
-    severity = 'info',
-    children,
-    variant = 'solid',
+    severity = AlertSeverity.Info,
+    title,
+    subtitle,
     onClose,
-    showCloseButton = false,
     localStorageKey,
     localStorageValue,
 }: {
-    severity?: 'error' | 'info' | 'success' | 'warning';
-    children: React.ReactNode;
-    variant?: 'solid' | 'outlined';
+    severity?: AlertSeverity;
+    title: React.ReactNode;
+    subtitle?: React.ReactNode;
     onClose?: () => void;
-    showCloseButton?: boolean;
     localStorageKey?: string;
     localStorageValue?: string;
 }) => {
@@ -31,21 +28,6 @@ export const Alert = ({
         value ? !(value === localStorageValue) : true
     );
 
-    let alertIcon;
-    switch (severity) {
-        case 'error':
-            alertIcon = <ErrorCircleIcon className='h-5 w-5' />;
-            break;
-        case 'warning':
-            alertIcon = <WarningCircleIcon className='h-5 w-5' />;
-            break;
-        default:
-            alertIcon = (
-                <InformationCircleIcon className='h-6 w-6 text-planetaryPurple' />
-            );
-            break;
-    }
-
     const handleClose = () => {
         setIsVisible(false);
         if (localStorageKey && localStorageValue) {
@@ -56,31 +38,69 @@ export const Alert = ({
         }
     };
 
-    return isVisible ? (
+    const alertIcon = alertIconMapping[severity];
+
+    if (!isVisible) return null;
+
+    return (
         <section
             aria-label={severity}
             role='alert'
-            className={clsx('rounded-xl', {
-                'border-2 border-yellow bg-yellow/20': variant === 'outlined', // should be changed to handle different colors
-                'bg-[rgba(41, 45, 63, 0.60)] border border-white-10 shadow-tab':
-                    variant === 'solid',
-            })}
+            className={clsx(
+                'flex w-full flex-row items-start justify-between gap-2 rounded-md border pl-2.5 pr-2 text-neutral-50',
+                severityStyle[severity],
+                {
+                    'py-1.5': !subtitle,
+                    'py-2': subtitle,
+                }
+            )}
         >
-            <div
+            <div className='flex items-start gap-1.5 pr-4 laptop:gap-2'>
+                {alertIcon && (
+                    <span>
+                        {cloneElement(alertIcon, {
+                            className: clsx(
+                                alertIcon.props.className,
+                                'w-[14.775px] h-[14.775px] laptop:w-4 laptop:h-4',
+                                {
+                                    'mt-[2.5px] laptop:mt-0.5': !subtitle,
+                                    'mt-[3px] laptop:mt-1': subtitle,
+                                }
+                            ),
+                        })}
+                    </span>
+                )}
+                <div className='flex flex-col'>
+                    {title && (
+                        <h2
+                            className={clsx('text-xs leading-5', {
+                                'laptop:text-sm laptop:leading-[22px]':
+                                    subtitle,
+                            })}
+                        >
+                            {title}
+                        </h2>
+                    )}
+                    {subtitle && (
+                        <div className='text-2xs leading-4 laptop:text-xs laptop:leading-5'>
+                            {subtitle}
+                        </div>
+                    )}
+                </div>
+            </div>
+            <button
+                onClick={handleClose}
                 className={clsx(
-                    'flex w-full flex-row items-center justify-between gap-1 rounded-xl px-5 py-3',
+                    buttonColorStyle[severity],
+                    'h-[13px] w-[13px] flex-shrink-0 laptop:h-4 laptop:w-4',
                     {
-                        'bg-gradient-to-b from-[rgba(111,116,176,0.35)] to-[rgba(57,77,174,0)]':
-                            variant === 'solid',
+                        'mt-[3px] laptop:mt-0.5': !subtitle,
                     }
                 )}
+                data-testid='close-button'
             >
-                <div className='flex items-center gap-3'>
-                    <span>{alertIcon}</span>
-                    {children}
-                </div>
-                {showCloseButton && <CloseButton onClick={handleClose} />}
-            </div>
+                <XMarkIcon />
+            </button>
         </section>
-    ) : null;
+    );
 };
