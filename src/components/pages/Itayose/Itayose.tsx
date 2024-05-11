@@ -409,33 +409,6 @@ export const Itayose = () => {
                     </div>
                 </>
 
-                {/* <div className='flex h-full flex-col items-stretch justify-stretch gap-6'>
-                    <HorizontalTab
-                        tabTitles={['Open Orders', 'Order History']}
-                        onTabChange={setSelectedTable}
-                        useCustomBreakpoint={true}
-                    >
-                        <OrderTable
-                            data={filteredOrderList}
-                            variant='compact'
-                            height={350}
-                        />
-                        {userOrderHistory.loading ? (
-                            <TabSpinner />
-                        ) : (
-                            <OrderHistoryTable
-                                data={sortedOrderHistory}
-                                pagination={{
-                                    totalData: sortedOrderHistory.length,
-                                    getMoreData: () => {},
-                                    containerHeight: 350,
-                                }}
-                                variant='contractOnly'
-                            />
-                        )}
-                    </HorizontalTab>
-                </div> */}
-
                 <AdvancedLendingOrderCard
                     collateralBook={collateralBook}
                     isItayose
