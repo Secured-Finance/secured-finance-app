@@ -1,6 +1,6 @@
 import { Currency } from '@secured-finance/sf-core';
 import { composeStories } from '@storybook/react';
-import { preloadedEthBalance } from 'src/stories/mocks/fixtures';
+import { preloadedBalance } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { render, screen, waitFor } from 'src/test-utils.js';
 import { CurrencySymbol } from 'src/utils';
@@ -30,7 +30,7 @@ describe('PortfolioManagement component', () => {
         await waitFor(() =>
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
-                preloadedState: preloadedEthBalance,
+                preloadedState: preloadedBalance,
             })
         );
     });
@@ -39,7 +39,7 @@ describe('PortfolioManagement component', () => {
         await waitFor(() =>
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
-                preloadedState: preloadedEthBalance,
+                preloadedState: preloadedBalance,
             })
         );
         await waitFor(() => {
@@ -56,7 +56,7 @@ describe('PortfolioManagement component', () => {
         await waitFor(() =>
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
-                preloadedState: preloadedEthBalance,
+                preloadedState: preloadedBalance,
             })
         );
         await waitFor(() => {
@@ -73,7 +73,7 @@ describe('PortfolioManagement component', () => {
         await waitFor(() =>
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
-                preloadedState: preloadedEthBalance,
+                preloadedState: preloadedBalance,
             })
         );
 
@@ -99,7 +99,7 @@ describe('PortfolioManagement component', () => {
         await waitFor(() =>
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
-                preloadedState: preloadedEthBalance,
+                preloadedState: preloadedBalance,
             })
         );
 

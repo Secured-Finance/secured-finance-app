@@ -23,10 +23,12 @@ import {
     useCurrencyDelistedStatus,
     useGraphClientHook,
     useIsGlobalItayose,
+    useIsSubgraphSupported,
     useLastPrices,
     useLendingMarkets,
     useValueLockedByCurrency,
 } from 'src/hooks';
+import useSF from 'src/hooks/useSecuredFinance';
 import {
     CurrencySymbol,
     Environment,
@@ -65,6 +67,11 @@ export const MarketDashboard = () => {
     const { data: currencies = [] } = useCurrencies();
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
 
+    const securedFinance = useSF();
+    const currentChainId = securedFinance?.config.chain.id;
+
+    const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
+
     currencies.forEach(ccy => {
         const unitPrices = getLoanValues(
             lendingContracts[ccy],
@@ -80,12 +87,14 @@ export const MarketDashboard = () => {
     const totalUser = useGraphClientHook(
         {}, // no variables
         queries.UserCountDocument,
-        'protocol'
+        'protocol',
+        !isSubgraphSupported
     );
     const dailyVolumes = useGraphClientHook(
         {}, // no variables
         queries.DailyVolumesDocument,
-        'dailyVolumes'
+        'dailyVolumes',
+        !isSubgraphSupported
     );
 
     const { data: priceList } = useLastPrices();
@@ -150,16 +159,20 @@ export const MarketDashboard = () => {
                                     'compact'
                                 ),
                             },
-                            {
-                                name: 'Total Volume',
-                                value: totalVolume,
-                            },
-                            {
-                                name: 'Total Users',
-                                value: computeTotalUsers(
-                                    totalUser.data?.totalUsers
-                                ),
-                            },
+                            ...(isSubgraphSupported
+                                ? [
+                                      {
+                                          name: 'Total Volume',
+                                          value: totalVolume,
+                                      },
+                                      {
+                                          name: 'Total Users',
+                                          value: computeTotalUsers(
+                                              totalUser.data?.totalUsers
+                                          ),
+                                      },
+                                  ]
+                                : []),
                         ]}
                     />
                     {!isGlobalItayose ? (
