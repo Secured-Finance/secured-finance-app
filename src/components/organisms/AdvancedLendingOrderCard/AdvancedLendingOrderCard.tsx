@@ -45,6 +45,7 @@ import {
     formatLoanValue,
     generateWalletSourceInformation,
     getAmountValidation,
+    multiply,
     ordinaryFormat,
     prefixTilde,
     usdFormat,
@@ -472,7 +473,19 @@ export function AdvancedLendingOrderCard({
                         />
                         <OrderDisplayBox
                             field='Future Value'
-                            value='--' // todo after apy -> apr
+                            value={
+                                unitPrice
+                                    ? divide(
+                                          multiply(
+                                              amountFormatterFromBase[currency](
+                                                  amount
+                                              ),
+                                              10000
+                                          ),
+                                          unitPrice
+                                      )
+                                    : 0
+                            }
                             informationText='Future Value is the expected return value of the contract at time of maturity.'
                         />
                     </div>
