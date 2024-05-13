@@ -42,6 +42,13 @@ Success.args = {
     severity: AlertSeverity.Success,
 };
 
+export const Basic = Template.bind({});
+Basic.args = {
+    severity: AlertSeverity.Basic,
+    isShowCloseButton: false,
+    title: 'Welcome to Secured Finance! Deposit funds to start trading.',
+};
+
 export const WithSubtitle = Template.bind({});
 WithSubtitle.args = {
     title: 'Alert',
