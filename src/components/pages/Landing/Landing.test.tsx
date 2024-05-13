@@ -353,4 +353,20 @@ describe('Landing Component', () => {
             ).toBeInTheDocument();
         });
     }, 8000);
+
+    it('should render the welcome message alert', () => {
+        render(<ConnectedToWallet />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+            preloadedState: {
+                ...preloadedState,
+                wallet: { address: '0x1', balance: 0 },
+            },
+        });
+
+        expect(
+            screen.getByText(
+                'Welcome to Secured Finance! Deposit funds to start trading.'
+            )
+        ).toBeInTheDocument();
+    });
 });
