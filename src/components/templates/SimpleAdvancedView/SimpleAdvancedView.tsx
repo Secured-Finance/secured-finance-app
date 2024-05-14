@@ -5,9 +5,6 @@ import { Page } from 'src/components/templates';
 import { useBalances } from 'src/hooks';
 import { useAccount } from 'wagmi';
 
-const WELCOME_MESSAGE =
-    'Welcome to Secured Finance! Deposit funds to start trading.';
-
 export const SimpleAdvancedView = ({
     title,
     simpleComponent,
@@ -39,7 +36,9 @@ export const SimpleAdvancedView = ({
             alertComponent={
                 isShowWelcomeAlert && (
                     <Alert
-                        title={WELCOME_MESSAGE}
+                        title={
+                            'Welcome to Secured Finance! Deposit funds to start trading.'
+                        }
                         severity={AlertSeverity.Basic}
                         isShowCloseButton={false}
                     />
