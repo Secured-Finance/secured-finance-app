@@ -1,11 +1,9 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { SimpleAdvancedSelector, ViewType } from 'src/components/atoms';
 import { Alert, AlertSeverity } from 'src/components/molecules';
 import { Page } from 'src/components/templates';
 import { useBalances } from 'src/hooks';
-import { selectLandingOrderForm } from 'src/store/landingOrderForm';
-import { RootState } from 'src/store/types';
+import { useAccount } from 'wagmi';
 
 const WELCOME_MESSAGE =
     'Welcome to Secured Finance! Deposit funds to start trading.';
@@ -29,16 +27,17 @@ export const SimpleAdvancedView = ({
 
     const component = view === 'Simple' ? simpleComponent : advanceComponent;
 
-    const balanceRecord = useBalances();
-    const { currency } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
-    );
+    const { isConnected } = useAccount();
+    const balance = useBalances();
+
+    const isShowWelcomeAlert =
+        Object.values(balance).every(v => v === 0) || !isConnected;
 
     return (
         <Page
             title={title}
             alertComponent={
-                !balanceRecord[currency] && (
+                isShowWelcomeAlert && (
                     <Alert
                         title={WELCOME_MESSAGE}
                         severity={AlertSeverity.Basic}

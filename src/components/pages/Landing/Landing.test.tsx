@@ -355,12 +355,9 @@ describe('Landing Component', () => {
     }, 8000);
 
     it('should render the welcome message alert', () => {
-        render(<ConnectedToWallet />, {
+        render(<Default />, {
             apolloMocks: Default.parameters?.apolloClient.mocks,
-            preloadedState: {
-                ...preloadedState,
-                wallet: { address: '0x1', balance: 0 },
-            },
+            preloadedState,
         });
 
         expect(
