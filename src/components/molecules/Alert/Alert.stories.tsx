@@ -1,4 +1,4 @@
-import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
+import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import { Meta, StoryFn } from '@storybook/react';
 import { Alert } from './Alert';
 import { FIGMA_STORYBOOK_LINK } from './constants';
@@ -16,6 +16,9 @@ export default {
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,
+        chromatic: {
+            viewports: [VIEWPORTS.MOBILE, VIEWPORTS.DESKTOP],
+        },
         design: {
             type: 'figma',
             url: FIGMA_STORYBOOK_LINK,
