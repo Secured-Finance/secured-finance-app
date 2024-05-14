@@ -16,8 +16,8 @@ describe('useOrderbook', () => {
         expect(result.current.data).toBeUndefined();
 
         await waitFor(() => {
-            expect(result.current[0].data.borrowOrderbook.length).toBe(13);
-            expect(result.current[0].data.lendOrderbook.length).toBe(13);
+            expect(result.current[0].data.borrowOrderbook.length).toBe(15);
+            expect(result.current[0].data.lendOrderbook.length).toBe(15);
 
             expect(result.current[1]).toBeInstanceOf(Function);
             expect(result.current[2]).toBeInstanceOf(Function);
@@ -34,7 +34,9 @@ describe('useOrderbook', () => {
                 result.current[0].data.borrowOrderbook.map(
                     (v: OrderBookEntry) => v.value.price
                 )
-            ).toEqual([9690, 9687, 9685, 9679, 9674, 0, 0, 0, 0, 0, 0, 0, 0]);
+            ).toEqual([
+                9690, 9687, 9685, 9679, 9674, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            ]);
 
             expect(
                 result.current[0].data.borrowOrderbook.map(
@@ -46,6 +48,8 @@ describe('useOrderbook', () => {
                 '15000000000000000000000',
                 '12000000000000000000000',
                 '1800000000000000000000',
+                '0',
+                '0',
                 '0',
                 '0',
                 '0',
@@ -69,13 +73,15 @@ describe('useOrderbook', () => {
                 result.current[0].data.borrowOrderbook.map(
                     (v: OrderBookEntry) => v.value.price
                 )
-            ).toEqual([9690, 9687, 9685, 9679, 9674, 0, 0, 0, 0, 0, 0, 0, 0]);
+            ).toEqual([
+                9690, 9687, 9685, 9679, 9674, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            ]);
 
             expect(
                 result.current[0].data.borrowOrderbook.map(
                     (v: OrderBookEntry) => v.value.calculationDate
                 )
-            ).toEqual(Array(13).fill(calculationDate));
+            ).toEqual(Array(15).fill(calculationDate));
         });
     });
 
@@ -85,15 +91,15 @@ describe('useOrderbook', () => {
         );
 
         await waitFor(() => {
-            expect(result.current[0].data.borrowOrderbook.length).toBe(13);
-            expect(result.current[0].data.lendOrderbook.length).toBe(13);
+            expect(result.current[0].data.borrowOrderbook.length).toBe(15);
+            expect(result.current[0].data.lendOrderbook.length).toBe(15);
         });
 
         act(() => result.current[2](false));
 
         await waitFor(() => {
-            expect(result.current[0].data.borrowOrderbook.length).toBe(26);
-            expect(result.current[0].data.lendOrderbook.length).toBe(26);
+            expect(result.current[0].data.borrowOrderbook.length).toBe(30);
+            expect(result.current[0].data.lendOrderbook.length).toBe(30);
         });
     });
 
@@ -103,15 +109,15 @@ describe('useOrderbook', () => {
         );
 
         await waitFor(() => {
-            expect(result.current[0].data.borrowOrderbook.length).toBe(13);
-            expect(result.current[0].data.lendOrderbook.length).toBe(13);
+            expect(result.current[0].data.borrowOrderbook.length).toBe(15);
+            expect(result.current[0].data.lendOrderbook.length).toBe(15);
         });
 
         act(() => result.current[1](2));
 
         await waitFor(() => {
-            expect(result.current[0].data.borrowOrderbook.length).toBe(26);
-            expect(result.current[0].data.lendOrderbook.length).toBe(26);
+            expect(result.current[0].data.borrowOrderbook.length).toBe(30);
+            expect(result.current[0].data.lendOrderbook.length).toBe(30);
         });
     });
 });

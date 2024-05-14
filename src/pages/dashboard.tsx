@@ -1,17 +1,18 @@
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import { MarketDashboard } from 'src/components/pages';
 import { useIsMarketTerminated } from 'src/hooks';
 
 const Dashboard = () => {
-    const { data: isTerminated, isLoading: isLoadingMarketTerminated } =
+    const router = useRouter();
+    const { data: isTerminated, isPending: isPendingMarketTerminated } =
         useIsMarketTerminated();
 
-    if (isLoadingMarketTerminated) {
+    if (isPendingMarketTerminated) {
         return null;
     }
 
     if (isTerminated) {
-        Router.push('/emergency');
+        router.push('/emergency');
         return null;
     }
 

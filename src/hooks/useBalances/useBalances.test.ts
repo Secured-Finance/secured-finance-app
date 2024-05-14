@@ -6,7 +6,7 @@ import { useBalances, zeroBalances } from './useBalances';
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
-const preloadedState = { wallet: { address: '0x1', ethBalance: 0 } };
+const preloadedState = { wallet: { address: '0x1', balance: 0 } };
 
 describe('useBalances', () => {
     it('should return balances of all currencies', async () => {

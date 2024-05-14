@@ -5,7 +5,11 @@ import Link from 'next/link';
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ViewType } from 'src/components/atoms';
-import { Alert, DelistedCurrencyDisclaimer } from 'src/components/molecules';
+import {
+    Alert,
+    AlertSeverity,
+    DelistedCurrencyDisclaimer,
+} from 'src/components/molecules';
 import {
     AdvancedLending,
     LendingCard,
@@ -20,10 +24,12 @@ import {
     useCollateralBook,
     useCurrencyDelistedStatus,
     useGraphClientHook,
+    useIsSubgraphSupported,
     useLendingMarkets,
     useLoanValues,
     useMaturityOptions,
 } from 'src/hooks';
+import useSF from 'src/hooks/useSecuredFinance';
 import {
     resetUnitPrice,
     selectLandingOrderForm,
@@ -43,6 +49,8 @@ export const emptyOptionList = [
     },
 ];
 
+const ITAYOSE_PERIOD = 60 * 60 * 1000; // 1 hour in milli-seconds
+
 export const Landing = ({ view }: { view?: ViewType }) => {
     const { address } = useAccount();
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
@@ -60,6 +68,11 @@ export const Landing = ({ view }: { view?: ViewType }) => {
         lendingContracts,
         market => market.isOpened
     );
+
+    const securedFinance = useSF();
+    const currentChainId = securedFinance?.config.chain.id;
+
+    const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
 
     const itayoseMarket = Object.entries(lendingContracts).find(
         ([, market]) => market.isPreOrderPeriod || market.isItayosePeriod
@@ -81,7 +94,8 @@ export const Landing = ({ view }: { view?: ViewType }) => {
     const dailyVolumes = useGraphClientHook(
         {}, // no variables
         queries.DailyVolumesDocument,
-        'dailyVolumes'
+        'dailyVolumes',
+        !isSubgraphSupported
     );
 
     return (
@@ -93,7 +107,7 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                     market={itayoseMarket}
                     delistedCurrencySet={delistedCurrencySet}
                 >
-                    <div className='flex flex-row items-center justify-center'>
+                    <div className='flex flex-row items-center justify-center px-3 tablet:px-5 laptop:px-0'>
                         <LendingCard
                             collateralBook={collateralBook}
                             maturitiesOptionList={maturityOptionList}
@@ -102,7 +116,11 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                         />
                         <YieldChart
                             asset={currency}
-                            dailyVolumes={dailyVolumes.data ?? []}
+                            dailyVolumes={
+                                isSubgraphSupported
+                                    ? dailyVolumes.data ?? []
+                                    : undefined
+                            }
                         />
                     </div>
                 </WithBanner>
@@ -148,38 +166,57 @@ const WithBanner = ({
     delistedCurrencySet: Set<CurrencySymbol>;
     children: React.ReactNode;
 }) => {
+    const preOrderTimeLimit = market
+        ? market.utcOpeningDate * 1000 - ITAYOSE_PERIOD
+        : 0;
+
+    const currencyArray = Array.from(delistedCurrencySet);
+
     return (
         <div className='flex flex-col justify-center gap-5'>
-            <DelistedCurrencyDisclaimer currencies={delistedCurrencySet} />
+            {currencyArray.length > 0 && (
+                <div className='px-3 laptop:px-0'>
+                    <DelistedCurrencyDisclaimer
+                        currencies={delistedCurrencySet}
+                    />
+                </div>
+            )}
             {market && (
-                <Alert severity='info'>
-                    <div className='typography-caption text-white'>
-                        <p>
-                            {`Itayose market for ${ccy}-${getUTCMonthYear(
-                                market.maturity,
-                                true
-                            )} is now open until ${Intl.DateTimeFormat(
-                                'en-US',
-                                {
-                                    weekday: 'long',
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric',
-                                }
-                            ).format(market.utcOpeningDate * 1000)}`}
-                            <span className='pl-4'>
-                                <Link href='itayose' passHref>
-                                    <a
-                                        href='_'
+                <div className='px-3 laptop:px-0'>
+                    <Alert
+                        title={
+                            <>
+                                {`Market ${ccy}-${getUTCMonthYear(
+                                    market.maturity,
+                                    true
+                                )} is open for pre-orders now until ${Intl.DateTimeFormat(
+                                    'en-US',
+                                    {
+                                        timeZone: 'UTC',
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric',
+                                    }
+                                ).format(
+                                    preOrderTimeLimit
+                                )} ${Intl.DateTimeFormat('en-GB', {
+                                    timeZone: 'UTC',
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                }).format(preOrderTimeLimit)} (UTC)`}
+                                <span className='pl-4'>
+                                    <Link
+                                        href='itayose'
                                         className='text-planetaryPurple underline'
                                     >
                                         Place Order Now
-                                    </a>
-                                </Link>
-                            </span>
-                        </p>
-                    </div>
-                </Alert>
+                                    </Link>
+                                </span>
+                            </>
+                        }
+                        severity={AlertSeverity.Info}
+                    />
+                </div>
             )}
             {children}
         </div>

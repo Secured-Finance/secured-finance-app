@@ -1,7 +1,5 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 
-const { themeVariants } = require('tailwindcss-theme-variants');
-
 module.exports = {
     content: ['./src/**/*.{ts,tsx,js,jsx}', './public/index.html'],
     safelist: [
@@ -72,6 +70,7 @@ module.exports = {
                 'Suisse International',
                 ...defaultTheme.fontFamily.sans,
             ],
+            tertiary: ['Roboto Mono', ...defaultTheme.fontFamily.sans],
         },
 
         screens: {
@@ -111,7 +110,6 @@ module.exports = {
                 500: '#BD47FB',
                 700: '#8919C4',
             },
-            // TODO: handle neutral 1-8 as figma variables
             neutral: {
                 DEFAULT: '#353945',
                 1: '#141416',
@@ -148,26 +146,24 @@ module.exports = {
                 500: '#FF658A',
                 700: '#C30C38',
             },
-            // Primary
-
             teal: '#11CABE',
             green: '#5CD167',
             orange: '#F9AA4B',
-            yellow: '#FAAD14',
             red: '#FA2256',
             purple: '#BD47FB',
             gunMetal: '#292D3F',
 
             // Secondary
             planetaryPurple: '#ADB6FF',
+            palePurple: '#F5F6FF',
             nebulaTeal: '#15D6E8',
             horizonBlue: '#3555AC',
             galacticOrange: '#FF9FAE',
             moonGrey: '#E6E6E6',
             slateGray: '#777E90',
-            secondary3: '#96EAF1',
             secondary7: '#B9BDEA',
             error5: '#FF324B',
+            'z-neutral-100': '#F1F5F9',
             grayScale: '#FAFAFA',
             tabGradient: {
                 1: 'rgba(57, 77, 174, 0)',
@@ -232,13 +228,4 @@ module.exports = {
             },
         },
     },
-    plugins: [
-        themeVariants({
-            themes: {
-                light: {
-                    selector: '.light',
-                },
-            },
-        }),
-    ],
 };

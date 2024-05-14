@@ -22,7 +22,9 @@ export default {
 } as Meta<typeof HorizontalAssetSelector>;
 
 const Template: StoryFn<typeof HorizontalAssetSelector> = args => (
-    <HorizontalAssetSelector {...args} />
+    <div className='max-w-lg'>
+        <HorizontalAssetSelector {...args} />
+    </div>
 );
 
 export const Default = Template.bind({});

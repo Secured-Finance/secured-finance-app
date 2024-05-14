@@ -33,10 +33,11 @@ describe('OrderDetails Component', () => {
 
         expect(screen.getByText('Collateral Usage')).toBeInTheDocument();
         expect(screen.getByText('37%')).toBeInTheDocument();
-        expect(screen.getByText('37%')).toHaveClass('text-progressBarStart');
+        expect(screen.getByText('37%')).toHaveClass('text-secondary-500');
+
         await waitFor(() => {
             expect(screen.getByText('55%')).toBeInTheDocument();
-            expect(screen.getByText('55%')).toHaveClass('text-progressBarVia');
+            expect(screen.getByText('55%')).toHaveClass('text-warning-500');
         });
     });
 

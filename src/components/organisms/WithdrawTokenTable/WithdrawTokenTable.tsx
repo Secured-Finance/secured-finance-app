@@ -5,7 +5,6 @@ import { CoreTable } from 'src/components/molecules';
 import { WithdrawCollateral } from 'src/components/organisms';
 import { EmergencySettlementStep } from 'src/components/templates';
 import { useTerminationPrices } from 'src/hooks';
-import { ButtonSizes } from 'src/types';
 import {
     CollateralInfo,
     CurrencySymbol,
@@ -90,7 +89,6 @@ export const WithdrawTokenTable = ({ data }: { data: TokenPosition[] }) => {
                                     );
                                     setOpenModal(true);
                                 }}
-                                size={ButtonSizes.sm}
                             >
                                 Withdraw
                             </Button>

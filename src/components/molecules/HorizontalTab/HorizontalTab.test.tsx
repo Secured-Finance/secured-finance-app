@@ -1,5 +1,5 @@
 import { composeStories } from '@storybook/react';
-import { render, screen } from 'src/test-utils.js';
+import { fireEvent, render, screen } from 'src/test-utils.js';
 import { HorizontalTab } from './HorizontalTab';
 import * as stories from './HorizontalTab.stories';
 
@@ -26,7 +26,7 @@ describe('HorizontalTab Component', () => {
         expect(screen.getByTestId('Trade History')).not.toHaveClass(
             'bg-black-30'
         );
-        screen.getByTestId('Trade History').click();
+        fireEvent.click(screen.getByTestId('Trade History'));
         expect(screen.getByRole('tab', { selected: true })).toHaveTextContent(
             'Trade History'
         );
@@ -37,7 +37,7 @@ describe('HorizontalTab Component', () => {
         expect(
             screen.getByText('This is a Great Tab Content')
         ).toBeInTheDocument();
-        screen.getByTestId('Trade History').click();
+        fireEvent.click(screen.getByTestId('Trade History'));
         expect(
             screen.getByText('This is the content of the second tab')
         ).toBeInTheDocument();
@@ -51,7 +51,7 @@ describe('HorizontalTab Component', () => {
     it('should call the onTabChange callback when the tab is changed with the tab index', () => {
         const onTabChange = jest.fn();
         render(<Default onTabChange={onTabChange} />);
-        screen.getByTestId('Trade History').click();
+        fireEvent.click(screen.getByTestId('Trade History'));
         expect(onTabChange).toHaveBeenCalledWith(1);
     });
 });

@@ -36,7 +36,7 @@ export const Section = ({
         <div
             className={clsx('rounded-xl border', {
                 'border-neutral-3': variant === 'default',
-                'bg-yellow/6 border-orange': variant === 'warning',
+                'bg-warning-500/6 border-orange': variant === 'warning',
             })}
         >
             {interiorComponent}
