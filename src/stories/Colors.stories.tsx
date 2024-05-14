@@ -33,7 +33,6 @@ export const Colors: Story = () => (
                 <div className='h-10 w-10 rounded-lg bg-galacticOrange' />
                 <div className='h-10 w-10 rounded-lg bg-planetaryPurple' />
                 <div className='h-10 w-10 rounded-lg bg-nebulaTeal' />
-                <div className='bg-secondaryPurple h-10 w-10 rounded-lg ' />
                 <div className='h-10 w-10 rounded-lg bg-moonGrey' />
                 <div className='h-10 w-10 rounded-lg bg-slateGray' />
             </div>

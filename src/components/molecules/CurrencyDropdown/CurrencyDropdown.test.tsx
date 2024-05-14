@@ -3,7 +3,7 @@ import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, within } from 'src/test-utils.js';
 import * as stories from './CurrencyDropdown.stories';
 
-const { Default } = composeStories(stories);
+const { Default, FullWidth } = composeStories(stories);
 
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
@@ -63,5 +63,14 @@ describe('CurrencyDropdown', () => {
                 screen.getByRole('menuitem', { name: 'WBTC' })
             ).findByRole('img')
         ).toBeInTheDocument();
+    });
+
+    it('should render a full width dropdown', () => {
+        render(<FullWidth />);
+        const dropdown = screen.getByRole('button', {
+            name: 'WBTC',
+        });
+        expect(dropdown).toBeInTheDocument();
+        expect(dropdown).toHaveClass('w-full');
     });
 });

@@ -1,29 +1,34 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
+import { VisibilityState } from '@tanstack/react-table';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     AdvancedLendingTopBar,
+    Alert,
+    AlertSeverity,
     HorizontalTab,
     Tab,
 } from 'src/components/molecules';
 import {
     ActiveTradeTable,
     AdvancedLendingOrderCard,
+    HistoricalWidget,
     LineChartTab,
     MyTransactionsTable,
-    OrderBookWidget,
+    NewOrderBookWidget,
     OrderHistoryTable,
     OrderTable,
 } from 'src/components/organisms';
 import { TabSpinner, TableType } from 'src/components/pages';
-import { ThreeColumnsWithTopBar } from 'src/components/templates';
 import {
     CollateralBook,
     emptyOrderList,
+    useBreakpoint,
     useCurrencies,
     useGraphClientHook,
+    useIsSubgraphSupported,
     useIsUnderCollateralThreshold,
     useLastPrices,
     useMarket,
@@ -33,6 +38,7 @@ import {
     useYieldCurveMarketRates,
 } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
+import useSF from 'src/hooks/useSecuredFinance';
 import {
     resetUnitPrice,
     selectLandingOrderForm,
@@ -104,6 +110,7 @@ export const AdvancedLending = ({
     marketPrice: number | undefined;
     delistedCurrencySet: Set<CurrencySymbol>;
 }) => {
+    const isTablet = useBreakpoint('laptop');
     const { currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
@@ -123,6 +130,11 @@ export const AdvancedLending = ({
     const currencyPrice = priceList[currency];
     const { data: currencies } = useCurrencies();
     const assetList = toOptions(currencies, currency);
+
+    const securedFinance = useSF();
+    const currentChainId = securedFinance?.config.chain.id;
+
+    const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
 
     useEffect(() => {
         setTimestamp(Math.round(new Date().getTime() / 1000));
@@ -212,11 +224,13 @@ export const AdvancedLending = ({
             from: timestamp - 24 * 3600,
             to: timestamp,
         },
-        queries.TransactionHistoryDocument
+        queries.TransactionHistoryDocument,
+        'transactionHistory',
+        !isSubgraphSupported
     ).data;
 
     const tradeHistoryDetails = useTradeHistoryDetails(
-        transactionHistory?.transactionHistory ?? [],
+        transactionHistory ?? [],
         currency,
         selectedTerm.value
     );
@@ -233,8 +247,7 @@ export const AdvancedLending = ({
         if (marketUnitPrice) {
             return {
                 value: LoanValue.fromPrice(marketUnitPrice, maturity),
-                // TODO: get the time from the block
-                time: 0,
+                time: data?.lastBlockUnitPriceTimestamp ?? 0,
                 type: 'block' as const,
             };
         }
@@ -245,7 +258,12 @@ export const AdvancedLending = ({
                 type: 'opening' as const,
             };
         }
-    }, [marketUnitPrice, maturity, openingUnitPrice]);
+    }, [
+        data?.lastBlockUnitPriceTimestamp,
+        marketUnitPrice,
+        maturity,
+        openingUnitPrice,
+    ]);
 
     const selectedAsset = useMemo(() => {
         return assetList.find(option => option.value === currency);
@@ -277,145 +295,239 @@ export const AdvancedLending = ({
         [dispatch, selectedTerm.label]
     );
 
+    const handleFilterChange = useCallback(
+        (state: VisibilityState) => {
+            setIsShowingAll(state.showBorrow && state.showLend);
+        },
+        [setIsShowingAll]
+    );
+
+    const maximumOpenOrderLimit = orderList.activeOrderList.length >= 20;
+
+    const tooltipMap: Record<number, string> = {};
+
+    if (maximumOpenOrderLimit)
+        tooltipMap[1] =
+            'You have too many open orders. Please ensure that you have fewer than 20 orders to place more orders.';
+
     return (
-        <ThreeColumnsWithTopBar
-            topBar={
-                <AdvancedLendingTopBar
-                    selectedAsset={selectedAsset}
-                    assetList={assetList}
-                    options={maturitiesOptionList.map(o => ({
-                        label: o.label,
-                        value: o.value.toString(),
-                    }))}
-                    selected={{
-                        label: selectedTerm.label,
-                        value: selectedTerm.value.toString(),
-                    }}
-                    onAssetChange={handleCurrencyChange}
-                    onTermChange={handleTermChange}
-                    currentMarket={currentMarket}
-                    values={[
-                        formatLoanValue(tradeHistoryDetails.max, 'price'),
-                        formatLoanValue(tradeHistoryDetails.min, 'price'),
-                        tradeHistoryDetails.count,
-                        tradeHistoryDetails.sum
-                            ? ordinaryFormat(tradeHistoryDetails.sum)
-                            : '-',
-                        usdFormat(currencyPrice, 2),
-                    ]}
-                />
-            }
-        >
-            <AdvancedLendingOrderCard
-                collateralBook={collateralBook}
-                marketPrice={marketPrice}
-                delistedCurrencySet={delistedCurrencySet}
-            />
+        <div className='grid gap-2'>
+            {maximumOpenOrderLimit && (
+                <div className='px-3 laptop:px-0'>
+                    <Alert
+                        severity={AlertSeverity.Warning}
+                        title='You will not be able to place additional orders as
+                            you currently have the maximum number of 20 orders.
+                            Please wait for your order to be filled or cancel
+                            existing orders before adding more.'
+                    />
+                </div>
+            )}
 
-            <OrderBookWidget
-                orderbook={orderBook}
-                currency={currency}
-                marketPrice={currentMarket?.value}
-                isCurrencyDelisted={delistedCurrencySet.has(currency)}
-                onFilterChange={state =>
-                    setIsShowingAll(state.showBorrow && state.showLend)
-                }
-                onAggregationChange={setMultiplier}
-            />
-
-            <div className='flex h-full flex-grow flex-col gap-4'>
-                <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
-                    <div className='h-[410px] w-full px-2 py-4'>
-                        <LineChartTab
-                            rates={rates}
-                            maturityList={maturityList}
-                            itayoseMarketIndexSet={itayoseMarketIndexSet}
-                            followLinks={false}
-                            maximumRate={maximumRate}
-                            marketCloseToMaturityOriginalRate={
-                                marketCloseToMaturityOriginalRate
-                            }
-                        />
-                    </div>
-                </Tab>
-                <HorizontalTab
-                    tabTitles={[
-                        'Active Positions',
-                        'Open Orders',
-                        'Order History',
-                        'My Transactions',
-                    ]}
-                    onTabChange={setSelectedTable}
-                    useCustomBreakpoint={true}
-                >
-                    <ActiveTradeTable
-                        data={
-                            positions
-                                ? positions.positions
-                                      .filter(
-                                          position =>
-                                              position.maturity ===
-                                              maturity.toString()
-                                      )
-                                      .map(position => {
-                                          const ccy = hexToCurrencySymbol(
-                                              position.currency
-                                          );
-                                          if (!ccy) return position;
-                                          return {
-                                              ...position,
-                                              underMinimalCollateralThreshold:
-                                                  isUnderCollateralThreshold(
-                                                      ccy,
-                                                      Number(position.maturity),
-                                                      Number(
-                                                          position.marketPrice
-                                                      ),
-                                                      position.futureValue > 0
-                                                          ? OrderSide.LEND
-                                                          : OrderSide.BORROW
-                                                  ),
-                                          };
-                                      })
-                                : []
+            <div className='grid h-fit grid-cols-1 place-items-stretch gap-x-3 tablet:grid-cols-2 laptop:grid-cols-4 laptop:gap-y-4'>
+                <div className='tablet:col-span-2 laptop:col-span-4'>
+                    <AdvancedLendingTopBar
+                        selectedAsset={selectedAsset}
+                        assetList={assetList}
+                        options={maturitiesOptionList.map(o => ({
+                            label: o.label,
+                            value: o.value.toString(),
+                        }))}
+                        selected={{
+                            label: selectedTerm.label,
+                            value: selectedTerm.value.toString(),
+                        }}
+                        onAssetChange={handleCurrencyChange}
+                        onTermChange={handleTermChange}
+                        currentMarket={currentMarket}
+                        currencyPrice={usdFormat(currencyPrice, 2)}
+                        values={
+                            isSubgraphSupported
+                                ? [
+                                      formatLoanValue(
+                                          tradeHistoryDetails.max,
+                                          'price'
+                                      ),
+                                      formatLoanValue(
+                                          tradeHistoryDetails.min,
+                                          'price'
+                                      ),
+                                      tradeHistoryDetails.count.toString(),
+                                      tradeHistoryDetails.sum
+                                          ? ordinaryFormat(
+                                                tradeHistoryDetails.sum
+                                            )
+                                          : '-',
+                                  ]
+                                : undefined
                         }
-                        height={350}
+                    />
+                </div>
+                <div className='mb-4 block tablet:col-span-2 laptop:mb-0 laptop:hidden'>
+                    <Tab
+                        tabDataArray={
+                            isSubgraphSupported
+                                ? [
+                                      { text: 'Yield Curve' },
+                                      { text: 'Historical Chart' },
+                                  ]
+                                : [{ text: 'Yield Curve' }]
+                        }
+                    >
+                        <div className='h-[410px] w-full px-2 py-4'>
+                            <LineChartTab
+                                rates={rates}
+                                maturityList={maturityList}
+                                itayoseMarketIndexSet={itayoseMarketIndexSet}
+                                followLinks={false}
+                                maximumRate={maximumRate}
+                                marketCloseToMaturityOriginalRate={
+                                    marketCloseToMaturityOriginalRate
+                                }
+                            />
+                        </div>
+                        {isSubgraphSupported && <HistoricalWidget />}
+                    </Tab>
+                </div>
+                <div className='tablet:col-span-2 laptop:col-span-1'>
+                    <AdvancedLendingOrderCard
+                        collateralBook={collateralBook}
+                        marketPrice={marketPrice}
                         delistedCurrencySet={delistedCurrencySet}
-                        variant='contractOnly'
                     />
-                    <OrderTable
-                        data={filteredOrderList}
-                        variant='compact'
-                        height={350}
-                    />
-                    {userOrderHistory.loading ? (
-                        <TabSpinner />
-                    ) : (
-                        <OrderHistoryTable
-                            data={sortedOrderHistory}
-                            pagination={{
-                                totalData: sortedOrderHistory.length,
-                                getMoreData: () => {},
-                                containerHeight: 350,
-                            }}
-                            variant='contractOnly'
+                </div>
+                <div className='hidden laptop:col-span-1 laptop:block'>
+                    {!isTablet && (
+                        <NewOrderBookWidget
+                            orderbook={orderBook}
+                            currency={currency}
+                            marketPrice={currentMarket?.value}
+                            maxLendUnitPrice={data?.maxLendUnitPrice}
+                            minBorrowUnitPrice={data?.minBorrowUnitPrice}
+                            onFilterChange={handleFilterChange}
+                            onAggregationChange={setMultiplier}
                         />
                     )}
-                    {userTransactionHistory.loading ? (
-                        <TabSpinner />
-                    ) : (
-                        <MyTransactionsTable
-                            data={myTransactions}
-                            pagination={{
-                                totalData: myTransactions.length,
-                                getMoreData: () => {},
-                                containerHeight: 350,
-                            }}
-                            variant='contractOnly'
-                        />
-                    )}
-                </HorizontalTab>
+                </div>
+                <div className='col-span-1 tablet:col-span-2'>
+                    <div className='flex h-full flex-grow flex-col gap-4'>
+                        <div className='hidden laptop:block'>
+                            <Tab
+                                tabDataArray={
+                                    isSubgraphSupported
+                                        ? [
+                                              { text: 'Yield Curve' },
+                                              { text: 'Historical Chart' },
+                                          ]
+                                        : [{ text: 'Yield Curve' }]
+                                }
+                            >
+                                <div className='h-[410px] w-full px-2 py-4'>
+                                    <LineChartTab
+                                        rates={rates}
+                                        maturityList={maturityList}
+                                        itayoseMarketIndexSet={
+                                            itayoseMarketIndexSet
+                                        }
+                                        followLinks={false}
+                                        maximumRate={maximumRate}
+                                        marketCloseToMaturityOriginalRate={
+                                            marketCloseToMaturityOriginalRate
+                                        }
+                                    />
+                                </div>
+                                {isSubgraphSupported && <HistoricalWidget />}
+                            </Tab>
+                        </div>
+                        <HorizontalTab
+                            tabTitles={
+                                isSubgraphSupported
+                                    ? [
+                                          'Active Positions',
+                                          'Open Orders',
+                                          'Order History',
+                                          'My Transactions',
+                                      ]
+                                    : ['Active Positions', 'Open Orders']
+                            }
+                            onTabChange={setSelectedTable}
+                            useCustomBreakpoint={true}
+                            tooltipMap={tooltipMap}
+                        >
+                            <ActiveTradeTable
+                                data={
+                                    positions
+                                        ? positions.positions
+                                              .filter(
+                                                  position =>
+                                                      position.maturity ===
+                                                      maturity.toString()
+                                              )
+                                              .map(position => {
+                                                  const ccy =
+                                                      hexToCurrencySymbol(
+                                                          position.currency
+                                                      );
+                                                  if (!ccy) return position;
+                                                  return {
+                                                      ...position,
+                                                      underMinimalCollateralThreshold:
+                                                          isUnderCollateralThreshold(
+                                                              ccy,
+                                                              Number(
+                                                                  position.maturity
+                                                              ),
+                                                              Number(
+                                                                  position.marketPrice
+                                                              ),
+                                                              position.futureValue >
+                                                                  0
+                                                                  ? OrderSide.LEND
+                                                                  : OrderSide.BORROW
+                                                          ),
+                                                  };
+                                              })
+                                        : []
+                                }
+                                height={350}
+                                delistedCurrencySet={delistedCurrencySet}
+                                variant='contractOnly'
+                            />
+                            <OrderTable
+                                data={filteredOrderList}
+                                variant='compact'
+                                height={350}
+                            />
+                            {userOrderHistory.loading ? (
+                                <TabSpinner />
+                            ) : (
+                                <OrderHistoryTable
+                                    data={sortedOrderHistory}
+                                    pagination={{
+                                        totalData: sortedOrderHistory.length,
+                                        getMoreData: () => {},
+                                        containerHeight: 350,
+                                    }}
+                                    variant='contractOnly'
+                                />
+                            )}
+                            {userTransactionHistory.loading ? (
+                                <TabSpinner />
+                            ) : (
+                                <MyTransactionsTable
+                                    data={myTransactions}
+                                    pagination={{
+                                        totalData: myTransactions.length,
+                                        getMoreData: () => {},
+                                        containerHeight: 350,
+                                    }}
+                                    variant='contractOnly'
+                                />
+                            )}
+                        </HorizontalTab>
+                    </div>
+                </div>
             </div>
-        </ThreeColumnsWithTopBar>
+        </div>
     );
 };

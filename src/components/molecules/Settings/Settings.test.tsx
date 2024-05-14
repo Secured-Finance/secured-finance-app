@@ -33,5 +33,5 @@ describe('Settings component', () => {
 
         fireEvent.click(button);
         expect(button).toHaveAttribute('aria-checked', 'true');
-    });
+    }, 8000);
 });

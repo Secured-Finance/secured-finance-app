@@ -65,7 +65,7 @@ export type DailyVolumes = DailyVolumesQuery['dailyVolumes'];
 export type TransactionList = TransactionsQuery['transactionHistory'];
 
 export interface ColorFormat {
-    color?: 'neutral' | 'positive' | 'negative';
+    color?: 'neutral' | 'positive' | 'negative' | 'disabled' | 'warning';
 }
 
 export type Alignment = 'left' | 'center' | 'right';
@@ -96,9 +96,14 @@ export type Wallet = 'MetaMask' | 'WalletConnect';
 export type UserAccount = ReturnType<typeof useAccount>['address'];
 export type AssetPriceMap = Record<CurrencySymbol, number>;
 
-export enum ButtonSizes {
-    xs = 'xs',
-    sm = 'sm',
-    md = 'md',
-    lg = 'lg',
+export enum HistoricalDataIntervals {
+    '5M' = '300',
+    '15M' = '900',
+    '30M' = '1800',
+    '1H' = '3600',
+    '4H' = '14400',
+    '1D' = '86400',
+    '3D' = '259200',
+    '1W' = '604800',
+    '1MTH' = '2592000',
 }

@@ -1,4 +1,5 @@
-import { GradientBox, MarketTab, Option } from 'src/components/atoms';
+import clsx from 'clsx';
+import { MarketTab, Option } from 'src/components/atoms';
 import { HorizontalAssetSelector } from 'src/components/molecules';
 import { IndexOf } from 'src/types';
 import {
@@ -6,11 +7,10 @@ import {
     CurrencySymbol,
     currencyMap,
     formatLoanValue,
-    formatTimestampWithMonth,
+    formatTimeStampWithTimezone,
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 
-type ValueField = number | string;
 type AdvancedLendingTopBarProp<T> = {
     selectedAsset: Option<CurrencySymbol> | undefined;
     assetList: Array<Option<CurrencySymbol>>;
@@ -19,7 +19,8 @@ type AdvancedLendingTopBarProp<T> = {
     onAssetChange: (v: CurrencySymbol) => void;
     onTermChange: (v: T) => void;
     currentMarket: CurrentMarket | undefined;
-    values?: [ValueField, ValueField, ValueField, ValueField, ValueField];
+    currencyPrice: string;
+    values?: [string, string, string, string];
 };
 
 type CurrentMarket = {
@@ -43,73 +44,127 @@ export const AdvancedLendingTopBar = <T extends string = string>({
     onAssetChange,
     onTermChange,
     currentMarket,
+    currencyPrice,
     values,
 }: AdvancedLendingTopBarProp<T>) => {
     const getTime = () => {
         if (currentMarket) {
             if (currentMarket.type === 'opening') {
                 return 'Opening Price';
+            } else {
+                return formatTimeStampWithTimezone(currentMarket.time);
             }
-
-            if (currentMarket.type === 'block' && currentMarket.time) {
-                return formatTimestampWithMonth(currentMarket.time);
-            }
-
-            // TODO: replace this '-' with the block time
-            return '-';
         }
         return '-';
     };
 
     return (
-        <GradientBox shape='rectangle'>
-            <div className='grid-col-3 tablet:grid-col-6 grid gap-y-6 px-5 pb-3 pt-6 laptop:grid-flow-col laptop:place-content-around laptop:items-start laptop:pt-4'>
-                <div className='col-span-3 pr-5'>
-                    <HorizontalAssetSelector
-                        selectedAsset={selectedAsset}
-                        assetList={assetList}
-                        options={options}
-                        selected={selected}
-                        onAssetChange={onAssetChange}
-                        onTermChange={onTermChange}
-                    />
-                </div>
-                <div className='col-span-3 col-start-1 tablet:col-span-2 laptop:col-span-2 laptop:border-r laptop:border-white-10 laptop:pr-5'>
-                    <MarketTab
-                        name={formatLoanValue(currentMarket?.value, 'price')}
-                        value={`${formatLoanValue(
-                            currentMarket?.value,
-                            'rate'
-                        )} APR`}
-                        variant={currentMarket ? 'green-name' : 'gray-name'}
-                        label='Current Market'
-                    />
+        <div>
+            <div className='h-1 bg-starBlue'></div>
+            <div className='border-white-10 laptop:border-x laptop:border-b laptop:bg-black-20'>
+                <div
+                    className={clsx(
+                        'grid grid-cols-12 gap-y-3 px-4 pb-[1.1875rem] pt-4 laptop:flex laptop:pb-3 laptop:pt-4',
+                        values && 'tablet:px-5'
+                    )}
+                >
+                    <section
+                        className={clsx(
+                            'col-span-12 grid grid-cols-12 gap-3 laptop:w-[43%] laptop:gap-y-0',
+                            values && 'tablet:col-span-6 tablet:gap-y-6'
+                        )}
+                    >
+                        <div
+                            className={clsx(
+                                'col-span-8 laptop:col-span-8 laptop:pr-0',
+                                values && 'tablet:col-span-12 tablet:pr-9'
+                            )}
+                        >
+                            <HorizontalAssetSelector
+                                selectedAsset={selectedAsset}
+                                assetList={assetList}
+                                options={options}
+                                selected={selected}
+                                onAssetChange={onAssetChange}
+                                onTermChange={onTermChange}
+                            />
+                        </div>
+                        <div
+                            className={clsx(
+                                'col-span-4 pl-2 laptop:border-r laptop:border-white-10 laptop:px-2',
+                                values && 'tablet:pl-0'
+                            )}
+                        >
+                            <MarketTab
+                                name={formatLoanValue(
+                                    currentMarket?.value,
+                                    'price'
+                                )}
+                                value={`${formatLoanValue(
+                                    currentMarket?.value,
+                                    'rate'
+                                )} APR`}
+                                variant={
+                                    currentMarket ? 'green-name' : 'gray-name'
+                                }
+                                label='Current Market'
+                            />
+                            <div className='laptop:typography-caption-2 whitespace-nowrap pt-[1px] text-[11px] leading-4 text-neutral-4'>
+                                {getTime()}
+                            </div>
+                        </div>
+                    </section>
 
-                    <div className='typography-caption-2 whitespace-nowrap text-neutral-4'>
-                        {getTime()}
+                    <div
+                        className={clsx(
+                            'col-span-12 grid grid-cols-12 gap-3 gap-y-3  laptop:w-[57%] laptop:grid-cols-10 laptop:items-start laptop:pl-4',
+                            values && 'tablet:col-span-6 tablet:gap-y-6'
+                        )}
+                    >
+                        {values && (
+                            <>
+                                <div className='col-span-4 border-white-10 tablet:col-span-4 tablet:border-r laptop:col-span-2'>
+                                    <MarketTab
+                                        name='24h High'
+                                        value={getValue(values, 0)}
+                                    />
+                                </div>
+                                <div className='col-span-4 border-white-10 tablet:col-span-4 tablet:border-r tablet:px-5 laptop:col-span-2 laptop:px-0'>
+                                    <MarketTab
+                                        name='24h Low'
+                                        value={getValue(values, 1)}
+                                    />
+                                </div>
+                                <div className='col-span-4 pl-2 tablet:col-span-4 tablet:px-5 laptop:col-span-2 laptop:border-r laptop:border-white-10 laptop:px-0'>
+                                    <MarketTab
+                                        name='24h Trades'
+                                        value={getValue(values, 2)}
+                                    />
+                                </div>
+                                <div className='col-span-4 border-white-10 tablet:border-r tablet:pr-5 laptop:col-span-2 laptop:pr-0'>
+                                    <MarketTab
+                                        name='24h Volume'
+                                        value={getValue(values, 3)}
+                                    />
+                                </div>
+                            </>
+                        )}
+                        <div
+                            className={clsx(
+                                'col-span-4 laptop:col-span-2 laptop:px-0',
+                                values && 'tablet:px-5'
+                            )}
+                        >
+                            <MarketTab
+                                name={`${selectedAsset?.value} Price`}
+                                value={currencyPrice || '0'}
+                                source={handleSource(selectedAsset?.value)}
+                            />
+                        </div>
                     </div>
                 </div>
-                <div className='border-r border-white-10 pr-5 tablet:col-start-4 tablet:row-start-1 laptop:col-start-auto laptop:row-start-auto laptop:px-5'>
-                    <MarketTab name='24h High' value={getValue(values, 0)} />
-                </div>
-                <div className='border-r border-white-10 px-5 tablet:col-start-5 tablet:row-start-1 laptop:col-start-auto laptop:row-start-auto'>
-                    <MarketTab name='24h Low' value={getValue(values, 1)} />
-                </div>
-                <div className='px-5 tablet:col-start-6 tablet:row-start-1 laptop:col-start-auto laptop:row-start-auto laptop:border-r laptop:border-white-10'>
-                    <MarketTab name='24h Trades' value={getValue(values, 2)} />
-                </div>
-                <div className='border-r border-white-10 pr-5 tablet:col-start-4 tablet:row-start-2 laptop:col-start-auto laptop:row-start-auto laptop:px-5'>
-                    <MarketTab name='24h Volume' value={getValue(values, 3)} />
-                </div>
-                <div className='border-white-10 px-5 tablet:col-start-5 tablet:row-start-2 laptop:col-start-auto laptop:row-start-auto'>
-                    <MarketTab
-                        name={`${selectedAsset?.value} Price`}
-                        value={getValue(values, 4)}
-                        source={handleSource(selectedAsset?.value)}
-                    />
-                </div>
             </div>
-        </GradientBox>
+        </div>
     );
 };
 
