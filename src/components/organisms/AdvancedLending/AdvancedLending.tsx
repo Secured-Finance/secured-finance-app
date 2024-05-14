@@ -390,7 +390,7 @@ export const AdvancedLending = ({
                 </Tab>
 
                 <>
-                    <div className='col-span-1 hidden w-[calc(100%-284px)] laptop:block'>
+                    <div className='col-span-1 hidden w-[calc(100%-284px)] laptop:block desktop:w-[calc(100%-312px)]'>
                         <div className='flex h-full flex-grow flex-col gap-4'>
                             <Tab
                                 tabDataArray={
@@ -420,7 +420,7 @@ export const AdvancedLending = ({
                             </Tab>
                         </div>
                     </div>
-                    <div className='hidden laptop:block laptop:w-[272px]'>
+                    <div className='hidden laptop:block laptop:w-[272px] desktop:w-[300px]'>
                         {!isTablet && (
                             <NewOrderBookWidget
                                 orderbook={orderBook}
