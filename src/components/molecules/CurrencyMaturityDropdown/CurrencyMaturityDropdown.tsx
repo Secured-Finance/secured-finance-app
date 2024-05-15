@@ -1,12 +1,8 @@
 import { Menu } from '@headlessui/react';
 import clsx from 'clsx';
-import {
-    // DelistingChip,
-    Option,
-} from 'src/components/atoms';
+import { useCallback, useState } from 'react';
+import { Option } from 'src/components/atoms';
 import { CurrencyOption } from 'src/components/molecules';
-// import { useCurrencyDelistedStatus } from 'src/hooks';
-import { currencyMap } from 'src/utils';
 
 export const CurrencyMaturityDropdown = <T extends string = string>({
     currencyList,
@@ -15,35 +11,68 @@ export const CurrencyMaturityDropdown = <T extends string = string>({
     maturity = maturityList[0],
     onChange,
 }: {
-    currencyList: CurrencyOption[];
-    asset?: CurrencyOption;
+    currencyList: Option<T>[];
+    asset?: Option<T>;
     maturityList: Option<T>[];
     maturity?: Option<T>;
-    onChange: (v: CurrencyOption['value']) => void;
+    onChange: (
+        currency: CurrencyOption['value'],
+        maturity: Option<T>['value']
+    ) => void;
 }) => {
-    // const isDelisted = useCurrencyDelistedStatus().data;
+    const currencyOptions = currencyList.flatMap(ccy =>
+        maturityList.map(maturity => {
+            const ccyMaturity = `${ccy.label}-${maturity.label}`;
+            return {
+                label: ccyMaturity,
+                value: ccyMaturity,
+                // iconSVG: currencyMap[ccy.value].icon,
+            };
+        })
+    );
 
-    const currencyOptions = currencyList.map(o => ({
-        ...o,
-        iconSVG: currencyMap[o.value].icon,
-        maturities: maturityList,
-        // ...(isDelisted.has(o.value) ? { chip: <DelistingChip /> } : {}),
-    }));
+    const [selectedOptionValue, setSelectedOptionValue] =
+        useState<`${string}-${string}`>(`${asset.label}-${maturity.label}`);
 
-    console.log(currencyOptions);
+    // const selectedOption = useMemo(
+    //     () => optionList.find(o => o.value === selectedOptionValue),
+    //     [optionList, selectedOptionValue]
+    // );
+
+    const handleSelect = useCallback(
+        (option: Option<T>) => {
+            if (option.value !== selectedOptionValue) {
+                setSelectedOptionValue(option.value);
+                // onChange(option.value);
+            }
+        },
+        [onChange, selectedOptionValue]
+    );
+
+    // const prevSelectedValue = useRef('');
+    // useEffect(() => {
+    //     if (
+    //         !prevSelectedValue ||
+    //         prevSelectedValue.current !== selected.value
+    //     ) {
+    //         setSelectedOptionValue(selected.value);
+    //         onChange(selected.value);
+    //     }
+    //     prevSelectedValue.current = selected.value;
+    // }, [onChange, selectedOptionValue, selected.label, selected.value]);
 
     return (
-        <div onChange={() => onChange(asset.value)}>
-            <Menu>
-                {currencyOptions.map((asset, i) => {
-                    console.log(asset);
-
+        <Menu>
+            <Menu.Button>{selectedOptionValue}</Menu.Button>
+            <Menu.Items className='absolute left-0 top-[78px] w-full bg-neutral-800 px-4'>
+                <input onChange={e => console.log(e.currentTarget.value)} />
+                {currencyOptions.map((option, i) => {
                     return (
                         <Menu.Item
-                            key={`${asset.label}_${i}`}
+                            key={`${option.label}_${i}`}
                             as='button'
-                            // onClick={() => handleSelect(asset)}
-                            aria-label={asset.label}
+                            onClick={() => handleSelect(option)}
+                            aria-label={option.label}
                         >
                             {({ active }) => (
                                 <div>
@@ -56,27 +85,22 @@ export const CurrencyMaturityDropdown = <T extends string = string>({
                                         )}
                                     >
                                         <div className='flex flex-row items-center justify-start space-x-2'>
-                                            {asset.iconSVG ? (
+                                            {option.iconSVG ? (
                                                 <span role='img'>
-                                                    <asset.iconSVG className='h-4 w-4 tablet:h-6 tablet:w-6' />
+                                                    <option.iconSVG className='h-4 w-4 tablet:h-6 tablet:w-6' />
                                                 </span>
                                             ) : null}
                                             <span className='typography-button-1'>
-                                                {asset.label}
+                                                {option.label}
                                             </span>
                                         </div>
-
-                                        {asset.chip ? (
-                                            <span>{asset.chip}</span>
-                                        ) : null}
                                     </div>
                                 </div>
                             )}
                         </Menu.Item>
                     );
                 })}
-            </Menu>
-            {asset.value}-{maturity.label}
-        </div>
+            </Menu.Items>
+        </Menu>
     );
 };

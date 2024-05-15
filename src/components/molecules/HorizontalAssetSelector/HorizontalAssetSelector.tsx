@@ -38,12 +38,12 @@ export const HorizontalAssetSelector = <T extends string = string>({
         [onTermChange]
     );
 
-    console.log({ assetList, options });
-
     // options is maturity
     // currency is assetList
 
-    const onChange = () => {};
+    const onChange = (asset, maturity) => {
+        console.log({ asset, maturity });
+    };
 
     return (
         <div className='grid grid-cols-2 gap-x-3 gap-y-1 text-neutral-4 desktop:gap-x-5'>
@@ -73,7 +73,7 @@ export const HorizontalAssetSelector = <T extends string = string>({
                     </div>
                 </div>
             </div>
-            <div className='flex flex-col items-center'>
+            <div className='hidden flex-col items-center'>
                 <div className='flex w-full flex-col gap-1 laptop:max-w-[200px]'>
                     <DropdownSelector
                         optionList={options}
