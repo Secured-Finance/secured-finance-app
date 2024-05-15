@@ -81,3 +81,11 @@ export const Blue = Template.bind({});
 Blue.args = {
     color: ChipColors.Blue,
 };
+
+export const FullWidth = () => {
+    return (
+        <div className='w-[150px]'>
+            <Chip isFullWidth label='Full Width' />
+        </div>
+    );
+};
