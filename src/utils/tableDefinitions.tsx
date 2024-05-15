@@ -10,6 +10,7 @@ import clsx from 'clsx';
 import {
     Chip,
     ChipColors,
+    ChipSizes,
     CurrencyItem,
     PriceYieldItem,
 } from 'src/components/atoms';
@@ -274,8 +275,10 @@ export const loanTypeColumnDefinition = <T extends SideProperty>(
         cell: info => {
             const value = info.getValue();
             return (
-                <div className='flex justify-center'>
+                <div className='flex w-[70px] justify-center'>
                     <Chip
+                        isFullWidth
+                        size={ChipSizes.lg}
                         color={
                             value.toString() === '1'
                                 ? ChipColors.Red
@@ -302,8 +305,10 @@ export const loanTypeFromFVColumnDefinition = <T extends FutureValueProperty>(
         cell: info => {
             if (info.getValue() === ZERO_BI) return null;
             return (
-                <div className='flex justify-center'>
+                <div className='flex w-[70px] justify-center'>
                     <Chip
+                        isFullWidth
+                        size={ChipSizes.lg}
                         color={
                             info.getValue() < 0
                                 ? ChipColors.Red

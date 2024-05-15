@@ -16,6 +16,6 @@ export const colorStyle: { [key in ChipColors]: string } = {
 
 export const sizeStyle: { [key in ChipSizes]: string } = {
     [ChipSizes.sm]: 'px-1 text-[0.5rem] leading-[0.625rem] rounded',
-    [ChipSizes.md]: 'px-1.5 text-2xs leading-[1.3] rounded-[0.3125rem]',
+    [ChipSizes.md]: 'px-1.5 text-2xs leading-[13px] rounded-[5px]',
     [ChipSizes.lg]: 'px-2 text-xs leading-4 rounded-md',
 };
