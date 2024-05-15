@@ -68,4 +68,118 @@
     .typography-amount-large {
       @apply text-[44px] font-secondary font-semibold leading-10;
     }
+    .typography-desktop-display-xxl {
+      @apply font-primary text-xxl;
+    }
+    .typography-desktop-display-xl {
+      @apply font-primary text-xl-1;
+    }
+    .typography-desktop-h-1 {
+      @apply font-secondary font-semibold text-h-1;
+    }
+    .typography-desktop-h-2 {
+      @apply font-secondary font-semibold text-h-2;
+    }
+    .typography-desktop-h-3 {
+      @apply font-secondary font-semibold text-h-3;
+    }
+    .typography-desktop-h-4 {
+      @apply font-secondary font-semibold text-h-4;
+    }
+    .typography-desktop-h-5 {
+      @apply font-secondary font-semibold text-h-5;
+    }
+    .typography-desktop-h-6 {
+      @apply font-secondary font-semibold text-h-6;
+    }
+    .typography-desktop-sh-7 {
+      @apply font-secondary font-semibold uppercase text-sh-7;
+    }
+    .typography-desktop-sh-8 {
+      @apply font-secondary font-semibold uppercase text-sh-8;
+    }
+    .typography-desktop-sh-9 {
+      @apply font-secondary font-semibold uppercase text-sh-9;
+    }
+    .typography-desktop-body-1 {
+      @apply font-secondary text-body-1;
+    }
+    .typography-desktop-body-2 {
+      @apply font-secondary text-body-2;
+    }
+    .typography-desktop-body-3 {
+      @apply font-secondary text-body-3;
+    }
+    .typography-desktop-body-4 {
+      @apply font-secondary text-body-4;
+    }
+    .typography-desktop-body-5 {
+      @apply font-secondary text-body-5;
+    }
+    .typography-desktop-body-6 {
+      @apply font-secondary text-body-6;
+    }
+    .typography-desktop-cta-1 {
+      @apply font-secondary font-semibold text-cta-1;
+    }
+    .typography-desktop-cta-2 {
+      @apply font-secondary font-semibold text-cta-2;
+    }
+    .typography-mobile-display-xxl {
+      @apply font-primary text-xxl-m;
+    }
+    .typography-mobile-display-xl {
+      @apply font-primary text-xl-1-m;
+    }
+    .typography-mobile-h-1 {
+      @apply font-secondary font-semibold text-h-1-m;
+    }
+    .typography-mobile-h-2 {
+      @apply font-secondary font-semibold text-h-2-m;
+    }
+    .typography-mobile-h-3 {
+      @apply font-secondary font-semibold text-h-3-m;
+    }
+    .typography-mobile-h-4 {
+      @apply font-secondary font-semibold text-h-4-m;
+    }
+    .typography-mobile-h-5 {
+      @apply font-secondary font-semibold text-h-5-m;
+    }
+    .typography-mobile-h-6 {
+      @apply font-secondary font-semibold text-h-6-m;
+    }
+    .typography-mobile-sh-7 {
+      @apply font-secondary font-semibold uppercase text-sh-7;
+    }
+    .typography-mobile-sh-8 {
+      @apply font-secondary font-semibold uppercase text-sh-8;
+    }
+    .typography-mobile-sh-9 {
+      @apply font-secondary font-semibold uppercase text-sh-9;
+    }
+    .typography-mobile-body-1 {
+      @apply font-secondary text-body-1-m;
+    }
+    .typography-mobile-body-2 {
+      @apply font-secondary text-body-2-m;
+    }
+    .typography-mobile-body-3 {
+      @apply font-secondary text-body-3-m;
+    }
+    .typography-mobile-body-4 {
+      @apply font-secondary text-body-4-m;
+    }
+    .typography-mobile-body-5 {
+      @apply font-secondary text-body-5-m;
+    }
+    .typography-mobile-body-6 {
+      @apply font-secondary text-body-6-m;
+    }
+    .typography-mobile-cta-1 {
+      @apply font-secondary font-semibold text-cta-1-m;
+    }
+    .typography-mobile-cta-2 {
+      @apply font-secondary font-semibold text-cta-2-m;
+    }
   }
