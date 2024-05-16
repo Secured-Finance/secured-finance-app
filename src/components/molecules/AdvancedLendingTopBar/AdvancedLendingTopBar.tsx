@@ -76,7 +76,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                     >
                         <div
                             className={clsx(
-                                'col-span-8 laptop:col-span-8 laptop:pr-0',
+                                'col-span-7 pr-[11px] laptop:col-span-8 laptop:pr-0',
                                 values && 'tablet:col-span-12 tablet:pr-9'
                             )}
                         >
@@ -91,7 +91,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                         </div>
                         <div
                             className={clsx(
-                                'col-span-4 pl-2 laptop:border-r laptop:border-white-10 laptop:px-2',
+                                'col-span-5 pl-2 laptop:border-r laptop:border-white-10 laptop:px-2',
                                 values && 'tablet:pl-0'
                             )}
                         >
