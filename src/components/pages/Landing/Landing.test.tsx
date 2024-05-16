@@ -361,9 +361,7 @@ describe('Landing Component', () => {
         });
 
         expect(
-            screen.getByText(
-                'Welcome to Secured Finance! Deposit funds to start trading.'
-            )
+            screen.getByText('Welcome! Please deposit funds to enable trading.')
         ).toBeInTheDocument();
     });
 });
