@@ -37,7 +37,7 @@ const asyncConfig = createJestConfig(customJestConfig);
 module.exports = async () => {
     const config = await asyncConfig();
     config.transformIgnorePatterns = [
-        '/node_modules/(?!(wagmi|@wagmi|@web3modal|@0xsquid|isows|lit)/).+\\.js$',
+        'node_modules/(?!(wagmi|@wagmi|@web3modal|@0xsquid|lit|@lit|lit-element|lit-html|uint8arrays|multiformats|isows)/)',
     ];
     config.moduleNameMapper = {
         // We cannot depend on the exact key used by Next.js
