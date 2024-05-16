@@ -1,7 +1,11 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
-    content: ['./src/**/*.{ts,tsx,js,jsx}', './public/index.html'],
+    content: [
+        './src/**/*.{ts,tsx,js,jsx}',
+        './public/index.html',
+        './node_modules/@nextui-org/theme/dist/components/(table).js',
+    ],
     safelist: [
         {
             pattern: /grid-cols-./,
