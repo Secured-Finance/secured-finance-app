@@ -110,7 +110,7 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                 isShowWelcomeAlert && (
                     <Alert
                         title={
-                            'Welcome to Secured Finance! Deposit funds to start trading.'
+                            'Welcome! Please deposit funds to enable trading.'
                         }
                         severity={AlertSeverity.Basic}
                         isShowCloseButton={false}

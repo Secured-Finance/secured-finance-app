@@ -49,7 +49,7 @@ export const Basic = Template.bind({});
 Basic.args = {
     severity: AlertSeverity.Basic,
     isShowCloseButton: false,
-    title: 'Welcome to Secured Finance! Deposit funds to start trading.',
+    title: 'Welcome! Please deposit funds to enable trading.',
 };
 
 export const WithSubtitle = Template.bind({});
