@@ -275,7 +275,7 @@ export const loanTypeColumnDefinition = <T extends SideProperty>(
         cell: info => {
             const value = info.getValue();
             return (
-                <div className='flex w-[70px] justify-center'>
+                <div className='mx-auto flex w-[70px] justify-center'>
                     <Chip
                         isFullWidth
                         size={ChipSizes.lg}
@@ -305,7 +305,7 @@ export const loanTypeFromFVColumnDefinition = <T extends FutureValueProperty>(
         cell: info => {
             if (info.getValue() === ZERO_BI) return null;
             return (
-                <div className='flex w-[70px] justify-center'>
+                <div className='mx-auto flex w-[70px] justify-center'>
                     <Chip
                         isFullWidth
                         size={ChipSizes.lg}
