@@ -1,28 +1,30 @@
 import { useCallback, useMemo, useState } from 'react';
-import { DropdownSelector, Option } from 'src/components/atoms';
+import { Option } from 'src/components/atoms';
 import {
     CurrencyDropdown,
     CurrencyMaturityDropdown,
 } from 'src/components/molecules';
+import { MaturityOptionList } from 'src/types';
 import { CurrencySymbol, getTransformMaturityOption } from 'src/utils';
+import { Maturity } from 'src/utils/entities';
 
-type HorizontalAssetSelectorProp<T> = {
+type HorizontalAssetSelectorProp = {
     selectedAsset: Option<CurrencySymbol> | undefined;
     assetList: Array<Option<CurrencySymbol>>;
-    options: Array<Option<T>>;
-    selected: Option<T>;
+    options: MaturityOptionList;
+    selected: Option<Maturity>;
     onAssetChange: (v: CurrencySymbol) => void;
-    onTermChange: (v: T) => void;
+    onTermChange: (v: Maturity) => void;
 };
 
-export const HorizontalAssetSelector = <T extends string = string>({
+export const HorizontalAssetSelector = ({
     selectedAsset,
     assetList,
     options,
     selected,
     onAssetChange,
     onTermChange,
-}: HorizontalAssetSelectorProp<T>) => {
+}: HorizontalAssetSelectorProp) => {
     const [termValue, setTermValue] = useState(selected.value);
 
     const selectedTerm = useMemo(
@@ -31,15 +33,16 @@ export const HorizontalAssetSelector = <T extends string = string>({
     );
 
     const handleTermChange = useCallback(
-        (v: T) => {
+        (v: Maturity) => {
             setTermValue(v);
             onTermChange(v);
         },
         [onTermChange]
     );
 
-    const onChange = (asset, maturity) => {
-        console.log({ asset, maturity });
+    const onChange = (asset: CurrencySymbol, maturity: Maturity) => {
+        handleTermChange(maturity);
+        onAssetChange(asset);
     };
 
     return (
@@ -70,7 +73,7 @@ export const HorizontalAssetSelector = <T extends string = string>({
                     </div>
                 </div>
             </div>
-            <div className='hidden flex-col items-center'>
+            {/* <div className='hidden flex-col items-center'>
                 <div className='flex w-full flex-col gap-1 laptop:max-w-[200px]'>
                     <DropdownSelector
                         optionList={options}
@@ -79,7 +82,7 @@ export const HorizontalAssetSelector = <T extends string = string>({
                         variant='fullWidth'
                     />
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 };

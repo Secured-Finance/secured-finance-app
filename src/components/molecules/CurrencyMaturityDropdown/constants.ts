@@ -4,7 +4,7 @@ export const mobileColumns = [
         label: 'Symbol',
     },
     {
-        key: 'last-prices',
+        key: 'last-prices-mobile',
         label: 'Last Price (APR)',
     },
     {
