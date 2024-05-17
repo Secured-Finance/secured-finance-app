@@ -11,7 +11,9 @@ export const Colors: Story = () => (
     <div className='inline-grid w-full grid-cols-1 gap-4 bg-[#010316] p-10'>
         <div className='flex-col items-start justify-start'>
             <div className='flex flex-col items-start justify-start space-y-4'>
-                <p className='typography-mobile-h-5 text-neutral-50'>Neutral</p>
+                <p className='typography-mobile-h-5 font-normal text-neutral-50'>
+                    Neutral
+                </p>
                 <div className='inline-flex items-center justify-start space-x-6'>
                     <div className='h-10 w-32 rounded-lg bg-neutral-50' />
                     <div className='h-10 w-32 rounded-lg bg-neutral-100' />
@@ -29,7 +31,9 @@ export const Colors: Story = () => (
             </div>
         </div>
         <div className='inline-flex flex-col items-start justify-start space-y-4'>
-            <p className='typography-mobile-h-5 text-neutral-50'>Primary</p>
+            <p className='typography-mobile-h-5 font-normal text-neutral-50'>
+                Primary
+            </p>
             <div className='inline-flex items-center justify-start space-x-6'>
                 <div className='h-10 w-32 rounded-lg bg-primary-300' />
                 <div className='h-10 w-32 rounded-lg bg-primary-500' />
@@ -37,7 +41,9 @@ export const Colors: Story = () => (
             </div>
         </div>
         <div className='inline-flex flex-col items-start justify-start space-y-4'>
-            <p className='typography-mobile-h-5 text-neutral-50'>Secondary</p>
+            <p className='typography-mobile-h-5 font-normal text-neutral-50'>
+                Secondary
+            </p>
             <div className='inline-flex items-center justify-start space-x-6'>
                 <div className='h-10 w-32 rounded-lg bg-secondary-300' />
                 <div className='h-10 w-32 rounded-lg bg-secondary-500' />
@@ -45,7 +51,9 @@ export const Colors: Story = () => (
             </div>
         </div>
         <div className='inline-flex flex-col items-start justify-start space-y-4'>
-            <p className='typography-mobile-h-5 text-neutral-50'>Tertiary</p>
+            <p className='typography-mobile-h-5 font-normal text-neutral-50'>
+                Tertiary
+            </p>
             <div className='inline-flex items-center justify-start space-x-6'>
                 <div className='h-10 w-32 rounded-lg bg-tertiary-300' />
                 <div className='h-10 w-32 rounded-lg bg-tertiary-500' />
@@ -53,7 +61,9 @@ export const Colors: Story = () => (
             </div>
         </div>
         <div className='inline-flex flex-col items-start justify-start space-y-4'>
-            <p className='typography-mobile-h-5 text-neutral-50'>Success</p>
+            <p className='typography-mobile-h-5 font-normal text-neutral-50'>
+                Success
+            </p>
             <div className='inline-flex items-center justify-start space-x-6'>
                 <div className='h-10 w-32 rounded-lg bg-success-300' />
                 <div className='h-10 w-32 rounded-lg bg-success-500' />
@@ -61,7 +71,9 @@ export const Colors: Story = () => (
             </div>
         </div>
         <div className='inline-flex flex-col items-start justify-start space-y-4'>
-            <p className='typography-mobile-h-5 text-neutral-50'>Warning</p>
+            <p className='typography-mobile-h-5 font-normal text-neutral-50'>
+                Warning
+            </p>
             <div className='inline-flex items-center justify-start space-x-6'>
                 <div className='h-10 w-32 rounded-lg bg-warning-300' />
                 <div className='h-10 w-32 rounded-lg bg-warning-500' />
@@ -70,7 +82,9 @@ export const Colors: Story = () => (
             </div>
         </div>
         <div className='inline-flex flex-col items-start justify-start space-y-4'>
-            <p className='typography-mobile-h-5 text-neutral-50'>Error</p>
+            <p className='typography-mobile-h-5 font-normal text-neutral-50'>
+                Error
+            </p>
             <div className='inline-flex items-center justify-start space-x-6'>
                 <div className='h-10 w-32 rounded-lg bg-error-300' />
                 <div className='h-10 w-32 rounded-lg bg-error-500' />
