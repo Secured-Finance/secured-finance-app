@@ -1,11 +1,10 @@
-import { VIEWPORTS } from '.storybook/constants';
 import { Meta, Story } from '@storybook/react';
 
 export default {
     title: 'Design System/Typography',
     parameters: {
         chromatic: {
-            viewports: [VIEWPORTS.DESKTOP],
+            viewports: [1800],
         },
         layout: 'fullscreen',
     },
