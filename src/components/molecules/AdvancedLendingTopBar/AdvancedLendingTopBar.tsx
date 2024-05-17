@@ -2,13 +2,7 @@ import clsx from 'clsx';
 import { MarketTab, Option } from 'src/components/atoms';
 import { HorizontalAssetSelector } from 'src/components/molecules';
 import { IndexOf } from 'src/types';
-import {
-    COIN_GECKO_SOURCE,
-    CurrencySymbol,
-    currencyMap,
-    formatLoanValue,
-    formatTimeStampWithTimezone,
-} from 'src/utils';
+import { COIN_GECKO_SOURCE, CurrencySymbol, currencyMap } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 
 type AdvancedLendingTopBarProp<T> = {
@@ -36,6 +30,7 @@ const getValue = (
     return values && values[index] ? values[index] : 0;
 };
 
+// TODO: remove getTime and MarketTab properly
 export const AdvancedLendingTopBar = <T extends string = string>({
     selectedAsset,
     assetList,
@@ -47,16 +42,16 @@ export const AdvancedLendingTopBar = <T extends string = string>({
     currencyPrice,
     values,
 }: AdvancedLendingTopBarProp<T>) => {
-    const getTime = () => {
-        if (currentMarket) {
-            if (currentMarket.type === 'opening') {
-                return 'Opening Price';
-            } else {
-                return formatTimeStampWithTimezone(currentMarket.time);
-            }
-        }
-        return '-';
-    };
+    // const getTime = () => {
+    //     if (currentMarket) {
+    //         if (currentMarket.type === 'opening') {
+    //             return 'Opening Price';
+    //         } else {
+    //             return formatTimeStampWithTimezone(currentMarket.time);
+    //         }
+    //     }
+    //     return '-';
+    // };
 
     return (
         <div>
@@ -89,7 +84,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                                 onTermChange={onTermChange}
                             />
                         </div>
-                        <div
+                        {/* <div
                             className={clsx(
                                 'col-span-5 pl-2 laptop:border-r laptop:border-white-10 laptop:px-2',
                                 values && 'tablet:pl-0'
@@ -112,7 +107,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                             <div className='laptop:typography-caption-2 whitespace-nowrap pt-[1px] text-[11px] leading-4 text-neutral-4'>
                                 {getTime()}
                             </div>
-                        </div>
+                        </div> */}
                     </section>
 
                     <div

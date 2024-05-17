@@ -28,12 +28,19 @@ export default {
             time: 1646920200,
             type: 'block',
         },
-
         onAssetChange: () => {},
         onTermChange: () => {},
     },
     parameters: {
+        // apolloClient: {
+        //     mocks: [
+        //         ...mockTrades,
+        //         ...mockFilteredUserTransactionHistory,
+        //         ...mockFilteredUserOrderHistory,
+        //     ],
+        // },
         ...RESPONSIVE_PARAMETERS,
+        layout: 'fullscreen',
     },
 } as Meta<typeof AdvancedLendingTopBar>;
 
