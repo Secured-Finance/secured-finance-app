@@ -69,117 +69,117 @@
       @apply text-[44px] font-secondary font-semibold leading-10;
     }
     .typography-desktop-display-xxl {
-      @apply font-primary text-xxl;
+      @apply font-primary text-26 leading-28;
     }
     .typography-desktop-display-xl {
-      @apply font-primary text-xl-1;
+      @apply font-primary text-22 leading-24;
     }
     .typography-desktop-h-1 {
-      @apply font-secondary font-semibold text-h-1;
+      @apply font-secondary text-18 leading-20 tracking-tighter font-semibold;
     }
     .typography-desktop-h-2 {
-      @apply font-secondary font-semibold text-h-2;
+      @apply font-secondary text-16 leading-18 tracking-tighter font-semibold;
     }
     .typography-desktop-h-3 {
-      @apply font-secondary font-semibold text-h-3;
+      @apply font-secondary text-14 leading-16 tracking-tighter font-semibold;
     }
     .typography-desktop-h-4 {
-      @apply font-secondary font-semibold text-h-4;
+      @apply font-secondary text-12 leading-14 tracking-tighter font-semibold;
     }
     .typography-desktop-h-5 {
-      @apply font-secondary font-semibold text-h-5;
+      @apply font-secondary text-10 leading-12 tracking-tighter font-semibold;
     }
     .typography-desktop-h-6 {
-      @apply font-secondary font-semibold text-h-6;
+      @apply font-secondary text-8 leading-10 tracking-tight font-semibold;
     }
     .typography-desktop-sh-7 {
-      @apply font-secondary font-semibold uppercase text-sh-7;
+      @apply font-secondary text-5.5 leading-8 tracking-tight font-semibold uppercase;
     }
     .typography-desktop-sh-8 {
-      @apply font-secondary font-semibold uppercase text-sh-8;
+      @apply font-secondary text-4.5 leading-6 tracking-tight font-semibold uppercase;
     }
     .typography-desktop-sh-9 {
-      @apply font-secondary font-semibold uppercase text-sh-9;
+      @apply font-secondary text-4 leading-6 tracking-tight font-semibold uppercase;
     }
     .typography-desktop-body-1 {
-      @apply font-secondary text-body-1;
+      @apply font-secondary text-5.5 leading-8 tracking-tight;
     }
     .typography-desktop-body-2 {
-      @apply font-secondary text-body-2;
+      @apply font-secondary text-4.5 leading-6 tracking-tight;
     }
     .typography-desktop-body-3 {
-      @apply font-secondary text-body-3;
+      @apply font-secondary text-4 leading-6;
     }
     .typography-desktop-body-4 {
-      @apply font-secondary text-body-4;
+      @apply font-secondary text-3.5 leading-5.5;
     }
     .typography-desktop-body-5 {
-      @apply font-secondary text-body-5;
+      @apply font-secondary text-3 leading-5;
     }
     .typography-desktop-body-6 {
-      @apply font-secondary text-body-6;
+      @apply font-secondary text-[11px] leading-[15px];
     }
     .typography-desktop-cta-1 {
-      @apply font-secondary font-semibold text-cta-1;
+      @apply font-secondary text-4.5 leading-8 tracking-tight font-semibold;
     }
     .typography-desktop-cta-2 {
-      @apply font-secondary font-semibold text-cta-2;
+      @apply font-secondary text-4 leading-6 tracking-tight font-semibold;
     }
     .typography-mobile-display-xxl {
-      @apply font-primary text-xxl-m;
+      @apply font-primary text-12 leading-16;
     }
     .typography-mobile-display-xl {
-      @apply font-primary text-xl-1-m;
+      @apply font-primary text-11 leading-14;
     }
     .typography-mobile-h-1 {
-      @apply font-secondary font-semibold text-h-1-m;
+      @apply font-secondary text-10 leading-14 tracking-tighter font-semibold;
     }
     .typography-mobile-h-2 {
-      @apply font-secondary font-semibold text-h-2-m;
+      @apply font-secondary text-9 leading-11 tracking-tighter font-semibold;
     }
     .typography-mobile-h-3 {
-      @apply font-secondary font-semibold text-h-3-m;
+      @apply font-secondary text-8 leading-10 tracking-tighter font-semibold;
     }
     .typography-mobile-h-4 {
-      @apply font-secondary font-semibold text-h-4-m;
+      @apply font-secondary text-7 leading-9 tracking-tight font-semibold;
     }
     .typography-mobile-h-5 {
-      @apply font-secondary font-semibold text-h-5-m;
+      @apply font-secondary text-6 leading-8 tracking-tight font-semibold;
     }
     .typography-mobile-h-6 {
-      @apply font-secondary font-semibold text-h-6-m;
+      @apply font-secondary text-5 leading-7 tracking-tight font-semibold;
     }
     .typography-mobile-sh-7 {
-      @apply font-secondary font-semibold uppercase text-sh-7;
+      @apply font-secondary text-5.5 leading-8 tracking-tight font-semibold uppercase;
     }
     .typography-mobile-sh-8 {
-      @apply font-secondary font-semibold uppercase text-sh-8;
+      @apply font-secondary text-4.5 leading-6 tracking-tight font-semibold uppercase;
     }
     .typography-mobile-sh-9 {
-      @apply font-secondary font-semibold uppercase text-sh-9;
+      @apply font-secondary text-4 leading-6 tracking-tight font-semibold uppercase;
     }
     .typography-mobile-body-1 {
-      @apply font-secondary text-body-1-m;
+      @apply font-secondary text-5 leading-8 tracking-tight;
     }
     .typography-mobile-body-2 {
-      @apply font-secondary text-body-2-m;
+      @apply font-secondary text-4.5 leading-7;
     }
     .typography-mobile-body-3 {
-      @apply font-secondary text-body-3-m;
+      @apply font-secondary text-4 leading-6;
     }
     .typography-mobile-body-4 {
-      @apply font-secondary text-body-4-m;
+      @apply font-secondary text-3.5 leading-5.5;
     }
     .typography-mobile-body-5 {
-      @apply font-secondary text-body-5-m;
+      @apply font-secondary text-3 leading-5;
     }
     .typography-mobile-body-6 {
-      @apply font-secondary text-body-6-m;
+      @apply font-secondary text-2.5 leading-4;
     }
     .typography-mobile-cta-1 {
-      @apply font-secondary font-semibold text-cta-1-m;
+      @apply font-secondary text-4.5 leading-6 font-semibold;
     }
     .typography-mobile-cta-2 {
-      @apply font-secondary font-semibold text-cta-2-m;
+      @apply font-secondary text-4 leading-6 font-semibold;
     }
   }
