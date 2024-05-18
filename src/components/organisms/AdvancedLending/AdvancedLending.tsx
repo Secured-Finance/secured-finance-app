@@ -311,7 +311,7 @@ export const AdvancedLending = ({
             'You have too many open orders. Please ensure that you have fewer than 20 orders to place more orders.';
 
     return (
-        <>
+        <div className='grid gap-2'>
             {maximumOpenOrderLimit && (
                 <div className='px-3 laptop:px-0'>
                     <Alert severity='warning'>
@@ -528,6 +528,6 @@ export const AdvancedLending = ({
                     delistedCurrencySet={delistedCurrencySet}
                 />
             </ThreeColumnsWithTopBar>
-        </>
+        </div>
     );
 };
