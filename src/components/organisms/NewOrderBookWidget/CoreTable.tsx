@@ -87,7 +87,9 @@ export const CoreTable = <T,>({
 
     return (
         <table
-            className='w-full table-fixed overflow-hidden'
+            className={clsx('w-full table-fixed overflow-hidden', {
+                'laptop:rounded-b-xl': coreTableOptions.name === 'sellOrders',
+            })}
             data-testid={coreTableOptions.name}
         >
             {coreTableOptions.showHeaders ? (
