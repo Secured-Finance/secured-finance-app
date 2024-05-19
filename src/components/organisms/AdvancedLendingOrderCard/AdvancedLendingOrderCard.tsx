@@ -474,7 +474,9 @@ export function AdvancedLendingOrderCard({
                         <OrderDisplayBox
                             field='Future Value'
                             value={
-                                unitPriceValue
+                                unitPriceValue ||
+                                unitPriceValue === '' ||
+                                unitPriceValue === '0'
                                     ? divide(
                                           multiply(
                                               amountFormatterFromBase[currency](
