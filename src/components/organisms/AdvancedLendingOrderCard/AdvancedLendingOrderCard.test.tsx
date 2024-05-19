@@ -126,7 +126,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(screen.getByText('Est. Present Value')).toBeInTheDocument();
         expect(await screen.findByText('$500.00')).toBeInTheDocument();
         expect(screen.getByText('Future Value')).toBeInTheDocument();
-        expect(await screen.findByText('526.32')).toBeInTheDocument();
+        expect(await screen.findByText('526')).toBeInTheDocument();
     });
 
     it('should display the PlaceOrder Dialog when clicking on the Place Order button', async () => {

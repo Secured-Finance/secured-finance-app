@@ -41,6 +41,7 @@ import {
     ZERO_BI,
     amountFormatterFromBase,
     amountFormatterToBase,
+    currencyMap,
     divide,
     formatLoanValue,
     generateWalletSourceInformation,
@@ -482,9 +483,12 @@ export function AdvancedLendingOrderCard({
                                               amountFormatterFromBase[currency](
                                                   amount
                                               ),
-                                              100
+                                              100,
+                                              currencyMap[currency]
+                                                  .roundingDecimal
                                           ),
-                                          Number(unitPriceValue)
+                                          Number(unitPriceValue),
+                                          currencyMap[currency].roundingDecimal
                                       )
                                     : 0
                             }
