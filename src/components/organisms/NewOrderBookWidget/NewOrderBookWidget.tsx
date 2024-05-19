@@ -469,7 +469,15 @@ export const NewOrderBookWidget = ({
                                 }}
                             />
                         </div>
-                        <div className='flex h-6 flex-row items-center justify-between py-1 font-secondary font-semibold text-neutral-50 laptop:h-fit laptop:bg-black-20 laptop:px-4 laptop:py-3'>
+                        <div
+                            className={clsx(
+                                'flex h-6 flex-row items-center justify-between py-1 font-secondary font-semibold text-neutral-50 laptop:h-fit laptop:bg-black-20 laptop:px-4 laptop:py-3',
+                                {
+                                    'laptop:rounded-b-xl':
+                                        state.showBorrow && !state.showLend,
+                                }
+                            )}
+                        >
                             <span
                                 className='flex items-center gap-2 text-base leading-6'
                                 data-testid='current-market-price'
