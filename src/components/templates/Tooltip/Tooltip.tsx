@@ -48,6 +48,8 @@ export const Tooltip = ({
                                         align === 'center',
                                     '-left-7': align === 'right',
                                     '-right-7': align === 'left',
+                                    'bottom-7': align === 'top',
+                                    '-right-7 bottom-7': align === 'top-right',
                                 }
                             )}
                             role='tooltip'
