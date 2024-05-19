@@ -7,7 +7,13 @@ import {
     Row,
 } from '@tanstack/react-table';
 import clsx from 'clsx';
-import { Chip, CurrencyItem, PriceYieldItem } from 'src/components/atoms';
+import {
+    Chip,
+    ChipColors,
+    ChipSizes,
+    CurrencyItem,
+    PriceYieldItem,
+} from 'src/components/atoms';
 import { TableContractCell, TableHeader } from 'src/components/molecules';
 import { Alignment, AssetPriceMap, ColorFormat } from 'src/types';
 import { ZERO_BI, formatTimestamp } from 'src/utils';
@@ -269,8 +275,15 @@ export const loanTypeColumnDefinition = <T extends SideProperty>(
         cell: info => {
             const value = info.getValue();
             return (
-                <div className='flex justify-center'>
+                <div className='mx-auto flex w-[70px] justify-center'>
                     <Chip
+                        isFullWidth
+                        size={ChipSizes.lg}
+                        color={
+                            value.toString() === '1'
+                                ? ChipColors.Red
+                                : ChipColors.Green
+                        }
                         label={value.toString() === '1' ? 'Borrow' : 'Lend'}
                     />
                 </div>
@@ -292,8 +305,17 @@ export const loanTypeFromFVColumnDefinition = <T extends FutureValueProperty>(
         cell: info => {
             if (info.getValue() === ZERO_BI) return null;
             return (
-                <div className='flex justify-center'>
-                    <Chip label={info.getValue() < 0 ? 'Borrow' : 'Lend'} />
+                <div className='mx-auto flex w-[70px] justify-center'>
+                    <Chip
+                        isFullWidth
+                        size={ChipSizes.lg}
+                        color={
+                            info.getValue() < 0
+                                ? ChipColors.Red
+                                : ChipColors.Green
+                        }
+                        label={info.getValue() < 0 ? 'Borrow' : 'Lend'}
+                    />
                 </div>
             );
         },

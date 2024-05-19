@@ -87,7 +87,7 @@ export const CoreTable = <T,>({
 
     return (
         <table
-            className='w-full table-fixed'
+            className={'w-full table-fixed overflow-hidden'}
             data-testid={coreTableOptions.name}
         >
             {coreTableOptions.showHeaders ? (

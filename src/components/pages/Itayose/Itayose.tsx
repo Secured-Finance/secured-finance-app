@@ -21,7 +21,7 @@ import {
 import {
     AdvancedLendingOrderCard,
     LineChartTab,
-    OrderBookWidget,
+    NewOrderBookWidget,
     OrderHistoryTable,
     OrderTable,
 } from 'src/components/organisms';
@@ -32,6 +32,7 @@ import {
     baseContracts,
     emptyCollateralBook,
     useBorrowOrderBook,
+    useBreakpoint,
     useCollateralBook,
     useCurrencies,
     useCurrencyDelistedStatus,
@@ -40,6 +41,7 @@ import {
     useLastPrices,
     useLendOrderBook,
     useLendingMarkets,
+    useMarket,
     useMarketOrderList,
     useMarketPhase,
     useMaturityOptions,
@@ -125,6 +127,7 @@ const Toolbar = ({
 
 export const Itayose = () => {
     const { address } = useAccount();
+    const isTablet = useBreakpoint('laptop');
 
     const { currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
@@ -141,6 +144,7 @@ export const Itayose = () => {
     const lendingContracts = lendingMarkets[currency];
 
     const marketPhase = useMarketPhase(currency, maturity);
+    const data = useMarket(currency, maturity);
 
     const maturityOptionList = useMaturityOptions(
         lendingContracts,
@@ -331,6 +335,83 @@ export const Itayose = () => {
                     />
                 }
             >
+                <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
+                    <div className='h-[410px] w-full px-6 py-4'>
+                        <LineChartTab
+                            rates={rates}
+                            maturityList={maturityList}
+                            itayoseMarketIndexSet={itayoseMarketIndexSet}
+                            maximumRate={maximumRate}
+                            marketCloseToMaturityOriginalRate={
+                                marketCloseToMaturityOriginalRate
+                            }
+                        />
+                    </div>
+                </Tab>
+
+                <>
+                    <div className='col-span-1 hidden w-[calc(100%-284px)] laptop:block desktop:w-[calc(100%-312px)]'>
+                        <div className='flex h-full flex-grow flex-col gap-4'>
+                            <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
+                                <div className='h-[410px] w-full px-6 py-4'>
+                                    <LineChartTab
+                                        rates={rates}
+                                        maturityList={maturityList}
+                                        itayoseMarketIndexSet={
+                                            itayoseMarketIndexSet
+                                        }
+                                        maximumRate={maximumRate}
+                                        marketCloseToMaturityOriginalRate={
+                                            marketCloseToMaturityOriginalRate
+                                        }
+                                    />
+                                </div>
+                            </Tab>
+                        </div>
+                    </div>
+                    <div className='hidden laptop:block laptop:w-[272px] desktop:w-[300px]'>
+                        {!isTablet && (
+                            <NewOrderBookWidget
+                                orderbook={orderBook}
+                                currency={currency}
+                                marketPrice={estimatedOpeningUnitPrice}
+                                maxLendUnitPrice={data?.maxLendUnitPrice}
+                                minBorrowUnitPrice={data?.minBorrowUnitPrice}
+                                onFilterChange={handleFilterChange}
+                                onAggregationChange={setMultiplier}
+                                isLoadingMap={isLoadingMap}
+                                isItayose
+                            />
+                        )}
+                    </div>
+                    <div className='col-span-12 laptop:w-full'>
+                        <HorizontalTab
+                            tabTitles={['Open Orders', 'Order History']}
+                            onTabChange={setSelectedTable}
+                            useCustomBreakpoint={true}
+                        >
+                            <OrderTable
+                                data={filteredOrderList}
+                                variant='compact'
+                                height={350}
+                            />
+                            {userOrderHistory.loading ? (
+                                <TabSpinner />
+                            ) : (
+                                <OrderHistoryTable
+                                    data={sortedOrderHistory}
+                                    pagination={{
+                                        totalData: sortedOrderHistory.length,
+                                        getMoreData: () => {},
+                                        containerHeight: 350,
+                                    }}
+                                    variant='contractOnly'
+                                />
+                            )}
+                        </HorizontalTab>
+                    </div>
+                </>
+
                 <AdvancedLendingOrderCard
                     collateralBook={collateralBook}
                     isItayose
@@ -347,58 +428,6 @@ export const Itayose = () => {
                     }
                     delistedCurrencySet={delistedCurrencySet}
                 />
-
-                <OrderBookWidget
-                    currency={currency}
-                    orderbook={orderBook}
-                    variant='itayose'
-                    marketPrice={estimatedOpeningUnitPrice}
-                    onFilterChange={handleFilterChange}
-                    isLoadingMap={isLoadingMap}
-                    onAggregationChange={setMultiplier}
-                    isCurrencyDelisted={delistedCurrencySet.has(currency)}
-                />
-
-                <div className='flex h-full flex-col items-stretch justify-stretch gap-6'>
-                    <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
-                        <div className='h-[410px] w-full px-6 py-4'>
-                            <LineChartTab
-                                rates={rates}
-                                maturityList={maturityList}
-                                itayoseMarketIndexSet={itayoseMarketIndexSet}
-                                maximumRate={maximumRate}
-                                marketCloseToMaturityOriginalRate={
-                                    marketCloseToMaturityOriginalRate
-                                }
-                            />
-                        </div>
-                    </Tab>
-
-                    <HorizontalTab
-                        tabTitles={['Open Orders', 'Order History']}
-                        onTabChange={setSelectedTable}
-                        useCustomBreakpoint={true}
-                    >
-                        <OrderTable
-                            data={filteredOrderList}
-                            variant='compact'
-                            height={350}
-                        />
-                        {userOrderHistory.loading ? (
-                            <TabSpinner />
-                        ) : (
-                            <OrderHistoryTable
-                                data={sortedOrderHistory}
-                                pagination={{
-                                    totalData: sortedOrderHistory.length,
-                                    getMoreData: () => {},
-                                    containerHeight: 350,
-                                }}
-                                variant='contractOnly'
-                            />
-                        )}
-                    </HorizontalTab>
-                </div>
             </ThreeColumnsWithTopBar>
         </Page>
     );
