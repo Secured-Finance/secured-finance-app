@@ -435,7 +435,7 @@ export const NewOrderBookWidget = ({
     };
 
     return (
-        <div className='flex h-full w-full flex-col justify-start gap-y-1 border-white-10 laptop:flex-col-reverse laptop:gap-y-0 laptop:rounded-b-xl laptop:border laptop:bg-cardBackground/60 laptop:shadow-tab'>
+        <div className='flex h-full w-full flex-col justify-start gap-y-1 overflow-hidden border-white-10 laptop:flex-col-reverse laptop:gap-y-0 laptop:rounded-b-xl laptop:border laptop:bg-cardBackground/60 laptop:shadow-tab'>
             <div className='h-full'>
                 {orderbook.isPending ? (
                     <div className='table h-full w-full'>
@@ -471,11 +471,7 @@ export const NewOrderBookWidget = ({
                         </div>
                         <div
                             className={clsx(
-                                'flex h-6 flex-row items-center justify-between py-1 font-secondary font-semibold text-neutral-50 laptop:h-fit laptop:bg-black-20 laptop:px-4 laptop:py-3',
-                                {
-                                    'laptop:rounded-b-xl':
-                                        state.showBorrow && !state.showLend,
-                                }
+                                'flex h-6 flex-row items-center justify-between py-1 font-secondary font-semibold text-neutral-50 laptop:h-fit laptop:bg-black-20 laptop:px-4 laptop:py-3'
                             )}
                         >
                             <span
@@ -484,7 +480,10 @@ export const NewOrderBookWidget = ({
                             >
                                 <p>{formatLoanValue(marketPrice, 'price')}</p>
                                 {isItayose && (
-                                    <InfoToolTip iconColor='white'>
+                                    <InfoToolTip
+                                        iconColor='white'
+                                        align='right'
+                                    >
                                         <p className='text-white'>
                                             Overlapping orders are aggregated to
                                             show net amounts. The price
