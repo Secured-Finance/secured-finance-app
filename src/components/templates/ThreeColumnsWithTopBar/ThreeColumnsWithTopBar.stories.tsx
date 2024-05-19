@@ -8,7 +8,7 @@ const column1 = (
     </div>
 );
 const column2 = (
-    <div className='bg-teal p-10 text-white' key='column2'>
+    <div className='col-span-12 w-full bg-teal p-10 text-white' key='column2'>
         Column 2
     </div>
 );

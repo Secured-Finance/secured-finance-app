@@ -180,3 +180,8 @@ Loading.args = {
 Loading.parameters = {
     ...RESPONSIVE_PARAMETERS,
 };
+
+export const Itayose = Template.bind({});
+Itayose.args = {
+    isItayose: true,
+};
