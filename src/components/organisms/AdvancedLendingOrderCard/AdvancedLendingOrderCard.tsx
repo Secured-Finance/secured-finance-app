@@ -501,6 +501,7 @@ export function AdvancedLendingOrderCard({
                             onFilterChange={handleFilterChange}
                             onAggregationChange={setMultiplier}
                             rowsToRenderMobile={rowsToRenderMobile}
+                            isItayose
                         />
                     )}
                 </div>

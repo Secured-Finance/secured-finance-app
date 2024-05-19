@@ -19,7 +19,7 @@ import {
     Option,
     Spinner,
 } from 'src/components/atoms';
-import { TableHeader } from 'src/components/molecules';
+import { InfoToolTip, TableHeader } from 'src/components/molecules';
 import {
     AggregationFactorType,
     OrderBookEntry,
@@ -50,8 +50,8 @@ const AGGREGATION_OPTIONS: (Option<string> & { multiplier: number })[] = [
     { label: '10', value: '1000', multiplier: 1000 },
 ];
 
-const ORDERBOOK_DOUBLE_MAX_LINES = 15;
-const ORDERBOOK_SINGLE_MAX_LINES = 30;
+const ORDERBOOK_DOUBLE_MAX_LINES = 6;
+const ORDERBOOK_SINGLE_MAX_LINES = 12;
 
 const columnHelper = createColumnHelper<OrderBookEntry>();
 
@@ -209,6 +209,7 @@ export const NewOrderBookWidget = ({
     onAggregationChange,
     isLoadingMap,
     rowsToRenderMobile = 10,
+    isItayose = false,
 }: {
     orderbook: Pick<ReturnType<typeof useOrderbook>[0], 'data' | 'isPending'>;
     currency: CurrencySymbol;
@@ -219,6 +220,7 @@ export const NewOrderBookWidget = ({
     onAggregationChange?: (multiplier: number) => void;
     isLoadingMap?: Record<OrderSide, boolean>;
     rowsToRenderMobile?: 10 | 12 | 14 | 16 | 18 | 20 | 22;
+    isItayose?: boolean;
 }) => {
     const isTablet = useBreakpoint('laptop');
     const singleMaxLines = isTablet
@@ -432,8 +434,24 @@ export const NewOrderBookWidget = ({
         return rowData.amount !== ZERO_BI;
     };
 
+    const alignment = () => {
+        if (state.showBorrow && !state.showLend) {
+            if (isTablet) {
+                return 'top-right';
+            }
+
+            return 'top';
+        }
+
+        if (isTablet) {
+            return 'left';
+        }
+
+        return 'right';
+    };
+
     return (
-        <div className='flex h-full w-full flex-col justify-start gap-y-1 overflow-hidden border-white-10 laptop:flex-col-reverse laptop:gap-y-0 laptop:rounded-b-xl laptop:border laptop:bg-cardBackground/60 laptop:shadow-tab'>
+        <div className='flex h-full w-full flex-col justify-start gap-y-1 border-white-10 laptop:flex-col-reverse laptop:gap-y-0 laptop:overflow-hidden laptop:rounded-b-xl laptop:border laptop:bg-cardBackground/60 laptop:shadow-tab'>
             <div className='h-full'>
                 {orderbook.isPending ? (
                     <div className='table h-full w-full'>
@@ -467,12 +485,30 @@ export const NewOrderBookWidget = ({
                                 }}
                             />
                         </div>
-                        <div className='flex h-6 flex-row items-center justify-between py-1 font-secondary font-semibold text-neutral-50 laptop:h-fit laptop:bg-black-20 laptop:px-4 laptop:py-3'>
+                        <div
+                            className={clsx(
+                                'flex h-6 flex-row items-center justify-between py-1 font-secondary font-semibold text-neutral-50 laptop:h-fit laptop:bg-black-20 laptop:px-4 laptop:py-3'
+                            )}
+                        >
                             <span
-                                className='text-base leading-6'
+                                className='flex items-center gap-2 text-base leading-6'
                                 data-testid='current-market-price'
                             >
                                 <p>{formatLoanValue(marketPrice, 'price')}</p>
+                                {isItayose && (
+                                    <InfoToolTip
+                                        iconColor='white'
+                                        align={alignment()}
+                                        maxWidth={'small'}
+                                    >
+                                        <p className='text-white'>
+                                            Overlapping orders are aggregated to
+                                            show net amounts. The price
+                                            indicates the estimated opening
+                                            price.
+                                        </p>
+                                    </InfoToolTip>
+                                )}
                             </span>
                             <span className='text-xs leading-5 laptop:text-sm laptop:leading-[22px]'>
                                 {formatLoanValue(marketPrice, 'rate')}

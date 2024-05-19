@@ -68,7 +68,7 @@ export interface ColorFormat {
     color?: 'neutral' | 'positive' | 'negative' | 'disabled' | 'warning';
 }
 
-export type Alignment = 'left' | 'center' | 'right';
+export type Alignment = 'left' | 'center' | 'right' | 'top' | 'top-right';
 
 export type IndexOf<T extends unknown[]> = Exclude<
     keyof T,
