@@ -474,15 +474,15 @@ export function AdvancedLendingOrderCard({
                         <OrderDisplayBox
                             field='Future Value'
                             value={
-                                unitPrice
+                                unitPriceValue
                                     ? divide(
                                           multiply(
                                               amountFormatterFromBase[currency](
                                                   amount
                                               ),
-                                              10000
+                                              100
                                           ),
-                                          unitPrice
+                                          Number(unitPriceValue)
                                       )
                                     : 0
                             }
