@@ -1,13 +1,9 @@
 import { composeStories } from '@storybook/react';
-import { useRouter } from 'next/router';
+import mockRouter from 'next-router-mock';
 import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './Header.stories';
 
 const { Primary } = composeStories(stories);
-
-jest.mock('next/router', () => ({
-    useRouter: jest.fn(),
-}));
 
 jest.mock(
     'next/link',
@@ -16,73 +12,60 @@ jest.mock(
             children
 );
 
+jest.mock('next/router', () => jest.requireActual('next-router-mock'));
+
 describe('Header component', () => {
     it('should render the header', () => {
-        (useRouter as jest.Mock).mockReturnValue({
-            pathname: '/',
-        });
+        mockRouter.push('/');
         render(<Primary />);
-        expect(screen.getByText('Lend / Borrow')).toBeInTheDocument();
+        expect(screen.getByText('Trading')).toBeInTheDocument();
         expect(screen.getByText('Markets')).toBeInTheDocument();
         expect(screen.getByText('Portfolio')).toBeInTheDocument();
         expect(screen.getByText('Connect Wallet')).toBeInTheDocument();
     });
 
     it('should highlight the landing page by default page', () => {
-        (useRouter as jest.Mock).mockReturnValue({
-            pathname: '/',
-        });
+        mockRouter.push('/');
         render(<Primary />);
-        const textElement = screen.getByText('Lend / Borrow');
+        const textElement = screen.getByText('Trading');
         expect(textElement.parentNode).toHaveClass(
-            'bg-gradient-to-b from-tabGradient2 to-tabGradient1'
+            'bg-gradient-to-b from-tabGradient-2 to-tabGradient-1'
         );
     });
 
     it('should highlight the landing page when on global-itayose', () => {
-        (useRouter as jest.Mock).mockReturnValue({
-            pathname: '/global-itayose',
-        });
+        mockRouter.push('/global-itayose');
         render(<Primary />);
-        const textElement = screen.getByText('Lend / Borrow');
+        const textElement = screen.getByText('Trading');
         expect(textElement.parentNode).toHaveClass(
-            'bg-gradient-to-b from-tabGradient2 to-tabGradient1'
+            'bg-gradient-to-b from-tabGradient-2 to-tabGradient-1'
         );
     });
 
     it('should highlight the dashboard page when on dashboard page', () => {
-        (useRouter as jest.Mock).mockImplementation(() => ({
-            pathname: '/dashboard',
-            push: jest.fn(),
-        }));
+        mockRouter.push('/dashboard');
 
         render(<Primary />);
         fireEvent.click(screen.getByText('Markets'));
 
         const textElement = screen.getByText('Markets');
         expect(textElement.parentNode).toHaveClass(
-            'bg-gradient-to-b from-tabGradient2 to-tabGradient1'
+            'bg-gradient-to-b from-tabGradient-2 to-tabGradient-1'
         );
     });
 
     it('should highlight the landing page when on advanced page', () => {
-        (useRouter as jest.Mock).mockImplementation(() => ({
-            pathname: '/advanced',
-            push: jest.fn(),
-        }));
+        mockRouter.push('/advanced');
 
         render(<Primary />);
-        const textElement = screen.getByText('Lend / Borrow');
+        const textElement = screen.getByText('Trading');
         expect(textElement.parentNode).toHaveClass(
-            'bg-gradient-to-b from-tabGradient2 to-tabGradient1'
+            'bg-gradient-to-b from-tabGradient-2 to-tabGradient-1'
         );
     });
 
     it('should render testnet info header on chainError false', () => {
-        (useRouter as jest.Mock).mockImplementation(() => ({
-            pathname: '/',
-            push: jest.fn(),
-        }));
+        mockRouter.push('/');
 
         render(<Primary />);
         expect(screen.getByTestId('testnet-info')).toBeInTheDocument();
@@ -91,29 +74,27 @@ describe('Header component', () => {
         ).toBeInTheDocument();
     });
 
-    it.skip('should render testnet alert header on chainError true', () => {
-        (useRouter as jest.Mock).mockImplementation(() => ({
-            pathname: '/',
-            push: jest.fn(),
-        }));
+    it('should render testnet alert header on chainError true', () => {
+        mockRouter.push('/');
 
         render(<Primary />, {
             preloadedState: {
                 blockchain: {
-                    chainId: 5,
+                    chainId: 11155111,
                     chainError: true,
                 },
             },
         });
         expect(screen.getByTestId('testnet-alert')).toBeInTheDocument();
-        expect(screen.getByText('Sepolia')).toBeInTheDocument();
+        expect(
+            screen.getByText(
+                'Secured Finance is not supported on this network. Please switch to a supported network.'
+            )
+        ).toBeInTheDocument();
     });
 
     it('should not render testnet header if current chain is mainnet', () => {
-        (useRouter as jest.Mock).mockImplementation(() => ({
-            pathname: '/',
-            push: jest.fn(),
-        }));
+        mockRouter.push('/');
 
         render(<Primary />, {
             preloadedState: {
@@ -125,5 +106,16 @@ describe('Header component', () => {
         });
         expect(screen.queryByTestId('testnet-info')).not.toBeInTheDocument();
         expect(screen.queryByTestId('testnet-alert')).not.toBeInTheDocument();
+    });
+
+    it('should open a submenu if Trading tab is clicked', () => {
+        mockRouter.push('/');
+        render(<Primary />);
+        const textElement = screen.getByText('Trading');
+
+        fireEvent.click(textElement);
+
+        expect(screen.getByText('Simple')).toBeInTheDocument();
+        expect(screen.getByText('Advanced')).toBeInTheDocument();
     });
 });

@@ -8,10 +8,12 @@ export const CurrencyDropdown = ({
     currencyOptionList,
     selected,
     onChange,
+    variant = 'fullWidth',
 }: {
     currencyOptionList: Readonly<Array<CurrencyOption>>;
     selected?: CurrencyOption;
     onChange: (v: CurrencyOption['value']) => void;
+    variant?: 'fullWidth' | 'fixedWidth';
 }) => {
     const isDelisted = useCurrencyDelistedStatus().data;
 
@@ -26,7 +28,7 @@ export const CurrencyDropdown = ({
             optionList={optionList}
             selected={selected}
             onChange={onChange}
-            variant='fixedWidth'
+            variant={variant}
         />
     );
 };

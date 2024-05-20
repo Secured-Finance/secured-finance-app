@@ -1,34 +1,29 @@
-import Router from 'next/router';
-import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { Landing } from 'src/components/pages';
 import { useIsGlobalItayose, useIsMarketTerminated } from 'src/hooks';
 
 function EntryPoint() {
-    const [isMounted, setIsMounted] = useState(false);
-    const { data: isTerminated, isLoading: isLoadingMarketTerminated } =
+    const { data: isTerminated, isPending: isPendingMarketTerminated } =
         useIsMarketTerminated();
 
-    const { data: isGlobalItayose, isLoading: isLoadingGlobalItayose } =
+    const { data: isGlobalItayose, isPending: isPendingGlobalItayose } =
         useIsGlobalItayose();
 
-    useEffect(() => {
-        setIsMounted(true);
-    }, []);
+    const router = useRouter();
 
-    if (!isMounted || isLoadingGlobalItayose || isLoadingMarketTerminated) {
+    if (isPendingGlobalItayose || isPendingMarketTerminated) {
         return null;
     }
 
     if (isTerminated) {
-        Router.push('/emergency');
+        router.push('/emergency');
         return null;
     }
 
     if (isGlobalItayose) {
-        Router.push('/global-itayose');
+        router.push('/global-itayose');
         return null;
     }
-
     return <Landing />;
 }
 

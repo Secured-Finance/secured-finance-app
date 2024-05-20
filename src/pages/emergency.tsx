@@ -1,12 +1,13 @@
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import { EmergencyGlobalSettlement } from 'src/components/pages/';
 import { useIsMarketTerminated } from 'src/hooks';
 
 const Emergency = () => {
-    const { data: isTerminated, isLoading: isLoadingMarketTerminated } =
+    const router = useRouter();
+    const { data: isTerminated, isPending: isPendingMarketTerminated } =
         useIsMarketTerminated();
 
-    if (isLoadingMarketTerminated) {
+    if (isPendingMarketTerminated) {
         return null;
     }
 
@@ -14,7 +15,7 @@ const Emergency = () => {
         return <EmergencyGlobalSettlement />;
     }
 
-    Router.push('/');
+    router.push('/');
     return null;
 };
 

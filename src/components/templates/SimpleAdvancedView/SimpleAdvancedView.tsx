@@ -6,7 +6,7 @@ export const SimpleAdvancedView = ({
     title,
     simpleComponent,
     advanceComponent,
-    initialView = 'Simple',
+    initialView = 'Advanced',
     onModeChange,
     pageName,
 }: {

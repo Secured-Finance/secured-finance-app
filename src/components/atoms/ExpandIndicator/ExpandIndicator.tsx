@@ -8,13 +8,14 @@ export const ExpandIndicator = ({
     expanded: boolean;
     variant?: 'solid' | 'opaque';
 }) => {
+    const className =
+        variant === 'solid'
+            ? 'h-3.5 w-3.5 laptop:h-5 laptop:w-5 text-white'
+            : 'h-3 w-3 text-white opacity-50';
     return (
         <ChevronDownIcon
-            className={clsx({
+            className={clsx(className, {
                 'rotate-180': expanded,
-                'h-4 w-4 text-white tablet:h-5 tablet:w-5': variant === 'solid',
-                'h-3 w-3 text-neutral-400 tablet:h-4 tablet:w-4':
-                    variant !== 'solid',
             })}
             data-testid='chevron-down-icon'
         />

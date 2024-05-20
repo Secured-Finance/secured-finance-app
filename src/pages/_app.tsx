@@ -1,15 +1,16 @@
-import { init } from '@amplitude/analytics-browser';
-import { LogLevel } from '@amplitude/analytics-types';
+import * as amplitude from '@amplitude/analytics-browser';
+import { pageViewTrackingPlugin } from '@amplitude/plugin-page-view-tracking-browser';
 import { GraphClientProvider } from '@secured-finance/sf-graph-client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AppProps } from 'next/app';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Provider, useSelector } from 'react-redux';
 import 'src/bigIntPatch';
 import { Footer } from 'src/components/atoms';
-import { Header } from 'src/components/organisms';
+
 import { Layout } from 'src/components/templates';
 import SecuredFinanceProvider from 'src/contexts/SecuredFinanceProvider';
 import store from 'src/store';
@@ -29,14 +30,26 @@ import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 import '../assets/css/index.css';
 
+const Header = dynamic(() => import('src/components/organisms/Header/Header'), {
+    ssr: false,
+});
+
 const projectId = getWalletConnectId();
 
 const queryClient = new QueryClient();
 
-init(getAmplitudeApiKey(), undefined, {
-    appVersion: process.env.SF_ENV,
-    logLevel: LogLevel.None,
-});
+if (typeof window !== 'undefined') {
+    const pageViewTracking = pageViewTrackingPlugin({
+        trackOn: undefined,
+        trackHistoryChanges: undefined,
+    });
+
+    amplitude.add(pageViewTracking);
+    amplitude.init(getAmplitudeApiKey(), {
+        appVersion: process.env.SF_ENV,
+        logLevel: amplitude.Types.LogLevel.None,
+    });
+}
 
 const chainIds = getSupportedChainIds();
 const networks = getSupportedNetworks().filter(chain =>
@@ -111,7 +124,7 @@ function App({ Component, pageProps }: AppProps) {
     );
 }
 
-const Providers: React.FC = ({ children }) => {
+const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const currentNetwork = useSelector((state: RootState) =>
         selectNetworkName(state)
     );

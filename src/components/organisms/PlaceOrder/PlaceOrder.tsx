@@ -199,7 +199,8 @@ export const PlaceOrder = ({
                         [OrderProperties.ORDER_TYPE]: orderType,
                         [OrderProperties.ASSET_TYPE]: ccy,
                         [OrderProperties.ORDER_MATURITY]: getUTCMonthYear(
-                            maturity.toNumber()
+                            maturity.toNumber(),
+                            true
                         ),
                         [OrderProperties.ORDER_AMOUNT]: orderAmount.value,
                         [OrderProperties.ORDER_PRICE]: unitPrice ?? 0,

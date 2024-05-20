@@ -76,6 +76,7 @@ export const AssetSelector = ({
                     currencyOptionList={options}
                     selected={selected}
                     onChange={handleAssetChange}
+                    variant={'fixedWidth'}
                 />
                 <InputBase
                     className='typography-body-1 w-full text-right text-white'

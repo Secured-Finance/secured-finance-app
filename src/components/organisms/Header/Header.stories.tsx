@@ -5,7 +5,7 @@ import {
 } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
-import { Header } from './';
+import Header from './Header';
 
 const FIGMA_STORYBOOK_LINK =
     'https://www.figma.com/file/YIBsk1ihFbPlDb8XldGj1T/SF-Design-System?type=design&node-id=182-2672&mode=dev';

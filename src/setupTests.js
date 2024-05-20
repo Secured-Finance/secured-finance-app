@@ -8,6 +8,8 @@ import 'jest-canvas-mock';
 import failOnConsole from 'jest-fail-on-console';
 import timemachine from 'timemachine';
 
+jest.mock('next/router', () => jest.requireActual('next-router-mock'));
+
 failOnConsole({
     silenceMessage: errorMessage => {
         return errorMessage.startsWith(

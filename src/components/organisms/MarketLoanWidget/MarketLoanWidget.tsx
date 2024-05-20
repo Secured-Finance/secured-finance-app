@@ -19,7 +19,6 @@ import {
     useMaturityOptions,
 } from 'src/hooks';
 import { setCurrency, setMaturity } from 'src/store/landingOrderForm';
-import { ButtonSizes } from 'src/types';
 import {
     CurrencySymbol,
     formatLoanValue,
@@ -112,7 +111,7 @@ export const MarketLoanWidget = ({
                     return (
                         <div className='flex flex-col justify-center text-left'>
                             <div className='typography-caption text-neutral-8'>
-                                {getUTCMonthYear(info.getValue())}
+                                {getUTCMonthYear(info.getValue(), true)}
                             </div>
                             <div className='typography-caption text-slateGray'>
                                 {formatDate(info.getValue())}
@@ -163,10 +162,7 @@ export const MarketLoanWidget = ({
                 cell: info => {
                     return (
                         <div className='flex justify-end px-4 laptop:px-1'>
-                            <Button
-                                onClick={() => handleClick(info)}
-                                size={ButtonSizes.sm}
-                            >
+                            <Button onClick={() => handleClick(info)}>
                                 {info.row.original.isOpened
                                     ? 'Open Order'
                                     : 'GO'}
@@ -187,7 +183,7 @@ export const MarketLoanWidget = ({
     };
 
     const openMarketUtil = (
-        <div className=' flex flex-row items-center justify-end gap-4 px-3 py-2 tablet:justify-end'>
+        <div className=' flex flex-row items-center justify-between gap-4 px-3 py-2 tablet:justify-end'>
             <AssetDropdown
                 handleSelectedCurrency={(ccy: CurrencySymbol | undefined) =>
                     setSelectedCurrency(ccy)
@@ -285,7 +281,7 @@ const AssetDropdown = ({
     handleSelectedCurrency: (ccy: CurrencySymbol | undefined) => void;
 }) => {
     const { data: currencies } = useCurrencies();
-    const assetList = toOptions(currencies, CurrencySymbol.WBTC);
+    const assetList = toOptions(currencies, CurrencySymbol.USDC);
     return (
         <DropdownSelector<string>
             optionList={[
