@@ -3,7 +3,7 @@ import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import { ArrowUpIcon } from '@heroicons/react/24/solid';
 import clsx from 'clsx';
 import Link from 'next/link';
-import { HTMLAttributes, LegacyRef, forwardRef, useState } from 'react';
+import { HTMLAttributes, Ref, forwardRef, useState } from 'react';
 import Burger from 'src/assets/img/burger.svg';
 import SFLogoSmall from 'src/assets/img/small-logo.svg';
 import { Closable } from 'src/components/templates';
@@ -16,14 +16,12 @@ const mobileLinkClassName =
 const NextLink = forwardRef(
     (
         props: HTMLAttributes<HTMLAnchorElement> & { href: string | UrlObject },
-        ref: LegacyRef<HTMLAnchorElement>
+        ref: Ref<HTMLAnchorElement>
     ) => {
         const { href, children, ...rest } = props;
         return (
-            <Link href={href}>
-                <a {...rest} ref={ref}>
-                    {children}
-                </a>
+            <Link href={href} {...rest} ref={ref}>
+                {children}
             </Link>
         );
     }

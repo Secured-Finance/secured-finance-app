@@ -10,7 +10,7 @@ describe('useValueLockedByCurrency', () => {
         const { result } = renderHook(() => useValueLockedByCurrency());
         const value = result.current;
         expect(value.data).toEqual(undefined);
-        expect(value.isLoading).toEqual(true);
+        expect(value.isPending).toEqual(true);
 
         await waitFor(() => {
             expect(mock.getProtocolDepositAmount).toHaveBeenCalledTimes(1);
@@ -21,7 +21,7 @@ describe('useValueLockedByCurrency', () => {
                 USDC: BigInt('1000000000000'), // 1 000 000 USDC
                 WBTC: BigInt('1000000000000'), // 1000 BTC
             });
-            expect(newValue.isLoading).toEqual(false);
+            expect(newValue.isPending).toEqual(false);
         });
     });
 });

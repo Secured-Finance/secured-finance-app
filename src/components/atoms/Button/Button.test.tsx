@@ -3,16 +3,7 @@ import WFIL from 'src/assets/coins/fil.svg';
 import { render, screen } from 'src/test-utils.js';
 import * as stories from './Button.stories';
 
-const {
-    Primary,
-    PrimaryBuy,
-    PrimarySell,
-    Secondary,
-    SecondaryNeutral,
-    Tertiary,
-    TertiaryBuy,
-    TertiarySell,
-} = composeStories(stories);
+const { Primary, Secondary, Tertiary } = composeStories(stories);
 
 describe('test Button component', () => {
     it('should render button with a text', () => {
@@ -26,7 +17,7 @@ describe('test Button component', () => {
     it('should render a medium button by default', () => {
         render(<Primary />);
         const button = screen.getByRole('button');
-        expect(button).toHaveClass('h-[2.5rem]');
+        expect(button).toHaveClass('rounded-[0.625rem] px-3.5 py-2.5');
     });
 
     it('should render as an anchor when used with a href', () => {
@@ -67,38 +58,14 @@ describe('test Button component', () => {
         expect(screen.getByRole('img')).toBeInTheDocument();
     });
 
-    it('should render a green background when variant is primary-buy', async () => {
-        render(<PrimaryBuy />);
-        expect(screen.getByRole('button')).toHaveClass('bg-success-500');
-    });
-
-    it('should render a red background when variant is primary-sell', async () => {
-        render(<PrimarySell />);
-        expect(screen.getByRole('button')).toHaveClass('bg-error-500');
-    });
-
-    it('should render a blue background when variant is secondary', async () => {
+    it('should render a transparent background when variant is secondary', async () => {
         render(<Secondary />);
-        expect(screen.getByRole('button')).toHaveClass('bg-primary-700');
+        expect(screen.getByRole('button')).toHaveClass(
+            'bg-transparent border-primary-300'
+        );
     });
-
-    it('should render a dark neutral background when variant is secondary-neutral', async () => {
-        render(<SecondaryNeutral />);
-        expect(screen.getByRole('button')).toHaveClass('bg-neutral-700');
-    });
-
     it('should render an outlined button when variant is tertiary', async () => {
         render(<Tertiary />);
-        expect(screen.getByRole('button')).toHaveClass('border-primary-50');
-    });
-
-    it('should render a green outlined button when variant is tertiary-buy', async () => {
-        render(<TertiaryBuy />);
-        expect(screen.getByRole('button')).toHaveClass('border-success-300');
-    });
-
-    it('should render a red outlined button when variant is tertiary-buy', async () => {
-        render(<TertiarySell />);
-        expect(screen.getByRole('button')).toHaveClass('border-error-300');
+        expect(screen.getByRole('button')).toHaveClass('border-neutral-200');
     });
 });

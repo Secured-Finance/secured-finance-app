@@ -10,11 +10,11 @@ describe('test Market Tab component', () => {
         expect(screen.getByLabelText('24h Volume')).toBeInTheDocument();
         expect(screen.getByText('24h Volume')).toBeInTheDocument();
         expect(screen.getByText('24h Volume')).toHaveClass(
-            'typography-caption-2 text-slateGray'
+            'whitespace-nowrap text-[11px] leading-4 text-slateGray'
         );
         expect(screen.getByText('10,000')).toBeInTheDocument();
         expect(screen.getByText('10,000')).toHaveClass(
-            'typography-caption text-neutral-8'
+            'text-sm font-semibold leading-5 text-neutral-8'
         );
     });
 
@@ -23,11 +23,11 @@ describe('test Market Tab component', () => {
         expect(screen.getByLabelText('Green Market Tab')).toBeInTheDocument();
         expect(screen.getByText('7977.00')).toBeInTheDocument();
         expect(screen.getByText('7977.00')).toHaveClass(
-            'typography-button-3 leading-7 text-nebulaTeal'
+            'whitespace-nowrap text-base font-semibold leading-[1.57] text-nebulaTeal'
         );
         expect(screen.getByText('25.00% APR')).toBeInTheDocument();
         expect(screen.getByText('25.00% APR')).toHaveClass(
-            'typography-caption text-white'
+            'whitespace-nowrap text-[11px] text-white flex items-center'
         );
     });
 
@@ -36,7 +36,7 @@ describe('test Market Tab component', () => {
         expect(screen.getByLabelText('Gray Market Tab')).toBeInTheDocument();
         expect(screen.getByText('7977.00')).toBeInTheDocument();
         expect(screen.getByText('7977.00')).toHaveClass(
-            'typography-button-3 leading-7 text-slateGray'
+            'typography-button-3 whitespace-nowrap leading-8 text-slateGray'
         );
         expect(screen.getByText('25.00% APR')).toBeInTheDocument();
         expect(screen.getByText('25.00% APR')).toHaveClass(

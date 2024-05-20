@@ -12,8 +12,9 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 describe('MarketLoanWidget Component', () => {
     it('should filter by currency', async () => {
         render(<Default />);
-        await waitFor(() => {
-            expect(screen.queryByText('WBTC')).toBeInTheDocument();
+        await waitFor(async () => {
+            expect(screen.queryAllByText('WBTC').length).toBeGreaterThan(0);
+            // Look into this re-render issue
             screen.getByRole('button', { name: 'All Assets' }).click();
             screen.getByRole('menuitem', { name: 'WFIL' }).click();
         });
@@ -24,8 +25,8 @@ describe('MarketLoanWidget Component', () => {
         render(<Default />);
         await waitFor(() => {
             expect(screen.getAllByText('Dec 1, 2022').length).toEqual(4);
-            screen.getByRole('button', { name: 'DEC22' }).click();
-            screen.getByRole('menuitem', { name: 'JUN23' }).click();
+            screen.getByRole('button', { name: 'DEC2022' }).click();
+            screen.getByRole('menuitem', { name: 'JUN2023' }).click();
         });
         expect(screen.queryByText('Dec 1, 2022')).not.toBeInTheDocument();
         expect(screen.getAllByText('Jun 1, 2023').length).toEqual(4);
@@ -34,7 +35,7 @@ describe('MarketLoanWidget Component', () => {
     it('should dedupe maturity and add a "All" option', async () => {
         render(<Default />);
         await waitFor(() => {
-            screen.getByRole('button', { name: 'DEC22' }).click();
+            screen.getByRole('button', { name: 'DEC2022' }).click();
         });
 
         expect(screen.getAllByRole('menuitem').length).toBe(9);
@@ -72,7 +73,7 @@ describe('MarketLoanWidget Component', () => {
     it('should hide the APR column when the market is in itayose mode', async () => {
         const lendingMarkets = await mock.getOrderBookDetails();
         const marketIndex = lendingMarkets.findIndex(
-            value => value.ccy === wbtcBytes32 && value.name === 'DEC24'
+            value => value.ccy === wbtcBytes32 && value.name === 'DEC2024'
         );
         const market = lendingMarkets[marketIndex];
         lendingMarkets[marketIndex] = {
@@ -99,7 +100,7 @@ describe('MarketLoanWidget Component', () => {
         expect(screen.queryByText('APR')).not.toBeInTheDocument();
         expect(screen.getByText('All Assets')).toBeInTheDocument();
         expect(
-            screen.queryByRole('button', { name: 'DEC24' })
+            screen.queryByRole('button', { name: 'DEC2024' })
         ).not.toBeInTheDocument();
     });
 

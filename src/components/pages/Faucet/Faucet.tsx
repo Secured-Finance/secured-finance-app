@@ -10,7 +10,12 @@ import clsx from 'clsx';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import MetaMaskIcon from 'src/assets/img/metamask-fox.svg';
-import { Button, GradientBox, Separator } from 'src/components/atoms';
+import {
+    Button,
+    ButtonSizes,
+    GradientBox,
+    Separator,
+} from 'src/components/atoms';
 import {
     CurrencyDropdown,
     Dialog,
@@ -98,7 +103,7 @@ export const Faucet = () => {
     const sf = useSF();
 
     const { data: currencies } = useCurrencies();
-    const assetList = toOptions(currencies, CurrencySymbol.WBTC).filter(
+    const assetList = toOptions(currencies, CurrencySymbol.USDC).filter(
         ccy => currencyMap[ccy.value].toCurrency().isToken
     );
 
@@ -193,7 +198,9 @@ export const Faucet = () => {
                                             setCcy(null);
                                         }
                                     }}
+                                    variant='fixedWidth'
                                 />
+
                                 <div className='typography-caption text-white-60'>
                                     <div className='hidden tablet:flex tablet:w-full tablet:flex-row tablet:items-center  tablet:justify-between'>
                                         <div>{address}</div>
@@ -275,6 +282,7 @@ export const Faucet = () => {
                                     disabled={
                                         !account || isPending || chainError
                                     }
+                                    size={ButtonSizes.lg}
                                 >
                                     {isPending ? 'Minting...' : 'Mint tokens'}
                                 </Button>

@@ -56,9 +56,7 @@ describe('OrderAction component', () => {
         expect(
             await screen.findByTestId('deposit-collateral-button')
         ).toBeInTheDocument();
-        expect(
-            screen.getByText('Deposit collateral to borrow')
-        ).toBeInTheDocument();
+        expect(screen.getByText('Deposit collateral')).toBeInTheDocument();
         const button = screen.getByTestId('deposit-collateral-button');
         fireEvent.click(button);
         expect(track).toHaveBeenCalledWith(
@@ -87,9 +85,7 @@ describe('OrderAction component', () => {
         expect(
             await screen.findByTestId('deposit-collateral-button')
         ).toBeInTheDocument();
-        expect(
-            screen.getByText('Deposit collateral to borrow')
-        ).toBeInTheDocument();
+        expect(screen.getByText('Deposit collateral')).toBeInTheDocument();
         expect(screen.getByTestId('deposit-collateral-button')).toBeDisabled();
     });
 
@@ -174,7 +170,7 @@ describe('OrderAction component', () => {
     it('should disable the button if the market is not open or pre-open', async () => {
         const lendingMarkets = await mockSecuredFinance.getOrderBookDetails();
         const marketIndex = lendingMarkets.findIndex(
-            value => value.ccy === usdcBytes32 && value.name === 'DEC22'
+            value => value.ccy === usdcBytes32 && value.name === 'DEC2022'
         );
         const market = lendingMarkets[marketIndex];
         lendingMarkets[marketIndex] = {

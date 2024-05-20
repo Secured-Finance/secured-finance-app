@@ -1,4 +1,5 @@
 import SliderUnstyled from '@mui/base/SliderUnstyled';
+import clsx from 'clsx';
 import { useCallback, useRef } from 'react';
 import { usePreventPageScroll } from 'src/hooks';
 
@@ -13,9 +14,11 @@ const marks = [
 export const Slider = ({
     onChange,
     value = 0,
+    disabled = false,
 }: {
     onChange: (v: number) => void;
     value: number;
+    disabled: boolean;
 }) => {
     const sliderRef = useRef(null);
     usePreventPageScroll(sliderRef);
@@ -33,14 +36,25 @@ export const Slider = ({
                 marks={marks}
                 onChange={handleChange}
                 classes={{ markActive: 'slider-markActive' }}
+                disabled={disabled}
                 slotProps={{
                     thumb: {
-                        className:
-                            'ring-starBlue-80 ring-[5px] w-3 h-3 -ml-[5px] bg-white rounded-full shadow-sliderthumb absolute',
+                        className: clsx(
+                            ' ring-[5px] w-3 h-3 -ml-[5px] bg-white rounded-full shadow-sliderthumb absolute',
+                            {
+                                'ring-transparent': disabled,
+                                'ring-starBlue-80': !disabled,
+                            }
+                        ),
                     },
                     root: {
-                        className:
-                            'w-full relative cursor-pointer flex items-center h-6',
+                        className: clsx(
+                            'w-full relative flex items-center h-6',
+                            {
+                                'cursor-default': disabled,
+                                'cursor-pointer': !disabled,
+                            }
+                        ),
                     },
                     rail: {
                         className: 'bg-neutral-3 h-2px w-full',

@@ -8,11 +8,13 @@ export const Tooltip = ({
     children,
     align = 'center',
     maxWidth = 'large',
+    severity = 'info',
 }: {
     iconElement: React.ReactNode;
     children: React.ReactNode;
     align?: Alignment;
     maxWidth?: 'small' | 'large';
+    severity?: 'info' | 'warning';
 }) => {
     const [open, setOpen] = useState(false);
     return (
@@ -46,12 +48,22 @@ export const Tooltip = ({
                                         align === 'center',
                                     '-left-7': align === 'right',
                                     '-right-7': align === 'left',
+                                    'bottom-7': align === 'top',
+                                    '-right-7 bottom-7': align === 'top-right',
                                 }
                             )}
                             role='tooltip'
                             static
                         >
-                            <div className='typography-caption-3 relative w-fit overflow-hidden whitespace-normal rounded-lg border border-black-20 bg-gunMetal p-4 text-left text-neutral-8 shadow-dropdown'>
+                            <div
+                                className={clsx(
+                                    'typography-caption-3 relative w-fit overflow-hidden whitespace-normal rounded-lg border border-black-20 bg-gunMetal p-4 text-left text-neutral-8 shadow-dropdown',
+                                    {
+                                        'border-none bg-warning-900 text-neutral-50':
+                                            severity === 'warning',
+                                    }
+                                )}
+                            >
                                 {children}
                             </div>
                         </Popover.Panel>

@@ -10,8 +10,9 @@ import {
     SupportedChainsList,
     formatDataCy,
     getSupportedChainIds,
+    readWalletFromStore,
 } from 'src/utils';
-import { useSwitchNetwork } from 'wagmi';
+import { useConnect } from 'wagmi';
 
 type ChainInfo = {
     chainName: string;
@@ -38,7 +39,7 @@ const MenuItem = ({
         >
             <div className='flex w-full cursor-pointer items-center gap-2'>
                 <div className='h-5 w-5'>{icon}</div>
-                <p className='typography-button-2 capitalize leading-[22px] text-neutral-50'>
+                <p className='typography-button-2 leading-[22px] text-neutral-50'>
                     {text}
                 </p>
             </div>
@@ -57,7 +58,9 @@ const generateChainList = () => {
                 chainId: c.chain.id,
                 icon: c.icon,
             };
-            if (c.chain.testnet) {
+            // NOTE: 314_159 is a testnet chain id but `viem` does not have a testnet flag for it.
+            // So we are checking for the chain id to determine if it is a testnet chain.
+            if (c.chain.testnet || c.chain.id === 314_159) {
                 testnetChainsList.push(chainInfo);
             } else {
                 mainnetChainsList.push(chainInfo);
@@ -80,17 +83,24 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
         ? availableChains.testnetChainsList
         : availableChains.mainnetChainsList;
 
-    const { switchNetworkAsync } = useSwitchNetwork();
     const selectedNetwork = chainList.find(
         d => Networks[d.chainId].toLowerCase() === networkName.toLowerCase()
     );
+    const { connectors } = useConnect();
 
     const handleNetworkChange = useCallback(
         async (index: number) => {
             const id = chainList[index].chainId;
-            await switchNetworkAsync?.(id);
+            const provider = readWalletFromStore();
+            const connector = connectors.find(
+                connect => connect.name === provider
+            );
+            if (!connector) {
+                return;
+            }
+            await connector.switchChain?.(id);
         },
-        [chainList, switchNetworkAsync]
+        [chainList, connectors]
     );
 
     return (

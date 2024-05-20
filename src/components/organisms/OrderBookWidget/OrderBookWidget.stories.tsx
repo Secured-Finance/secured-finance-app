@@ -113,7 +113,7 @@ export default {
                 borrowOrderbook: borrowEntries,
                 lendOrderbook: lendEntries,
             },
-            isLoading: false,
+            isPending: false,
         },
         marketPrice: LoanValue.fromPrice(9300, maturityMar23.toNumber()),
         currency: CurrencySymbol.WFIL,
@@ -133,7 +133,7 @@ Bitcoin.args = {
             borrowOrderbook: btcEntriesBorrow,
             lendOrderbook: btcEntriesLend,
         },
-        isLoading: false,
+        isPending: false,
     },
     currency: CurrencySymbol.WBTC,
 };
@@ -150,7 +150,7 @@ Eth.args = {
             ],
             lendOrderbook: [...ethEntries, ZERO_ENTRY],
         },
-        isLoading: false,
+        isPending: false,
     },
     currency: CurrencySymbol.ETH,
 };
@@ -167,7 +167,7 @@ Loading.args = {
             borrowOrderbook: [],
             lendOrderbook: [],
         },
-        isLoading: true,
+        isPending: true,
     },
 };
 

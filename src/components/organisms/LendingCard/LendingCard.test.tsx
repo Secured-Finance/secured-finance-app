@@ -73,10 +73,17 @@ describe('LendingCard Component', () => {
         await waitFor(() => render(<Default />, { preloadedState }));
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '10' } });
-        await waitFor(() => {
-            fireEvent.click(screen.getByTestId('place-order-button'));
+        const placeOrderButton = await screen.findByRole('button', {
+            name: 'Borrow',
         });
-        expect(await screen.findByRole('dialog')).toBeInTheDocument();
+        fireEvent.click(placeOrderButton);
+
+        await waitFor(
+            () => {
+                expect(screen.queryByRole('dialog')).toBeInTheDocument();
+            },
+            { timeout: 500 }
+        );
         expect(screen.getByText('Confirm Borrow')).toBeInTheDocument();
         const button = screen.getByTestId('dialog-action-button');
         expect(button).toHaveTextContent('OK');
@@ -130,13 +137,13 @@ describe('LendingCard Component', () => {
         await waitFor(() => render(<Default />));
         fireEvent.click(
             screen.getByRole('button', {
-                name: 'DEC22',
+                name: 'DEC2022',
             })
         );
-        fireEvent.click(screen.getByText('MAR23'));
+        fireEvent.click(screen.getByText('MAR2023'));
         const dateWithTimezone = formatDate(mar23Fixture.toNumber());
         expect(track).toHaveBeenCalledWith(ButtonEvents.TERM_CHANGE, {
-            [ButtonProperties.TERM]: '1669852800',
+            [ButtonProperties.TERM]: 'MAR2023',
         });
         expect(screen.getByText(dateWithTimezone)).toBeInTheDocument();
     });
@@ -145,10 +152,12 @@ describe('LendingCard Component', () => {
         await waitFor(() => render(<Default />, { preloadedState }));
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '10' } });
-        await waitFor(() => {
-            fireEvent.click(screen.getByTestId('place-order-button'));
-            expect(screen.getByText('Confirm Borrow')).toBeInTheDocument();
-        });
+
+        const placeOrderButton = await screen.findByTestId(
+            'place-order-button'
+        );
+        fireEvent.click(placeOrderButton);
+        expect(screen.getByText('Confirm Borrow')).toBeInTheDocument();
     });
 
     it('should support orders with decimal amounts', async () => {
@@ -182,7 +191,7 @@ describe('LendingCard Component', () => {
         const lendTab = screen.getByText('Lend');
         fireEvent.click(lendTab);
         await waitFor(() =>
-            expect(screen.getByText('Lending Source')).toBeInTheDocument()
+            expect(screen.getByText('Available')).toBeInTheDocument()
         );
         expect(screen.getByText('10,000')).toBeInTheDocument();
 
@@ -216,7 +225,7 @@ describe('LendingCard Component', () => {
         fireEvent.click(lendTab);
 
         await waitFor(() =>
-            expect(screen.getByText('Lending Source')).toBeInTheDocument()
+            expect(screen.getByText('Available')).toBeInTheDocument()
         );
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '200' } });

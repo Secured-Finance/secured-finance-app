@@ -14,16 +14,22 @@ import {
     MaturityOptionList,
     OrderHistoryList,
     OrderType,
-    TradeHistory,
+    TransactionHistoryList,
     TransactionList,
 } from 'src/types';
-import { CurrencySymbol, Rate, createCurrencyMap } from 'src/utils';
+import {
+    CurrencySymbol,
+    Rate,
+    createCurrencyMap,
+    getMappedOrderStatus,
+} from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
 export const wfilBytes32 = toBytes32('WFIL'); // 0x5746494c0000000000000000000000000000000000000000000000000000000000
 export const ethBytes32 = toBytes32('ETH'); // 0x455448000000000000000000000000000000000000000000000000000000000
 export const wbtcBytes32 = toBytes32('WBTC'); // 0x5742544300000000000000000000000000000000000000000000000000000000
 export const usdcBytes32 = toBytes32('USDC'); // 0x5553444300000000000000000000000000000000000000000000000000000000
+export const ifilBytes32 = toBytes32('iFIL'); // 0x6946494c00000000000000000000000000000000000000000000000000000000
 
 export const assetPriceMap = createCurrencyMap<number>(0);
 assetPriceMap.WFIL = 6.0;
@@ -33,9 +39,9 @@ assetPriceMap.WBTC = 50000.0;
 assetPriceMap.aUSDC = 1.0;
 assetPriceMap.axlFIL = 6.0;
 
-export const preloadedEthBalance = {
+export const preloadedBalance = {
     wallet: {
-        ethBalance: 10,
+        balance: 10,
         address: '',
     },
 };
@@ -58,7 +64,7 @@ const preOpeningDate = BigInt(preOpeningDateTimestamp);
 
 export const maturitiesMockFromContract = (ccy: string) => [
     {
-        name: 'DEC22',
+        name: 'DEC2022',
         maturity: BigInt(dec22Fixture.toString()),
         openingDate: openingDate,
         marketUnitPrice: BigInt('9801'),
@@ -75,9 +81,10 @@ export const maturitiesMockFromContract = (ccy: string) => [
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
         preOpeningDate: preOpeningDate,
+        lastBlockUnitPriceTimestamp: BigInt(1646920200),
     },
     {
-        name: 'MAR23',
+        name: 'MAR2023',
         maturity: BigInt(mar23Fixture.toString()),
         openingDate: openingDate,
         marketUnitPrice: BigInt('9701'),
@@ -94,9 +101,10 @@ export const maturitiesMockFromContract = (ccy: string) => [
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
         preOpeningDate: preOpeningDate,
+        lastBlockUnitPriceTimestamp: BigInt(1646920200),
     },
     {
-        name: 'JUN23',
+        name: 'JUN2023',
         maturity: BigInt(jun23Fixture.toString()),
         openingDate: openingDate,
         marketUnitPrice: BigInt('9601'),
@@ -113,9 +121,10 @@ export const maturitiesMockFromContract = (ccy: string) => [
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
         preOpeningDate: preOpeningDate,
+        lastBlockUnitPriceTimestamp: BigInt(1646920200),
     },
     {
-        name: 'SEP23',
+        name: 'SEP2023',
         maturity: BigInt(sep23Fixture.toString()),
         openingDate: openingDate,
         marketUnitPrice: BigInt('9501'),
@@ -132,9 +141,10 @@ export const maturitiesMockFromContract = (ccy: string) => [
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
         preOpeningDate: preOpeningDate,
+        lastBlockUnitPriceTimestamp: BigInt(1646920200),
     },
     {
-        name: 'DEC23',
+        name: 'DEC2023',
         maturity: BigInt(dec23Fixture.toString()),
         openingDate: openingDate,
         marketUnitPrice: BigInt('9401'),
@@ -151,9 +161,10 @@ export const maturitiesMockFromContract = (ccy: string) => [
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
         preOpeningDate: preOpeningDate,
+        lastBlockUnitPriceTimestamp: BigInt(1646920200),
     },
     {
-        name: 'MAR24',
+        name: 'MAR2024',
         maturity: BigInt(mar24Fixture.toString()),
         openingDate: openingDate,
         marketUnitPrice: BigInt('9301'),
@@ -170,9 +181,10 @@ export const maturitiesMockFromContract = (ccy: string) => [
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
         preOpeningDate: preOpeningDate,
+        lastBlockUnitPriceTimestamp: BigInt(1646920200),
     },
     {
-        name: 'JUN24',
+        name: 'JUN2024',
         maturity: BigInt(jun24Fixture.toString()),
         openingDate: openingDate,
         marketUnitPrice: BigInt('9201'),
@@ -189,9 +201,10 @@ export const maturitiesMockFromContract = (ccy: string) => [
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
         preOpeningDate: preOpeningDate,
+        lastBlockUnitPriceTimestamp: BigInt(1646920200),
     },
     {
-        name: 'SEP24',
+        name: 'SEP2024',
         maturity: BigInt(sep24Fixture.toString()),
         openingDate: openingDate,
         marketUnitPrice: BigInt('9101'),
@@ -208,9 +221,10 @@ export const maturitiesMockFromContract = (ccy: string) => [
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
         preOpeningDate: preOpeningDate,
+        lastBlockUnitPriceTimestamp: BigInt(1646920200),
     },
     {
-        name: 'DEC24',
+        name: 'DEC2024',
         maturity: BigInt(dec24Fixture.toString()),
         openingDate: BigInt('1685577600'),
         marketUnitPrice: BigInt('9001'),
@@ -227,12 +241,13 @@ export const maturitiesMockFromContract = (ccy: string) => [
         currentMinDebtUnitPrice: BigInt('9500'),
         ccy,
         preOpeningDate: BigInt(1684972800),
+        lastBlockUnitPriceTimestamp: BigInt(1646920200),
     },
 ];
 
 export const maturities = {
     [dec22Fixture.toNumber()]: {
-        name: 'DEC22',
+        name: 'DEC2022',
         maturity: dec22Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
@@ -249,9 +264,10 @@ export const maturities = {
         minBorrowUnitPrice: 9672,
         maxLendUnitPrice: 9700,
         currentMinDebtUnitPrice: 9500,
+        lastBlockUnitPriceTimestamp: 1646920200,
     },
     [mar23Fixture.toNumber()]: {
-        name: 'MAR23',
+        name: 'MAR2023',
         maturity: mar23Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
@@ -268,9 +284,10 @@ export const maturities = {
         minBorrowUnitPrice: 9670,
         maxLendUnitPrice: 9698,
         currentMinDebtUnitPrice: 9500,
+        lastBlockUnitPriceTimestamp: 1646920200,
     },
     [jun23Fixture.toNumber()]: {
-        name: 'JUN23',
+        name: 'JUN2023',
         maturity: jun23Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
@@ -287,9 +304,10 @@ export const maturities = {
         minBorrowUnitPrice: 9664,
         maxLendUnitPrice: 9692,
         currentMinDebtUnitPrice: 9500,
+        lastBlockUnitPriceTimestamp: 1646920200,
     },
     [sep23Fixture.toNumber()]: {
-        name: 'SEP23',
+        name: 'SEP2023',
         maturity: sep23Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
@@ -306,9 +324,10 @@ export const maturities = {
         minBorrowUnitPrice: 9659,
         maxLendUnitPrice: 9687,
         currentMinDebtUnitPrice: 9500,
+        lastBlockUnitPriceTimestamp: 1646920200,
     },
     [dec23Fixture.toNumber()]: {
-        name: 'DEC23',
+        name: 'DEC2023',
         maturity: dec23Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
@@ -325,9 +344,10 @@ export const maturities = {
         minBorrowUnitPrice: 9638,
         maxLendUnitPrice: 9666,
         currentMinDebtUnitPrice: 9500,
+        lastBlockUnitPriceTimestamp: 1646920200,
     },
     [mar24Fixture.toNumber()]: {
-        name: 'MAR24',
+        name: 'MAR2024',
         maturity: mar24Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
@@ -344,9 +364,10 @@ export const maturities = {
         minBorrowUnitPrice: 9628,
         maxLendUnitPrice: 9656,
         currentMinDebtUnitPrice: 9500,
+        lastBlockUnitPriceTimestamp: 1646920200,
     },
     [jun24Fixture.toNumber()]: {
-        name: 'JUN24',
+        name: 'JUN2024',
         maturity: jun24Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
@@ -363,9 +384,10 @@ export const maturities = {
         minBorrowUnitPrice: 9612,
         maxLendUnitPrice: 9640,
         currentMinDebtUnitPrice: 9500,
+        lastBlockUnitPriceTimestamp: 1646920200,
     },
     [sep24Fixture.toNumber()]: {
-        name: 'SEP24',
+        name: 'SEP2024',
         maturity: sep24Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: openingDateTimestamp,
@@ -382,9 +404,10 @@ export const maturities = {
         minBorrowUnitPrice: 9602,
         maxLendUnitPrice: 9630,
         currentMinDebtUnitPrice: 9500,
+        lastBlockUnitPriceTimestamp: 1646920200,
     },
     [dec24Fixture.toNumber()]: {
-        name: 'DEC24',
+        name: 'DEC2024',
         maturity: dec24Fixture.toNumber(),
         isActive: false,
         utcOpeningDate: 1685577600,
@@ -401,18 +424,19 @@ export const maturities = {
         minBorrowUnitPrice: 9602,
         maxLendUnitPrice: 9630,
         currentMinDebtUnitPrice: 9500,
+        lastBlockUnitPriceTimestamp: 1646920200,
     },
 };
 
 export const maturityOptions: MaturityOptionList = [
-    { label: 'DEC22', value: dec22Fixture },
-    { label: 'MAR23', value: mar23Fixture },
-    { label: 'JUN23', value: jun23Fixture },
-    { label: 'SEP23', value: sep23Fixture },
-    { label: 'DEC23', value: dec23Fixture },
-    { label: 'MAR24', value: mar24Fixture },
-    { label: 'JUN24', value: jun24Fixture },
-    { label: 'SEP24', value: sep24Fixture },
+    { label: 'DEC2022', value: dec22Fixture },
+    { label: 'MAR2023', value: mar23Fixture },
+    { label: 'JUN2023', value: jun23Fixture },
+    { label: 'SEP2023', value: sep23Fixture },
+    { label: 'DEC2023', value: dec23Fixture },
+    { label: 'MAR2024', value: mar24Fixture },
+    { label: 'JUN2024', value: jun24Fixture },
+    { label: 'SEP2024', value: sep24Fixture },
 ];
 
 export const walletSourceList: WalletSourceOption[] = [
@@ -533,6 +557,7 @@ export const activeOrders: Order[] = [
 
 export const orderHistoryList: OrderHistoryList = [
     {
+        id: '0',
         orderId: 1,
         currency: wfilBytes32,
         side: 1,
@@ -548,11 +573,13 @@ export const orderHistoryList: OrderHistoryList = [
             id: '1',
             isActive: true,
         },
-        maker: {
+        user: {
             id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
         },
+        isCircuitBreakerTriggered: false,
     },
     {
+        id: '0',
         orderId: 2,
         currency: wfilBytes32,
         side: 1,
@@ -560,7 +587,7 @@ export const orderHistoryList: OrderHistoryList = [
         inputUnitPrice: BigInt('9600'),
         filledAmount: BigInt('0'),
         inputAmount: BigInt('5000000000000000000000'),
-        status: 'Open',
+        status: 'Cancelled',
         type: OrderType.LIMIT,
         createdAt: BigInt('1605299000'),
         txHash: toBytes32('hash'),
@@ -568,11 +595,13 @@ export const orderHistoryList: OrderHistoryList = [
             id: '1',
             isActive: true,
         },
-        maker: {
+        user: {
             id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
         },
+        isCircuitBreakerTriggered: false,
     },
     {
+        id: '0',
         orderId: 1,
         currency: wbtcBytes32,
         side: 0,
@@ -588,11 +617,13 @@ export const orderHistoryList: OrderHistoryList = [
             id: '1',
             isActive: true,
         },
-        maker: {
+        user: {
             id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
         },
+        isCircuitBreakerTriggered: false,
     },
     {
+        id: '0',
         orderId: 1,
         currency: ethBytes32,
         side: 1,
@@ -600,19 +631,21 @@ export const orderHistoryList: OrderHistoryList = [
         inputUnitPrice: BigInt('9600'),
         filledAmount: BigInt('0'),
         inputAmount: BigInt('5000000000000000000000'),
-        status: 'Open',
-        type: OrderType.LIMIT,
+        status: 'Killed',
+        type: OrderType.MARKET,
         createdAt: BigInt('1689299000'),
         txHash: toBytes32('hash'),
         lendingMarket: {
             id: '1',
             isActive: true,
         },
-        maker: {
+        user: {
             id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
         },
+        isCircuitBreakerTriggered: false,
     },
     {
+        id: '0',
         orderId: 1,
         currency: wfilBytes32,
         side: 1,
@@ -628,11 +661,13 @@ export const orderHistoryList: OrderHistoryList = [
             id: '1',
             isActive: false,
         },
-        maker: {
+        user: {
             id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
         },
+        isCircuitBreakerTriggered: false,
     },
     {
+        id: '0',
         orderId: 2,
         currency: ethBytes32,
         side: 1,
@@ -640,19 +675,21 @@ export const orderHistoryList: OrderHistoryList = [
         inputUnitPrice: BigInt('9600'),
         filledAmount: BigInt('0'),
         inputAmount: BigInt('100000000000000000'),
-        status: 'Open',
-        type: OrderType.LIMIT,
+        status: 'Killed',
+        type: OrderType.MARKET,
         createdAt: BigInt('1669299000'),
         txHash: toBytes32('hash'),
         lendingMarket: {
             id: '1',
             isActive: true,
         },
-        maker: {
+        user: {
             id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
         },
+        isCircuitBreakerTriggered: true,
     },
     {
+        id: '0',
         orderId: 1,
         currency: wbtcBytes32,
         side: 0,
@@ -668,11 +705,13 @@ export const orderHistoryList: OrderHistoryList = [
             id: '1',
             isActive: true,
         },
-        maker: {
+        user: {
             id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
         },
+        isCircuitBreakerTriggered: false,
     },
     {
+        id: '0',
         orderId: 1,
         currency: ethBytes32,
         side: 0,
@@ -680,7 +719,7 @@ export const orderHistoryList: OrderHistoryList = [
         inputUnitPrice: BigInt('9800'),
         filledAmount: BigInt('50000000000000000'),
         inputAmount: BigInt('500000000000000000'),
-        status: 'PartiallyFilled',
+        status: 'Killed',
         type: OrderType.LIMIT,
         createdAt: BigInt('1649299000'),
         txHash: toBytes32('hash'),
@@ -688,11 +727,13 @@ export const orderHistoryList: OrderHistoryList = [
             id: '1',
             isActive: true,
         },
-        maker: {
+        user: {
             id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
         },
+        isCircuitBreakerTriggered: false,
     },
     {
+        id: '0',
         orderId: 3,
         currency: wfilBytes32,
         side: 1,
@@ -700,7 +741,7 @@ export const orderHistoryList: OrderHistoryList = [
         inputUnitPrice: BigInt('0'),
         filledAmount: BigInt('10000000000000000000'),
         inputAmount: BigInt('100000000000000000000'),
-        status: 'PartiallyBlocked',
+        status: 'Killed',
         type: OrderType.MARKET,
         createdAt: BigInt('1639299000'),
         txHash: toBytes32('hash'),
@@ -708,11 +749,13 @@ export const orderHistoryList: OrderHistoryList = [
             id: '1',
             isActive: false,
         },
-        maker: {
+        user: {
             id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
         },
+        isCircuitBreakerTriggered: true,
     },
     {
+        id: '0',
         orderId: 3,
         currency: wfilBytes32,
         side: 1,
@@ -720,19 +763,21 @@ export const orderHistoryList: OrderHistoryList = [
         inputUnitPrice: BigInt('9600'),
         filledAmount: BigInt('0'),
         inputAmount: BigInt('5000000000000000000000'),
-        status: 'Blocked',
+        status: 'Open',
         type: OrderType.LIMIT,
         createdAt: BigInt('1629299000'),
         txHash: toBytes32('hash'),
         lendingMarket: {
             id: '1',
-            isActive: true,
+            isActive: false,
         },
-        maker: {
+        user: {
             id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
         },
+        isCircuitBreakerTriggered: false,
     },
     {
+        id: '0',
         orderId: 5,
         currency: wfilBytes32,
         side: 1,
@@ -740,25 +785,27 @@ export const orderHistoryList: OrderHistoryList = [
         inputUnitPrice: BigInt('9800'),
         filledAmount: BigInt('10000000000000000000'),
         inputAmount: BigInt('100000000000000000000'),
-        status: 'PartiallyBlocked',
+        status: 'PartiallyFilled',
         type: OrderType.LIMIT,
         createdAt: BigInt('1619299000'),
         txHash: toBytes32('hash'),
         lendingMarket: {
             id: '1',
-            isActive: true,
+            isActive: false,
         },
-        maker: {
+        user: {
             id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
         },
+        isCircuitBreakerTriggered: false,
     },
     {
+        id: '0',
         orderId: 6,
         currency: wfilBytes32,
         side: 1,
         maturity: BigInt(dec22Fixture.toString()),
         inputUnitPrice: BigInt('0'),
-        filledAmount: BigInt('10000000000000000000'),
+        filledAmount: BigInt('100000000000000000000'),
         inputAmount: BigInt('100000000000000000000'),
         status: 'Filled',
         type: OrderType.MARKET,
@@ -768,80 +815,93 @@ export const orderHistoryList: OrderHistoryList = [
             id: '1',
             isActive: true,
         },
-        maker: {
+        user: {
             id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
         },
+        isCircuitBreakerTriggered: false,
     },
 ];
 
-export const transactions: TradeHistory = [
+export const mappedOrderHistoryList = orderHistoryList.map(order => {
+    return {
+        ...order,
+        status: getMappedOrderStatus(order),
+    };
+});
+
+export const transactions: TransactionHistoryList = [
     {
+        id: '0',
         amount: '1000000000000000000000',
         averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
         side: 0,
-        orderPrice: '9800',
+        executionPrice: '9800',
         createdAt: '1671859344',
         feeInFV: '3213742117859654893',
-        forwardValue: '1020000000000000000000',
+        futureValue: '1020000000000000000000',
         currency: wfilBytes32,
         maturity: jun23Fixture.toString(),
-        taker: {
+        user: {
             id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
         },
     },
     {
+        id: '0',
         amount: '500000000000000000000',
         averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
         side: 1,
-        orderPrice: '9543',
+        executionPrice: '9543',
         createdAt: '1671080520',
         feeInFV: '3213742117851700971',
-        forwardValue: '520000000000000000000',
+        futureValue: '520000000000000000000',
         currency: wfilBytes32,
         maturity: jun23Fixture.toString(),
-        taker: {
+        user: {
             id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
         },
     },
     {
+        id: '0',
         amount: '500000000000000000000',
         averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
         side: 1,
-        orderPrice: '9543',
+        executionPrice: '9543',
         createdAt: '1671080520',
         feeInFV: '3213742117851708102',
-        forwardValue: '520000000000000000000',
+        futureValue: '520000000000000000000',
         currency: wfilBytes32,
         maturity: mar23Fixture.toString(),
-        taker: {
+        user: {
             id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
         },
     },
     {
+        id: '0',
         amount: '1000000000',
         averagePrice: '0.9000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
         side: 1,
-        orderPrice: '9700',
+        executionPrice: '9700',
         createdAt: '1671427140',
         feeInFV: '400',
-        forwardValue: '1040000000',
+        futureValue: '1040000000',
         currency: wbtcBytes32,
         maturity: jun23Fixture.toString(),
-        taker: {
+        user: {
             id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
         },
     },
     {
+        id: '0',
         amount: '500000000',
         averagePrice: '0.98', // TODO: rework the unit in the graph. This is changed only for a dirty fix
         side: 0,
-        orderPrice: '9800',
+        executionPrice: '9800',
         createdAt: '1609296986',
         feeInFV: '700',
-        forwardValue: '505000000',
+        futureValue: '505000000',
         currency: wbtcBytes32,
         maturity: dec22Fixture.toString(),
-        taker: {
+        user: {
             id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
         },
     },
@@ -851,27 +911,27 @@ export const positions: Position[] = [
     {
         amount: BigInt('400000000000000000000'),
         currency: wfilBytes32,
-        forwardValue: BigInt('500000000000000000000'),
+        futureValue: BigInt('500000000000000000000'),
         maturity: jun23Fixture.toString(),
         marketPrice: BigInt(8000),
     },
     {
         amount: BigInt('-500000000000000000000'),
         currency: wfilBytes32,
-        forwardValue: BigInt('-1000000000000000000000'),
+        futureValue: BigInt('-1000000000000000000000'),
         maturity: mar23Fixture.toString(),
         marketPrice: BigInt(5000),
     },
     {
         amount: BigInt('0'),
-        forwardValue: BigInt('-1040000000'),
+        futureValue: BigInt('-1040000000'),
         currency: wbtcBytes32,
         maturity: jun23Fixture.toString(),
         marketPrice: BigInt(0),
     },
     {
         amount: BigInt('0'),
-        forwardValue: BigInt('505000000'),
+        futureValue: BigInt('505000000'),
         currency: wbtcBytes32,
         maturity: dec22Fixture.toString(),
         marketPrice: BigInt(0),

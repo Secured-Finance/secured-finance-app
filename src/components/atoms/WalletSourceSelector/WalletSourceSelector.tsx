@@ -3,6 +3,7 @@ import { WalletSource } from '@secured-finance/sf-client';
 import clsx from 'clsx';
 import { Fragment, useMemo } from 'react';
 import { ExpandIndicator, Separator } from 'src/components/atoms';
+import { useBreakpoint } from 'src/hooks';
 import { SvgIcon } from 'src/types';
 import { AddressUtils, CurrencySymbol, ordinaryFormat } from 'src/utils';
 import { AMOUNT_PRECISION } from 'src/utils/entities';
@@ -41,6 +42,7 @@ export const WalletSourceSelector = ({
     account,
     onChange,
 }: WalletSourceSelectorProps) => {
+    const isLaptop = useBreakpoint('desktop');
     const list = useMemo(
         () =>
             optionList.filter(
@@ -56,11 +58,7 @@ export const WalletSourceSelector = ({
     );
 
     return (
-        <div className='flex h-20 w-full flex-col justify-between'>
-            <div className='typography-caption-2 mx-2 flex flex-row justify-between text-secondary7'>
-                <span>Lending Source</span>
-                <span>Available to Lend</span>
-            </div>
+        <div className='flex w-full flex-col justify-between'>
             <div className='w-full'>
                 <Listbox
                     value={selectedOption}
@@ -71,24 +69,24 @@ export const WalletSourceSelector = ({
                         <>
                             <div className='relative h-full rounded-lg ring-inset ring-starBlue focus-within:ring-2'>
                                 <Listbox.Button
-                                    className='flex w-full cursor-text flex-row items-center justify-between rounded-lg bg-black-20 py-2 pl-2 pr-4'
+                                    className='flex w-full cursor-text flex-row items-center justify-between rounded-lg bg-black-20 py-2 pl-3 pr-4 laptop:pl-2'
                                     data-testid='wallet-source-selector-button'
                                 >
                                     <div
-                                        className={`flex h-10 w-[156px] flex-row items-center justify-between rounded-lg bg-white-5 px-2 ${
+                                        className={`flex h-7 w-auto flex-row items-center justify-between gap-1 rounded-lg bg-white-5 px-2 laptop:h-10 desktop:w-[156px] ${
                                             account
                                                 ? 'cursor-pointer'
                                                 : 'cursor-default'
                                         }`}
                                     >
-                                        <div className='flex flex-row items-center gap-2'>
+                                        <div className='flex flex-row items-center gap-1 laptop:gap-2'>
                                             {account && (
                                                 <span>
-                                                    <selectedOption.iconSVG className='h-5 w-5' />
+                                                    <selectedOption.iconSVG className='h-3.5 w-3.5 desktop:h-5 desktop:w-5' />
                                                 </span>
                                             )}
                                             <span
-                                                className={`typography-caption-2 leading-4 ${
+                                                className={`desktop:typography-caption-2 text-[11px] leading-4 ${
                                                     account
                                                         ? 'text-grayScale'
                                                         : 'text-grayScale/50'
@@ -99,7 +97,7 @@ export const WalletSourceSelector = ({
                                                           selectedOption.source,
                                                           account
                                                       )
-                                                    : 'Select Source'}
+                                                    : 'Connect'}
                                             </span>
                                         </div>
                                         <ExpandIndicator
@@ -109,7 +107,10 @@ export const WalletSourceSelector = ({
                                             }
                                         />
                                     </div>
-                                    <div className='typography-caption w-fit max-w-[200px] text-white-60'>
+                                    <div className='flex w-fit max-w-[200px] flex-col gap-0.5 text-right text-xs leading-5 text-planetaryPurple laptop:gap-[1px] laptop:text-sm laptop:leading-normal'>
+                                        <span className='block gap-[1px] whitespace-nowrap text-right text-[11px] leading-4 text-slateGray laptop:text-xs laptop:leading-tight'>
+                                            {isLaptop ? 'Avl.' : 'Available'}
+                                        </span>
                                         {account
                                             ? ordinaryFormat(
                                                   Math.floor(

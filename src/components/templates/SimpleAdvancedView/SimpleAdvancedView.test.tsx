@@ -26,11 +26,11 @@ describe('SimpleAdvancedView Component', () => {
     it('should call the onModeChange function when the user change the mode', () => {
         const onModeChange = jest.fn();
         render(<Default onModeChange={onModeChange} />);
-        fireEvent.click(screen.getByText('Simple'));
-        expect(onModeChange).not.toHaveBeenCalled();
         fireEvent.click(screen.getByText('Advanced'));
-        expect(onModeChange).toHaveBeenCalled();
+        expect(onModeChange).not.toHaveBeenCalled();
         fireEvent.click(screen.getByText('Simple'));
+        expect(onModeChange).toHaveBeenCalled();
+        fireEvent.click(screen.getByText('Advanced'));
         expect(onModeChange).toHaveBeenCalled();
     });
 
@@ -39,29 +39,29 @@ describe('SimpleAdvancedView Component', () => {
         expect(screen.getByText('My Title')).toBeInTheDocument();
     });
 
-    it('should display the simple component by default', () => {
+    it('should display the advanced component by default', () => {
         render(<Default />);
-        expect(screen.getByText('Simple Component')).toBeInTheDocument();
+        expect(screen.getByText('Advanced Component')).toBeInTheDocument();
     });
 
-    it('should open on the advanced view if the initialView is set to Advanced', () => {
-        render(<Default initialView='Advanced' />);
-        expect(screen.getByText('Advanced Component')).toBeInTheDocument();
+    it('should open on the simple view if the initialView is set to Simple', () => {
+        render(<Default initialView='Simple' />);
+        expect(screen.getByText('Simple Component')).toBeInTheDocument();
     });
 
     it('should open on the simple view by default', () => {
         render(<Default />);
-        expect(screen.getByText('Simple Component')).toBeInTheDocument();
+        expect(screen.getByText('Advanced Component')).toBeInTheDocument();
     });
 
     it('should highlight the selected view', () => {
         render(<Default />);
-        expect(screen.getByRole('radio', { name: 'Simple' })).toBeChecked();
+        expect(screen.getByRole('radio', { name: 'Advanced' })).toBeChecked();
+        expect(screen.getByRole('radio', { name: 'Simple' })).not.toBeChecked();
+        fireEvent.click(screen.getByText('Simple'));
         expect(
             screen.getByRole('radio', { name: 'Advanced' })
         ).not.toBeChecked();
-        fireEvent.click(screen.getByText('Advanced'));
-        expect(screen.getByRole('radio', { name: 'Simple' })).not.toBeChecked();
-        expect(screen.getByRole('radio', { name: 'Advanced' })).toBeChecked();
+        expect(screen.getByRole('radio', { name: 'Simple' })).toBeChecked();
     });
 });

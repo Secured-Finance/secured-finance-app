@@ -8,8 +8,15 @@ import {
     setMaturity,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { ONE_PERCENT, Rate, currencyMap } from 'src/utils';
+import {
+    ButtonEvents,
+    ButtonProperties,
+    ONE_PERCENT,
+    Rate,
+    currencyMap,
+} from 'src/utils';
 import { Maturity } from 'src/utils/entities';
+import { trackButtonEvent } from 'src/utils/events';
 
 export const LineChartTab = ({
     rates,
@@ -95,9 +102,14 @@ export const LineChartTab = ({
                     maturityList={maturityList}
                     options={chartOptions}
                     handleChartClick={maturityIndex => {
-                        const { maturity, isPreOrderPeriod } =
+                        const { maturity, label, isPreOrderPeriod } =
                             maturityList[maturityIndex];
                         dispatch(setMaturity(maturity));
+                        trackButtonEvent(
+                            ButtonEvents.TERM_CHANGE,
+                            ButtonProperties.TERM,
+                            label
+                        );
 
                         if (isPreOrderPeriod) {
                             router.push('/itayose');

@@ -1,9 +1,9 @@
 import type { Meta, StoryFn } from '@storybook/react';
-import { within } from '@storybook/testing-library';
+import { screen, userEvent } from '@storybook/testing-library';
 import { RESPONSIVE_PARAMETERS } from 'src/../.storybook/constants';
 import {
     withAppLayout,
-    withEthBalance,
+    withBalance,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import {
@@ -19,7 +19,7 @@ import { Landing } from './Landing';
 export default {
     title: 'Pages/Landing',
     component: Landing,
-    decorators: [withAppLayout, withEthBalance, withWalletProvider],
+    decorators: [withAppLayout, withBalance, withWalletProvider],
     parameters: {
         apolloClient: {
             mocks: [
@@ -48,12 +48,15 @@ ConnectedToWallet.parameters = {
 };
 
 export const AdvancedView = Template.bind({});
-AdvancedView.play = async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    canvas.getByText('Advanced').click();
-    const button = await canvas.findByRole('button', { name: 'DEC22' });
-    button.click();
-    canvas.getByRole('menuitem', { name: 'JUN23' }).click();
+AdvancedView.play = async () => {
+    const advancedBtn = await screen.findByText('Advanced');
+    await userEvent.click(advancedBtn);
+
+    const dec22Btn = await screen.findByRole('button', { name: 'DEC2022' });
+    await userEvent.click(dec22Btn);
+
+    const jun23Btn = await screen.findByRole('menuitem', { name: 'JUN2023' });
+    await userEvent.click(jun23Btn);
 };
 AdvancedView.parameters = {
     connected: true,

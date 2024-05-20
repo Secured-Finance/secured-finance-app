@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 import { useBreakpoint } from 'src/hooks';
-import { ButtonSizes, SvgIcon } from 'src/types';
-import { sizeStyle, variantStyle } from './constants';
-import { ButtonVariants } from './types';
+import { SvgIcon } from 'src/types';
+import { sizeStyle, textStyle, variantStyle } from './constants';
+import { ButtonSizes, ButtonVariants } from './types';
 
 export const Button = ({
     href,
@@ -12,7 +12,7 @@ export const Button = ({
     StartIcon,
     EndIcon,
     variant = ButtonVariants.primary,
-    mobileText, // Added prop to handle button text on mobile
+    mobileText,
     ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement> &
     React.AnchorHTMLAttributes<HTMLAnchorElement> & {
@@ -43,15 +43,15 @@ export const Button = ({
             {...tagProps}
             aria-label={label}
             className={clsx(
-                'flex items-center justify-center border font-semibold disabled:bg-neutral-600 disabled:text-neutral-400',
+                'flex items-center justify-center border font-semibold disabled:border-0 disabled:bg-neutral-600 disabled:text-neutral-400',
                 props?.className,
                 sizeStyle[size],
                 variantStyle[variant],
                 {
                     'text-neutral-50':
-                        variant !== ButtonVariants.primaryBuy &&
-                        variant !== ButtonVariants.tertiaryBuy &&
-                        variant !== ButtonVariants.tertiarySell,
+                        variant === ButtonVariants.primary ||
+                        variant === ButtonVariants.tertiary,
+                    'text-primary-300': variant === ButtonVariants.secondary,
                     'w-full': fullWidth,
                     'w-fit': !fullWidth,
                 }
@@ -63,16 +63,7 @@ export const Button = ({
                     <StartIcon className='h-4 text-white' role='img' />
                 </span>
             )}
-            <p
-                className={clsx('whitespace-nowrap', {
-                    'text-xs': size === ButtonSizes.xs,
-                    'text-sm': size === ButtonSizes.sm,
-                    'text-base':
-                        size === ButtonSizes.md || size === ButtonSizes.lg,
-                })}
-            >
-                {text}
-            </p>
+            <p className={clsx('whitespace-nowrap', textStyle[size])}>{text}</p>
             {EndIcon && (
                 <span className='ml-3'>
                     <EndIcon className='h-4 text-white' role='img' />

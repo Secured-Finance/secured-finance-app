@@ -3,7 +3,12 @@ import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import SFLogo from 'src/assets/img/logo.svg';
 import SFLogoSmall from 'src/assets/img/small-logo.svg';
-import { Button, NavTab, SupportedNetworks } from 'src/components/atoms';
+import {
+    Button,
+    ButtonSizes,
+    NavTab,
+    SupportedNetworks,
+} from 'src/components/atoms';
 import {
     HamburgerMenu,
     MenuPopover,
@@ -15,39 +20,12 @@ import { useBreakpoint, useIsGlobalItayose } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
-import { ButtonSizes } from 'src/types';
 import { getSupportedNetworks } from 'src/utils';
 import { AddressUtils } from 'src/utils/address';
 import { isProdEnv } from 'src/utils/displayUtils';
 import { useAccount } from 'wagmi';
-
-const PRODUCTION_LINKS = [
-    {
-        text: 'Lend / Borrow',
-        link: '/',
-        alternateLinks: ['/advanced', '/global-itayose', '/itayose'],
-        dataCy: 'lending',
-    },
-    {
-        text: 'Markets',
-        link: '/dashboard',
-        dataCy: 'terminal',
-    },
-    {
-        text: 'Portfolio',
-        link: '/portfolio',
-        dataCy: 'history',
-    },
-];
-
-const DEV_LINKS = [
-    ...PRODUCTION_LINKS,
-    {
-        text: 'Faucet',
-        link: '/faucet',
-        dataCy: 'faucet',
-    },
-];
+import { TradingDropdown } from './TradingDropdown';
+import { DEV_LINKS, PRODUCTION_LINKS } from './constants';
 
 const HeaderMessage = ({
     chainId,
@@ -67,8 +45,11 @@ const HeaderMessage = ({
                 </div>
             );
         } else if (
-            getSupportedNetworks().find(n => n.id === chainId)?.testnet
+            getSupportedNetworks().find(n => n.id === chainId)?.testnet ||
+            getSupportedNetworks().find(n => n.id === chainId)?.id === 314_159
         ) {
+            // NOTE: 314_159 is a testnet chain id but `viem` does not have a testnet flag for it.
+            // So we are checking for the chain id to determine if it is a testnet chain.
             return (
                 <div
                     className='typography-caption-2 w-full bg-horizonBlue p-[1px] text-center text-neutral-8'
@@ -82,10 +63,9 @@ const HeaderMessage = ({
     return <></>;
 };
 
-export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
+const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     const dispatch = useDispatch();
     const isMobile = useBreakpoint('tablet');
-    const isDesktop = useBreakpoint('desktop');
 
     const { address, isConnected } = useAccount();
     const securedFinance = useSF();
@@ -111,42 +91,28 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
 
     const LINKS = isProduction ? PRODUCTION_LINKS : DEV_LINKS;
 
-    let buttonSize = ButtonSizes.xs;
-
-    if (!isMobile) {
-        buttonSize = ButtonSizes.md;
-    }
-
-    if (!isDesktop) {
-        buttonSize = ButtonSizes.lg;
-    }
-
     return (
         <div className='relative'>
             <HeaderMessage chainId={currentChainId} chainError={chainError} />
             <nav
                 data-cy='header'
-                className='grid h-[4.5rem] w-full grid-flow-col items-center border-b border-neutral-1 px-6 py-[1.375rem] tablet:px-5 tablet:py-0 laptop:grid-flow-col desktop:h-20'
+                className='grid h-14 w-full grid-flow-col bg-neutral-800 px-5 tablet:h-[72px] laptop:h-20 laptop:grid-flow-col'
             >
-                <div className='col-span-2 flex h-full flex-row items-center gap-3 tablet:gap-4 desktop:gap-6'>
-                    <Link href='/' passHref>
-                        <a
-                            href='_'
-                            className='flex items-center tablet:h-10 tablet:border-r tablet:border-neutral-800 tablet:pr-4 desktop:pr-6'
-                        >
-                            <SFLogo className='hidden tablet:flex tablet:h-[15px] tablet:w-[150px] desktop:h-5 desktop:w-[200px]' />
-                            <SFLogoSmall className='inline h-7 w-7 tablet:hidden' />
-                        </a>
+                <div className='col-span-2 flex flex-row items-center gap-8 desktop:gap-12'>
+                    <Link href='/'>
+                        <SFLogo className='hidden tablet:inline tablet:h-[15px] tablet:w-[150px] desktop:h-5 desktop:w-[200px]' />
+                        <SFLogoSmall className='inline h-7 w-7 tablet:hidden' />
                     </Link>
                     {showNavigation && (
                         <div className='hidden h-full flex-row laptop:flex'>
+                            <TradingDropdown />
                             {LINKS.map(link => (
                                 <div key={link.text} className='h-full w-full'>
                                     <ItemLink
                                         text={link.text}
                                         dataCy={link.dataCy}
                                         link={link.link}
-                                        alternateLinks={link?.alternateLinks}
+                                        // alternateLinks={link?.alternateLinks}
                                     />
                                 </div>
                             ))}
@@ -171,8 +137,7 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                         </>
                     ) : (
                         <Button
-                            size={buttonSize}
-                            className='mr-1 tablet:mr-0'
+                            size={isMobile ? ButtonSizes.sm : ButtonSizes.lg}
                             data-cy='wallet'
                             data-testid='connect-wallet'
                             onClick={() => dispatch(setWalletDialogOpen(true))}
@@ -215,10 +180,15 @@ const ItemLink = ({
         );
     };
     return (
-        <Link href={link} className='h-full' passHref>
-            <a className='h-full' href='_' data-cy={dataCy.toLowerCase()}>
-                <NavTab text={text} active={useCheckActive()} />
-            </a>
+        <Link
+            href={link}
+            className='h-full'
+            passHref
+            data-cy={dataCy.toLowerCase()}
+        >
+            <NavTab text={text} active={useCheckActive()} />
         </Link>
     );
 };
+
+export default Header;

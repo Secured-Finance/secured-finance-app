@@ -1,25 +1,27 @@
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import { Landing } from 'src/components/pages';
 import { useIsGlobalItayose, useIsMarketTerminated } from 'src/hooks';
 
 const Advanced = () => {
-    const { data: isTerminated, isLoading: isLoadingMarketTerminated } =
+    const { data: isTerminated, isPending: isPendingMarketTerminated } =
         useIsMarketTerminated();
 
-    const { data: isGlobalItayose, isLoading: isLoadingGlobalItayose } =
+    const { data: isGlobalItayose, isPending: isPendingGlobalItayose } =
         useIsGlobalItayose();
 
-    if (isLoadingMarketTerminated || isLoadingGlobalItayose) {
+    const router = useRouter();
+
+    if (isPendingMarketTerminated || isPendingGlobalItayose) {
         return null;
     }
 
     if (isTerminated) {
-        Router.push('/emergency');
+        router.push('/emergency');
         return null;
     }
 
     if (isGlobalItayose) {
-        Router.push('/global-itayose');
+        router.push('/global-itayose');
         return null;
     }
 
