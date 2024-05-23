@@ -3,19 +3,21 @@ import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import { ArrowUpIcon } from '@heroicons/react/24/solid';
 import clsx from 'clsx';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { HTMLAttributes, Ref, forwardRef, useState } from 'react';
 import Burger from 'src/assets/img/burger.svg';
 import SFLogoSmall from 'src/assets/img/small-logo.svg';
-import { Closable } from 'src/components/templates';
+import { CloseButton } from 'src/components/atoms';
+import { TRADING_LINKS } from 'src/components/organisms';
 import { LinkList } from 'src/utils';
 import { UrlObject } from 'url';
 
-const mobileLinkClassName =
-    'text-[1.25rem] font-semibold -tracking-[0.0125rem] text-primary-50';
-
 const NextLink = forwardRef(
     (
-        props: HTMLAttributes<HTMLAnchorElement> & { href: string | UrlObject },
+        props: HTMLAttributes<HTMLAnchorElement> & {
+            href: string | UrlObject;
+            target?: string;
+        },
         ref: Ref<HTMLAnchorElement>
     ) => {
         const { href, children, ...rest } = props;
@@ -29,18 +31,17 @@ const NextLink = forwardRef(
 NextLink.displayName = 'NextLink';
 
 const MenuItemLink = ({ text, link }: { text: string; link: string }) => {
+    const router = useRouter();
+    const isActive = router.pathname === link;
+
     return (
         <Menu.Item>
-            {({ active }) => (
+            {() => (
                 <NextLink
                     href={link}
                     className={clsx(
-                        'flex w-full items-center justify-start whitespace-nowrap px-2 py-2 text-center',
-                        mobileLinkClassName,
-                        {
-                            'laptop:text-primary-8 via-[#4A5BAF1F] text-primary-300 laptop:border-l-4 laptop:border-starBlue laptop:bg-gradient-to-r laptop:from-[#6A76B159] laptop:to-[#394DAE00]':
-                                active,
-                        }
+                        'typography-mobile-h-6 flex w-full items-center justify-start whitespace-nowrap px-2 py-1.5 text-center',
+                        { underline: isActive }
                     )}
                 >
                     {text}
@@ -50,24 +51,30 @@ const MenuItemLink = ({ text, link }: { text: string; link: string }) => {
     );
 };
 
-const MobileItemLink = ({ text, href }: { text: string; href: string }) => {
+const MobileItemLink = ({
+    text,
+    href,
+    target,
+}: {
+    text: string;
+    href: string;
+    target?: string;
+}) => {
+    const router = useRouter();
+    const isActive = router.pathname === href;
     return (
         <Menu.Item>
             {({ active }) => (
-                <a
+                <NextLink
                     className={clsx(
-                        'flex w-full flex-row items-center justify-start gap-3 whitespace-nowrap px-3 py-2 text-center',
-                        mobileLinkClassName,
-                        {
-                            'laptop:rounded-2xl laptop:bg-[#233447] laptop:text-neutral-8':
-                                active,
-                        }
+                        'typography-mobile-h-6 flex w-full flex-row items-center justify-start gap-3 whitespace-nowrap px-3 py-1.5 text-center',
+                        { underline: isActive }
                     )}
                     href={href}
-                    target='_blank'
+                    target={target}
                     rel='noreferrer'
                 >
-                    <p>{text}</p>
+                    {text}
                     <ArrowUpIcon
                         className={clsx(
                             'mt-1 hidden h-4 w-4 rotate-45 text-white laptop:inline',
@@ -77,7 +84,7 @@ const MobileItemLink = ({ text, href }: { text: string; href: string }) => {
                             }
                         )}
                     />
-                </a>
+                </NextLink>
             )}
         </Menu.Item>
     );
@@ -88,14 +95,16 @@ export const HamburgerMenu = ({
 }: {
     links: { label: string; link: string }[];
 }) => {
-    const [showMore, setShowMore] = useState(false);
+    const [showMore, setShowMore] = useState<boolean>(false);
+    const [showTradingSublinks, setShowTradingSublinks] =
+        useState<boolean>(false);
 
     return (
         <Menu>
             {({ open, close }) => (
                 <>
                     <Menu.Button aria-label='Hamburger Menu'>
-                        <Burger className='h-6 w-6' />
+                        <Burger className='h-6 w-6 text-neutral-400' />
                     </Menu.Button>
                     {open && (
                         <div className='fixed inset-0 z-40 hidden bg-neutral-800 opacity-50 tablet:block' />
@@ -111,72 +120,106 @@ export const HamburgerMenu = ({
                     >
                         <Menu.Items
                             as='div'
-                            className={clsx(
-                                'flex h-screen w-full flex-col gap-8 overflow-y-auto bg-neutral-900 p-4 text-neutral-4'
-                            )}
+                            className='flex h-screen w-full flex-col gap-[26px] overflow-y-auto bg-neutral-900 p-4 text-neutral-4'
                         >
-                            <Closable onClose={close}>
-                                <div className='fixed tablet:mt-1'>
-                                    <SFLogoSmall className='h-5 w-[22.75px]' />
-                                </div>
-                                <div className='w-full flex-col items-start'>
-                                    {links.map(link => (
-                                        <MenuItemLink
-                                            key={link.label}
-                                            text={link.label}
-                                            link={link.link}
-                                        />
-                                    ))}
-
-                                    <Menu.Item
-                                        as='div'
+                            <div className='flex items-center justify-between'>
+                                <SFLogoSmall className='h-5 w-[22.75px]' />
+                                {/* TODO: handle close button height + width */}
+                                <CloseButton onClick={close} />
+                            </div>
+                            <div className='w-full flex-col items-start text-primary-50'>
+                                <Menu.Item
+                                    as='div'
+                                    className='typography-mobile-h-6 flex w-full items-center'
+                                >
+                                    <button
+                                        onClick={e => {
+                                            e.preventDefault();
+                                            setShowTradingSublinks(
+                                                !showTradingSublinks
+                                            );
+                                        }}
+                                        aria-label='Trading'
                                         className={clsx(
-                                            'flex w-full items-center',
-                                            mobileLinkClassName
+                                            'flex items-center justify-between gap-2 px-2 py-1.5 text-center focus:outline-none'
                                         )}
                                     >
-                                        {({ active }) => (
-                                            <button
-                                                onClick={e => {
-                                                    e.preventDefault();
-                                                    setShowMore(!showMore);
-                                                }}
-                                                aria-label='Show More'
+                                        {TRADING_LINKS.text}
+                                        <ChevronRightIcon
+                                            className={clsx(
+                                                'relative top-[1px] inline h-6 w-6',
+                                                {
+                                                    'rotate-90':
+                                                        showTradingSublinks,
+                                                }
+                                            )}
+                                        />
+                                    </button>
+                                </Menu.Item>
+
+                                {showTradingSublinks && (
+                                    <div className='w-full px-4'>
+                                        {TRADING_LINKS.links.map(link => (
+                                            <MobileItemLink
+                                                key={link.text}
+                                                text={link.text}
+                                                href={link.link}
+                                            />
+                                        ))}
+                                    </div>
+                                )}
+
+                                {links.map(link => (
+                                    <MenuItemLink
+                                        key={link.label}
+                                        text={link.label}
+                                        link={link.link}
+                                    />
+                                ))}
+
+                                <Menu.Item
+                                    as='div'
+                                    className={clsx(
+                                        'typography-mobile-h-6 flex w-full items-center'
+                                    )}
+                                >
+                                    {() => (
+                                        <button
+                                            onClick={e => {
+                                                e.preventDefault();
+                                                setShowMore(!showMore);
+                                            }}
+                                            aria-label='Show More'
+                                            className={clsx(
+                                                'flex items-center justify-between gap-2 px-2 py-2 text-center focus:outline-none'
+                                            )}
+                                        >
+                                            More
+                                            <ChevronRightIcon
                                                 className={clsx(
-                                                    'flex items-center justify-between gap-2 px-2 py-2 text-center focus:outline-none',
+                                                    'relative top-[1px] inline h-6 w-6',
                                                     {
-                                                        'laptop:border-l-4 laptop:border-starBlue laptop:bg-gradient-to-r laptop:from-[#6A76B159] laptop:via-[#4A5BAF1F] laptop:to-[#394DAE00] laptop:text-neutral-8':
-                                                            active,
+                                                        'rotate-90': showMore,
                                                     }
                                                 )}
-                                            >
-                                                More
-                                                <ChevronRightIcon
-                                                    className={clsx(
-                                                        'relative top-[1px] inline h-6 w-6',
-                                                        {
-                                                            'rotate-90':
-                                                                showMore,
-                                                        }
-                                                    )}
-                                                />
-                                            </button>
-                                        )}
-                                    </Menu.Item>
-
-                                    {showMore && (
-                                        <div className='w-full px-4'>
-                                            {LinkList.map(link => (
-                                                <MobileItemLink
-                                                    key={link.text}
-                                                    text={link.text}
-                                                    href={link.href}
-                                                />
-                                            ))}
-                                        </div>
+                                            />
+                                        </button>
                                     )}
-                                </div>
-                            </Closable>
+                                </Menu.Item>
+
+                                {showMore && (
+                                    <div className='w-full px-4'>
+                                        {LinkList.map(link => (
+                                            <MobileItemLink
+                                                key={link.text}
+                                                text={link.text}
+                                                href={link.href}
+                                                target='_blank'
+                                            />
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
                         </Menu.Items>
                     </Transition>
                 </>

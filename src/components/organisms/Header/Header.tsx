@@ -96,7 +96,7 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
             <HeaderMessage chainId={currentChainId} chainError={chainError} />
             <nav
                 data-cy='header'
-                className='grid h-14 w-full grid-flow-col bg-neutral-800 px-5 tablet:h-[72px] laptop:h-20 laptop:grid-flow-col'
+                className='grid h-14 w-full grid-flow-col bg-neutral-800 px-4 tablet:h-[72px] tablet:px-5 laptop:h-20 laptop:grid-flow-col'
             >
                 <div className='col-span-2 flex flex-row items-center gap-8 desktop:gap-12'>
                     <Link href='/'>
@@ -112,7 +112,6 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                                         text={link.text}
                                         dataCy={link.dataCy}
                                         link={link.link}
-                                        // alternateLinks={link?.alternateLinks}
                                     />
                                 </div>
                             ))}
@@ -120,7 +119,7 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                         </div>
                     )}
                 </div>
-                <div className='col-span-2 flex flex-row items-center justify-end gap-2 tablet:gap-3 laptop:col-span-1 laptop:gap-4 desktop:gap-5'>
+                <div className='col-span-2 flex flex-row items-center justify-end gap-2 laptop:col-span-1 laptop:gap-2.5'>
                     {isConnected && address ? (
                         <>
                             <NetworkSelector networkName={'Unknown'} />

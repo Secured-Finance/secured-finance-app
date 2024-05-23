@@ -109,7 +109,7 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
                 data-cy='network-selector-button'
                 aria-label='Network Selector Button'
                 className={clsx(
-                    'flex items-center gap-2 rounded-[6px] bg-neutral-800 p-2 ring-1 ring-neutral-500 focus:outline-none tablet:rounded-xl tablet:p-3 tablet:ring-[1.5px]',
+                    'flex items-center gap-2 rounded-lg bg-neutral-800 p-2 ring-1 ring-neutral-500 focus:outline-none tablet:rounded-xl tablet:p-3 tablet:ring-[1.5px]',
                     {
                         'pr-2': !selectedNetwork,
                     }
