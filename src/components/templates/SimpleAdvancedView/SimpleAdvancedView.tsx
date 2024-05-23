@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { ViewType } from 'src/components/atoms';
 import { Page } from 'src/components/templates';
 
@@ -13,9 +12,8 @@ export const SimpleAdvancedView = ({
     initialView: ViewType;
     pageName?: string;
 }) => {
-    const [view] = useState<ViewType>(initialView);
-
-    const component = view === 'Simple' ? simpleComponent : advanceComponent;
+    const component =
+        initialView === 'Simple' ? simpleComponent : advanceComponent;
 
     return <Page name={pageName}>{component}</Page>;
 };
