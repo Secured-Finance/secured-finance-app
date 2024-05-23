@@ -1,6 +1,5 @@
 import { Menu, Transition } from '@headlessui/react';
 import { ChevronRightIcon } from '@heroicons/react/20/solid';
-import { ArrowUpIcon } from '@heroicons/react/24/solid';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -64,28 +63,17 @@ const MobileItemLink = ({
     const isActive = router.pathname === href;
     return (
         <Menu.Item>
-            {({ active }) => (
-                <NextLink
-                    className={clsx(
-                        'typography-mobile-h-6 flex w-full flex-row items-center justify-start gap-3 whitespace-nowrap px-3 py-1.5 text-center',
-                        { underline: isActive }
-                    )}
-                    href={href}
-                    target={target}
-                    rel='noreferrer'
-                >
-                    {text}
-                    <ArrowUpIcon
-                        className={clsx(
-                            'mt-1 hidden h-4 w-4 rotate-45 text-white laptop:inline',
-                            {
-                                inline: active,
-                                hidden: !active,
-                            }
-                        )}
-                    />
-                </NextLink>
-            )}
+            <NextLink
+                className={clsx(
+                    'typography-mobile-h-6 flex w-full flex-row items-center justify-start gap-3 whitespace-nowrap px-3 py-1.5 text-center',
+                    { underline: isActive }
+                )}
+                href={href}
+                target={target}
+                rel='noreferrer'
+            >
+                {text}
+            </NextLink>
         </Menu.Item>
     );
 };
@@ -124,7 +112,6 @@ export const HamburgerMenu = ({
                         >
                             <div className='flex items-center justify-between'>
                                 <SFLogoSmall className='h-5 w-[22.75px]' />
-                                {/* TODO: handle close button height + width */}
                                 <CloseButton onClick={close} />
                             </div>
                             <div className='w-full flex-col items-start text-primary-50'>

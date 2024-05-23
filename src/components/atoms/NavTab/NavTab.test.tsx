@@ -7,11 +7,11 @@ const { Default, MarketDashboard } = composeStories(stories);
 describe('NavTab component', () => {
     it('should render an active NavTab', () => {
         render(<Default />);
-        const textElement = screen.getByText('Lend / Borrow');
+        const textElement = screen.getByText('Trading');
         expect(textElement.parentNode).toHaveClass(
             'bg-gradient-to-b from-tabGradient-2 to-tabGradient-1'
         );
-        expect(screen.getByTestId('Lend / Borrow-tab')).toBeInTheDocument();
+        expect(screen.getByTestId('Trading-tab')).toBeInTheDocument();
     });
 
     it('should render an inactive NavTab', () => {
