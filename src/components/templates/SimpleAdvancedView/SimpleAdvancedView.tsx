@@ -6,7 +6,6 @@ export const SimpleAdvancedView = ({
     simpleComponent,
     advanceComponent,
     initialView = 'Advanced',
-    // onModeChange,
     pageName,
 }: {
     simpleComponent: React.ReactNode;
