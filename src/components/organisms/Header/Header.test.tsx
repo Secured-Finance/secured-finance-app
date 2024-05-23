@@ -1,6 +1,6 @@
 import { composeStories } from '@storybook/react';
 import mockRouter from 'next-router-mock';
-import { fireEvent, render, screen } from 'src/test-utils.js';
+import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './Header.stories';
 
 const { Primary } = composeStories(stories);
@@ -12,8 +12,6 @@ jest.mock(
             children
 );
 
-jest.mock('next/router', () => jest.requireActual('next-router-mock'));
-
 describe('Header component', () => {
     it('should render the header', () => {
         mockRouter.push('/');
@@ -22,6 +20,19 @@ describe('Header component', () => {
         expect(screen.getByText('Markets')).toBeInTheDocument();
         expect(screen.getByText('Portfolio')).toBeInTheDocument();
         expect(screen.getByText('Connect Wallet')).toBeInTheDocument();
+    });
+
+    it('should open a submenu if Trading tab is clicked', async () => {
+        mockRouter.push('/');
+        render(<Primary />);
+
+        const tradingTab = screen.getByTestId('Trading-tab');
+        fireEvent.click(tradingTab);
+
+        await waitFor(() => {
+            expect(screen.getByText('Simple')).toBeInTheDocument();
+            expect(screen.getByText('Advanced')).toBeInTheDocument();
+        });
     });
 
     it('should highlight the landing page by default page', () => {
@@ -55,7 +66,7 @@ describe('Header component', () => {
     });
 
     it('should highlight the landing page when on advanced page', () => {
-        mockRouter.push('/advanced');
+        mockRouter.push('/');
 
         render(<Primary />);
         const textElement = screen.getByText('Trading');
@@ -106,16 +117,5 @@ describe('Header component', () => {
         });
         expect(screen.queryByTestId('testnet-info')).not.toBeInTheDocument();
         expect(screen.queryByTestId('testnet-alert')).not.toBeInTheDocument();
-    });
-
-    it('should open a submenu if Trading tab is clicked', () => {
-        mockRouter.push('/');
-        render(<Primary />);
-        const textElement = screen.getByText('Trading');
-
-        fireEvent.click(textElement);
-
-        expect(screen.getByText('Simple')).toBeInTheDocument();
-        expect(screen.getByText('Advanced')).toBeInTheDocument();
     });
 });

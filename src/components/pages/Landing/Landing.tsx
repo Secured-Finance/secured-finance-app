@@ -3,7 +3,7 @@ import { getUTCMonthYear } from '@secured-finance/sf-core';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import Link from 'next/link';
 import { useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { ViewType } from 'src/components/atoms';
 import {
     Alert,
@@ -30,14 +30,8 @@ import {
     useMaturityOptions,
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
-import {
-    resetUnitPrice,
-    selectLandingOrderForm,
-    setLastView,
-    setOrderType,
-} from 'src/store/landingOrderForm';
+import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
@@ -54,12 +48,11 @@ const ITAYOSE_PERIOD = 60 * 60 * 1000; // 1 hour in milli-seconds
 export const Landing = ({ view }: { view?: ViewType }) => {
     const { address } = useAccount();
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
-    const { currency, side, maturity, lastView } = useSelector(
-        (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
+    const { currency, side, maturity } = useSelector((state: RootState) =>
+        selectLandingOrderForm(state.landingOrderForm)
     );
     const { data: lendingMarkets = baseContracts } = useLendingMarkets();
     const lendingContracts = lendingMarkets[currency];
-    const dispatch = useDispatch();
 
     const { data: collateralBook = emptyCollateralBook } =
         useCollateralBook(address);
@@ -100,14 +93,13 @@ export const Landing = ({ view }: { view?: ViewType }) => {
 
     return (
         <SimpleAdvancedView
-            title='OTC Lending'
             simpleComponent={
                 <WithBanner
                     ccy={currency}
                     market={itayoseMarket}
                     delistedCurrencySet={delistedCurrencySet}
                 >
-                    <div className='flex flex-row items-center justify-center px-3 tablet:px-5 laptop:px-0'>
+                    <div className='mt-6 flex flex-row items-center justify-center px-3 tablet:px-5 laptop:px-0'>
                         <LendingCard
                             collateralBook={collateralBook}
                             maturitiesOptionList={maturityOptionList}
@@ -139,17 +131,7 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                     />
                 </WithBanner>
             }
-            initialView={view ?? lastView}
-            onModeChange={v => {
-                dispatch(setLastView(v));
-                if (v === 'Simple') {
-                    dispatch(setOrderType(OrderType.MARKET));
-                    dispatch(resetUnitPrice());
-                } else if (v === 'Advanced') {
-                    dispatch(setOrderType(OrderType.LIMIT));
-                    dispatch(resetUnitPrice());
-                }
-            }}
+            initialView={view}
             pageName='lending-page'
         />
     );

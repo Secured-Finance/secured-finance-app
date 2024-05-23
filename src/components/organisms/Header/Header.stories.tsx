@@ -37,6 +37,13 @@ Connected.parameters = {
     connected: true,
 };
 
+export const TradingMenuOpened = Template.bind({});
+TradingMenuOpened.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = await canvas.findByTestId('Trading-tab');
+    await userEvent.click(button);
+};
+
 export const MenuExpanded = Template.bind({});
 MenuExpanded.parameters = {
     chromatic: { viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET] },

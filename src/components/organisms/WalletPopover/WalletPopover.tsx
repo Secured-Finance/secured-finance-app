@@ -100,7 +100,7 @@ export const WalletPopover = ({
                         data-cy='popover-button'
                         aria-label='Wallet Popover Button'
                         className={clsx(
-                            'flex items-center gap-x-1.5 rounded-[6px] bg-neutral-800 px-3 py-2 ring-1 hover:bg-white-10 hover:ring-white-10 focus:outline-none tablet:gap-x-4 tablet:rounded-xl tablet:px-4 tablet:py-3 tablet:ring-[1.5px]',
+                            'flex items-center gap-x-1 rounded-lg bg-neutral-800 py-2 pl-2 pr-1 ring-1 hover:bg-white-10 hover:ring-white-10 focus:outline-none tablet:gap-x-1.5 tablet:rounded-xl tablet:px-4 tablet:py-3 tablet:pl-3 tablet:pr-2 tablet:ring-[1.5px]',
                             {
                                 'bg-white-10 ring-white-10': open,
                                 'ring-neutral-500': !open,
@@ -108,17 +108,15 @@ export const WalletPopover = ({
                         )}
                     >
                         <span>
-                            <MetamaskLogo className='h-4 w-4' />
+                            <MetamaskLogo className='h-3.5 w-3.5 tablet:h-4 tablet:w-4' />
                         </span>
                         <span
-                            className='text-[0.6875rem] leading-4 text-grayScale tablet:text-xs tablet:leading-5'
+                            className='typography-mobile-body-6 tablet:typography-desktop-body-5 text-grayScale'
                             data-cy='wallet-address'
                         >
                             {wallet}
                         </span>
-                        <span className='hidden tablet:inline'>
-                            <ExpandIndicator expanded={open} variant='opaque' />
-                        </span>
+                        <ExpandIndicator expanded={open} variant='solid' />
                     </Popover.Button>
                     <Transition
                         as={Fragment}

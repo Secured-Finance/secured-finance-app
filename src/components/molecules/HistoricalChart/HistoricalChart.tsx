@@ -295,7 +295,7 @@ export function HistoricalChart({
                                 </span>
                                 <div
                                     className={clsx('font-normal', {
-                                        'text-palePurple': key !== 'Change',
+                                        'text-primary-50': key !== 'Change',
                                         'text-nebulaTeal':
                                             key === 'Change' &&
                                             !value.includes('-'),
