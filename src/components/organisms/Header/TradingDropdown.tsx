@@ -3,10 +3,12 @@ import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useIsGlobalItayose } from 'src/hooks';
 import { TRADING_LINKS } from './constants';
 
 export const TradingDropdown = () => {
     const router = useRouter();
+    const { data: isGlobalItayose } = useIsGlobalItayose();
     const { text, links, alternateLinks } = TRADING_LINKS;
 
     const isActive =
@@ -75,7 +77,11 @@ export const TradingDropdown = () => {
                                         })}
                                     >
                                         <Link
-                                            href={tradingLink.link}
+                                            href={
+                                                isGlobalItayose
+                                                    ? '/itayose'
+                                                    : tradingLink.link
+                                            }
                                             className={clsx(
                                                 'flex items-center rounded px-2 py-1 hover:bg-neutral-700'
                                             )}

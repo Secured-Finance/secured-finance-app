@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SFLogo from 'src/assets/img/logo.svg';
 import SFLogoSmall from 'src/assets/img/small-logo.svg';
@@ -15,8 +16,17 @@ import {
     NetworkSelector,
     Settings,
 } from 'src/components/molecules';
-import { WalletDialog, WalletPopover } from 'src/components/organisms';
-import { useBreakpoint, useIsGlobalItayose } from 'src/hooks';
+import {
+    DepositCollateral,
+    WalletDialog,
+    WalletPopover,
+    generateCollateralList,
+} from 'src/components/organisms';
+import {
+    useBreakpoint,
+    useCollateralBalances,
+    useCollateralCurrencies,
+} from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
@@ -66,6 +76,8 @@ const HeaderMessage = ({
 const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     const dispatch = useDispatch();
     const isMobile = useBreakpoint('tablet');
+    const [isOpenDepositModal, setIsOpenDepositModal] =
+        useState<boolean>(false);
 
     const { address, isConnected } = useAccount();
     const securedFinance = useSF();
@@ -77,86 +89,113 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     );
     const isProduction = isProdEnv();
 
-    const { data: isGlobalItayose } = useIsGlobalItayose();
-
-    const landingPage = PRODUCTION_LINKS.find(obj => obj.dataCy === 'lending');
-
-    if (landingPage) {
-        if (isGlobalItayose) {
-            landingPage.link = '/itayose';
-        } else {
-            landingPage.link = '/';
-        }
-    }
-
     const LINKS = isProduction ? PRODUCTION_LINKS : DEV_LINKS;
 
-    return (
-        <div className='relative'>
-            <HeaderMessage chainId={currentChainId} chainError={chainError} />
-            <nav
-                data-cy='header'
-                className='grid h-14 w-full grid-flow-col bg-neutral-800 px-4 tablet:h-[72px] tablet:px-5 laptop:h-20 laptop:grid-flow-col'
-            >
-                <div className='col-span-2 flex flex-row items-center gap-8 desktop:gap-12'>
-                    <Link href='/'>
-                        <SFLogo className='hidden tablet:inline tablet:h-[15px] tablet:w-[150px] desktop:h-5 desktop:w-[200px]' />
-                        <SFLogoSmall className='inline h-7 w-7 tablet:hidden' />
-                    </Link>
-                    {showNavigation && (
-                        <div className='hidden h-full flex-row laptop:flex'>
-                            <TradingDropdown />
-                            {LINKS.map(link => (
-                                <div key={link.text} className='h-full w-full'>
-                                    <ItemLink
-                                        text={link.text}
-                                        dataCy={link.dataCy}
-                                        link={link.link}
-                                    />
-                                </div>
-                            ))}
-                            <MenuPopover />
-                        </div>
-                    )}
-                </div>
-                <div className='col-span-2 flex flex-row items-center justify-end gap-2 laptop:col-span-1 laptop:gap-2.5'>
-                    {isConnected && address ? (
-                        <>
-                            <NetworkSelector networkName={'Unknown'} />
-                            <WalletPopover
-                                wallet={AddressUtils.format(
-                                    address,
-                                    isMobile ? 2 : 6
-                                )}
-                                networkName={
-                                    securedFinance?.config?.network ?? 'Unknown'
-                                }
-                            />
-                            <Settings isProduction={isProduction} />
-                        </>
-                    ) : (
-                        <Button
-                            size={isMobile ? ButtonSizes.sm : ButtonSizes.lg}
-                            data-cy='wallet'
-                            data-testid='connect-wallet'
-                            onClick={() => dispatch(setWalletDialogOpen(true))}
-                        >
-                            Connect Wallet
-                        </Button>
-                    )}
+    const collateralBalances = useCollateralBalances();
 
-                    <div className='flex laptop:hidden'>
-                        <HamburgerMenu
-                            links={LINKS.map(link => ({
-                                label: link.text,
-                                link: link.link,
-                            }))}
-                        />
+    const { data: collateralCurrencies = [] } = useCollateralCurrencies();
+
+    const depositCollateralList = useMemo(
+        () =>
+            generateCollateralList(
+                collateralBalances,
+                false,
+                collateralCurrencies
+            ),
+        [collateralBalances, collateralCurrencies]
+    );
+
+    const btnSize = isMobile ? ButtonSizes.sm : ButtonSizes.lg;
+
+    return (
+        <>
+            <div className='relative'>
+                <HeaderMessage
+                    chainId={currentChainId}
+                    chainError={chainError}
+                />
+                <nav
+                    data-cy='header'
+                    className='grid h-14 w-full grid-flow-col bg-neutral-800 px-4 tablet:h-[72px] tablet:px-5 laptop:h-20 laptop:grid-flow-col'
+                >
+                    <div className='col-span-2 flex flex-row items-center gap-8 desktop:gap-12'>
+                        <Link href='/'>
+                            <SFLogo className='hidden tablet:inline tablet:h-[15px] tablet:w-[150px] desktop:h-5 desktop:w-[200px]' />
+                            <SFLogoSmall className='inline h-7 w-7 tablet:hidden' />
+                        </Link>
+                        {showNavigation && (
+                            <div className='hidden h-full flex-row laptop:flex'>
+                                <TradingDropdown />
+                                {LINKS.map(link => (
+                                    <div
+                                        key={link.text}
+                                        className='h-full w-full'
+                                    >
+                                        <ItemLink
+                                            text={link.text}
+                                            dataCy={link.dataCy}
+                                            link={link.link}
+                                        />
+                                    </div>
+                                ))}
+                                <MenuPopover />
+                            </div>
+                        )}
                     </div>
-                </div>
-                <WalletDialog />
-            </nav>
-        </div>
+                    <div className='col-span-2 flex flex-row items-center justify-end gap-2 laptop:col-span-1 laptop:gap-2.5'>
+                        {isConnected && address ? (
+                            <>
+                                <Button
+                                    size={btnSize}
+                                    onClick={() => setIsOpenDepositModal(true)}
+                                >
+                                    Deposit
+                                </Button>
+                                <NetworkSelector networkName={'Unknown'} />
+                                <WalletPopover
+                                    wallet={AddressUtils.format(
+                                        address,
+                                        isMobile ? 2 : 6
+                                    )}
+                                    networkName={
+                                        securedFinance?.config?.network ??
+                                        'Unknown'
+                                    }
+                                />
+                                <Settings isProduction={isProduction} />
+                            </>
+                        ) : (
+                            <Button
+                                size={btnSize}
+                                data-cy='wallet'
+                                data-testid='connect-wallet'
+                                onClick={() =>
+                                    dispatch(setWalletDialogOpen(true))
+                                }
+                            >
+                                Connect Wallet
+                            </Button>
+                        )}
+
+                        <div className='flex laptop:hidden'>
+                            <HamburgerMenu
+                                links={LINKS.map(link => ({
+                                    label: link.text,
+                                    link: link.link,
+                                }))}
+                            />
+                        </div>
+                    </div>
+                    <WalletDialog />
+                </nav>
+            </div>
+            <DepositCollateral
+                isOpen={isOpenDepositModal}
+                onClose={() => setIsOpenDepositModal(false)}
+                collateralList={depositCollateralList}
+                source={'Header'}
+            />
+        </>
     );
 };
 
