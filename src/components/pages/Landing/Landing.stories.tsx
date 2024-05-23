@@ -49,10 +49,10 @@ ConnectedToWallet.parameters = {
     connected: true,
 };
 
-export const AdvancedView = Template.bind({});
-AdvancedView.parameters = {
+export const AdvancedViewConnected = Template.bind({});
+AdvancedViewConnected.parameters = {
     connected: true,
 };
-AdvancedView.args = {
+AdvancedViewConnected.args = {
     view: 'Advanced',
 };

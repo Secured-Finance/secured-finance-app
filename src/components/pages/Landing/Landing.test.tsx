@@ -8,7 +8,7 @@ import { CurrencySymbol } from 'src/utils';
 import timemachine from 'timemachine';
 import * as stories from './Landing.stories';
 
-const { Default, ConnectedToWallet, AdvancedView } = composeStories(stories);
+const { Default, AdvancedViewConnected } = composeStories(stories);
 
 jest.mock('next/router', () => ({
     useRouter: jest.fn(() => ({
@@ -40,14 +40,6 @@ beforeAll(() => {
 });
 
 describe('Landing Component', () => {
-    // const clickAdvancedButton = () => {
-    //     fireEvent.click(screen.getByText('Advanced'));
-    // };
-
-    // const clickSimpleButton = () => {
-    //     fireEvent.click(screen.getByText('Simple'));
-    // };
-
     const changeInputValue = (label: string, value: string) => {
         const input = screen.getByLabelText(label);
         fireEvent.change(input, { target: { value } });
@@ -85,24 +77,23 @@ describe('Landing Component', () => {
     });
 
     it('should default to limit order type when the user goes to advanced mode', async () => {
-        // waitFor(() => {
-        render(<AdvancedView />, {
-            apolloMocks: Default.parameters?.apolloClient.mocks,
-            preloadedState,
+        waitFor(() => {
+            render(<AdvancedViewConnected />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+                preloadedState,
+            });
         });
-        // });
 
         expect(screen.getByRole('radio', { name: 'Limit' })).toBeChecked();
         expect(screen.getByRole('radio', { name: 'Market' })).not.toBeChecked();
     });
 
-    it.skip('should select the market order type when the user clicks on market tab', async () => {
+    it('should select the market order type when the user clicks on market tab', async () => {
         waitFor(() => {
-            render(<Default />, {
+            render(<AdvancedViewConnected />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
                 preloadedState,
             });
-            // clickAdvancedButton();
         });
 
         expect(screen.getByRole('radio', { name: 'Limit' })).toBeChecked();
@@ -111,15 +102,14 @@ describe('Landing Component', () => {
         expect(screen.getByRole('radio', { name: 'Market' })).toBeChecked();
     });
 
-    describe.skip('Bond Price field', () => {
-        it.skip('should display the best price as bond price when user change to advance mode', async () => {
+    describe('Bond Price field', () => {
+        it('should display the best price as bond price when user gets to advanced mode', async () => {
             await waitFor(() => {
-                render(<Default />, {
+                render(<AdvancedViewConnected />, {
                     apolloMocks: Default.parameters?.apolloClient.mocks,
                     preloadedState,
                 });
             });
-            // clickAdvancedButton();
 
             await waitFor(() =>
                 expect(screen.getByText('DEC2022')).toBeInTheDocument()
@@ -128,14 +118,13 @@ describe('Landing Component', () => {
             assertInputValue('Bond Price', '96.85');
         });
 
-        it.skip('should reset bond price when user changes maturity', async () => {
+        it('should reset bond price when user changes maturity', async () => {
             await waitFor(() => {
-                render(<Default />, {
+                render(<AdvancedViewConnected />, {
                     apolloMocks: Default.parameters?.apolloClient.mocks,
                     preloadedState,
                 });
             });
-            // clickAdvancedButton();
 
             expect(await screen.findByText('DEC2022')).toBeInTheDocument();
 
@@ -152,15 +141,14 @@ describe('Landing Component', () => {
             assertInputValue('Bond Price', '96.83');
         });
 
-        it.skip('should reset bond price to the best price when user changes currency', async () => {
+        it('should reset bond price to the best price when user changes currency', async () => {
             await waitFor(() => {
-                render(<ConnectedToWallet />, {
+                render(<AdvancedViewConnected />, {
                     apolloMocks: Default.parameters?.apolloClient.mocks,
                     preloadedState,
                 });
             });
 
-            // clickAdvancedButton();
             await waitFor(() =>
                 expect(
                     screen.getByRole('button', { name: 'DEC2022' })
@@ -183,60 +171,6 @@ describe('Landing Component', () => {
             assertInputValue('Amount', '1');
             assertInputValue('Bond Price', '96.85');
         }, 8000);
-
-        it.skip('should reset bond price to the best price when user changes mode', async () => {
-            await waitFor(() => {
-                render(<Default />, {
-                    apolloMocks: Default.parameters?.apolloClient.mocks,
-                    preloadedState,
-                });
-            });
-            // clickAdvancedButton();
-
-            expect(await screen.findByText('DEC2022')).toBeInTheDocument();
-
-            assertInputValue('Bond Price', '96.85');
-            changeInputValue('Amount', '1');
-            changeInputValue('Bond Price', '80');
-            // clickSimpleButton();
-            // clickAdvancedButton();
-            expect(await screen.findByText('DEC2022')).toBeInTheDocument();
-
-            assertInputValue('Bond Price', '96.85');
-        });
-    });
-
-    it.skip('should open the landing page with the mode set in the store', async () => {
-        await waitFor(() => {
-            render(<Default />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
-                preloadedState: {
-                    ...preloadedState,
-                    landingOrderForm: {
-                        currency: CurrencySymbol.WFIL,
-                        maturity: 0,
-                        side: OrderSide.BORROW,
-                        amount: '0',
-                        unitPrice: 0,
-                        orderType: OrderType.MARKET,
-                        lastView: 'Advanced',
-                    },
-                },
-            });
-        });
-        expect(screen.getByRole('radio', { name: 'Advanced' })).toBeChecked();
-    });
-
-    it.skip('should save in the store the last view used', async () => {
-        await waitFor(() => {
-            const { store } = render(<Default />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
-                preloadedState,
-            });
-            expect(store.getState().landingOrderForm.lastView).toBe('Simple');
-            // clickAdvancedButton();
-            expect(store.getState().landingOrderForm.lastView).toBe('Advanced');
-        });
     });
 
     it.skip('should filter out non ready markets', async () => {
@@ -256,12 +190,11 @@ describe('Landing Component', () => {
 
     it.skip('should change the amount slider when amount input changes and user has balance', async () => {
         await waitFor(() => {
-            render(<ConnectedToWallet />, {
+            render(<AdvancedViewConnected />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
                 preloadedState,
             });
         });
-        // clickAdvancedButton();
         expect(await screen.findByText('DEC2022')).toBeInTheDocument();
         expect(screen.getByRole('slider')).toHaveValue('0');
         fireEvent.click(screen.getByRole('radio', { name: 'Lend' }));
@@ -283,12 +216,11 @@ describe('Landing Component', () => {
 
     it.skip('should not change the amount slider when amount input changes and user do not have balance', async () => {
         await waitFor(() => {
-            render(<ConnectedToWallet />, {
+            render(<AdvancedViewConnected />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
                 preloadedState,
             });
         });
-        // clickAdvancedButton();
         expect(await screen.findByText('DEC2022')).toBeInTheDocument();
         expect(screen.getByRole('slider')).toHaveValue('0');
         waitFor(() => {
@@ -336,7 +268,7 @@ describe('Landing Component', () => {
         });
     });
 
-    it.skip('should render the itayose banner for opening of a new market', async () => {
+    it('should render the itayose banner for opening of a new market', async () => {
         await waitFor(() => {
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,

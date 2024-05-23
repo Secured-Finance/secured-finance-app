@@ -5,12 +5,12 @@ import { Page } from 'src/components/templates';
 export const SimpleAdvancedView = ({
     simpleComponent,
     advanceComponent,
-    initialView = 'Advanced',
+    initialView,
     pageName,
 }: {
     simpleComponent: React.ReactNode;
     advanceComponent: React.ReactNode;
-    initialView?: ViewType;
+    initialView: ViewType;
     pageName?: string;
 }) => {
     const [view] = useState<ViewType>(initialView);
