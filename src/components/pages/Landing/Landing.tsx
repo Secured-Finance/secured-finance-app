@@ -15,7 +15,7 @@ import {
     LendingCard,
     YieldChart,
 } from 'src/components/organisms';
-import { SimpleAdvancedView } from 'src/components/templates';
+import { Page } from 'src/components/templates';
 import {
     LendingMarket,
     RateType,
@@ -108,13 +108,13 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
     }, [view, dispatch]);
 
     return (
-        <SimpleAdvancedView
-            simpleComponent={
-                <WithBanner
-                    ccy={currency}
-                    market={itayoseMarket}
-                    delistedCurrencySet={delistedCurrencySet}
-                >
+        <Page name='lending-page'>
+            <WithBanner
+                ccy={currency}
+                market={itayoseMarket}
+                delistedCurrencySet={delistedCurrencySet}
+            >
+                {view === 'Simple' ? (
                     <div className='mt-6 flex flex-row items-center justify-center px-3 tablet:px-5 laptop:px-0'>
                         <LendingCard
                             collateralBook={collateralBook}
@@ -131,25 +131,16 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
                             }
                         />
                     </div>
-                </WithBanner>
-            }
-            advanceComponent={
-                <WithBanner
-                    ccy={currency}
-                    market={itayoseMarket}
-                    delistedCurrencySet={delistedCurrencySet}
-                >
+                ) : (
                     <AdvancedLending
                         collateralBook={collateralBook}
                         maturitiesOptionList={maturityOptionList}
                         marketPrice={marketPrice}
                         delistedCurrencySet={delistedCurrencySet}
                     />
-                </WithBanner>
-            }
-            initialView={view}
-            pageName='lending-page'
-        />
+                )}
+            </WithBanner>
+        </Page>
     );
 };
 
