@@ -2,8 +2,8 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { getUTCMonthYear } from '@secured-finance/sf-core';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import Link from 'next/link';
-import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { ViewType } from 'src/components/atoms';
 import {
     Alert,
@@ -30,8 +30,13 @@ import {
     useMaturityOptions,
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
-import { selectLandingOrderForm } from 'src/store/landingOrderForm';
+import {
+    resetUnitPrice,
+    selectLandingOrderForm,
+    setOrderType,
+} from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
+import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
@@ -45,7 +50,8 @@ export const emptyOptionList = [
 
 const ITAYOSE_PERIOD = 60 * 60 * 1000; // 1 hour in milli-seconds
 
-export const Landing = ({ view }: { view?: ViewType }) => {
+export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
+    const dispatch = useDispatch();
     const { address } = useAccount();
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
     const { currency, side, maturity } = useSelector((state: RootState) =>
@@ -90,6 +96,16 @@ export const Landing = ({ view }: { view?: ViewType }) => {
         'dailyVolumes',
         !isSubgraphSupported
     );
+
+    useEffect(() => {
+        if (view === 'Simple') {
+            dispatch(setOrderType(OrderType.MARKET));
+            dispatch(resetUnitPrice());
+        } else if (view === 'Advanced') {
+            dispatch(setOrderType(OrderType.LIMIT));
+            dispatch(resetUnitPrice());
+        }
+    }, [view, dispatch]);
 
     return (
         <SimpleAdvancedView
