@@ -14,7 +14,7 @@ export const variantStyle: { [key in ButtonVariants]: string } = {
 
 export const sizeStyle: { [key in ButtonSizes]: string } = {
     [ButtonSizes.xs]: 'rounded-md px-2.5 py-1',
-    [ButtonSizes.sm]: 'rounded-lg px-3 py-1.5',
+    [ButtonSizes.sm]: 'rounded-lg px-3 py-[7px]',
     [ButtonSizes.md]: 'rounded-[0.625rem] px-3.5 py-2.5',
     [ButtonSizes.lg]: 'rounded-xl py-3 px-5',
 };
