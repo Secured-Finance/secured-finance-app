@@ -7,6 +7,8 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AppProps } from 'next/app';
 import dynamic from 'next/dynamic';
 
+import { EIP6963Connector } from '@web3modal/wagmi';
+import { createWeb3Modal } from '@web3modal/wagmi/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Provider, useSelector } from 'react-redux';
@@ -14,17 +16,50 @@ import 'src/bigIntPatch';
 import { Footer } from 'src/components/atoms';
 import { Layout } from 'src/components/templates';
 import SecuredFinanceProvider from 'src/contexts/SecuredFinanceProvider';
-import { Web3Modal } from 'src/contexts/Web3Modal';
 import store from 'src/store';
 import { selectNetworkName } from 'src/store/blockchain';
 import { RootState } from 'src/store/types';
 import { getAmplitudeApiKey } from 'src/utils';
+import { WagmiConfig, configureChains, createConfig } from 'wagmi';
+
+import {
+    getSupportedChainIds,
+    getSupportedNetworks,
+    getWalletConnectId,
+} from 'src/utils';
+import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
+import { InjectedConnector } from 'wagmi/connectors/injected';
+import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
+import { alchemyProvider } from 'wagmi/providers/alchemy';
+import { publicProvider } from 'wagmi/providers/public';
 
 import '../assets/css/index.css';
 
 const Header = dynamic(() => import('src/components/organisms/Header/Header'), {
     ssr: false,
 });
+
+const projectId = getWalletConnectId();
+
+const chainIds = getSupportedChainIds();
+const networks = getSupportedNetworks().filter(chain =>
+    chainIds.includes(chain.id)
+);
+
+const { chains, publicClient } = configureChains(networks, [
+    alchemyProvider({
+        apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ?? '',
+    }),
+    publicProvider(),
+]);
+
+const metadata = {
+    name: 'Secured Finance',
+    description:
+        'A DeFi Trading Platform utilizing Orderbook-based Rates, facilitating the lending and borrowing of digital assets for constructing yield curves within the DeFi ecosystem.',
+    url: 'https://app.secured.finance',
+    icons: ['https://avatars.githubusercontent.com/u/68607377'],
+};
 
 const queryClient = new QueryClient();
 
@@ -40,6 +75,42 @@ if (typeof window !== 'undefined') {
         logLevel: amplitude.Types.LogLevel.None,
     });
 }
+
+const wagmiConfig = createConfig({
+    autoConnect: true,
+    connectors: [
+        new WalletConnectConnector({
+            chains,
+            options: {
+                projectId,
+                showQrModal: false,
+                metadata,
+                qrModalOptions: {
+                    themeVariables: {
+                        '--wcm-font-family':
+                            "'Suisse International', sans-serif",
+                        '--wcm-accent-color': '#002133',
+                        '--wcm-background-color': '#5162FF',
+                    },
+                },
+            },
+        }),
+        new EIP6963Connector({ chains }),
+        new InjectedConnector({ chains, options: { shimDisconnect: true } }),
+        new CoinbaseWalletConnector({
+            chains,
+            options: { appName: metadata.name },
+        }),
+    ],
+    publicClient,
+});
+
+createWeb3Modal({
+    wagmiConfig,
+    projectId,
+    chains,
+    enableAnalytics: true,
+});
 
 function App({ Component, pageProps }: AppProps) {
     const router = useRouter();
@@ -81,9 +152,9 @@ const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     return (
         <QueryClientProvider client={queryClient}>
             <GraphClientProvider network={currentNetwork}>
-                <Web3Modal>
+                <WagmiConfig config={wagmiConfig}>
                     <SecuredFinanceProvider>{children}</SecuredFinanceProvider>
-                </Web3Modal>
+                </WagmiConfig>
             </GraphClientProvider>
             <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
