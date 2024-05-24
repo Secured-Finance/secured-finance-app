@@ -1,16 +1,13 @@
 import { reset as resetTracking } from '@amplitude/analytics-browser';
 import { Popover, Transition } from '@headlessui/react';
+import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Fragment, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AlertTriangle from 'src/assets/icons/alert-triangle.svg';
 import MetamaskLogo from 'src/assets/img/metamask-fox.svg';
-import {
-    ExpandIndicator,
-    Separator,
-    SupportedNetworks,
-} from 'src/components/atoms';
+import { Separator, SupportedNetworks } from 'src/components/atoms';
 import { Tooltip } from 'src/components/templates';
 import { RootState } from 'src/store/types';
 import { resetWallet } from 'src/store/wallet';
@@ -116,7 +113,14 @@ export const WalletPopover = ({
                         >
                             {wallet}
                         </span>
-                        <ExpandIndicator expanded={open} variant='solid' />
+                        <ChevronDownIcon
+                            className={clsx(
+                                'h-3.5 w-3.5 text-neutral-400 laptop:h-4 laptop:w-4',
+                                {
+                                    'rotate-180': open,
+                                }
+                            )}
+                        />
                     </Popover.Button>
                     <Transition
                         as={Fragment}
