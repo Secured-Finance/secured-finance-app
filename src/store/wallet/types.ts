@@ -1,9 +1,9 @@
 export interface WalletsStore {
     address: string;
-    ethBalance: number;
+    balance: number;
 }
 
 export const defaultWallet: WalletsStore = {
     address: '',
-    ethBalance: 0,
+    balance: 0,
 };

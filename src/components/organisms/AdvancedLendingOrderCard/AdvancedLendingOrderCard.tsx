@@ -41,10 +41,12 @@ import {
     ZERO_BI,
     amountFormatterFromBase,
     amountFormatterToBase,
+    currencyMap,
     divide,
     formatLoanValue,
     generateWalletSourceInformation,
     getAmountValidation,
+    multiply,
     ordinaryFormat,
     prefixTilde,
     usdFormat,
@@ -334,7 +336,7 @@ export function AdvancedLendingOrderCard({
                 optionsStyles={[
                     {
                         bgColorActive: 'bg-nebulaTeal',
-                        textClassActive: 'text-secondary3 font-semibold',
+                        textClassActive: 'text-secondary-300 font-semibold',
                         gradient: {
                             from: 'from-tabGradient-4',
                             to: 'to-tabGradient-3',
@@ -472,21 +474,34 @@ export function AdvancedLendingOrderCard({
                         />
                         <OrderDisplayBox
                             field='Future Value'
-                            value='--' // todo after apy -> apr
+                            value={
+                                unitPriceValue &&
+                                unitPriceValue !== '' &&
+                                unitPriceValue !== '0'
+                                    ? divide(
+                                          multiply(
+                                              amountFormatterFromBase[currency](
+                                                  amount
+                                              ),
+                                              100,
+                                              currencyMap[currency]
+                                                  .roundingDecimal
+                                          ),
+                                          Number(unitPriceValue),
+                                          currencyMap[currency].roundingDecimal
+                                      )
+                                    : 0
+                            }
                             informationText='Future Value is the expected return value of the contract at time of maturity.'
                         />
                     </div>
 
-                    <div className=''>
-                        <OrderAction
-                            loanValue={loanValue}
-                            collateralBook={collateralBook}
-                            validation={shouldDisableActionButton}
-                            isCurrencyDelisted={delistedCurrencySet.has(
-                                currency
-                            )}
-                        />
-                    </div>
+                    <OrderAction
+                        loanValue={loanValue}
+                        collateralBook={collateralBook}
+                        validation={shouldDisableActionButton}
+                        isCurrencyDelisted={delistedCurrencySet.has(currency)}
+                    />
 
                     <ErrorInfo
                         errorMessage='Simultaneous borrow and lend orders are not allowed during the pre-open market period.'
@@ -505,6 +520,7 @@ export function AdvancedLendingOrderCard({
                             onFilterChange={handleFilterChange}
                             onAggregationChange={setMultiplier}
                             rowsToRenderMobile={rowsToRenderMobile}
+                            isItayose
                         />
                     )}
                 </div>

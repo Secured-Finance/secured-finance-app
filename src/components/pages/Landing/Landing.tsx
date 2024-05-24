@@ -5,7 +5,11 @@ import Link from 'next/link';
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ViewType } from 'src/components/atoms';
-import { Alert, DelistedCurrencyDisclaimer } from 'src/components/molecules';
+import {
+    Alert,
+    AlertSeverity,
+    DelistedCurrencyDisclaimer,
+} from 'src/components/molecules';
 import {
     AdvancedLending,
     LendingCard,
@@ -20,10 +24,12 @@ import {
     useCollateralBook,
     useCurrencyDelistedStatus,
     useGraphClientHook,
+    useIsSubgraphSupported,
     useLendingMarkets,
     useLoanValues,
     useMaturityOptions,
 } from 'src/hooks';
+import useSF from 'src/hooks/useSecuredFinance';
 import {
     resetUnitPrice,
     selectLandingOrderForm,
@@ -63,6 +69,11 @@ export const Landing = ({ view }: { view?: ViewType }) => {
         market => market.isOpened
     );
 
+    const securedFinance = useSF();
+    const currentChainId = securedFinance?.config.chain.id;
+
+    const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
+
     const itayoseMarket = Object.entries(lendingContracts).find(
         ([, market]) => market.isPreOrderPeriod || market.isItayosePeriod
     )?.[1];
@@ -83,7 +94,8 @@ export const Landing = ({ view }: { view?: ViewType }) => {
     const dailyVolumes = useGraphClientHook(
         {}, // no variables
         queries.DailyVolumesDocument,
-        'dailyVolumes'
+        'dailyVolumes',
+        !isSubgraphSupported
     );
 
     return (
@@ -104,7 +116,11 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                         />
                         <YieldChart
                             asset={currency}
-                            dailyVolumes={dailyVolumes.data ?? []}
+                            dailyVolumes={
+                                isSubgraphSupported
+                                    ? dailyVolumes.data ?? []
+                                    : undefined
+                            }
                         />
                     </div>
                 </WithBanner>
@@ -167,9 +183,9 @@ const WithBanner = ({
             )}
             {market && (
                 <div className='px-3 laptop:px-0'>
-                    <Alert severity='info'>
-                        <div className='typography-caption text-white'>
-                            <p>
+                    <Alert
+                        title={
+                            <>
                                 {`Market ${ccy}-${getUTCMonthYear(
                                     market.maturity,
                                     true
@@ -196,9 +212,10 @@ const WithBanner = ({
                                         Place Order Now
                                     </Link>
                                 </span>
-                            </p>
-                        </div>
-                    </Alert>
+                            </>
+                        }
+                        severity={AlertSeverity.Info}
+                    />
                 </div>
             )}
             {children}

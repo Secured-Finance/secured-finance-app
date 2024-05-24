@@ -162,7 +162,7 @@ export const MarketLoanWidget = ({
                 cell: info => {
                     return (
                         <div className='flex justify-end px-4 laptop:px-1'>
-                            <Button onClick={() => handleClick(info)} size='sm'>
+                            <Button onClick={() => handleClick(info)}>
                                 {info.row.original.isOpened
                                     ? 'Open Order'
                                     : 'GO'}
@@ -281,7 +281,7 @@ const AssetDropdown = ({
     handleSelectedCurrency: (ccy: CurrencySymbol | undefined) => void;
 }) => {
     const { data: currencies } = useCurrencies();
-    const assetList = toOptions(currencies, CurrencySymbol.WBTC);
+    const assetList = toOptions(currencies, CurrencySymbol.USDC);
     return (
         <DropdownSelector<string>
             optionList={[

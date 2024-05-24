@@ -3,7 +3,7 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Button } from 'src/components/atoms';
+import { Button, ButtonSizes } from 'src/components/atoms';
 import {
     DepositCollateral,
     PlaceOrder,
@@ -100,7 +100,7 @@ export const OrderAction = ({
             marketPhase !== MarketPhase.OPEN);
 
     return (
-        <div>
+        <>
             {isConnected &&
                 (canBorrow || side === OrderSide.LEND ? (
                     <Button
@@ -111,7 +111,9 @@ export const OrderAction = ({
                             track(ButtonEvents.PLACE_ORDER_BUTTON);
                         }}
                         data-testid='place-order-button'
+                        mobileText='Order'
                         aria-label={getButtonText()}
+                        size={ButtonSizes.lg}
                     >
                         {getButtonText()}
                     </Button>
@@ -124,12 +126,13 @@ export const OrderAction = ({
                             track(ButtonEvents.DEPOSIT_COLLATERAL_BUTTON);
                         }}
                         data-testid='deposit-collateral-button'
+                        size={ButtonSizes.lg}
                     >
-                        Deposit collateral to borrow
+                        Deposit collateral
                     </Button>
                 ))}
             {!isConnected && (
-                <Button fullWidth onClick={() => open()}>
+                <Button fullWidth onClick={() => open()} size={ButtonSizes.lg}>
                     Connect Wallet
                 </Button>
             )}
@@ -159,6 +162,6 @@ export const OrderAction = ({
                 collateralList={depositCollateralList}
                 source='Order Action Button'
             ></DepositCollateral>
-        </div>
+        </>
     );
 };

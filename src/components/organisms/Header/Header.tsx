@@ -4,7 +4,12 @@ import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import SFLogo from 'src/assets/img/logo.svg';
 import SFLogoSmall from 'src/assets/img/small-logo.svg';
-import { Button, NavTab, SupportedNetworks } from 'src/components/atoms';
+import {
+    Button,
+    ButtonSizes,
+    NavTab,
+    SupportedNetworks,
+} from 'src/components/atoms';
 import {
     HamburgerMenu,
     MenuPopover,
@@ -66,8 +71,11 @@ const HeaderMessage = ({
                 </div>
             );
         } else if (
-            getSupportedNetworks().find(n => n.id === chainId)?.testnet
+            getSupportedNetworks().find(n => n.id === chainId)?.testnet ||
+            getSupportedNetworks().find(n => n.id === chainId)?.id === 314_159
         ) {
+            // NOTE: 314_159 is a testnet chain id but `viem` does not have a testnet flag for it.
+            // So we are checking for the chain id to determine if it is a testnet chain.
             return (
                 <div
                     className='typography-caption-2 w-full bg-horizonBlue p-[1px] text-center text-neutral-8'
@@ -163,7 +171,7 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                         </>
                     ) : (
                         <Button
-                            size={isMobile ? 'sm' : undefined}
+                            size={isMobile ? ButtonSizes.sm : ButtonSizes.lg}
                             data-cy='wallet'
                             data-testid='connect-wallet'
                             onClick={() => {

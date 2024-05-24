@@ -58,7 +58,9 @@ const generateChainList = () => {
                 chainId: c.chain.id,
                 icon: c.icon,
             };
-            if (c.chain.testnet) {
+            // NOTE: 314_159 is a testnet chain id but `viem` does not have a testnet flag for it.
+            // So we are checking for the chain id to determine if it is a testnet chain.
+            if (c.chain.testnet || c.chain.id === 314_159) {
                 testnetChainsList.push(chainInfo);
             } else {
                 mainnetChainsList.push(chainInfo);

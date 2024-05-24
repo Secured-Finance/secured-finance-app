@@ -23,7 +23,7 @@ const getRiskLevel = (percentage: number) => {
             break;
         case percentage > 40:
             text = 'medium risk';
-            className = 'text-yellow';
+            className = 'text-warning-500';
             break;
         default:
             text = 'lower risk';
@@ -57,7 +57,7 @@ export const CollateralManagementConciseTab = ({
     const info = getLiquidationInformation(collateralCoverage);
 
     return (
-        <div className='flex h-fit w-full flex-col gap-3 rounded-b'>
+        <div className='flex h-fit w-full flex-col gap-3'>
             <div className='flex flex-col gap-3 rounded-xl border border-neutral-600 bg-neutral-900 p-4'>
                 <div className='flex flex-row justify-between text-sm leading-6 text-grayScale'>
                     <span>Collateral Utilization</span>
@@ -77,11 +77,11 @@ export const CollateralManagementConciseTab = ({
                     />
                 </div>
                 <div className='block gap-x-1 text-[11px] leading-[15px] text-neutral-300'>
-                    {!account || !totalCollateralInUSD ? (
+                    {!account ? (
                         'N/A'
                     ) : (
                         <>
-                            <span className='text-secondary-300 font-semibold'>
+                            <span className='font-semibold text-secondary-300'>
                                 {`${usdFormat(availableToBorrow, 2)} `}
                             </span>
                             <span>{`of ${usdFormat(

@@ -7,7 +7,7 @@ import * as stories from './AdvancedLendingTopBar.stories';
 const { Default, Values } = composeStories(stories);
 
 describe('AdvancedLendingTopBar Component', () => {
-    it('should render a default AdvancedLendingTopBar with lastTradePrice and last block timestamp', () => {
+    it('should render a AdvancedLendingTopBar without the values', () => {
         render(<Default />);
 
         expect(
@@ -15,11 +15,6 @@ describe('AdvancedLendingTopBar Component', () => {
         ).toBeInTheDocument();
         expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
 
-        expect(screen.getByText('24h High')).toBeInTheDocument();
-        expect(screen.getByText('24h Low')).toBeInTheDocument();
-        expect(screen.getByText('24h Trades')).toBeInTheDocument();
-        expect(screen.getByText('24h Volume')).toBeInTheDocument();
-        expect(screen.getAllByText('0')).toHaveLength(5);
         expect(screen.getByText('80.00')).toBeInTheDocument();
         expect(screen.getByText('25.03% APR')).toBeInTheDocument();
         expect(
@@ -27,8 +22,13 @@ describe('AdvancedLendingTopBar Component', () => {
         ).toBeInTheDocument();
     });
 
-    it('should render the values on the AdvancedLendingTopBar', () => {
+    it('should render a AdvancedLendingTopBar with the values', () => {
         render(<Values />);
+
+        expect(screen.getByText('24h High')).toBeInTheDocument();
+        expect(screen.getByText('24h Low')).toBeInTheDocument();
+        expect(screen.getByText('24h Trades')).toBeInTheDocument();
+        expect(screen.getByText('24h Volume')).toBeInTheDocument();
 
         expect(screen.getByText('26.16')).toBeInTheDocument();
         expect(screen.getByText('24.2')).toBeInTheDocument();

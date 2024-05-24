@@ -8,7 +8,7 @@ import { Footer } from 'src/components/atoms';
 import Header from 'src/components/organisms/Header/Header';
 import { Layout } from 'src/components/templates';
 import { updateChainError } from 'src/store/blockchain';
-import { connectEthWallet, updateEthBalance } from 'src/store/wallet';
+import { connectWallet, updateBalance } from 'src/store/wallet';
 import { account, connector, publicClient } from 'src/stories/mocks/mockWallet';
 import { getWalletConnectId } from 'src/utils';
 import timemachine from 'timemachine';
@@ -33,7 +33,7 @@ export const withWalletProvider = (Story: StoryFn, Context: StoryContext) => {
 
     useEffect(() => {
         const timeoutId = setTimeout(() => {
-            dispatch(connectEthWallet(account.address));
+            dispatch(connectWallet(account.address));
         }, 300);
 
         return () => clearTimeout(timeoutId);
@@ -69,11 +69,11 @@ export const withMockDate = (Story: StoryFn, context: StoryContext) => {
     return <Story />;
 };
 
-export const withEthBalance = (Story: StoryFn) => {
+export const withBalance = (Story: StoryFn) => {
     const dispatch = useDispatch();
     useEffect(() => {
         const timeoutId = setTimeout(() => {
-            dispatch(updateEthBalance(2000));
+            dispatch(updateBalance(2000));
         }, 300);
 
         return () => clearTimeout(timeoutId);

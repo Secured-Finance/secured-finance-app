@@ -3,7 +3,7 @@ import { fireEvent, render, screen, within } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
 import * as stories from './NewOrderBookWidget.stories';
 
-const { Default, Loading, Bitcoin } = composeStories(stories);
+const { Default, Loading, Bitcoin, Itayose } = composeStories(stories);
 
 describe.skip('NewOrderBookWidget Component', () => {
     it('should render two tables', () => {
@@ -120,12 +120,12 @@ describe.skip('NewOrderBookWidget Component', () => {
 
         it('should render the Show All Orders button as active by default', () => {
             render(<Default />);
-            expect(getButton('Show All Orders')).toHaveClass('bg-universeBlue');
+            expect(getButton('Show All Orders')).toHaveClass('bg-neutral-900');
             expect(getButton('Show Only Lend Orders')).not.toHaveClass(
-                'bg-universeBlue'
+                'bg-neutral-900'
             );
             expect(getButton('Show Only Borrow Orders')).not.toHaveClass(
-                'bg-universeBlue'
+                'bg-neutral-900'
             );
         });
 
@@ -136,24 +136,24 @@ describe.skip('NewOrderBookWidget Component', () => {
 
             fireEvent.click(getButton('Show Only Borrow Orders'));
             expect(getButton('Show All Orders')).not.toHaveClass(
-                'bg-universeBlue'
+                'bg-neutral-900'
             );
             expect(getButton('Show Only Lend Orders')).not.toHaveClass(
-                'bg-universeBlue'
+                'bg-neutral-900'
             );
             expect(getButton('Show Only Borrow Orders')).toHaveClass(
-                'bg-universeBlue'
+                'bg-neutral-900'
             );
             expectToHaveRows('buyOrders');
             expectNotToHaveRows('sellOrders');
 
             fireEvent.click(getButton('Show Only Borrow Orders'));
-            expect(getButton('Show All Orders')).toHaveClass('bg-universeBlue');
+            expect(getButton('Show All Orders')).toHaveClass('bg-neutral-900');
             expect(getButton('Show Only Lend Orders')).not.toHaveClass(
-                'bg-universeBlue'
+                'bg-neutral-900'
             );
             expect(getButton('Show Only Borrow Orders')).not.toHaveClass(
-                'bg-universeBlue'
+                'bg-neutral-900'
             );
             expectToHaveRows('buyOrders');
             expectToHaveRows('sellOrders');
@@ -166,24 +166,24 @@ describe.skip('NewOrderBookWidget Component', () => {
 
             fireEvent.click(getButton('Show Only Lend Orders'));
             expect(getButton('Show All Orders')).not.toHaveClass(
-                'bg-universeBlue'
+                'bg-neutral-900'
             );
             expect(getButton('Show Only Lend Orders')).toHaveClass(
-                'bg-universeBlue'
+                'bg-neutral-900'
             );
             expect(getButton('Show Only Borrow Orders')).not.toHaveClass(
-                'bg-universeBlue'
+                'bg-neutral-900'
             );
             expectNotToHaveRows('buyOrders');
             expectToHaveRows('sellOrders');
 
             fireEvent.click(getButton('Show Only Lend Orders'));
-            expect(getButton('Show All Orders')).toHaveClass('bg-universeBlue');
+            expect(getButton('Show All Orders')).toHaveClass('bg-neutral-900');
             expect(getButton('Show Only Lend Orders')).not.toHaveClass(
-                'bg-universeBlue'
+                'bg-neutral-900'
             );
             expect(getButton('Show Only Borrow Orders')).not.toHaveClass(
-                'bg-universeBlue'
+                'bg-neutral-900'
             );
             expectToHaveRows('buyOrders');
             expectToHaveRows('sellOrders');
@@ -373,17 +373,10 @@ describe.skip('NewOrderBookWidget Component', () => {
         });
     });
 
-    // describe('Variants', () => {
-    //     it('should display the current market price in the correct color', () => {
-    //         render(<Itayose />);
-    //         expect(screen.getByTestId('current-market-price')).toHaveClass(
-    //             'text-white'
-    //         );
-    //     });
-
-    //     it('should display a help tooltip', () => {
-    //         render(<Itayose />);
-    //         expect(screen.getByTestId('tooltip')).toBeInTheDocument();
-    //     });
-    // });
+    describe('Variants', () => {
+        it('should display a help tooltip', () => {
+            render(<Itayose />);
+            expect(screen.getByTestId('tooltip')).toBeInTheDocument();
+        });
+    });
 });
