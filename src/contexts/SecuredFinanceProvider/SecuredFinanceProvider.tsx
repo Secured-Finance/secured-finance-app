@@ -37,7 +37,7 @@ export const CACHED_PROVIDER_KEY = 'CACHED_PROVIDER_KEY';
 declare global {
     interface Window {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ethereum: any;
+        ethereum?: any;
     }
 }
 
