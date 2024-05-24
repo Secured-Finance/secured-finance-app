@@ -28,6 +28,11 @@ publicClient.waitForTransactionReceipt = async (
     } as unknown as TransactionReceipt;
 };
 
+// Mock the getBalance function
+publicClient.getBalance = async () => {
+    return BigInt('1000000000000000000'); // Example balance in wei (1 ETH)
+};
+
 const walletClient = createWalletClient({
     account: account,
     chain: sepolia,
