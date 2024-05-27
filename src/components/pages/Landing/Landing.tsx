@@ -2,7 +2,7 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { getUTCMonthYear } from '@secured-finance/sf-core';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import Link from 'next/link';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ViewType } from 'src/components/atoms';
 import {
@@ -15,7 +15,7 @@ import {
     LendingCard,
     YieldChart,
 } from 'src/components/organisms';
-import { SimpleAdvancedView } from 'src/components/templates';
+import { Page } from 'src/components/templates';
 import {
     LendingMarket,
     RateType,
@@ -34,7 +34,6 @@ import useSF from 'src/hooks/useSecuredFinance';
 import {
     resetUnitPrice,
     selectLandingOrderForm,
-    setLastView,
     setOrderType,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
@@ -52,16 +51,16 @@ export const emptyOptionList = [
 
 const ITAYOSE_PERIOD = 60 * 60 * 1000; // 1 hour in milli-seconds
 
-export const Landing = ({ view }: { view?: ViewType }) => {
+export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
+    const dispatch = useDispatch();
     const { address, isConnected } = useAccount();
     const balance = useBalances();
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
-    const { currency, side, maturity, lastView } = useSelector(
-        (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
+    const { currency, side, maturity } = useSelector((state: RootState) =>
+        selectLandingOrderForm(state.landingOrderForm)
     );
     const { data: lendingMarkets = baseContracts } = useLendingMarkets();
     const lendingContracts = lendingMarkets[currency];
-    const dispatch = useDispatch();
 
     const { data: collateralBook = emptyCollateralBook } =
         useCollateralBook(address);
@@ -100,12 +99,22 @@ export const Landing = ({ view }: { view?: ViewType }) => {
         !isSubgraphSupported
     );
 
+    useEffect(() => {
+        if (view === 'Simple') {
+            dispatch(setOrderType(OrderType.MARKET));
+            dispatch(resetUnitPrice());
+        } else if (view === 'Advanced') {
+            dispatch(setOrderType(OrderType.LIMIT));
+            dispatch(resetUnitPrice());
+        }
+    }, [view, dispatch]);
+
     const isShowWelcomeAlert =
         Object.values(balance).every(v => v === 0) || !isConnected;
 
     return (
-        <SimpleAdvancedView
-            title='OTC Lending'
+        <Page
+            name='lending-page'
             alertComponent={
                 isShowWelcomeAlert && (
                     <Alert
@@ -117,13 +126,14 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                     />
                 )
             }
-            simpleComponent={
-                <WithBanner
-                    ccy={currency}
-                    market={itayoseMarket}
-                    delistedCurrencySet={delistedCurrencySet}
-                >
-                    <div className='flex flex-row items-center justify-center px-3 tablet:px-5 laptop:px-0'>
+        >
+            <WithBanner
+                ccy={currency}
+                market={itayoseMarket}
+                delistedCurrencySet={delistedCurrencySet}
+            >
+                {view === 'Simple' ? (
+                    <div className='mt-6 flex flex-row items-center justify-center px-3 tablet:px-5 laptop:px-0'>
                         <LendingCard
                             collateralBook={collateralBook}
                             maturitiesOptionList={maturityOptionList}
@@ -139,35 +149,16 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                             }
                         />
                     </div>
-                </WithBanner>
-            }
-            advanceComponent={
-                <WithBanner
-                    ccy={currency}
-                    market={itayoseMarket}
-                    delistedCurrencySet={delistedCurrencySet}
-                >
+                ) : (
                     <AdvancedLending
                         collateralBook={collateralBook}
                         maturitiesOptionList={maturityOptionList}
                         marketPrice={marketPrice}
                         delistedCurrencySet={delistedCurrencySet}
                     />
-                </WithBanner>
-            }
-            initialView={view ?? lastView}
-            onModeChange={v => {
-                dispatch(setLastView(v));
-                if (v === 'Simple') {
-                    dispatch(setOrderType(OrderType.MARKET));
-                    dispatch(resetUnitPrice());
-                } else if (v === 'Advanced') {
-                    dispatch(setOrderType(OrderType.LIMIT));
-                    dispatch(resetUnitPrice());
-                }
-            }}
-            pageName='lending-page'
-        />
+                )}
+            </WithBanner>
+        </Page>
     );
 };
 

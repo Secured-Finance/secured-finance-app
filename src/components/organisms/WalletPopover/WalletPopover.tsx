@@ -1,16 +1,13 @@
 import { reset as resetTracking } from '@amplitude/analytics-browser';
 import { Popover, Transition } from '@headlessui/react';
+import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Fragment, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AlertTriangle from 'src/assets/icons/alert-triangle.svg';
 import MetamaskLogo from 'src/assets/img/metamask-fox.svg';
-import {
-    ExpandIndicator,
-    Separator,
-    SupportedNetworks,
-} from 'src/components/atoms';
+import { Separator, SupportedNetworks } from 'src/components/atoms';
 import { Tooltip } from 'src/components/templates';
 import { RootState } from 'src/store/types';
 import { resetWallet } from 'src/store/wallet';
@@ -100,25 +97,30 @@ export const WalletPopover = ({
                         data-cy='popover-button'
                         aria-label='Wallet Popover Button'
                         className={clsx(
-                            'flex items-center gap-x-3 rounded-[6px] bg-transparent px-4 py-2 ring-2 hover:bg-white-10 hover:ring-white-10 focus:outline-none tablet:rounded-xl tablet:py-3',
+                            'flex items-center gap-x-1 rounded-lg bg-neutral-800 py-2 pl-2 pr-1 ring-1 hover:bg-white-10 hover:ring-white-10 focus:outline-none tablet:gap-x-1.5 tablet:rounded-xl tablet:px-4 tablet:py-3 tablet:pl-3 tablet:pr-2 tablet:ring-[1.5px]',
                             {
                                 'bg-white-10 ring-white-10': open,
-                                'ring-white-20': !open,
+                                'ring-neutral-500': !open,
                             }
                         )}
                     >
                         <span>
-                            <MetamaskLogo className='h-4 w-4' />
+                            <MetamaskLogo className='h-3.5 w-3.5 tablet:h-4 tablet:w-4' />
                         </span>
                         <span
-                            className='typography-button-2 leading-4 text-grayScale tablet:leading-[22px]'
+                            className='typography-mobile-body-6 tablet:typography-desktop-body-5 text-grayScale'
                             data-cy='wallet-address'
                         >
                             {wallet}
                         </span>
-                        <span className='hidden tablet:inline'>
-                            <ExpandIndicator expanded={open} variant='opaque' />
-                        </span>
+                        <ChevronDownIcon
+                            className={clsx(
+                                'h-3.5 w-3.5 text-neutral-400 laptop:h-4 laptop:w-4',
+                                {
+                                    'rotate-180': open,
+                                }
+                            )}
+                        />
                     </Popover.Button>
                     <Transition
                         as={Fragment}
