@@ -5,7 +5,11 @@ import Link from 'next/link';
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ViewType } from 'src/components/atoms';
-import { Alert, DelistedCurrencyDisclaimer } from 'src/components/molecules';
+import {
+    Alert,
+    AlertSeverity,
+    DelistedCurrencyDisclaimer,
+} from 'src/components/molecules';
 import {
     AdvancedLending,
     LendingCard,
@@ -179,9 +183,9 @@ const WithBanner = ({
             )}
             {market && (
                 <div className='px-3 laptop:px-0'>
-                    <Alert severity='info'>
-                        <div className='typography-caption text-white'>
-                            <p>
+                    <Alert
+                        title={
+                            <>
                                 {`Market ${ccy}-${getUTCMonthYear(
                                     market.maturity,
                                     true
@@ -208,9 +212,10 @@ const WithBanner = ({
                                         Place Order Now
                                     </Link>
                                 </span>
-                            </p>
-                        </div>
-                    </Alert>
+                            </>
+                        }
+                        severity={AlertSeverity.Info}
+                    />
                 </div>
             )}
             {children}

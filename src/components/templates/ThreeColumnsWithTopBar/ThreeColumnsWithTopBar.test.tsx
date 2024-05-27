@@ -17,13 +17,13 @@ describe('ThreeColumnsWithTopBar', () => {
     it('renders the children props in the correct columns', () => {
         render(<Default />);
         expect(screen.getByText('Column 1').parentElement).toHaveClass(
-            'tablet:col-span-2'
+            'order-2'
         );
         expect(screen.getByText('Column 2').parentElement).toHaveClass(
-            'laptop:col-span-1'
+            'order-4'
         );
         expect(screen.getByText('Column 3').parentElement).toHaveClass(
-            'laptop:col-span-2'
+            'order-3'
         );
     });
 
