@@ -34,7 +34,7 @@ export const ColorBar = ({
         <div
             className={clsx('absolute h-4 laptop:h-[22px]', {
                 'bg-error-300/25': color === 'negative',
-                'bg-success-300/25': color === 'positive',
+                'bg-secondary-300/25': color === 'positive',
             })}
             data-testid='color-bar'
             style={{ width: value === ZERO_BI ? '4px' : `${width}%` }}
