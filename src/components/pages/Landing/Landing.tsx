@@ -21,6 +21,7 @@ import {
     RateType,
     baseContracts,
     emptyCollateralBook,
+    useBalances,
     useCollateralBook,
     useCurrencyDelistedStatus,
     useGraphClientHook,
@@ -52,7 +53,8 @@ export const emptyOptionList = [
 const ITAYOSE_PERIOD = 60 * 60 * 1000; // 1 hour in milli-seconds
 
 export const Landing = ({ view }: { view?: ViewType }) => {
-    const { address } = useAccount();
+    const { address, isConnected } = useAccount();
+    const balance = useBalances();
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
     const { currency, side, maturity, lastView } = useSelector(
         (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
@@ -98,9 +100,23 @@ export const Landing = ({ view }: { view?: ViewType }) => {
         !isSubgraphSupported
     );
 
+    const isShowWelcomeAlert =
+        Object.values(balance).every(v => v === 0) || !isConnected;
+
     return (
         <SimpleAdvancedView
             title='OTC Lending'
+            alertComponent={
+                isShowWelcomeAlert && (
+                    <Alert
+                        title={
+                            'Welcome! Please deposit funds to enable trading.'
+                        }
+                        severity={AlertSeverity.Basic}
+                        isShowCloseButton={false}
+                    />
+                )
+            }
             simpleComponent={
                 <WithBanner
                     ccy={currency}
