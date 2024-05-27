@@ -1,57 +1,45 @@
 import { composeStories } from '@storybook/react';
-import { render, screen } from 'src/test-utils.js';
+import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './Alert.stories';
 
-const { Default, WithCloseButton } = composeStories(stories);
+const { Default, Error } = composeStories(stories);
 
 describe('Alert Component', () => {
-    it('should render a Alert', () => {
+    it('should render an Alert', () => {
         render(<Default />);
     });
 
-    it('should render solid variant if variant is not provided', () => {
+    it('should render info variant if variant is not provided', () => {
         render(<Default />);
         const alert = screen.getByRole('alert');
-        expect(alert).toHaveClass(
-            'bg-[rgba(41, 45, 63, 0.60)] border border-white-10 shadow-tab'
-        );
-        expect(alert).not.toHaveClass('border-2 border-yellow bg-yellow/20');
+        expect(alert).toHaveClass('border-primary-300 bg-primary-500/10');
     });
 
-    it('should render outlined variant if specified', () => {
-        render(<Default variant='outlined' />);
+    it('should render error variant if specified', () => {
+        render(<Error />);
         const alert = screen.getByRole('alert');
-        expect(alert).not.toHaveClass(
-            'bg-[rgba(41, 45, 63, 0.60)] border border-white-10 shadow-tab'
-        );
-        expect(alert).toHaveClass('border-2 border-yellow bg-yellow/20');
+        expect(alert).toHaveClass('border-error-300 bg-error-500/10');
     });
 
-    it('should not render a close button if showCloseButton is false', () => {
-        render(<Default />);
-        const closeButton = screen.queryByTestId('close-button');
-        expect(closeButton).not.toBeInTheDocument();
-    });
-
-    it('should  render a close button if showCloseButton is true', () => {
-        render(<WithCloseButton />);
-        const closeButton = screen.getByTestId('close-button');
-        expect(closeButton).toBeInTheDocument();
-    });
-
-    it('should render alert if localStorageValue is not found in localStorage', () => {
+    it('should render alert component if localStorageValue is not found in localStorage', () => {
         localStorage.setItem('key', 'value');
-        render(
-            <WithCloseButton localStorageKey='key' localStorageValue='val' />
-        );
+        render(<Default localStorageKey='key' localStorageValue='val' />);
         expect(screen.queryByRole('alert')).toBeInTheDocument();
     });
 
-    it('should not render alert if localStorageValue is found in localStorage', () => {
+    it('should not render alert component if localStorageValue is found in localStorage', () => {
         localStorage.setItem('key', 'val');
-        render(
-            <WithCloseButton localStorageKey='key' localStorageValue='val' />
-        );
+        render(<Default localStorageKey='key' localStorageValue='val' />);
         expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    });
+
+    it('should render a close button that closes the alert when clicked', () => {
+        render(<Default />);
+        const closeButton = screen.getByTestId('close-button');
+        const alert = screen.getByRole('alert');
+        expect(closeButton).toBeInTheDocument();
+
+        fireEvent.click(closeButton);
+        expect(alert).not.toBeInTheDocument();
     });
 });

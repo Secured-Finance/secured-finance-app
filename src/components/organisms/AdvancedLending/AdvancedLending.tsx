@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     AdvancedLendingTopBar,
     Alert,
+    AlertSeverity,
     HorizontalTab,
     Tab,
 } from 'src/components/molecules';
@@ -21,6 +22,7 @@ import {
     OrderTable,
 } from 'src/components/organisms';
 import { TabSpinner, TableType } from 'src/components/pages';
+import { ThreeColumnsWithTopBar } from 'src/components/templates';
 import {
     CollateralBook,
     emptyOrderList,
@@ -313,19 +315,17 @@ export const AdvancedLending = ({
         <div className='grid gap-2'>
             {maximumOpenOrderLimit && (
                 <div className='px-3 laptop:px-0'>
-                    <Alert severity='warning'>
-                        <div className='typography-caption text-neutral-50'>
-                            You will not be able to place additional orders as
+                    <Alert
+                        severity={AlertSeverity.Warning}
+                        title='You will not be able to place additional orders as
                             you currently have the maximum number of 20 orders.
                             Please wait for your order to be filled or cancel
-                            existing orders before adding more.
-                        </div>
-                    </Alert>
+                            existing orders before adding more.'
+                    />
                 </div>
             )}
-
-            <div className='grid h-fit grid-cols-1 place-items-stretch gap-x-3 tablet:grid-cols-2 laptop:grid-cols-4 laptop:gap-y-4'>
-                <div className='tablet:col-span-2 laptop:col-span-4'>
+            <ThreeColumnsWithTopBar
+                topBar={
                     <AdvancedLendingTopBar
                         selectedAsset={selectedAsset}
                         assetList={assetList}
@@ -362,56 +362,36 @@ export const AdvancedLending = ({
                                 : undefined
                         }
                     />
-                </div>
-                <div className='mb-4 block tablet:col-span-2 laptop:mb-0 laptop:hidden'>
-                    <Tab
-                        tabDataArray={
-                            isSubgraphSupported
-                                ? [
-                                      { text: 'Yield Curve' },
-                                      { text: 'Historical Chart' },
-                                  ]
-                                : [{ text: 'Yield Curve' }]
-                        }
-                    >
-                        <div className='h-[410px] w-full px-2 py-4'>
-                            <LineChartTab
-                                rates={rates}
-                                maturityList={maturityList}
-                                itayoseMarketIndexSet={itayoseMarketIndexSet}
-                                followLinks={false}
-                                maximumRate={maximumRate}
-                                marketCloseToMaturityOriginalRate={
-                                    marketCloseToMaturityOriginalRate
-                                }
-                            />
-                        </div>
-                        {isSubgraphSupported && <HistoricalWidget />}
-                    </Tab>
-                </div>
-                <div className='tablet:col-span-2 laptop:col-span-1'>
-                    <AdvancedLendingOrderCard
-                        collateralBook={collateralBook}
-                        marketPrice={marketPrice}
-                        delistedCurrencySet={delistedCurrencySet}
-                    />
-                </div>
-                <div className='hidden laptop:col-span-1 laptop:block'>
-                    {!isTablet && (
-                        <NewOrderBookWidget
-                            orderbook={orderBook}
-                            currency={currency}
-                            marketPrice={currentMarket?.value}
-                            maxLendUnitPrice={data?.maxLendUnitPrice}
-                            minBorrowUnitPrice={data?.minBorrowUnitPrice}
-                            onFilterChange={handleFilterChange}
-                            onAggregationChange={setMultiplier}
+                }
+            >
+                <Tab
+                    tabDataArray={
+                        isSubgraphSupported
+                            ? [
+                                  { text: 'Yield Curve' },
+                                  { text: 'Historical Chart' },
+                              ]
+                            : [{ text: 'Yield Curve' }]
+                    }
+                >
+                    <div className='h-[410px] w-full px-2 py-4'>
+                        <LineChartTab
+                            rates={rates}
+                            maturityList={maturityList}
+                            itayoseMarketIndexSet={itayoseMarketIndexSet}
+                            followLinks={false}
+                            maximumRate={maximumRate}
+                            marketCloseToMaturityOriginalRate={
+                                marketCloseToMaturityOriginalRate
+                            }
                         />
-                    )}
-                </div>
-                <div className='col-span-1 tablet:col-span-2'>
-                    <div className='flex h-full flex-grow flex-col gap-4'>
-                        <div className='hidden laptop:block'>
+                    </div>
+                    {isSubgraphSupported && <HistoricalWidget />}
+                </Tab>
+
+                <>
+                    <div className='col-span-1 hidden w-[calc(100%-284px)] laptop:block desktop:w-[calc(100%-312px)]'>
+                        <div className='flex h-full flex-grow flex-col gap-4'>
                             <Tab
                                 tabDataArray={
                                     isSubgraphSupported
@@ -439,6 +419,21 @@ export const AdvancedLending = ({
                                 {isSubgraphSupported && <HistoricalWidget />}
                             </Tab>
                         </div>
+                    </div>
+                    <div className='hidden laptop:block laptop:w-[272px] desktop:w-[300px]'>
+                        {!isTablet && (
+                            <NewOrderBookWidget
+                                orderbook={orderBook}
+                                currency={currency}
+                                marketPrice={currentMarket?.value}
+                                maxLendUnitPrice={data?.maxLendUnitPrice}
+                                minBorrowUnitPrice={data?.minBorrowUnitPrice}
+                                onFilterChange={handleFilterChange}
+                                onAggregationChange={setMultiplier}
+                            />
+                        )}
+                    </div>
+                    <div className='col-span-12 laptop:w-full'>
                         <HorizontalTab
                             tabTitles={
                                 isSubgraphSupported
@@ -526,8 +521,13 @@ export const AdvancedLending = ({
                             )}
                         </HorizontalTab>
                     </div>
-                </div>
-            </div>
+                </>
+                <AdvancedLendingOrderCard
+                    collateralBook={collateralBook}
+                    marketPrice={marketPrice}
+                    delistedCurrencySet={delistedCurrencySet}
+                />
+            </ThreeColumnsWithTopBar>
         </div>
     );
 };
