@@ -353,4 +353,15 @@ describe('Landing Component', () => {
             ).toBeInTheDocument();
         });
     }, 8000);
+
+    it('should render the welcome message alert', () => {
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+            preloadedState,
+        });
+
+        expect(
+            screen.getByText('Welcome! Please deposit funds to enable trading.')
+        ).toBeInTheDocument();
+    });
 });

@@ -1,3 +1,4 @@
+import { withWalletProvider } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
 import { within } from '@storybook/testing-library';
 import { RESPONSIVE_PARAMETERS } from 'src/../.storybook/constants';
@@ -19,6 +20,7 @@ export default {
         ...RESPONSIVE_PARAMETERS,
         layout: 'fullscreen',
     },
+    decorators: [withWalletProvider],
 } as Meta<typeof SimpleAdvancedView>;
 
 const Template: StoryFn<typeof SimpleAdvancedView> = args => (

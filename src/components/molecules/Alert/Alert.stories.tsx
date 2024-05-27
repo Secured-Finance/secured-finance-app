@@ -1,4 +1,4 @@
-import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
+import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import { Meta, StoryFn } from '@storybook/react';
 import { Alert } from './Alert';
 import { FIGMA_STORYBOOK_LINK } from './constants';
@@ -16,6 +16,9 @@ export default {
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,
+        chromatic: {
+            viewports: [VIEWPORTS.MOBILE, VIEWPORTS.DESKTOP],
+        },
         design: {
             type: 'figma',
             url: FIGMA_STORYBOOK_LINK,
@@ -40,6 +43,13 @@ Warning.args = {
 export const Success = Template.bind({});
 Success.args = {
     severity: AlertSeverity.Success,
+};
+
+export const Basic = Template.bind({});
+Basic.args = {
+    severity: AlertSeverity.Basic,
+    isShowCloseButton: false,
+    title: 'Welcome! Please deposit funds to enable trading.',
 };
 
 export const WithSubtitle = Template.bind({});
