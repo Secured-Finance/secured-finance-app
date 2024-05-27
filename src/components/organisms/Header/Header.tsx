@@ -151,7 +151,12 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                                 >
                                     Deposit
                                 </Button>
-                                <NetworkSelector networkName={'Unknown'} />
+                                <NetworkSelector
+                                    networkName={
+                                        securedFinance?.config?.network ??
+                                        'Unknown'
+                                    }
+                                />
                                 <WalletPopover
                                     wallet={AddressUtils.format(
                                         address,

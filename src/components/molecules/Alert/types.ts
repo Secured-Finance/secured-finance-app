@@ -3,4 +3,5 @@ export enum AlertSeverity {
     Info = 'info',
     Success = 'success',
     Warning = 'warning',
+    Basic = 'basic',
 }

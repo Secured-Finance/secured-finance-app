@@ -2,10 +2,12 @@ import { Children } from 'react';
 
 export const Page = ({
     title,
+    alertComponent,
     children,
     name,
 }: {
     title?: string;
+    alertComponent?: React.ReactNode;
     children: React.ReactNode;
     name?: string;
 }) => {
@@ -14,6 +16,9 @@ export const Page = ({
             className='mx-auto mt-3 flex flex-col gap-2 tablet:min-w-[728px] laptop:mt-6 laptop:min-w-[970px] laptop:gap-4 laptop:px-6 desktop:min-w-[1120px] desktop:max-w-[1920px]'
             data-testid={name}
         >
+            {alertComponent && (
+                <div className='px-3 laptop:px-0'>{alertComponent}</div>
+            )}
             {title && (
                 <div className='flex items-center justify-between border-panelStroke px-4 pb-3 laptop:border-b-[0.5px] laptop:px-0 laptop:pb-7'>
                     <span className='font-secondary text-smd font-light leading-7 text-white tablet:text-md laptop:text-lg'>
