@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { SimpleAdvancedSelector, ViewType } from 'src/components/atoms';
 import { Page } from 'src/components/templates';
 
@@ -6,6 +6,7 @@ export const SimpleAdvancedView = ({
     title,
     simpleComponent,
     advanceComponent,
+    alertComponent,
     initialView = 'Simple',
     onModeChange,
     pageName,
@@ -13,6 +14,7 @@ export const SimpleAdvancedView = ({
     title: string;
     simpleComponent: React.ReactNode;
     advanceComponent: React.ReactNode;
+    alertComponent?: React.ReactNode;
     initialView?: ViewType;
     onModeChange?: (v: ViewType) => void;
     pageName?: string;
@@ -33,6 +35,7 @@ export const SimpleAdvancedView = ({
                     text={view}
                 />
             }
+            alertComponent={alertComponent}
             name={pageName}
         >
             {component}
