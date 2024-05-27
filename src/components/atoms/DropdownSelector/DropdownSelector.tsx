@@ -76,7 +76,7 @@ const OrderBookButton = ({
     open: boolean;
 }) => {
     return (
-        <div className='flex h-6 w-full flex-row items-center justify-between gap-1 rounded border-0.5 border-neutral-500 bg-neutral-800 py-1 pl-2 pr-2 laptop:h-8 laptop:pr-1'>
+        <div className='flex h-6 w-full flex-row items-center justify-between gap-1 rounded border-0.5 border-neutral-500 bg-neutral-800 py-1 pl-2 pr-2 laptop:py-0 laptop:pr-1'>
             <span className='whitespace-nowrap font-secondary text-[10px] leading-4 text-neutral-7 laptop:text-xs laptop:leading-5'>
                 {selectedOption?.label}
             </span>
@@ -221,7 +221,7 @@ export const DropdownSelector = <T extends string = string>({
                                 'max-h-[196px] w-52 tablet:max-h-60':
                                     variant !== 'fullWidth',
                                 'w-full': variant === 'fullWidth',
-                                'bottom-0 mb-7 w-full origin-top-right laptop:bottom-auto laptop:right-0 laptop:w-fit':
+                                'bottom-0 mb-7 w-full origin-top-right laptop:bottom-auto laptop:w-fit':
                                     variant === 'orderBook',
                                 'w-72': variant === 'fixedWidth',
                             }
