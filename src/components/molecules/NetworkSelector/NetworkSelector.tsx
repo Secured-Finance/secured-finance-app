@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { Fragment, useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import ExclamationCircleIcon from 'src/assets/icons/exclamation-circle.svg';
-import { ExpandIndicator, Separator } from 'src/components/atoms';
+import { Separator } from 'src/components/atoms';
 import { Networks } from 'src/store/blockchain';
 import { RootState } from 'src/store/types';
 import {
@@ -105,76 +105,64 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
 
     return (
         <Popover className='relative'>
-            {({ open }) => (
-                <>
-                    <Popover.Button
-                        data-cy='network-selector-button'
-                        aria-label='Network Selector Button'
-                        className={clsx(
-                            'flex items-center gap-2 rounded-[6px] bg-neutral-800 px-3 py-2 ring-[1.5px] ring-neutral-500 focus:outline-none tablet:rounded-xl tablet:px-4 tablet:py-3'
-                        )}
-                    >
-                        {selectedNetwork ? (
-                            <div>{selectedNetwork.icon}</div>
-                        ) : (
-                            <>
-                                <span>
-                                    <ExclamationCircleIcon className='h-4 w-4 tablet:h-5 tablet:w-5' />
-                                </span>
-                                <span className='typography-button-2 leading-4 text-neutral-50 tablet:leading-[22px]'>
-                                    Network
-                                </span>
-                                <span className='hidden tablet:inline'>
-                                    <ExpandIndicator
-                                        expanded={open}
-                                        variant='solid'
-                                    />
-                                </span>
-                            </>
-                        )}
-                    </Popover.Button>
-                    <Transition
-                        as={Fragment}
-                        enter='transition ease-out duration-200'
-                        enterFrom='opacity-0 translate-y-5'
-                        enterTo='opacity-100 translate-y-0'
-                        leave='transition ease-in duration-150'
-                        leaveFrom='opacity-100 translate-y-0'
-                        leaveTo='opacity-0 translate-y-5'
-                    >
-                        <Popover.Panel className='absolute left-0 z-10 mt-3 w-64 origin-top-right tablet:right-0'>
-                            {({ close }) => (
-                                <div className='relative flex h-fit flex-col overflow-hidden rounded-xl bg-neutral-900 py-[10px]'>
-                                    {chainList.map((link, index) => {
-                                        return (
-                                            <div key={index} role='menuitem'>
-                                                <div className='px-2'>
-                                                    <MenuItem
-                                                        text={link.chainName}
-                                                        icon={link.icon}
-                                                        onClick={async () => {
-                                                            await handleNetworkChange(
-                                                                index
-                                                            );
-                                                            close();
-                                                        }}
-                                                    />
-                                                </div>
-                                                {index !==
-                                                    chainList.length - 1 && (
-                                                    <div className='py-[6px]'>
-                                                        <Separator />
-                                                    </div>
-                                                )}
+            <Popover.Button
+                data-cy='network-selector-button'
+                aria-label='Network Selector Button'
+                className={clsx(
+                    'flex items-center gap-2 rounded-lg bg-neutral-800 p-2 ring-1 ring-neutral-500 focus:outline-none tablet:rounded-xl tablet:p-3 tablet:ring-[1.5px]',
+                    {
+                        'pr-2': !selectedNetwork,
+                    }
+                )}
+            >
+                {selectedNetwork ? (
+                    <div>{selectedNetwork.icon}</div>
+                ) : (
+                    <ExclamationCircleIcon
+                        data-testid='exclamation-circle-icon'
+                        className='h-4 w-4 tablet:h-5 tablet:w-5'
+                    />
+                )}
+            </Popover.Button>
+            <Transition
+                as={Fragment}
+                enter='transition ease-out duration-200'
+                enterFrom='opacity-0 translate-y-5'
+                enterTo='opacity-100 translate-y-0'
+                leave='transition ease-in duration-150'
+                leaveFrom='opacity-100 translate-y-0'
+                leaveTo='opacity-0 translate-y-5'
+            >
+                <Popover.Panel className='absolute left-0 z-10 mt-3 w-64 origin-top-right tablet:right-0'>
+                    {({ close }) => (
+                        <div className='relative flex h-fit flex-col overflow-hidden rounded-xl bg-neutral-900 py-[10px]'>
+                            {chainList.map((link, index) => {
+                                return (
+                                    <div key={index} role='menuitem'>
+                                        <div className='px-2'>
+                                            <MenuItem
+                                                text={link.chainName}
+                                                icon={link.icon}
+                                                onClick={async () => {
+                                                    await handleNetworkChange(
+                                                        index
+                                                    );
+                                                    close();
+                                                }}
+                                            />
+                                        </div>
+                                        {index !== chainList.length - 1 && (
+                                            <div className='py-[6px]'>
+                                                <Separator />
                                             </div>
-                                        );
-                                    })}
-                                </div>
-                            )}
-                        </Popover.Panel>
-                    </Transition>
-                </>
-            )}
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+                </Popover.Panel>
+            </Transition>
         </Popover>
     );
 };
