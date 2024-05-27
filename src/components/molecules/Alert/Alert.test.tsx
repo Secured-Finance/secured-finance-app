@@ -42,4 +42,10 @@ describe('Alert Component', () => {
         fireEvent.click(closeButton);
         expect(alert).not.toBeInTheDocument();
     });
+
+    it('should not render a close button if isShowCloseButton is false', () => {
+        render(<Default isShowCloseButton={false} />);
+        const closeButton = screen.queryByTestId('close-button');
+        expect(closeButton).not.toBeInTheDocument();
+    });
 });

@@ -21,6 +21,7 @@ import {
     RateType,
     baseContracts,
     emptyCollateralBook,
+    useBalances,
     useCollateralBook,
     useCurrencyDelistedStatus,
     useGraphClientHook,
@@ -52,7 +53,8 @@ const ITAYOSE_PERIOD = 60 * 60 * 1000; // 1 hour in milli-seconds
 
 export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
     const dispatch = useDispatch();
-    const { address } = useAccount();
+    const { address, isConnected } = useAccount();
+    const balance = useBalances();
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
     const { currency, side, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
@@ -107,8 +109,24 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
         }
     }, [view, dispatch]);
 
+    const isShowWelcomeAlert =
+        Object.values(balance).every(v => v === 0) || !isConnected;
+
     return (
-        <Page name='lending-page'>
+        <Page
+            name='lending-page'
+            alertComponent={
+                isShowWelcomeAlert && (
+                    <Alert
+                        title={
+                            'Welcome! Please deposit funds to enable trading.'
+                        }
+                        severity={AlertSeverity.Basic}
+                        isShowCloseButton={false}
+                    />
+                )
+            }
+        >
             <WithBanner
                 ccy={currency}
                 market={itayoseMarket}
