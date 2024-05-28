@@ -11,7 +11,7 @@ export const GlobalItayoseMultiCurveChart = () => {
     const defaultCurrency =
         currencies && currencies.length > 0
             ? currencies[0]
-            : CurrencySymbol.WBTC;
+            : CurrencySymbol.USDC;
 
     currencies?.forEach(ccy => {
         Object.keys(lendingContracts[ccy]).forEach(maturity => {

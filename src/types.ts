@@ -68,7 +68,7 @@ export interface ColorFormat {
     color?: 'neutral' | 'positive' | 'negative' | 'disabled' | 'warning';
 }
 
-export type Alignment = 'left' | 'center' | 'right';
+export type Alignment = 'left' | 'center' | 'right' | 'top' | 'top-right';
 
 export type IndexOf<T extends unknown[]> = Exclude<
     keyof T,
@@ -95,13 +95,6 @@ export type Wallet = 'MetaMask' | 'WalletConnect';
 
 export type UserAccount = ReturnType<typeof useAccount>['address'];
 export type AssetPriceMap = Record<CurrencySymbol, number>;
-
-export enum ButtonSizes {
-    xs = 'xs',
-    sm = 'sm',
-    md = 'md',
-    lg = 'lg',
-}
 
 export enum HistoricalDataIntervals {
     '5M' = '300',

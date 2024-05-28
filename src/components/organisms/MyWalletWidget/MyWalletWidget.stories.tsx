@@ -1,4 +1,4 @@
-import { withEthBalance, withWalletProvider } from '.storybook/decorators';
+import { withBalance, withWalletProvider } from '.storybook/decorators';
 import { Meta, StoryFn } from '@storybook/react';
 import { MyWalletWidget } from './MyWalletWidget';
 
@@ -6,7 +6,7 @@ export default {
     title: 'Organism/MyWalletWidget',
     component: MyWalletWidget,
     args: {},
-    decorators: [withWalletProvider, withEthBalance],
+    decorators: [withWalletProvider, withBalance],
 } as Meta<typeof MyWalletWidget>;
 
 const Template: StoryFn<typeof MyWalletWidget> = () => <MyWalletWidget />;

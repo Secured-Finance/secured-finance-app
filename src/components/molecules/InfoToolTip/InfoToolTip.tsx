@@ -21,7 +21,7 @@ export const InfoToolTip = ({
                 'h-5 w-5': iconSize === 'large',
                 'text-slateGray': iconColor === 'gray',
                 'text-white': iconColor === 'white',
-                'text-yellow': iconColor === 'yellow',
+                'text-warning-500': iconColor === 'yellow',
             })}
             data-testid='information-circle'
         />

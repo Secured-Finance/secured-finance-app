@@ -2,9 +2,9 @@ import { TooltipMode } from './types';
 
 export const modeStyles: { [key in TooltipMode]: string } = {
     [TooltipMode.Dark]: 'bg-neutral-700 border-neutral-500',
-    [TooltipMode.Success]: 'bg-[#0C474C] border-secondary-700', // TODO: update bg color to variable
-    [TooltipMode.Warning]: 'bg-[#422F09] border-warning-700', // TODO: update bg color to variable
-    [TooltipMode.Error]: 'bg-[#4A1220] border-error-700', // TODO: update bg color to variable
+    [TooltipMode.Success]: 'bg-tooltip-success border-secondary-700',
+    [TooltipMode.Warning]: 'bg-tooltip-warning border-warning-700',
+    [TooltipMode.Error]: 'bg-tooltip-warning border-error-700',
 };
 
 export const iconStyles: { [key in TooltipMode]: string } = {

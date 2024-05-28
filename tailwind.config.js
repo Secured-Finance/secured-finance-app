@@ -1,12 +1,10 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 
-// const { nextui } = require('@nextui-org/theme');
-
 module.exports = {
     content: [
         './src/**/*.{ts,tsx,js,jsx}',
         './public/index.html',
-        './node_modules/@nextui-org/theme/dist/components/tooltip.js',
+        './node_modules/@nextui-org/theme/dist/components/(tooltip).js',
     ],
     safelist: [
         {
@@ -22,7 +20,7 @@ module.exports = {
             },
             boxShadow: {
                 deep: '0px 34px 64px 0px rgba(0, 0, 0, 0.45)',
-                dropdown: '0px 0px 4px 0px rgba(0, 0, 0, 0.20)',
+                dropdown: '0px 16px 64px -48px rgba(31, 47, 70, 0.4)',
                 tab: '0px 46px 64px 0px rgba(31, 47, 70, 0.4)',
                 selector: 'inset 0px 2px 4px rgba(0, 0, 0, 0.25)',
                 sliderthumb: '0px 4px 16px -8px rgba(15, 15, 15, 0.1)',
@@ -68,6 +66,17 @@ module.exports = {
             gap: {
                 '10px': '10px',
             },
+            lineHeight: {
+                5.5: '22px',
+                11: '44px',
+                12: '48px',
+                14: '56px',
+                16: '64px',
+                18: '72px',
+                20: '80px',
+                24: '96px',
+                28: '112px',
+            },
         },
 
         fontFamily: {
@@ -87,6 +96,25 @@ module.exports = {
         },
 
         fontSize: {
+            2.5: '10px',
+            3: '12px',
+            3.5: '14px',
+            4: '16px',
+            4.5: '18px',
+            5: '20px',
+            5.5: '22px',
+            6: '24px',
+            7: '28px',
+            8: '32px',
+            9: '36px',
+            10: '40px',
+            11: '44px',
+            12: '48px',
+            14: '56px',
+            16: '64px',
+            18: '72px',
+            22: '88px',
+            26: '104px',
             '5xl': ['86px', { lineHeight: '96px', letterSpacing: '-0.02em' }],
             '4xl': ['54px', { lineHeight: '64px', letterSpacing: '-0.02em' }],
             '3xl': ['42px', { lineHeight: '52px', letterSpacing: '-0.02em' }],
@@ -100,27 +128,23 @@ module.exports = {
             xs: '12px',
             '2xs': ['10px', { lineHeight: '15px' }],
         },
+
         colors: {
             primary: {
                 50: '#F5F6FF',
-                300: '#C4CAFF',
+                300: '#B9BDEA',
                 500: '#5162FF',
-                700: '#2033DB',
-                900: '#0213A5',
+                700: '#3555AC',
             },
             secondary: {
-                50: '#D4FCFF',
                 300: '#96EAF1',
                 500: '#15D6E8',
                 700: '#09A8B7',
-                900: '#01747F',
             },
             tertiary: {
-                50: '#F5F6FF',
-                300: '#C4CAFF',
-                500: '#5162FF',
-                700: '#BD47FB',
-                900: '#0213A5',
+                300: '#EDCBFF',
+                500: '#BD47FB',
+                700: '#8919C4',
             },
             neutral: {
                 DEFAULT: '#353945',
@@ -143,40 +167,30 @@ module.exports = {
                 800: '#1E293B',
                 900: '#002133',
             },
-            // TODO: check success 300 and 500 values in design system and app
             success: {
-                50: '#DDFFE9',
-                '300': '#96EAF1',
-                // 300: '#AFFFCB',
-                '500': '#15D6E8',
-                // 500: '#74E37E',
-                700: '#5CD167',
-                900: '#157637',
+                300: '#AAE8B0',
+                500: '#5CD167',
+                700: '#0F921B',
             },
             warning: {
-                50: '#FFF1D7',
                 300: '#FFDB93',
-                500: '#FFCD69',
-                700: '#FAAD14',
+                500: '#FAAD14',
+                700: '#C58300',
                 900: '#BD7003',
             },
             error: {
-                50: '#FFE5E8',
                 300: '#FF9FAE',
-                500: '#FF324B',
-                700: '#CE0920',
-                900: '#A50114',
+                500: '#FF658A',
+                700: '#C30C38',
             },
-            // Primary
-            universeBlue: '#002133',
-
+            tooltip: {
+                success: '#0C474C',
+                warning: '#422F09',
+                error: '#4A1220',
+            },
             teal: '#11CABE',
             green: '#5CD167',
             orange: '#F9AA4B',
-            yellow: {
-                DEFAULT: '#FAAD14',
-                '900': '#BD7003',
-            },
             red: '#FA2256',
             purple: '#BD47FB',
             gunMetal: '#292D3F',
@@ -189,7 +203,6 @@ module.exports = {
             galacticOrange: '#FF9FAE',
             moonGrey: '#E6E6E6',
             slateGray: '#777E90',
-            secondary3: '#96EAF1',
             secondary7: '#B9BDEA',
             error5: '#FF324B',
             'z-neutral-100': '#F1F5F9',
@@ -257,5 +270,4 @@ module.exports = {
             },
         },
     },
-    // plugins: [nextui()], // TODO: add nextui in and default to dark theme
 };

@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { Landing } from 'src/components/pages';
 import { useIsGlobalItayose, useIsMarketTerminated } from 'src/hooks';
 
-const Advanced = () => {
+const Simple = () => {
     const { data: isTerminated, isPending: isPendingMarketTerminated } =
         useIsMarketTerminated();
 
@@ -25,7 +25,7 @@ const Advanced = () => {
         return null;
     }
 
-    return <Landing view='Advanced' />;
+    return <Landing view='Simple' />;
 };
 
-export default Advanced;
+export default Simple;

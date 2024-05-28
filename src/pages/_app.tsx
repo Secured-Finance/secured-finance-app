@@ -5,12 +5,13 @@ import { GraphClientProvider } from '@secured-finance/sf-graph-client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AppProps } from 'next/app';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Provider, useSelector } from 'react-redux';
 import 'src/bigIntPatch';
 import { Footer } from 'src/components/atoms';
-import { Header } from 'src/components/organisms';
+
 import { Layout } from 'src/components/templates';
 import SecuredFinanceProvider from 'src/contexts/SecuredFinanceProvider';
 import store from 'src/store';
@@ -29,6 +30,10 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 import '../assets/css/index.css';
+
+const Header = dynamic(() => import('src/components/organisms/Header/Header'), {
+    ssr: false,
+});
 
 const projectId = getWalletConnectId();
 
