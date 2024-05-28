@@ -10,10 +10,6 @@ const Content = ({
     content: string;
 }) => <div className={`bg-${color} p-10 text-white`}>{content}</div>;
 
-const TitleComponent = () => (
-    <div className='bg-teal p-10 text-white'>Title Component</div>
-);
-
 export default {
     title: 'Templates/Page',
     component: Page,
@@ -30,10 +26,6 @@ export default {
 const Template: StoryFn<typeof Page> = args => <Page {...args} />;
 
 export const Default = Template.bind({});
-export const WithTitleComponent = Template.bind({});
-WithTitleComponent.args = {
-    titleComponent: <TitleComponent />,
-};
 
 export const WithMultipleChildren = Template.bind({});
 WithMultipleChildren.args = {

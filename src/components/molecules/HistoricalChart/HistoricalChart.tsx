@@ -295,7 +295,7 @@ export function HistoricalChart({
                                 </span>
                                 <div
                                     className={clsx('font-normal', {
-                                        'text-palePurple': key !== 'Change',
+                                        'text-primary-50': key !== 'Change',
                                         'text-nebulaTeal':
                                             key === 'Change' &&
                                             !value.includes('-'),
@@ -313,7 +313,7 @@ export function HistoricalChart({
             <div
                 ref={chartContainerRef}
                 data-testid='candlestick-chart'
-                className='relative h-[297px] w-full'
+                className='relative h-[156px] w-full laptop:h-[184px]'
             />
             <div className={clsx(titleOfChartClass)}>
                 <div>
@@ -351,7 +351,7 @@ export function HistoricalChart({
             <div
                 ref={secondContainerRef}
                 data-testid='volume-chart'
-                className='relative h-[144px] w-full'
+                className='relative h-[92px] w-full laptop:h-[115px]'
             ></div>
         </div>
     );

@@ -87,11 +87,11 @@ export const CoreTable = <T,>({
 
     return (
         <table
-            className='w-full table-fixed'
+            className={'w-full table-fixed overflow-hidden'}
             data-testid={coreTableOptions.name}
         >
             {coreTableOptions.showHeaders ? (
-                <thead className='font-secondary text-2xs leading-4 text-neutral-400 laptop:h-7 laptop:py-1 laptop:text-xs laptop:leading-5 laptop:text-neutral-300'>
+                <thead className='font-tertiary text-xs leading-[14px] text-neutral-400 laptop:h-[22px] laptop:py-1'>
                     {table.getHeaderGroups().map(headerGroup => (
                         <tr
                             key={headerGroup.id}
@@ -101,7 +101,7 @@ export const CoreTable = <T,>({
                                 <th
                                     data-testid={`${coreTableOptions.name}-header-cell`}
                                     key={header.id}
-                                    className='whitespace-nowrap pb-1 text-center font-normal laptop:px-5 laptop:pb-0'
+                                    className='whitespace-nowrap pb-1 text-center font-normal laptop:px-4 laptop:pb-0'
                                 >
                                     {header.isPlaceholder
                                         ? null

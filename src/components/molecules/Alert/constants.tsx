@@ -13,16 +13,21 @@ export const severityStyle: { [key in AlertSeverity]: string } = {
     [AlertSeverity.Info]: 'border-primary-300 bg-primary-500/10',
     [AlertSeverity.Success]: 'border-success-300 bg-success-700/10',
     [AlertSeverity.Warning]: 'border-warning-300 bg-warning-900/10',
+    [AlertSeverity.Basic]: 'border-primary-300 bg-primary-700',
 };
 
-export const buttonColorStyle: { [key in AlertSeverity]: string } = {
-    [AlertSeverity.Error]: 'text-error-300',
-    [AlertSeverity.Info]: 'text-primary-300',
-    [AlertSeverity.Success]: 'text-success-300',
-    [AlertSeverity.Warning]: 'text-warning-300',
-};
+export const buttonColorStyle: { [key in AlertSeverity]: string | undefined } =
+    {
+        [AlertSeverity.Error]: 'text-error-300',
+        [AlertSeverity.Info]: 'text-primary-300',
+        [AlertSeverity.Success]: 'text-success-300',
+        [AlertSeverity.Warning]: 'text-warning-300',
+        [AlertSeverity.Basic]: undefined,
+    };
 
-export const alertIconMapping: { [key in AlertSeverity]: JSX.Element } = {
+export const alertIconMapping: {
+    [key in AlertSeverity]: JSX.Element | undefined;
+} = {
     [AlertSeverity.Error]: (
         <XCircleIcon className={buttonColorStyle[AlertSeverity.Error]} />
     ),
@@ -39,4 +44,5 @@ export const alertIconMapping: { [key in AlertSeverity]: JSX.Element } = {
             className={buttonColorStyle[AlertSeverity.Warning]}
         />
     ),
+    [AlertSeverity.Basic]: undefined,
 };
