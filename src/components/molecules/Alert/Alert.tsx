@@ -11,6 +11,7 @@ export const Alert = ({
     onClose,
     localStorageKey,
     localStorageValue,
+    isShowCloseButton = true,
 }: {
     severity?: AlertSeverity;
     title: React.ReactNode;
@@ -18,6 +19,7 @@ export const Alert = ({
     onClose?: () => void;
     localStorageKey?: string;
     localStorageValue?: string;
+    isShowCloseButton?: boolean;
 }) => {
     const value =
         typeof window !== 'undefined' && localStorageKey
@@ -88,19 +90,21 @@ export const Alert = ({
                     )}
                 </div>
             </div>
-            <button
-                onClick={handleClose}
-                className={clsx(
-                    buttonColorStyle[severity],
-                    'h-[13px] w-[13px] flex-shrink-0 laptop:h-4 laptop:w-4',
-                    {
-                        'mt-[3px] laptop:mt-0.5': !subtitle,
-                    }
-                )}
-                data-testid='close-button'
-            >
-                <XMarkIcon />
-            </button>
+            {isShowCloseButton && (
+                <button
+                    onClick={handleClose}
+                    className={clsx(
+                        buttonColorStyle[severity],
+                        'h-[13px] w-[13px] flex-shrink-0 laptop:h-4 laptop:w-4',
+                        {
+                            'mt-[3px] laptop:mt-0.5': !subtitle,
+                        }
+                    )}
+                    data-testid='close-button'
+                >
+                    <XMarkIcon />
+                </button>
+            )}
         </section>
     );
 };

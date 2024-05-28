@@ -66,6 +66,17 @@ module.exports = {
             gap: {
                 '10px': '10px',
             },
+            lineHeight: {
+                5.5: '22px',
+                11: '44px',
+                12: '48px',
+                14: '56px',
+                16: '64px',
+                18: '72px',
+                20: '80px',
+                24: '96px',
+                28: '112px',
+            },
         },
 
         fontFamily: {
@@ -85,6 +96,25 @@ module.exports = {
         },
 
         fontSize: {
+            2.5: '10px',
+            3: '12px',
+            3.5: '14px',
+            4: '16px',
+            4.5: '18px',
+            5: '20px',
+            5.5: '22px',
+            6: '24px',
+            7: '28px',
+            8: '32px',
+            9: '36px',
+            10: '40px',
+            11: '44px',
+            12: '48px',
+            14: '56px',
+            16: '64px',
+            18: '72px',
+            22: '88px',
+            26: '104px',
             '5xl': ['86px', { lineHeight: '96px', letterSpacing: '-0.02em' }],
             '4xl': ['54px', { lineHeight: '64px', letterSpacing: '-0.02em' }],
             '3xl': ['42px', { lineHeight: '52px', letterSpacing: '-0.02em' }],
@@ -98,8 +128,10 @@ module.exports = {
             xs: '12px',
             '2xs': ['10px', { lineHeight: '15px' }],
         },
+
         colors: {
             primary: {
+                50: '#F5F6FF',
                 300: '#B9BDEA',
                 500: '#5162FF',
                 700: '#3555AC',

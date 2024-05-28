@@ -9,101 +9,22 @@ import {
     TableHeader,
     TableRow,
 } from '@nextui-org/table';
-import { toBytes32 } from '@secured-finance/sf-graph-client';
-import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
 import clsx from 'clsx';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { CloseButton, Option } from 'src/components/atoms';
-import {
-    ContractMap,
-    baseContracts,
-    useBreakpoint,
-    useGraphClientHook,
-    useIsSubgraphSupported,
-    useLendingMarkets,
-    useMaturityOptions,
-    useTradeHistoryDetails,
-} from 'src/hooks';
-import useSF from 'src/hooks/useSecuredFinance';
+import { baseContracts, useBreakpoint, useLendingMarkets } from 'src/hooks';
 import { MaturityOptionList } from 'src/types';
 import {
     CurrencySymbol,
     calculateTimeDifference,
     currencyMap,
+    formatDuration,
     formatLoanValue,
-    ordinaryFormat,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
+import { CurrencyMaturityInfo } from './CurrencyMaturityInfo';
 import { columns, mobileColumns } from './constants';
 import { ColumnKey, CurrencyMaturityCategories } from './types';
-
-export const PriceChange = ({
-    currency,
-    maturity,
-    lendingContracts,
-    index,
-}: {
-    currency: CurrencySymbol;
-    maturity: Maturity;
-    lendingContracts: ContractMap;
-    index: number;
-}) => {
-    const [timestamp, setTimestamp] = useState<number>(1643713200);
-    const securedFinance = useSF();
-    const currentChainId = securedFinance?.config.chain.id;
-
-    const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
-
-    useEffect(() => {
-        setTimestamp(Math.round(new Date().getTime() / 1000));
-    }, []);
-
-    const maturityOptionList = useMaturityOptions(
-        lendingContracts,
-        market => market.isOpened
-    );
-
-    const transactionHistory = useGraphClientHook(
-        {
-            currency: toBytes32(currency),
-            maturity: maturity,
-            from: timestamp - 24 * 3600,
-            to: timestamp,
-        },
-        queries.TransactionHistoryDocument,
-        'transactionHistory',
-        !isSubgraphSupported
-    ).data;
-
-    const selectedTerm = useMemo(() => {
-        return (
-            maturityOptionList.find(option =>
-                option.value.equals(new Maturity(+maturity))
-            ) || maturityOptionList[0]
-        );
-    }, [maturity, maturityOptionList]);
-
-    const tradeHistoryDetails = useTradeHistoryDetails(
-        transactionHistory ?? [],
-        currency,
-        selectedTerm.value
-    );
-
-    let values = undefined;
-
-    if (isSubgraphSupported) {
-        values = [
-            formatLoanValue(tradeHistoryDetails.max, 'price'),
-            formatLoanValue(tradeHistoryDetails.min, 'price'),
-            tradeHistoryDetails.count.toString(),
-            tradeHistoryDetails.sum
-                ? ordinaryFormat(tradeHistoryDetails.sum)
-                : '-',
-        ];
-    }
-
-    return <span>{values && values[index] ? values[index] : 0}</span>;
-};
 
 export const CurrencyMaturityDropdown = ({
     currencyList,
@@ -143,25 +64,6 @@ export const CurrencyMaturityDropdown = ({
             };
         })
     );
-
-    function formatDuration(durationMs: number): string {
-        const msPerDay = 24 * 60 * 60 * 1000; // Milliseconds in a day
-        const daysInYear = 365.25; // Average number of days in a year accounting for leap years
-
-        // Calculate the duration in days
-        const durationInDays = durationMs / msPerDay;
-
-        // Calculate the fraction of the year
-        const fractionOfYear = durationInDays / daysInYear;
-
-        // Format the fraction of year to two decimal places
-        const fractionOfYearFormatted = fractionOfYear.toFixed(2);
-
-        // Return the formatted string
-        return `${fractionOfYearFormatted}Y (${Math.round(
-            durationInDays
-        )} days)`;
-    }
 
     const renderCell = useCallback(
         (
@@ -209,7 +111,7 @@ export const CurrencyMaturityDropdown = ({
                     );
                 case 'volume':
                     return (
-                        <PriceChange
+                        <CurrencyMaturityInfo
                             currency={ccy}
                             maturity={maturity}
                             lendingContracts={lendingMarkets[ccy]}

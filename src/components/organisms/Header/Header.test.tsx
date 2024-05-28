@@ -1,6 +1,6 @@
 import { composeStories } from '@storybook/react';
 import mockRouter from 'next-router-mock';
-import { fireEvent, render, screen } from 'src/test-utils.js';
+import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './Header.stories';
 
 const { Primary } = composeStories(stories);
@@ -16,16 +16,29 @@ describe('Header component', () => {
     it('should render the header', () => {
         mockRouter.push('/');
         render(<Primary />);
-        expect(screen.getByText('OTC Lending')).toBeInTheDocument();
+        expect(screen.getByText('Trading')).toBeInTheDocument();
         expect(screen.getByText('Markets')).toBeInTheDocument();
         expect(screen.getByText('Portfolio')).toBeInTheDocument();
         expect(screen.getByText('Connect Wallet')).toBeInTheDocument();
     });
 
+    it('should open a submenu if Trading tab is clicked', async () => {
+        mockRouter.push('/');
+        render(<Primary />);
+
+        const tradingTab = screen.getByTestId('Trading-tab');
+        fireEvent.click(tradingTab);
+
+        await waitFor(() => {
+            expect(screen.getByText('Simple')).toBeInTheDocument();
+            expect(screen.getByText('Advanced')).toBeInTheDocument();
+        });
+    });
+
     it('should highlight the landing page by default page', () => {
         mockRouter.push('/');
         render(<Primary />);
-        const textElement = screen.getByText('OTC Lending');
+        const textElement = screen.getByText('Trading');
         expect(textElement.parentNode).toHaveClass(
             'bg-gradient-to-b from-tabGradient-2 to-tabGradient-1'
         );
@@ -34,7 +47,7 @@ describe('Header component', () => {
     it('should highlight the landing page when on global-itayose', () => {
         mockRouter.push('/global-itayose');
         render(<Primary />);
-        const textElement = screen.getByText('OTC Lending');
+        const textElement = screen.getByText('Trading');
         expect(textElement.parentNode).toHaveClass(
             'bg-gradient-to-b from-tabGradient-2 to-tabGradient-1'
         );
@@ -53,10 +66,10 @@ describe('Header component', () => {
     });
 
     it('should highlight the landing page when on advanced page', () => {
-        mockRouter.push('/advanced');
+        mockRouter.push('/');
 
         render(<Primary />);
-        const textElement = screen.getByText('OTC Lending');
+        const textElement = screen.getByText('Trading');
         expect(textElement.parentNode).toHaveClass(
             'bg-gradient-to-b from-tabGradient-2 to-tabGradient-1'
         );
