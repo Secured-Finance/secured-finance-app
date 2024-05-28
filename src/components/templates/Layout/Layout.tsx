@@ -23,7 +23,7 @@ export const Layout = ({
             </div>
             <footer
                 className={clsx('w-full', {
-                    'sticky bottom-0 z-30 bg-universeBlue':
+                    'sticky bottom-0 z-30 bg-neutral-900':
                         getCommitHash() !== '.storybook',
                 })}
             >

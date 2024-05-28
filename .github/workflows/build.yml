@@ -28,7 +28,7 @@ on:
 jobs:
   build-and-test-all:
     name: Build and Test
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     environment: ${{ inputs.environment_name }}
     steps:
       - uses: actions/checkout@v3
@@ -63,6 +63,7 @@ jobs:
           SF_ENV=${{ vars.SF_ENV }}
           NEXT_PUBLIC_USE_PACKAGE_VERSION=${{ vars.USE_PACKAGE_VERSION }}
           NEXT_PUBLIC_SUPPORTED_CHAIN_IDS=${{ vars.SUPPORTED_CHAIN_IDS }}
+          NEXT_PUBLIC_NON_SUBGRAPH_SUPPORTED_CHAIN_IDS=${{ vars.NON_SUBGRAPH_SUPPORTED_CHAIN_IDS }}
           EOF
 
       - name: Check Syntax with Prettier
@@ -71,13 +72,25 @@ jobs:
       - name: Check Style with ESLint
         run: npm run lint:check
 
+      - name: Run Tests
+        run: npm run test:cov
+
+      - name: Upload Code Coverage
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: unit-tests
+          files: './coverage/coverage-final.json'
+
       - name: Build Web App
-        run: npm run build --verbose
+        run: npm run build
 
       - name: Build Storybook
-        uses: chromaui/action@v1
+        uses: chromaui/action@v11
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          exitOnceUploaded: true
+          skip: "main"
 
       - name: Publish Web App
         uses: actions/upload-artifact@v3

@@ -10,7 +10,6 @@ import {
 } from 'src/components/atoms';
 import { CollateralBook, useCollateralCurrencies } from 'src/hooks';
 import { RootState } from 'src/store/types';
-import { ButtonSizes } from 'src/types';
 import {
     ButtonEvents,
     CurrencySymbol,
@@ -82,6 +81,8 @@ export const CollateralTabLeftPane = ({
         return checkAssetQuantityExist(collateralBook.nonCollateral);
     }, [collateralBook.nonCollateral]);
 
+    const totalCollateralInUSD = account ? collateralBook.usdCollateral : 0;
+
     return (
         <div className='flex min-h-[400px] w-full flex-col border-white-10 tablet:w-64 tablet:border-r'>
             <div className='flex-grow tablet:border-b tablet:border-white-10'>
@@ -152,6 +153,7 @@ export const CollateralTabLeftPane = ({
                                     collateralBook.collateralThreshold
                                 }
                                 account={account}
+                                totalCollateralInUSD={totalCollateralInUSD}
                             />
                             {collateralQuantityExist && (
                                 <CollateralInformationTable
@@ -212,7 +214,6 @@ export const CollateralTabLeftPane = ({
             </div>
             <div className='flex h-24 flex-row items-center justify-center gap-4 px-6'>
                 <Button
-                    size={ButtonSizes.sm}
                     onClick={() => {
                         onClick('deposit');
                         track(ButtonEvents.DEPOSIT_COLLATERAL_BUTTON);
@@ -224,7 +225,6 @@ export const CollateralTabLeftPane = ({
                     Deposit
                 </Button>
                 <Button
-                    size={ButtonSizes.sm}
                     disabled={!account || netAssetValue <= 0 || chainError}
                     onClick={() => {
                         onClick('withdraw');

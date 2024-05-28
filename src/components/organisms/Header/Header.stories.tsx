@@ -5,7 +5,10 @@ import {
 } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
-import { Header } from './';
+import Header from './Header';
+
+const FIGMA_STORYBOOK_LINK =
+    'https://www.figma.com/file/YIBsk1ihFbPlDb8XldGj1T/SF-Design-System?type=design&node-id=182-2672&mode=dev';
 
 export default {
     title: 'Organism/Header',
@@ -16,6 +19,13 @@ export default {
     decorators: [withWalletProvider],
     parameters: {
         ...RESPONSIVE_PARAMETERS,
+        viewport: {
+            disable: true,
+        },
+        design: {
+            type: 'figma',
+            url: FIGMA_STORYBOOK_LINK,
+        },
     },
 } as Meta<typeof Header>;
 
@@ -25,6 +35,13 @@ export const Primary = Template.bind({});
 export const Connected = Template.bind({});
 Connected.parameters = {
     connected: true,
+};
+
+export const TradingMenuOpened = Template.bind({});
+TradingMenuOpened.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = await canvas.findByTestId('Trading-tab');
+    await userEvent.click(button);
 };
 
 export const MenuExpanded = Template.bind({});

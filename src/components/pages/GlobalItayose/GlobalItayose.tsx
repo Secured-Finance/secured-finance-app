@@ -17,7 +17,7 @@ export const GlobalItayose = () => {
     const dispatch = useDispatch();
     const router = useRouter();
     const { data: currencies } = useCurrencies();
-    const assetList = toOptions(currencies, CurrencySymbol.WBTC);
+    const assetList = toOptions(currencies, CurrencySymbol.USDC);
 
     const { currency } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)

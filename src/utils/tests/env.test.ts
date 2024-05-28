@@ -3,6 +3,7 @@ import {
     getAmplitudeApiKey,
     getCommitHash,
     getEnvironment,
+    getNonSubgraphSupportedChainIds,
     getSupportedChainIds,
     getUsePackageVersion,
     getWalletConnectId,
@@ -24,6 +25,24 @@ describe('getSupportedChainIds ', () => {
         expect(() => getSupportedChainIds()).toThrowError(
             'NEXT_PUBLIC_SUPPORTED_CHAIN_IDS is not set'
         );
+    });
+});
+
+describe('getNonSubgraphSupportedChainIds ', () => {
+    it('should return the value of the environment variable', () => {
+        process.env.NEXT_PUBLIC_NON_SUBGRAPH_SUPPORTED_CHAIN_IDS = '314,314159';
+        const chainIds = getNonSubgraphSupportedChainIds();
+        expect(chainIds.length).toBe(2);
+        expect(chainIds[0]).toBe(314);
+        expect(typeof chainIds[0]).toBe('number');
+        expect(chainIds[1]).toBe(314159);
+        expect(typeof chainIds[1]).toBe('number');
+    });
+
+    it('should return empty array if variable is not set', () => {
+        process.env.NEXT_PUBLIC_NON_SUBGRAPH_SUPPORTED_CHAIN_IDS = '';
+        const chainIds = getNonSubgraphSupportedChainIds();
+        expect(chainIds.length).toBe(0);
     });
 });
 

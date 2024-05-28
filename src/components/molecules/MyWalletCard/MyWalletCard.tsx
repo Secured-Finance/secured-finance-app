@@ -5,13 +5,17 @@ import { useMemo, useRef, useState } from 'react';
 import Filecoin from 'src/assets/coins/fil.svg';
 import AxelarFil from 'src/assets/coins/wfil.svg';
 import AxelarSquid from 'src/assets/img/squid+axelar.svg';
-import { Button, GradientBox, Separator } from 'src/components/atoms';
+import {
+    Button,
+    ButtonSizes,
+    GradientBox,
+    Separator,
+} from 'src/components/atoms';
 import {
     AssetDisclosure,
     AssetDisclosureProps,
 } from 'src/components/molecules';
 import { useBalances } from 'src/hooks';
-import { ButtonSizes } from 'src/types';
 import {
     CurrencySymbol,
     WalletSource,
@@ -112,7 +116,7 @@ export const MyWalletCard = ({
                                     </div>
                                     <Button
                                         onClick={() => setIsOpen(true)}
-                                        size={ButtonSizes.xs}
+                                        size={ButtonSizes.sm}
                                     >
                                         Bridge
                                     </Button>
