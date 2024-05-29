@@ -16,7 +16,7 @@ export const OrderDisplayBox = ({
             <div className='flex flex-row items-center gap-2'>
                 <div className='text-slateGray'>{field}</div>
                 {informationText && (
-                    <InfoToolTip align='right' iconSize='small'>
+                    <InfoToolTip iconSize='small' placement='bottom-start'>
                         {informationText}
                     </InfoToolTip>
                 )}

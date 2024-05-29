@@ -20,9 +20,10 @@ import {
     CurrencyDropdown,
     Dialog,
     SuccessPanel,
+    Tooltip,
 } from 'src/components/molecules';
 import { MyWalletWidget } from 'src/components/organisms';
-import { Page, Tooltip, TwoColumns } from 'src/components/templates';
+import { Page, TwoColumns } from 'src/components/templates';
 import {
     useBlockExplorerUrl,
     useCurrencies,
