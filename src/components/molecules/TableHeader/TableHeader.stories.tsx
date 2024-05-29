@@ -8,6 +8,9 @@ export default {
     args: {
         title: 'Title',
     },
+    parameters: {
+        chromatic: { delay: 3000 },
+    },
 } as Meta<typeof TableHeader>;
 
 const Template: StoryFn<typeof TableHeader> = args => (
@@ -38,5 +41,6 @@ TitleHint.args = {
 TitleHint.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const button = canvas.getByRole('button');
+    await userEvent.unhover(button);
     await userEvent.hover(button);
 };
