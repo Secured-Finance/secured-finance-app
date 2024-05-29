@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 import ErrorCircleIcon from 'src/assets/icons/error-circle.svg';
 import WarningCircleIcon from 'src/assets/icons/warning-circle.svg';
 import { CurrencyIcon } from 'src/components/atoms';
-import { Tooltip } from 'src/components/templates';
+import { Tooltip } from 'src/components/molecules';
 import {
     currencyMap,
     hexToCurrencySymbol,
@@ -87,7 +87,7 @@ export const TableContractCell = ({
                 </span>
                 {delistedContractSide !== undefined && (
                     <Tooltip
-                        align='right'
+                        placement='bottom-start'
                         iconElement={
                             <div className='mt-1 flex h-3 w-3 items-center justify-center'>
                                 {delistedTooltipIcon}

@@ -22,7 +22,6 @@ export const Tooltip = ({
 }) => {
     return (
         <NextTooltip
-            defaultOpen
             isDisabled={disabled}
             showArrow={true}
             offset={0}
@@ -44,9 +43,12 @@ export const Tooltip = ({
             {...tooltipOptions}
         >
             <div
-                className={clsx('flex items-center focus:outline-none', {
-                    'cursor-pointer': !disabled,
-                })}
+                className={clsx(
+                    'pointer-events-auto flex items-center focus:outline-none',
+                    {
+                        'cursor-pointer': !disabled,
+                    }
+                )}
             >
                 {cloneElement(
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any

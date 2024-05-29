@@ -1,16 +1,18 @@
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
-import { Tooltip } from 'src/components/templates';
+import { Tooltip } from 'src/components/molecules';
 
 export const InfoToolTip = ({
     iconColor = 'gray',
     iconSize = 'medium',
     align,
     children,
+    placement,
 }: {
     iconColor?: 'gray' | 'white' | 'yellow';
     iconSize?: 'small' | 'medium' | 'large';
     align?: Parameters<typeof Tooltip>[0]['align'];
+    placement?: Parameters<typeof Tooltip>[0]['placement'];
     children: React.ReactNode;
 }) => {
     const Icon = (
@@ -28,7 +30,7 @@ export const InfoToolTip = ({
     );
 
     return (
-        <Tooltip iconElement={Icon} align={align}>
+        <Tooltip iconElement={Icon} align={align} placement={placement}>
             {children}
         </Tooltip>
     );

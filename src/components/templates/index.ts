@@ -1,4 +1,3 @@
-export * from '../molecules/Tooltip';
 export * from './Closable';
 export * from './EmergencySettlementStep';
 export * from './Layout';
