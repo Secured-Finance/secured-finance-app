@@ -3,7 +3,7 @@ import {
     InformationCircleIcon,
 } from '@heroicons/react/24/outline';
 import type { Meta, StoryFn } from '@storybook/react';
-import { screen, userEvent } from '@storybook/testing-library';
+import { userEvent, within } from '@storybook/testing-library';
 import { Tooltip } from './Tooltip';
 import { TooltipMode } from './types';
 
@@ -43,8 +43,10 @@ const Template: StoryFn<typeof Tooltip> = args => (
 );
 
 export const Default = Template.bind({});
-Default.play = async () => {
-    const button = await screen.getByTestId('information-circle');
+Default.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = await canvas.findByTestId('information-circle');
+    await userEvent.unhover(button);
     await userEvent.hover(button);
 };
 
@@ -52,8 +54,10 @@ export const Success = Template.bind({});
 Success.args = {
     mode: TooltipMode.Success,
 };
-Success.play = async () => {
-    const button = screen.getByTestId('information-circle');
+Success.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = await canvas.findByTestId('information-circle');
+    await userEvent.unhover(button);
     await userEvent.hover(button);
 };
 
@@ -61,8 +65,10 @@ export const Warning = Template.bind({});
 Warning.args = {
     mode: TooltipMode.Warning,
 };
-Warning.play = async () => {
-    const button = screen.getByTestId('information-circle');
+Warning.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = await canvas.findByTestId('information-circle');
+    await userEvent.unhover(button);
     await userEvent.hover(button);
 };
 
@@ -70,8 +76,10 @@ export const Error = Template.bind({});
 Error.args = {
     mode: TooltipMode.Error,
 };
-Error.play = async () => {
-    const button = screen.getByTestId('information-circle');
+Error.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = await canvas.findByTestId('information-circle');
+    await userEvent.unhover(button);
     await userEvent.hover(button);
 };
 
@@ -80,7 +88,9 @@ WithCustomHoverIcon.args = {
     iconElement: ButtonIcon,
 };
 
-WithCustomHoverIcon.play = async () => {
-    const button = screen.getByTestId('button-icon');
+WithCustomHoverIcon.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = await canvas.findByTestId('button-icon');
+    await userEvent.unhover(button);
     await userEvent.hover(button);
 };
