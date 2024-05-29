@@ -2,8 +2,9 @@ import {
     ChevronDoubleDownIcon,
     InformationCircleIcon,
 } from '@heroicons/react/24/outline';
+import { expect } from '@storybook/jest';
 import type { Meta, StoryFn } from '@storybook/react';
-import { userEvent, within } from '@storybook/testing-library';
+import { userEvent, waitFor, within } from '@storybook/testing-library';
 import { Tooltip } from './Tooltip';
 import { TooltipMode } from './types';
 
@@ -35,7 +36,7 @@ export default {
         iconElement: InformationIcon,
     },
     parameters: {
-        chromatic: { delay: 300 },
+        chromatic: { delay: 5000 },
     },
 } as Meta<typeof Tooltip>;
 
@@ -51,6 +52,14 @@ Default.play = async ({ canvasElement }) => {
     const button = await canvas.findByTestId('information-circle');
     await userEvent.unhover(button);
     await userEvent.hover(button);
+    await waitFor(async () => {
+        //👇 This assertion will pass if a DOM element with the matching id exists
+        await expect(
+            canvas.getByText(
+                'If the conditions are fulfilled, the trade will be executed.'
+            )
+        ).toBeInTheDocument();
+    });
 };
 
 export const Success = Template.bind({});
