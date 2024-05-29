@@ -34,6 +34,9 @@ export default {
         children: children,
         iconElement: InformationIcon,
     },
+    parameters: {
+        chromatic: { delay: 300 },
+    },
 } as Meta<typeof Tooltip>;
 
 const Template: StoryFn<typeof Tooltip> = args => (
