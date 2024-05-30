@@ -1,5 +1,6 @@
 import { composeStories } from '@storybook/react';
-import { fireEvent, render, screen } from 'src/test-utils.js';
+import userEvent from '@testing-library/user-event';
+import { render, screen } from 'src/test-utils.js';
 import * as stories from './Tooltip.stories';
 
 const { Default } = composeStories(stories);
@@ -18,12 +19,21 @@ describe('Tooltip Component', () => {
         expect(spy).toBeCalledTimes(0);
     });
 
-    it('should remove rendered information on mouseLeave event', () => {
+    it('should show rendered information on mouseEnter event', async () => {
         render(<Default />);
         const information = screen.getByTestId('information-circle');
-        fireEvent.mouseEnter(information);
-        fireEvent.mouseLeave(information);
+        await userEvent.unhover(information);
+        await userEvent.hover(information);
+        const tooltip = await screen.findByText(
+            'If the conditions are fulfilled, the trade will be executed.'
+        );
+        expect(tooltip).toBeInTheDocument();
+    });
 
+    it('should remove rendered information on mouseLeave event', async () => {
+        render(<Default />);
+        const information = screen.getByTestId('information-circle');
+        await userEvent.unhover(information);
         expect(
             screen.queryByText(
                 'If the conditions are fulfilled, the trade will be executed.'

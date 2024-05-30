@@ -1,5 +1,6 @@
 import * as analytics from '@amplitude/analytics-browser';
 import { composeStories } from '@storybook/react';
+import userEvent from '@testing-library/user-event';
 import {
     emptyTransaction,
     mockFilteredUserOrderHistory,
@@ -194,14 +195,14 @@ describe('Advanced Lending Component', () => {
                 'You will not be able to place additional orders as you currently have the maximum number of 20 orders. Please wait for your order to be filled or cancel existing orders before adding more.'
             )
         ).toBeInTheDocument();
-        const tooltip = await screen.findByTestId('Open Orders-tooltip');
-        fireEvent.mouseEnter(tooltip);
+        const tooltipTrigger = await screen.findByTestId('Open Orders-tooltip');
 
-        // expect(
-        //     screen.getByText(
-        //         'You have too many open orders. Please ensure that you have fewer than 20 orders to place more orders.'
-        //     )
-        // ).toBeInTheDocument();
+        await userEvent.unhover(tooltipTrigger);
+        await userEvent.hover(tooltipTrigger);
+        const tooltip = await screen.findByText(
+            'You have too many open orders. Please ensure that you have fewer than 20 orders to place more orders.'
+        );
+        expect(tooltip).toBeInTheDocument();
     });
 
     describe('Dynamic orderbook depth', () => {

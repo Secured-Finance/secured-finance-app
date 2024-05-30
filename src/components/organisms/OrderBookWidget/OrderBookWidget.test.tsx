@@ -383,9 +383,11 @@ describe('OrderBookWidget Component', () => {
             );
         });
 
-        // it('should display a help tooltip', () => {
-        //     render(<Itayose />);
-        //     expect(screen.getByTestId('tooltip')).toBeInTheDocument();
-        // });
+        it('should display an information icon', () => {
+            render(<Itayose />);
+            expect(
+                screen.getByTestId('information-circle')
+            ).toBeInTheDocument();
+        });
     });
 });

@@ -5,7 +5,7 @@ export default {
     title: 'Molecules/InfoToolTip',
     component: InfoToolTip,
     args: {
-        message: 'This is a tooltip',
+        children: 'This is a tooltip',
     },
 } as Meta<typeof InfoToolTip>;
 
