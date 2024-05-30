@@ -1,13 +1,9 @@
 import { composeStories } from '@storybook/react';
+import userEvent from '@testing-library/user-event';
 import { render, screen } from 'src/test-utils.js';
 import * as stories from './TableContractCell.stories';
 
-const {
-    Default,
-    Compact,
-    ContractOnly,
-    // Delisted
-} = composeStories(stories);
+const { Default, Compact, ContractOnly, Delisted } = composeStories(stories);
 
 describe('TableContractCell Component', () => {
     describe('Default Variant', () => {
@@ -26,12 +22,16 @@ describe('TableContractCell Component', () => {
             expect(screen.getByRole('img')).toHaveClass('w-6 h-6');
         });
 
-        // it('should display the tooltip if delisted is true', () => {
-        //     render(<Delisted />);
-        //     expect(screen.getByTestId('tooltip')).toBeInTheDocument();
-        // });
-
-        // TODO: Add tests for hovering over the tooltip
+        it('should display the tooltip if delisted is true', async () => {
+            render(<Delisted />);
+            const information = screen.getByTestId('delisted-tooltip');
+            await userEvent.unhover(information);
+            await userEvent.hover(information);
+            const tooltip = await screen.findByText(
+                'Delisting: Redemption will be available 7 days post-maturity.'
+            );
+            expect(tooltip).toBeInTheDocument();
+        });
     });
 
     describe('Compact Variant', () => {

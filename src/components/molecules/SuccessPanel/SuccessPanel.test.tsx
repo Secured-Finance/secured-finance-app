@@ -1,17 +1,9 @@
 import { composeStories } from '@storybook/react';
 import { userEvent } from '@storybook/testing-library';
-import {
-    // fireEvent,
-    render,
-    screen,
-    waitFor,
-} from 'src/test-utils.js';
+import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './SuccessPanel.stories';
 
-const {
-    Default,
-    // WithTransactionHash
-} = composeStories(stories);
+const { Default, WithTransactionHash } = composeStories(stories);
 
 window.open = jest.fn();
 
@@ -31,19 +23,21 @@ describe('SuccessPanel Component', () => {
         expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
     });
 
-    // it('should have a link to etherscan if txHash is provided and tooltip should be visible on hover', async () => {
-    //     render(<WithTransactionHash />);
-    //     const address = screen.getByText('987654321123456789');
-    //     expect(address).toBeInTheDocument();
-    //     expect(address.tagName).toBe('BUTTON');
-    //     fireEvent.click(address);
+    it('should have a link to etherscan if txHash is provided and tooltip should be visible on hover', async () => {
+        render(<WithTransactionHash />);
+        const address = screen.getByText('987654321123456789');
+        expect(address).toBeInTheDocument();
+        expect(address.tagName).toBe('BUTTON');
+        fireEvent.click(address);
 
-    //     expect(window.open).toHaveBeenCalledWith(
-    //         'https://sepolia.etherscan.io/tx/1123456789',
-    //         '_blank'
-    //     );
+        expect(window.open).toHaveBeenCalledWith(
+            'https://sepolia.etherscan.io/tx/1123456789',
+            '_blank'
+        );
 
-    //     userEvent.hover(address);
-    //     await waitFor(() => expect(screen.getByRole('tooltip')).toBeVisible());
-    // });
+        await userEvent.unhover(address);
+        await userEvent.hover(address);
+        const tooltip = await screen.findByText('View on Etherscan');
+        expect(tooltip).toBeInTheDocument();
+    });
 });

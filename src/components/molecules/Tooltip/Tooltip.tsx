@@ -31,8 +31,7 @@ export const Tooltip = ({
     }, []);
 
     return (
-        <>
-            <div ref={tooltipRef}></div>
+        <div ref={tooltipRef} className='flex'>
             <NextTooltip
                 isDisabled={disabled}
                 showArrow={true}
@@ -69,6 +68,6 @@ export const Tooltip = ({
                     )}
                 </div>
             </NextTooltip>
-        </>
+        </div>
     );
 };

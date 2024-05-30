@@ -89,7 +89,10 @@ export const TableContractCell = ({
                     <Tooltip
                         placement='bottom-start'
                         iconElement={
-                            <div className='mt-1 flex h-3 w-3 items-center justify-center'>
+                            <div
+                                className='mt-1 flex h-3 w-3 items-center justify-center'
+                                data-testid={'delisted-tooltip'}
+                            >
                                 {delistedTooltipIcon}
                             </div>
                         }

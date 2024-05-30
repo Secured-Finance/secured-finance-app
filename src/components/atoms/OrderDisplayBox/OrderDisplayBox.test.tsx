@@ -1,11 +1,9 @@
 import { composeStories } from '@storybook/react';
+import userEvent from '@testing-library/user-event';
 import { render, screen } from 'src/test-utils.js';
 import * as stories from './OrderDisplayBox.stories';
 
-const {
-    Default,
-    // WithInformationText
-} = composeStories(stories);
+const { Default, WithInformationText } = composeStories(stories);
 
 describe('OrderDisplayBox component', () => {
     it('should render rate order display box', () => {
@@ -14,10 +12,13 @@ describe('OrderDisplayBox component', () => {
         expect(screen.getByText('1000')).toBeInTheDocument();
     });
 
-    // it('should display hint when mouse enter on information circle', () => {
-    //     render(<WithInformationText />);
-    //     const information = screen.getByTestId('information-circle');
-    //     fireEvent.mouseEnter(information);
-    //     expect(screen.getByRole('tooltip')).toHaveTextContent('Some hint.');
-    // });
+    it('should display hint when mouse enter on information circle', async () => {
+        render(<WithInformationText />);
+        const information = screen.getByTestId('information-circle');
+
+        await userEvent.unhover(information);
+        await userEvent.hover(information);
+        const tooltip = await screen.findByText('Some hint.');
+        expect(tooltip).toBeInTheDocument();
+    });
 });
