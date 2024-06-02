@@ -80,7 +80,7 @@ export const ActiveTradeTable = ({
                     onClick: (): void => {
                         dispatch(setMaturity(maturity));
                         handleCurrencyChange(ccy);
-                        router.push('/advanced/');
+                        router.push('/');
                     },
                 },
                 {
