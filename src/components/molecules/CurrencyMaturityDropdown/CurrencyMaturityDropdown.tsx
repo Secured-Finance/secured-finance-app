@@ -9,10 +9,20 @@ import {
     TableHeader,
     TableRow,
 } from '@nextui-org/table';
+import { toBytes32 } from '@secured-finance/sf-graph-client';
+import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import clsx from 'clsx';
 import { useCallback, useState } from 'react';
 import { CloseButton, Option } from 'src/components/atoms';
-import { baseContracts, useBreakpoint, useLendingMarkets } from 'src/hooks';
+import {
+    baseContracts,
+    useBreakpoint,
+    useGraphClientHook,
+    useIsSubgraphSupported,
+    useLastPrices,
+    useLendingMarkets,
+} from 'src/hooks';
+import useSF from 'src/hooks/useSecuredFinance';
 import { MaturityOptionList } from 'src/types';
 import {
     CurrencySymbol,
@@ -20,9 +30,9 @@ import {
     currencyMap,
     formatDuration,
     formatLoanValue,
+    usdFormat,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
-import { CurrencyMaturityInfo } from './CurrencyMaturityInfo';
 import { columns, mobileColumns } from './constants';
 import { ColumnKey, CurrencyMaturityCategories } from './types';
 
@@ -48,6 +58,35 @@ export const CurrencyMaturityDropdown = ({
         CurrencyMaturityCategories.All
     );
     const { data: lendingMarkets = baseContracts } = useLendingMarkets();
+    const { data: priceList } = useLastPrices();
+
+    const securedFinance = useSF();
+    const currentChainId = securedFinance?.config.chain.id;
+
+    const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
+
+    const dailyVolumes = useGraphClientHook(
+        {}, // no variables
+        queries.DailyVolumesDocument,
+        'dailyVolumes',
+        !isSubgraphSupported
+    );
+
+    const transactionHistory = useGraphClientHook(
+        {
+            currency: '',
+            maturity: '',
+            from: Math.round(
+                (new Date().getTime() - 90 * 24 * 60 * 60 * 1000) / 1000
+            ),
+            to: Math.round(new Date().getTime() / 1000),
+        },
+        queries.TransactionHistoryDocument,
+        'transactionHistory',
+        !isSubgraphSupported
+    );
+
+    console.log(transactionHistory);
 
     const CcyIcon = currencyMap[asset.value].icon;
 
@@ -79,8 +118,23 @@ export const CurrencyMaturityDropdown = ({
             const maturity = option.maturity;
 
             const data = lendingMarkets[ccy][+maturity];
+
             const marketUnitPrice = data?.marketUnitPrice;
             const openingUnitPrice = data?.openingUnitPrice;
+
+            const totalVolumeInUSD = (dailyVolumes.data ?? [])
+                .filter(
+                    item =>
+                        item.currency === toBytes32(ccy) &&
+                        item.maturity === maturity
+                )
+                .reduce((sum, item) => {
+                    const volumeInBaseUnit = currencyMap[ccy].fromBaseUnit(
+                        BigInt(item.volume)
+                    );
+                    const valueInUSD = volumeInBaseUnit * priceList[ccy];
+                    return sum + BigInt(Math.floor(valueInUSD));
+                }, BigInt(0));
 
             let lastPrice;
 
@@ -110,14 +164,8 @@ export const CurrencyMaturityDropdown = ({
                         </span>
                     );
                 case 'volume':
-                    return (
-                        <CurrencyMaturityInfo
-                            currency={ccy}
-                            maturity={maturity}
-                            lendingContracts={lendingMarkets[ccy]}
-                            index={3}
-                        />
-                    );
+                    // TODO: handle decimal places
+                    return <span>{usdFormat(Number(totalVolumeInUSD))}</span>;
                 case 'apr':
                     return formatLoanValue(lastPrice, 'rate');
                 case 'maturity':
@@ -127,7 +175,7 @@ export const CurrencyMaturityDropdown = ({
                     return formatDuration(Math.abs(timestampDifference));
             }
         },
-        [lendingMarkets]
+        [lendingMarkets, dailyVolumes.data, priceList]
     );
 
     return (
@@ -192,6 +240,11 @@ export const CurrencyMaturityDropdown = ({
                             aria-label='Currency Maturity Dropdown'
                             selectionMode='single'
                             removeWrapper
+                            isHeaderSticky
+                            classNames={{
+                                base: 'max-h-[232px] overflow-auto',
+                                table: 'min-h-[400px]',
+                            }}
                         >
                             <TableHeader columns={tableHeaderColumns}>
                                 {column => (
