@@ -38,10 +38,17 @@ export default {
     parameters: {
         chromatic: { delay: 5000 },
     },
+    decorators: [
+        Story => (
+            <div className='h-24'>
+                <Story />
+            </div>
+        ),
+    ],
 } as Meta<typeof Tooltip>;
 
 const Template: StoryFn<typeof Tooltip> = args => (
-    <div className='mx-10 flex h-full w-full justify-center'>
+    <div className='mx-10 flex w-full justify-center'>
         <Tooltip {...args} />
     </div>
 );
