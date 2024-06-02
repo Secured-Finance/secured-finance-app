@@ -42,10 +42,10 @@ export const CurrencyMaturityInfo = ({
         {
             currency: toBytes32(currency),
             maturity: maturity,
-            from: timestamp - 24 * 3600,
-            // from: Math.round(
-            //     (new Date().getTime() - 90 * 24 * 60 * 60 * 1000) / 1000
-            // ),
+            // from: timestamp - 24 * 3600,
+            from: Math.round(
+                (new Date().getTime() - 90 * 24 * 60 * 60 * 1000) / 1000
+            ),
             to: timestamp,
         },
         queries.TransactionHistoryDocument,
