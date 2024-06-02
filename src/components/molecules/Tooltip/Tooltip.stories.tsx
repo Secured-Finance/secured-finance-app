@@ -40,7 +40,7 @@ export default {
     },
     decorators: [
         Story => (
-            <div className='h-24'>
+            <div className='h-32'>
                 <Story />
             </div>
         ),

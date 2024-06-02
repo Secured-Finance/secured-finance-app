@@ -11,6 +11,13 @@ export default {
     parameters: {
         chromatic: { delay: 3000 },
     },
+    decorators: [
+        Story => (
+            <div className='h-24'>
+                <Story />
+            </div>
+        ),
+    ],
 } as Meta<typeof TableHeader>;
 
 const Template: StoryFn<typeof TableHeader> = args => (
