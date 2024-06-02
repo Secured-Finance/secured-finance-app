@@ -4,7 +4,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { expect } from '@storybook/jest';
 import type { Meta, StoryFn } from '@storybook/react';
-import { userEvent, waitFor, within } from '@storybook/testing-library';
+import { screen, userEvent, waitFor, within } from '@storybook/testing-library';
 import { Tooltip } from './Tooltip';
 import { TooltipMode } from './types';
 
@@ -53,9 +53,8 @@ Default.play = async ({ canvasElement }) => {
     await userEvent.unhover(button);
     await userEvent.hover(button);
     await waitFor(async () => {
-        //👇 This assertion will pass if a DOM element with the matching id exists
         await expect(
-            canvas.getByText(
+            screen.getByText(
                 'If the conditions are fulfilled, the trade will be executed.'
             )
         ).toBeInTheDocument();
