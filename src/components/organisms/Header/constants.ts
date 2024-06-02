@@ -23,7 +23,7 @@ export const DEV_LINKS = [
 export const TRADING_LINKS = {
     text: 'Trading',
     dataCy: 'lending',
-    alternateLinks: ['/advanced', '/global-itayose', '/itayose'],
+    alternateLinks: ['/', '/global-itayose', '/itayose'],
     links: [
         {
             text: 'Simple',

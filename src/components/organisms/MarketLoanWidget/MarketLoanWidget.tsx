@@ -87,7 +87,7 @@ export const MarketLoanWidget = ({
             dispatch(setCurrency(ccy));
 
             info.row.original.isOpened
-                ? router.push('/advanced/')
+                ? router.push('/')
                 : router.push('/itayose/');
         },
         [dispatch, router]
