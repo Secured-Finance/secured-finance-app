@@ -1,4 +1,5 @@
 import { composeStories } from '@storybook/react';
+import userEvent from '@testing-library/user-event';
 import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './OrderInputBox.stories';
 
@@ -49,13 +50,14 @@ describe('OrderInputBox component', () => {
         ).toBeInTheDocument();
     });
 
-    it('should display hint when mouse enter on information circle', () => {
+    it('should display hint when mouse enter on information circle', async () => {
         render(<WithInformationText />);
         const information = screen.getByTestId('information-circle');
-        fireEvent.mouseEnter(information);
-        expect(screen.getByRole('tooltip')).toHaveTextContent(
-            'Input value from 0 to 100'
-        );
+
+        await userEvent.unhover(information);
+        await userEvent.hover(information);
+        const tooltip = await screen.findByText('Input value from 0 to 100');
+        expect(tooltip).toBeInTheDocument();
     });
 
     it('should not display hint when the input is disabled', () => {

@@ -1,6 +1,6 @@
-import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
-
 import { composeStories } from '@storybook/react';
+import userEvent from '@testing-library/user-event';
+import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './WalletPopover.stories';
 
 const { Default } = composeStories(stories);
@@ -27,11 +27,13 @@ describe('WalletPopover component', () => {
             expect(screen.getByText('Sepolia')).toBeInTheDocument();
         });
         const alertIcon = screen.getByTestId('network-alert-triangle');
-        fireEvent.mouseEnter(alertIcon);
-        const tooltip = screen.getByRole('tooltip');
-        expect(tooltip).toHaveTextContent(
+
+        await userEvent.unhover(alertIcon);
+        await userEvent.hover(alertIcon);
+        const tooltip = await screen.findByText(
             'Secured Finance is not supported on this network. Please switch to a supported network.'
         );
+        expect(tooltip).toBeInTheDocument();
     });
 
     it('should have a default cursor if there is no onclick action', async () => {

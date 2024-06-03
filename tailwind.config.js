@@ -1,7 +1,11 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
-    content: ['./src/**/*.{ts,tsx,js,jsx}', './public/index.html'],
+    content: [
+        './src/**/*.{ts,tsx,js,jsx}',
+        './public/index.html',
+        './node_modules/@nextui-org/theme/dist/components/(tooltip).js',
+    ],
     safelist: [
         {
             pattern: /grid-cols-./,
@@ -178,6 +182,11 @@ module.exports = {
                 300: '#FF9FAE',
                 500: '#FF658A',
                 700: '#C30C38',
+            },
+            tooltip: {
+                success: '#0C474C',
+                warning: '#422F09',
+                error: '#4A1220',
             },
             teal: '#11CABE',
             green: '#5CD167',

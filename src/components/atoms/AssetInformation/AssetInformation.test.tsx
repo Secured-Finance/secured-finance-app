@@ -1,6 +1,7 @@
 import { composeStories } from '@storybook/react';
+import userEvent from '@testing-library/user-event';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { fireEvent, render, screen } from 'src/test-utils.js';
+import { render, screen } from 'src/test-utils.js';
 import * as stories from './AssetInformation.stories';
 
 const { Default, ZeroUsdcCollateral } = composeStories(stories);
@@ -24,14 +25,15 @@ describe('test AssetInformation component', () => {
         expect(screen.getByText('$10.00')).toBeInTheDocument();
     });
 
-    it('should display the information popover on mouse enter', () => {
+    it('should display the information popover on mouse enter', async () => {
         render(<Default />);
         const information = screen.getByTestId('information-circle');
-        fireEvent.mouseEnter(information);
-        const tooltip = screen.getByRole('tooltip');
-        expect(tooltip).toHaveTextContent(
+        await userEvent.unhover(information);
+        await userEvent.hover(information);
+        const tooltip = await screen.findByText(
             'Only USDC and ETH are eligible as collateral.'
         );
+        expect(tooltip).toBeInTheDocument();
     });
 
     it('should not render currencies with zero collateral', async () => {

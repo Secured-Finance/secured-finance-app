@@ -107,7 +107,7 @@ export const CollateralProgressBar = ({
                                 2
                             )} available`}</span>
                         </div>
-                        <InfoToolTip align='right'>
+                        <InfoToolTip placement='bottom-start'>
                             {getInformationText(
                                 totalCollateralInUSD,
                                 collateralCoverage,

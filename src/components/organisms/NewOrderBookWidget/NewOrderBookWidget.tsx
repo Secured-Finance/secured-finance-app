@@ -434,22 +434,6 @@ export const NewOrderBookWidget = ({
         return rowData.amount !== ZERO_BI;
     };
 
-    const alignment = () => {
-        if (state.showBorrow && !state.showLend) {
-            if (isTablet) {
-                return 'top-right';
-            }
-
-            return 'top';
-        }
-
-        if (isTablet) {
-            return 'left';
-        }
-
-        return 'right';
-    };
-
     return (
         <div className='flex h-full w-full flex-col justify-start gap-y-1 overflow-hidden border-white-10 laptop:flex-col-reverse laptop:gap-y-0 laptop:rounded-b-xl laptop:border laptop:bg-cardBackground/60 laptop:shadow-tab'>
             <div className='h-full'>
@@ -498,15 +482,11 @@ export const NewOrderBookWidget = ({
                                 {isItayose && (
                                     <InfoToolTip
                                         iconColor='white'
-                                        align={alignment()}
-                                        maxWidth={'small'}
+                                        placement='bottom'
                                     >
-                                        <p className='text-white'>
-                                            Overlapping orders are aggregated to
-                                            show net amounts. The price
-                                            indicates the estimated opening
-                                            price.
-                                        </p>
+                                        Overlapping orders are aggregated to
+                                        show net amounts. The price indicates
+                                        the estimated opening price.
                                     </InfoToolTip>
                                 )}
                             </span>
