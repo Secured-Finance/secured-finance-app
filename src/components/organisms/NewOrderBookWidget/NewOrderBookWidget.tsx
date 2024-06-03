@@ -96,14 +96,15 @@ const AmountCell = ({
     let val: string | undefined;
     if (value === ZERO_BI) {
         val = undefined;
-    } else if (cbLimit) {
-        val = 'CB Limit';
     } else {
         val = ordinaryFormat(
             currencyMap[currency].fromBaseUnit(value),
             currencyMap[currency].roundingDecimal,
             currencyMap[currency].roundingDecimal
         );
+        if (cbLimit) {
+            val += '(CB)';
+        }
     }
     return (
         <div className='relative flex items-center justify-end'>
@@ -204,6 +205,8 @@ const reducer = (
 export const NewOrderBookWidget = ({
     orderbook,
     currency,
+    maxLendUnitPrice,
+    minBorrowUnitPrice,
     marketPrice,
     onFilterChange,
     onAggregationChange,
@@ -265,13 +268,13 @@ export const NewOrderBookWidget = ({
         aggregationFactor
     );
 
-    const maxAmountInOrderbook = useMemo(() => {
-        const maxLendAmount = getMaxAmount(lendOrders);
-        const maxBorrowAmount = getMaxAmount(borrowOrders);
-        return maxLendAmount > maxBorrowAmount
-            ? maxLendAmount
-            : maxBorrowAmount;
-    }, [borrowOrders, lendOrders]);
+    const maxLendAmount = useMemo(() => {
+        return getMaxAmount(lendOrders);
+    }, [lendOrders]);
+
+    const maxBorrowAmount = useMemo(() => {
+        return getMaxAmount(borrowOrders);
+    }, [borrowOrders]);
 
     const buyColumns = useMemo(
         () => [
@@ -283,7 +286,7 @@ export const NewOrderBookWidget = ({
                         amount={info.row.original.amount}
                         aggregationFactor={aggregationFactor}
                         position='borrow'
-                        cbLimit={false}
+                        cbLimit={info.getValue().price > maxLendUnitPrice}
                     />
                 ),
                 header: () => (
@@ -316,10 +319,12 @@ export const NewOrderBookWidget = ({
                     <AmountCell
                         value={info.getValue()}
                         amount={info.row.original.cumulativeAmount}
-                        totalAmount={maxAmountInOrderbook}
+                        totalAmount={maxBorrowAmount}
                         position='borrow'
                         currency={currency}
-                        cbLimit={false}
+                        cbLimit={
+                            info.row.original.value.price > maxLendUnitPrice
+                        }
                     />
                 ),
                 header: () => (
@@ -331,7 +336,7 @@ export const NewOrderBookWidget = ({
                 ),
             }),
         ],
-        [aggregationFactor, currency, maxAmountInOrderbook]
+        [aggregationFactor, currency, maxBorrowAmount, maxLendUnitPrice]
     );
 
     const sellColumns = useMemo(
@@ -342,10 +347,12 @@ export const NewOrderBookWidget = ({
                     <AmountCell
                         value={info.getValue()}
                         amount={info.row.original.cumulativeAmount}
-                        totalAmount={maxAmountInOrderbook}
+                        totalAmount={maxLendAmount}
                         position='lend'
                         currency={currency}
-                        cbLimit={false}
+                        cbLimit={
+                            info.row.original.value.price < minBorrowUnitPrice
+                        }
                     />
                 ),
                 header: () => (
@@ -380,7 +387,7 @@ export const NewOrderBookWidget = ({
                         amount={info.row.original.amount}
                         aggregationFactor={aggregationFactor}
                         position='lend'
-                        cbLimit={false}
+                        cbLimit={info.getValue().price < minBorrowUnitPrice}
                     />
                 ),
                 header: () => (
@@ -392,7 +399,7 @@ export const NewOrderBookWidget = ({
                 ),
             }),
         ],
-        [aggregationFactor, currency, maxAmountInOrderbook]
+        [aggregationFactor, currency, maxLendAmount, minBorrowUnitPrice]
     );
 
     const handleClick = (rowId: string, side: OrderSide): void => {
