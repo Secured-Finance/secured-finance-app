@@ -18,7 +18,6 @@ export * from './MyTransactionsTable';
 export * from './MyWalletWidget';
 export * from './NewOrderBookWidget';
 export * from './OrderAction';
-export * from './OrderBookWidget';
 export * from './OrderDetails';
 export * from './OrderHistoryTable';
 export * from './OrderTable';

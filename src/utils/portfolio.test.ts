@@ -319,22 +319,22 @@ describe('sortOrders', () => {
 describe('getMaxAmount', () => {
     it('returns the maximum amount from an array of orders', () => {
         const orders = [
-            { amount: BigInt(10) },
-            { amount: BigInt(5) },
-            { amount: BigInt(20) },
+            { cumulativeAmount: BigInt(10) },
+            { cumulativeAmount: BigInt(5) },
+            { cumulativeAmount: BigInt(20) },
         ];
         const maxAmount = getMaxAmount(orders);
         expect(maxAmount.toString()).toBe('20');
     });
 
     it('returns the amount of the only order in the array', () => {
-        const orders = [{ amount: BigInt(10) }];
+        const orders = [{ cumulativeAmount: BigInt(10) }];
         const maxAmount = getMaxAmount(orders);
         expect(maxAmount.toString()).toBe('10');
     });
 
     it('returns zero if the array is empty', () => {
-        const orders: { amount: bigint }[] = [];
+        const orders: { cumulativeAmount: bigint }[] = [];
         const maxAmount = getMaxAmount(orders);
         expect(maxAmount.toString()).toBe('0');
     });

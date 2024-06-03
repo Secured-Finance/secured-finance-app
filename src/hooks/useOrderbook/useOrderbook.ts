@@ -16,6 +16,7 @@ interface SmartContractOrderbook {
 export type OrderBookEntry = {
     amount: bigint;
     value: LoanValue;
+    cumulativeAmount: bigint;
 };
 
 export type OrderBook = Array<OrderBookEntry>;
@@ -48,6 +49,7 @@ const transformOrderbook = (
                 maturity,
                 calculationDate
             ),
+            cumulativeAmount: ZERO_BI,
         };
     });
 };
