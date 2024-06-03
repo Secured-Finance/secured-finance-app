@@ -1,4 +1,5 @@
 import { renderHook } from 'src/test-utils';
+import { ZERO_BI } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import { usePrepareOrderbookData } from './usePrepareOrderbookData';
 
@@ -8,52 +9,64 @@ const data = {
         {
             amount: BigInt('1'),
             value: LoanValue.fromPrice(9850, maturity),
+            cumulativeAmount: ZERO_BI,
         },
         {
             amount: BigInt('1'),
             value: LoanValue.fromPrice(9851, maturity),
+            cumulativeAmount: ZERO_BI,
         },
         {
             amount: BigInt('1'),
             value: LoanValue.fromPrice(9852, maturity),
+            cumulativeAmount: ZERO_BI,
         },
         {
             amount: BigInt('1'),
             value: LoanValue.fromPrice(9853, maturity),
+            cumulativeAmount: ZERO_BI,
         },
         {
             amount: BigInt('1'),
             value: LoanValue.fromPrice(9854, maturity),
+            cumulativeAmount: ZERO_BI,
         },
         {
             amount: BigInt('0'),
             value: LoanValue.fromPrice(9855, maturity),
+            cumulativeAmount: ZERO_BI,
         },
     ],
     lendOrderbook: [
         {
             amount: BigInt('1'),
             value: LoanValue.fromPrice(9200, maturity),
+            cumulativeAmount: ZERO_BI,
         },
         {
             amount: BigInt('2'),
             value: LoanValue.fromPrice(9110, maturity),
+            cumulativeAmount: ZERO_BI,
         },
         {
             amount: BigInt('3'),
             value: LoanValue.fromPrice(9050, maturity),
+            cumulativeAmount: ZERO_BI,
         },
         {
             amount: BigInt('4'),
             value: LoanValue.fromPrice(9010, maturity),
+            cumulativeAmount: ZERO_BI,
         },
         {
             amount: BigInt('1'),
             value: LoanValue.fromPrice(8980, maturity),
+            cumulativeAmount: ZERO_BI,
         },
         {
             amount: BigInt('1'),
             value: LoanValue.fromPrice(8960, maturity),
+            cumulativeAmount: ZERO_BI,
         },
     ],
 };
@@ -62,26 +75,32 @@ const sortedResults = [
     {
         amount: BigInt('0'),
         value: LoanValue.fromPrice(9855, maturity),
+        cumulativeAmount: ZERO_BI,
     },
     {
         amount: BigInt('1'),
         value: LoanValue.fromPrice(9854, maturity),
+        cumulativeAmount: BigInt('5'),
     },
     {
         amount: BigInt('1'),
         value: LoanValue.fromPrice(9853, maturity),
+        cumulativeAmount: BigInt('4'),
     },
     {
         amount: BigInt('1'),
         value: LoanValue.fromPrice(9852, maturity),
+        cumulativeAmount: BigInt('3'),
     },
     {
         amount: BigInt('1'),
         value: LoanValue.fromPrice(9851, maturity),
+        cumulativeAmount: BigInt('2'),
     },
     {
         amount: BigInt('1'),
         value: LoanValue.fromPrice(9850, maturity),
+        cumulativeAmount: BigInt('1'),
     },
 ];
 
@@ -102,14 +121,17 @@ describe('usePrepareOrderbookData', () => {
                 {
                     amount: BigInt('0'),
                     value: LoanValue.fromPrice(9855, maturity),
+                    cumulativeAmount: BigInt('0'),
                 },
                 {
                     value: LoanValue.fromPrice(9860, maturity),
                     amount: BigInt('4'),
+                    cumulativeAmount: BigInt('5'),
                 },
                 {
                     value: LoanValue.fromPrice(9850, maturity),
                     amount: BigInt('1'),
+                    cumulativeAmount: BigInt('1'),
                 },
             ]);
         });
@@ -129,10 +151,12 @@ describe('usePrepareOrderbookData', () => {
                 {
                     amount: BigInt('10'),
                     value: LoanValue.fromPrice(9000, maturity),
+                    cumulativeAmount: BigInt('10'),
                 },
                 {
                     amount: BigInt('2'),
                     value: LoanValue.fromPrice(8000, maturity),
+                    cumulativeAmount: BigInt('12'),
                 },
             ]);
         });
@@ -143,18 +167,22 @@ describe('usePrepareOrderbookData', () => {
             {
                 amount: BigInt('1'),
                 value: LoanValue.fromPrice(9200, maturity),
+                cumulativeAmount: ZERO_BI,
             },
             {
                 amount: BigInt('0'),
                 value: LoanValue.fromPrice(9200, maturity),
+                cumulativeAmount: ZERO_BI,
             },
             {
                 amount: BigInt('0'),
                 value: LoanValue.fromPrice(9200, maturity),
+                cumulativeAmount: ZERO_BI,
             },
             {
                 amount: BigInt('2'),
                 value: LoanValue.fromPrice(9110, maturity),
+                cumulativeAmount: ZERO_BI,
             },
         ];
 
@@ -171,10 +199,26 @@ describe('usePrepareOrderbookData', () => {
                 )
             );
             expect(result.current).toEqual([
-                withZeros[0],
-                withZeros[3],
-                withZeros[1],
-                withZeros[2],
+                {
+                    amount: BigInt('1'),
+                    value: LoanValue.fromPrice(9200, maturity),
+                    cumulativeAmount: BigInt('1'),
+                },
+                {
+                    amount: BigInt('2'),
+                    value: LoanValue.fromPrice(9110, maturity),
+                    cumulativeAmount: BigInt('3'),
+                },
+                {
+                    amount: BigInt('0'),
+                    value: LoanValue.fromPrice(9200, maturity),
+                    cumulativeAmount: ZERO_BI,
+                },
+                {
+                    amount: BigInt('0'),
+                    value: LoanValue.fromPrice(9200, maturity),
+                    cumulativeAmount: ZERO_BI,
+                },
             ]);
         });
 
@@ -191,10 +235,26 @@ describe('usePrepareOrderbookData', () => {
                 )
             );
             expect(result.current).toEqual([
-                withZeros[2],
-                withZeros[1],
-                withZeros[0],
-                withZeros[3],
+                {
+                    amount: BigInt('0'),
+                    value: LoanValue.fromPrice(9200, maturity),
+                    cumulativeAmount: ZERO_BI,
+                },
+                {
+                    amount: BigInt('0'),
+                    value: LoanValue.fromPrice(9200, maturity),
+                    cumulativeAmount: ZERO_BI,
+                },
+                {
+                    amount: BigInt('1'),
+                    value: LoanValue.fromPrice(9200, maturity),
+                    cumulativeAmount: BigInt('3'),
+                },
+                {
+                    amount: BigInt('2'),
+                    value: LoanValue.fromPrice(9110, maturity),
+                    cumulativeAmount: BigInt('2'),
+                },
             ]);
         });
     });
@@ -208,14 +268,17 @@ describe('usePrepareOrderbookData', () => {
                 {
                     amount: BigInt('1'),
                     value: LoanValue.fromPrice(9200, maturity),
+                    cumulativeAmount: BigInt('1'),
                 },
                 {
                     amount: BigInt('2'),
                     value: LoanValue.fromPrice(9110, maturity),
+                    cumulativeAmount: BigInt('3'),
                 },
                 {
                     amount: BigInt('3'),
                     value: LoanValue.fromPrice(9050, maturity),
+                    cumulativeAmount: BigInt('6'),
                 },
             ]);
         });
@@ -228,14 +291,17 @@ describe('usePrepareOrderbookData', () => {
                 {
                     amount: BigInt('1'),
                     value: LoanValue.fromPrice(9852, maturity),
+                    cumulativeAmount: BigInt('3'),
                 },
                 {
                     amount: BigInt('1'),
                     value: LoanValue.fromPrice(9851, maturity),
+                    cumulativeAmount: BigInt('2'),
                 },
                 {
                     amount: BigInt('1'),
                     value: LoanValue.fromPrice(9850, maturity),
+                    cumulativeAmount: BigInt('1'),
                 },
             ]);
         });

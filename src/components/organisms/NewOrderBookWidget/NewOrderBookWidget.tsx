@@ -315,7 +315,7 @@ export const NewOrderBookWidget = ({
                 cell: info => (
                     <AmountCell
                         value={info.getValue()}
-                        amount={info.row.original.amount}
+                        amount={info.row.original.cumulativeAmount}
                         totalAmount={maxAmountInOrderbook}
                         position='borrow'
                         currency={currency}
@@ -341,7 +341,7 @@ export const NewOrderBookWidget = ({
                 cell: info => (
                     <AmountCell
                         value={info.getValue()}
-                        amount={info.row.original.amount}
+                        amount={info.row.original.cumulativeAmount}
                         totalAmount={maxAmountInOrderbook}
                         position='lend'
                         currency={currency}

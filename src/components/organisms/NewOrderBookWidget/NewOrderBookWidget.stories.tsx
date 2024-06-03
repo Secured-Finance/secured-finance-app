@@ -9,32 +9,39 @@ const maturityMar23 = new Maturity(1675252800);
 const ZERO_ENTRY = {
     amount: ZERO_BI,
     value: LoanValue.fromPrice(0, maturityMar23.toNumber()),
+    cumulativeAmount: ZERO_BI,
 };
 
 const borrowEntries: Array<OrderBookEntry> = [
     {
         amount: BigInt('43003200000000000000000'),
         value: LoanValue.fromPrice(9850, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
     {
         amount: BigInt('230000052000000000000000'),
         value: LoanValue.fromPrice(9700, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
     {
         amount: BigInt('15000000000000000000000'),
         value: LoanValue.fromPrice(9500, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
     {
         amount: BigInt('12000000000000000000000'),
         value: LoanValue.fromPrice(9475, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
     {
         amount: BigInt('1800000000000000000000'),
         value: LoanValue.fromPrice(9400, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
     {
         amount: BigInt('0'),
         value: LoanValue.fromPrice(9200, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
 ];
 
@@ -42,26 +49,32 @@ const lendEntries: Array<OrderBookEntry> = [
     {
         amount: BigInt('43000000000000000000000'),
         value: LoanValue.fromPrice(9200, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
     {
         amount: BigInt('55000000000000000000000'),
         value: LoanValue.fromPrice(9110, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
     {
         amount: BigInt('3000000000000000000000'),
         value: LoanValue.fromPrice(9050, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
     {
         amount: BigInt('15000000000000000000000'),
         value: LoanValue.fromPrice(9010, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
     {
         amount: BigInt('21000000000000000000000'),
         value: LoanValue.fromPrice(8980, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
     {
         amount: BigInt('51000000000000000000000'),
         value: LoanValue.fromPrice(8960, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
 ];
 
@@ -70,6 +83,7 @@ const generateOrderBookEntries = (n: number, start: number) => {
         return {
             amount: BigInt(`1${i}000000`),
             value: LoanValue.fromPrice(start + i, maturityMar23.toNumber()),
+            cumulativeAmount: ZERO_BI,
         };
     });
 };
@@ -86,22 +100,27 @@ const ethEntries: Array<OrderBookEntry> = [
     {
         amount: BigInt('12000000000000000000'),
         value: LoanValue.fromPrice(9653, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
     {
         amount: BigInt('12301100000000000000'),
         value: LoanValue.fromPrice(9674, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
     {
         amount: BigInt('10034003400000000000'),
         value: LoanValue.fromPrice(9679, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
     {
         amount: BigInt('100000000000000000000'),
         value: LoanValue.fromPrice(9679, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
     {
         amount: BigInt('100200000000000000000'),
         value: LoanValue.fromPrice(9679, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
 ];
 
