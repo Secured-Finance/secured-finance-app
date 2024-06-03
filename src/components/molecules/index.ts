@@ -33,4 +33,5 @@ export * from './TableActionMenu';
 export * from './TableContractCell';
 export * from './TableHeader';
 export * from './TermSelector';
+export * from './Tooltip';
 export * from './WalletRadioGroup';

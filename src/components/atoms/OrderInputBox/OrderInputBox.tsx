@@ -47,8 +47,8 @@ export const OrderInputBox = ({
                     {field}
                 </div>
                 {informationText && !disabled && (
-                    <InfoToolTip maxWidth='small' align='right'>
-                        {informationText}
+                    <InfoToolTip>
+                        <div>{informationText}</div>
                     </InfoToolTip>
                 )}
             </div>

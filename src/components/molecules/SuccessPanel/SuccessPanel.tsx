@@ -2,7 +2,7 @@ import { ArrowUpRightIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import Check from 'src/assets/icons/check-mark.svg';
 import { SectionWithItems } from 'src/components/atoms';
-import { Tooltip } from 'src/components/templates';
+import { Tooltip } from 'src/components/molecules';
 
 export const SuccessPanel = ({
     itemList,
@@ -78,6 +78,7 @@ const EtherScanTooltip = ({
     handleClick: () => void;
 }) => (
     <Tooltip
+        placement='bottom'
         iconElement={
             <button
                 className='secondary typography-caption cursor-pointer whitespace-nowrap text-planetaryPurple underline'
