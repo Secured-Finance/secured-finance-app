@@ -13,6 +13,12 @@ export const PRODUCTION_LINKS = [
 
 export const DEV_LINKS = [
     ...PRODUCTION_LINKS,
+    // TODO: Move to production links when ready
+    {
+        text: 'Points',
+        link: '/points',
+        dataCy: 'points',
+    },
     {
         text: 'Faucet',
         link: '/faucet',
