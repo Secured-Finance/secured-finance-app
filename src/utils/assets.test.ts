@@ -14,20 +14,20 @@ describe('toOptions', () => {
         );
         expect(options).toEqual([
             {
-                label: 'WBTC',
-                value: 'WBTC',
+                label: 'USDC',
+                value: 'USDC',
             },
             {
                 label: 'ETH',
                 value: 'ETH',
             },
             {
-                label: 'WFIL',
-                value: 'WFIL',
+                label: 'WBTC',
+                value: 'WBTC',
             },
             {
-                label: 'USDC',
-                value: 'USDC',
+                label: 'WFIL',
+                value: 'WFIL',
             },
         ]);
     });

@@ -1,9 +1,8 @@
 import type { Meta, StoryFn } from '@storybook/react';
-import { within } from '@storybook/testing-library';
 import { RESPONSIVE_PARAMETERS } from 'src/../.storybook/constants';
 import {
     withAppLayout,
-    withEthBalance,
+    withBalance,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import {
@@ -19,7 +18,10 @@ import { Landing } from './Landing';
 export default {
     title: 'Pages/Landing',
     component: Landing,
-    decorators: [withAppLayout, withEthBalance, withWalletProvider],
+    decorators: [withAppLayout, withBalance, withWalletProvider],
+    args: {
+        view: 'Simple',
+    },
     parameters: {
         apolloClient: {
             mocks: [
@@ -36,8 +38,8 @@ export default {
     },
 } as Meta<typeof Landing>;
 
-const Template: StoryFn<typeof Landing> = () => {
-    return <Landing />;
+const Template: StoryFn<typeof Landing> = args => {
+    return <Landing {...args} />;
 };
 
 export const Default = Template.bind({});
@@ -47,14 +49,10 @@ ConnectedToWallet.parameters = {
     connected: true,
 };
 
-export const AdvancedView = Template.bind({});
-AdvancedView.play = async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    canvas.getByText('Advanced').click();
-    const button = await canvas.findByRole('button', { name: 'DEC2022' });
-    button.click();
-    canvas.getByRole('menuitem', { name: 'JUN2023' }).click();
-};
-AdvancedView.parameters = {
+export const AdvancedViewConnected = Template.bind({});
+AdvancedViewConnected.parameters = {
     connected: true,
+};
+AdvancedViewConnected.args = {
+    view: 'Advanced',
 };

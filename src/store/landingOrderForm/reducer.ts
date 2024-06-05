@@ -17,13 +17,13 @@ type LandingOrderFormStore = {
 };
 
 const initialStore: LandingOrderFormStore = {
-    currency: CurrencySymbol.WBTC,
+    currency: CurrencySymbol.USDC,
     maturity: 0,
     side: OrderSide.BORROW,
     amount: '',
     unitPrice: undefined,
     orderType: OrderType.MARKET,
-    lastView: 'Simple',
+    lastView: 'Advanced',
     sourceAccount: WalletSource.METAMASK,
     isBorrowedCollateral: false,
 };

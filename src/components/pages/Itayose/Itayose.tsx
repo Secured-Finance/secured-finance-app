@@ -1,6 +1,9 @@
 import { OrderSide } from '@secured-finance/sf-client';
+import { toBytes32 } from '@secured-finance/sf-graph-client';
+import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
+import { VisibilityState } from '@tanstack/table-core';
 import * as dayjs from 'dayjs';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     GradientBox,
@@ -18,22 +21,27 @@ import {
 import {
     AdvancedLendingOrderCard,
     LineChartTab,
-    OrderBookWidget,
+    NewOrderBookWidget,
+    OrderHistoryTable,
     OrderTable,
 } from 'src/components/organisms';
+import { TabSpinner } from 'src/components/pages';
 import { Page, ThreeColumnsWithTopBar } from 'src/components/templates';
 import {
     MarketPhase,
     baseContracts,
     emptyCollateralBook,
     useBorrowOrderBook,
+    useBreakpoint,
     useCollateralBook,
     useCurrencies,
     useCurrencyDelistedStatus,
+    useGraphClientHook,
     useItayoseEstimation,
     useLastPrices,
     useLendOrderBook,
     useLendingMarkets,
+    useMarket,
     useMarketOrderList,
     useMarketPhase,
     useMaturityOptions,
@@ -46,9 +54,21 @@ import {
     setMaturity,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { CurrencySymbol, ZERO_BI, toOptions, usdFormat } from 'src/utils';
+import {
+    CurrencySymbol,
+    ZERO_BI,
+    getMappedOrderStatus,
+    sortOrders,
+    toOptions,
+    usdFormat,
+} from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
+
+enum TableType {
+    OPEN_ORDERS = 0,
+    ORDER_HISTORY,
+}
 
 const Toolbar = ({
     selectedAsset,
@@ -76,14 +96,16 @@ const Toolbar = ({
     return (
         <GradientBox shape='rectangle'>
             <div className='flex min-w-fit flex-row items-center justify-start gap-10 px-6 py-3 tablet:justify-between'>
-                <HorizontalAssetSelector
-                    assetList={assetList}
-                    selectedAsset={selectedAsset}
-                    options={options}
-                    selected={selected}
-                    onAssetChange={handleAssetChange}
-                    onTermChange={handleTermChange}
-                />
+                <div className='w-full tablet:w-1/2'>
+                    <HorizontalAssetSelector
+                        assetList={assetList}
+                        selectedAsset={selectedAsset}
+                        options={options}
+                        selected={selected}
+                        onAssetChange={handleAssetChange}
+                        onTermChange={handleTermChange}
+                    />
+                </div>
                 <div className='hidden w-full flex-row items-center justify-start gap-40 tablet:flex'>
                     <div className='typography-caption w-40 text-nebulaTeal'>
                         <p className=' typography-caption-2 text-slateGray'>
@@ -105,10 +127,12 @@ const Toolbar = ({
 
 export const Itayose = () => {
     const { address } = useAccount();
+    const isTablet = useBreakpoint('laptop');
 
     const { currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
+    const [selectedTable, setSelectedTable] = useState(TableType.OPEN_ORDERS);
 
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
 
@@ -120,6 +144,7 @@ export const Itayose = () => {
     const lendingContracts = lendingMarkets[currency];
 
     const marketPhase = useMarketPhase(currency, maturity);
+    const data = useMarket(currency, maturity);
 
     const maturityOptionList = useMaturityOptions(
         lendingContracts,
@@ -150,6 +175,27 @@ export const Itayose = () => {
             ),
         [currencies, currency, delistedCurrencySet]
     );
+    const userOrderHistory = useGraphClientHook(
+        {
+            address: address?.toLowerCase() ?? '',
+            currency: toBytes32(currency),
+            maturity: maturity,
+        },
+        queries.FilteredUserOrderHistoryDocument,
+        'user',
+        selectedTable !== TableType.ORDER_HISTORY
+    );
+
+    const sortedOrderHistory = useMemo(() => {
+        return (userOrderHistory.data?.orders || [])
+            .map(order => {
+                return {
+                    ...order,
+                    status: getMappedOrderStatus(order),
+                } as typeof order & { status: string };
+            })
+            .sort((a, b) => sortOrders(a, b));
+    }, [userOrderHistory.data?.orders]);
 
     const estimatedOpeningUnitPrice = lendingMarkets[currency][maturity]
         ?.openingUnitPrice
@@ -166,7 +212,7 @@ export const Itayose = () => {
 
     const {
         data: borrowAmount,
-        isLoading: isLoadingBorrow,
+        isPending: isPendingBorrow,
         fetchStatus: borrowFetchStatus,
     } = useBorrowOrderBook(
         currency,
@@ -176,7 +222,7 @@ export const Itayose = () => {
 
     const {
         data: lendAmount,
-        isLoading: isLoadingLend,
+        isPending: isPendingLend,
         fetchStatus: lendFetchStatus,
     } = useLendOrderBook(
         currency,
@@ -219,8 +265,8 @@ export const Itayose = () => {
     );
 
     const isLoadingMap = {
-        [OrderSide.BORROW]: isLoadingBorrow && borrowFetchStatus !== 'idle',
-        [OrderSide.LEND]: isLoadingLend && lendFetchStatus !== 'idle',
+        [OrderSide.BORROW]: isPendingBorrow && borrowFetchStatus !== 'idle',
+        [OrderSide.LEND]: isPendingLend && lendFetchStatus !== 'idle',
     };
 
     const preOrderDays = useMemo(() => {
@@ -232,22 +278,32 @@ export const Itayose = () => {
             : undefined;
     }, [lendingContracts, selectedTerm.value]);
 
+    const handleFilterChange = useCallback(
+        (state: VisibilityState) => {
+            setIsShowingAll(state.showBorrow && state.showLend);
+        },
+        [setIsShowingAll]
+    );
+
     return (
         <Page title='Pre-Open Order Book'>
             {preOrderDays && (
-                <Alert>
-                    <p className='typography-caption text-white'>
-                        Secure your market position by placing limit orders up
-                        to {preOrderDays} days before trading begins with no
-                        fees. Opt for either a lend or borrow during pre-open,
-                        not both. No new pre-orders will be accepted within 1
-                        hour prior to the start of trading. Learn more at&nbsp;
-                        <TextLink
-                            href='https://docs.secured.finance/platform-guide/unique-features/fair-price-discovery/'
-                            text='Secured Finance Docs'
-                        />
-                    </p>
-                </Alert>
+                <Alert
+                    title={
+                        <>
+                            Secure your market position by placing limit orders
+                            up to {preOrderDays} days before trading begins with
+                            no fees. Opt for either a lend or borrow during
+                            pre-open, not both. No new pre-orders will be
+                            accepted within 1 hour prior to the start of
+                            trading. Learn more at&nbsp;
+                            <TextLink
+                                href='https://docs.secured.finance/platform-guide/unique-features/fair-price-discovery/'
+                                text='Secured Finance Docs'
+                            />
+                        </>
+                    }
+                />
             )}
             <ThreeColumnsWithTopBar
                 topBar={
@@ -279,6 +335,85 @@ export const Itayose = () => {
                     />
                 }
             >
+                <TabSelector tabDataArray={[{ text: 'Yield Curve' }]}>
+                    <div className='h-[410px] w-full px-6 py-4'>
+                        <LineChartTab
+                            rates={rates}
+                            maturityList={maturityList}
+                            itayoseMarketIndexSet={itayoseMarketIndexSet}
+                            maximumRate={maximumRate}
+                            marketCloseToMaturityOriginalRate={
+                                marketCloseToMaturityOriginalRate
+                            }
+                        />
+                    </div>
+                </TabSelector>
+
+                <>
+                    <div className='col-span-1 hidden w-[calc(100%-284px)] laptop:block desktop:w-[calc(100%-312px)]'>
+                        <div className='flex h-full flex-grow flex-col gap-4'>
+                            <TabSelector
+                                tabDataArray={[{ text: 'Yield Curve' }]}
+                            >
+                                <div className='h-[410px] w-full px-6 py-4'>
+                                    <LineChartTab
+                                        rates={rates}
+                                        maturityList={maturityList}
+                                        itayoseMarketIndexSet={
+                                            itayoseMarketIndexSet
+                                        }
+                                        maximumRate={maximumRate}
+                                        marketCloseToMaturityOriginalRate={
+                                            marketCloseToMaturityOriginalRate
+                                        }
+                                    />
+                                </div>
+                            </TabSelector>
+                        </div>
+                    </div>
+                    <div className='hidden laptop:block laptop:w-[272px] desktop:w-[300px]'>
+                        {!isTablet && (
+                            <NewOrderBookWidget
+                                orderbook={orderBook}
+                                currency={currency}
+                                marketPrice={estimatedOpeningUnitPrice}
+                                maxLendUnitPrice={data?.maxLendUnitPrice}
+                                minBorrowUnitPrice={data?.minBorrowUnitPrice}
+                                onFilterChange={handleFilterChange}
+                                onAggregationChange={setMultiplier}
+                                isLoadingMap={isLoadingMap}
+                                isItayose
+                            />
+                        )}
+                    </div>
+                    <div className='col-span-12 laptop:w-full'>
+                        <HorizontalTab
+                            tabTitles={['Open Orders', 'Order History']}
+                            onTabChange={setSelectedTable}
+                            useCustomBreakpoint={true}
+                        >
+                            <OrderTable
+                                data={filteredOrderList}
+                                variant='compact'
+                                height={350}
+                            />
+                            {userOrderHistory.loading ? (
+                                <TabSpinner />
+                            ) : (
+                                <OrderHistoryTable
+                                    data={sortedOrderHistory}
+                                    pagination={{
+                                        totalData: sortedOrderHistory.length,
+                                        getMoreData: () => {},
+                                        containerHeight: 350,
+                                    }}
+                                    variant='contractOnly'
+                                />
+                            )}
+                        </HorizontalTab>
+                    </div>
+                </>
+
                 <AdvancedLendingOrderCard
                     collateralBook={collateralBook}
                     isItayose
@@ -295,43 +430,6 @@ export const Itayose = () => {
                     }
                     delistedCurrencySet={delistedCurrencySet}
                 />
-
-                <OrderBookWidget
-                    currency={currency}
-                    orderbook={orderBook}
-                    variant='itayose'
-                    marketPrice={estimatedOpeningUnitPrice}
-                    onFilterChange={state =>
-                        setIsShowingAll(state.showBorrow && state.showLend)
-                    }
-                    isLoadingMap={isLoadingMap}
-                    onAggregationChange={setMultiplier}
-                    isCurrencyDelisted={delistedCurrencySet.has(currency)}
-                />
-
-                <div className='flex h-full flex-col items-stretch justify-stretch gap-6'>
-                    <TabSelector tabDataArray={[{ text: 'Yield Curve' }]}>
-                        <div className='h-[410px] w-full px-6 py-4'>
-                            <LineChartTab
-                                rates={rates}
-                                maturityList={maturityList}
-                                itayoseMarketIndexSet={itayoseMarketIndexSet}
-                                maximumRate={maximumRate}
-                                marketCloseToMaturityOriginalRate={
-                                    marketCloseToMaturityOriginalRate
-                                }
-                            />
-                        </div>
-                    </TabSelector>
-
-                    <HorizontalTab tabTitles={['Open Orders']}>
-                        <OrderTable
-                            data={filteredOrderList}
-                            variant='compact'
-                            height={350}
-                        />
-                    </HorizontalTab>
-                </div>
             </ThreeColumnsWithTopBar>
         </Page>
     );

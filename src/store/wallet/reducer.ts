@@ -9,15 +9,15 @@ const walletSlice = createSlice({
     name: 'wallet',
     initialState: initialStore,
     reducers: {
-        connectEthWallet(state, action: PayloadAction<string>) {
+        connectWallet(state, action: PayloadAction<string>) {
             state.address = action.payload;
         },
-        updateEthBalance(state, action: PayloadAction<number>) {
-            state.ethBalance = action.payload;
+        updateBalance(state, action: PayloadAction<number>) {
+            state.balance = action.payload;
         },
-        resetEthWallet(state) {
+        resetWallet(state) {
             state.address = defaultWallet.address;
-            state.ethBalance = defaultWallet.ethBalance;
+            state.balance = defaultWallet.balance;
         },
     },
 });

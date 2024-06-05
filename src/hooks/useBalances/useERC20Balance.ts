@@ -8,7 +8,7 @@ import { useCurrencies } from '../useCurrencies';
 
 export const useERC20Balance = (address: string | undefined) => {
     const securedFinance = useSF();
-    const { data } = useCurrencies();
+    const { data } = useCurrencies(true);
 
     const tokens = useMemo(() => {
         return (

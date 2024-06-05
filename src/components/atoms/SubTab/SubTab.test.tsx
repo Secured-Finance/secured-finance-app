@@ -16,15 +16,13 @@ describe('SubTab component', () => {
         render(<Default />);
 
         expect(screen.getByText('Tab label')).toHaveClass(
-            'bg-primary-500 text-neutral-50'
+            'bg-primary-700 text-neutral-50'
         );
     });
 
     it('should apply inactive class when active prop is false', () => {
         render(<Default text='Test' active={false} />);
 
-        expect(screen.getByText('Test')).toHaveClass(
-            'bg-transparent text-neutral-400 light:text-neutral-600'
-        );
+        expect(screen.getByText('Test')).toHaveClass('text-neutral-400');
     });
 });

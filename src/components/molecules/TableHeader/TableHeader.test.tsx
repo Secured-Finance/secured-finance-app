@@ -1,5 +1,6 @@
 import { composeStories } from '@storybook/react';
-import { fireEvent, render, screen } from 'src/test-utils.js';
+import userEvent from '@testing-library/user-event';
+import { render, screen } from 'src/test-utils.js';
 import * as stories from './TableHeader.stories';
 
 const { Default, Sorting, TitleHint } = composeStories(stories);
@@ -32,6 +33,18 @@ describe('TableHeader Component', () => {
         );
     });
 
+    it('should add horizontal padding by default', () => {
+        render(<Default />);
+        expect(screen.getByTestId('table-header-wrapper')).toHaveClass('px-3');
+    });
+
+    it('should remove horizontal padding when horizontalPadding is falsy', () => {
+        render(<Default horizontalPadding={false} />);
+        expect(screen.getByTestId('table-header-wrapper')).not.toHaveClass(
+            'px-3'
+        );
+    });
+
     it('should align the text to the right when align is right', () => {
         render(<Default align='right' />);
         expect(screen.getByTestId('table-header-wrapper')).toHaveClass(
@@ -39,20 +52,20 @@ describe('TableHeader Component', () => {
         );
     });
 
-    it('should display title hint on mouse enter as a tooltip', () => {
+    it('should display title hint on mouse enter as a tooltip', async () => {
         render(<TitleHint />);
         const button = screen.getByRole('button');
-        fireEvent.mouseEnter(button);
-
-        expect(screen.getByText('This is a title hint.')).toBeInTheDocument();
-        expect(screen.getByRole('tooltip')).toBeInTheDocument();
+        await userEvent.unhover(button);
+        await userEvent.hover(button);
+        const tooltip = await screen.findByText('This is a title hint.');
+        expect(tooltip).toBeInTheDocument();
     });
 
-    it('should not display title hint on mouse out', () => {
+    it('should not display title hint on mouse out', async () => {
         render(<TitleHint />);
         const button = screen.getByRole('button');
-        fireEvent.mouseEnter(button);
-        fireEvent.mouseOut(button);
+
+        await userEvent.unhover(button);
 
         expect(
             screen.queryByText('This is a title hint.')

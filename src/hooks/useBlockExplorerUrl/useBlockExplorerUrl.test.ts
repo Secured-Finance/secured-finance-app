@@ -1,5 +1,6 @@
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
+import { Environment } from 'src/utils';
 import { useBlockExplorerUrl } from './useBlockExplorerUrl';
 
 const mock = mockUseSF();
@@ -24,5 +25,37 @@ describe('useBlockExplorerUrl', () => {
         const { result } = renderHook(() => useBlockExplorerUrl());
         const { blockExplorerUrl } = result.current;
         expect(blockExplorerUrl).toBe('https://testnet.snowtrace.io');
+    });
+
+    it('should return mainnet when chain is Ethereum mainnet', () => {
+        process.env.SF_ENV = Environment.PRODUCTION;
+        mock.config.chain.id = 1;
+        const { result } = renderHook(() => useBlockExplorerUrl());
+        const { blockExplorerUrl } = result.current;
+        expect(blockExplorerUrl).toBe('https://etherscan.io');
+    });
+
+    it('should return arbiscan link when chain is Arbitrum One', () => {
+        process.env.SF_ENV = Environment.PRODUCTION;
+        mock.config.chain.id = 42161;
+        const { result } = renderHook(() => useBlockExplorerUrl());
+        const { blockExplorerUrl } = result.current;
+        expect(blockExplorerUrl).toBe('https://arbiscan.io');
+    });
+
+    it('should return snowtrace link when chain is Avalanche', () => {
+        process.env.SF_ENV = Environment.PRODUCTION;
+        mock.config.chain.id = 43114;
+        const { result } = renderHook(() => useBlockExplorerUrl());
+        const { blockExplorerUrl } = result.current;
+        expect(blockExplorerUrl).toBe('https://snowtrace.io');
+    });
+
+    it('should return polygonscan link when chain is Polygon ZkEvm', () => {
+        process.env.SF_ENV = Environment.PRODUCTION;
+        mock.config.chain.id = 1101;
+        const { result } = renderHook(() => useBlockExplorerUrl());
+        const { blockExplorerUrl } = result.current;
+        expect(blockExplorerUrl).toBe('https://zkevm.polygonscan.com');
     });
 });

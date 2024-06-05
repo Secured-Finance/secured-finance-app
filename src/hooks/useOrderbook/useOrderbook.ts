@@ -5,7 +5,7 @@ import useSF from 'src/hooks/useSecuredFinance';
 import { CurrencySymbol, ZERO_BI, toCurrency } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 
-const DEFAULT_ORDERBOOK_DEPTH = 26;
+const DEFAULT_ORDERBOOK_DEPTH = 30;
 
 interface SmartContractOrderbook {
     unitPrices: bigint[];
@@ -16,6 +16,7 @@ interface SmartContractOrderbook {
 export type OrderBookEntry = {
     amount: bigint;
     value: LoanValue;
+    cumulativeAmount: bigint;
 };
 
 export type OrderBook = Array<OrderBookEntry>;
@@ -48,6 +49,7 @@ const transformOrderbook = (
                 maturity,
                 calculationDate
             ),
+            cumulativeAmount: ZERO_BI,
         };
     });
 };

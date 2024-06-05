@@ -1,10 +1,12 @@
 import { RadioGroup } from '@headlessui/react';
+import clsx from 'clsx';
 import { Tab, TabVariant } from 'src/components/atoms';
 
 export const TabGroup = ({
     options,
     selectedOption,
     handleClick,
+    isFullHeight,
 }: {
     options: {
         text: string;
@@ -12,13 +14,16 @@ export const TabGroup = ({
     }[];
     selectedOption: string;
     handleClick: (option: string) => void;
+    isFullHeight?: boolean;
 }) => {
     return (
         <RadioGroup
             value={selectedOption}
             onChange={handleClick}
             as='div'
-            className='flex flex-row items-center'
+            className={clsx('flex flex-row items-center', {
+                'h-full': isFullHeight,
+            })}
         >
             {options.map((option, index) => (
                 <RadioGroup.Option

@@ -1,18 +1,28 @@
+import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import { Meta, StoryFn } from '@storybook/react';
 import { Alert } from './Alert';
+import { FIGMA_STORYBOOK_LINK } from './constants';
+import { AlertSeverity } from './types';
 
-const message = (
-    <p className='text-white'>
-        Itayose market for WFIL-SEP2025 is now open until June 13, 2023. Place
-        Order Now
-    </p>
-);
 export default {
     title: 'Molecules/Alert',
     component: Alert,
     args: {
-        severity: 'info',
-        children: message,
+        title: 'Alert',
+    },
+    argTypes: {
+        subtitle: { control: 'text' },
+        severity: { control: 'radio', options: Object.values(AlertSeverity) },
+    },
+    parameters: {
+        ...RESPONSIVE_PARAMETERS,
+        chromatic: {
+            viewports: [VIEWPORTS.MOBILE, VIEWPORTS.DESKTOP],
+        },
+        design: {
+            type: 'figma',
+            url: FIGMA_STORYBOOK_LINK,
+        },
     },
 } as Meta<typeof Alert>;
 
@@ -22,21 +32,29 @@ export const Default = Template.bind({});
 
 export const Error = Template.bind({});
 Error.args = {
-    severity: 'error',
+    severity: AlertSeverity.Error,
 };
 
 export const Warning = Template.bind({});
 Warning.args = {
-    severity: 'warning',
+    severity: AlertSeverity.Warning,
 };
 
-export const Outlined = Template.bind({});
-Outlined.args = {
-    severity: 'warning',
-    variant: 'outlined',
+export const Success = Template.bind({});
+Success.args = {
+    severity: AlertSeverity.Success,
 };
 
-export const WithCloseButton = Template.bind({});
-WithCloseButton.args = {
-    showCloseButton: true,
+export const Basic = Template.bind({});
+Basic.args = {
+    severity: AlertSeverity.Basic,
+    isShowCloseButton: false,
+    title: 'Welcome! Please deposit funds to enable trading.',
+};
+
+export const WithSubtitle = Template.bind({});
+WithSubtitle.args = {
+    title: 'Alert',
+    subtitle:
+        'Interactively monetize corporate alignments and fully tested niche markets.',
 };

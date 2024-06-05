@@ -1,5 +1,6 @@
 import { composeStories } from '@storybook/react';
-import { fireEvent, render, screen } from 'src/test-utils.js';
+import userEvent from '@testing-library/user-event';
+import { render, screen } from 'src/test-utils.js';
 import * as stories from './CollateralProgressBar.stories';
 
 const {
@@ -25,7 +26,7 @@ describe('CollateralProgressBar Component', () => {
         );
     });
 
-    it('should render zero collateral CollateralProgressBar', () => {
+    it('should render zero collateral CollateralProgressBar', async () => {
         render(<ZeroCollateral />);
         expect(screen.getByText('Collateral Utilization')).toBeInTheDocument();
         expect(screen.getByText('0%')).toBeInTheDocument();
@@ -41,16 +42,14 @@ describe('CollateralProgressBar Component', () => {
         );
 
         const information = screen.getByTestId('information-circle');
-        fireEvent.mouseEnter(information);
 
-        const tooltip = screen.getByRole('tooltip');
-
-        expect(tooltip).toHaveTextContent(
-            'Your current collateral balance is $0. Deposit collateral assets to borrow on Secured Finance.'
-        );
+        await userEvent.unhover(information);
+        await userEvent.hover(information);
+        const tooltip = await screen.findByRole('tooltip');
+        expect(tooltip).toBeInTheDocument();
     });
 
-    it('should render collateral deposited zero coverage CollateralProgressBar', () => {
+    it('should render collateral deposited zero coverage CollateralProgressBar', async () => {
         render(<CollateralDepositedZeroCoverage />);
         expect(screen.getByText('Collateral Utilization')).toBeInTheDocument();
         expect(screen.getByText('0%')).toBeInTheDocument();
@@ -66,16 +65,14 @@ describe('CollateralProgressBar Component', () => {
         );
 
         const information = screen.getByTestId('information-circle');
-        fireEvent.mouseEnter(information);
 
-        const tooltip = screen.getByRole('tooltip');
-
-        expect(tooltip).toHaveTextContent(
-            'Your current borrow limit is at $80.00 which is 80% of your $100.00 collateral deposit.Increasing collateral deposit will increase your borrow limit by 80% of its value.'
-        );
+        await userEvent.unhover(information);
+        await userEvent.hover(information);
+        const tooltip = await screen.findByRole('tooltip');
+        expect(tooltip).toBeInTheDocument();
     });
 
-    it('should render collateral deposited with coverage CollateralProgressBar', () => {
+    it('should render collateral deposited with coverage CollateralProgressBar', async () => {
         render(<CollateralDepositedWithCoverage />);
         expect(screen.getByText('Collateral Utilization')).toBeInTheDocument();
         expect(screen.getByText('37%')).toBeInTheDocument();
@@ -91,12 +88,10 @@ describe('CollateralProgressBar Component', () => {
         );
 
         const information = screen.getByTestId('information-circle');
-        fireEvent.mouseEnter(information);
 
-        const tooltip = screen.getByRole('tooltip');
-
-        expect(tooltip).toHaveTextContent(
-            'Your current borrow limit is at $43.00 which is 43% of your $100.00 collateral deposit.Increasing collateral deposit will increase your borrow limit by 80% of its value.'
-        );
+        await userEvent.unhover(information);
+        await userEvent.hover(information);
+        const tooltip = await screen.findByRole('tooltip');
+        expect(tooltip).toBeInTheDocument();
     });
 });

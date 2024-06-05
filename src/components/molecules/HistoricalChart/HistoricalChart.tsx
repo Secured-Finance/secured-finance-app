@@ -202,11 +202,12 @@ export function HistoricalChart({
 
         if (!chartContainerRef.current || !secondContainerRef.current) return;
         const { candlestickSeries, chart: candleStickChart } =
-            createCandlestickChart(chartContainerRef.current);
+            createCandlestickChart(chartContainerRef.current, isMobile);
 
         const { volumeSeries, chart: volumeChart } = createVolumeChart(
             secondContainerRef.current,
-            timeScale
+            timeScale,
+            isMobile
         );
 
         setupCharts(candlestickSeries, volumeSeries);
@@ -271,12 +272,13 @@ export function HistoricalChart({
             });
             setHoverTime('');
         };
-    }, [data, setupCharts, timeScale, usdPrice]);
+    }, [data, setupCharts, timeScale, usdPrice, isMobile]);
 
     const titleOfChartClass =
-        'z-10 flex gap-4 text-2xs text-neutral-4 font-medium leading-4 pt-[0.4375rem] px-4';
+        'z-10 flex gap-4 text-2xs text-neutral-4 font-medium text-[11px] tablet:text-xs leading-4 pt-2 laptop:pt-1.5 px-4';
+
     return (
-        <div className='bg-neutral-900 pt-[0.5625rem]'>
+        <div className='bg-neutral-900 pt-1 font-tertiary laptop:pt-2.5'>
             <div className={clsx(titleOfChartClass)}>
                 {hoverTime && <span data-testid='hover-time'>{hoverTime}</span>}
                 {Object.entries(legendData)
@@ -284,10 +286,16 @@ export function HistoricalChart({
                     .map(([key, value]) => {
                         return (
                             <div key={key} className='flex gap-1'>
-                                <span className='text-neutral-4'>{key}</span>
+                                <span
+                                    className={clsx('text-neutral-4', {
+                                        'hidden laptop:block': key === 'Change',
+                                    })}
+                                >
+                                    {key}
+                                </span>
                                 <div
                                     className={clsx('font-normal', {
-                                        'text-palePurple': key !== 'Change',
+                                        'text-primary-50': key !== 'Change',
                                         'text-nebulaTeal':
                                             key === 'Change' &&
                                             !value.includes('-'),
@@ -305,7 +313,7 @@ export function HistoricalChart({
             <div
                 ref={chartContainerRef}
                 data-testid='candlestick-chart'
-                className='relative h-[297px] w-full'
+                className='relative h-[156px] w-full laptop:h-[184px]'
             />
             <div className={clsx(titleOfChartClass)}>
                 <div>
@@ -343,7 +351,7 @@ export function HistoricalChart({
             <div
                 ref={secondContainerRef}
                 data-testid='volume-chart'
-                className='relative h-[144px] w-full'
+                className='relative h-[92px] w-full laptop:h-[115px]'
             ></div>
         </div>
     );

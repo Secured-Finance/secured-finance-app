@@ -172,6 +172,7 @@ describe('formatOrders', () => {
         ];
         const trades = [
             {
+                id: '0',
                 amount: BigInt('900'),
                 side: 0,
                 executionPrice: BigInt('9000'),
@@ -184,6 +185,7 @@ describe('formatOrders', () => {
                 user: { id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D' },
             },
             {
+                id: '0',
                 amount: BigInt('10000'),
                 side: 1,
                 executionPrice: BigInt('8000'),
@@ -251,6 +253,7 @@ describe('checkOrderIsFilled', () => {
     ];
     it('should return true', () => {
         const order = {
+            id: '0',
             orderId: 5,
             currency: ethBytes32,
             side: 0,
@@ -277,6 +280,7 @@ describe('checkOrderIsFilled', () => {
 
     it('should return false', () => {
         const order = {
+            id: '0',
             orderId: 6,
             currency: ethBytes32,
             side: 0,
@@ -315,22 +319,22 @@ describe('sortOrders', () => {
 describe('getMaxAmount', () => {
     it('returns the maximum amount from an array of orders', () => {
         const orders = [
-            { amount: BigInt(10) },
-            { amount: BigInt(5) },
-            { amount: BigInt(20) },
+            { cumulativeAmount: BigInt(10) },
+            { cumulativeAmount: BigInt(5) },
+            { cumulativeAmount: BigInt(20) },
         ];
         const maxAmount = getMaxAmount(orders);
         expect(maxAmount.toString()).toBe('20');
     });
 
     it('returns the amount of the only order in the array', () => {
-        const orders = [{ amount: BigInt(10) }];
+        const orders = [{ cumulativeAmount: BigInt(10) }];
         const maxAmount = getMaxAmount(orders);
         expect(maxAmount.toString()).toBe('10');
     });
 
     it('returns zero if the array is empty', () => {
-        const orders: { amount: bigint }[] = [];
+        const orders: { cumulativeAmount: bigint }[] = [];
         const maxAmount = getMaxAmount(orders);
         expect(maxAmount.toString()).toBe('0');
     });
@@ -339,6 +343,7 @@ describe('getMaxAmount', () => {
 describe('getMappedOrderStatus', () => {
     it('returns the mapped status as Expired when lending market is inactive and order is Open', () => {
         const order = {
+            id: '0',
             orderId: 6,
             currency: ethBytes32,
             side: 0,
@@ -364,6 +369,7 @@ describe('getMappedOrderStatus', () => {
 
     it('returns the mapped status as Partially Filled & Expired when lending market is inactive and order is PartiallyFilled', () => {
         const order = {
+            id: '0',
             orderId: 6,
             currency: ethBytes32,
             side: 0,
@@ -389,6 +395,7 @@ describe('getMappedOrderStatus', () => {
 
     it('returns the mapped status as Blocked when order is completely Killed because of circuit breaker', () => {
         const order = {
+            id: '0',
             orderId: 6,
             currency: ethBytes32,
             side: 0,
@@ -414,6 +421,7 @@ describe('getMappedOrderStatus', () => {
 
     it('returns the mapped status as Partially Filled & Blocked when order is partially Killed because of circuit breaker', () => {
         const order = {
+            id: '0',
             orderId: 6,
             currency: ethBytes32,
             side: 0,
@@ -439,6 +447,7 @@ describe('getMappedOrderStatus', () => {
 
     it('returns the mapped status as Filled when order status is Filled', () => {
         const order = {
+            id: '0',
             orderId: 6,
             currency: ethBytes32,
             side: 0,
@@ -464,6 +473,7 @@ describe('getMappedOrderStatus', () => {
 
     it('returns the mapped status as Partially Filled when order status is PartiallyFilled', () => {
         const order = {
+            id: '0',
             orderId: 6,
             currency: ethBytes32,
             side: 0,
@@ -489,6 +499,7 @@ describe('getMappedOrderStatus', () => {
 
     it('returns the mapped status as Killed when order status is Killed and filled amount is 0', () => {
         const order = {
+            id: '0',
             orderId: 6,
             currency: ethBytes32,
             side: 0,
@@ -514,6 +525,7 @@ describe('getMappedOrderStatus', () => {
 
     it('returns the mapped status as Partially Filled & Killed when order status is Killed and filled amount is not 0', () => {
         const order = {
+            id: '0',
             orderId: 6,
             currency: ethBytes32,
             side: 0,
@@ -539,6 +551,7 @@ describe('getMappedOrderStatus', () => {
 
     it('returns the mapped status as Cancelled when order status is Cancelled and filled amount is 0', () => {
         const order = {
+            id: '0',
             orderId: 6,
             currency: ethBytes32,
             side: 0,
@@ -564,6 +577,7 @@ describe('getMappedOrderStatus', () => {
 
     it('returns the mapped status as Partially Filled & Cancelled when order status is Cancelled and filled amount is not 0', () => {
         const order = {
+            id: '0',
             orderId: 6,
             currency: ethBytes32,
             side: 0,

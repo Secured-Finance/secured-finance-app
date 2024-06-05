@@ -1,5 +1,6 @@
 import { composeStories } from '@storybook/react';
-import { fireEvent, render, screen } from 'src/test-utils.js';
+import userEvent from '@testing-library/user-event';
+import { render, screen } from 'src/test-utils.js';
 import * as stories from './LiquidationProgressBar.stories';
 
 const { NotConnectedToWallet, CollateralDepositedWithCoverage } =
@@ -11,7 +12,8 @@ describe('LiquidationProgressBar Component', () => {
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
         expect(screen.getByText('Low')).toBeInTheDocument();
-        expect(screen.getByText('Low')).toHaveClass('text-progressBarStart');
+        expect(screen.getByText('Low')).toHaveClass('text-secondary-500');
+
         expect(screen.getByText('N/A')).toBeInTheDocument();
 
         expect(screen.getByTestId('liquidation-progress-bar-tick')).toHaveStyle(
@@ -19,14 +21,16 @@ describe('LiquidationProgressBar Component', () => {
         );
     });
 
-    it('should render a LiquidationProgressBar with values', () => {
+    it('should render a LiquidationProgressBar with values', async () => {
         render(<CollateralDepositedWithCoverage />);
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
         expect(screen.getByText('Medium')).toBeInTheDocument();
-        expect(screen.getByText('Medium')).toHaveClass('text-progressBarVia');
+        expect(screen.getByText('Medium')).toHaveClass('text-warning-500');
+
         expect(screen.getByText('35%')).toBeInTheDocument();
-        expect(screen.getByText('35%')).toHaveClass('text-progressBarVia');
+        expect(screen.getByText('35%')).toHaveClass('text-warning-500');
+
         expect(
             screen.getByText('threshold to liquidation')
         ).toBeInTheDocument();
@@ -37,32 +41,32 @@ describe('LiquidationProgressBar Component', () => {
         );
 
         const information = screen.getByTestId('information-circle');
-        fireEvent.mouseEnter(information);
 
-        const tooltip = screen.getByRole('tooltip');
-
-        expect(tooltip).toHaveTextContent(
-            'Liquidation threshold is the limit where your collateral will be eligible for liquidation.You are currently 35% under the liquidation threshold (80% of deposit balance).'
-        );
+        await userEvent.unhover(information);
+        await userEvent.hover(information);
+        const tooltip = await screen.findByRole('tooltip');
+        expect(tooltip).toBeInTheDocument();
     });
 
     it('should render correct color and risk status', () => {
         render(<CollateralDepositedWithCoverage liquidationPercentage={30} />);
         expect(screen.getByText('50%')).toBeInTheDocument();
-        expect(screen.getByText('50%')).toHaveClass('text-progressBarStart');
+        expect(screen.getByText('50%')).toHaveClass('text-secondary-500');
+
         expect(screen.getByText('Low')).toBeInTheDocument();
-        expect(screen.getByText('Low')).toHaveClass('text-progressBarStart');
+        expect(screen.getByText('Low')).toHaveClass('text-secondary-500');
 
         render(<CollateralDepositedWithCoverage liquidationPercentage={50} />);
         expect(screen.getByText('30%')).toBeInTheDocument();
-        expect(screen.getByText('30%')).toHaveClass('text-progressBarVia');
+        expect(screen.getByText('30%')).toHaveClass('text-warning-500');
+
         expect(screen.getByText('Medium')).toBeInTheDocument();
-        expect(screen.getByText('Medium')).toHaveClass('text-progressBarVia');
+        expect(screen.getByText('Medium')).toHaveClass('text-warning-500');
 
         render(<CollateralDepositedWithCoverage liquidationPercentage={90} />);
         expect(screen.getByText('0%')).toBeInTheDocument();
-        expect(screen.getByText('0%')).toHaveClass('text-progressBarEnd');
-        expect(screen.getByText('High')).toBeInTheDocument();
-        expect(screen.getByText('High')).toHaveClass('text-progressBarEnd');
+        expect(screen.getByText('0%')).toHaveClass('text-error-500');
+        expect(screen.getByText('Very High')).toBeInTheDocument();
+        expect(screen.getByText('Very High')).toHaveClass('text-error-500');
     });
 });

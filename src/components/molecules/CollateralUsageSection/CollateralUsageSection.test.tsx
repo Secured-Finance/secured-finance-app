@@ -44,18 +44,18 @@ describe('CollateralUsageSection Component', () => {
     it('should render correct color on collateral usage', () => {
         render(<Default collateralCoverage={0} />);
         expect(screen.getByText('0%')).toBeInTheDocument();
-        expect(screen.getByText('0%')).toHaveClass('text-progressBarStart');
+        expect(screen.getByText('0%')).toHaveClass('text-secondary-500');
 
         render(<Default collateralCoverage={1000} />);
         expect(screen.getByText('10%')).toBeInTheDocument();
-        expect(screen.getByText('10%')).toHaveClass('text-progressBarStart');
+        expect(screen.getByText('10%')).toHaveClass('text-secondary-500');
 
         render(<Default collateralCoverage={5000} />);
         expect(screen.getByText('50%')).toBeInTheDocument();
-        expect(screen.getByText('50%')).toHaveClass('text-progressBarVia');
+        expect(screen.getByText('50%')).toHaveClass('text-warning-500');
 
         render(<Default collateralCoverage={9000} />);
         expect(screen.getByText('90%')).toBeInTheDocument();
-        expect(screen.getByText('90%')).toHaveClass('text-progressBarEnd');
+        expect(screen.getByText('90%')).toHaveClass('text-error-500');
     });
 });

@@ -15,7 +15,7 @@ export const SubtabGroup = ({
             value={selectedOption}
             onChange={handleClick}
             as='div'
-            className='flex flex-row items-center gap-1 rounded-lg bg-[#010316] px-[0.375rem] py-[0.3125rem] light:bg-neutral-100 laptop:gap-2 laptop:p-2'
+            className='flex flex-row items-center gap-1 rounded-lg bg-tab px-1.5 py-[5px] laptop:gap-2 laptop:p-2'
         >
             {options.map((option, index) => (
                 <RadioGroup.Option
