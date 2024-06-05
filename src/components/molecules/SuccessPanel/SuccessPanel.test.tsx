@@ -1,6 +1,6 @@
 import { composeStories } from '@storybook/react';
 import { userEvent } from '@storybook/testing-library';
-import { render, screen, waitFor } from 'src/test-utils.js';
+import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './SuccessPanel.stories';
 
 const { Default, WithTransactionHash } = composeStories(stories);
@@ -28,15 +28,16 @@ describe('SuccessPanel Component', () => {
         const address = screen.getByText('987654321123456789');
         expect(address).toBeInTheDocument();
         expect(address.tagName).toBe('BUTTON');
-        address.click();
+        fireEvent.click(address);
 
         expect(window.open).toHaveBeenCalledWith(
             'https://sepolia.etherscan.io/tx/1123456789',
             '_blank'
         );
-        await waitFor(async () => {
-            await userEvent.hover(address);
-        });
-        expect(screen.getByRole('tooltip')).toBeVisible();
+
+        await userEvent.unhover(address);
+        await userEvent.hover(address);
+        const tooltip = await screen.findByText('View on Etherscan');
+        expect(tooltip).toBeInTheDocument();
     });
 });

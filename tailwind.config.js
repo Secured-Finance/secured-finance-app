@@ -1,9 +1,11 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 
-const { themeVariants } = require('tailwindcss-theme-variants');
-
 module.exports = {
-    content: ['./src/**/*.{ts,tsx,js,jsx}', './public/index.html'],
+    content: [
+        './src/**/*.{ts,tsx,js,jsx}',
+        './public/index.html',
+        './node_modules/@nextui-org/theme/dist/components/(tooltip).js',
+    ],
     safelist: [
         {
             pattern: /grid-cols-./,
@@ -64,6 +66,17 @@ module.exports = {
             gap: {
                 '10px': '10px',
             },
+            lineHeight: {
+                5.5: '22px',
+                11: '44px',
+                12: '48px',
+                14: '56px',
+                16: '64px',
+                18: '72px',
+                20: '80px',
+                24: '96px',
+                28: '112px',
+            },
         },
 
         fontFamily: {
@@ -72,6 +85,7 @@ module.exports = {
                 'Suisse International',
                 ...defaultTheme.fontFamily.sans,
             ],
+            tertiary: ['Roboto Mono', ...defaultTheme.fontFamily.sans],
         },
 
         screens: {
@@ -82,6 +96,25 @@ module.exports = {
         },
 
         fontSize: {
+            2.5: '10px',
+            3: '12px',
+            3.5: '14px',
+            4: '16px',
+            4.5: '18px',
+            5: '20px',
+            5.5: '22px',
+            6: '24px',
+            7: '28px',
+            8: '32px',
+            9: '36px',
+            10: '40px',
+            11: '44px',
+            12: '48px',
+            14: '56px',
+            16: '64px',
+            18: '72px',
+            22: '88px',
+            26: '104px',
             '5xl': ['86px', { lineHeight: '96px', letterSpacing: '-0.02em' }],
             '4xl': ['54px', { lineHeight: '64px', letterSpacing: '-0.02em' }],
             '3xl': ['42px', { lineHeight: '52px', letterSpacing: '-0.02em' }],
@@ -95,29 +128,25 @@ module.exports = {
             xs: '12px',
             '2xs': ['10px', { lineHeight: '15px' }],
         },
+
         colors: {
+            tab: '#010316',
             primary: {
                 50: '#F5F6FF',
-                300: '#C4CAFF',
+                300: '#B9BDEA',
                 500: '#5162FF',
-                700: '#2033DB',
-                900: '#0213A5',
+                700: '#3555AC',
             },
             secondary: {
-                50: '#D4FCFF',
                 300: '#96EAF1',
                 500: '#15D6E8',
                 700: '#09A8B7',
-                900: '#017E8A',
             },
             tertiary: {
-                50: '#F5F6FF',
-                300: '#C4CAFF',
-                500: '#5162FF',
-                700: '#BD47FB',
-                900: '#0213A5',
+                300: '#EDCBFF',
+                500: '#BD47FB',
+                700: '#8919C4',
             },
-            // TODO: handle neutral 1-8 as figma variables
             neutral: {
                 DEFAULT: '#353945',
                 1: '#141416',
@@ -140,35 +169,30 @@ module.exports = {
                 900: '#002133',
             },
             success: {
-                50: '#DDFFE9',
-                300: '#AFFFCB',
-                500: '#74E37E',
-                700: '#5CD167',
-                900: '#157637',
+                300: '#AAE8B0',
+                500: '#5CD167',
+                700: '#0F921B',
             },
             warning: {
-                50: '#FFF1D7',
                 300: '#FFDB93',
-                500: '#FFCD69',
-                700: '#FAAD14',
+                500: '#FAAD14',
+                700: '#C58300',
                 900: '#BD7003',
             },
             error: {
-                50: '#FFE5E8',
                 300: '#FF9FAE',
                 500: '#FF658A',
-                700: '#CE0920',
+                700: '#C30C38',
                 900: '#A50114',
             },
-            // Primary
-
+            tooltip: {
+                success: '#0C474C',
+                warning: '#422F09',
+                error: '#4A1220',
+            },
             teal: '#11CABE',
             green: '#5CD167',
             orange: '#F9AA4B',
-            yellow: {
-                DEFAULT: '#FAAD14',
-                '900': '#BD7003',
-            },
             red: '#FA2256',
             purple: '#BD47FB',
             gunMetal: '#292D3F',
@@ -181,9 +205,9 @@ module.exports = {
             galacticOrange: '#FF9FAE',
             moonGrey: '#E6E6E6',
             slateGray: '#777E90',
-            secondary3: '#96EAF1',
             secondary7: '#B9BDEA',
             error5: '#FF324B',
+            'z-neutral-100': '#F1F5F9',
             grayScale: '#FAFAFA',
             tabGradient: {
                 1: 'rgba(57, 77, 174, 0)',
@@ -207,8 +231,6 @@ module.exports = {
                 blue: {
                     start: 'rgba(111, 116, 176, 0.35)',
                     end: 'rgba(111, 116, 176, 0.00)',
-                    startLight: 'rgba(117, 130, 255, 0.35)',
-                    startEnd: 'rgba(81, 98, 255, 0.00)',
                 },
             },
             backgroundBlur: 'rgba(35, 43, 56, 0.6)',
@@ -266,13 +288,4 @@ module.exports = {
             },
         },
     },
-    plugins: [
-        themeVariants({
-            themes: {
-                light: {
-                    selector: '.light',
-                },
-            },
-        }),
-    ],
 };

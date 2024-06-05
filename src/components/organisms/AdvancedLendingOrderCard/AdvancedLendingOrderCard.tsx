@@ -1,28 +1,29 @@
 import { track } from '@amplitude/analytics-browser';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
-import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { VisibilityState } from '@tanstack/react-table';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     CollateralManagementConciseTab,
     ErrorInfo,
     OrderDisplayBox,
     OrderInputBox,
-    Separator,
     Slider,
     TabGroup,
     TabVariant,
     WalletSourceSelector,
 } from 'src/components/atoms';
 import { SubtabGroup } from 'src/components/molecules/SubtabGroup';
-import { OrderAction } from 'src/components/organisms';
+import { NewOrderBookWidget, OrderAction } from 'src/components/organisms';
 import {
     CollateralBook,
     useBalances,
     useBorrowableAmount,
+    useBreakpoint,
     useLastPrices,
     useMarket,
 } from 'src/hooks';
+import { useOrderbook } from 'src/hooks/useOrderbook';
 import {
     resetUnitPrice,
     selectLandingOrderForm,
@@ -34,7 +35,12 @@ import {
     setUnitPrice,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { OrderSideMap, OrderType, OrderTypeOptions } from 'src/types';
+import {
+    OrderSideMap,
+    OrderType,
+    OrderTypeOptions,
+    getOrderSideText,
+} from 'src/types';
 import {
     ButtonEvents,
     ButtonProperties,
@@ -42,10 +48,12 @@ import {
     ZERO_BI,
     amountFormatterFromBase,
     amountFormatterToBase,
+    currencyMap,
     divide,
     formatLoanValue,
     generateWalletSourceInformation,
     getAmountValidation,
+    multiply,
     ordinaryFormat,
     prefixTilde,
     usdFormat,
@@ -85,6 +93,11 @@ export function AdvancedLendingOrderCard({
         selectLandingOrderForm(state.landingOrderForm)
     );
 
+    const [orderBook, setMultiplier, setIsShowingAll] = useOrderbook(
+        currency,
+        maturity
+    );
+
     const { address, isConnected } = useAccount();
     const { amountInput, unitPriceInput } = useSelector((state: RootState) =>
         selectLandingOrderInputs(state.landingOrderForm)
@@ -93,6 +106,7 @@ export function AdvancedLendingOrderCard({
     const [sliderValue, setSliderValue] = useState(0.0);
 
     const balanceRecord = useBalances();
+    const isTablet = useBreakpoint('laptop');
 
     const loanValue = useMemo(() => {
         if (!maturity) return LoanValue.ZERO;
@@ -123,10 +137,36 @@ export function AdvancedLendingOrderCard({
         return collateralBook.coverage / 100.0;
     }, [collateralBook]);
 
+    const totalCollateralInUSD = address ? collateralBook.usdCollateral : 0;
+
     const { data: priceList } = useLastPrices();
     const price = priceList[currency];
 
     const market = useMarket(currency, maturity);
+    const marketUnitPrice = market?.marketUnitPrice;
+    const openingUnitPrice = market?.openingUnitPrice;
+
+    const currentMarket = useMemo(() => {
+        if (marketUnitPrice) {
+            return {
+                value: LoanValue.fromPrice(marketUnitPrice, maturity),
+                time: market?.lastBlockUnitPriceTimestamp ?? 0,
+                type: 'block' as const,
+            };
+        }
+        if (openingUnitPrice) {
+            return {
+                value: LoanValue.fromPrice(openingUnitPrice, maturity),
+                time: 0,
+                type: 'opening' as const,
+            };
+        }
+    }, [
+        market?.lastBlockUnitPriceTimestamp,
+        marketUnitPrice,
+        maturity,
+        openingUnitPrice,
+    ]);
 
     const slippage = useMemo(() => {
         if (!market) {
@@ -253,184 +293,240 @@ export function AdvancedLendingOrderCard({
 
     const isBondPriceFieldDisabled = isMarketOrderType || !isConnected;
 
+    const rowsToRenderMobile = useMemo(() => {
+        switch (side) {
+            case OrderSide.LEND:
+                switch (isMarketOrderType) {
+                    case true:
+                        return 18;
+                    case false:
+                        return 18;
+                }
+            case OrderSide.BORROW:
+                switch (isMarketOrderType) {
+                    case true:
+                        return 16;
+                    case false:
+                        return 14;
+                }
+        }
+    }, [side, isMarketOrderType]);
+
+    const handleFilterChange = useCallback(
+        (state: VisibilityState) => {
+            setIsShowingAll(state.showBorrow && state.showLend);
+        },
+        [setIsShowingAll]
+    );
+
     const orderSideOptions = Object.values(OrderSideMap).map(option => ({
-        text: option,
+        text: getOrderSideText(option),
         variant: TabVariant[option],
     }));
-
     return (
-        <div className='h-full rounded-b-xl border border-white-10 bg-cardBackground bg-opacity-60 pb-7'>
-            <TabGroup
-                options={orderSideOptions}
-                selectedOption={OrderSideMap[side]}
-                handleClick={option => {
-                    dispatch(
-                        setSide(
-                            option === 'Borrow'
-                                ? OrderSide.BORROW
-                                : OrderSide.LEND
-                        )
-                    );
-                    dispatch(setSourceAccount(WalletSource.METAMASK));
-                    trackButtonEvent(
-                        ButtonEvents.ORDER_SIDE,
-                        ButtonProperties.ORDER_SIDE,
-                        option
-                    );
-                }}
-            />
+        <div className='h-full rounded-b-xl border-white-10 pb-7 laptop:border laptop:bg-cardBackground laptop:bg-opacity-60'>
+            <div className='h-11 border-b border-neutral-600 laptop:h-[60px]'>
+                <TabGroup
+                    options={orderSideOptions}
+                    selectedOption={getOrderSideText(OrderSideMap[side])}
+                    handleClick={option => {
+                        dispatch(
+                            setSide(
+                                option === 'Sell / Borrow'
+                                    ? OrderSide.BORROW
+                                    : OrderSide.LEND
+                            )
+                        );
+                        dispatch(setSourceAccount(WalletSource.METAMASK));
+                        trackButtonEvent(
+                            ButtonEvents.ORDER_SIDE,
+                            ButtonProperties.ORDER_SIDE,
+                            option
+                        );
+                    }}
+                    isFullHeight
+                />
+            </div>
 
-            <div className='flex w-full flex-col justify-center gap-4 px-4 pt-5'>
-                {!isItayose && (
-                    <SubtabGroup
-                        options={OrderTypeOptions}
-                        selectedOption={orderType}
-                        handleClick={option => {
-                            dispatch(setOrderType(option as OrderType));
-                            dispatch(resetUnitPrice());
-                            trackButtonEvent(
-                                ButtonEvents.ORDER_TYPE,
-                                ButtonProperties.ORDER_TYPE,
-                                option
-                            );
-                        }}
-                    />
-                )}
-                {side === OrderSide.LEND && (
-                    <div className='space-y-1'>
-                        <WalletSourceSelector
-                            optionList={walletSourceList}
-                            selected={selectedWalletSource}
-                            account={address ?? ''}
-                            onChange={handleWalletSourceChange}
+            <div className='grid w-full grid-cols-12 gap-5  px-4 pb-8 pt-4 laptop:gap-0 laptop:pb-4 laptop:pt-5'>
+                <div className='col-span-7 flex flex-col justify-start gap-2 laptop:col-span-12 laptop:gap-4'>
+                    {!isItayose && (
+                        <SubtabGroup
+                            options={OrderTypeOptions}
+                            selectedOption={orderType}
+                            handleClick={option => {
+                                dispatch(setOrderType(option as OrderType));
+                                dispatch(resetUnitPrice());
+                                trackButtonEvent(
+                                    ButtonEvents.ORDER_TYPE,
+                                    ButtonProperties.ORDER_TYPE,
+                                    option
+                                );
+                            }}
                         />
-                        <ErrorInfo
-                            showError={getAmountValidation(
-                                amountFormatterFromBase[currency](amount),
-                                balanceToLend,
-                                side
-                            )}
-                            errorMessage='Insufficient amount in source'
-                        />
-                    </div>
-                )}
-                <div className='flex flex-col gap-10px'>
-                    <OrderInputBox
-                        field='Bond Price'
-                        disabled={isBondPriceFieldDisabled}
-                        initialValue={
-                            isMarketOrderType ? 'Market' : unitPriceValue
-                        }
-                        onValueChange={v => {
-                            v !== undefined
-                                ? dispatch(setUnitPrice(v.toString()))
-                                : dispatch(setUnitPrice(''));
-                            track(InteractionEvents.BOND_PRICE, {
-                                [InteractionProperties.BOND_PRICE]:
-                                    v?.toString(),
-                            });
-                        }}
-                        informationText='Input value greater than or equal to 0.01 and up to and including 100.'
-                        decimalPlacesAllowed={2}
-                        maxLimit={100}
-                        bgClassName={
-                            isBondPriceFieldDisabled
-                                ? 'bg-neutral-700'
-                                : undefined
-                        }
-                    />
-                    <ErrorInfo
-                        errorMessage='Invalid bond price'
-                        showError={isInvalidBondPrice}
-                    />
-                    {isMarketOrderType && (
-                        <div className='mx-10px'>
-                            <OrderDisplayBox
-                                field='Max Slippage'
-                                value={divide(slippage, 100)}
-                                informationText='A bond price limit, triggering a circuit breaker if exceeded within a single block due to price fluctuations.'
+                    )}
+                    {side === OrderSide.LEND && (
+                        <div className='space-y-1'>
+                            <WalletSourceSelector
+                                optionList={walletSourceList}
+                                selected={selectedWalletSource}
+                                account={address ?? ''}
+                                onChange={handleWalletSourceChange}
+                            />
+
+                            <ErrorInfo
+                                showError={getAmountValidation(
+                                    amountFormatterFromBase[currency](amount),
+                                    balanceToLend,
+                                    side
+                                )}
+                                errorMessage='Insufficient amount in source'
                             />
                         </div>
                     )}
-                    <div className='mx-10px'>
-                        <OrderDisplayBox
-                            field='Fixed Rate (APR)'
-                            value={formatLoanValue(loanValue, 'rate')}
+                    <div className='flex flex-col gap-3 laptop:gap-2.5'>
+                        <OrderInputBox
+                            field='Bond Price'
+                            disabled={isBondPriceFieldDisabled}
+                            initialValue={
+                                isMarketOrderType ? 'Market' : unitPriceValue
+                            }
+                            onValueChange={v => {
+                                v !== undefined
+                                    ? dispatch(setUnitPrice(v.toString()))
+                                    : dispatch(setUnitPrice(''));
+                                track(InteractionEvents.BOND_PRICE, {
+                                    [InteractionProperties.BOND_PRICE]:
+                                        v?.toString(),
+                                });
+                            }}
+                            informationText='Input value greater than or equal to 0.01 and up to and including 100.'
+                            decimalPlacesAllowed={2}
+                            maxLimit={100}
+                            bgClassName={
+                                isBondPriceFieldDisabled
+                                    ? 'bg-neutral-700'
+                                    : undefined
+                            }
                         />
-                    </div>
-                </div>
-                {side === OrderSide.BORROW && (
-                    <div className='typography-caption mx-10px flex flex-row justify-between'>
-                        <div className='text-slateGray'>{`Available To Borrow (${currency.toString()})`}</div>
-                        <div className='text-right text-planetaryPurple'>
-                            {prefixTilde(
-                                ordinaryFormat(availableToBorrow, 0, 6)
-                            )}
+                        <ErrorInfo
+                            errorMessage='Invalid bond price'
+                            showError={isInvalidBondPrice}
+                        />
+                        {isMarketOrderType && (
+                            <div className='mx-2 laptop:mx-10px'>
+                                <OrderDisplayBox
+                                    field='Max Slippage'
+                                    value={divide(slippage, 100)}
+                                    informationText='A bond price limit, triggering a circuit breaker if exceeded within a single block due to price fluctuations.'
+                                />
+                            </div>
+                        )}
+                        <div className='mx-2 mb-1 laptop:mx-10px laptop:mb-0'>
+                            <OrderDisplayBox
+                                field='Fixed Rate (APR)'
+                                value={formatLoanValue(loanValue, 'rate')}
+                            />
                         </div>
                     </div>
-                )}
-                <OrderInputBox
-                    field='Amount'
-                    unit={currency}
-                    initialValue={amountInput}
-                    onValueChange={v => handleInputChange((v as string) ?? '')}
-                    disabled={!isConnected}
-                    bgClassName={!isConnected ? 'bg-neutral-700' : undefined}
-                />
-                <div className='mx-10px'>
-                    <Slider
-                        onChange={handleSliderChange}
-                        value={sliderValue}
+                    {side === OrderSide.BORROW && (
+                        <div className='laptop:typography-caption mx-2 flex flex-row justify-between text-[11px] laptop:mx-10px'>
+                            <div className='text-slateGray'>{`Available To Borrow (${currency.toString()})`}</div>
+                            <div className='text-right text-planetaryPurple'>
+                                {prefixTilde(
+                                    ordinaryFormat(availableToBorrow, 0, 6)
+                                )}
+                            </div>
+                        </div>
+                    )}
+                    <OrderInputBox
+                        field='Amount'
+                        unit={currency}
+                        initialValue={amountInput}
+                        onValueChange={v =>
+                            handleInputChange((v as string) ?? '')
+                        }
                         disabled={!isConnected}
+                        bgClassName={
+                            !isConnected ? 'bg-neutral-700' : undefined
+                        }
+                    />
+                    <div className='mx-10px'>
+                        <Slider
+                            onChange={handleSliderChange}
+                            value={sliderValue}
+                            disabled={!isConnected}
+                        />
+                    </div>
+                    <div className='mx-2 flex flex-col gap-2 laptop:mx-10px'>
+                        <OrderDisplayBox
+                            field='Est. Present Value'
+                            value={usdFormat(orderAmount?.toUSD(price) ?? 0, 2)}
+                        />
+                        <OrderDisplayBox
+                            field='Future Value'
+                            value={
+                                unitPriceValue &&
+                                unitPriceValue !== '' &&
+                                unitPriceValue !== '0'
+                                    ? divide(
+                                          multiply(
+                                              amountFormatterFromBase[currency](
+                                                  amount
+                                              ),
+                                              100,
+                                              currencyMap[currency]
+                                                  .roundingDecimal
+                                          ),
+                                          Number(unitPriceValue),
+                                          currencyMap[currency].roundingDecimal
+                                      )
+                                    : 0
+                            }
+                            informationText='Future Value is the expected return value of the contract at time of maturity.'
+                        />
+                    </div>
+
+                    <OrderAction
+                        loanValue={loanValue}
+                        collateralBook={collateralBook}
+                        validation={shouldDisableActionButton}
+                        isCurrencyDelisted={delistedCurrencySet.has(currency)}
+                    />
+
+                    <ErrorInfo
+                        errorMessage='Simultaneous borrow and lend orders are not allowed during the pre-open market period.'
+                        align='left'
+                        showError={showPreOrderError}
                     />
                 </div>
-                <div className='mx-10px flex flex-col gap-2'>
-                    <OrderDisplayBox
-                        field='Est. Present Value'
-                        value={usdFormat(orderAmount?.toUSD(price) ?? 0, 2)}
-                    />
-                    <OrderDisplayBox
-                        field='Future Value'
-                        value='--' // todo after apy -> apr
-                        informationText='Future Value is the expected return value of the contract at time of maturity.'
-                    />
+                <div className='col-span-5 laptop:hidden'>
+                    {isTablet && (
+                        <NewOrderBookWidget
+                            orderbook={orderBook}
+                            currency={currency}
+                            marketPrice={currentMarket?.value}
+                            maxLendUnitPrice={market?.maxLendUnitPrice}
+                            minBorrowUnitPrice={market?.minBorrowUnitPrice}
+                            onFilterChange={handleFilterChange}
+                            onAggregationChange={setMultiplier}
+                            rowsToRenderMobile={rowsToRenderMobile}
+                            isItayose
+                        />
+                    )}
                 </div>
-
-                <OrderAction
-                    loanValue={loanValue}
-                    collateralBook={collateralBook}
-                    validation={shouldDisableActionButton}
-                    isCurrencyDelisted={delistedCurrencySet.has(currency)}
-                />
-
-                <ErrorInfo
-                    errorMessage='Simultaneous borrow and lend orders are not allowed during the pre-open market period.'
-                    align='left'
-                    showError={showPreOrderError}
-                />
-
-                <Separator color='neutral-3'></Separator>
-
-                <div className='typography-nav-menu-default flex flex-row justify-between'>
-                    <div className='text-neutral-8'>Collateral Management</div>
-                    <Link href='/portfolio' passHref>
-                        <a
-                            className='text-planetaryPurple'
-                            href='_'
-                            role='button'
-                        >
-                            {'Manage \u00BB'}
-                        </a>
-                    </Link>
-                </div>
-
-                <CollateralManagementConciseTab
-                    collateralCoverage={collateralUsagePercent}
-                    availableToBorrow={collateralBook.usdAvailableToBorrow}
-                    collateralThreshold={collateralBook.collateralThreshold}
-                    account={address}
-                />
             </div>
+            <section className='px-4'>
+                <div className='border-neutral-3 laptop:border-t laptop:pt-4'>
+                    <CollateralManagementConciseTab
+                        collateralCoverage={collateralUsagePercent}
+                        availableToBorrow={collateralBook.usdAvailableToBorrow}
+                        collateralThreshold={collateralBook.collateralThreshold}
+                        account={address}
+                        totalCollateralInUSD={totalCollateralInUSD}
+                    />
+                </div>
+            </section>
         </div>
     );
 }

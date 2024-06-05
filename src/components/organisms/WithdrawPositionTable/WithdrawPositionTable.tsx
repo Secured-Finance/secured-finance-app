@@ -1,7 +1,7 @@
 import { InformationCircleIcon } from '@heroicons/react/24/solid';
 import { createColumnHelper } from '@tanstack/react-table';
 import { useMemo } from 'react';
-import { Button } from 'src/components/atoms';
+import { Button, ButtonSizes } from 'src/components/atoms';
 import { CoreTable } from 'src/components/molecules';
 import { EmergencySettlementStep } from 'src/components/templates';
 import { Position, useTerminationPrices } from 'src/hooks';
@@ -97,7 +97,11 @@ export const WithdrawPositionTable = ({
                                 {usdFormat(netValue)}
                             </span>
                         </span>
-                        <Button className='row-start-1' onClick={onRedeem}>
+                        <Button
+                            className='row-start-1'
+                            size={ButtonSizes.lg}
+                            onClick={onRedeem}
+                        >
                             Redeem
                         </Button>
                     </div>

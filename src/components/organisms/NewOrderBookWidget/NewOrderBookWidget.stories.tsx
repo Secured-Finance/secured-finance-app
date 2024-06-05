@@ -1,39 +1,47 @@
+import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
 import type { Meta, StoryFn } from '@storybook/react';
 import { OrderBookEntry } from 'src/hooks/useOrderbook';
 import { CurrencySymbol, ZERO_BI } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
-import { OrderBookWidget } from './OrderBookWidget';
+import { NewOrderBookWidget } from './NewOrderBookWidget';
 
 const maturityMar23 = new Maturity(1675252800);
 const ZERO_ENTRY = {
     amount: ZERO_BI,
     value: LoanValue.fromPrice(0, maturityMar23.toNumber()),
+    cumulativeAmount: ZERO_BI,
 };
 
 const borrowEntries: Array<OrderBookEntry> = [
     {
         amount: BigInt('43003200000000000000000'),
         value: LoanValue.fromPrice(9850, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
     {
         amount: BigInt('230000052000000000000000'),
         value: LoanValue.fromPrice(9700, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
     {
         amount: BigInt('15000000000000000000000'),
         value: LoanValue.fromPrice(9500, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
     {
         amount: BigInt('12000000000000000000000'),
         value: LoanValue.fromPrice(9475, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
     {
         amount: BigInt('1800000000000000000000'),
         value: LoanValue.fromPrice(9400, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
     {
         amount: BigInt('0'),
         value: LoanValue.fromPrice(9200, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
 ];
 
@@ -41,26 +49,32 @@ const lendEntries: Array<OrderBookEntry> = [
     {
         amount: BigInt('43000000000000000000000'),
         value: LoanValue.fromPrice(9200, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
     {
         amount: BigInt('55000000000000000000000'),
         value: LoanValue.fromPrice(9110, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
     {
         amount: BigInt('3000000000000000000000'),
         value: LoanValue.fromPrice(9050, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
     {
         amount: BigInt('15000000000000000000000'),
         value: LoanValue.fromPrice(9010, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
     {
         amount: BigInt('21000000000000000000000'),
         value: LoanValue.fromPrice(8980, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
     {
         amount: BigInt('51000000000000000000000'),
         value: LoanValue.fromPrice(8960, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
 ];
 
@@ -69,6 +83,7 @@ const generateOrderBookEntries = (n: number, start: number) => {
         return {
             amount: BigInt(`1${i}000000`),
             value: LoanValue.fromPrice(start + i, maturityMar23.toNumber()),
+            cumulativeAmount: ZERO_BI,
         };
     });
 };
@@ -85,44 +100,54 @@ const ethEntries: Array<OrderBookEntry> = [
     {
         amount: BigInt('12000000000000000000'),
         value: LoanValue.fromPrice(9653, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
     {
         amount: BigInt('12301100000000000000'),
         value: LoanValue.fromPrice(9674, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
     {
         amount: BigInt('10034003400000000000'),
         value: LoanValue.fromPrice(9679, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
     {
         amount: BigInt('100000000000000000000'),
         value: LoanValue.fromPrice(9679, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
     {
         amount: BigInt('100200000000000000000'),
         value: LoanValue.fromPrice(9679, maturityMar23.toNumber()),
+        cumulativeAmount: ZERO_BI,
     },
 ];
 
 export default {
-    title: 'Organism/OrderBookWidget',
-    component: OrderBookWidget,
+    title: 'Organism/NewOrderBookWidget',
+    component: NewOrderBookWidget,
     args: {
         orderbook: {
             data: {
                 borrowOrderbook: borrowEntries,
                 lendOrderbook: lendEntries,
             },
-            isLoading: false,
+            isPending: false,
         },
+        maxLendUnitPrice: 9830,
+        minBorrowUnitPrice: 9000,
         marketPrice: LoanValue.fromPrice(9300, maturityMar23.toNumber()),
         currency: CurrencySymbol.WFIL,
-        isCurrencyDelisted: false,
+        rowsToRenderMobile: 12,
     },
-} as Meta<typeof OrderBookWidget>;
+    parameters: {
+        ...RESPONSIVE_PARAMETERS,
+    },
+} as Meta<typeof NewOrderBookWidget>;
 
-const Template: StoryFn<typeof OrderBookWidget> = args => (
-    <OrderBookWidget {...args} />
+const Template: StoryFn<typeof NewOrderBookWidget> = args => (
+    <NewOrderBookWidget {...args} />
 );
 
 export const Default = Template.bind({});
@@ -133,9 +158,12 @@ Bitcoin.args = {
             borrowOrderbook: btcEntriesBorrow,
             lendOrderbook: btcEntriesLend,
         },
-        isLoading: false,
+        isPending: false,
     },
     currency: CurrencySymbol.WBTC,
+};
+Bitcoin.parameters = {
+    ...RESPONSIVE_PARAMETERS,
 };
 
 export const Eth = Template.bind({});
@@ -148,16 +176,14 @@ Eth.args = {
                 ZERO_ENTRY,
                 ZERO_ENTRY,
             ],
-            lendOrderbook: [...ethEntries, ZERO_ENTRY],
+            lendOrderbook: [...ethEntries, ZERO_ENTRY, ZERO_ENTRY, ZERO_ENTRY],
         },
-        isLoading: false,
+        isPending: false,
     },
     currency: CurrencySymbol.ETH,
 };
-
-export const Itayose = Template.bind({});
-Itayose.args = {
-    variant: 'itayose',
+Eth.parameters = {
+    ...RESPONSIVE_PARAMETERS,
 };
 
 export const Loading = Template.bind({});
@@ -167,11 +193,14 @@ Loading.args = {
             borrowOrderbook: [],
             lendOrderbook: [],
         },
-        isLoading: true,
+        isPending: true,
     },
 };
+Loading.parameters = {
+    ...RESPONSIVE_PARAMETERS,
+};
 
-export const Delisted = Template.bind({});
-Delisted.args = {
-    isCurrencyDelisted: true,
+export const Itayose = Template.bind({});
+Itayose.args = {
+    isItayose: true,
 };

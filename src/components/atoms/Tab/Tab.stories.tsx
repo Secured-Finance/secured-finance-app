@@ -51,7 +51,7 @@ WithSuffix.args = {
     text: 'With Suffix',
     suffixEle: (
         <span
-            className='bg-warning-300/35 flex items-center gap-1 rounded-[5px] border border-warning-300 px-1.5 py-0.5 text-2xs leading-[1.3] text-warning-300'
+            className='flex items-center gap-1 rounded-[5px] border border-warning-300 bg-warning-300/35 px-1.5 py-0.5 text-2xs leading-[1.3] text-warning-300'
             data-testid='tab-suffix'
         >
             New <FireIcon className='h-2.5 w-2.5' />

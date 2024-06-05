@@ -12,6 +12,7 @@ export * from './useGraphClientHook';
 export * from './useHandleContractTransaction';
 export * from './useIsGlobalItayose';
 export * from './useIsMarketTerminated';
+export * from './useIsSubgraphSupported';
 export * from './useIsUnderCollateralThreshold';
 export * from './useItayoseEstimation';
 export * from './useLastPrices';

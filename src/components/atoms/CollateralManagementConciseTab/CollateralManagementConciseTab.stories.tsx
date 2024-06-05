@@ -6,7 +6,7 @@ export default {
     component: CollateralManagementConciseTab,
     args: {
         collateralCoverage: 0,
-        totalCollateralInUSD: 0,
+        totalCollateralInUSD: 100,
         collateralThreshold: 0,
         account: undefined,
     },
@@ -24,6 +24,7 @@ ZeroCollateral.args = {
     availableToBorrow: 0,
     collateralThreshold: 80,
     account: '0x123',
+    totalCollateralInUSD: 0,
 };
 
 export const CollateralDepositedZeroCoverage = Template.bind({});

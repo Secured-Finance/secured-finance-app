@@ -114,7 +114,7 @@ export const LineChartTab = ({
                         if (isPreOrderPeriod) {
                             router.push('/itayose');
                         } else if (followLinks) {
-                            router.push('/advanced');
+                            router.push('/');
                         }
                     }}
                     maturity={new Maturity(maturity)}

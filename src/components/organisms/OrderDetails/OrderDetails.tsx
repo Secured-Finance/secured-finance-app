@@ -29,7 +29,7 @@ const FeeItem = () => {
     return (
         <div className='flex flex-row items-center gap-1'>
             <div className='text-planetaryPurple'>Transaction Fee %</div>
-            <InfoToolTip>
+            <InfoToolTip placement='bottom'>
                 A duration-based transaction fee only for market takers,
                 factored into the bond price, and deducted from its future value
             </InfoToolTip>

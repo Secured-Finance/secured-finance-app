@@ -12,15 +12,11 @@ export const OrderDisplayBox = ({
     informationText,
 }: OrderDisplayBoxProps) => {
     return (
-        <div className='typography-caption flex h-6 w-full flex-row items-center justify-between bg-transparent'>
+        <div className='laptop:typography-caption flex h-4 w-full flex-row items-center justify-between bg-transparent text-[11px] laptop:h-6'>
             <div className='flex flex-row items-center gap-2'>
                 <div className='text-slateGray'>{field}</div>
                 {informationText && (
-                    <InfoToolTip
-                        maxWidth='small'
-                        align='right'
-                        iconSize='small'
-                    >
+                    <InfoToolTip iconSize='small' placement='bottom-start'>
                         {informationText}
                     </InfoToolTip>
                 )}

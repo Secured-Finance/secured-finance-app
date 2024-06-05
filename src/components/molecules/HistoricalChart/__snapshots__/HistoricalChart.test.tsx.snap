@@ -6,12 +6,11 @@ exports[`HistoricalChart component should match snapshot 1`] = `
     class="w-[600px]"
   >
     <div
-      class="bg-neutral-900 pt-[0.5625rem]"
+      class="bg-neutral-900 pt-1 font-tertiary laptop:pt-2.5"
     >
       <div
-        class="z-10 flex gap-4 text-2xs text-neutral-4 font-medium leading-4 pt-[0.4375rem] px-4"
+        class="z-10 flex gap-4 text-2xs text-neutral-4 font-medium text-[11px] tablet:text-xs leading-4 pt-2 laptop:pt-1.5 px-4"
       >
-        
         <div
           class="flex gap-1"
         >
@@ -21,7 +20,7 @@ exports[`HistoricalChart component should match snapshot 1`] = `
             O
           </span>
           <div
-            class="font-normal text-palePurple"
+            class="font-normal text-primary-50"
           />
         </div>
         <div
@@ -33,7 +32,7 @@ exports[`HistoricalChart component should match snapshot 1`] = `
             H
           </span>
           <div
-            class="font-normal text-palePurple"
+            class="font-normal text-primary-50"
           />
         </div>
         <div
@@ -45,7 +44,7 @@ exports[`HistoricalChart component should match snapshot 1`] = `
             L
           </span>
           <div
-            class="font-normal text-palePurple"
+            class="font-normal text-primary-50"
           />
         </div>
         <div
@@ -57,14 +56,14 @@ exports[`HistoricalChart component should match snapshot 1`] = `
             C
           </span>
           <div
-            class="font-normal text-palePurple"
+            class="font-normal text-primary-50"
           />
         </div>
         <div
           class="flex gap-1"
         >
           <span
-            class="text-neutral-4"
+            class="text-neutral-4 hidden laptop:block"
           >
             Change
           </span>
@@ -74,7 +73,7 @@ exports[`HistoricalChart component should match snapshot 1`] = `
         </div>
       </div>
       <div
-        class="relative h-[297px] w-full"
+        class="relative h-[156px] w-full laptop:h-[184px]"
         data-testid="candlestick-chart"
       >
         <div
@@ -154,24 +153,22 @@ exports[`HistoricalChart component should match snapshot 1`] = `
         </div>
       </div>
       <div
-        class="z-10 flex gap-4 text-2xs text-neutral-4 font-medium leading-4 pt-[0.4375rem] px-4"
+        class="z-10 flex gap-4 text-2xs text-neutral-4 font-medium text-[11px] tablet:text-xs leading-4 pt-2 laptop:pt-1.5 px-4"
       >
         <div>
           <span>
             Vol(WFIL DEC22)
             :
           </span>
-          
         </div>
         <div>
           <span>
             Vol(USDT):
           </span>
-          
         </div>
       </div>
       <div
-        class="relative h-[144px] w-full"
+        class="relative h-[92px] w-full laptop:h-[115px]"
         data-testid="volume-chart"
       >
         <div

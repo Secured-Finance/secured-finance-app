@@ -4,7 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { createContext, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { QUERIES_TO_INVALIDATE } from 'src/hooks';
-import { useEthereumWalletStore } from 'src/hooks/useEthWallet';
+import { useWalletStore } from 'src/hooks/useWallet';
 import {
     updateChainError,
     updateChainId,
@@ -49,7 +49,9 @@ export const Context = createContext<SFContext>({
     securedFinance: undefined,
 });
 
-const SecuredFinanceProvider: React.FC = ({ children }) => {
+const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
+    children,
+}) => {
     const { address, isConnected } = useAccount();
     const { chain } = useNetwork();
     const chainId = useSelector((state: RootState) => state.blockchain.chainId);
@@ -64,7 +66,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
         useState<SecuredFinanceClient>();
     const dispatch = useDispatch();
 
-    useEthereumWalletStore();
+    useWalletStore();
 
     const chainName = getSupportedNetworks().find(n => n.id === chainId)?.name;
 

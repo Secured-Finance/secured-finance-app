@@ -67,6 +67,7 @@ export const calculateAveragePrice = (unitPrice: bigint): number => {
 
 export const formatOrders = (orders: OrderList): TransactionHistoryList => {
     return orders?.map(order => ({
+        id: '0',
         amount: order.amount,
         side: order.side,
         executionPrice: order.unitPrice,
@@ -106,13 +107,14 @@ export const sortOrders = (a: Order, b: Order) => {
     return Number(b.createdAt - a.createdAt);
 };
 
-export const getMaxAmount = (orders: { amount: bigint }[]) => {
+export const getMaxAmount = (orders: { cumulativeAmount: bigint }[]) => {
     if (!orders.length) {
         return ZERO_BI;
     }
     return orders.reduce(
-        (prev, current) => (prev > current.amount ? prev : current.amount),
-        orders[0].amount
+        (prev, current) =>
+            prev > current.cumulativeAmount ? prev : current.cumulativeAmount,
+        orders[0].cumulativeAmount
     );
 };
 

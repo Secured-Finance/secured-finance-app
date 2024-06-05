@@ -1,5 +1,5 @@
 import { Tab as HeadlessTab } from '@headlessui/react';
-import { Children, useState } from 'react';
+import React, { Children, useState } from 'react';
 import { Tab } from 'src/components/atoms';
 
 export type TabSelectorData = {
@@ -10,6 +10,7 @@ export type TabSelectorData = {
 
 interface TabSelectorProps {
     tabDataArray: TabSelectorData[];
+    children: React.ReactNode;
 }
 
 export const TabSelector: React.FC<TabSelectorProps> = ({
@@ -26,15 +27,15 @@ export const TabSelector: React.FC<TabSelectorProps> = ({
             selectedIndex={selectedIndex}
             onChange={setSelectedIndex}
             as='div'
-            className='rounded-b-2xl border border-white-10 bg-gunMetal/40 shadow-tab'
+            className='border-white-10 bg-gunMetal/40 shadow-tab laptop:rounded-b-2xl laptop:border'
         >
-            <div className='grid w-full grid-cols-1 border-b border-white-10 tablet:grid-cols-2'>
-                <HeadlessTab.List className='col-span-1 flex h-[60px] w-full'>
+            <div className='grid grid-cols-1 border-b border-white-10 tablet:grid-cols-2'>
+                <HeadlessTab.List className='col-span-2 flex h-11 w-full laptop:h-[60px]'>
                     {tabDataArray.map((tabData, index) => {
                         return (
                             <HeadlessTab
                                 key={tabData.text}
-                                className='h-full w-full focus:outline-none tablet:w-fit'
+                                className='h-full w-full flex-1 focus:outline-none tablet:w-fit laptop:flex-none'
                                 disabled={tabData.disabled}
                                 data-testid={tabData.text}
                             >
@@ -48,7 +49,7 @@ export const TabSelector: React.FC<TabSelectorProps> = ({
                 </HeadlessTab.List>
                 {util && <div className='col-span-1 h-full w-full'>{util}</div>}
             </div>
-            <HeadlessTab.Panels className='min-h-[25vh] overflow-hidden rounded-b-2xl bg-cardBackground'>
+            <HeadlessTab.Panels className='min-h-[25vh] overflow-hidden bg-cardBackground laptop:rounded-b-2xl'>
                 {arrayChildren[selectedIndex]}
             </HeadlessTab.Panels>
         </HeadlessTab.Group>

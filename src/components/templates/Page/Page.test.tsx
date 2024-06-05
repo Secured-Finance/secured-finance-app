@@ -9,11 +9,6 @@ describe('Page Component', () => {
         render(<Default />);
     });
 
-    it('should render a Page with a title component', () => {
-        render(<Default titleComponent={<div>title component</div>} />);
-        screen.getByText('title component');
-    });
-
     it('should render a Page with a title', () => {
         render(<Default title='title' />);
         screen.getByText('title');

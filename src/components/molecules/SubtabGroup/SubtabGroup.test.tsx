@@ -16,10 +16,10 @@ describe('SubtabGroup component', () => {
     it('should render Limit button as active', () => {
         render(<Default />);
         const limitBtn = screen.getByText('Limit');
-        expect(limitBtn).toHaveClass('bg-primary-500 text-neutral-50');
+        expect(limitBtn).toHaveClass('bg-primary-700 text-neutral-50');
 
         const marketBtn = screen.getByText('Market');
-        expect(marketBtn).toHaveClass('bg-transparent text-neutral-400');
+        expect(marketBtn).toHaveClass('text-neutral-400');
     });
 
     it('should render three Subtabs', () => {
@@ -32,11 +32,11 @@ describe('SubtabGroup component', () => {
         render(<Default handleClick={handleClick} />);
 
         const marketBtn = screen.getByText('Market');
-        expect(marketBtn).toHaveClass('bg-transparent text-neutral-400');
+        expect(marketBtn).toHaveClass('text-neutral-400');
 
         fireEvent.click(marketBtn);
         expect(handleClick).toBeCalledTimes(1);
         expect(handleClick).toHaveBeenCalledWith('Market');
-        expect(marketBtn).toHaveClass('bg-primary-500 text-neutral-50');
+        expect(marketBtn).toHaveClass('bg-primary-700 text-neutral-50');
     });
 });

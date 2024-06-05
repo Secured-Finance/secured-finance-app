@@ -1,17 +1,19 @@
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import { GlobalItayose as GlobalItayoseComponent } from 'src/components/pages';
 import { useIsGlobalItayose } from 'src/hooks';
 
 const GlobalItayose = () => {
-    const { data: isGlobalItayose, isLoading: isLoadingGlobalItayose } =
+    const { data: isGlobalItayose, isPending: isPendingGlobalItayose } =
         useIsGlobalItayose();
 
-    if (isLoadingGlobalItayose) {
+    const router = useRouter();
+
+    if (isPendingGlobalItayose) {
         return null;
     }
 
     if (!isGlobalItayose) {
-        Router.push('/');
+        router.push('/');
         return null;
     }
     return <GlobalItayoseComponent />;

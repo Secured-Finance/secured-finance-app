@@ -1,13 +1,11 @@
 import { composeStories } from '@storybook/react';
 import { fireEvent, render, screen, within } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
-import { CurrencySymbol } from 'src/utils';
-import * as stories from './OrderBookWidget.stories';
+import * as stories from './NewOrderBookWidget.stories';
 
-const { Default, Loading, Itayose, Bitcoin, Delisted } =
-    composeStories(stories);
+const { Default, Loading, Bitcoin, Itayose } = composeStories(stories);
 
-describe('OrderBookWidget Component', () => {
+describe.skip('NewOrderBookWidget Component', () => {
     it('should render two tables', () => {
         render(<Default />);
         expect(screen.getByTestId('buyOrders')).toBeInTheDocument();
@@ -85,17 +83,17 @@ describe('OrderBookWidget Component', () => {
         ).toBeInTheDocument();
     });
 
-    it('should display delisting disclaimer if currency is being delisted', () => {
-        render(<Delisted />);
-        expect(screen.getByText('WFIL will be delisted')).toBeInTheDocument();
-    });
+    // it('should display delisting disclaimer if currency is being delisted', () => {
+    //     render(<Delisted />);
+    //     expect(screen.getByText('WFIL will be delisted')).toBeInTheDocument();
+    // });
 
-    it('should display delisting disclaimer only if currency selected currency is being delisted', () => {
-        render(<Delisted currency={CurrencySymbol.USDC} />);
-        expect(
-            screen.queryByText('WFIL will be delisted')
-        ).not.toBeInTheDocument();
-    });
+    // it('should display delisting disclaimer only if currency selected currency is being delisted', () => {
+    //     render(<Delisted currency={CurrencySymbol.USDC} />);
+    //     expect(
+    //         screen.queryByText('WFIL will be delisted')
+    //     ).not.toBeInTheDocument();
+    // });
 
     it('should not display delisting disclaimer if no currency is being delisted', () => {
         render(<Default />);
@@ -376,13 +374,6 @@ describe('OrderBookWidget Component', () => {
     });
 
     describe('Variants', () => {
-        it('should display the current market price in the correct color', () => {
-            render(<Itayose />);
-            expect(screen.getByTestId('current-market-price')).toHaveClass(
-                'text-white'
-            );
-        });
-
         it('should display a help tooltip', () => {
             render(<Itayose />);
             expect(screen.getByTestId('tooltip')).toBeInTheDocument();

@@ -1,5 +1,4 @@
 import { Popover, Transition } from '@headlessui/react';
-import clsx from 'clsx';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Gear from 'src/assets/icons/gear.svg';
@@ -27,9 +26,7 @@ export const Settings = ({ isProduction }: { isProduction: boolean }) => {
                     <Popover.Button
                         data-cy='settings-button'
                         aria-label='Settings Button'
-                        className={clsx(
-                            'flex items-center rounded-[6px] bg-neutral-800 p-[7px] ring-[1.5px] ring-neutral-500 focus:outline-none tablet:rounded-xl tablet:p-[14px]'
-                        )}
+                        className='flex items-center rounded-lg bg-neutral-800 p-[7px] ring-1 ring-neutral-500 focus:outline-none tablet:rounded-xl tablet:px-3.5 tablet:py-[13px] tablet:ring-[1.5px]'
                     >
                         <Gear className='h-18px w-18px' />
                     </Popover.Button>
