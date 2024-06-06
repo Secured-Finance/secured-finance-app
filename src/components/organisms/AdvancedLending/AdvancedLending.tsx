@@ -401,6 +401,7 @@ export const AdvancedLending = ({
                                           ]
                                         : [{ text: 'Yield Curve' }]
                                 }
+                                tabGroupClassName='laptop:w-full laptop:max-w-[400px] desktop:max-w-[450px]'
                             >
                                 <div className='h-[410px] w-full px-2 py-4'>
                                     <LineChartTab
