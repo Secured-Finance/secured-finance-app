@@ -1,12 +1,12 @@
 import * as jdenticon from 'jdenticon';
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 interface IdenticonProps {
     value: string;
     size: number;
 }
 
-export const Identicon: React.FC<IdenticonProps> = ({ value, size }) => {
+export const Identicon = ({ value, size }: IdenticonProps) => {
     const iconRef = useRef<SVGSVGElement>(null);
 
     useEffect(() => {
