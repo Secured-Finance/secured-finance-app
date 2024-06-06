@@ -1,4 +1,5 @@
 import { Tab as HeadlessTab } from '@headlessui/react';
+import clsx from 'clsx';
 import React, { Children, useState } from 'react';
 import { Tab } from 'src/components/atoms';
 
@@ -11,11 +12,13 @@ export type TabSelectorData = {
 interface TabSelectorProps {
     tabDataArray: TabSelectorData[];
     children: React.ReactNode;
+    tabGroupClassName?: string;
 }
 
 export const TabSelector: React.FC<TabSelectorProps> = ({
     tabDataArray,
     children,
+    tabGroupClassName,
 }) => {
     const arrayChildren = Children.toArray(children);
     const [selectedIndex, setSelectedIndex] = useState(0);
@@ -29,19 +32,25 @@ export const TabSelector: React.FC<TabSelectorProps> = ({
             as='div'
             className='border-white-10 bg-gunMetal/40 shadow-tab laptop:rounded-b-2xl laptop:border'
         >
-            <div className='grid grid-cols-1 border-b border-white-10 tablet:grid-cols-2'>
-                <HeadlessTab.List className='col-span-2 flex h-11 w-full laptop:h-[60px]'>
+            <div className='border-b border-white-10'>
+                <HeadlessTab.List
+                    className={clsx(
+                        'flex h-11 w-full laptop:h-[60px]',
+                        tabGroupClassName
+                    )}
+                >
                     {tabDataArray.map((tabData, index) => {
                         return (
                             <HeadlessTab
                                 key={tabData.text}
-                                className='h-full w-full flex-1 focus:outline-none tablet:w-fit laptop:flex-none'
+                                className='h-full w-full flex-1 focus:outline-none tablet:w-fit'
                                 disabled={tabData.disabled}
                                 data-testid={tabData.text}
                             >
                                 <Tab
                                     text={tabData.text}
                                     active={selectedIndex === index}
+                                    disabled={tabData.disabled}
                                 />
                             </HeadlessTab>
                         );

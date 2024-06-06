@@ -56,7 +56,6 @@ export function HistoricalChart({
 }: HistoricalChartProps) {
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const secondContainerRef = useRef<HTMLDivElement>(null);
-    const [hoverTime, setHoverTime] = useState('');
     const { currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
@@ -117,14 +116,6 @@ export function HistoricalChart({
                 ...candleData,
                 ...volumeData,
             } as Omit<ITradingData, 'vol'> & { value: number };
-
-            const date = new Date(Number(candleData?.time) * 1000);
-            const formattedDate = `${date.getFullYear()}/${(
-                '0' +
-                (date.getMonth() + 1)
-            ).slice(-2)}/${('0' + date.getDate()).slice(-2)}`;
-
-            setHoverTime(formattedDate);
 
             const isNegative = mergeData?.close < mergeData?.open;
 
@@ -270,7 +261,6 @@ export function HistoricalChart({
                 Change: '',
                 usdVol: '',
             });
-            setHoverTime('');
         };
     }, [data, setupCharts, timeScale, usdPrice, isMobile]);
 
@@ -280,7 +270,6 @@ export function HistoricalChart({
     return (
         <div className='bg-neutral-900 pt-1 font-tertiary laptop:pt-2.5'>
             <div className={clsx(titleOfChartClass)}>
-                {hoverTime && <span data-testid='hover-time'>{hoverTime}</span>}
                 {Object.entries(legendData)
                     .filter(([key, _]) => legendArray.includes(key))
                     .map(([key, value]) => {

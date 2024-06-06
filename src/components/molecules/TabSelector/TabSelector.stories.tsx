@@ -60,3 +60,8 @@ WithUtils.args = {
         { text: 'Tab C', disabled: true },
     ],
 };
+
+export const WithTabGroupStyles = Template.bind({});
+WithTabGroupStyles.args = {
+    tabGroupClassName: 'laptop:max-w-[300px]',
+};
