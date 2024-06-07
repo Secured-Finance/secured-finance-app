@@ -79,6 +79,7 @@ const ReferralCode = ({ code }: { code: string }) => {
                                     <Tooltip
                                         iconElement={
                                             <button
+                                                type='button'
                                                 className='flex h-8 w-8 items-center justify-center rounded-2xl bg-gunMetal'
                                                 onClick={() =>
                                                     navigator.clipboard.writeText(
