@@ -130,7 +130,7 @@ module.exports = {
         },
 
         colors: {
-            tab: '#010316',
+            tabBg: '#010316',
             primary: {
                 50: '#F5F6FF',
                 300: '#B9BDEA',

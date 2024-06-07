@@ -3,10 +3,17 @@ import clsx from 'clsx';
 import React, { Children, useState } from 'react';
 import { Tab } from 'src/components/atoms';
 
+export type TabHighlight = {
+    text: string;
+    size: 'small' | 'large';
+    visible: boolean;
+};
+
 export type TabSelectorData = {
     text: string;
     disabled?: boolean;
     util?: React.ReactNode;
+    highlight?: TabHighlight;
 };
 
 interface TabSelectorProps {
@@ -32,10 +39,10 @@ export const TabSelector: React.FC<TabSelectorProps> = ({
             as='div'
             className='border-white-10 bg-gunMetal/40 shadow-tab laptop:rounded-b-2xl laptop:border'
         >
-            <div className='border-b border-white-10'>
+            <div className='flex border-b border-white-10'>
                 <HeadlessTab.List
                     className={clsx(
-                        'flex h-11 w-full laptop:h-[60px]',
+                        'flex h-11 w-full tablet:h-[60px]',
                         tabGroupClassName
                     )}
                 >
@@ -51,12 +58,13 @@ export const TabSelector: React.FC<TabSelectorProps> = ({
                                     text={tabData.text}
                                     active={selectedIndex === index}
                                     disabled={tabData.disabled}
+                                    highlight={tabData.highlight}
                                 />
                             </HeadlessTab>
                         );
                     })}
                 </HeadlessTab.List>
-                {util && <div className='col-span-1 h-full w-full'>{util}</div>}
+                {util && <div className='h-full w-full'>{util}</div>}
             </div>
             <HeadlessTab.Panels className='min-h-[25vh] overflow-hidden bg-cardBackground laptop:rounded-b-2xl'>
                 {arrayChildren[selectedIndex]}
