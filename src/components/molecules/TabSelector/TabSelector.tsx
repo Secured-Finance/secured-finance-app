@@ -39,7 +39,12 @@ export const TabSelector: React.FC<TabSelectorProps> = ({
             as='div'
             className='border-white-10 bg-gunMetal/40 shadow-tab laptop:rounded-b-2xl laptop:border'
         >
-            <div className='flex border-b border-white-10'>
+            <div
+                className={clsx(
+                    'flex border-b border-white-10',
+                    util && 'flex-col tablet:flex-row'
+                )}
+            >
                 <HeadlessTab.List
                     className={clsx(
                         'flex h-11 w-full tablet:h-[60px]',
