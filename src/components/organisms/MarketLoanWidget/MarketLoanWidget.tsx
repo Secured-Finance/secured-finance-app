@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { Button, DropdownSelector, Timer } from 'src/components/atoms';
 import {
     CoreTable,
+    TabHighlight,
     TabSelector,
     TabSelectorData,
 } from 'src/components/molecules';
@@ -175,11 +176,11 @@ export const MarketLoanWidget = ({
         [handleClick]
     );
 
-    // const itayoseHighlight: TabHighlight = {
-    //     text: 'NEW',
-    //     size: 'small',
-    //     visible: filteredItayoseMarkets.length !== 0,
-    // };
+    const itayoseHighlight: TabHighlight = {
+        text: 'NEW',
+        size: 'small',
+        visible: filteredItayoseMarkets.length !== 0,
+    };
 
     const openMarketUtil = (
         <div className=' flex flex-row items-center justify-between gap-4 px-3 py-2 tablet:justify-end'>
@@ -208,7 +209,7 @@ export const MarketLoanWidget = ({
     const tabDataArray: TabSelectorData[] = [
         {
             text: 'Pre-Open',
-            // highlight: itayoseHighlight,
+            highlight: itayoseHighlight,
             util: itayoseMarketUtil,
             disabled: filteredItayoseMarkets.length === 0,
         },
@@ -220,7 +221,10 @@ export const MarketLoanWidget = ({
 
     return (
         <div className='h-fit min-h-[300px] rounded-b-2xl border border-white-10 bg-black-20 shadow-tab'>
-            <TabSelector tabDataArray={tabDataArray}>
+            <TabSelector
+                tabDataArray={tabDataArray}
+                tabGroupClassName='tablet:w-1/2 laptop:w-[163px]'
+            >
                 {!isGlobalItayose && (
                     <CoreTable
                         columns={columns}

@@ -13,7 +13,10 @@ export const CollateralOrganism = ({
 }) => {
     return (
         <div className='h-fit w-full'>
-            <TabSelector tabDataArray={tabDataArray}>
+            <TabSelector
+                tabDataArray={tabDataArray}
+                tabGroupClassName='tablet:max-w-[50%] laptop:max-w-[185px]'
+            >
                 <CollateralTab
                     collateralBook={collateralBook}
                     netAssetValue={netAssetValue}
