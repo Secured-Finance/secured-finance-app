@@ -71,7 +71,7 @@ export const Tab = ({
                     {text}
                     {suffixEle && suffixEle}
                 </p>
-                {highlight && highlight.visible && (
+                {highlight?.visible && (
                     <HighlightChip
                         text={highlight.text}
                         size={highlight.size}

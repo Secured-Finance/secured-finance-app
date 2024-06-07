@@ -28,7 +28,7 @@ const Template: StoryFn<typeof SubtabGroup> = args => {
         args.handleClick(newOption);
     };
     return (
-        <div className='max-w-[318px]'>
+        <div className='max-w-[418px]'>
             <SubtabGroup
                 {...args}
                 selectedOption={option}
