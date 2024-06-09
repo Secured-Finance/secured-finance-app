@@ -1,4 +1,5 @@
 import type { Meta, StoryFn } from '@storybook/react';
+import { useState } from 'react';
 import { Slider } from '.';
 
 export default {
@@ -11,9 +12,14 @@ export default {
 } as Meta<typeof Slider>;
 
 const Template: StoryFn<typeof Slider> = args => {
+    const [value, setValue] = useState(args.value);
+    const handleChange = (newValue: number | undefined) => {
+        setValue(newValue);
+        args.onChange(newValue);
+    };
     return (
         <div className='w-80'>
-            <Slider {...args} />
+            <Slider {...args} value={value} onChange={handleChange} />
         </div>
     );
 };

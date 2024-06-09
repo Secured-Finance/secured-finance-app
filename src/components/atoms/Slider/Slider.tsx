@@ -2,6 +2,7 @@ import SliderUnstyled from '@mui/base/SliderUnstyled';
 import clsx from 'clsx';
 import { useCallback, useRef } from 'react';
 import { usePreventPageScroll } from 'src/hooks';
+import { InputBase } from '../InputBase';
 
 const marks = [
     { value: 0 },
@@ -13,11 +14,11 @@ const marks = [
 
 export const Slider = ({
     onChange,
-    value = 0,
+    value,
     disabled = false,
 }: {
-    onChange: (v: number) => void;
-    value: number;
+    onChange: (v: number | undefined) => void;
+    value?: number;
     disabled: boolean;
 }) => {
     const sliderRef = useRef(null);
@@ -29,10 +30,29 @@ export const Slider = ({
         },
         [onChange]
     );
+
+    const handleAmountChange = useCallback(
+        (amount: string | undefined) => {
+            if (amount === undefined || value === undefined) {
+                onChange(undefined);
+            }
+            if (
+                value !== undefined &&
+                Math.floor(value) !== Math.floor(Number(amount))
+            ) {
+                onChange(Number(amount));
+            }
+        },
+        [onChange, value]
+    );
+
     return (
-        <div ref={sliderRef}>
+        <div
+            ref={sliderRef}
+            className='flex w-full flex-row items-center gap-6'
+        >
             <SliderUnstyled
-                value={value}
+                value={value ?? 0}
                 marks={marks}
                 onChange={handleChange}
                 classes={{ markActive: 'slider-markActive' }}
@@ -40,7 +60,7 @@ export const Slider = ({
                 slotProps={{
                     thumb: {
                         className: clsx(
-                            ' ring-[5px] w-3 h-3 -ml-[5px] bg-white rounded-full shadow-sliderthumb absolute',
+                            'ring-[5px] w-3 h-3 -ml-[5px] bg-white rounded-3xl shadow-sliderthumb absolute',
                             {
                                 'ring-transparent': disabled,
                                 'ring-starBlue-80': !disabled,
@@ -57,17 +77,33 @@ export const Slider = ({
                         ),
                     },
                     rail: {
-                        className: 'bg-neutral-3 h-2px w-full',
+                        className: 'bg-neutral-700 h-2px w-full',
                     },
                     track: {
-                        className: 'bg-starBlue h-2px absolute',
+                        className: 'bg-primary-500 h-2px absolute',
                     },
                     mark: {
                         className:
-                            'rounded-sm h-6px w-2px absolute bg-neutral-4',
+                            'rounded-sm h-6px w-2px absolute bg-neutral-600',
                     },
                 }}
             />
+            <div className='flex h-11 w-16 flex-shrink-0 flex-row items-center justify-between rounded-lg border border-neutral-500 bg-neutral-900 px-2 focus-within:border-primary-500'>
+                <InputBase
+                    className='w-full text-base font-semibold leading-6 text-neutral-50'
+                    onValueChange={handleAmountChange}
+                    value={
+                        value !== undefined
+                            ? Math.floor(value).toString()
+                            : undefined
+                    }
+                    maxLimit={100}
+                    decimalPlacesAllowed={0}
+                />
+                <span className='text-[11px] leading-[15px] text-neutral-400'>
+                    %
+                </span>
+            </div>
         </div>
     );
 };
