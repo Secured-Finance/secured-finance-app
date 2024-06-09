@@ -7,8 +7,8 @@ import SFLogoSmall from 'src/assets/img/small-logo.svg';
 import {
     Button,
     ButtonSizes,
-    NavTab,
     SupportedNetworks,
+    Tab,
 } from 'src/components/atoms';
 import {
     HamburgerMenu,
@@ -223,13 +223,13 @@ const ItemLink = ({
         );
     };
     return (
-        <Link
-            href={link}
-            className='h-full'
-            passHref
-            data-cy={dataCy.toLowerCase()}
-        >
-            <NavTab text={text} active={useCheckActive()} />
+        <Link href={link} className='h-full' data-cy={dataCy.toLowerCase()}>
+            <Tab
+                text={text}
+                active={useCheckActive()}
+                isFullHeight
+                className='laptop:px-[1.875rem]'
+            />
         </Link>
     );
 };

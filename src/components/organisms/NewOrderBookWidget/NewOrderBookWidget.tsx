@@ -13,12 +13,7 @@ import { useDispatch } from 'react-redux';
 import ShowFirstIcon from 'src/assets/icons/orderbook-first.svg';
 import ShowAllIcon from 'src/assets/icons/orderbook-full.svg';
 import ShowLastIcon from 'src/assets/icons/orderbook-last.svg';
-import {
-    DropdownSelector,
-    NavTab,
-    Option,
-    Spinner,
-} from 'src/components/atoms';
+import { DropdownSelector, Option, Spinner, Tab } from 'src/components/atoms';
 import { InfoToolTip, TableHeader } from 'src/components/molecules';
 import {
     AggregationFactorType,
@@ -610,7 +605,7 @@ export const NewOrderBookWidget = ({
                 </div>
                 <div className='hidden border-neutral-600 laptop:block laptop:border-b'>
                     <div className='h-[60px]'>
-                        <NavTab text='Order Book' active={true} />
+                        <Tab text='Order Book' active={true} />
                     </div>
                 </div>
             </div>
