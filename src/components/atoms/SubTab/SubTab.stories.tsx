@@ -22,4 +22,3 @@ const Template: StoryFn<typeof SubTab> = args => (
 );
 
 export const Default = Template.bind({});
-Default.args = {};
