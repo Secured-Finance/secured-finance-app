@@ -43,9 +43,11 @@ export const Default = Template.bind({});
 export const GroupOfThree = Template.bind({});
 GroupOfThree.args = {
     options: ['Tab label', 'Label', 'Label 2'],
+    selectedOption: 'Tab label',
 };
 
 export const GroupOfFour = Template.bind({});
 GroupOfFour.args = {
     options: ['Label', 'Label 2', 'Label 3', 'Label 4'],
+    selectedOption: 'Label',
 };

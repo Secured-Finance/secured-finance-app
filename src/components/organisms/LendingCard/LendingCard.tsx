@@ -48,6 +48,11 @@ import { LoanValue, Maturity } from 'src/utils/entities';
 import { trackButtonEvent } from 'src/utils/events';
 import { useAccount } from 'wagmi';
 
+const orderSideOptions = Object.values(OrderSideMap).map(option => ({
+    text: option,
+    variant: TabVariant.Blue,
+}));
+
 export const LendingCard = ({
     collateralBook,
     maturitiesOptionList,
@@ -154,11 +159,6 @@ export const LendingCard = ({
     };
 
     const { data: availableToBorrow } = useBorrowableAmount(address, currency);
-
-    const orderSideOptions = Object.values(OrderSideMap).map(option => ({
-        text: option,
-        variant: TabVariant.Blue,
-    }));
 
     return (
         <div className='w-[345px] flex-shrink-0 space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-7 shadow-deep'>

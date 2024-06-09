@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { HighlightChip } from '../HighlightChip';
+import { HighlightChip } from 'src/components/atoms';
 import { bgGradientStyle, lineStyle, textStyle } from './constants';
 import { TabVariant } from './types';
 
