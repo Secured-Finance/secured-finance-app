@@ -173,7 +173,7 @@ describe('AdvancedLendingOrderCard Component', () => {
 
     it('should render wallet source when side is lend', async () => {
         render(<Default />, { preloadedState });
-        const lendTab = screen.getByText('Lend');
+        const lendTab = screen.getByText('Buy / Lend');
         fireEvent.click(lendTab);
         expect(screen.getByText('Available')).toBeInTheDocument();
         expect(await screen.findByText('4,000')).toBeInTheDocument();
@@ -426,7 +426,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         render(<WalletNotConnected />, { preloadedState });
 
         // lending side
-        fireEvent.click(screen.getByRole('radio', { name: 'Lend' }));
+        fireEvent.click(screen.getByRole('radio', { name: 'Buy / Lend' }));
         expect(
             screen.getByTestId('wallet-source-selector-button')
         ).toBeDisabled();
@@ -435,7 +435,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         ).not.toBeInTheDocument();
 
         // borrow side
-        fireEvent.click(screen.getByRole('radio', { name: 'Borrow' }));
+        fireEvent.click(screen.getByRole('radio', { name: 'Sell / Borrow' }));
 
         expect(
             screen.queryByRole('textbox', { name: 'Amount' })
@@ -482,7 +482,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                 ).not.toBeDisabled()
             );
 
-            fireEvent.click(screen.getByRole('radio', { name: 'Lend' }));
+            fireEvent.click(screen.getByRole('radio', { name: 'Buy / Lend' }));
             expect(
                 screen.queryByText(
                     'Simultaneous borrow and lend orders are not allowed during the pre-open market period.'
@@ -762,7 +762,7 @@ describe('AdvancedLendingOrderCard Component', () => {
             changeInputValue('Bond Price', '20');
             assertBondPriceInputValue('20');
             await waitFor(() => {
-                fireEvent.click(screen.getByText('Lend'));
+                fireEvent.click(screen.getByText('Buy / Lend'));
             });
             assertBondPriceInputValue('20');
         });
@@ -776,9 +776,9 @@ describe('AdvancedLendingOrderCard Component', () => {
             expect(track).toHaveBeenCalledWith(ButtonEvents.ORDER_TYPE, {
                 [ButtonProperties.ORDER_TYPE]: OrderType.LIMIT,
             });
-            fireEvent.click(screen.getByText('Lend'));
+            fireEvent.click(screen.getByText('Buy / Lend'));
             expect(track).toHaveBeenCalledWith(ButtonEvents.ORDER_SIDE, {
-                [ButtonProperties.ORDER_SIDE]: 'Lend',
+                [ButtonProperties.ORDER_SIDE]: 'Buy / Lend',
             });
         });
 

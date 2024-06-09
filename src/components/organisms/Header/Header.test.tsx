@@ -40,7 +40,7 @@ describe('Header component', () => {
         render(<Primary />);
         const textElement = screen.getByText('Trading');
         expect(textElement.parentNode).toHaveClass(
-            'bg-gradient-to-b from-tabGradient-2 to-tabGradient-1'
+            'from-tabGradient-blue-start to-tabGradient-blue-end'
         );
     });
 
@@ -49,7 +49,7 @@ describe('Header component', () => {
         render(<Primary />);
         const textElement = screen.getByText('Trading');
         expect(textElement.parentNode).toHaveClass(
-            'bg-gradient-to-b from-tabGradient-2 to-tabGradient-1'
+            'from-tabGradient-blue-start to-tabGradient-blue-end'
         );
     });
 
@@ -60,8 +60,8 @@ describe('Header component', () => {
         fireEvent.click(screen.getByText('Markets'));
 
         const textElement = screen.getByText('Markets');
-        expect(textElement.parentNode).toHaveClass(
-            'bg-gradient-to-b from-tabGradient-2 to-tabGradient-1'
+        expect(textElement.parentNode?.parentNode).toHaveClass(
+            'from-tabGradient-blue-start to-tabGradient-blue-end'
         );
     });
 
@@ -71,7 +71,7 @@ describe('Header component', () => {
         render(<Primary />);
         const textElement = screen.getByText('Trading');
         expect(textElement.parentNode).toHaveClass(
-            'bg-gradient-to-b from-tabGradient-2 to-tabGradient-1'
+            'from-tabGradient-blue-start to-tabGradient-blue-end'
         );
     });
 

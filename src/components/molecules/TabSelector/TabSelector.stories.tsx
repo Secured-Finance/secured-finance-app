@@ -1,10 +1,10 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import type { Meta, StoryFn } from '@storybook/react';
-import { Tab } from './Tab';
+import { TabSelector } from './TabSelector';
 
 export default {
-    title: 'Molecules/Tab',
-    component: Tab,
+    title: 'Molecules/TabSelector',
+    component: TabSelector,
     args: {
         tabDataArray: [
             { text: 'Tab A' },
@@ -18,15 +18,15 @@ export default {
             viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
         },
     },
-} as Meta<typeof Tab>;
+} as Meta<typeof TabSelector>;
 
-const Template: StoryFn<typeof Tab> = args => (
+const Template: StoryFn<typeof TabSelector> = args => (
     <div className='h-[400px] w-[600px] text-white-80'>
-        <Tab {...args}>
-            <p>Tab A Content</p>
-            <p>Tab B Content</p>
-            <p>Tab C Content</p>
-        </Tab>
+        <TabSelector {...args}>
+            <div className='p-4'>Tab A Content</div>
+            <div className='p-4'>Tab B Content</div>
+            <div className='p-4'>Tab C Content</div>
+        </TabSelector>
     </div>
 );
 
@@ -59,4 +59,9 @@ WithUtils.args = {
         },
         { text: 'Tab C', disabled: true },
     ],
+};
+
+export const WithTabGroupStyles = Template.bind({});
+WithTabGroupStyles.args = {
+    tabGroupClassName: 'laptop:max-w-[300px]',
 };
