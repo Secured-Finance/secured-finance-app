@@ -104,7 +104,7 @@ export function AdvancedLendingOrderCard({
         selectLandingOrderInputs(state.landingOrderForm)
     );
 
-    const [sliderValue, setSliderValue] = useState<number>();
+    const [sliderValue, setSliderValue] = useState(0.0);
 
     const balanceRecord = useBalances();
     const isTablet = useBreakpoint('laptop');
@@ -220,44 +220,32 @@ export function AdvancedLendingOrderCard({
         selectedWalletSource.source,
     ]);
 
-    const handleSliderChange = useCallback(
-        (percentage: number | undefined) => {
-            const available =
-                side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
-            track(InteractionEvents.SLIDER, {
-                [InteractionProperties.SLIDER_VALUE]: percentage ?? 0,
-            });
-            dispatch(
-                percentage
-                    ? setAmount(
-                          (
-                              Math.floor(
-                                  percentage * available * AMOUNT_PRECISION
-                              ) /
-                              (100.0 * AMOUNT_PRECISION)
-                          ).toString()
-                      )
-                    : setAmount('')
-            );
-            setSliderValue(percentage);
-        },
-        [availableToBorrow, balanceToLend, dispatch, side]
-    );
+    const handleSliderChange = (percentage: number) => {
+        const available =
+            side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
+        track(InteractionEvents.SLIDER, {
+            [InteractionProperties.SLIDER_VALUE]: percentage,
+        });
+        dispatch(
+            setAmount(
+                (
+                    Math.floor(percentage * available * AMOUNT_PRECISION) /
+                    (100.0 * AMOUNT_PRECISION)
+                ).toString()
+            )
+        );
+        setSliderValue(percentage);
+    };
 
-    const handleInputChange = useCallback(
-        (v: string) => {
-            dispatch(setAmount(v));
-            const available =
-                side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
-            const inputValue = Number(v);
-            available > 0 && inputValue !== 0
-                ? setSliderValue(
-                      Math.min(100.0, (inputValue * 100.0) / available)
-                  )
-                : setSliderValue(undefined);
-        },
-        [availableToBorrow, balanceToLend, dispatch, side]
-    );
+    const handleInputChange = (v: string) => {
+        dispatch(setAmount(v));
+        const available =
+            side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
+        const inputValue = Number(v);
+        available > 0
+            ? setSliderValue(Math.min(100.0, (inputValue * 100.0) / available))
+            : setSliderValue(0.0);
+    };
 
     useEffect(() => {
         if (isItayose) {
@@ -283,7 +271,7 @@ export function AdvancedLendingOrderCard({
         dispatch(setAmount(inputAmount.toString()));
         available
             ? setSliderValue(Math.min(100.0, (inputAmount * 100.0) / available))
-            : setSliderValue(undefined);
+            : setSliderValue(0.0);
     };
 
     const isInvalidBondPrice = unitPrice === 0 && orderType === OrderType.LIMIT;
@@ -464,7 +452,7 @@ export function AdvancedLendingOrderCard({
                             !isConnected ? 'bg-neutral-700' : undefined
                         }
                     />
-                    <div className='mx-2'>
+                    <div className='mx-10px'>
                         <Slider
                             onChange={handleSliderChange}
                             value={sliderValue}
