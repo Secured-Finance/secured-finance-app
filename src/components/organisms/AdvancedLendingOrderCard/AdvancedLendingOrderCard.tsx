@@ -35,12 +35,7 @@ import {
     setUnitPrice,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import {
-    OrderSideMap,
-    OrderType,
-    OrderTypeOptions,
-    getOrderSideText,
-} from 'src/types';
+import { OrderSideMap, OrderType, OrderTypeOptions } from 'src/types';
 import {
     ButtonEvents,
     ButtonProperties,
@@ -65,6 +60,13 @@ import {
     trackButtonEvent,
 } from 'src/utils/events';
 import { useAccount } from 'wagmi';
+
+const getOrderSideText = (
+    side: (typeof OrderSideMap)[OrderSide.LEND | OrderSide.BORROW]
+) => {
+    if (side === 'Lend') return 'Buy / Lend';
+    return 'Sell / Borrow';
+};
 
 export function AdvancedLendingOrderCard({
     collateralBook,

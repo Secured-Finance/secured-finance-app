@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     ErrorInfo,
     TabGroup,
-    TabVariant,
     WalletSourceSelector,
 } from 'src/components/atoms';
 import {
@@ -47,11 +46,7 @@ import {
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { trackButtonEvent } from 'src/utils/events';
 import { useAccount } from 'wagmi';
-
-const orderSideOptions = Object.values(OrderSideMap).map(option => ({
-    text: option,
-    variant: TabVariant.Blue,
-}));
+import { orderSideOptions } from './constants';
 
 export const LendingCard = ({
     collateralBook,
