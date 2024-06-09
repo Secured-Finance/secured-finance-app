@@ -1,6 +1,7 @@
 import { Tab as HeadlessTab } from '@headlessui/react';
-import { Children, useState } from 'react';
-import { NavTab } from 'src/components/atoms';
+import clsx from 'clsx';
+import React, { Children, useState } from 'react';
+import { Tab } from 'src/components/atoms';
 
 export type TabHighlight = {
     text: string;
@@ -8,19 +9,24 @@ export type TabHighlight = {
     visible: boolean;
 };
 
-export type TabData = {
+export type TabSelectorData = {
     text: string;
     disabled?: boolean;
-    highlight?: TabHighlight;
     util?: React.ReactNode;
+    highlight?: TabHighlight;
 };
 
-interface TabProps {
-    tabDataArray: TabData[];
+interface TabSelectorProps {
+    tabDataArray: TabSelectorData[];
     children: React.ReactNode;
+    tabGroupClassName?: string;
 }
 
-export const Tab: React.FC<TabProps> = ({ tabDataArray, children }) => {
+export const TabSelector: React.FC<TabSelectorProps> = ({
+    tabDataArray,
+    children,
+    tabGroupClassName,
+}) => {
     const arrayChildren = Children.toArray(children);
     const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -33,26 +39,37 @@ export const Tab: React.FC<TabProps> = ({ tabDataArray, children }) => {
             as='div'
             className='border-white-10 bg-gunMetal/40 shadow-tab laptop:rounded-b-2xl laptop:border'
         >
-            <div className='grid w-full grid-cols-1 border-b border-white-10 tablet:grid-cols-2'>
-                <HeadlessTab.List className='col-span-1 flex h-[60px] w-full'>
+            <div
+                className={clsx(
+                    'flex border-b border-white-10',
+                    util && 'flex-col tablet:flex-row'
+                )}
+            >
+                <HeadlessTab.List
+                    className={clsx(
+                        'flex h-11 w-full tablet:h-[60px]',
+                        tabGroupClassName
+                    )}
+                >
                     {tabDataArray.map((tabData, index) => {
                         return (
                             <HeadlessTab
                                 key={tabData.text}
-                                className='h-full w-full flex-1 focus:outline-none tablet:w-fit laptop:flex-none'
+                                className='h-full w-full flex-1 focus:outline-none tablet:w-fit'
                                 disabled={tabData.disabled}
                                 data-testid={tabData.text}
                             >
-                                <NavTab
+                                <Tab
                                     text={tabData.text}
                                     active={selectedIndex === index}
+                                    disabled={tabData.disabled}
                                     highlight={tabData.highlight}
-                                ></NavTab>
+                                />
                             </HeadlessTab>
                         );
                     })}
                 </HeadlessTab.List>
-                {util && <div className='col-span-1 h-full w-full'>{util}</div>}
+                {util && <div className='h-full w-full'>{util}</div>}
             </div>
             <HeadlessTab.Panels className='min-h-[25vh] overflow-hidden bg-cardBackground laptop:rounded-b-2xl'>
                 {arrayChildren[selectedIndex]}

@@ -20,7 +20,7 @@
     "@secured-finance/sf-graph-client": "0.2.0-beta.163",
     "@svgr/webpack": "^8.1.0",
     "@tanstack/react-query": "^5.20.5",
-    "@tanstack/react-table": "^8.5.13",
+    "@tanstack/react-table": "^8.17.3",
     "@wagmi/connectors": "^3.1.5",
     "axios": "^0.21.1",
     "bignumber.js": "^9.0.1",
