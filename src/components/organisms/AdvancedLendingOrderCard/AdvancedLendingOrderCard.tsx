@@ -214,19 +214,22 @@ export function AdvancedLendingOrderCard({
 
     const handleSliderChange = useCallback(
         (percentage: number | undefined) => {
-            const percent = percentage ?? 0;
             const available =
                 side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
             track(InteractionEvents.SLIDER, {
-                [InteractionProperties.SLIDER_VALUE]: percent,
+                [InteractionProperties.SLIDER_VALUE]: percentage ?? 0,
             });
             dispatch(
-                setAmount(
-                    (
-                        Math.floor(percent * available * AMOUNT_PRECISION) /
-                        (100.0 * AMOUNT_PRECISION)
-                    ).toString()
-                )
+                percentage
+                    ? setAmount(
+                          (
+                              Math.floor(
+                                  percentage * available * AMOUNT_PRECISION
+                              ) /
+                              (100.0 * AMOUNT_PRECISION)
+                          ).toString()
+                      )
+                    : setAmount('')
             );
             setSliderValue(percentage);
         },
@@ -239,11 +242,11 @@ export function AdvancedLendingOrderCard({
             const available =
                 side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
             const inputValue = Number(v);
-            available > 0
+            available > 0 && inputValue !== 0
                 ? setSliderValue(
                       Math.min(100.0, (inputValue * 100.0) / available)
                   )
-                : setSliderValue(0);
+                : setSliderValue(undefined);
         },
         [availableToBorrow, balanceToLend, dispatch, side]
     );
@@ -272,7 +275,7 @@ export function AdvancedLendingOrderCard({
         dispatch(setAmount(inputAmount.toString()));
         available
             ? setSliderValue(Math.min(100.0, (inputAmount * 100.0) / available))
-            : setSliderValue(0);
+            : setSliderValue(undefined);
     };
 
     const isInvalidBondPrice = unitPrice === 0 && orderType === OrderType.LIMIT;
