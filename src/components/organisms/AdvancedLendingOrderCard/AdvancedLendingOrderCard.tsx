@@ -469,7 +469,7 @@ export function AdvancedLendingOrderCard({
                             !isConnected ? 'bg-neutral-700' : undefined
                         }
                     />
-                    <div className='mx-10px'>
+                    <div className='mx-2'>
                         <Slider
                             onChange={handleSliderChange}
                             value={sliderValue}

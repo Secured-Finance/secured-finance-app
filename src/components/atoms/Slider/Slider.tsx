@@ -49,7 +49,7 @@ export const Slider = ({
     return (
         <div
             ref={sliderRef}
-            className='flex w-full flex-row items-center gap-6'
+            className='flex w-full flex-row items-center gap-4 tablet:gap-6'
         >
             <SliderUnstyled
                 value={value ?? 0}
@@ -88,9 +88,9 @@ export const Slider = ({
                     },
                 }}
             />
-            <div className='flex h-11 w-16 flex-shrink-0 flex-row items-center justify-between rounded-lg border border-neutral-500 bg-neutral-900 px-2 focus-within:border-primary-500'>
+            <div className='flex h-[38px] w-[60px] flex-shrink-0 flex-row items-center justify-between rounded-lg border border-neutral-500 bg-neutral-900 px-1.5 focus-within:border-primary-500 tablet:h-11 tablet:w-16 tablet:px-2'>
                 <InputBase
-                    className='w-full text-base font-semibold leading-6 text-neutral-50'
+                    className='tablet:typography-desktop-body-3 typography-desktop-body-4 w-full font-semibold text-neutral-50'
                     onValueChange={handleAmountChange}
                     value={
                         value !== undefined
@@ -100,7 +100,7 @@ export const Slider = ({
                     maxLimit={100}
                     decimalPlacesAllowed={0}
                 />
-                <span className='text-[11px] leading-[15px] text-neutral-400'>
+                <span className='tablet:typography-desktop-body-6 typography-mobile-body-6 text-neutral-400'>
                     %
                 </span>
             </div>
