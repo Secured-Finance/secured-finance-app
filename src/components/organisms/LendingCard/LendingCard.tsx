@@ -1,14 +1,11 @@
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-    ErrorInfo,
-    TabGroup,
-    WalletSourceSelector,
-} from 'src/components/atoms';
+import { ErrorInfo, WalletSourceSelector } from 'src/components/atoms';
 import {
     AssetSelector,
     CollateralUsageSection,
+    TabGroup,
     TermSelector,
 } from 'src/components/molecules';
 import { OrderAction } from 'src/components/organisms';

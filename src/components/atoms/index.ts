@@ -1,4 +1,3 @@
-export * from '../molecules/TabGroup';
 export * from './AssetInformation';
 export * from './Button';
 export * from './Chip';

@@ -27,6 +27,7 @@ export * from './NetworkSelector';
 export * from './PercentageSelector';
 export * from './Settings';
 export * from './StatsBar';
+export * from './SubtabGroup';
 export * from './SuccessPanel';
 export * from './TabGroup';
 export * from './TabSelector';

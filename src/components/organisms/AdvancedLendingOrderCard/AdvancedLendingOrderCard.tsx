@@ -9,11 +9,10 @@ import {
     OrderDisplayBox,
     OrderInputBox,
     Slider,
-    TabGroup,
     TabVariant,
     WalletSourceSelector,
 } from 'src/components/atoms';
-import { SubtabGroup } from 'src/components/molecules/SubtabGroup';
+import { SubtabGroup, TabGroup } from 'src/components/molecules';
 import { NewOrderBookWidget, OrderAction } from 'src/components/organisms';
 import {
     CollateralBook,
