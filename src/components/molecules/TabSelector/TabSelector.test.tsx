@@ -1,6 +1,6 @@
 import { composeStories } from '@storybook/react';
 import { fireEvent, render, screen } from 'src/test-utils.js';
-import * as stories from './Tab.stories';
+import * as stories from './TabSelector.stories';
 
 const { Default, WithUtils } = composeStories(stories);
 

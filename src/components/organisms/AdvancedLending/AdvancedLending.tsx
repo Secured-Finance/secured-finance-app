@@ -9,7 +9,7 @@ import {
     Alert,
     AlertSeverity,
     HorizontalTab,
-    Tab,
+    TabSelector,
 } from 'src/components/molecules';
 import {
     ActiveTradeTable,
@@ -364,7 +364,7 @@ export const AdvancedLending = ({
                     />
                 }
             >
-                <Tab
+                <TabSelector
                     tabDataArray={
                         isSubgraphSupported
                             ? [
@@ -387,12 +387,12 @@ export const AdvancedLending = ({
                         />
                     </div>
                     {isSubgraphSupported && <HistoricalWidget />}
-                </Tab>
+                </TabSelector>
 
                 <>
                     <div className='col-span-1 hidden w-[calc(100%-284px)] laptop:block desktop:w-[calc(100%-312px)]'>
                         <div className='flex h-full flex-grow flex-col gap-4'>
-                            <Tab
+                            <TabSelector
                                 tabDataArray={
                                     isSubgraphSupported
                                         ? [
@@ -401,6 +401,7 @@ export const AdvancedLending = ({
                                           ]
                                         : [{ text: 'Yield Curve' }]
                                 }
+                                tabGroupClassName='laptop:w-full laptop:max-w-[400px] desktop:max-w-[450px]'
                             >
                                 <div className='h-[410px] w-full px-2 py-4'>
                                     <LineChartTab
@@ -417,9 +418,10 @@ export const AdvancedLending = ({
                                     />
                                 </div>
                                 {isSubgraphSupported && <HistoricalWidget />}
-                            </Tab>
+                            </TabSelector>
                         </div>
                     </div>
+
                     <div className='hidden laptop:block laptop:w-[272px] desktop:w-[300px]'>
                         {!isTablet && (
                             <NewOrderBookWidget
