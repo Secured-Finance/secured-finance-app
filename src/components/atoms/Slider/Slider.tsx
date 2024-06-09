@@ -1,8 +1,8 @@
 import SliderUnstyled from '@mui/base/SliderUnstyled';
 import clsx from 'clsx';
 import { useCallback, useRef } from 'react';
+import { InputBase } from 'src/components/atoms';
 import { usePreventPageScroll } from 'src/hooks';
-import { InputBase } from '../InputBase';
 
 const marks = [
     { value: 0 },
