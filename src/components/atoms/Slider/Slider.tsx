@@ -33,13 +33,9 @@ export const Slider = ({
 
     const handleAmountChange = useCallback(
         (amount: string | undefined) => {
-            if (amount === undefined || value === undefined) {
+            if (amount === undefined || amount === '') {
                 onChange(undefined);
-            }
-            if (
-                value !== undefined &&
-                Math.floor(value) !== Math.floor(Number(amount))
-            ) {
+            } else if (Math.floor(value ?? 0) !== Math.floor(Number(amount))) {
                 onChange(Number(amount));
             }
         },
