@@ -91,13 +91,6 @@ export const OrderSideMap = Object.freeze({
     [OrderSide.BORROW]: 'Borrow',
 });
 
-export const getOrderSideText = (
-    side: (typeof OrderSideMap)[OrderSide.LEND | OrderSide.BORROW]
-) => {
-    if (side === 'Lend') return 'Buy / Lend';
-    return 'Sell / Borrow';
-};
-
 export type Wallet = 'MetaMask' | 'WalletConnect';
 
 export type UserAccount = ReturnType<typeof useAccount>['address'];
