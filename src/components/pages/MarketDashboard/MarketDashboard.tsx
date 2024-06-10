@@ -19,6 +19,7 @@ import {
     emptyValueLockedBook,
     getLoanValues,
     useCollateralBook,
+    useCollateralCurrencies,
     useCurrencies,
     useCurrencyDelistedStatus,
     useGraphClientHook,
@@ -65,7 +66,12 @@ export const MarketDashboard = () => {
     const { data: lendingContracts = baseContracts } = useLendingMarkets();
     const { data: isGlobalItayose } = useIsGlobalItayose();
     const { data: currencies = [] } = useCurrencies();
+    const { data: collateralCurrencies = [] } = useCollateralCurrencies();
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
+
+    const extraCollateralCurrencies = collateralCurrencies.filter(
+        element => !currencies.includes(element)
+    );
 
     const securedFinance = useSF();
     const currentChainId = securedFinance?.config.chain.id;
@@ -113,7 +119,7 @@ export const MarketDashboard = () => {
         if (!valueLockedByCurrency) {
             return val;
         }
-        for (const ccy of currencies ?? []) {
+        for (const ccy of [...currencies, ...extraCollateralCurrencies] ?? []) {
             if (!valueLockedByCurrency[ccy]) continue;
             val += BigInt(
                 Math.floor(
@@ -124,7 +130,12 @@ export const MarketDashboard = () => {
         }
 
         return val;
-    }, [currencies, priceList, valueLockedByCurrency]);
+    }, [
+        currencies,
+        priceList,
+        valueLockedByCurrency,
+        extraCollateralCurrencies,
+    ]);
 
     const defaultCurrency =
         currencies && currencies.length > 0
