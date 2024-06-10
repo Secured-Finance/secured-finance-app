@@ -70,35 +70,31 @@ const ReferralCode = ({ code }: { code: string }) => {
                 className='typography-body-1 h-12 w-full text-center text-white'
                 data-testid='portfolio-tab-value'
             >
-                <div className='mx-4 grid h-12 grid-flow-col items-center justify-start justify-stretch gap-x-3 rounded-xl border border-neutral-3 bg-black-20 px-2'>
-                    <div className='typography-caption text-white-60'>
-                        <div className='flex w-full flex-row items-center  justify-between'>
-                            <div>{code}</div>
-                            <div className='flex flex-row items-center gap-2'>
-                                <div className='hidden tablet:block'>
-                                    <Tooltip
-                                        iconElement={
-                                            <button
-                                                type='button'
-                                                className='flex h-8 w-8 items-center justify-center rounded-2xl bg-gunMetal'
-                                                onClick={() =>
-                                                    navigator.clipboard.writeText(
-                                                        `${
-                                                            window.location
-                                                                .origin +
-                                                            window.location
-                                                                .pathname
-                                                        }?ref=${code}`
-                                                    )
-                                                }
-                                            >
-                                                <ClipboardDocumentIcon className='h-5 w-5 text-slateGray hover:text-planetaryPurple' />
-                                            </button>
-                                        }
-                                    >
-                                        Copy your referral link
-                                    </Tooltip>
-                                </div>
+                <div className='mx-4 grid h-12 grid-flow-col items-center gap-x-3 rounded-xl border border-neutral-3 bg-black-20 px-2'>
+                    <div className='typography-caption overflow-auto text-white-60'>
+                        <div className='flex w-full flex-row items-center justify-between'>
+                            <div className='truncate'>{code}</div>
+                            <div className='float-right flex flex-row items-center justify-between  gap-2 text-right'>
+                                <Tooltip
+                                    iconElement={
+                                        <button
+                                            type='button'
+                                            className='flex h-8 w-8 items-center justify-center rounded-2xl bg-gunMetal'
+                                            onClick={() =>
+                                                navigator.clipboard.writeText(
+                                                    `${
+                                                        window.location.origin +
+                                                        window.location.pathname
+                                                    }?ref=${code}`
+                                                )
+                                            }
+                                        >
+                                            <ClipboardDocumentIcon className='h-5 w-5 text-slateGray hover:text-planetaryPurple' />
+                                        </button>
+                                    }
+                                >
+                                    Copy your referral link
+                                </Tooltip>
                                 <Tooltip
                                     iconElement={
                                         <button
@@ -535,7 +531,7 @@ const Leaderboard = () => {
                         <div className='truncate pl-4 pr-8 text-secondary7'>
                             {item.walletAddress}
                         </div>
-                        <div className='float-right text-right text-neutral-6 '>
+                        <div className='float-right flex-1 text-right text-neutral-6'>
                             {ordinaryFormat(item.point, 0, 2, 'standard')}
                         </div>
                     </div>

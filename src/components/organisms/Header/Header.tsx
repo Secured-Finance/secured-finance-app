@@ -120,8 +120,8 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                 >
                     <div className='col-span-2 flex flex-row items-center gap-8 desktop:gap-12'>
                         <Link href='/'>
-                            <SFLogo className='hidden tablet:inline tablet:h-[15px] tablet:w-[150px] desktop:h-5 desktop:w-[200px]' />
-                            <SFLogoSmall className='inline h-7 w-7 tablet:hidden' />
+                            <SFLogo className='hidden desktop:inline desktop:h-5 desktop:w-[200px]' />
+                            <SFLogoSmall className='inline h-7 w-7 desktop:hidden' />
                         </Link>
                         {showNavigation && (
                             <div className='hidden h-full flex-row laptop:flex'>
