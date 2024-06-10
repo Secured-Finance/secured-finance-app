@@ -8,10 +8,11 @@ import {
     ErrorInfo,
     OrderDisplayBox,
     OrderInputBox,
-    RadioGroupSelector,
     Slider,
+    TabVariant,
     WalletSourceSelector,
 } from 'src/components/atoms';
+import { SubtabGroup, TabGroup } from 'src/components/molecules';
 import { NewOrderBookWidget, OrderAction } from 'src/components/organisms';
 import {
     CollateralBook,
@@ -59,6 +60,13 @@ import {
 } from 'src/utils/events';
 import { useAccount } from 'wagmi';
 
+const getOrderSideText = (
+    side: (typeof OrderSideMap)[OrderSide.LEND | OrderSide.BORROW]
+) => {
+    if (side === 'Lend') return 'Buy / Lend';
+    return 'Sell / Borrow';
+};
+
 export function AdvancedLendingOrderCard({
     collateralBook,
     isItayose = false,
@@ -96,7 +104,7 @@ export function AdvancedLendingOrderCard({
         selectLandingOrderInputs(state.landingOrderForm)
     );
 
-    const [sliderValue, setSliderValue] = useState(0.0);
+    const [sliderValue, setSliderValue] = useState<number>();
 
     const balanceRecord = useBalances();
     const isTablet = useBreakpoint('laptop');
@@ -212,32 +220,44 @@ export function AdvancedLendingOrderCard({
         selectedWalletSource.source,
     ]);
 
-    const handleSliderChange = (percentage: number) => {
-        const available =
-            side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
-        track(InteractionEvents.SLIDER, {
-            [InteractionProperties.SLIDER_VALUE]: percentage,
-        });
-        dispatch(
-            setAmount(
-                (
-                    Math.floor(percentage * available * AMOUNT_PRECISION) /
-                    (100.0 * AMOUNT_PRECISION)
-                ).toString()
-            )
-        );
-        setSliderValue(percentage);
-    };
+    const handleSliderChange = useCallback(
+        (percentage: number | undefined) => {
+            const available =
+                side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
+            track(InteractionEvents.SLIDER, {
+                [InteractionProperties.SLIDER_VALUE]: percentage ?? 0,
+            });
+            dispatch(
+                percentage
+                    ? setAmount(
+                          (
+                              Math.floor(
+                                  percentage * available * AMOUNT_PRECISION
+                              ) /
+                              (100.0 * AMOUNT_PRECISION)
+                          ).toString()
+                      )
+                    : setAmount('')
+            );
+            setSliderValue(percentage);
+        },
+        [availableToBorrow, balanceToLend, dispatch, side]
+    );
 
-    const handleInputChange = (v: string) => {
-        dispatch(setAmount(v));
-        const available =
-            side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
-        const inputValue = Number(v);
-        available > 0
-            ? setSliderValue(Math.min(100.0, (inputValue * 100.0) / available))
-            : setSliderValue(0.0);
-    };
+    const handleInputChange = useCallback(
+        (v: string) => {
+            dispatch(setAmount(v));
+            const available =
+                side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
+            const inputValue = Number(v);
+            available > 0 && inputValue !== 0
+                ? setSliderValue(
+                      Math.min(100.0, (inputValue * 100.0) / available)
+                  )
+                : setSliderValue(undefined);
+        },
+        [availableToBorrow, balanceToLend, dispatch, side]
+    );
 
     useEffect(() => {
         if (isItayose) {
@@ -263,7 +283,7 @@ export function AdvancedLendingOrderCard({
         dispatch(setAmount(inputAmount.toString()));
         available
             ? setSliderValue(Math.min(100.0, (inputAmount * 100.0) / available))
-            : setSliderValue(0.0);
+            : setSliderValue(undefined);
     };
 
     const isInvalidBondPrice = unitPrice === 0 && orderType === OrderType.LIMIT;
@@ -312,77 +332,61 @@ export function AdvancedLendingOrderCard({
         [setIsShowingAll]
     );
 
+    const orderSideOptions = Object.values(OrderSideMap).map(option => ({
+        text: getOrderSideText(option),
+        variant: TabVariant[option],
+    }));
     return (
         <div className='h-full rounded-b-xl border-white-10 pb-7 laptop:border laptop:bg-cardBackground laptop:bg-opacity-60'>
-            <RadioGroupSelector
-                options={Object.values(OrderSideMap)}
-                selectedOption={OrderSideMap[side]}
-                handleClick={option => {
-                    dispatch(
-                        setSide(
-                            option === 'Borrow'
-                                ? OrderSide.BORROW
-                                : OrderSide.LEND
-                        )
-                    );
-                    dispatch(setSourceAccount(WalletSource.METAMASK));
-                    trackButtonEvent(
-                        ButtonEvents.ORDER_SIDE,
-                        ButtonProperties.ORDER_SIDE,
-                        option
-                    );
-                }}
-                variant='NavTab'
-                optionsStyles={[
-                    {
-                        bgColorActive: 'bg-nebulaTeal',
-                        textClassActive: 'text-secondary-300 font-semibold',
-                        gradient: {
-                            from: 'from-tabGradient-4',
-                            to: 'to-tabGradient-3',
-                        },
-                    },
-                    {
-                        bgColorActive: 'bg-galacticOrange',
-                        textClassActive: 'text-[#FFE5E8] font-semibold',
-                        gradient: {
-                            from: 'from-tabGradient-6',
-                            to: 'to-tabGradient-5',
-                        },
-                    },
-                ]}
-            />
+            <div className='h-11 border-b border-neutral-600 laptop:h-[60px]'>
+                <TabGroup
+                    options={orderSideOptions}
+                    selectedOption={getOrderSideText(OrderSideMap[side])}
+                    handleClick={option => {
+                        dispatch(
+                            setSide(
+                                option === 'Sell / Borrow'
+                                    ? OrderSide.BORROW
+                                    : OrderSide.LEND
+                            )
+                        );
+                        dispatch(setSourceAccount(WalletSource.METAMASK));
+                        trackButtonEvent(
+                            ButtonEvents.ORDER_SIDE,
+                            ButtonProperties.ORDER_SIDE,
+                            option
+                        );
+                    }}
+                    isFullHeight
+                />
+            </div>
 
-            <div className='grid w-full grid-cols-12 gap-5 px-4 pb-8 pt-4 laptop:gap-0 laptop:pb-4 laptop:pt-5'>
+            <div className='grid w-full grid-cols-12 gap-5  px-4 pb-8 pt-4 laptop:gap-0 laptop:pb-4 laptop:pt-5'>
                 <div className='col-span-7 flex flex-col justify-start gap-2 laptop:col-span-12 laptop:gap-4'>
                     {!isItayose && (
-                        <div className='mb-1 laptop:mb-0'>
-                            <RadioGroupSelector
-                                options={OrderTypeOptions}
-                                selectedOption={orderType}
-                                handleClick={option => {
-                                    dispatch(setOrderType(option as OrderType));
-                                    dispatch(resetUnitPrice());
-                                    trackButtonEvent(
-                                        ButtonEvents.ORDER_TYPE,
-                                        ButtonProperties.ORDER_TYPE,
-                                        option
-                                    );
-                                }}
-                                variant='StyledButton'
-                            />
-                        </div>
+                        <SubtabGroup
+                            options={OrderTypeOptions}
+                            selectedOption={orderType}
+                            handleClick={option => {
+                                dispatch(setOrderType(option as OrderType));
+                                dispatch(resetUnitPrice());
+                                trackButtonEvent(
+                                    ButtonEvents.ORDER_TYPE,
+                                    ButtonProperties.ORDER_TYPE,
+                                    option
+                                );
+                            }}
+                        />
                     )}
                     {side === OrderSide.LEND && (
                         <div className='space-y-1'>
-                            <div className='mb-1 laptop:mb-0'>
-                                <WalletSourceSelector
-                                    optionList={walletSourceList}
-                                    selected={selectedWalletSource}
-                                    account={address ?? ''}
-                                    onChange={handleWalletSourceChange}
-                                />
-                            </div>
+                            <WalletSourceSelector
+                                optionList={walletSourceList}
+                                selected={selectedWalletSource}
+                                account={address ?? ''}
+                                onChange={handleWalletSourceChange}
+                            />
+
                             <ErrorInfo
                                 showError={getAmountValidation(
                                     amountFormatterFromBase[currency](amount),
@@ -460,7 +464,7 @@ export function AdvancedLendingOrderCard({
                             !isConnected ? 'bg-neutral-700' : undefined
                         }
                     />
-                    <div className='mx-10px'>
+                    <div className='mx-2'>
                         <Slider
                             onChange={handleSliderChange}
                             value={sliderValue}

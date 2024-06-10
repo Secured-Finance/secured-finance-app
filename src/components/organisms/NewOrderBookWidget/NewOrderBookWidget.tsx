@@ -13,12 +13,7 @@ import { useDispatch } from 'react-redux';
 import ShowFirstIcon from 'src/assets/icons/orderbook-first.svg';
 import ShowAllIcon from 'src/assets/icons/orderbook-full.svg';
 import ShowLastIcon from 'src/assets/icons/orderbook-last.svg';
-import {
-    DropdownSelector,
-    NavTab,
-    Option,
-    Spinner,
-} from 'src/components/atoms';
+import { DropdownSelector, Option, Spinner, Tab } from 'src/components/atoms';
 import { InfoToolTip, TableHeader } from 'src/components/molecules';
 import {
     AggregationFactorType,
@@ -37,6 +32,7 @@ import {
     formatLoanValue,
     getMaxAmount,
     ordinaryFormat,
+    percentFormat,
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import { ColorBar } from './ColorBar';
@@ -96,14 +92,15 @@ const AmountCell = ({
     let val: string | undefined;
     if (value === ZERO_BI) {
         val = undefined;
-    } else if (cbLimit) {
-        val = 'CB Limit';
     } else {
         val = ordinaryFormat(
             currencyMap[currency].fromBaseUnit(value),
             currencyMap[currency].roundingDecimal,
             currencyMap[currency].roundingDecimal
         );
+        if (cbLimit) {
+            val += '(CB)';
+        }
     }
     return (
         <div className='relative flex items-center justify-end'>
@@ -204,6 +201,8 @@ const reducer = (
 export const NewOrderBookWidget = ({
     orderbook,
     currency,
+    maxLendUnitPrice,
+    minBorrowUnitPrice,
     marketPrice,
     onFilterChange,
     onAggregationChange,
@@ -265,13 +264,40 @@ export const NewOrderBookWidget = ({
         aggregationFactor
     );
 
-    const maxAmountInOrderbook = useMemo(() => {
-        const maxLendAmount = getMaxAmount(lendOrders);
-        const maxBorrowAmount = getMaxAmount(borrowOrders);
-        return maxLendAmount > maxBorrowAmount
-            ? maxLendAmount
-            : maxBorrowAmount;
-    }, [borrowOrders, lendOrders]);
+    const spread =
+        lendOrders.length > 0 && borrowOrders.length > 0
+            ? ordinaryFormat(
+                  Math.abs(
+                      borrowOrders[borrowOrders.length - 1].value.price -
+                          lendOrders[0].value.price
+                  ) / 100.0,
+                  2,
+                  2
+              )
+            : '0.00';
+
+    const aprSpread =
+        lendOrders.length > 0 && borrowOrders.length > 0
+            ? percentFormat(
+                  Math.abs(
+                      borrowOrders[
+                          borrowOrders.length - 1
+                      ].value.apr.toNormalizedNumber() -
+                          lendOrders[0].value.apr.toNormalizedNumber()
+                  ),
+                  100,
+                  2,
+                  2
+              )
+            : '0.00%';
+
+    const maxLendAmount = useMemo(() => {
+        return getMaxAmount(lendOrders);
+    }, [lendOrders]);
+
+    const maxBorrowAmount = useMemo(() => {
+        return getMaxAmount(borrowOrders);
+    }, [borrowOrders]);
 
     const buyColumns = useMemo(
         () => [
@@ -283,7 +309,7 @@ export const NewOrderBookWidget = ({
                         amount={info.row.original.amount}
                         aggregationFactor={aggregationFactor}
                         position='borrow'
-                        cbLimit={false}
+                        cbLimit={info.getValue().price > maxLendUnitPrice}
                     />
                 ),
                 header: () => (
@@ -315,11 +341,13 @@ export const NewOrderBookWidget = ({
                 cell: info => (
                     <AmountCell
                         value={info.getValue()}
-                        amount={info.row.original.amount}
-                        totalAmount={maxAmountInOrderbook}
+                        amount={info.row.original.cumulativeAmount}
+                        totalAmount={maxBorrowAmount}
                         position='borrow'
                         currency={currency}
-                        cbLimit={false}
+                        cbLimit={
+                            info.row.original.value.price > maxLendUnitPrice
+                        }
                     />
                 ),
                 header: () => (
@@ -331,7 +359,7 @@ export const NewOrderBookWidget = ({
                 ),
             }),
         ],
-        [aggregationFactor, currency, maxAmountInOrderbook]
+        [aggregationFactor, currency, maxBorrowAmount, maxLendUnitPrice]
     );
 
     const sellColumns = useMemo(
@@ -341,11 +369,13 @@ export const NewOrderBookWidget = ({
                 cell: info => (
                     <AmountCell
                         value={info.getValue()}
-                        amount={info.row.original.amount}
-                        totalAmount={maxAmountInOrderbook}
+                        amount={info.row.original.cumulativeAmount}
+                        totalAmount={maxLendAmount}
                         position='lend'
                         currency={currency}
-                        cbLimit={false}
+                        cbLimit={
+                            info.row.original.value.price < minBorrowUnitPrice
+                        }
                     />
                 ),
                 header: () => (
@@ -380,7 +410,7 @@ export const NewOrderBookWidget = ({
                         amount={info.row.original.amount}
                         aggregationFactor={aggregationFactor}
                         position='lend'
-                        cbLimit={false}
+                        cbLimit={info.getValue().price < minBorrowUnitPrice}
                     />
                 ),
                 header: () => (
@@ -392,7 +422,7 @@ export const NewOrderBookWidget = ({
                 ),
             }),
         ],
-        [aggregationFactor, currency, maxAmountInOrderbook]
+        [aggregationFactor, currency, maxLendAmount, minBorrowUnitPrice]
     );
 
     const handleClick = (rowId: string, side: OrderSide): void => {
@@ -434,22 +464,6 @@ export const NewOrderBookWidget = ({
         return rowData.amount !== ZERO_BI;
     };
 
-    const alignment = () => {
-        if (state.showBorrow && !state.showLend) {
-            if (isTablet) {
-                return 'top-right';
-            }
-
-            return 'top';
-        }
-
-        if (isTablet) {
-            return 'left';
-        }
-
-        return 'right';
-    };
-
     return (
         <div className='flex h-full w-full flex-col justify-start gap-y-1 overflow-hidden border-white-10 laptop:flex-col-reverse laptop:gap-y-0 laptop:rounded-b-xl laptop:border laptop:bg-cardBackground/60 laptop:shadow-tab'>
             <div className='h-full'>
@@ -487,32 +501,32 @@ export const NewOrderBookWidget = ({
                         </div>
                         <div
                             className={clsx(
-                                'flex h-6 flex-row items-center justify-between py-1 font-secondary font-semibold text-neutral-50 laptop:h-fit laptop:bg-black-20 laptop:px-4 laptop:py-3'
+                                'flex h-6 flex-row items-center py-1 font-secondary font-semibold laptop:h-fit laptop:bg-black-20 laptop:px-4 laptop:py-1'
                             )}
                         >
                             <span
-                                className='flex items-center gap-2 text-base leading-6'
+                                className='flex w-full items-center gap-2 text-base font-semibold leading-6 text-neutral-50'
                                 data-testid='current-market-price'
                             >
                                 <p>{formatLoanValue(marketPrice, 'price')}</p>
                                 {isItayose && (
                                     <InfoToolTip
                                         iconColor='white'
-                                        align={alignment()}
-                                        maxWidth={'small'}
+                                        placement='bottom'
                                     >
-                                        <p className='text-white'>
-                                            Overlapping orders are aggregated to
-                                            show net amounts. The price
-                                            indicates the estimated opening
-                                            price.
-                                        </p>
+                                        Overlapping orders are aggregated to
+                                        show net amounts. The price indicates
+                                        the estimated opening price.
                                     </InfoToolTip>
                                 )}
                             </span>
-                            <span className='text-xs leading-5 laptop:text-sm laptop:leading-[22px]'>
+                            <span className='flex w-full justify-end text-xs font-semibold leading-5 text-neutral-200 laptop:justify-center laptop:text-sm laptop:leading-[22px]'>
                                 {formatLoanValue(marketPrice, 'rate')}
                             </span>
+                            <div className='typography-desktop-body-6 hidden w-full flex-col justify-end text-right text-neutral-200 laptop:flex'>
+                                <span>Spread</span>
+                                <span>{`${spread}/${aprSpread}`}</span>
+                            </div>
                         </div>
                         <div
                             className={clsx('flex', {
@@ -591,7 +605,7 @@ export const NewOrderBookWidget = ({
                 </div>
                 <div className='hidden border-neutral-600 laptop:block laptop:border-b'>
                     <div className='h-[60px]'>
-                        <NavTab text='Order Book' active={true} />
+                        <Tab text='Order Book' active={true} />
                     </div>
                 </div>
             </div>

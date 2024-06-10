@@ -1,7 +1,7 @@
 import { SortDirection } from '@tanstack/react-table';
 import clsx from 'clsx';
 import { SortArrows } from 'src/components/atoms';
-import { Tooltip } from 'src/components/templates';
+import { Tooltip } from 'src/components/molecules';
 import { Alignment } from 'src/types';
 
 export const TableHeader = ({
@@ -38,7 +38,9 @@ export const TableHeader = ({
     if (titleHint) {
         return (
             <Container align={align} horizontalPadding={horizontalPadding}>
-                <Tooltip iconElement={titleComponent}>{titleHint}</Tooltip>
+                <Tooltip placement='bottom' iconElement={titleComponent}>
+                    {titleHint}
+                </Tooltip>
             </Container>
         );
     }

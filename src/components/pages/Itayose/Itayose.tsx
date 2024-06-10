@@ -16,7 +16,7 @@ import {
     Alert,
     HorizontalAssetSelector,
     HorizontalTab,
-    Tab,
+    TabSelector,
 } from 'src/components/molecules';
 import {
     AdvancedLendingOrderCard,
@@ -335,7 +335,7 @@ export const Itayose = () => {
                     />
                 }
             >
-                <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
+                <TabSelector tabDataArray={[{ text: 'Yield Curve' }]}>
                     <div className='h-[410px] w-full px-6 py-4'>
                         <LineChartTab
                             rates={rates}
@@ -347,12 +347,14 @@ export const Itayose = () => {
                             }
                         />
                     </div>
-                </Tab>
+                </TabSelector>
 
                 <>
                     <div className='col-span-1 hidden w-[calc(100%-284px)] laptop:block desktop:w-[calc(100%-312px)]'>
                         <div className='flex h-full flex-grow flex-col gap-4'>
-                            <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
+                            <TabSelector
+                                tabDataArray={[{ text: 'Yield Curve' }]}
+                            >
                                 <div className='h-[410px] w-full px-6 py-4'>
                                     <LineChartTab
                                         rates={rates}
@@ -366,7 +368,7 @@ export const Itayose = () => {
                                         }
                                     />
                                 </div>
-                            </Tab>
+                            </TabSelector>
                         </div>
                     </div>
                     <div className='hidden laptop:block laptop:w-[272px] desktop:w-[300px]'>

@@ -1,14 +1,11 @@
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-    ErrorInfo,
-    RadioGroupSelector,
-    WalletSourceSelector,
-} from 'src/components/atoms';
+import { ErrorInfo, WalletSourceSelector } from 'src/components/atoms';
 import {
     AssetSelector,
     CollateralUsageSection,
+    TabGroup,
     TermSelector,
 } from 'src/components/molecules';
 import { OrderAction } from 'src/components/organisms';
@@ -46,6 +43,7 @@ import {
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { trackButtonEvent } from 'src/utils/events';
 import { useAccount } from 'wagmi';
+import { orderSideOptions } from './constants';
 
 export const LendingCard = ({
     collateralBook,
@@ -156,8 +154,8 @@ export const LendingCard = ({
 
     return (
         <div className='w-[345px] flex-shrink-0 space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-7 shadow-deep'>
-            <RadioGroupSelector
-                options={Object.values(OrderSideMap)}
+            <TabGroup
+                options={orderSideOptions}
                 selectedOption={OrderSideMap[side]}
                 handleClick={option => {
                     dispatch(
@@ -174,7 +172,6 @@ export const LendingCard = ({
                         option
                     );
                 }}
-                variant='NavTab'
             />
 
             <div className='flex h-[480px] flex-col justify-between px-4'>

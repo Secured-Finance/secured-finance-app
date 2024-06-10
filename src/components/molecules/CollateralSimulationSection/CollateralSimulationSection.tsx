@@ -17,7 +17,7 @@ const CollateralUsageItem = () => {
             <div className='typography-caption text-planetaryPurple'>
                 Collateral Usage
             </div>
-            <InfoToolTip>
+            <InfoToolTip placement='bottom'>
                 Existing open orders are factored into your collateral usage and
                 may affect remaining borrow capacity
             </InfoToolTip>

@@ -7,9 +7,9 @@ import { useDispatch } from 'react-redux';
 import { Button, DropdownSelector, Timer } from 'src/components/atoms';
 import {
     CoreTable,
-    Tab,
-    TabData,
     TabHighlight,
+    TabSelector,
+    TabSelectorData,
 } from 'src/components/molecules';
 import {
     Market,
@@ -87,7 +87,7 @@ export const MarketLoanWidget = ({
             dispatch(setCurrency(ccy));
 
             info.row.original.isOpened
-                ? router.push('/advanced/')
+                ? router.push('/')
                 : router.push('/itayose/');
         },
         [dispatch, router]
@@ -206,7 +206,7 @@ export const MarketLoanWidget = ({
         </div>
     );
 
-    const tabDataArray: TabData[] = [
+    const tabDataArray: TabSelectorData[] = [
         {
             text: 'Pre-Open',
             highlight: itayoseHighlight,
@@ -221,7 +221,10 @@ export const MarketLoanWidget = ({
 
     return (
         <div className='h-fit min-h-[300px] rounded-b-2xl border border-white-10 bg-black-20 shadow-tab'>
-            <Tab tabDataArray={tabDataArray}>
+            <TabSelector
+                tabDataArray={tabDataArray}
+                tabGroupClassName='tablet:w-1/2 laptop:w-[163px]'
+            >
                 {!isGlobalItayose && (
                     <CoreTable
                         columns={columns}
@@ -240,7 +243,7 @@ export const MarketLoanWidget = ({
                         stickyFirstColumn: true,
                     }}
                 />
-            </Tab>
+            </TabSelector>
         </div>
     );
 };
