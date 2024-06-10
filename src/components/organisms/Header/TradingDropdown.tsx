@@ -28,7 +28,7 @@ export const TradingDropdown = () => {
                             />
                             <div
                                 className={clsx(
-                                    'flex h-full items-center justify-center gap-2 pl-[30px] pr-[10px] desktop:pr-[23px]',
+                                    'flex h-full items-center justify-center gap-2 pl-[30px] pr-[23px]',
                                     {
                                         'bg-gradient-to-b from-tabGradient-blue-start to-tabGradient-blue-end':
                                             isActive,

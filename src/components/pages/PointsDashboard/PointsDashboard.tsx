@@ -98,6 +98,7 @@ const ReferralCode = ({ code }: { code: string }) => {
                                 <Tooltip
                                     iconElement={
                                         <button
+                                            type='button'
                                             className='flex h-8 w-8 items-center justify-center rounded-2xl bg-gunMetal'
                                             onClick={() =>
                                                 window.open(
@@ -196,12 +197,7 @@ const UserPointInfo = () => {
                     </div>
                     <div className='typography-body-1 flex w-full flex-row items-center justify-center border-b border-white-10 pb-8 text-2xl text-white'>
                         <div className='pr-2'>
-                            {address && (
-                                <Identicon
-                                    value={address}
-                                    size={36}
-                                ></Identicon>
-                            )}
+                            {address && <Identicon value={address} size={36} />}
                         </div>
                         <CountUp
                             start={0}
@@ -523,10 +519,7 @@ const Leaderboard = () => {
                             {item.rank}
                         </div>
                         <div>
-                            <Identicon
-                                value={item.walletAddress}
-                                size={24}
-                            ></Identicon>
+                            <Identicon value={item.walletAddress} size={24} />
                         </div>
                         <div className='truncate pl-4 pr-8 text-secondary7'>
                             {item.walletAddress}
