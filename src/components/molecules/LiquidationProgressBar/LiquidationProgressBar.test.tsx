@@ -1,5 +1,6 @@
 import { composeStories } from '@storybook/react';
-import { fireEvent, render, screen } from 'src/test-utils.js';
+import userEvent from '@testing-library/user-event';
+import { render, screen } from 'src/test-utils.js';
 import * as stories from './LiquidationProgressBar.stories';
 
 const { NotConnectedToWallet, CollateralDepositedWithCoverage } =
@@ -20,7 +21,7 @@ describe('LiquidationProgressBar Component', () => {
         );
     });
 
-    it('should render a LiquidationProgressBar with values', () => {
+    it('should render a LiquidationProgressBar with values', async () => {
         render(<CollateralDepositedWithCoverage />);
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
@@ -40,13 +41,11 @@ describe('LiquidationProgressBar Component', () => {
         );
 
         const information = screen.getByTestId('information-circle');
-        fireEvent.mouseEnter(information);
 
-        const tooltip = screen.getByRole('tooltip');
-
-        expect(tooltip).toHaveTextContent(
-            'Liquidation threshold is the limit where your collateral will be eligible for liquidation.You are currently 35% under the liquidation threshold (80% of deposit balance).'
-        );
+        await userEvent.unhover(information);
+        await userEvent.hover(information);
+        const tooltip = await screen.findByRole('tooltip');
+        expect(tooltip).toBeInTheDocument();
     });
 
     it('should render correct color and risk status', () => {

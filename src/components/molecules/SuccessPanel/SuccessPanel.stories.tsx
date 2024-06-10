@@ -12,6 +12,9 @@ export default {
             ['Price', '10'],
         ],
     },
+    parameters: {
+        chromatic: { delay: 3000 },
+    },
 } as Meta<typeof SuccessPanel>;
 
 const Template: StoryFn<typeof SuccessPanel> = args => (
@@ -30,6 +33,7 @@ WithTransactionHash.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const tooltip = canvas.getByText('987654321123456789');
     await waitFor(async () => {
+        await userEvent.unhover(tooltip);
         await userEvent.hover(tooltip);
     });
 };

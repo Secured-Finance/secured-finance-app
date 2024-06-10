@@ -35,7 +35,9 @@ describe('SuccessPanel Component', () => {
             '_blank'
         );
 
-        userEvent.hover(address);
-        await waitFor(() => expect(screen.getByRole('tooltip')).toBeVisible());
+        await userEvent.unhover(address);
+        await userEvent.hover(address);
+        const tooltip = await screen.findByText('View on Etherscan');
+        expect(tooltip).toBeInTheDocument();
     });
 });

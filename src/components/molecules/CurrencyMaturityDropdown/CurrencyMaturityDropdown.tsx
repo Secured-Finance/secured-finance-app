@@ -1,6 +1,6 @@
 import { Menu } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
-import { MagnifyingGlassIcon, StarIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import {
     Table,
     TableBody,
@@ -72,22 +72,6 @@ export const CurrencyMaturityDropdown = ({
         !isSubgraphSupported
     );
 
-    const transactionHistory = useGraphClientHook(
-        {
-            currency: '',
-            maturity: '',
-            from: Math.round(
-                (new Date().getTime() - 90 * 24 * 60 * 60 * 1000) / 1000
-            ),
-            to: Math.round(new Date().getTime() / 1000),
-        },
-        queries.TransactionHistoryDocument,
-        'transactionHistory',
-        !isSubgraphSupported
-    );
-
-    console.log(transactionHistory);
-
     const CcyIcon = currencyMap[asset.value].icon;
 
     const tableHeaderColumns = isTablet ? mobileColumns : columns;
@@ -150,7 +134,7 @@ export const CurrencyMaturityDropdown = ({
                 case 'symbol':
                     return (
                         <h3 className='flex items-center gap-1'>
-                            <StarIcon className='h-3.5 w-3.5' />
+                            {/* <StarIcon className='h-3.5 w-3.5' /> */}
                             {option.display}
                         </h3>
                     );
@@ -196,7 +180,7 @@ export const CurrencyMaturityDropdown = ({
                             )}
                         />
                     </Menu.Button>
-                    <Menu.Items className='fixed left-0 top-[56px] z-[28] flex w-full flex-col gap-3 overflow-hidden border-t-4 border-primary-500 bg-neutral-800 px-4 pt-3 laptop:absolute laptop:left-auto laptop:top-auto laptop:mt-1.5 laptop:w-[779px] laptop:rounded-xl laptop:border laptop:border-neutral-600 laptop:bg-neutral-900'>
+                    <Menu.Items className='fixed left-0 top-[56px] z-[28] flex w-full flex-col gap-3 overflow-hidden border-t-4 border-primary-500 bg-neutral-800 pt-3 laptop:absolute laptop:left-auto laptop:top-auto laptop:mt-1.5 laptop:w-[779px] laptop:rounded-xl laptop:border laptop:border-neutral-600 laptop:bg-neutral-900'>
                         <header className='flex items-center justify-between text-neutral-50 laptop:hidden'>
                             <div className='flex items-center gap-1'>
                                 <MagnifyingGlassIcon className='h-5 w-5' />
@@ -207,33 +191,35 @@ export const CurrencyMaturityDropdown = ({
                             <CloseButton onClick={close} />
                         </header>
                         {/* TODO: change to design system input field */}
-                        <input
-                            className='rounded-lg border border-neutral-500 !bg-neutral-900 px-3 py-2 text-neutral-300 focus:border-primary-500 active:border-[1.5px]'
-                            onChange={e =>
-                                setSearchValue(e.currentTarget.value)
-                            }
-                            value={searchValue}
-                            placeholder='Search products...'
-                        />
+                        <div className='flex flex-col gap-3 px-4'>
+                            <input
+                                className='rounded-lg border border-neutral-500 !bg-neutral-900 px-3 py-2 text-neutral-300 focus:border-primary-500 active:border-[1.5px]'
+                                onChange={e =>
+                                    setSearchValue(e.currentTarget.value)
+                                }
+                                value={searchValue}
+                                placeholder='Search products...'
+                            />
 
-                        <div className='flex items-center gap-[13.5px]'>
-                            {Object.entries(CurrencyMaturityCategories).map(
-                                ([key, value]) => (
-                                    <button
-                                        key={key}
-                                        className={clsx(
-                                            'text-xs leading-5 text-neutral-400',
-                                            {
-                                                'text-primary-300':
-                                                    category === value,
-                                            }
-                                        )}
-                                        onClick={() => setCategory(value)}
-                                    >
-                                        {value}
-                                    </button>
-                                )
-                            )}
+                            <div className='flex items-center gap-[13.5px]'>
+                                {Object.entries(CurrencyMaturityCategories).map(
+                                    ([key, value]) => (
+                                        <button
+                                            key={key}
+                                            className={clsx(
+                                                'text-xs leading-5 text-neutral-400',
+                                                {
+                                                    'text-primary-300':
+                                                        category === value,
+                                                }
+                                            )}
+                                            onClick={() => setCategory(value)}
+                                        >
+                                            {value}
+                                        </button>
+                                    )
+                                )}
+                            </div>
                         </div>
 
                         <Table
@@ -242,7 +228,7 @@ export const CurrencyMaturityDropdown = ({
                             removeWrapper
                             isHeaderSticky
                             classNames={{
-                                base: 'max-h-[232px] overflow-auto',
+                                base: 'max-h-[232px] overflow-auto pl-4 pr-3',
                                 table: 'min-h-[400px]',
                             }}
                         >
@@ -263,7 +249,7 @@ export const CurrencyMaturityDropdown = ({
                                         className='cursor-pointer overflow-hidden rounded border-b border-neutral-600 laptop:border-b-0 laptop:hover:bg-neutral-700'
                                         onClick={() => {
                                             if (
-                                                item.currency !== asset.value &&
+                                                item.currency !== asset.value ||
                                                 item.maturity !== maturity.value
                                             ) {
                                                 onChange(

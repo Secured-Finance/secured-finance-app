@@ -1,9 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 import { Option } from 'src/components/atoms';
-import {
-    CurrencyDropdown,
-    CurrencyMaturityDropdown,
-} from 'src/components/molecules';
+import { CurrencyMaturityDropdown } from 'src/components/molecules';
 import { MaturityOptionList } from 'src/types';
 import { CurrencySymbol, getTransformMaturityOption } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
@@ -64,13 +61,6 @@ export const HorizontalAssetSelector = ({
                             )
                         }`}
                     </p>
-                    <div className='hidden'>
-                        <CurrencyDropdown
-                            currencyOptionList={assetList}
-                            selected={selectedAsset}
-                            onChange={onAssetChange}
-                        />
-                    </div>
                 </div>
             </div>
             {/* <div className='hidden flex-col items-center'>

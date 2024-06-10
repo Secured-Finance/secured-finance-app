@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import AlertTriangle from 'src/assets/icons/alert-triangle.svg';
 import MetamaskLogo from 'src/assets/img/metamask-fox.svg';
 import { Separator, SupportedNetworks } from 'src/components/atoms';
-import { Tooltip } from 'src/components/templates';
+import { Tooltip } from 'src/components/molecules';
 import { RootState } from 'src/store/types';
 import { resetWallet } from 'src/store/wallet';
 import { formatDataCy, removeWalletFromStore } from 'src/utils';
@@ -143,6 +143,7 @@ export const WalletPopover = ({
                                                 iconElement={
                                                     <AlertTriangle data-testid='network-alert-triangle' />
                                                 }
+                                                placement='bottom'
                                             >
                                                 <SupportedNetworks />
                                             </Tooltip>
