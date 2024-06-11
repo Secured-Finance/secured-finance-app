@@ -39,3 +39,8 @@ LongInput.play = async () => {
         delay: 100,
     });
 };
+
+export const DefaultCcySymbol = Template.bind({});
+DefaultCcySymbol.args = {
+    defaultCcySymbol: CurrencySymbol.ETH,
+};
