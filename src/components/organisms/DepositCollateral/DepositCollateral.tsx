@@ -103,8 +103,10 @@ export const DepositCollateral = ({
     onClose,
     collateralList,
     source,
+    defaultCcySymbol = CurrencySymbol.USDC,
 }: {
     collateralList: Partial<Record<CurrencySymbol, CollateralInfo>>;
+    defaultCcySymbol?: string;
 } & DialogState) => {
     const { blockExplorerUrl } = useBlockExplorerUrl();
     const [asset, setAsset] = useState(CurrencySymbol.USDC);
@@ -139,7 +141,7 @@ export const DepositCollateral = ({
 
     const optionList = Object.values(collateralList);
     const defaultCcyIndex = optionList.findIndex(
-        col => col.symbol === CurrencySymbol.USDC
+        col => col.symbol === defaultCcySymbol
     );
     if (defaultCcyIndex >= 0) {
         [optionList[0], optionList[defaultCcyIndex]] = [
