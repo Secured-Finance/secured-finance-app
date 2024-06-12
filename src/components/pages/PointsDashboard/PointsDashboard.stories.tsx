@@ -80,7 +80,10 @@ const users = [
                 users: [
                     ...Array.from({ length: 20 }).map((_, index) => ({
                         id: `${index}`,
-                        walletAddress: utils.hexlify(utils.randomBytes(20)),
+                        walletAddress: utils.hexlify(
+                            BigInt((index + 1).toString().padEnd(40, '0')) +
+                                BigInt(index)
+                        ),
                         point: 100 - index,
                         rank: index + 1,
                     })),
