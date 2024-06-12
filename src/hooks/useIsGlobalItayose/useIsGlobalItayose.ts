@@ -13,7 +13,6 @@ export const useIsGlobalItayose = () => {
         };
     }
 
-    let itayoseMarketCount = 0;
     let openMarketExists = false;
 
     for (const ccy of currencies) {
@@ -26,14 +25,11 @@ export const useIsGlobalItayose = () => {
                 openMarketExists = true;
                 break;
             }
-            if (contract.isPreOrderPeriod || contract.isItayosePeriod) {
-                itayoseMarketCount += 1;
-            }
         }
     }
 
     return {
-        data: !openMarketExists && itayoseMarketCount >= 1,
+        data: !openMarketExists,
         isPending: false,
     };
 };
