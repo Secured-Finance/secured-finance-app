@@ -36,7 +36,6 @@ import {
     useMarketOrderList,
     useOrderList,
     usePositions,
-    useTradeHistoryDetails,
     useYieldCurveMarketRates,
 } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
@@ -48,12 +47,14 @@ import {
     setMaturity,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { MaturityOptionList } from 'src/types';
+import { MaturityOptionList, TransactionList } from 'src/types';
 import {
     ButtonEvents,
     ButtonProperties,
     CurrencySymbol,
+    ZERO_BI,
     checkOrderIsFilled,
+    currencyMap,
     formatLoanValue,
     formatOrders,
     getMappedOrderStatus,
@@ -66,6 +67,38 @@ import {
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { trackButtonEvent } from 'src/utils/events';
 import { useAccount } from 'wagmi';
+
+const useTradeHistoryDetails = (
+    transactions: TransactionList,
+    currency: CurrencySymbol,
+    maturity: Maturity
+) => {
+    return useMemo(() => {
+        let min = 10000;
+        let max = 0;
+        let sum = ZERO_BI;
+        let count = 0;
+        if (!transactions.length) {
+            min = 0;
+            max = 0;
+        }
+        for (const t of transactions) {
+            const price = t.averagePrice * 10000;
+            if (price < min) min = price;
+            if (price > max) max = price;
+            sum += BigInt(t.amount);
+            count++;
+        }
+
+        return {
+            min: LoanValue.fromPrice(min, maturity.toNumber()),
+            max: LoanValue.fromPrice(max, maturity.toNumber()),
+            sum: currencyMap[currency].fromBaseUnit(sum),
+            count,
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currency, maturity.toNumber(), transactions.length]);
+};
 
 export const AdvancedLending = ({
     collateralBook,
@@ -251,7 +284,7 @@ export const AdvancedLending = ({
     );
 
     const handleTermChange = useCallback(
-        (v: string) => {
+        (v: Maturity) => {
             dispatch(setMaturity(Number(v)));
             dispatch(resetUnitPrice());
             trackButtonEvent(
@@ -296,17 +329,13 @@ export const AdvancedLending = ({
                     <AdvancedLendingTopBar
                         selectedAsset={selectedAsset}
                         assetList={assetList}
-                        options={maturitiesOptionList.map(o => ({
-                            label: o.label,
-                            value: o.value.toString(),
-                        }))}
+                        options={maturitiesOptionList}
                         selected={{
                             label: selectedTerm.label,
-                            value: selectedTerm.value.toString(),
+                            value: selectedTerm.value,
                         }}
                         onAssetChange={handleCurrencyChange}
                         onTermChange={handleTermChange}
-                        currentMarket={currentMarket}
                         currencyPrice={usdFormat(currencyPrice, 2)}
                         values={
                             isSubgraphSupported

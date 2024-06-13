@@ -9,6 +9,7 @@ import {
     yieldCurveRates,
 } from 'src/stories/mocks/fixtures';
 import {
+    mockDailyVolumes,
     mockFilteredUserOrderHistory,
     mockFilteredUserTransactionHistory,
     mockTrades,
@@ -27,14 +28,15 @@ export default {
         delistedCurrencySet: defaultDelistedStatusSet,
     },
     parameters: {
+        ...RESPONSIVE_PARAMETERS,
         apolloClient: {
             mocks: [
                 ...mockTrades,
                 ...mockFilteredUserTransactionHistory,
                 ...mockFilteredUserOrderHistory,
+                ...mockDailyVolumes,
             ],
         },
-        ...RESPONSIVE_PARAMETERS,
         chromatic: {
             ...RESPONSIVE_PARAMETERS.chromatic,
             delay: 5000,

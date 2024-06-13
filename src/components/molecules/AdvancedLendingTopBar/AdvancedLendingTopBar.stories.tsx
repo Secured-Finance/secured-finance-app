@@ -1,10 +1,13 @@
 import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
 import type { Meta, StoryFn } from '@storybook/react';
 import { currencyList, maturityOptions } from 'src/stories/mocks/fixtures';
-import { LoanValue } from 'src/utils/entities';
+import {
+    mockDailyVolumes,
+    mockFilteredUserOrderHistory,
+    mockFilteredUserTransactionHistory,
+    mockTrades,
+} from 'src/stories/mocks/queries';
 import { AdvancedLendingTopBar } from '.';
-
-const lastTradePrice = 8000;
 
 export default {
     title: 'Molecules/AdvancedLendingTopBar',
@@ -12,34 +15,24 @@ export default {
     args: {
         selectedAsset: currencyList[2],
         assetList: currencyList,
-        options: maturityOptions.map(o => ({
-            label: o.label,
-            value: o.value.toString(),
-        })),
+        options: maturityOptions,
         selected: {
             label: maturityOptions[0].label,
-            value: maturityOptions[0].value.toString(),
-        },
-        currentMarket: {
-            value: LoanValue.fromPrice(
-                lastTradePrice,
-                maturityOptions[0].value.toNumber()
-            ),
-            time: 1646920200,
-            type: 'block',
+            value: maturityOptions[0].value,
         },
         onAssetChange: () => {},
         onTermChange: () => {},
     },
     parameters: {
-        // apolloClient: {
-        //     mocks: [
-        //         ...mockTrades,
-        //         ...mockFilteredUserTransactionHistory,
-        //         ...mockFilteredUserOrderHistory,
-        //     ],
-        // },
         ...RESPONSIVE_PARAMETERS,
+        apolloClient: {
+            mocks: [
+                ...mockTrades,
+                ...mockFilteredUserTransactionHistory,
+                ...mockFilteredUserOrderHistory,
+                ...mockDailyVolumes,
+            ],
+        },
         layout: 'fullscreen',
     },
 } as Meta<typeof AdvancedLendingTopBar>;

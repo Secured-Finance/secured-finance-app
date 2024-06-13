@@ -9,20 +9,15 @@ import {
     TableHeader,
     TableRow,
 } from '@nextui-org/table';
-import { toBytes32 } from '@secured-finance/sf-graph-client';
-import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import clsx from 'clsx';
 import { useCallback, useState } from 'react';
 import { CloseButton, Option } from 'src/components/atoms';
 import {
     baseContracts,
     useBreakpoint,
-    useGraphClientHook,
-    useIsSubgraphSupported,
-    useLastPrices,
+    useCurrencies,
     useLendingMarkets,
 } from 'src/hooks';
-import useSF from 'src/hooks/useSecuredFinance';
 import { MaturityOptionList } from 'src/types';
 import {
     CurrencySymbol,
@@ -30,19 +25,12 @@ import {
     currencyMap,
     formatDuration,
     formatLoanValue,
-    usdFormat,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { columns, mobileColumns } from './constants';
-import { ColumnKey, CurrencyMaturityCategories } from './types';
+import { ColumnKey } from './types';
 
-export const CurrencyMaturityDropdown = ({
-    currencyList,
-    asset = currencyList[0],
-    maturityList,
-    maturity = maturityList[0],
-    onChange,
-}: {
+type CurrencyMaturityDropdownProps = {
     currencyList: Option<CurrencySymbol>[];
     asset?: Option<CurrencySymbol>;
     maturityList: MaturityOptionList;
@@ -51,42 +39,64 @@ export const CurrencyMaturityDropdown = ({
         currency: CurrencySymbol,
         maturity: Option<Maturity>['value']
     ) => void;
-}) => {
+};
+
+export const CurrencyMaturityDropdown = ({
+    currencyList,
+    asset = currencyList[0],
+    maturityList,
+    maturity = maturityList[0],
+    onChange,
+}: CurrencyMaturityDropdownProps) => {
     const isTablet = useBreakpoint('laptop');
     const [searchValue, setSearchValue] = useState<string | undefined>('');
-    const [category, setCategory] = useState<CurrencyMaturityCategories>(
-        CurrencyMaturityCategories.All
-    );
+    const [currentCcy, setCurrentCcy] = useState<CurrencySymbol>();
+    const [isItayose, setIsItayose] = useState<boolean>(false);
     const { data: lendingMarkets = baseContracts } = useLendingMarkets();
-    const { data: priceList } = useLastPrices();
+    const { data: currencies } = useCurrencies();
 
-    const securedFinance = useSF();
-    const currentChainId = securedFinance?.config.chain.id;
-
-    const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
-
-    const dailyVolumes = useGraphClientHook(
-        {}, // no variables
-        queries.DailyVolumesDocument,
-        'dailyVolumes',
-        !isSubgraphSupported
-    );
+    // const dailyVolumesCollection = useDailyVolumesByMarket();
+    // const { data: priceList } = useLastPrices();
 
     const CcyIcon = currencyMap[asset.value].icon;
 
     const tableHeaderColumns = isTablet ? mobileColumns : columns;
+    // TODO: include this for when checking subgraph-relevant fields
+    // tableHeaderColumns = tableHeaderColumns.filter(column => {
+    //     if (isSubgraphSupported || !column.isSubgraphField) {
+    //         return true;
+    //     }
+    //     return false;
+    // });
 
-    const currencyOptions = currencyList.flatMap(ccy =>
-        maturityList.map(maturity => {
+    const currencyOptions = currencyList.flatMap(ccy => {
+        return maturityList.map(maturity => {
             const ccyMaturity = `${ccy.label}-${maturity.label}`;
+
+            const data = lendingMarkets[ccy.value][+maturity];
+
+            if (currentCcy && !currentCcy?.includes(ccy.value)) return null;
+
+            if (
+                searchValue &&
+                !ccyMaturity
+                    .toLocaleLowerCase()
+                    .includes(searchValue.toLowerCase())
+            )
+                return null;
+
+            if (isItayose && !data?.isItayosePeriod) {
+                return null;
+            }
+
             return {
                 key: ccyMaturity,
                 display: ccyMaturity,
                 currency: ccy.value,
                 maturity: maturity.value,
             };
-        })
-    );
+        });
+    });
 
     const renderCell = useCallback(
         (
@@ -106,20 +116,6 @@ export const CurrencyMaturityDropdown = ({
             const marketUnitPrice = data?.marketUnitPrice;
             const openingUnitPrice = data?.openingUnitPrice;
 
-            const totalVolumeInUSD = (dailyVolumes.data ?? [])
-                .filter(
-                    item =>
-                        item.currency === toBytes32(ccy) &&
-                        item.maturity === maturity
-                )
-                .reduce((sum, item) => {
-                    const volumeInBaseUnit = currencyMap[ccy].fromBaseUnit(
-                        BigInt(item.volume)
-                    );
-                    const valueInUSD = volumeInBaseUnit * priceList[ccy];
-                    return sum + BigInt(Math.floor(valueInUSD));
-                }, BigInt(0));
-
             let lastPrice;
 
             if (openingUnitPrice) {
@@ -134,7 +130,6 @@ export const CurrencyMaturityDropdown = ({
                 case 'symbol':
                     return (
                         <h3 className='flex items-center gap-1'>
-                            {/* <StarIcon className='h-3.5 w-3.5' /> */}
                             {option.display}
                         </h3>
                     );
@@ -147,9 +142,6 @@ export const CurrencyMaturityDropdown = ({
                             {formatLoanValue(lastPrice, 'rate')})
                         </span>
                     );
-                case 'volume':
-                    // TODO: handle decimal places
-                    return <span>{usdFormat(Number(totalVolumeInUSD))}</span>;
                 case 'apr':
                     return formatLoanValue(lastPrice, 'rate');
                 case 'maturity':
@@ -159,14 +151,14 @@ export const CurrencyMaturityDropdown = ({
                     return formatDuration(Math.abs(timestampDifference));
             }
         },
-        [lendingMarkets, dailyVolumes.data, priceList]
+        [lendingMarkets]
     );
 
     return (
         <Menu>
             {({ open, close }) => (
                 <div className='relative'>
-                    <Menu.Button className='flex w-full items-center justify-between gap-2 rounded-lg bg-neutral-700 px-2 py-1.5 text-sm font-semibold leading-6 text-white laptop:max-w-[302px] laptop:py-2.5 laptop:pl-3'>
+                    <Menu.Button className='laptop:typography-desktop-sh-7 flex w-full items-center justify-between gap-2 rounded-lg bg-neutral-700 px-2 py-1.5 text-sm font-semibold leading-6 text-white laptop:max-w-[302px] laptop:pl-3'>
                         <div className='flex items-center gap-2 laptop:gap-1'>
                             <CcyIcon className='h-5 w-5 laptop:h-6 laptop:w-6' />
                             {asset.label}-{maturity.label}
@@ -180,7 +172,7 @@ export const CurrencyMaturityDropdown = ({
                             )}
                         />
                     </Menu.Button>
-                    <Menu.Items className='fixed left-0 top-[56px] z-[28] flex w-full flex-col gap-3 overflow-hidden border-t-4 border-primary-500 bg-neutral-800 pt-3 laptop:absolute laptop:left-auto laptop:top-auto laptop:mt-1.5 laptop:w-[779px] laptop:rounded-xl laptop:border laptop:border-neutral-600 laptop:bg-neutral-900'>
+                    <Menu.Items className='fixed left-0 top-[56px] z-[28] flex h-full w-full flex-col gap-3 overflow-hidden border-t-4 border-primary-500 bg-neutral-800 px-4 pt-3 laptop:absolute laptop:left-auto laptop:top-auto laptop:mt-1.5 laptop:h-auto laptop:w-[779px] laptop:rounded-xl laptop:border laptop:border-neutral-600 laptop:bg-neutral-900 laptop:px-0'>
                         <header className='flex items-center justify-between text-neutral-50 laptop:hidden'>
                             <div className='flex items-center gap-1'>
                                 <MagnifyingGlassIcon className='h-5 w-5' />
@@ -190,10 +182,11 @@ export const CurrencyMaturityDropdown = ({
                             </div>
                             <CloseButton onClick={close} />
                         </header>
+
                         {/* TODO: change to design system input field */}
-                        <div className='flex flex-col gap-3 px-4'>
+                        <div className='flex flex-col gap-3 laptop:px-4'>
                             <input
-                                className='rounded-lg border border-neutral-500 !bg-neutral-900 px-3 py-2 text-neutral-300 focus:border-primary-500 active:border-[1.5px]'
+                                className='typography-mobile-body-4 laptop:typography-desktop-body-4 rounded-lg border border-neutral-500 !bg-neutral-900 px-3 py-2 text-neutral-300 focus:border-primary-500 active:border-[1.5px]'
                                 onChange={e =>
                                     setSearchValue(e.currentTarget.value)
                                 }
@@ -202,23 +195,54 @@ export const CurrencyMaturityDropdown = ({
                             />
 
                             <div className='flex items-center gap-[13.5px]'>
-                                {Object.entries(CurrencyMaturityCategories).map(
-                                    ([key, value]) => (
-                                        <button
-                                            key={key}
-                                            className={clsx(
-                                                'text-xs leading-5 text-neutral-400',
-                                                {
-                                                    'text-primary-300':
-                                                        category === value,
-                                                }
-                                            )}
-                                            onClick={() => setCategory(value)}
-                                        >
-                                            {value}
-                                        </button>
-                                    )
-                                )}
+                                <button
+                                    className={clsx(
+                                        'text-xs leading-5 text-neutral-400',
+                                        {
+                                            'text-primary-300':
+                                                !currentCcy && !isItayose,
+                                        }
+                                    )}
+                                    onClick={() => {
+                                        setCurrentCcy(undefined);
+                                        setIsItayose(false);
+                                    }}
+                                >
+                                    All
+                                </button>
+                                <button
+                                    className={clsx(
+                                        'text-xs leading-5 text-neutral-400',
+                                        {
+                                            'text-primary-300':
+                                                isItayose && !currentCcy,
+                                        }
+                                    )}
+                                    onClick={() => {
+                                        setCurrentCcy(undefined);
+                                        setIsItayose(true);
+                                    }}
+                                >
+                                    Itayose
+                                </button>
+                                {currencies?.map(ccy => (
+                                    <button
+                                        key={`currency-${ccy}`}
+                                        className={clsx(
+                                            'text-xs leading-5 text-neutral-400',
+                                            {
+                                                'text-primary-300':
+                                                    currentCcy === ccy,
+                                            }
+                                        )}
+                                        onClick={() => {
+                                            setCurrentCcy(ccy);
+                                            setIsItayose(false);
+                                        }}
+                                    >
+                                        {ccy}
+                                    </button>
+                                ))}
                             </div>
                         </div>
 
@@ -228,48 +252,54 @@ export const CurrencyMaturityDropdown = ({
                             removeWrapper
                             isHeaderSticky
                             classNames={{
-                                base: 'max-h-[232px] overflow-auto pl-4 pr-3',
+                                base: 'laptop:max-h-[232px] overflow-auto laptop:pl-4 laptop:pr-3',
                                 table: 'min-h-[400px]',
                             }}
                         >
                             <TableHeader columns={tableHeaderColumns}>
                                 {column => (
                                     <TableColumn
-                                        className='h-5 border-b border-neutral-700 px-0 text-xs font-normal leading-5 text-neutral-400'
+                                        className='relative h-5 !rounded-none bg-neutral-900 px-0 text-xs font-normal leading-5 text-neutral-400'
                                         key={column.key}
                                     >
                                         {column.label}
+                                        <span className='absolute bottom-0 left-0 h-[1px] w-full bg-neutral-700'></span>
                                     </TableColumn>
                                 )}
                             </TableHeader>
                             <TableBody items={currencyOptions}>
-                                {item => (
-                                    <TableRow
-                                        key={item.key}
-                                        className='cursor-pointer overflow-hidden rounded border-b border-neutral-600 laptop:border-b-0 laptop:hover:bg-neutral-700'
-                                        onClick={() => {
-                                            if (
-                                                item.currency !== asset.value ||
-                                                item.maturity !== maturity.value
-                                            ) {
-                                                onChange(
-                                                    item.currency,
-                                                    item.maturity
-                                                );
-                                            }
-                                            close();
-                                        }}
-                                    >
-                                        {columnKey => (
-                                            <TableCell className='px-0 py-2 text-xs leading-5 text-neutral-50'>
-                                                {renderCell(
-                                                    item,
-                                                    `${columnKey}`
-                                                )}
-                                            </TableCell>
-                                        )}
-                                    </TableRow>
-                                )}
+                                {item => {
+                                    if (!item) return <></>;
+                                    return (
+                                        <TableRow
+                                            key={item.key}
+                                            className='cursor-pointer overflow-hidden rounded border-b border-neutral-600 laptop:border-b-0 laptop:hover:bg-neutral-700'
+                                            onClick={() => {
+                                                if (
+                                                    item.currency !==
+                                                        asset.value ||
+                                                    item.maturity !==
+                                                        maturity.value
+                                                ) {
+                                                    onChange(
+                                                        item.currency,
+                                                        item.maturity
+                                                    );
+                                                }
+                                                close();
+                                            }}
+                                        >
+                                            {columnKey => (
+                                                <TableCell className='px-0 py-2 text-xs leading-5 text-neutral-50'>
+                                                    {renderCell(
+                                                        item,
+                                                        `${columnKey}`
+                                                    )}
+                                                </TableCell>
+                                            )}
+                                        </TableRow>
+                                    );
+                                }}
                             </TableBody>
                         </Table>
                     </Menu.Items>
@@ -278,36 +308,3 @@ export const CurrencyMaturityDropdown = ({
         </Menu>
     );
 };
-
-// const selectedOption = useMemo(
-//     () => optionList.find(o => o.value === selectedOptionValue),
-//     [optionList, selectedOptionValue]
-// );
-
-// const handleSelect = useCallback(
-//     (option: Option<T>) => {
-//         if (option.value !== selectedOptionValue) {
-//             setSelectedOptionValue(option.value);
-//             // onChange(option.value);
-//         }
-//     },
-//     [onChange, selectedOptionValue]
-// );
-
-// return {
-//     value: LoanValue.fromPrice(
-//         openingUnitPrice,
-//         maturity
-//     ),
-//     time: 0,
-//     type: 'opening' as const,
-// };
-
-// return {
-//     value: LoanValue.fromPrice(
-//         marketUnitPrice,
-//         maturity
-//     ),
-//     time: data?.lastBlockUnitPriceTimestamp ?? 0,
-//     type: 'block' as const,
-// };

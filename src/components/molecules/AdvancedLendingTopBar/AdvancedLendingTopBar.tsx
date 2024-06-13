@@ -1,46 +1,62 @@
 import clsx from 'clsx';
+import { useCallback, useMemo, useState } from 'react';
 import { MarketTab, Option } from 'src/components/atoms';
-import { HorizontalAssetSelector } from 'src/components/molecules';
+import { CurrencyMaturityDropdown } from 'src/components/molecules';
 import { IndexOf } from 'src/types';
-import { COIN_GECKO_SOURCE, CurrencySymbol, currencyMap } from 'src/utils';
-import { LoanValue } from 'src/utils/entities';
+import {
+    COIN_GECKO_SOURCE,
+    CurrencySymbol,
+    currencyMap,
+    getTransformMaturityOption,
+} from 'src/utils';
+import { Maturity } from 'src/utils/entities';
 
-type AdvancedLendingTopBarProp<T> = {
+type AdvancedLendingTopBarProp = {
     selectedAsset: Option<CurrencySymbol> | undefined;
     assetList: Array<Option<CurrencySymbol>>;
-    options: Array<Option<T>>;
-    selected: Option<T>;
+    options: Array<Option<Maturity>>;
+    selected: Option<Maturity>;
     onAssetChange: (v: CurrencySymbol) => void;
-    onTermChange: (v: T) => void;
-    currentMarket: CurrentMarket | undefined;
+    onTermChange: (v: Maturity) => void;
     currencyPrice: string;
     values?: [string, string, string, string];
 };
 
-type CurrentMarket = {
-    value: LoanValue;
-    time: number;
-    type: 'opening' | 'block';
-};
-
 const getValue = (
-    values: AdvancedLendingTopBarProp<unknown>['values'],
-    index: IndexOf<NonNullable<AdvancedLendingTopBarProp<unknown>['values']>>
+    values: AdvancedLendingTopBarProp['values'],
+    index: IndexOf<NonNullable<AdvancedLendingTopBarProp['values']>>
 ) => {
     return values && values[index] ? values[index] : 0;
 };
 
-export const AdvancedLendingTopBar = <T extends string = string>({
+export const AdvancedLendingTopBar = ({
     selectedAsset,
     assetList,
     options,
     selected,
     onAssetChange,
     onTermChange,
-    currentMarket,
     currencyPrice,
     values,
-}: AdvancedLendingTopBarProp<T>) => {
+}: AdvancedLendingTopBarProp) => {
+    const [termValue, setTermValue] = useState(selected.value);
+    const selectedTerm = useMemo(
+        () => options.find(o => o.value === termValue),
+        [options, termValue]
+    );
+
+    const handleTermChange = useCallback(
+        (v: Maturity) => {
+            setTermValue(v);
+            onTermChange(v);
+        },
+        [onTermChange]
+    );
+
+    const onChange = (asset: CurrencySymbol, maturity: Maturity) => {
+        handleTermChange(maturity);
+        onAssetChange(asset);
+    };
     return (
         <div>
             <div className='h-1 bg-starBlue'></div>
@@ -63,14 +79,30 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                                 values && 'tablet:col-span-12 tablet:pr-9'
                             )}
                         >
-                            <HorizontalAssetSelector
-                                selectedAsset={selectedAsset}
-                                assetList={assetList}
-                                options={options}
-                                selected={selected}
-                                onAssetChange={onAssetChange}
-                                onTermChange={onTermChange}
-                            />
+                            <div className='grid grid-cols-1 gap-x-3 gap-y-1 text-neutral-4 desktop:gap-x-5'>
+                                <div className='flex flex-col items-start'>
+                                    <div className='flex w-full flex-col gap-1'>
+                                        <CurrencyMaturityDropdown
+                                            asset={selectedAsset}
+                                            currencyList={assetList}
+                                            maturity={selectedTerm}
+                                            maturityList={options}
+                                            onChange={onChange}
+                                        />
+                                        <p className='whitespace-nowrap pl-1 text-[11px] leading-4 tablet:text-xs laptop:text-xs'>
+                                            {`Maturity ${
+                                                selectedTerm &&
+                                                getTransformMaturityOption(
+                                                    options.map(o => ({
+                                                        ...o,
+                                                        value: o.value.toString(),
+                                                    }))
+                                                )(selectedTerm.label)
+                                            }`}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </section>
 
