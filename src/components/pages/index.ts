@@ -1,4 +1,5 @@
 export * from './Bridge';
+export * from './Campaign';
 export * from './EmergencyGlobalSettlement';
 export * from './Faucet';
 export * from './GlobalItayose';
