@@ -20,6 +20,11 @@ export const DEV_LINKS = [
         dataCy: 'points',
     },
     {
+        text: 'Campaign',
+        link: '/campaign',
+        dataCy: 'campaign',
+    },
+    {
         text: 'Faucet',
         link: '/faucet',
         dataCy: 'faucet',
