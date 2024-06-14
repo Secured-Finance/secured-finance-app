@@ -17,3 +17,8 @@ export default {
 const Template: StoryFn<typeof GlobalItayose> = () => <GlobalItayose />;
 
 export const Default = Template.bind({});
+
+export const NoActiveOrderBook = Template.bind({});
+NoActiveOrderBook.parameters = {
+    date: { value: new Date('2021-11-01T11:00:00.00Z') },
+};
