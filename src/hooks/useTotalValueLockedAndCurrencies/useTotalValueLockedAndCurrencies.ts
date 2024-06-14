@@ -16,6 +16,7 @@ export const useTotalValueLockedAndCurrencies = () => {
     const { data: priceList } = useLastPrices();
 
     const currenciesSet = new Set(currencies);
+
     const extraCollateralCurrencies = collateralCurrencies.filter(
         element => !currenciesSet.has(element)
     );
