@@ -21,6 +21,7 @@ export * from './FormatCollateralUsage';
 export * from './GradientBox';
 export * from './HighlightChip';
 export * from './HorizontalListItem';
+export * from './Identicon';
 export * from './InputBase';
 export * from './MarketTab';
 export * from './MenuItem';

@@ -12,6 +12,8 @@ const config: StorybookConfig = {
         'storybook-addon-apollo-client',
         '@storybook/addon-interactions',
         '@storybook/addon-designs',
+        '@storybook/addon-queryparams',
+        'storybook-addon-cookie',
     ],
     typescript: {
         reactDocgen: false,
