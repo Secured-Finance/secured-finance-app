@@ -30,6 +30,7 @@ export * from './usePagination';
 export * from './usePositions';
 export * from './usePrepareOrderbookData';
 export * from './usePreventPageScroll';
+export * from './useTotalValueLockedAndCurrencies';
 export * from './useValueLockedByCurrency';
 export * from './useYieldCurveMarketRates';
 export * from './useZCUsage';
