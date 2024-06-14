@@ -9,6 +9,7 @@ import {
     arbitrumSepolia,
     avalanche,
     avalancheFuji,
+    filecoin,
     filecoinCalibration,
     mainnet,
     polygonZkEvm,
@@ -30,7 +31,13 @@ const testnetNetworks: Chain[] = [
 ];
 
 // it is important to keep mainnet as first chain in this list
-const mainnetNetworks: Chain[] = [mainnet, arbitrum, avalanche, polygonZkEvm];
+const mainnetNetworks: Chain[] = [
+    mainnet,
+    arbitrum,
+    avalanche,
+    polygonZkEvm,
+    filecoin,
+];
 
 export const getSupportedNetworks = () => {
     return isProdEnv()
@@ -79,6 +86,12 @@ export const SupportedChainsList: ChainInformation[] = [
         chain: avalancheFuji,
         icon: (
             <Avalanche className='h-4 w-4 rounded-full tablet:h-5 tablet:w-5' />
+        ),
+    },
+    {
+        chain: filecoin,
+        icon: (
+            <Filecoin className='h-4 w-4 rounded-full tablet:h-5 tablet:w-5' />
         ),
     },
     {
