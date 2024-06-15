@@ -1,9 +1,10 @@
 import Share from '@heroicons/react/24/solid/ShareIcon';
+import { useEffect, useState } from 'react';
 import FilIcon from 'src/assets/coins/fil.svg';
 import LockClose from 'src/assets/icons/lock-close.svg';
 import LockOpen from 'src/assets/icons/lock-open.svg';
-import { Timer } from 'src/components/atoms';
 import { Tooltip } from 'src/components/molecules';
+import { CountdownFormat, getCountdown } from 'src/utils';
 
 const stages = [
     {
@@ -182,4 +183,56 @@ export const DepositCard = ({
             </div>
         </div>
     );
+};
+
+const Timer = ({ targetTime }: { targetTime: number; text?: string }) => {
+    const [time, setTime] = useState<CountdownFormat | undefined>(
+        getCountdown(targetTime)
+    );
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setTime(getCountdown(targetTime));
+        }, 1000);
+
+        return () => {
+            clearInterval(interval);
+        };
+    }, [targetTime]);
+
+    return (
+        time && (
+            <div
+                className='flex flex-row items-center justify-between'
+                data-chromatic='ignore'
+            >
+                {timeDesign(time.days, 'D')}
+                <Separator />
+                {timeDesign(time.hours, 'H')}
+                <Separator />
+                {timeDesign(time.minutes, 'M')}
+                <Separator />
+                {timeDesign(time.seconds, 'S')}
+            </div>
+        )
+    );
+};
+
+const timeDesign = (val: string, text: string) => {
+    return (
+        <div className='flex gap-2'>
+            <span className='font-tertiary text-[42px] font-medium leading-14 text-neutral-50'>
+                {val}
+            </span>
+            <span className='flex items-end'>
+                <span className='pb-2.5 align-top text-4 leading-4 text-neutral-100/50'>
+                    {text}
+                </span>
+            </span>
+        </div>
+    );
+};
+
+const Separator = () => {
+    return <div className='h-9 w-1px bg-white-40'></div>;
 };
