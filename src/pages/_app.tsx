@@ -19,7 +19,6 @@ import { Cookies, CookiesProvider } from 'react-cookie';
 import { Provider, useSelector } from 'react-redux';
 import 'src/bigIntPatch';
 import { Footer } from 'src/components/atoms';
-
 import { Layout } from 'src/components/templates';
 import SecuredFinanceProvider from 'src/contexts/SecuredFinanceProvider';
 import store from 'src/store';

@@ -75,7 +75,7 @@
 
   body {
     @apply font-secondary;
-    background-image: url(../img/app-bg.jpg);
+    background-image: url(../img/campaign-bg.png);
     background-color: #002133;
     background-size: cover;
     background-attachment: fixed;
