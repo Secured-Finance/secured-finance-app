@@ -33,7 +33,7 @@ export const useTotalValueLockedAndCurrencies = () => {
         }
         for (const ccy of currenciesInvolved ?? []) {
             if (!valueLockedByCurrency[ccy]) continue;
-            val = BigInt(
+            val += BigInt(
                 Math.floor(
                     currencyMap[ccy].fromBaseUnit(valueLockedByCurrency[ccy]) *
                         priceList[ccy]
