@@ -4,6 +4,7 @@ import FilIcon from 'src/assets/coins/fil.svg';
 import LockClose from 'src/assets/icons/lock-close.svg';
 import LockOpen from 'src/assets/icons/lock-open.svg';
 import { Tooltip } from 'src/components/molecules';
+import { useBreakpoint } from 'src/hooks';
 import { CountdownFormat, getCountdown } from 'src/utils';
 
 const stages = [
@@ -51,7 +52,7 @@ export const Stage = ({
     active: boolean;
 }) => {
     return active ? (
-        <div className='flex flex-row items-center justify-center gap-2 rounded-xl border-2 border-blue/75 bg-blue/25 px-2.5 py-1.5'>
+        <div className='flex w-full flex-row items-center justify-center gap-2 rounded-xl border-2 border-blue/75 bg-blue/25 px-2.5 py-1.5'>
             <LockOpen />
             <span className='typography-desktop-body-3 text-white'>{`Stage ${index}: ${text}`}</span>
         </div>
@@ -64,46 +65,65 @@ export const Stage = ({
 };
 
 export const StageBanner = () => {
+    const isTablet = useBreakpoint('laptop');
     return (
         <div className='flex w-full flex-row items-center justify-between rounded-xl border-2 border-blue bg-blue/20 p-1.5'>
-            {stages.map((stage, index) => {
-                return (
-                    <div key={index}>
-                        <Stage
-                            text={stage.text}
-                            index={index + 1}
-                            active={stage.active}
-                        />
-                    </div>
-                );
-            })}
+            {!isTablet ? (
+                stages.map((stage, index) => {
+                    return (
+                        <div key={index}>
+                            <Stage
+                                text={stage.text}
+                                index={index + 1}
+                                active={stage.active}
+                            />
+                        </div>
+                    );
+                })
+            ) : (
+                <Stage text='Core Fueling' index={1} active />
+            )}
         </div>
     );
 };
 
-export const CampaignStatus = () => {
+export const CampaignStatus = ({
+    startTime,
+    endTime,
+    stage,
+}: {
+    startTime: number;
+    endTime: number;
+    stage: string;
+}) => {
+    const isStageOn = Date.now() - startTime > 0;
+
     return (
-        <div className='flex h-[448px] w-[753px] flex-col justify-between rounded-3xl border-2 border-blue bg-[rgba(7,24,39,0.20)] p-8'>
+        <div className='flex flex-col justify-between gap-3 rounded-3xl border-2 border-blue bg-[rgba(7,24,39,0.20)] p-4 laptop:p-8'>
             <div className='flex flex-col gap-10'>
-                <div className='flex flex-col justify-between gap-14 laptop:flex-row laptop:items-center'>
+                <div className='flex flex-col justify-between laptop:flex-row laptop:items-center'>
                     <div className='flex flex-row items-center gap-4'>
                         <span className='h-3 w-3 rounded-full bg-warning-500 ring-[6px] ring-warning-300/10'></span>
                         <span className='laptop:typography-desktop-sh-7 typography-mobile-sh-8 uppercase text-white'>
-                            Stage 1
+                            {stage}
                         </span>
                     </div>
                     <span className='text-4 uppercase leading-6 text-[#A7A7A7]'>
                         Jun 17, 12:00 AM (UTC) - Jun 28, 12:00 AM (UTC)
                     </span>
                 </div>
-                <div className='flex flex-row gap-6'>
-                    <div className='flex w-[400px] flex-col gap-2 rounded-[14px] bg-white-5 p-6'>
+                <div className='flex flex-col gap-6 laptop:flex-row'>
+                    <div className='flex w-full flex-col gap-2 rounded-[14px] bg-white-5 p-6 laptop:w-[400px]'>
                         <span className='text-4 leading-8 text-neutral-50'>
-                            Campaign ends in...
+                            {isStageOn
+                                ? 'Campaign ends in...'
+                                : 'Campaign starts in...'}
                         </span>
-                        <Timer targetTime={1719532800000}></Timer>
+                        <Timer
+                            targetTime={isStageOn ? endTime : startTime}
+                        ></Timer>
                     </div>
-                    <div className='flex w-[264px] flex-col gap-2 rounded-[14px] bg-white-5 px-4 py-3'>
+                    <div className='flex w-full flex-col gap-2 rounded-[14px] bg-white-5 px-4 py-3 laptop:w-[264px]'>
                         <span className='text-4 leading-8 text-neutral-50'>
                             Total Value Locked
                         </span>
@@ -119,21 +139,21 @@ export const CampaignStatus = () => {
                     </div>
                 </div>
             </div>
-            <div className='flex flex-col gap-6'>
-                <span className='w-full text-4.5 leading-6 text-neutral-50'>
+            <div className='flex flex-col gap-3 laptop:gap-6'>
+                <span className='w-full text-3.5 leading-[22px] text-neutral-50 laptop:text-4.5 laptop:leading-6'>
                     Quest Goal: Deposit following collateral assets and earn
                     double points
                 </span>
-                <div className='flex flex-row gap-4'>
-                    <div className='flex w-fit flex-row items-center justify-center gap-2 rounded-2xl bg-chart-fil/20 px-8 py-2'>
+                <div className='flex flex-row gap-3 laptop:gap-4'>
+                    <div className='flex w-1/2 flex-row items-center justify-center gap-2 rounded-2xl bg-chart-fil/20 px-8 py-3 laptop:w-fit laptop:py-2'>
                         <FilIcon className='h-18px w-18px' />
-                        <span className='text-4.5 leading-7 text-white'>
+                        <span className='text-4 leading-6 text-white laptop:text-4.5 laptop:leading-7'>
                             FIL
                         </span>
                     </div>
-                    <div className='flex w-fit flex-row items-center justify-center gap-2 rounded-2xl bg-[#6226FF]/20 px-8 py-2'>
+                    <div className='flex w-1/2 flex-row items-center justify-center gap-2 rounded-2xl bg-[#6226FF]/20 px-8 py-3 laptop:w-fit laptop:py-2'>
                         <FilIcon className='h-18px w-18px' />
-                        <span className='text-4.5 leading-7 text-white'>
+                        <span className='text-4 leading-6 text-white laptop:text-4.5 laptop:leading-7'>
                             iFIL
                         </span>
                     </div>
@@ -151,17 +171,17 @@ export const DepositCard = ({
     onShareClick: () => void;
 }) => {
     return (
-        <div className='flex h-[448px] w-[750px] flex-col justify-between overflow-hidden rounded-3xl border-2 border-blue'>
+        <div className='flex h-[448px] flex-col justify-between overflow-hidden rounded-3xl border-2 border-blue laptop:w-[750px]'>
             <div></div>
-            <div className='flex flex-row justify-between bg-black-40 p-6'>
-                <span className='w-80 text-8 font-semibold text-white'>
-                    Earn double points by depositing FIL/iFIL
+            <div className='flex flex-col justify-between gap-4 p-4 laptop:flex-row laptop:p-6'>
+                <span className='w-52 text-6 font-semibold leading-8 text-white laptop:w-80 laptop:text-8 laptop:leading-10'>
+                    Earn 2X points by depositing FIL/iFIL
                 </span>
                 <div>
-                    <div className='h-1/2'></div>
-                    <div className='flex h-fit gap-3'>
+                    <div className='hidden h-1/2 laptop:block'></div>
+                    <div className='flex h-full flex-col gap-4 laptop:h-1/2 laptop:flex-row laptop:gap-3'>
                         <button
-                            className='w-[168px] rounded-lg bg-blue px-5 py-2 text-4 font-semibold leading-6 text-white'
+                            className='w-full rounded-lg bg-blue px-8 py-3 text-4 font-semibold leading-6 text-white laptop:w-[168px] laptop:px-5 laptop:py-2'
                             onClick={onDepositClick}
                         >
                             Deposit
@@ -169,10 +189,13 @@ export const DepositCard = ({
                         <Tooltip
                             iconElement={
                                 <button
-                                    className='h-full rounded-lg border border-primary-300 bg-primary-300/60 p-3 text-white'
+                                    className='flex h-full w-full items-center justify-center gap-2 rounded-lg border border-primary-300 bg-primary-300/60 p-3 text-white'
                                     onClick={onShareClick}
                                 >
                                     <Share className='h-4 w-4' />
+                                    <span className='text-4 font-semibold leading-6 text-white laptop:hidden'>
+                                        Share Event
+                                    </span>
                                 </button>
                             }
                         >

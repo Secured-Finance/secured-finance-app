@@ -27,7 +27,7 @@ export const Campaign = () => {
     });
 
     return (
-        <div className='flex flex-col gap-[72px] px-10 pt-[60px]'>
+        <div className='flex flex-col gap-4 px-4 pt-[60px] laptop:gap-[72px] laptop:px-10'>
             <div className='flex justify-center'>
                 <div className='flex w-fit flex-col items-center gap-4 laptop:gap-6'>
                     <Banner text={'STAGE 1: CORE FUELING & LAUNCH'}></Banner>
@@ -37,8 +37,12 @@ export const Campaign = () => {
                     <StageBanner></StageBanner>
                 </div>
             </div>
-            <div className='flex flex-row justify-between'>
-                <CampaignStatus />
+            <div className='flex flex-col gap-4 laptop:flex-row laptop:justify-between'>
+                <CampaignStatus
+                    startTime={1718582400000}
+                    endTime={1719532800000}
+                    stage='Stage 1'
+                />
                 <DepositCard
                     onDepositClick={() => setOpenModal(true)}
                     onShareClick={() =>
