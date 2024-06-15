@@ -365,16 +365,21 @@ const QuestList = () => {
         questType,
         questChainId,
         questCurrencies,
+        startAt,
     }: {
         questType: QuestType;
         questChainId?: number | null;
         questCurrencies?: string[] | null;
+        startAt: string | null;
     }) => {
         switch (questType) {
             case QuestType.Deposit:
                 return (
                     <Button
                         size={ButtonSizes.md}
+                        disabled={
+                            startAt ? dayjs().isBefore(dayjs(startAt)) : false
+                        }
                         onClick={() => {
                             if (questChainId && questCurrencies) {
                                 if (questChainId !== chainId) {
@@ -436,6 +441,7 @@ const QuestList = () => {
                                 questType={item.questType}
                                 questChainId={item.chainId}
                                 questCurrencies={item.currencies}
+                                startAt={item.startAt}
                             />
                         </div>
                         <div className='typography-caption-2 flex flex-row items-center text-secondary7'>

@@ -8,6 +8,7 @@ type Networks =
     | 'avalanche-fuji'
     | 'avalanche-mainnet'
     | 'polygon-zkevm-mainnet'
+    | 'filecoin-mainnet'
     | 'filecoin-calibration';
 
 export const Networks: Record<number, Networks> = {
@@ -18,6 +19,7 @@ export const Networks: Record<number, Networks> = {
     43113: 'avalanche-fuji',
     43114: 'avalanche-mainnet',
     1101: 'polygon-zkevm-mainnet',
+    314: 'filecoin-mainnet',
     314159: 'filecoin-calibration',
 };
 
