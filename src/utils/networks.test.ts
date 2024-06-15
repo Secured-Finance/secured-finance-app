@@ -8,10 +8,10 @@ describe('networks', () => {
         expect(supportedNetworks[0]).toEqual(sepolia); // sepolia should be first network
     });
 
-    it('should have three testnet and four mainnet supported networks', () => {
+    it('should have four testnet and five mainnet supported networks', () => {
         process.env.SF_ENV = 'production';
         const supportedNetworks = getSupportedNetworks();
-        expect(supportedNetworks).toHaveLength(8);
+        expect(supportedNetworks).toHaveLength(9);
         expect(supportedNetworks[0]).toEqual(mainnet); // mainnet should be first network
     });
 });

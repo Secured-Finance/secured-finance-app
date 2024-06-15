@@ -9,6 +9,7 @@ import tailwindConfig from 'src/../tailwind.config';
 import BTCIcon from 'src/assets/coins/btc.svg';
 import EthIcon from 'src/assets/coins/eth2.svg';
 import FilIcon from 'src/assets/coins/fil.svg';
+import IFilIcon from 'src/assets/coins/ifil.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
 import WFilIcon from 'src/assets/coins/wfil.svg';
 import { SvgIcon } from 'src/types';
@@ -17,6 +18,7 @@ import { ZERO_BI } from './collateral';
 import { AUSDC } from './currencies/ausdc';
 import { AXLFIL } from './currencies/axlfil';
 import { BTCB } from './currencies/btcb';
+import { FIL } from './currencies/fil';
 import { WFIL } from './currencies/filecoin';
 import { IFIL } from './currencies/ifil';
 import { TFIL } from './currencies/tfil';
@@ -28,6 +30,7 @@ BigNumberJS.set({ EXPONENTIAL_AT: 30 }); // setting to a decent limit
 
 export enum CurrencySymbol {
     ETH = 'ETH',
+    FIL = 'FIL',
     tFIL = 'tFIL',
     WETHe = 'WETH.e',
     WFIL = 'WFIL',
@@ -151,8 +154,26 @@ export const currencyMap: Readonly<
         longName: 'Bitcoin',
         hasOrderBook: true,
     },
-    [CurrencySymbol.tFIL]: {
+    [CurrencySymbol.FIL]: {
         index: 6,
+        icon: FilIcon,
+        symbol: CurrencySymbol.FIL,
+        name: 'Filecoin',
+        coinGeckoId: 'filecoin',
+        isCollateral: true,
+        toBaseUnit: (amount: number) =>
+            convertToBlockchainUnit(amount, FIL.onChain()),
+        fromBaseUnit: (amount: bigint) =>
+            convertFromBlockchainUnit(amount, FIL.onChain()),
+        toCurrency: () => FIL.onChain(),
+        chartColor: tailwindConfig.theme.colors.chart.fil,
+        pillColor: tailwindConfig.theme.colors.pill.fil,
+        roundingDecimal: 0,
+        longName: 'Filecoin',
+        hasOrderBook: true,
+    },
+    [CurrencySymbol.tFIL]: {
+        index: 7,
         icon: FilIcon,
         symbol: CurrencySymbol.tFIL,
         name: 'Filecoin',
@@ -170,7 +191,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.WFIL]: {
-        index: 7,
+        index: 8,
         icon: WFilIcon,
         symbol: CurrencySymbol.WFIL,
         name: WFIL.onChain().name,
@@ -190,7 +211,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.axlFIL]: {
-        index: 8,
+        index: 9,
         symbol: CurrencySymbol.axlFIL,
         name: 'Axelar Wrapped FIL',
         icon: WFilIcon,
@@ -208,10 +229,10 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.iFIL]: {
-        index: 9,
+        index: 10,
         symbol: CurrencySymbol.iFIL,
         name: 'Infinity Pool Staked FIL',
-        icon: WFilIcon,
+        icon: IFilIcon,
         coinGeckoId: 'filecoin',
         isCollateral: true,
         toBaseUnit: (amount: number) =>
@@ -283,6 +304,8 @@ export function toCurrencySymbol(ccy: string) {
     switch (ccy) {
         case CurrencySymbol.ETH:
             return CurrencySymbol.ETH;
+        case CurrencySymbol.FIL:
+            return CurrencySymbol.FIL;
         case CurrencySymbol.tFIL:
             return CurrencySymbol.tFIL;
         case CurrencySymbol.WETHe:
