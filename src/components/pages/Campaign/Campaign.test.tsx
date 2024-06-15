@@ -13,6 +13,8 @@ jest.mock('next/router', () => ({
 
 describe('Campaign Component', () => {
     it('should render the Campaign', async () => {
-        render(<Default />);
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
     });
 });
