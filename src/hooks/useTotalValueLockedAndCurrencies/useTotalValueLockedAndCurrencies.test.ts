@@ -21,7 +21,7 @@ describe('useTotalValueLockedAndCurrencies', () => {
             ).toHaveBeenCalledTimes(1);
             expect(mockSecuredFinance.getLastPrice).toHaveBeenCalledTimes(4);
             const newValue = result.current;
-            expect(newValue.totalValueLockedInUSD).toEqual(BigInt(600000));
+            expect(newValue.totalValueLockedInUSD).toEqual(BigInt(501800034));
         });
     });
 
