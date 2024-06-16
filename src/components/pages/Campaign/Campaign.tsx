@@ -1,11 +1,12 @@
 import { useGetUserLazyQuery } from '@secured-finance/sf-point-client';
 import { useMemo, useState } from 'react';
+import CampaignSeparator from 'src/assets/icons/campaign-separator.svg';
 import {
     DepositCollateral,
     generateCollateralList,
 } from 'src/components/organisms';
-import { useCollateralBalances } from 'src/hooks';
-import { CurrencySymbol } from 'src/utils';
+import { useCollateralBalances, useCollateralCurrencies } from 'src/hooks';
+import { CurrencySymbol, currencyMap } from 'src/utils';
 import { Banner, CampaignStatus, DepositCard, StageBanner } from './components';
 
 const POLL_INTERVAL = 600000; // 10 minutes
@@ -14,12 +15,18 @@ export const Campaign = () => {
     const [openModal, setOpenModal] = useState(false);
 
     const collateralBalances = useCollateralBalances();
+    const { data: collateralCurrencies = [] } = useCollateralCurrencies();
+
     const depositCollateralList = useMemo(
         () =>
-            generateCollateralList(collateralBalances, false, [
-                CurrencySymbol.iFIL,
-            ]),
-        [collateralBalances]
+            generateCollateralList(
+                collateralBalances,
+                false,
+                collateralCurrencies.filter(
+                    ccy => currencyMap[ccy].coinGeckoId === 'filecoin'
+                )
+            ),
+        [collateralBalances, collateralCurrencies]
     );
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [getUser, { data: userData }] = useGetUserLazyQuery({
@@ -27,14 +34,15 @@ export const Campaign = () => {
     });
 
     return (
-        <div className='flex flex-col gap-4 px-4 pt-[60px] laptop:gap-[72px] laptop:px-10'>
+        <div className='flex flex-col gap-4 px-6 pt-[60px] laptop:gap-9 laptop:px-10'>
             <div className='flex justify-center'>
                 <div className='flex w-fit flex-col items-center gap-4 laptop:gap-6'>
-                    <Banner text={'STAGE 1: CORE FUELING & LAUNCH'}></Banner>
+                    <Banner text='STAGE 1: CORE FUELING & LAUNCH'></Banner>
                     <div className='font-primary text-8 font-medium leading-11 text-white laptop:text-24 laptop:font-normal laptop:leading-[116px]'>
                         Filecoin Infinity Quest
                     </div>
-                    <StageBanner></StageBanner>
+                    <StageBanner />
+                    <CampaignSeparator className='h-2px w-full laptop:hidden' />
                 </div>
             </div>
             <div className='flex flex-col gap-4 laptop:flex-row laptop:justify-between'>

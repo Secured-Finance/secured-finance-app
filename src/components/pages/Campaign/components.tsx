@@ -52,9 +52,9 @@ export const Stage = ({
     active: boolean;
 }) => {
     return active ? (
-        <div className='flex w-full flex-row items-center justify-center gap-2 rounded-xl border-2 border-blue/75 bg-blue/25 px-2.5 py-1.5'>
+        <div className='flex w-full flex-row items-center gap-2 rounded-xl border border-blue/75 bg-blue/25 px-2.5 py-1.5 laptop:justify-center laptop:border-2'>
             <LockOpen />
-            <span className='typography-desktop-body-3 text-white'>{`Stage ${index}: ${text}`}</span>
+            <span className='laptop:typography-desktop-body-3 typography-mobile-body-4 text-white'>{`Stage ${index}: ${text}`}</span>
         </div>
     ) : (
         <div className='flex flex-row items-center justify-center gap-2 px-3 opacity-50'>
@@ -67,7 +67,7 @@ export const Stage = ({
 export const StageBanner = () => {
     const isTablet = useBreakpoint('laptop');
     return (
-        <div className='flex w-full flex-row items-center justify-between rounded-xl border-2 border-blue bg-blue/20 p-1.5'>
+        <div className='flex w-full flex-row items-center justify-between rounded-[20px] border-2 border-blue bg-blue/20 p-1.5 laptop:rounded-xl'>
             {!isTablet ? (
                 stages.map((stage, index) => {
                     return (
