@@ -5,16 +5,26 @@ import {
     DepositCollateral,
     generateCollateralList,
 } from 'src/components/organisms';
-import { useCollateralBalances, useCollateralCurrencies } from 'src/hooks';
+import {
+    emptyCollateralBook,
+    useCollateralBalances,
+    useCollateralBook,
+    useCollateralCurrencies,
+} from 'src/hooks';
 import { CurrencySymbol, currencyMap } from 'src/utils';
+import { useAccount } from 'wagmi';
 import { Banner, CampaignStatus, DepositCard, StageBanner } from './components';
 
 const POLL_INTERVAL = 600000; // 10 minutes
 
 export const Campaign = () => {
     const [openModal, setOpenModal] = useState(false);
+    const { address } = useAccount();
 
     const collateralBalances = useCollateralBalances();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { data: collateralBook = emptyCollateralBook } =
+        useCollateralBook(address);
     const { data: collateralCurrencies = [] } = useCollateralCurrencies();
 
     const depositCollateralList = useMemo(
@@ -50,6 +60,9 @@ export const Campaign = () => {
                     startTime={1718582400000}
                     endTime={1719532800000}
                     stage='Stage 1'
+                    filValue={1}
+                    iFilValue={1}
+                    totalUSDValue={2}
                 />
                 <DepositCard
                     onDepositClick={() => setOpenModal(true)}

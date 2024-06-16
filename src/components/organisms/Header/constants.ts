@@ -10,6 +10,11 @@ export const PRODUCTION_LINKS = [
         dataCy: 'history',
     },
     {
+        text: 'Campaign',
+        link: '/campaign',
+        dataCy: 'campaign',
+    },
+    {
         text: 'Points',
         link: '/points',
         dataCy: 'points',
@@ -18,11 +23,6 @@ export const PRODUCTION_LINKS = [
 
 export const DEV_LINKS = [
     ...PRODUCTION_LINKS,
-    {
-        text: 'Campaign',
-        link: '/campaign',
-        dataCy: 'campaign',
-    },
     {
         text: 'Faucet',
         link: '/faucet',
