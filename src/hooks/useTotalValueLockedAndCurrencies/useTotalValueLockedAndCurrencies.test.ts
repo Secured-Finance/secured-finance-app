@@ -5,6 +5,12 @@ import { useTotalValueLockedAndCurrencies } from './useTotalValueLockedAndCurren
 
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
+
+afterEach(() => {
+    mockSecuredFinance.getCurrencies.mockClear();
+    mockSecuredFinance.getCollateralCurrencies.mockClear();
+});
+
 describe('useTotalValueLockedAndCurrencies', () => {
     it('should return the total value locked', async () => {
         const { result } = renderHook(() => useTotalValueLockedAndCurrencies());
@@ -31,10 +37,10 @@ describe('useTotalValueLockedAndCurrencies', () => {
         expect(value.currencies).toEqual([]);
 
         await waitFor(() => {
-            expect(mockSecuredFinance.getCurrencies).toHaveBeenCalledTimes(2);
+            expect(mockSecuredFinance.getCurrencies).toHaveBeenCalledTimes(1);
             expect(
                 mockSecuredFinance.getCollateralCurrencies
-            ).toHaveBeenCalledTimes(2);
+            ).toHaveBeenCalledTimes(1);
             const newValue = result.current;
             expect(newValue.currencies).toHaveLength(4);
         });

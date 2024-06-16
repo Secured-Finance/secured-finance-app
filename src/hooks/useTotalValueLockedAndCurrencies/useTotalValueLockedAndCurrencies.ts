@@ -15,15 +15,9 @@ export const useTotalValueLockedAndCurrencies = () => {
         useValueLockedByCurrency();
     const { data: priceList } = useLastPrices();
 
-    const currenciesSet = new Set(currencies);
-
-    const extraCollateralCurrencies = collateralCurrencies.filter(
-        element => !currenciesSet.has(element)
-    );
-
     const currenciesInvolved = useMemo(
-        () => [...currencies, ...extraCollateralCurrencies],
-        [currencies, extraCollateralCurrencies]
+        () => Array.from(new Set([...currencies, ...collateralCurrencies])),
+        [collateralCurrencies, currencies]
     );
 
     const totalValueLockedInUSD = useMemo(() => {
