@@ -7,12 +7,9 @@ import { CurrencyDropdown, StatsBar } from 'src/components/molecules';
 import { GlobalItayoseMultiCurveChart } from 'src/components/organisms';
 import {
     baseContracts,
-    emptyValueLockedBook,
-    useCollateralCurrencies,
     useCurrencies,
-    useLastPrices,
     useLendingMarkets,
-    useValueLockedByCurrency,
+    useTotalValueLockedAndCurrencies,
 } from 'src/hooks';
 import {
     resetUnitPrice,
@@ -20,22 +17,14 @@ import {
     setCurrency,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import {
-    CurrencySymbol,
-    ZERO_BI,
-    currencyMap,
-    toOptions,
-    usdFormat,
-} from 'src/utils';
+import { CurrencySymbol, toOptions, usdFormat } from 'src/utils';
 
 export const GlobalItayose = () => {
     const dispatch = useDispatch();
     const router = useRouter();
     const { data: currencies = [] } = useCurrencies();
-    const { data: collateralCurrencies = [] } = useCollateralCurrencies();
-    const extraCollateralCurrencies = collateralCurrencies.filter(
-        element => !currencies.includes(element)
-    );
+    const { totalValueLockedInUSD, currencies: totalValueLockedCurrencies } =
+        useTotalValueLockedAndCurrencies();
     const assetList = toOptions(currencies, CurrencySymbol.USDC);
 
     const { currency } = useSelector((state: RootState) =>
@@ -43,9 +32,6 @@ export const GlobalItayose = () => {
     );
 
     const { data: lendingContracts = baseContracts } = useLendingMarkets();
-
-    const { data: valueLockedByCurrency = emptyValueLockedBook } =
-        useValueLockedByCurrency();
 
     const targetTime = useMemo(() => {
         let startTime = 0;
@@ -67,32 +53,6 @@ export const GlobalItayose = () => {
 
         return { start: startTime * 1000, end: endTime * 1000 };
     }, [lendingContracts, currency]);
-
-    const { data: priceList } = useLastPrices();
-
-    const totalValueLockedInUSD = useMemo(() => {
-        let val = ZERO_BI;
-        if (!valueLockedByCurrency) {
-            return val;
-        }
-
-        for (const ccy of [...currencies, ...extraCollateralCurrencies] ?? []) {
-            if (!valueLockedByCurrency[ccy]) continue;
-            val += BigInt(
-                Math.floor(
-                    currencyMap[ccy].fromBaseUnit(valueLockedByCurrency[ccy]) *
-                        priceList[ccy]
-                )
-            );
-        }
-
-        return val;
-    }, [
-        currencies,
-        priceList,
-        valueLockedByCurrency,
-        extraCollateralCurrencies,
-    ]);
 
     const handleCurrencyChange = useCallback(
         (v: CurrencySymbol) => {
@@ -166,10 +126,7 @@ export const GlobalItayose = () => {
                             values={[
                                 {
                                     name: 'Digital Assets',
-                                    value: (
-                                        currencies.length +
-                                        extraCollateralCurrencies.length
-                                    ).toString(),
+                                    value: totalValueLockedCurrencies.length.toString(),
                                 },
                                 {
                                     name: 'Total Value Locked',
