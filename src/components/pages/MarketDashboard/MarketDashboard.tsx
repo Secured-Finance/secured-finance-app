@@ -16,7 +16,6 @@ import {
     RateType,
     baseContracts,
     emptyCollateralBook,
-    emptyValueLockedBook,
     getLoanValues,
     useCollateralBook,
     useCurrencies,
@@ -26,7 +25,7 @@ import {
     useIsSubgraphSupported,
     useLastPrices,
     useLendingMarkets,
-    useValueLockedByCurrency,
+    useTotalValueLockedAndCurrencies,
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import {
@@ -34,9 +33,7 @@ import {
     Environment,
     PREVIOUS_TOTAL_USERS,
     Rate,
-    ZERO_BI,
     computeTotalDailyVolumeInUSD,
-    currencyMap,
     getEnvironment,
     ordinaryFormat,
     usdFormat,
@@ -66,7 +63,8 @@ export const MarketDashboard = () => {
     const { data: isGlobalItayose } = useIsGlobalItayose();
     const { data: currencies = [] } = useCurrencies();
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
-
+    const { totalValueLockedInUSD, currencies: totalValueLockedCurrencies } =
+        useTotalValueLockedAndCurrencies();
     const securedFinance = useSF();
     const currentChainId = securedFinance?.config.chain.id;
 
@@ -80,9 +78,6 @@ export const MarketDashboard = () => {
         );
         curves[ccy] = Array.from(unitPrices.values()).map(r => r.apr);
     });
-
-    const { data: valueLockedByCurrency = emptyValueLockedBook } =
-        useValueLockedByCurrency();
 
     const totalUser = useGraphClientHook(
         {}, // no variables
@@ -108,24 +103,6 @@ export const MarketDashboard = () => {
         );
     }, [priceList, dailyVolumes.data]);
 
-    const totalValueLockedInUSD = useMemo(() => {
-        let val = ZERO_BI;
-        if (!valueLockedByCurrency) {
-            return val;
-        }
-        for (const ccy of currencies ?? []) {
-            if (!valueLockedByCurrency[ccy]) continue;
-            val += BigInt(
-                Math.floor(
-                    currencyMap[ccy].fromBaseUnit(valueLockedByCurrency[ccy]) *
-                        priceList[ccy]
-                )
-            );
-        }
-
-        return val;
-    }, [currencies, priceList, valueLockedByCurrency]);
-
     const defaultCurrency =
         currencies && currencies.length > 0
             ? currencies[0]
@@ -149,7 +126,7 @@ export const MarketDashboard = () => {
                         values={[
                             {
                                 name: 'Digital Assets',
-                                value: currencies.length.toString(),
+                                value: totalValueLockedCurrencies.length.toString(),
                             },
                             {
                                 name: 'Total Value Locked',
