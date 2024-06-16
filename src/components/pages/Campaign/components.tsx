@@ -1,6 +1,7 @@
 import Share from '@heroicons/react/24/solid/ShareIcon';
 import { useEffect, useState } from 'react';
 import FilIcon from 'src/assets/coins/fil.svg';
+import IFilIcon from 'src/assets/coins/ifil.svg';
 import LockClose from 'src/assets/icons/lock-close.svg';
 import LockOpen from 'src/assets/icons/lock-open.svg';
 import { Tooltip } from 'src/components/molecules';
@@ -91,10 +92,16 @@ export const CampaignStatus = ({
     startTime,
     endTime,
     stage,
+    filValue,
+    iFilValue,
+    totalUSDValue,
 }: {
     startTime: number;
     endTime: number;
     stage: string;
+    filValue: number;
+    iFilValue: number;
+    totalUSDValue: number;
 }) => {
     const isStageOn = Date.now() - startTime > 0;
 
@@ -103,7 +110,7 @@ export const CampaignStatus = ({
             <div className='flex flex-col gap-10'>
                 <div className='flex flex-col justify-between laptop:flex-row laptop:items-center'>
                     <div className='flex flex-row items-center gap-4'>
-                        <span className='h-3 w-3 rounded-full bg-warning-500 ring-[6px] ring-warning-300/10'></span>
+                        <span className='h-3 w-3 rounded-full bg-[#6EC94E] ring-[6px] ring-[#84D069]/10'></span>
                         <span className='laptop:typography-desktop-sh-7 typography-mobile-sh-8 uppercase text-white'>
                             {stage}
                         </span>
@@ -128,13 +135,13 @@ export const CampaignStatus = ({
                             Total Value Locked
                         </span>
                         <span className='text-7 leading-8 text-white'>
-                            3,342,343 FIL
+                            {`${filValue} FIL`}
                         </span>
                         <span className='text-7 leading-8 text-white'>
-                            1,234,567 iFIL
+                            {`${iFilValue} iFIL`}
                         </span>
                         <span className='text-4 leading-8 text-white/40'>
-                            ≈ $7,355.00
+                            {`≈ ${totalUSDValue}`}
                         </span>
                     </div>
                 </div>
@@ -152,7 +159,7 @@ export const CampaignStatus = ({
                         </span>
                     </div>
                     <div className='flex w-1/2 flex-row items-center justify-center gap-2 rounded-2xl bg-[#6226FF]/20 px-8 py-3 laptop:w-fit laptop:py-2'>
-                        <FilIcon className='h-18px w-18px' />
+                        <IFilIcon className='h-18px w-18px' />
                         <span className='text-4 leading-6 text-white laptop:text-4.5 laptop:leading-7'>
                             iFIL
                         </span>
