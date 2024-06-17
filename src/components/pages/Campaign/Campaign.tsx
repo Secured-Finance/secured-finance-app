@@ -92,7 +92,7 @@ export const Campaign = () => {
                 isOpen={openModal}
                 onClose={() => setOpenModal(false)}
                 collateralList={depositCollateralList}
-                source='Collateral Tab'
+                source='Campaign Page'
                 defaultCcySymbol={CurrencySymbol.iFIL}
             ></DepositCollateral>
         </div>
