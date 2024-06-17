@@ -1,12 +1,19 @@
-import Share from '@heroicons/react/24/solid/ShareIcon';
 import { useEffect, useState } from 'react';
 import FilIcon from 'src/assets/coins/fil.svg';
 import IFilIcon from 'src/assets/coins/ifil.svg';
 import LockClose from 'src/assets/icons/lock-close.svg';
 import LockOpen from 'src/assets/icons/lock-open.svg';
-import { Tooltip } from 'src/components/molecules';
+import WormholeDesktop from 'src/assets/img/wormhole-desktop.svg';
+// import WormholeMobile from 'src/assets/img/wormhole-mobile.svg';
 import { useBreakpoint } from 'src/hooks';
-import { CountdownFormat, getCountdown } from 'src/utils';
+import {
+    CountdownFormat,
+    CurrencySymbol,
+    ZERO_BI,
+    amountFormatterFromBase,
+    getCountdown,
+    usdFormat,
+} from 'src/utils';
 
 const stages = [
     {
@@ -14,23 +21,11 @@ const stages = [
         active: true,
     },
     {
-        text: '',
+        text: 'Orbital Contracts',
         active: false,
     },
     {
-        text: '',
-        active: false,
-    },
-    {
-        text: '',
-        active: false,
-    },
-    {
-        text: '',
-        active: false,
-    },
-    {
-        text: '',
+        text: 'Stellar Minting',
         active: false,
     },
 ];
@@ -68,7 +63,7 @@ export const Stage = ({
 export const StageBanner = () => {
     const isTablet = useBreakpoint('laptop');
     return (
-        <div className='flex w-full flex-row items-center justify-between rounded-[20px] border-2 border-blue bg-blue/20 p-1.5 laptop:rounded-xl'>
+        <div className='flex w-fit flex-row items-center gap-14 rounded-[20px] border-2 border-blue bg-blue/20 p-1.5 backdrop-blur-sm laptop:rounded-xl'>
             {!isTablet ? (
                 stages.map((stage, index) => {
                     return (
@@ -92,21 +87,27 @@ export const CampaignStatus = ({
     startTime,
     endTime,
     stage,
-    filValue,
-    iFilValue,
-    totalUSDValue,
+    collateralCurrencies,
+    collateral,
+    priceList,
 }: {
     startTime: number;
     endTime: number;
     stage: string;
-    filValue: number;
-    iFilValue: number;
-    totalUSDValue: number;
+    collateralCurrencies: CurrencySymbol[];
+    collateral: Partial<Record<CurrencySymbol, bigint>>;
+    priceList: Record<CurrencySymbol, number>;
 }) => {
     const isStageOn = Date.now() - startTime > 0;
+    let totalUSDValue = 0;
+    collateralCurrencies.forEach(ccy => {
+        totalUSDValue +=
+            priceList[ccy] *
+            amountFormatterFromBase[ccy](collateral[ccy] ?? ZERO_BI);
+    });
 
     return (
-        <div className='flex flex-col justify-between gap-3 rounded-3xl border-2 border-blue bg-[rgba(7,24,39,0.20)] p-4 laptop:p-8'>
+        <div className='flex flex-col justify-between gap-3 rounded-3xl border-2 border-blue bg-[rgba(7,24,39,0.20)] p-4 backdrop-blur-[20px] laptop:p-8'>
             <div className='flex flex-col gap-10'>
                 <div className='flex flex-col justify-between laptop:flex-row laptop:items-center'>
                     <div className='flex flex-row items-center gap-4'>
@@ -116,7 +117,7 @@ export const CampaignStatus = ({
                         </span>
                     </div>
                     <span className='text-4 uppercase leading-6 text-[#A7A7A7]'>
-                        Jun 17, 12:00 AM (UTC) - Jun 28, 12:00 AM (UTC)
+                        Jun 19, 12:00 AM (UTC) - Jun 28, 12:00 AM (UTC)
                     </span>
                 </div>
                 <div className='flex flex-col gap-6 laptop:flex-row'>
@@ -134,14 +135,20 @@ export const CampaignStatus = ({
                         <span className='text-4 leading-8 text-neutral-50'>
                             Total Value Locked
                         </span>
-                        <span className='text-7 leading-8 text-white'>
-                            {`${filValue} FIL`}
-                        </span>
-                        <span className='text-7 leading-8 text-white'>
-                            {`${iFilValue} iFIL`}
-                        </span>
+                        {collateralCurrencies.map(ccy => {
+                            return (
+                                <span
+                                    className='text-7 leading-8 text-white'
+                                    key={ccy}
+                                >
+                                    {`${amountFormatterFromBase[ccy](
+                                        collateral[ccy] ?? ZERO_BI
+                                    )} ${ccy}`}
+                                </span>
+                            );
+                        })}
                         <span className='text-4 leading-8 text-white/40'>
-                            {`≈ ${totalUSDValue}`}
+                            {`≈ ${usdFormat(totalUSDValue, 2)}`}
                         </span>
                     </div>
                 </div>
@@ -172,42 +179,26 @@ export const CampaignStatus = ({
 
 export const DepositCard = ({
     onDepositClick,
-    onShareClick,
 }: {
     onDepositClick: () => void;
-    onShareClick: () => void;
 }) => {
     return (
-        <div className='flex h-[448px] flex-col justify-between overflow-hidden rounded-3xl border-2 border-blue laptop:w-[750px]'>
-            <div></div>
-            <div className='flex flex-col justify-between gap-4 p-4 laptop:flex-row laptop:p-6'>
-                <span className='w-52 text-6 font-semibold leading-8 text-white laptop:w-80 laptop:text-8 laptop:leading-10'>
-                    Earn 2X points by depositing FIL/iFIL
-                </span>
-                <div>
-                    <div className='hidden h-1/2 laptop:block'></div>
-                    <div className='flex h-full flex-col gap-4 laptop:h-1/2 laptop:flex-row laptop:gap-3'>
+        <div className='relative h-[448px] overflow-hidden rounded-3xl border-2 border-blue laptop:w-[750px]'>
+            <WormholeDesktop className='absolute h-full w-full' />
+            <div className='absolute flex h-full w-full flex-col justify-between overflow-hidden'>
+                <div></div>
+                <div className='flex flex-col justify-between gap-4 p-4 laptop:flex-row laptop:p-6'>
+                    <span className='w-52 text-6 font-semibold leading-8 text-white laptop:w-80 laptop:text-8 laptop:leading-10'>
+                        Earn 2X points by depositing FIL/iFIL
+                    </span>
+                    <div>
+                        <div className='hidden h-1/2 laptop:block'></div>
                         <button
-                            className='w-full rounded-lg bg-blue px-8 py-3 text-4 font-semibold leading-6 text-white laptop:w-[168px] laptop:px-5 laptop:py-2'
+                            className='w-full rounded-2xl bg-primary-500 px-8 py-3 text-4 font-semibold leading-5 text-white hover:bg-primary-700 laptop:h-1/2 laptop:w-[168px] laptop:rounded-lg laptop:px-5 laptop:py-2 laptop:leading-6'
                             onClick={onDepositClick}
                         >
                             Deposit
                         </button>
-                        <Tooltip
-                            iconElement={
-                                <button
-                                    className='flex h-full w-full items-center justify-center gap-2 rounded-lg border border-primary-300 bg-primary-300/60 p-3 text-white'
-                                    onClick={onShareClick}
-                                >
-                                    <Share className='h-4 w-4' />
-                                    <span className='text-4 font-semibold leading-6 text-white laptop:hidden'>
-                                        Share Event
-                                    </span>
-                                </button>
-                            }
-                        >
-                            Share Invite
-                        </Tooltip>
                     </div>
                 </div>
             </div>
@@ -236,19 +227,19 @@ const Timer = ({ targetTime }: { targetTime: number; text?: string }) => {
                 className='flex flex-row items-center justify-between'
                 data-chromatic='ignore'
             >
-                {timeDesign(time.days, 'D')}
+                {TimeDesign(time.days, 'D')}
                 <Separator />
-                {timeDesign(time.hours, 'H')}
+                {TimeDesign(time.hours, 'H')}
                 <Separator />
-                {timeDesign(time.minutes, 'M')}
+                {TimeDesign(time.minutes, 'M')}
                 <Separator />
-                {timeDesign(time.seconds, 'S')}
+                {TimeDesign(time.seconds, 'S')}
             </div>
         )
     );
 };
 
-const timeDesign = (val: string, text: string) => {
+const TimeDesign = (val: string, text: string) => {
     return (
         <div className='flex gap-2'>
             <span className='font-tertiary text-[42px] font-medium leading-14 text-neutral-50'>
