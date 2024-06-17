@@ -121,4 +121,11 @@
   .slider-markActive {
       background-color: #5162FF !important;
   }
+
+  .campaign {
+    background-image: url(../img/campaign.jpg);
+    background-color: #002133;
+    background-size: cover;
+    background-attachment: fixed;
+  }
 }
