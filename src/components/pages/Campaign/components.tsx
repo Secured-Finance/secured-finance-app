@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
-import FilIcon from 'src/assets/coins/fil.svg';
-import IFilIcon from 'src/assets/coins/ifil.svg';
 import LockClose from 'src/assets/icons/lock-close.svg';
 import LockOpen from 'src/assets/icons/lock-open.svg';
 import WormholeDesktop from 'src/assets/img/wormhole-desktop.svg';
+import { CurrencyIcon } from 'src/components/atoms';
 // import WormholeMobile from 'src/assets/img/wormhole-mobile.svg';
 import { useBreakpoint } from 'src/hooks';
 import {
@@ -32,7 +31,7 @@ const stages = [
 
 export const Banner = ({ text }: { text: string }) => {
     return (
-        <div className='w-fit rounded-3xl border border-primary-500 bg-primary-500/50 px-[18px] py-2 text-3.5 font-semibold uppercase leading-[18px] text-neutral-100 laptop:px-8 laptop:text-7 laptop:leading-9 laptop:tracking-[3.311px]'>
+        <div className='w-fit rounded-3xl bg-primary-700 px-[18px] py-2 text-3.5 font-semibold uppercase leading-[18px] text-neutral-200 laptop:px-8 laptop:text-7 laptop:leading-9 laptop:tracking-[3.36px]'>
             {text}
         </div>
     );
@@ -108,20 +107,20 @@ export const CampaignStatus = ({
 
     return (
         <div className='flex flex-col justify-between gap-3 rounded-3xl border-2 border-blue bg-[rgba(7,24,39,0.20)] p-4 backdrop-blur-[20px] laptop:p-8'>
-            <div className='flex flex-col gap-10'>
+            <div className='flex flex-col gap-7'>
                 <div className='flex flex-col justify-between laptop:flex-row laptop:items-center'>
                     <div className='flex flex-row items-center gap-4'>
-                        <span className='h-3 w-3 rounded-full bg-[#6EC94E] ring-[6px] ring-[#84D069]/10'></span>
+                        <span className='h-3 w-3 rounded-full bg-[#6EC94E] ring-8 ring-[#84D069]/10'></span>
                         <span className='laptop:typography-desktop-sh-7 typography-mobile-sh-8 uppercase text-white'>
                             {stage}
                         </span>
                     </div>
-                    <span className='text-4 uppercase leading-6 text-[#A7A7A7]'>
+                    <span className='text-4 uppercase leading-6 text-neutral-300'>
                         Jun 19, 12:00 AM (UTC) - Jun 28, 12:00 AM (UTC)
                     </span>
                 </div>
                 <div className='flex flex-col gap-6 laptop:flex-row'>
-                    <div className='flex w-full flex-col gap-2 rounded-[14px] bg-white-5 p-6 laptop:w-[400px]'>
+                    <div className='flex w-full flex-col gap-2 rounded-[14px] bg-white-5 px-6 py-9 laptop:w-[400px]'>
                         <span className='text-4 leading-8 text-neutral-50'>
                             {isStageOn
                                 ? 'Campaign ends in...'
@@ -160,15 +159,21 @@ export const CampaignStatus = ({
                 </span>
                 <div className='flex flex-row gap-3 laptop:gap-4'>
                     <div className='flex w-1/2 flex-row items-center justify-center gap-2 rounded-2xl bg-chart-fil/20 px-8 py-3 laptop:w-fit laptop:py-2'>
-                        <FilIcon className='h-18px w-18px' />
+                        <CurrencyIcon
+                            ccy={collateralCurrencies[0]}
+                            variant='campaign'
+                        />
                         <span className='text-4 leading-6 text-white laptop:text-4.5 laptop:leading-7'>
-                            FIL
+                            {collateralCurrencies[0]}
                         </span>
                     </div>
                     <div className='flex w-1/2 flex-row items-center justify-center gap-2 rounded-2xl bg-[#6226FF]/20 px-8 py-3 laptop:w-fit laptop:py-2'>
-                        <IFilIcon className='h-18px w-18px' />
+                        <CurrencyIcon
+                            ccy={collateralCurrencies[1]}
+                            variant='campaign'
+                        />
                         <span className='text-4 leading-6 text-white laptop:text-4.5 laptop:leading-7'>
-                            iFIL
+                            {collateralCurrencies[1]}
                         </span>
                     </div>
                 </div>
