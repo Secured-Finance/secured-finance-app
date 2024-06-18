@@ -2,7 +2,24 @@ export function isPastDate(utcTimestamp: number): boolean {
     return utcTimestamp <= Date.now() / 1000;
 }
 
+export interface CountdownFormat {
+    days: string;
+    hours: string;
+    minutes: string;
+    seconds: string;
+}
+
 export function countdown(targetTimestamp: number): string {
+    // Format the countdown string'
+    const count = getCountdown(targetTimestamp);
+    if (!count) {
+        return '';
+    }
+    const { days, hours, minutes, seconds } = count;
+    return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+}
+
+export const getCountdown = (targetTimestamp: number) => {
     // Convert current time to UTC timestamp
     const now = Date.now();
     const nowUtc = Date.UTC(
@@ -19,7 +36,7 @@ export function countdown(targetTimestamp: number): string {
     const difference = targetTimestamp - nowUtc;
 
     if (difference <= 0) {
-        return '';
+        return undefined;
     }
 
     // Calculate days, hours, minutes, and seconds remaining
@@ -28,11 +45,13 @@ export function countdown(targetTimestamp: number): string {
     const minutes = Math.floor((difference % 3600000) / 60000);
     const seconds = Math.floor((difference % 60000) / 1000);
 
-    // Format the countdown string
-    const countdownString = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-
-    return countdownString;
-}
+    return {
+        days: days.toString().padStart(2, '0'),
+        hours: hours.toString().padStart(2, '0'),
+        minutes: minutes.toString().padStart(2, '0'),
+        seconds: seconds.toString().padStart(2, '0'),
+    };
+};
 
 export const getTimestampRelativeToNow = (hours: number, isFuture = false) => {
     const now = new Date();
