@@ -44,6 +44,7 @@ import {
     getReferralHashtags,
     getReferralMessage,
     ordinaryFormat,
+    percentFormat,
     readWalletFromStore,
 } from 'src/utils';
 import { keccak256, stringToBytes } from 'viem';
@@ -59,10 +60,8 @@ const ReferralCode = ({ code }: { code: string }) => {
                     Referral Code
                 </div>
                 <InfoToolTip align='top-right'>
-                    Copy your referral link to share with friends and earn
-                    points. The inviter can earn 15% of the points earned by the
-                    invitee. The invitee can get 100 points by using the inviter
-                    referral code.
+                    Share your referral link with friends and start earning. Get
+                    15% of their points and give them a 5% boost with your code!
                 </InfoToolTip>
             </div>
 
@@ -128,7 +127,13 @@ const ReferralCode = ({ code }: { code: string }) => {
 const UserPointInfo = () => {
     const searchParams = new URLSearchParams(document.location.search);
     const referralCode = searchParams.get('ref');
-    const questTypes = Object.values(QuestType);
+    const questTypes = [
+        QuestType.DailyLogin,
+        QuestType.Deposit,
+        QuestType.LimitOrder,
+        QuestType.ActivePosition,
+        QuestType.Referral,
+    ];
     const [timestamp, setTimestamp] = useState(new Date());
     const [cookies, setCookie, removeCookie] = useCookies();
     const { data: signature, isLoading, signMessage, reset } = useSignMessage();
@@ -267,11 +272,13 @@ const UserPointInfo = () => {
                         <div className={'border-r border-white-10'}>
                             <div className='flex h-full w-full flex-col items-center justify-center overflow-hidden'>
                                 <span className='typography-caption-2 h-5 w-full text-center text-secondary7'>
-                                    Joined Date
+                                    Point Boost
                                 </span>
-                                <div className='typography-caption flex h-9 w-full items-center justify-center text-center text-white'>
-                                    {formatDate(
-                                        dayjs(userData?.user.joinedAt).unix()
+                                <div className='typography-body-1 h-8 text-center text-md text-white'>
+                                    +{' '}
+                                    {percentFormat(
+                                        userData?.user.boostPercentage,
+                                        10000
                                     )}
                                 </div>
                             </div>
