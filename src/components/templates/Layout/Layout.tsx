@@ -5,14 +5,19 @@ export const Layout = ({
     navBar,
     children,
     footer,
+    isCampaignPage,
 }: {
     navBar: React.ReactNode;
     children: React.ReactNode;
     footer: React.ReactNode;
+    isCampaignPage?: boolean;
 }) => {
     return (
         <div
-            className='flex h-screen w-full flex-col justify-between gap-8'
+            className={clsx(
+                'flex h-screen w-full flex-col justify-between',
+                !isCampaignPage && 'gap-8'
+            )}
             data-testid='wrapper-div'
         >
             <div className='w-full'>

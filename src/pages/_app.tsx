@@ -135,6 +135,7 @@ function App({ Component, pageProps }: AppProps) {
             <Provider store={store}>
                 <Providers>
                     <Layout
+                        isCampaignPage={router.pathname.includes('campaign')}
                         navBar={
                             <Header
                                 showNavigation={
