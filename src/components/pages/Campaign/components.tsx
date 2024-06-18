@@ -13,6 +13,7 @@ import {
     ZERO_BI,
     amountFormatterFromBase,
     getCountdown,
+    ordinaryFormat,
     usdFormat,
 } from 'src/utils';
 import { stages } from './constants';
@@ -74,13 +75,13 @@ export const CampaignStatus = ({
     startTime,
     endTime,
     collateralCurrencies,
-    collateral,
+    valueLocked,
     priceList,
 }: {
     startTime: number;
     endTime: number;
     collateralCurrencies: CurrencySymbol[];
-    collateral: Partial<Record<CurrencySymbol, bigint>>;
+    valueLocked: Partial<Record<CurrencySymbol, bigint>>;
     priceList: Record<CurrencySymbol, number>;
 }) => {
     const isStageOn = Date.now() - startTime > 0;
@@ -88,7 +89,7 @@ export const CampaignStatus = ({
     collateralCurrencies.forEach(ccy => {
         totalUSDValue +=
             (priceList[ccy] ?? 0) *
-            amountFormatterFromBase[ccy](collateral[ccy] ?? ZERO_BI);
+            amountFormatterFromBase[ccy](valueLocked[ccy] ?? ZERO_BI);
     });
 
     const campaignStartCopy = isStageOn
@@ -143,8 +144,12 @@ export const CampaignStatus = ({
                                         className='typography-mobile-body-3 block text-center text-white tablet:text-left tablet:text-[22px] tablet:font-semibold desktop:text-7 desktop:leading-8'
                                         key={ccy}
                                     >
-                                        {`${amountFormatterFromBase[ccy](
-                                            collateral[ccy] ?? ZERO_BI
+                                        {`${ordinaryFormat(
+                                            amountFormatterFromBase[ccy](
+                                                valueLocked[ccy] ?? ZERO_BI
+                                            ),
+                                            0,
+                                            1
                                         )} ${ccy}`}
                                     </span>
                                 );
