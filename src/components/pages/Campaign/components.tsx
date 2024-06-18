@@ -19,7 +19,7 @@ import { stages } from './constants';
 
 export const Banner = ({ text }: { text: string }) => {
     return (
-        <div className='laptop:typography-desktop-sh-8 w-fit rounded-3xl border border-primary-500 bg-primary-700 px-[18px] py-2 text-xs font-semibold uppercase leading-[18px] text-neutral-200 laptop:px-8 laptop:tracking-[3.36px] desktop:text-7 desktop:leading-9'>
+        <div className='laptop:typography-desktop-sh-8 desktop:typography-desktop-sh-7 w-fit rounded-3xl border border-primary-500 bg-primary-700 px-[18px] py-2 text-xs font-semibold uppercase leading-[18px] text-neutral-200 laptop:px-8'>
             {text}
         </div>
     );
@@ -98,7 +98,7 @@ export const CampaignStatus = ({
         : 'Campaign starts in...';
 
     return (
-        <div className='flex flex-col justify-between gap-3 rounded-3xl border border-blue bg-[rgba(7,24,39,0.20)] p-4 backdrop-blur-[20px] tablet:p-6 laptop:w-[48%] laptop:gap-[30px] laptop:border-2 laptop:p-6 desktop:w-[45%] desktop:p-8'>
+        <div className='flex flex-col justify-between gap-3 rounded-3xl border border-blue bg-[rgba(7,24,39,0.20)] p-4 backdrop-blur-[20px] tablet:p-6 laptop:w-[48%] laptop:gap-[30px] laptop:border-2 laptop:p-6 desktop:w-[47%] desktop:p-8'>
             <div className='flex flex-col gap-3 desktop:gap-7'>
                 <div className='flex flex-col justify-between gap-2 desktop:flex-row desktop:items-center'>
                     <div className='flex flex-row items-center gap-4'>
@@ -116,7 +116,7 @@ export const CampaignStatus = ({
                         <span className='typography-mobile-body-5 flex text-neutral-300 tablet:hidden'>
                             {campaignStartCopy}
                         </span>
-                        <div className='flex w-full flex-col gap-2 rounded-[14px] bg-white-5 px-4 py-2 tablet:h-[152px] tablet:justify-center tablet:p-6 laptop:h-auto laptop:px-6 laptop:py-9'>
+                        <div className='flex w-full flex-col gap-2 rounded-[14px] bg-white-5 px-4 py-2 tablet:h-[152px] tablet:justify-center tablet:p-6 laptop:h-auto laptop:px-6 laptop:py-9 desktop:h-full'>
                             <span className='typography-mobile-body-4 hidden justify-center text-neutral-50/80 tablet:flex laptop:justify-start'>
                                 {campaignStartCopy}
                             </span>
@@ -129,7 +129,7 @@ export const CampaignStatus = ({
                         <span className='typography-mobile-body-5 flex text-neutral-300 tablet:hidden'>
                             Total Value Locked
                         </span>
-                        <div className='flex w-full flex-col gap-2 rounded-[14px] bg-white-5 px-5 py-2 tablet:justify-center tablet:p-4 laptop:h-[166px] laptop:px-4 laptop:py-3'>
+                        <div className='flex w-full flex-col gap-2 rounded-[14px] bg-white-5 px-5 py-2 tablet:justify-center tablet:p-4 laptop:h-[166px] laptop:p-4'>
                             <span className='tablet:typography-desktop-body-4 hidden text-4 leading-8 text-neutral-50/80 tablet:mb-1 tablet:flex'>
                                 Total Value Locked
                             </span>
@@ -197,7 +197,7 @@ export const DepositCard = ({
 
             {/* eslint-disable-next-line prettier/prettier */}
             <div className='z-1 relative flex w-full flex-col justify-between gap-4 p-4 min-[645px]:gap-8 tablet:p-6 laptop:flex-row laptop:items-end'>
-                <span className='desktop:typography-desktop-h-6 tablet:typography-mobile-body-1 block max-w-[50%] text-base font-semibold leading-6 text-white laptop:max-w-[200px] laptop:text-[18px] laptop:leading-6'>
+                <span className='tablet:typography-mobile-body-1 block max-w-[50%] text-base font-semibold leading-6 text-white laptop:max-w-[200px] laptop:text-[18px] laptop:leading-6 desktop:text-[22px] desktop:leading-8'>
                     Earn 2X points by depositing FIL/iFIL
                 </span>
 
