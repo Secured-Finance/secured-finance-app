@@ -114,6 +114,7 @@ module.exports = {
             16: '64px',
             18: '72px',
             22: '88px',
+            24: '96px',
             26: '104px',
             '5xl': ['86px', { lineHeight: '96px', letterSpacing: '-0.02em' }],
             '4xl': ['54px', { lineHeight: '64px', letterSpacing: '-0.02em' }],
@@ -249,6 +250,7 @@ module.exports = {
                 '10': 'rgba(81, 98, 255, 0.1)',
                 DEFAULT: '#5162FF',
             },
+            blue: '#5365F6',
             black: {
                 DEFAULT: '#000000',
                 '90': 'rgba(0, 0, 0, 0.9)',

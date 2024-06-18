@@ -121,4 +121,18 @@
   .slider-markActive {
       background-color: #5162FF !important;
   }
+
+  .campaign {
+    background-image: url(../img/campaign.jpg);
+    background-color: #002133;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    min-height: 100dvh;
+    width: 100%;
+  }
+
+  .wormhole {
+    background-image: url(../img/wormhole.png);
+  }
 }
