@@ -44,6 +44,7 @@ import {
     getReferralHashtags,
     getReferralMessage,
     ordinaryFormat,
+    percentFormat,
     readWalletFromStore,
 } from 'src/utils';
 import { keccak256, stringToBytes } from 'viem';
@@ -274,7 +275,11 @@ const UserPointInfo = () => {
                                     Point Boost
                                 </span>
                                 <div className='typography-body-1 h-8 text-center text-md text-white'>
-                                    + {userData?.user.boostPercentage / 100}%
+                                    +{' '}
+                                    {percentFormat(
+                                        userData?.user.boostPercentage,
+                                        10000
+                                    )}
                                 </div>
                             </div>
                             <Separator
