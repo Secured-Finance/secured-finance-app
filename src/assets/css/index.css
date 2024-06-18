@@ -127,5 +127,10 @@
     background-color: #002133;
     background-size: cover;
     background-attachment: fixed;
+    background-position: center;
+  }
+
+  .wormhole {
+    background-image: url(../img/wormhole.png);
   }
 }
