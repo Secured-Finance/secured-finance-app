@@ -3,8 +3,8 @@ import {
     calculateTimeDifference,
     countdown,
     getTimestampRelativeToNow,
-    isPastDate,
     isMaturityPastDays,
+    isPastDate,
 } from './date';
 
 beforeAll(() => {
@@ -40,7 +40,7 @@ describe('countdown', () => {
     it('returns the correct countdown string when there are hours, minutes, and seconds remaining', () => {
         const targetTimestamp = Date.UTC(2023, 4, 1, 12, 0, 0, 0); // May 1, 2023 at 12:00:00 UTC
         const now = Date.UTC(2023, 4, 1, 6, 30, 0, 0); // May 1, 2023 at 06:30:00 UTC
-        const expectedCountdown = '0d 5h 30m 0s';
+        const expectedCountdown = '00d 05h 30m 00s';
 
         jest.spyOn(Date, 'now').mockReturnValue(now);
         const countdownString = countdown(targetTimestamp);
@@ -51,7 +51,7 @@ describe('countdown', () => {
     it('returns the correct countdown string when there are minutes and seconds remaining', () => {
         const targetTimestamp = Date.UTC(2023, 4, 1, 12, 0, 0, 0); // May 1, 2023 at 12:00:00 UTC
         const now = Date.UTC(2023, 4, 1, 11, 59, 0, 0); // May 1, 2023 at 11:59:00 UTC
-        const expectedCountdown = '0d 0h 1m 0s';
+        const expectedCountdown = '00d 00h 01m 00s';
 
         jest.spyOn(Date, 'now').mockReturnValue(now);
         const countdownString = countdown(targetTimestamp);
@@ -62,7 +62,7 @@ describe('countdown', () => {
     it('returns the correct countdown string when there are seconds remaining', () => {
         const targetTimestamp = Date.UTC(2023, 4, 1, 12, 0, 0, 0); // May 1, 2023 at 12:00:00 UTC
         const now = Date.UTC(2023, 4, 1, 11, 59, 59, 0); // May 1, 2023 at 11:59:59 UTC
-        const expectedCountdown = '0d 0h 0m 1s';
+        const expectedCountdown = '00d 00h 00m 01s';
 
         jest.spyOn(Date, 'now').mockReturnValue(now);
         const countdownString = countdown(targetTimestamp);
