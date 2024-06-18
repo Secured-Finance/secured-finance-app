@@ -73,14 +73,12 @@ export const StageBanner = () => {
 export const CampaignStatus = ({
     startTime,
     endTime,
-    stage,
     collateralCurrencies,
     collateral,
     priceList,
 }: {
     startTime: number;
     endTime: number;
-    stage: string;
     collateralCurrencies: CurrencySymbol[];
     collateral: Partial<Record<CurrencySymbol, bigint>>;
     priceList: Record<CurrencySymbol, number>;
@@ -89,7 +87,7 @@ export const CampaignStatus = ({
     let totalUSDValue = 0;
     collateralCurrencies.forEach(ccy => {
         totalUSDValue +=
-            priceList[ccy] *
+            (priceList[ccy] ?? 0) *
             amountFormatterFromBase[ccy](collateral[ccy] ?? ZERO_BI);
     });
 
@@ -102,9 +100,15 @@ export const CampaignStatus = ({
             <div className='flex flex-col gap-3 desktop:gap-7'>
                 <div className='flex flex-col justify-between gap-2 desktop:flex-row desktop:items-center'>
                     <div className='flex flex-row items-center gap-4'>
-                        <span className='h-3 w-3 rounded-full bg-[#6EC94E] ring-8 ring-[#84D069]/10'></span>
-                        <span className='typography-mobile-sh-8 tablet:typography-desktop-sh-9 uppercase text-white desktop:text-6'>
-                            {stage}
+                        <span
+                            className={clsx('h-3 w-3 rounded-full ring-8', {
+                                'bg-[#6EC94E] ring-[#84D069]/10': isStageOn,
+                                'bg-warning-500 ring-warning-300/10':
+                                    !isStageOn,
+                            })}
+                        ></span>
+                        <span className='typography-mobile-sh-8 tablet:typography-desktop-sh-9 uppercase text-white'>
+                            Status: {isStageOn ? 'Active' : 'Not started'}
                         </span>
                     </div>
                     <span className='typography-mobile-body-5 tablet:typography-desktop-body-4 text-neutral-300 desktop:text-base desktop:leading-6'>

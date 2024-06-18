@@ -80,7 +80,6 @@ export const Campaign = () => {
                     <CampaignStatus
                         startTime={1718755200000}
                         endTime={1719532800000}
-                        stage='Stage 1'
                         collateralCurrencies={collateralCurrencies}
                         collateral={collateralBook.collateral}
                         priceList={priceList}
