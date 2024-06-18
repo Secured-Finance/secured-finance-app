@@ -5,15 +5,15 @@ import {
     generateCollateralList,
 } from 'src/components/organisms';
 import {
-    emptyCollateralBook,
+    emptyValueLockedBook,
     useCollateralBalances,
-    useCollateralBook,
     useLastPrices,
+    useValueLockedByCurrency,
 } from 'src/hooks';
 import { RootState } from 'src/store/types';
 import { CurrencySymbol, readWalletFromStore } from 'src/utils';
 import { isProdEnv } from 'src/utils/displayUtils';
-import { useAccount, useConnect } from 'wagmi';
+import { useConnect } from 'wagmi';
 import { Banner, CampaignStatus, DepositCard, StageBanner } from './components';
 
 const prodQuestChainId = 314;
@@ -24,8 +24,6 @@ const PROD_COLLATERAL_CURRENCIES = [CurrencySymbol.FIL, CurrencySymbol.iFIL];
 
 export const Campaign = () => {
     const [openModal, setOpenModal] = useState(false);
-    const { address } = useAccount();
-
     const { connectors } = useConnect();
     const provider = readWalletFromStore();
     const chainId = useSelector((state: RootState) => state.blockchain.chainId);
@@ -33,8 +31,9 @@ export const Campaign = () => {
 
     const collateralBalances = useCollateralBalances();
     const { data: priceList } = useLastPrices();
-    const { data: collateralBook = emptyCollateralBook } =
-        useCollateralBook(address);
+
+    const { data: valueLockedByCurrency = emptyValueLockedBook } =
+        useValueLockedByCurrency();
 
     const collateralCurrencies = isProdEnv()
         ? PROD_COLLATERAL_CURRENCIES
@@ -81,7 +80,7 @@ export const Campaign = () => {
                         startTime={1718755200000}
                         endTime={1719532800000}
                         collateralCurrencies={collateralCurrencies}
-                        collateral={collateralBook.collateral}
+                        valueLocked={valueLockedByCurrency}
                         priceList={priceList}
                     />
                     <DepositCard onDepositClick={handleDepositClick} />
