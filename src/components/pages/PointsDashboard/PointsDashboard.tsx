@@ -9,7 +9,8 @@ import {
     useGetQuestsQuery,
     useGetUserLazyQuery,
     useGetUsersQuery,
-    useSignInMutation,
+    useNonceLazyQuery,
+    useVerifyMutation,
 } from '@secured-finance/sf-point-client';
 import { capitalCase, snakeCase } from 'change-case';
 import clsx from 'clsx';
@@ -18,6 +19,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import CountUp from 'react-countup';
 import { useSelector } from 'react-redux';
+import { SiweMessage } from 'siwe';
 import {
     Button,
     ButtonSizes,
@@ -47,7 +49,6 @@ import {
     percentFormat,
     readWalletFromStore,
 } from 'src/utils';
-import { keccak256, stringToBytes } from 'viem';
 import { useAccount, useConnect, useSignMessage } from 'wagmi';
 
 const POLL_INTERVAL = 600000; // 10 minutes
@@ -124,7 +125,7 @@ const ReferralCode = ({ code }: { code: string }) => {
     );
 };
 
-const UserPointInfo = () => {
+const UserPointInfo = ({ chainId }: { chainId: number }) => {
     const searchParams = new URLSearchParams(document.location.search);
     const referralCode = searchParams.get('ref');
     const questTypes = [
@@ -134,52 +135,36 @@ const UserPointInfo = () => {
         QuestType.ActivePosition,
         QuestType.Referral,
     ];
-    const [timestamp, setTimestamp] = useState(new Date());
     const [cookies, setCookie, removeCookie] = useCookies();
-    const { data: signature, isLoading, signMessage, reset } = useSignMessage();
+    const [getNonce] = useNonceLazyQuery({ fetchPolicy: 'no-cache' });
+    const { isLoading, signMessageAsync, reset } = useSignMessage();
     const { address, isConnected } = useAccount();
-    const [signIn, { data: signInData, loading, error }] = useSignInMutation();
+    const [verify, { data: verifyData, loading, error }] = useVerifyMutation();
     const [getUser, { data: userData, loading: loadingUser, refetch }] =
         useGetUserLazyQuery({ pollInterval: POLL_INTERVAL });
 
     useEffect(() => {
-        if (address && signature) {
-            signIn({
-                variables: {
-                    input: {
-                        walletAddress: address,
-                        timestamp: timestamp.toISOString(),
-                        signature,
-                        referralCode,
-                    },
-                },
-            });
-            reset();
-        }
-    }, [signature, signIn, address, timestamp, reset, referralCode]);
-
-    useEffect(() => {
-        if (signInData) {
+        if (verifyData) {
             const expires = dayjs().add(1, 'day').toDate();
-            const signInDataText = {
-                token: signInData?.signIn.token,
-                walletAddress: signInData?.signIn.walletAddress,
+            const verifiedData = {
+                token: verifyData?.verify.token,
+                walletAddress: verifyData?.verify.walletAddress,
             };
-            setCookie('sign_in_data', signInDataText, {
+            setCookie('verified_data', verifiedData, {
                 expires,
             });
         }
-    }, [signInData, setCookie]);
+    }, [verifyData, setCookie]);
 
     useEffect(() => {
-        if (cookies.sign_in_data) {
+        if (cookies.verified_data) {
             userData?.user.walletAddress &&
             userData?.user.walletAddress !== address
                 ? refetch()
                 : getUser();
         }
     }, [
-        cookies.sign_in_data,
+        cookies.verified_data,
         getUser,
         address,
         userData?.user.walletAddress,
@@ -187,15 +172,15 @@ const UserPointInfo = () => {
     ]);
 
     useEffect(() => {
-        const walletAddress = cookies.sign_in_data?.walletAddress;
+        const walletAddress = cookies.verified_data?.walletAddress;
         if (error || (walletAddress && walletAddress !== address)) {
-            removeCookie('sign_in_data');
+            removeCookie('verified_data');
         }
-    }, [error, removeCookie, cookies.sign_in_data, address]);
+    }, [error, removeCookie, cookies.verified_data, address]);
 
     return (
         <GradientBox>
-            {cookies.sign_in_data && userData ? (
+            {cookies.verified_data && userData ? (
                 <>
                     <div className='items-center pb-2 pt-8 text-center text-lg font-bold text-white'>
                         Total Points
@@ -317,18 +302,36 @@ const UserPointInfo = () => {
                             <Button
                                 className='mx-auto mt-4'
                                 size={ButtonSizes.lg}
-                                onClick={() => {
-                                    const timestamp = new Date();
-                                    setTimestamp(timestamp);
-                                    const message = JSON.stringify({
-                                        walletAddress: address,
-                                        timestamp: timestamp.toISOString(),
+                                onClick={async () => {
+                                    const { data } = await getNonce();
+
+                                    const message = new SiweMessage({
+                                        domain: window.location.host,
+                                        address,
+                                        statement:
+                                            'Join the Secured Finance points program!',
+                                        uri: window.location.origin,
+                                        version: '1',
+                                        chainId: chainId,
+                                        nonce: data?.nonce,
                                     });
-                                    signMessage({
-                                        message: keccak256(
-                                            stringToBytes(message)
-                                        ),
+
+                                    const signature = await signMessageAsync({
+                                        message: message.prepareMessage(),
                                     });
+
+                                    await verify({
+                                        variables: {
+                                            input: {
+                                                signature,
+                                                message:
+                                                    JSON.stringify(message),
+                                                referralCode,
+                                            },
+                                        },
+                                    });
+
+                                    reset();
                                 }}
                                 disabled={!isConnected || isLoading || loading}
                             >
@@ -342,14 +345,13 @@ const UserPointInfo = () => {
     );
 };
 
-const QuestList = () => {
+const QuestList = ({ chainId }: { chainId: number }) => {
     const [isOpenDepositModal, setIsOpenDepositModal] =
         useState<boolean>(false);
     const [isDefaultDepositCcySymbol, setIsDefaultDepositCcySymbol] = useState<
         string | undefined
     >(undefined);
     const { connectors } = useConnect();
-    const chainId = useSelector((state: RootState) => state.blockchain.chainId);
     const { data, loading } = useGetQuestsQuery({
         pollInterval: POLL_INTERVAL,
     });
@@ -548,12 +550,13 @@ const Leaderboard = () => {
 };
 
 export const PointsDashboard = () => {
+    const chainId = useSelector((state: RootState) => state.blockchain.chainId);
     return (
         <Page title='Point Dashboard' name='point-dashboard'>
             <TwoColumns>
                 <div className='grid grid-cols-1 gap-y-7'>
-                    <UserPointInfo />
-                    <QuestList />
+                    <UserPointInfo chainId={chainId} />
+                    <QuestList chainId={chainId} />
                 </div>
                 <Leaderboard />
             </TwoColumns>
