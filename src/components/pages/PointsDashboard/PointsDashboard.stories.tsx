@@ -3,7 +3,7 @@ import {
     GetQuestsDocument,
     GetUserDocument,
     GetUsersDocument,
-    SignInDocument,
+    VerifyDocument,
 } from '@secured-finance/sf-point-client';
 import type { Meta, StoryFn } from '@storybook/react';
 import { utils } from 'ethers';
@@ -120,7 +120,7 @@ const user = [
 const signIn = [
     {
         request: {
-            query: SignInDocument,
+            query: VerifyDocument,
         },
         variables: {
             input: {
@@ -180,7 +180,7 @@ JoinedPointProgram.parameters = {
         mocks: [...signIn, ...quests, ...users, ...user],
     },
     cookie: {
-        sign_in_data: {
+        verified_data: {
             token: '1234567890',
             walletAddress: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
         },

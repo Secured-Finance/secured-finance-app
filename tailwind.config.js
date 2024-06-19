@@ -86,6 +86,7 @@ module.exports = {
                 ...defaultTheme.fontFamily.sans,
             ],
             tertiary: ['Roboto Mono', ...defaultTheme.fontFamily.sans],
+            numerical: ['IBM Plex Sans', ...defaultTheme.fontFamily.sans],
         },
 
         screens: {

@@ -106,7 +106,7 @@ const httpLink = createHttpLink({
 });
 
 const authLink = setContext((_, { headers }) => {
-    const token = new Cookies().get('sign_in_data')?.token;
+    const token = new Cookies().get('verified_data')?.token;
     return {
         headers: {
             ...headers,
