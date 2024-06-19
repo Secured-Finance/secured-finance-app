@@ -65,13 +65,14 @@ export const Campaign = () => {
 
     return (
         <div className='campaign'>
-            <div className='container mx-auto flex flex-col gap-3 px-6 pb-8 pt-6  tablet:gap-7 laptop:gap-14 laptop:pb-[80px] laptop:pt-10'>
+            {/* eslint-disable-next-line prettier/prettier */}
+            <div className='container mx-auto flex flex-col gap-3 px-6 pb-8 pt-6  tablet:gap-7 laptop:gap-14 laptop:pb-[80px] laptop:pt-10 min-[1920px]:max-w-[1776px]'>
                 <div className='flex justify-center'>
-                    <div className='flex w-full flex-col items-center gap-3 laptop:gap-4 desktop:gap-6'>
+                    <div className='flex w-full flex-col items-center gap-2 tablet:gap-3 laptop:gap-4 desktop:gap-6'>
                         <Banner text='STAGE 1: CORE FUELING & LAUNCH'></Banner>
-                        <div className='text-center font-primary text-7 font-medium leading-8 text-white tablet:text-11 tablet:leading-16 laptop:text-16 laptop:font-normal laptop:leading-18 desktop:text-[80px] desktop:leading-[96px]'>
+                        <h1 className='text-center font-primary text-7 font-medium leading-8 text-white tablet:text-11 tablet:leading-16 laptop:text-16 laptop:font-normal laptop:leading-18 desktop:text-[80px] desktop:leading-[96px]'>
                             Filecoin Infinity Quest
-                        </div>
+                        </h1>
                         <StageBanner />
                     </div>
                 </div>
