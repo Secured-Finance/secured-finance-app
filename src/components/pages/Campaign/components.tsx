@@ -36,14 +36,14 @@ export const Stage = ({
     active: boolean;
 }) => {
     return active ? (
-        <div className='flex w-full flex-row items-center gap-2 rounded-xl border border-blue/75 bg-blue/25 px-2.5 py-1.5 laptop:justify-center laptop:border-2'>
-            <LockOpen className='h-3 w-3' />
-            <span className='tablet:typography-desktop-body-5 typography-mobile-body-4 text-white'>{`Stage ${index}: ${text}`}</span>
+        <div className='flex w-full flex-row items-center gap-2 rounded-xl border border-blue/75 bg-blue/25 px-2.5 py-1.5 tablet:px-3 laptop:justify-center laptop:border-2'>
+            <LockOpen className='h-3 w-3 laptop:h-3.5 laptop:w-3.5' />
+            <span className='tablet:typography-desktop-body-5 typography-mobile-body-4 laptop:typography-desktop-body-4 desktop:typography-desktop-body-3 text-white'>{`Stage ${index}: ${text}`}</span>
         </div>
     ) : (
-        <div className='flex flex-row items-center justify-center gap-2 px-3 opacity-50'>
-            <LockClose className='h-3 w-3' />
-            <span className='typography-desktop-body-3 tablet:typography-desktop-body-5 text-white'>{`Stage ${index}`}</span>
+        <div className='flex flex-row items-center justify-center gap-2 px-3 opacity-50 laptop:min-w-[100px] desktop:min-w-[153px]'>
+            <LockClose className='h-3 w-3 laptop:h-3.5 laptop:w-3.5' />
+            <span className='desktop:typography-desktop-body-3 tablet:typography-desktop-body-5  laptop:typography-desktop-body-4 text-white'>{`Stage ${index}`}</span>
         </div>
     );
 };
@@ -51,12 +51,13 @@ export const Stage = ({
 export const StageBanner = () => {
     const isMobile = useBreakpoint('tablet');
     return (
-        <div className='flex w-full flex-row items-center gap-2 rounded-xl border-2 border-blue bg-blue/20 px-2 py-1.5 backdrop-blur-sm tablet:justify-between laptop:w-fit desktop:gap-14 desktop:rounded-[20px]'>
+        <div className='flex w-full flex-row items-center gap-2 rounded-xl border-2 border-blue bg-blue/20 px-2 py-1.5 backdrop-blur-sm tablet:w-auto tablet:justify-between laptop:w-fit desktop:gap-3 desktop:rounded-[20px]'>
             {!isMobile ? (
                 stages.map((stage, index) => {
                     return (
                         <div key={index}>
                             <Stage
+                                key={index}
                                 text={stage.text}
                                 index={index + 1}
                                 active={stage.active}
@@ -105,7 +106,8 @@ export const CampaignStatus = ({
         : 'Campaign starts in...';
 
     return (
-        <div className='flex flex-col justify-between gap-3 rounded-3xl border border-blue bg-[rgba(7,24,39,0.20)] p-4 backdrop-blur-[20px] tablet:p-6 laptop:w-[48%] laptop:gap-[30px] laptop:border-2 laptop:p-6 desktop:w-[54%] desktop:p-8'>
+        // eslint-disable-next-line prettier/prettier
+        <div className='flex max-w-[753px] flex-col justify-between gap-3 rounded-3xl border border-blue bg-[rgba(7,24,39,0.20)] p-4 backdrop-blur-[20px] tablet:p-6 laptop:w-[48%] laptop:gap-[30px] laptop:border-2 laptop:p-6 desktop:w-[54%] desktop:p-8'>
             <div className='flex flex-col gap-3 desktop:gap-7'>
                 <div className='flex flex-col justify-between gap-2 desktop:flex-row desktop:items-center'>
                     <div className='flex flex-row items-center gap-4'>
@@ -208,7 +210,7 @@ export const DepositCard = ({
     onDepositClick: () => void;
 }) => {
     return (
-        <div className='relative flex items-end overflow-hidden rounded-3xl border border-blue laptop:h-auto laptop:w-[50%] laptop:border-2 desktop:w-[46%]'>
+        <div className='relative flex max-w-[752px] items-end overflow-hidden rounded-3xl border border-blue laptop:h-auto laptop:w-[50%] laptop:border-2 desktop:w-[46%]'>
             <div className='wormhole absolute left-0 top-0 h-full w-full bg-[rgb(39,52,119)] bg-cover bg-center'></div>
             <div className='absolute right-4 top-[5px] flex items-center justify-center laptop:inset-0'>
                 <Glow className='absolute hidden h-[300px] w-[420px] laptop:flex' />
@@ -222,7 +224,7 @@ export const DepositCard = ({
                 </span>
 
                 <button
-                    className='flex w-full items-center justify-center gap-2.5 rounded-2xl bg-primary-500 px-8 py-3 text-4 font-semibold leading-5 text-white hover:bg-primary-700 laptop:w-[168px] laptop:rounded-lg laptop:px-5 laptop:py-2 laptop:leading-6'
+                    className='flex w-full items-center justify-center gap-2.5 rounded-2xl bg-primary-500 px-8 py-3 text-4 font-semibold leading-5 text-white hover:bg-primary-700 laptop:w-[142px] laptop:rounded-lg laptop:px-5 laptop:py-3 laptop:leading-5 desktop:w-[257px]'
                     onClick={onDepositClick}
                 >
                     <BuildingLibraryIcon className='h-4 w-4 flex-shrink-0' />
