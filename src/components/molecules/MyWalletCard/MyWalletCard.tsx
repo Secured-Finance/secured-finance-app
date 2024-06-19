@@ -1,6 +1,7 @@
 import { Dialog } from '@headlessui/react';
 import clsx from 'clsx';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import { useMemo, useRef, useState } from 'react';
 import Filecoin from 'src/assets/coins/fil.svg';
 import AxelarFil from 'src/assets/coins/wfil.svg';
@@ -26,6 +27,9 @@ import {
 const SquidWidget = dynamic(() =>
     import('@0xsquid/widget').then(mod => mod.SquidWidget)
 );
+
+const SQUID_ROUTER_URL =
+    'https://app.squidrouter.com/?chains=1%2C314&tokens=0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE%2C0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
 
 const BridgeDialog = ({
     isOpen,
@@ -114,12 +118,14 @@ export const MyWalletCard = ({
                                         <Filecoin className='h-10 w-10' />
                                         <AxelarFil className='-ml-3 h-10 w-10' />
                                     </div>
-                                    <Button
-                                        onClick={() => setIsOpen(true)}
-                                        size={ButtonSizes.sm}
+                                    <Link
+                                        target='_blank'
+                                        href={SQUID_ROUTER_URL}
                                     >
-                                        Bridge
-                                    </Button>
+                                        <Button size={ButtonSizes.sm}>
+                                            Bridge
+                                        </Button>
+                                    </Link>
                                 </div>
                                 <div className='typography-nav-menu-default flex flex-col gap-4 text-secondary7'>
                                     <p className='typography-nav-menu-default text-[13px]'>
