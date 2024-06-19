@@ -75,7 +75,7 @@ export const Campaign = () => {
                         <StageBanner />
                     </div>
                 </div>
-                <div className='flex flex-col-reverse gap-4 tablet:gap-[28px] laptop:flex-row laptop:justify-between'>
+                <div className='flex flex-col-reverse gap-4 tablet:gap-[28px] laptop:flex-row laptop:justify-between desktop:gap-11'>
                     <CampaignStatus
                         startTime={1718755200000}
                         endTime={1719532800000}

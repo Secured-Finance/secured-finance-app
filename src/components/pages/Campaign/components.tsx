@@ -71,6 +71,14 @@ export const StageBanner = () => {
     );
 };
 
+export const MultiplierBlock = () => {
+    return (
+        <span className='absolute right-0 top-0 flex h-[19px] w-11 items-center justify-center rounded-bl-2xl bg-[linear-gradient(124deg,_#F7BD26_11.69%,_#BB8700_110.74%)] text-2xs font-semibold text-neutral-800 tablet:w-[29px] tablet:text-white'>
+            2x
+        </span>
+    );
+};
+
 export const CampaignStatus = ({
     startTime,
     endTime,
@@ -97,7 +105,7 @@ export const CampaignStatus = ({
         : 'Campaign starts in...';
 
     return (
-        <div className='flex flex-col justify-between gap-3 rounded-3xl border border-blue bg-[rgba(7,24,39,0.20)] p-4 backdrop-blur-[20px] tablet:p-6 laptop:w-[48%] laptop:gap-[30px] laptop:border-2 laptop:p-6 desktop:w-[47%] desktop:p-8'>
+        <div className='flex flex-col justify-between gap-3 rounded-3xl border border-blue bg-[rgba(7,24,39,0.20)] p-4 backdrop-blur-[20px] tablet:p-6 laptop:w-[48%] laptop:gap-[30px] laptop:border-2 laptop:p-6 desktop:w-[54%] desktop:p-8'>
             <div className='flex flex-col gap-3 desktop:gap-7'>
                 <div className='flex flex-col justify-between gap-2 desktop:flex-row desktop:items-center'>
                     <div className='flex flex-row items-center gap-4'>
@@ -116,12 +124,12 @@ export const CampaignStatus = ({
                         Jun 19, 12:00 AM (UTC) - Jun 28, 12:00 AM (UTC)
                     </span>
                 </div>
-                <div className='flex flex-col gap-3 tablet:flex-row tablet:justify-between tablet:gap-5 desktop:gap-6'>
-                    <div className='flex flex-col gap-2 tablet:h-full tablet:w-[48%] tablet:justify-center'>
+                <div className='flex flex-col gap-3 tablet:flex-row tablet:justify-between tablet:gap-5'>
+                    <div className='flex flex-col gap-2 tablet:h-full tablet:w-[48%] tablet:justify-center laptop:w-[176px] desktop:w-[55%]'>
                         <span className='typography-mobile-body-5 flex text-neutral-300 tablet:hidden'>
                             {campaignStartCopy}
                         </span>
-                        <div className='flex w-full flex-col gap-2 rounded-[14px] bg-white-5 px-4 py-2 tablet:h-[152px] tablet:justify-center tablet:p-6 laptop:h-auto laptop:px-6 laptop:py-9 desktop:h-full'>
+                        <div className='flex w-full flex-col gap-2 rounded-[14px] bg-white-5 px-4 py-2 tablet:h-[152px] tablet:justify-center tablet:p-6 laptop:h-auto desktop:h-full'>
                             <span className='typography-mobile-body-4 hidden justify-center text-neutral-50/80 tablet:flex laptop:justify-start'>
                                 {campaignStartCopy}
                             </span>
@@ -130,7 +138,7 @@ export const CampaignStatus = ({
                             />
                         </div>
                     </div>
-                    <div className='flex flex-col gap-2 tablet:w-[48%]'>
+                    <div className='flex flex-col gap-2 tablet:w-[48%] laptop:w-[61%] desktop:w-[45%]'>
                         <span className='typography-mobile-body-5 flex text-neutral-300 tablet:hidden'>
                             Total Value Locked
                         </span>
@@ -162,12 +170,13 @@ export const CampaignStatus = ({
                 </div>
             </div>
             <div className='flex flex-col gap-2 tablet:items-start laptop:gap-5 desktop:gap-6'>
-                <span className='laptop:typography-desktop-body-4 desktop:typography-desktop-body-3 w-full text-xs leading-[22px] text-neutral-300'>
+                <span className='laptop:typography-desktop-body-4 desktop:typography-desktop-body-3 typography-mobile-body-5 w-full text-neutral-50'>
                     Quest Goal: Deposit following collateral assets and earn
                     double points
                 </span>
-                <div className='flex flex-row gap-3 laptop:gap-4'>
-                    <div className='flex w-1/2 flex-row items-center justify-center gap-2 rounded-2xl bg-chart-fil/20 px-8 py-2 laptop:w-fit'>
+                <div className='flex flex-row items-center gap-3 laptop:gap-4'>
+                    <div className='relative flex w-1/2 flex-row items-center justify-center gap-2 overflow-hidden rounded-2xl bg-chart-fil/20 px-8 py-2 laptop:w-fit'>
+                        <MultiplierBlock />
                         <CurrencyIcon
                             ccy={collateralCurrencies[0]}
                             variant='campaign'
@@ -176,7 +185,9 @@ export const CampaignStatus = ({
                             {collateralCurrencies[0]}
                         </span>
                     </div>
-                    <div className='flex w-1/2 flex-row items-center justify-center gap-2 rounded-2xl bg-[#6226FF]/20 px-8 py-3 laptop:w-fit laptop:py-2'>
+
+                    <div className='relative flex w-1/2 flex-row items-center justify-center gap-2 overflow-hidden rounded-2xl bg-[#6226FF]/20 px-8 py-2 laptop:w-fit'>
+                        <MultiplierBlock />
                         <CurrencyIcon
                             ccy={collateralCurrencies[1]}
                             variant='campaign'
@@ -197,7 +208,7 @@ export const DepositCard = ({
     onDepositClick: () => void;
 }) => {
     return (
-        <div className='relative flex items-end overflow-hidden rounded-3xl border border-blue laptop:h-auto laptop:w-[48%] laptop:border-2 desktop:w-[43%]'>
+        <div className='relative flex items-end overflow-hidden rounded-3xl border border-blue laptop:h-auto laptop:w-[50%] laptop:border-2 desktop:w-[46%]'>
             <div className='wormhole absolute left-0 top-0 h-full w-full bg-[rgb(39,52,119)] bg-cover bg-center'></div>
             <div className='absolute right-4 top-[5px] flex items-center justify-center laptop:inset-0'>
                 <Glow className='absolute hidden h-[300px] w-[420px] laptop:flex' />
@@ -262,11 +273,11 @@ const TimeDesign = (val: string, text: string, isLast?: boolean) => {
                 }
             )}
         >
-            <span className='font-tertiary text-[22px] font-medium leading-8 text-neutral-50 tablet:text-6'>
+            <span className='font-numerical text-[22px] font-medium leading-8 tracking-[1.368px] text-neutral-50 tablet:text-6 desktop:text-9'>
                 {val}
             </span>
             <span className='flex items-center'>
-                <span className='typography-mobile-body-5 text-neutral-100/50'>
+                <span className='typography-mobile-body-5 text-neutral-100/50 desktop:mt-2.5'>
                     {text}
                 </span>
             </span>
