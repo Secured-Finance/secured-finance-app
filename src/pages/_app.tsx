@@ -1,5 +1,12 @@
 import * as amplitude from '@amplitude/analytics-browser';
 import { pageViewTrackingPlugin } from '@amplitude/plugin-page-view-tracking-browser';
+import {
+    ApolloClient,
+    ApolloProvider,
+    InMemoryCache,
+    createHttpLink,
+} from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import { NextUIProvider } from '@nextui-org/system';
 import { GraphClientProvider } from '@secured-finance/sf-graph-client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -8,10 +15,10 @@ import { AppProps } from 'next/app';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { Cookies, CookiesProvider } from 'react-cookie';
 import { Provider, useSelector } from 'react-redux';
 import 'src/bigIntPatch';
 import { Footer } from 'src/components/atoms';
-
 import { Layout } from 'src/components/templates';
 import SecuredFinanceProvider from 'src/contexts/SecuredFinanceProvider';
 import store from 'src/store';
@@ -19,6 +26,7 @@ import { selectNetworkName } from 'src/store/blockchain';
 import { RootState } from 'src/store/types';
 import {
     getAmplitudeApiKey,
+    getGraphqlServerUrl,
     getSupportedChainIds,
     getSupportedNetworks,
     getWalletConnectId,
@@ -93,6 +101,25 @@ const config = createConfig({
     ],
 });
 
+const httpLink = createHttpLink({
+    uri: getGraphqlServerUrl(),
+});
+
+const authLink = setContext((_, { headers }) => {
+    const token = new Cookies().get('verified_data')?.token;
+    return {
+        headers: {
+            ...headers,
+            authorization: token ? `Bearer ${token}` : '',
+        },
+    };
+});
+
+const client = new ApolloClient({
+    link: authLink.concat(httpLink),
+    cache: new InMemoryCache(),
+});
+
 function App({ Component, pageProps }: AppProps) {
     const router = useRouter();
     return (
@@ -108,6 +135,7 @@ function App({ Component, pageProps }: AppProps) {
             <Provider store={store}>
                 <Providers>
                     <Layout
+                        isCampaignPage={router.pathname.includes('campaign')}
                         navBar={
                             <Header
                                 showNavigation={
@@ -131,18 +159,22 @@ const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     );
 
     return (
-        <NextUIProvider>
-            <QueryClientProvider client={queryClient}>
-                <GraphClientProvider network={currentNetwork}>
-                    <WagmiConfig config={config}>
-                        <SecuredFinanceProvider>
-                            {children}
-                        </SecuredFinanceProvider>
-                    </WagmiConfig>
-                </GraphClientProvider>
-                <ReactQueryDevtools initialIsOpen={false} />
-            </QueryClientProvider>
-        </NextUIProvider>
+        <CookiesProvider>
+            <NextUIProvider>
+                <QueryClientProvider client={queryClient}>
+                    <GraphClientProvider network={currentNetwork}>
+                        <ApolloProvider client={client}>
+                            <WagmiConfig config={config}>
+                                <SecuredFinanceProvider>
+                                    {children}
+                                </SecuredFinanceProvider>
+                            </WagmiConfig>
+                        </ApolloProvider>
+                    </GraphClientProvider>
+                    <ReactQueryDevtools initialIsOpen={false} />
+                </QueryClientProvider>
+            </NextUIProvider>
+        </CookiesProvider>
     );
 };
 

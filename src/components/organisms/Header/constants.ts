@@ -9,6 +9,16 @@ export const PRODUCTION_LINKS = [
         link: '/portfolio',
         dataCy: 'history',
     },
+    {
+        text: 'Campaign',
+        link: '/campaign',
+        dataCy: 'campaign',
+    },
+    {
+        text: 'Points',
+        link: '/points',
+        dataCy: 'points',
+    },
 ];
 
 export const DEV_LINKS = [

@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { MarketTab, Option } from 'src/components/atoms';
 import { CurrencyMaturityDropdown } from 'src/components/molecules';
 import { IndexOf } from 'src/types';
@@ -39,15 +39,13 @@ export const AdvancedLendingTopBar = ({
     currencyPrice,
     values,
 }: AdvancedLendingTopBarProp) => {
-    const [termValue, setTermValue] = useState(selected.value);
     const selectedTerm = useMemo(
-        () => options.find(o => o.value === termValue),
-        [options, termValue]
+        () => options.find(o => o.value === selected.value),
+        [options, selected]
     );
 
     const handleTermChange = useCallback(
         (v: Maturity) => {
-            setTermValue(v);
             onTermChange(v);
         },
         [onTermChange]
@@ -57,6 +55,7 @@ export const AdvancedLendingTopBar = ({
         handleTermChange(maturity);
         onAssetChange(asset);
     };
+
     return (
         <div>
             <div className='h-1 bg-starBlue'></div>

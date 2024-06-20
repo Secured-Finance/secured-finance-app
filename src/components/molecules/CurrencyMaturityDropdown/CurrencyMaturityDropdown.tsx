@@ -158,7 +158,7 @@ export const CurrencyMaturityDropdown = ({
         <Menu>
             {({ open, close }) => (
                 <div className='relative'>
-                    <Menu.Button className='laptop:typography-desktop-sh-7 flex w-full items-center justify-between gap-2 rounded-lg bg-neutral-700 px-2 py-1.5 text-sm font-semibold leading-6 text-white laptop:max-w-[302px] laptop:pl-3'>
+                    <Menu.Button className='laptop:typography-desktop-sh-9 flex w-full items-center justify-between gap-2 rounded-lg bg-neutral-700 px-2 py-1.5 text-sm font-semibold leading-6 text-white laptop:min-w-[190px] laptop:py-2.5 laptop:pl-3 laptop:pr-2'>
                         <div className='flex items-center gap-2 laptop:gap-1'>
                             <CcyIcon className='h-5 w-5 laptop:h-6 laptop:w-6' />
                             {asset.label}-{maturity.label}
@@ -259,7 +259,7 @@ export const CurrencyMaturityDropdown = ({
                             <TableHeader columns={tableHeaderColumns}>
                                 {column => (
                                     <TableColumn
-                                        className='relative h-5 !rounded-none bg-neutral-900 px-0 text-xs font-normal leading-5 text-neutral-400'
+                                        className='relative h-5 !rounded-none bg-neutral-800 px-0 text-xs font-normal leading-5 text-neutral-400 laptop:bg-neutral-900'
                                         key={column.key}
                                     >
                                         {column.label}
