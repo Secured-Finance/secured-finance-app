@@ -93,18 +93,13 @@ const Toolbar = ({
     handleTermChange: (v: Maturity) => void;
 }) => {
     const { data: priceList } = useLastPrices();
-
-    const [termValue, setTermValue] = useState(selected.value);
     const selectedTerm = useMemo(
-        () => options.find(o => o.value === termValue),
-        [options, termValue]
+        () => options.find(o => o.value === selected.value),
+        [options, selected]
     );
 
     const onHandleTermChange = useCallback(
-        (v: Maturity) => {
-            setTermValue(v);
-            handleTermChange(v);
-        },
+        (v: Maturity) => handleTermChange(v),
         [handleTermChange]
     );
 

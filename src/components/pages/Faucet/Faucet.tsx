@@ -183,120 +183,135 @@ export const Faucet = () => {
                         <h1 className='typography-headline-4 py-8 text-center text-2xl font-bold text-white'>
                             Test Token Faucet
                         </h1>
-                        <div className='flex flex-col gap-10'>
-                            <div className='grid h-14 grid-flow-col items-center justify-start gap-x-3 rounded-xl border border-neutral-3 bg-black-20 px-2 tablet:justify-stretch'>
-                                <CurrencyDropdown
-                                    currencyOptionList={assetList}
-                                    selected={assetList[0]}
-                                    onChange={ccy => {
-                                        if (
-                                            assetList
-                                                .map(item => item.label)
-                                                .includes(ccy)
-                                        ) {
-                                            setCcy(ccy as CurrencySymbol);
-                                        } else {
-                                            setCcy(null);
-                                        }
-                                    }}
-                                    variant='fixedWidth'
-                                />
+                        {assetList.length > 0 ? (
+                            <div className='flex flex-col gap-10'>
+                                <div className='grid h-14 grid-flow-col items-center justify-start gap-x-3 rounded-xl border border-neutral-3 bg-black-20 px-2 tablet:justify-stretch'>
+                                    <CurrencyDropdown
+                                        currencyOptionList={assetList}
+                                        selected={assetList[0]}
+                                        onChange={ccy => {
+                                            if (
+                                                assetList
+                                                    .map(item => item.label)
+                                                    .includes(ccy)
+                                            ) {
+                                                setCcy(ccy as CurrencySymbol);
+                                            } else {
+                                                setCcy(null);
+                                            }
+                                        }}
+                                        variant='fixedWidth'
+                                    />
 
-                                <div className='typography-caption text-white-60'>
-                                    <div className='hidden tablet:flex tablet:w-full tablet:flex-row tablet:items-center  tablet:justify-between'>
-                                        <div>{address}</div>
-                                        <div className='flex flex-row items-center gap-2'>
-                                            <Tooltip
-                                                placement='bottom'
-                                                iconElement={
-                                                    <button
-                                                        className='flex h-9 w-9 items-center justify-center rounded-2xl bg-gunMetal'
-                                                        onClick={() =>
-                                                            navigator.clipboard.writeText(
-                                                                address
-                                                            )
-                                                        }
-                                                    >
-                                                        <ClipboardDocumentIcon className='h-5 w-5 text-slateGray hover:text-planetaryPurple' />
-                                                    </button>
-                                                }
-                                            >
-                                                Copy Contract ID
-                                            </Tooltip>
-                                            <Tooltip
-                                                placement='bottom'
-                                                disabled={!client}
-                                                iconElement={
-                                                    <button
-                                                        className={clsx(
-                                                            'flex h-9 w-9 items-center justify-center rounded-2xl bg-gunMetal',
-                                                            {
-                                                                'cursor-default':
-                                                                    !client,
+                                    <div className='typography-caption text-white-60'>
+                                        <div className='hidden tablet:flex tablet:w-full tablet:flex-row tablet:items-center  tablet:justify-between'>
+                                            <div>{address}</div>
+                                            <div className='flex flex-row items-center gap-2'>
+                                                <Tooltip
+                                                    placement='bottom'
+                                                    iconElement={
+                                                        <button
+                                                            className='flex h-9 w-9 items-center justify-center rounded-2xl bg-gunMetal'
+                                                            onClick={() =>
+                                                                navigator.clipboard.writeText(
+                                                                    address
+                                                                )
                                                             }
-                                                        )}
-                                                        onClick={() =>
-                                                            addToMetamask(token)
-                                                        }
-                                                    >
-                                                        <WalletIcon
+                                                        >
+                                                            <ClipboardDocumentIcon className='h-5 w-5 text-slateGray hover:text-planetaryPurple' />
+                                                        </button>
+                                                    }
+                                                >
+                                                    Copy Contract ID
+                                                </Tooltip>
+                                                <Tooltip
+                                                    placement='bottom'
+                                                    disabled={!client}
+                                                    iconElement={
+                                                        <button
                                                             className={clsx(
-                                                                'h-5 w-5 text-slateGray ',
+                                                                'flex h-9 w-9 items-center justify-center rounded-2xl bg-gunMetal',
                                                                 {
-                                                                    'hover:text-planetaryPurple':
-                                                                        client,
+                                                                    'cursor-default':
+                                                                        !client,
                                                                 }
                                                             )}
-                                                        />
-                                                    </button>
-                                                }
-                                            >
-                                                Add Token to Wallet
-                                            </Tooltip>
+                                                            onClick={() =>
+                                                                addToMetamask(
+                                                                    token
+                                                                )
+                                                            }
+                                                        >
+                                                            <WalletIcon
+                                                                className={clsx(
+                                                                    'h-5 w-5 text-slateGray ',
+                                                                    {
+                                                                        'hover:text-planetaryPurple':
+                                                                            client,
+                                                                    }
+                                                                )}
+                                                            />
+                                                        </button>
+                                                    }
+                                                >
+                                                    Add Token to Wallet
+                                                </Tooltip>
+                                            </div>
                                         </div>
+                                        <MenuAddToken
+                                            address={address}
+                                            onClick={() => addToMetamask(token)}
+                                        />
                                     </div>
-                                    <MenuAddToken
-                                        address={address}
+                                </div>
+                                <div className='grid h-14 grid-flow-col items-center justify-between gap-x-3 rounded-xl border border-neutral-3 bg-black-20 px-2'>
+                                    <button
+                                        className='flex h-10 w-36 flex-row items-center justify-start gap-x-2 rounded-lg bg-white-5 px-2 hover:bg-white-40'
                                         onClick={() => addToMetamask(token)}
-                                    />
+                                    >
+                                        <span>
+                                            <MetaMaskIcon className='h-6 w-6' />
+                                        </span>
+                                        <span className='typography-caption w-20 whitespace-nowrap pl-2 text-left text-white'>
+                                            Wallet
+                                        </span>
+                                    </button>
+                                    <div className='typography-caption text-white-60 tablet:pr-10'>
+                                        <span className='inline tablet:hidden'>
+                                            {account
+                                                ? AddressUtils.format(
+                                                      account,
+                                                      6
+                                                  )
+                                                : ''}
+                                        </span>
+                                        <span className='hidden tablet:inline'>
+                                            {account ?? ''}
+                                        </span>
+                                    </div>
+                                    <div></div>
+                                </div>
+                                <div className='flex justify-center'>
+                                    <Button
+                                        onClick={mint}
+                                        disabled={
+                                            !account || isPending || chainError
+                                        }
+                                        size={ButtonSizes.lg}
+                                    >
+                                        {isPending
+                                            ? 'Minting...'
+                                            : 'Mint tokens'}
+                                    </Button>
                                 </div>
                             </div>
-                            <div className='grid h-14 grid-flow-col items-center justify-between gap-x-3 rounded-xl border border-neutral-3 bg-black-20 px-2'>
-                                <button
-                                    className='flex h-10 w-36 flex-row items-center justify-start gap-x-2 rounded-lg bg-white-5 px-2 hover:bg-white-40'
-                                    onClick={() => addToMetamask(token)}
-                                >
-                                    <span>
-                                        <MetaMaskIcon className='h-6 w-6' />
-                                    </span>
-                                    <span className='typography-caption w-20 whitespace-nowrap pl-2 text-left text-white'>
-                                        Wallet
-                                    </span>
-                                </button>
-                                <div className='typography-caption text-white-60 tablet:pr-10'>
-                                    <span className='inline tablet:hidden'>
-                                        {account
-                                            ? AddressUtils.format(account, 6)
-                                            : ''}
-                                    </span>
-                                    <span className='hidden tablet:inline'>
-                                        {account ?? ''}
-                                    </span>
+                        ) : (
+                            <div className='flex justify-center pb-12'>
+                                <div className='text-white-60'>
+                                    No Test Tokens Available
                                 </div>
-                                <div></div>
                             </div>
-                            <div className='flex justify-center'>
-                                <Button
-                                    onClick={mint}
-                                    disabled={
-                                        !account || isPending || chainError
-                                    }
-                                    size={ButtonSizes.lg}
-                                >
-                                    {isPending ? 'Minting...' : 'Mint tokens'}
-                                </Button>
-                            </div>
-                        </div>
+                        )}
                         <Separator />
                         <div className='typography-body-2 flex flex-col gap-4 pt-5 text-planetaryPurple'>
                             <h1 className='text-neutral-8'>

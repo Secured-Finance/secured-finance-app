@@ -11,7 +11,8 @@ describe('test MyWalletCard component', () => {
         expect(screen.getByText('de926d...aa4f')).toBeInTheDocument();
     });
 
-    it('should show bridge dialog by default', async () => {
+    // TODO: reinstate this after squid widget filecoin bridging issue is resolved
+    it.skip('should show bridge dialog by default', async () => {
         await waitFor(() => render(<Default />));
         fireEvent.click(screen.getByRole('button', { name: 'Bridge' }));
         expect(await screen.findByRole('dialog')).toBeInTheDocument();
