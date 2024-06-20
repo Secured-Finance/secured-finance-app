@@ -360,7 +360,7 @@ export const Faucet = () => {
                         </div>
                     </div>
                 </GradientBox>
-                <MyWalletWidget hideBridge />
+                <MyWalletWidget />
             </TwoColumns>
             <Dialog
                 isOpen={isOpen}

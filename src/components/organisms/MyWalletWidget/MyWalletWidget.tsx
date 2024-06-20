@@ -4,11 +4,7 @@ import { useCurrencies } from 'src/hooks';
 import { WalletSource } from 'src/utils';
 import { useAccount } from 'wagmi';
 
-export const MyWalletWidget = ({
-    hideBridge = false,
-}: {
-    hideBridge?: boolean;
-}) => {
+export const MyWalletWidget = () => {
     const { address, isConnected } = useAccount();
     const { data: currencies = [] } = useCurrencies(true);
     const walletInformation = {
@@ -23,7 +19,6 @@ export const MyWalletWidget = ({
                 [WalletSource.METAMASK]: address,
             }}
             information={walletInformation}
-            hideBridge={hideBridge}
         />
     );
 };
