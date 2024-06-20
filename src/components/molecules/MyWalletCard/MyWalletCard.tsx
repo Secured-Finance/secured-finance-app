@@ -1,7 +1,6 @@
 import { Dialog } from '@headlessui/react';
-import dynamic from 'next/dynamic';
-import Link from 'next/link';
-import { useMemo, useRef, useState } from 'react';
+import clsx from 'clsx';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Filecoin from 'src/assets/coins/fil.svg';
 import AxelarFil from 'src/assets/coins/wfil.svg';
 import AxelarSquid from 'src/assets/img/squid+axelar.svg';
@@ -10,6 +9,7 @@ import {
     ButtonSizes,
     GradientBox,
     Separator,
+    Spinner,
 } from 'src/components/atoms';
 import {
     AssetDisclosure,
@@ -20,15 +20,8 @@ import {
     CurrencySymbol,
     WalletSource,
     generateWalletInformation,
-    squidConfig,
+    squidWidgetiFrame,
 } from 'src/utils';
-
-const SquidWidget = dynamic(() =>
-    import('@0xsquid/widget').then(mod => mod.SquidWidget)
-);
-
-const SQUID_ROUTER_URL =
-    'https://app.squidrouter.com/?chains=1%2C314&tokens=0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE%2C0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
 
 const BridgeDialog = ({
     isOpen,
@@ -37,7 +30,17 @@ const BridgeDialog = ({
     isOpen: boolean;
     onClose: () => void;
 }) => {
+    const [isReady, setIsReady] = useState<boolean>(false);
     const refDiv = useRef(null); // Dialog needs a focusable element. There are no focus elements in the dialog if its rendered without a button.
+
+    useEffect(() => {
+        if (!isOpen) {
+            setIsReady(false);
+        }
+        setTimeout(() => {
+            if (isOpen) setIsReady(isOpen);
+        }, 2300);
+    }, [isOpen, onClose]);
 
     return (
         <Dialog
@@ -54,9 +57,26 @@ const BridgeDialog = ({
                 >
                     <div
                         ref={refDiv}
-                        className='min-h-2/3 flex h-full w-full flex-col items-center justify-between space-y-6 tablet:h-fit tablet:justify-center'
+                        className='min-h-2/3 relative flex h-full w-full justify-center'
                     >
-                        <SquidWidget config={squidConfig} />
+                        {!isReady && (
+                            <div className='absolute inset-0 flex items-center justify-center'>
+                                <Spinner />
+                            </div>
+                        )}
+                        <div
+                            className={clsx('transition-opacity', {
+                                'opacity-100': isReady,
+                                'opacity-0': !isReady,
+                            })}
+                        >
+                            <iframe
+                                title='squid_widget'
+                                width='430'
+                                height='684'
+                                src={squidWidgetiFrame}
+                            />
+                        </div>
                     </div>
                 </Dialog.Panel>
             </div>
@@ -110,11 +130,12 @@ export const MyWalletCard = ({
                                     <Filecoin className='h-10 w-10' />
                                     <AxelarFil className='-ml-3 h-10 w-10' />
                                 </div>
-                                <Link target='_blank' href={SQUID_ROUTER_URL}>
-                                    <Button size={ButtonSizes.sm}>
-                                        Bridge
-                                    </Button>
-                                </Link>
+                                <Button
+                                    size={ButtonSizes.sm}
+                                    onClick={() => setIsOpen(true)}
+                                >
+                                    Bridge
+                                </Button>
                             </div>
                             <div className='typography-nav-menu-default flex flex-col gap-4 text-secondary7'>
                                 <p className='typography-nav-menu-default text-[13px]'>

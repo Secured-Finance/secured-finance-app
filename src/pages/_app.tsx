@@ -146,6 +146,7 @@ function App({ Component, pageProps }: AppProps) {
                         footer={<Footer />}
                     >
                         <Component {...pageProps} />
+                        {/* <div id='headlessui-portal-root'></div> */}
                     </Layout>
                 </Providers>
             </Provider>
