@@ -1,10 +1,13 @@
+/* eslint-disable prettier/prettier */
 import { BuildingLibraryIcon } from '@heroicons/react/20/solid';
 import clsx from 'clsx';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import LockClose from 'src/assets/icons/lock-close.svg';
 import LockOpen from 'src/assets/icons/lock-open.svg';
 import Coins from 'src/assets/img/2d coins.svg';
 import Glow from 'src/assets/img/glow.svg';
+import SfPoints from 'src/assets/img/sf-points.svg';
 import { CurrencyIcon } from 'src/components/atoms';
 import { useBreakpoint } from 'src/hooks';
 import {
@@ -80,6 +83,19 @@ export const MultiplierBlock = () => {
     );
 };
 
+const SFPoints = () => (
+    <Link
+        href='https://docs.secured.finance/top/secured-finance-points-sfp'
+        target='_blank'
+        className='flex flex-shrink-0 flex-nowrap tablet:ml-1 laptop:ml-0 min-[1119px]:ml-0 desktop:ml-1'
+    >
+        <span className='typography-mobile-body-5 tablet:typography-desktop-body-5 desktop:typography-desktop-body-3 flex items-center justify-center gap-2 rounded-lg bg-starBlue-20 px-2 py-1 font-semibold uppercase laptop:rounded-xl desktop:px-3 desktop:py-2'>
+            <SfPoints className='h-[18px] w-[18px] tablet:h-3.5 tablet:w-3.5 laptop:h-4 laptop:w-4 desktop:h-[18px] desktop:w-[18px]' />{' '}
+            <span className='underline'>SF Points</span>
+        </span>
+    </Link>
+);
+
 export const CampaignStatus = ({
     startTime,
     endTime,
@@ -106,7 +122,6 @@ export const CampaignStatus = ({
         : 'Campaign starts in...';
 
     return (
-        // eslint-disable-next-line prettier/prettier
         <div className='flex max-w-[753px] flex-col justify-between gap-3 rounded-3xl border border-blue bg-[rgba(7,24,39,0.20)] p-4 backdrop-blur-[20px] tablet:p-6 laptop:w-[48%] laptop:gap-[30px] laptop:border-2 laptop:p-6 desktop:w-[54%] desktop:p-8'>
             <div className='flex flex-col gap-3 desktop:gap-7'>
                 <div className='flex flex-col justify-between gap-2 desktop:flex-row desktop:items-center'>
@@ -172,9 +187,9 @@ export const CampaignStatus = ({
                 </div>
             </div>
             <div className='flex flex-col gap-2 tablet:items-start laptop:gap-5 desktop:gap-6'>
-                <span className='laptop:typography-desktop-body-4 desktop:typography-desktop-body-3 typography-mobile-body-5 w-full text-neutral-50'>
+                <span className='tablet:typography-desktop-body-5 laptop:typography-desktop-body-4 desktop:typography-desktop-body-3 typography-mobile-body-5 inline-flex w-full flex-wrap items-center text-neutral-50 laptop:flex-shrink-0 laptop:whitespace-nowrap'>
                     Quest Goal: Deposit following collateral assets and earn
-                    double points
+                    double <SFPoints />
                 </span>
                 <div className='flex flex-row items-center gap-3 laptop:gap-4'>
                     <div className='relative flex w-1/2 flex-row items-center justify-center gap-2 overflow-hidden rounded-2xl bg-chart-fil/20 px-8 py-2 laptop:w-fit'>
@@ -220,7 +235,11 @@ export const DepositCard = ({
             {/* eslint-disable-next-line prettier/prettier */}
             <div className='z-1 relative flex w-full flex-col justify-between gap-4 p-4 min-[645px]:gap-8 tablet:p-6 laptop:flex-row laptop:items-end'>
                 <span className='tablet:typography-mobile-body-1 block max-w-[50%] text-base font-semibold leading-6 text-white laptop:max-w-[200px] laptop:text-[18px] laptop:leading-6 desktop:text-[22px] desktop:leading-8'>
-                    Earn 2X points by depositing FIL/iFIL
+                    Earn 2X{' '}
+                    <Link href='/points' className='underline'>
+                        points
+                    </Link>{' '}
+                    by depositing FIL/iFIL
                 </span>
 
                 <button
