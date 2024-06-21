@@ -50,7 +50,3 @@ export const squidConfig: any = {
         },
     ],
 };
-
-export const squidWidgetiFrame = `https://widget.squidrouter.com/iframe?config=${encodeURIComponent(
-    JSON.stringify(squidConfig)
-)}`;
