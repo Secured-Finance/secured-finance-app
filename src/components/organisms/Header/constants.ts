@@ -10,14 +10,14 @@ export const PRODUCTION_LINKS = [
         dataCy: 'history',
     },
     {
-        text: 'Campaign',
-        link: '/campaign',
-        dataCy: 'campaign',
-    },
-    {
         text: 'Points',
         link: '/points',
         dataCy: 'points',
+    },
+    {
+        text: 'Campaign',
+        link: '/campaign',
+        dataCy: 'campaign',
     },
 ];
 
