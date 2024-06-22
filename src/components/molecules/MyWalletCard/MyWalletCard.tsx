@@ -1,8 +1,6 @@
-import { Dialog } from '@headlessui/react';
 import clsx from 'clsx';
-import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { useMemo, useRef, useState } from 'react';
+import { useMemo } from 'react';
 import Filecoin from 'src/assets/coins/fil.svg';
 import AxelarFil from 'src/assets/coins/wfil.svg';
 import AxelarSquid from 'src/assets/img/squid+axelar.svg';
@@ -21,46 +19,8 @@ import {
     CurrencySymbol,
     WalletSource,
     generateWalletInformation,
-    squidConfig,
 } from 'src/utils';
 
-const SquidWidget = dynamic(() =>
-    import('@0xsquid/widget').then(mod => mod.SquidWidget)
-);
-
-const BridgeDialog = ({
-    isOpen,
-    onClose,
-}: {
-    isOpen: boolean;
-    onClose: () => void;
-}) => {
-    const refDiv = useRef(null); // Dialog needs a focusable element. There are no focus elements in the dialog if its rendered without a button.
-
-    return (
-        <Dialog
-            open={isOpen}
-            onClose={onClose}
-            className='relative z-30'
-            initialFocus={refDiv}
-        >
-            <div className='fixed inset-0 bg-backgroundBlur backdrop-blur-sm' />
-            <div className='fixed inset-0 flex items-center justify-center'>
-                <Dialog.Panel
-                    className='h-screen w-full overflow-y-auto rounded-xl bg-neutral-900 p-6 shadow-deep tablet:h-fit tablet:w-fit'
-                    data-cy='modal'
-                >
-                    <div
-                        ref={refDiv}
-                        className='min-h-2/3 flex h-full w-full flex-col items-center justify-between space-y-6 tablet:h-fit tablet:justify-center'
-                    >
-                        <SquidWidget config={squidConfig} />
-                    </div>
-                </Dialog.Panel>
-            </div>
-        </Dialog>
-    );
-};
 export const MyWalletCard = ({
     addressRecord,
     information,
@@ -71,7 +31,6 @@ export const MyWalletCard = ({
     hideBridge?: boolean;
 }) => {
     const balanceRecord = useBalances();
-    const [isOpen, setIsOpen] = useState(false);
 
     const assetMap: AssetDisclosureProps[] = useMemo(
         () =>
@@ -137,7 +96,6 @@ export const MyWalletCard = ({
                     )}
                 </div>
             </GradientBox>
-            <BridgeDialog isOpen={isOpen} onClose={() => setIsOpen(false)} />
         </div>
     );
 };
