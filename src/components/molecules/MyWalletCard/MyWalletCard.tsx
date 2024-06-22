@@ -28,9 +28,6 @@ const SquidWidget = dynamic(() =>
     import('@0xsquid/widget').then(mod => mod.SquidWidget)
 );
 
-const SQUID_ROUTER_URL =
-    'https://app.squidrouter.com/?chains=1%2C314&tokens=0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE%2C0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
-
 const BridgeDialog = ({
     isOpen,
     onClose,
@@ -118,10 +115,7 @@ export const MyWalletCard = ({
                                         <Filecoin className='h-10 w-10' />
                                         <AxelarFil className='-ml-3 h-10 w-10' />
                                     </div>
-                                    <Link
-                                        target='_blank'
-                                        href={SQUID_ROUTER_URL}
-                                    >
+                                    <Link href='/bridge'>
                                         <Button size={ButtonSizes.sm}>
                                             Bridge
                                         </Button>
