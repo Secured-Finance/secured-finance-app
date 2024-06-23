@@ -37,6 +37,7 @@ import {
     useCurrencies,
     useCurrencyDelistedStatus,
     useGraphClientHook,
+    useIsSubgraphSupported,
     useItayoseEstimation,
     useLastPrices,
     useLendOrderBook,
@@ -48,6 +49,7 @@ import {
     useOrderbook,
     useYieldCurveMarketRates,
 } from 'src/hooks';
+import useSF from 'src/hooks/useSecuredFinance';
 import {
     selectLandingOrderForm,
     setCurrency,
@@ -142,6 +144,10 @@ export const Itayose = () => {
         maturity
     );
     const lendingContracts = lendingMarkets[currency];
+
+    const securedFinance = useSF();
+    const currentChainId = securedFinance?.config.chain.id;
+    const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
 
     const marketPhase = useMarketPhase(currency, maturity);
     const data = useMarket(currency, maturity);
@@ -388,7 +394,11 @@ export const Itayose = () => {
                     </div>
                     <div className='col-span-12 laptop:w-full'>
                         <HorizontalTab
-                            tabTitles={['Open Orders', 'Order History']}
+                            tabTitles={
+                                isSubgraphSupported
+                                    ? ['Open Orders', 'Order History']
+                                    : ['Open Orders']
+                            }
                             onTabChange={setSelectedTable}
                             useCustomBreakpoint={true}
                         >
