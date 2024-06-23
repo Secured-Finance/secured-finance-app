@@ -419,11 +419,7 @@ export const PortfolioManagement = () => {
                     />
                 </div>
                 <div className='my-4 laptop:my-0'>
-                    <MyWalletWidget
-                        hideBridge={currentChainId
-                            ?.toString()
-                            .startsWith('314')}
-                    />
+                    <MyWalletWidget />
                 </div>
             </TwoColumns>
         </Page>
