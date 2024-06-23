@@ -55,11 +55,11 @@ describe('LendingCard Component', () => {
         await waitFor(() => render(<Default />));
     });
 
-    it('should render the component with Borrow as the default', async () => {
+    it('should render the component with Lend as the default', async () => {
         render(<Default />, { preloadedState });
         expect(
             await screen.findByTestId('place-order-button')
-        ).toHaveTextContent('Borrow');
+        ).toHaveTextContent('Lend');
     });
 
     it('should show correct market rate', async () => {
@@ -71,6 +71,10 @@ describe('LendingCard Component', () => {
 
     it('should open Confirm Borrow dialog when borrow button is clicked', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
+
+        const borrowTab = screen.getByRole('radio', { name: 'Borrow' });
+        fireEvent.click(borrowTab);
+
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '10' } });
         const placeOrderButton = await screen.findByRole('button', {
@@ -150,6 +154,10 @@ describe('LendingCard Component', () => {
 
     it('should open the confirm borrow dialog to place a market order when the borrow button is clicked', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
+
+        const borrowTab = screen.getByRole('radio', { name: 'Borrow' });
+        fireEvent.click(borrowTab);
+
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '10' } });
 
@@ -188,12 +196,10 @@ describe('LendingCard Component', () => {
 
     it('should render wallet source when side is lend', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
-        const lendTab = screen.getByText('Lend');
-        fireEvent.click(lendTab);
-        await waitFor(() =>
-            expect(screen.getByText('Available')).toBeInTheDocument()
-        );
-        expect(screen.getByText('10,000')).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.getByText('Available')).toBeInTheDocument();
+            expect(screen.getByText('10,000')).toBeInTheDocument();
+        });
 
         const walletSourceButton = screen.getByTestId(
             'wallet-source-selector-button'
@@ -208,22 +214,20 @@ describe('LendingCard Component', () => {
 
     it('should show Collateral Usage and Available to Borrow only in Borrow order', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
-        expect(screen.queryByText('Available to borrow')).toBeInTheDocument();
-        expect(screen.queryByText('Collateral Usage')).toBeInTheDocument();
-        const lendTab = screen.getByText('Lend');
-        fireEvent.click(lendTab);
         expect(
             screen.queryByText('Available to borrow')
         ).not.toBeInTheDocument();
         expect(screen.queryByText('Collateral Usage')).not.toBeInTheDocument();
+
+        const borrowTab = screen.getByRole('radio', { name: 'Borrow' });
+        fireEvent.click(borrowTab);
+
+        expect(screen.queryByText('Available to borrow')).toBeInTheDocument();
+        expect(screen.queryByText('Collateral Usage')).toBeInTheDocument();
     });
 
     it('it should disable the action button and show error hint if amount is greater than available amount', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
-
-        const lendTab = screen.getByText('Lend');
-        fireEvent.click(lendTab);
-
         await waitFor(() =>
             expect(screen.getByText('Available')).toBeInTheDocument()
         );
@@ -248,10 +252,10 @@ describe('LendingCard Component', () => {
         const track = jest.spyOn(analytics, 'track');
         await waitFor(() => render(<Default />, { preloadedState }));
 
-        const lendTab = screen.getByText('Lend');
-        fireEvent.click(lendTab);
+        const borrowTab = screen.getByRole('radio', { name: 'Borrow' });
+        fireEvent.click(borrowTab);
         expect(track).toHaveBeenCalledWith(ButtonEvents.ORDER_SIDE, {
-            [ButtonProperties.ORDER_SIDE]: 'Lend',
+            [ButtonProperties.ORDER_SIDE]: 'Borrow',
         });
     });
 });

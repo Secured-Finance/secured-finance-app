@@ -35,18 +35,18 @@ WalletNotConnected.parameters = {
     connected: false,
 };
 
-export const Lend = Template.bind({});
-Lend.play = async ({ canvasElement }) => {
+export const Borrow = Template.bind({});
+Borrow.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const lendTab = await canvas.findByRole('radio', { name: 'Buy / Lend' });
-    await userEvent.click(lendTab);
+    const borrowTab = await canvas.findByRole('radio', {
+        name: 'Sell / Borrow',
+    });
+    await userEvent.click(borrowTab);
 };
 
 export const FailedAmountValidation = Template.bind({});
 FailedAmountValidation.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const lendTab = await canvas.findByRole('radio', { name: 'Buy / Lend' });
-    await userEvent.click(lendTab);
     const input = await canvas.findByRole('textbox', { name: 'Amount' });
     await userEvent.type(input, '999999999', {
         delay: 100,

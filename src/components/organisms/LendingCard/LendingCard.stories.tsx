@@ -26,11 +26,11 @@ const Template: StoryFn<typeof LendingCard> = args => {
 
 export const Default = Template.bind({});
 
-export const Lend = Template.bind({});
-Lend.play = async ({ canvasElement }) => {
+export const Borrow = Template.bind({});
+Borrow.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const lendTab = canvas.getByRole('radio', { name: 'Lend' });
-    lendTab.click();
+    const borrowTab = canvas.getByRole('radio', { name: 'Borrow' });
+    borrowTab.click();
 };
 
 export const FailedAmountValidation = Template.bind({});

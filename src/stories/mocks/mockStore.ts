@@ -16,7 +16,7 @@ export const initialStore = {
     landingOrderForm: {
         currency: CurrencySymbol.WFIL,
         maturity: dec22Fixture.toNumber(),
-        side: OrderSide.BORROW,
+        side: OrderSide.LEND,
         amount: '',
         unitPrice: undefined,
         orderType: OrderType.MARKET,

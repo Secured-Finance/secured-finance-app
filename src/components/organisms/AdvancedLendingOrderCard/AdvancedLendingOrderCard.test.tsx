@@ -22,7 +22,7 @@ const preloadedState = {
     landingOrderForm: {
         currency: CurrencySymbol.USDC,
         maturity: dec22Fixture,
-        side: OrderSide.BORROW,
+        side: OrderSide.LEND,
         amount: '500',
         unitPrice: '95',
         orderType: OrderType.LIMIT,
@@ -131,6 +131,8 @@ describe('AdvancedLendingOrderCard Component', () => {
 
     it('should display the PlaceOrder Dialog when clicking on the Place Order button', async () => {
         render(<Default />, { preloadedState });
+        const borrowTab = screen.getByText('Sell / Borrow');
+        fireEvent.click(borrowTab);
         expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
         expect(
             await screen.findByTestId('place-order-button')
@@ -173,8 +175,6 @@ describe('AdvancedLendingOrderCard Component', () => {
 
     it('should render wallet source when side is lend', async () => {
         render(<Default />, { preloadedState });
-        const lendTab = screen.getByText('Buy / Lend');
-        fireEvent.click(lendTab);
         expect(screen.getByText('Available')).toBeInTheDocument();
         expect(await screen.findByText('4,000')).toBeInTheDocument();
 
@@ -194,6 +194,9 @@ describe('AdvancedLendingOrderCard Component', () => {
         render(<Default />, {
             preloadedState,
         });
+
+        const borrowTab = screen.getByText('Sell / Borrow');
+        fireEvent.click(borrowTab);
 
         await waitFor(() => {
             expect(screen.getByText('$5,203.15')).toBeInTheDocument();
@@ -374,6 +377,10 @@ describe('AdvancedLendingOrderCard Component', () => {
                 },
             },
         });
+
+        const borrowTab = screen.getByText('Sell / Borrow');
+        fireEvent.click(borrowTab);
+
         await waitFor(() => {
             const input = screen.getByRole('textbox', { name: 'Amount' });
             fireEvent.change(input, { target: { value: '100' } });
@@ -470,6 +477,9 @@ describe('AdvancedLendingOrderCard Component', () => {
                     },
                 }
             );
+
+            const borrowTab = screen.getByText('Sell / Borrow');
+            fireEvent.click(borrowTab);
 
             expect(
                 screen.queryByText(
