@@ -15,6 +15,7 @@ import {
 import { capitalCase, snakeCase } from 'change-case';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
+import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import CountUp from 'react-countup';
@@ -370,6 +371,98 @@ const QuestList = ({ chainId }: { chainId: number }) => {
     const provider = readWalletFromStore();
     const connector = connectors.find(connect => connect.name === provider);
 
+    const PointTag = ({
+        point,
+        questType,
+        isHighlight,
+    }: {
+        point: number;
+        questType: QuestType;
+        isHighlight: boolean;
+    }) => {
+        const prefix = [
+            QuestType.LimitOrder,
+            QuestType.ActivePosition,
+        ].includes(questType)
+            ? 'Up to '
+            : '';
+        const suffix = [QuestType.DailyLogin, QuestType.Referral].includes(
+            questType
+        )
+            ? 'pt'
+            : 'pt / $';
+
+        return (
+            <div className='whitespace-nowrap'>
+                <Chip
+                    label={prefix + point.toString() + suffix}
+                    color={isHighlight ? ChipColors.Yellow : ChipColors.Blue}
+                />
+            </div>
+        );
+    };
+
+    const BonusPointTags = ({
+        bonusPoints,
+        questType,
+        questPoint,
+    }: {
+        bonusPoints: Record<string, number>;
+        questType: QuestType;
+        questPoint: number;
+    }) => {
+        const BonusPointTag = ({
+            label,
+            color,
+        }: {
+            label: string;
+            color: ChipColors;
+        }) => (
+            <div className='whitespace-nowrap'>
+                <Chip label={label} color={color} />
+            </div>
+        );
+
+        const bonusPointTags = useMemo(() => {
+            const tags = [];
+            if (questType === QuestType.LimitOrder) {
+                if (bonusPoints['lend'] > 0) {
+                    tags.push(
+                        <div className='pl-2' key={'lend'}>
+                            <BonusPointTag
+                                label={`LEND ${Number(
+                                    (
+                                        (questPoint + bonusPoints['lend']) /
+                                        questPoint
+                                    ).toFixed(1)
+                                )}x`}
+                                color={ChipColors.Teal}
+                            />
+                        </div>
+                    );
+                }
+                if (bonusPoints['borrow'] > 0) {
+                    tags.push(
+                        <div className='pl-2' key={'borrow'}>
+                            <BonusPointTag
+                                label={`BORROW ${Number(
+                                    (
+                                        (questPoint + bonusPoints['borrow']) /
+                                        questPoint
+                                    ).toFixed(1)
+                                )}x`}
+                                color={ChipColors.Red}
+                            />
+                        </div>
+                    );
+                }
+            }
+            return tags;
+        }, [bonusPoints, questPoint, questType]);
+
+        return <>{bonusPointTags}</>;
+    };
+
     const QuestActionButton = ({
         questType,
         questChainId,
@@ -381,41 +474,55 @@ const QuestList = ({ chainId }: { chainId: number }) => {
         questCurrencies?: string[] | null;
         startAt: string | null;
     }) => {
-        switch (questType) {
-            case QuestType.Deposit:
-                return (
-                    <Button
-                        size={ButtonSizes.md}
-                        disabled={
-                            startAt ? dayjs().isBefore(dayjs(startAt)) : false
+        const router = useRouter();
+
+        let label: string | undefined;
+        let call: () => void | undefined;
+
+        if (questChainId && questCurrencies) {
+            switch (questType) {
+                case QuestType.Deposit:
+                    label = 'Deposit';
+                    call = () => {
+                        setIsDefaultDepositCcySymbol(questCurrencies[0]);
+                        setIsOpenDepositModal(true);
+                    };
+                    break;
+                case QuestType.LimitOrder:
+                    label = 'Open Order';
+                    call = () => {
+                        router.push('/');
+                    };
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if (label) {
+            return (
+                <Button
+                    size={ButtonSizes.md}
+                    disabled={
+                        startAt ? dayjs().isBefore(dayjs(startAt)) : false
+                    }
+                    onClick={() => {
+                        if (questChainId !== chainId) {
+                            connector
+                                ?.switchChain?.(Number(questChainId))
+                                .then(() => {
+                                    setTimeout(() => call(), 500);
+                                });
+                        } else {
+                            call();
                         }
-                        onClick={() => {
-                            if (questChainId && questCurrencies) {
-                                if (questChainId !== chainId) {
-                                    connector
-                                        ?.switchChain?.(Number(questChainId))
-                                        .then(() => {
-                                            setTimeout(() => {
-                                                setIsDefaultDepositCcySymbol(
-                                                    questCurrencies[0]
-                                                );
-                                                setIsOpenDepositModal(true);
-                                            }, 500);
-                                        });
-                                } else {
-                                    setIsDefaultDepositCcySymbol(
-                                        questCurrencies[0]
-                                    );
-                                    setIsOpenDepositModal(true);
-                                }
-                            }
-                        }}
-                    >
-                        Deposit
-                    </Button>
-                );
-            default:
-                return <> </>;
+                    }}
+                >
+                    {label}
+                </Button>
+            );
+        } else {
+            return <></>;
         }
     };
 
@@ -453,23 +560,20 @@ const QuestList = ({ chainId }: { chainId: number }) => {
                                 startAt={item.startAt}
                             />
                         </div>
+
                         <div className='typography-caption-2 flex flex-row items-center text-secondary7'>
-                            <Chip
-                                label={
-                                    item.point.toString() +
-                                    ([
-                                        QuestType.DailyLogin,
-                                        QuestType.Referral,
-                                    ].includes(item.questType)
-                                        ? 'pt'
-                                        : 'pt / $')
-                                }
-                                color={
-                                    item.isHighlight
-                                        ? ChipColors.Yellow
-                                        : ChipColors.Blue
-                                }
+                            <PointTag
+                                point={item.point}
+                                questType={item.questType}
+                                isHighlight={item.isHighlight}
                             />
+                            {item.bonusPoints && (
+                                <BonusPointTags
+                                    bonusPoints={item.bonusPoints}
+                                    questType={item.questType}
+                                    questPoint={item.point}
+                                />
+                            )}
                             {item.currencies && (
                                 <div className='flex pl-3'>
                                     {item.currencies.map(ccy => (
@@ -483,7 +587,6 @@ const QuestList = ({ chainId }: { chainId: number }) => {
                                     ))}
                                 </div>
                             )}
-
                             {(item.startAt || item.endAt) && (
                                 <div className='pl-2'>
                                     {`${formatDate(
