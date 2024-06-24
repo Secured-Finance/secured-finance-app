@@ -11,7 +11,6 @@ import {
     TableRow,
 } from '@nextui-org/table';
 import React, { useMemo, useState } from 'react';
-import { Option } from 'src/components/atoms';
 import {
     baseContracts,
     useBreakpoint,
@@ -27,22 +26,11 @@ import {
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { desktopColumns, mobileColumns } from './constants';
-import { ColumnKey } from './types';
-
-type CurrencyMaturityDropdownProps = {
-    currencyList: Option<CurrencySymbol>[];
-    asset?: Option<CurrencySymbol>;
-    maturityList: Option<Maturity>[];
-    maturity?: Option<Maturity>;
-    onChange: (currency: CurrencySymbol, maturity: Maturity) => void;
-};
-
-type FilteredOptionsType = {
-    key: string;
-    display: string;
-    currency: CurrencySymbol;
-    maturity: Maturity;
-}[];
+import {
+    ColumnKey,
+    CurrencyMaturityDropdownProps,
+    FilteredOptionsType,
+} from './types';
 
 export const CurrencyMaturityDropdown = ({
     currencyList,
