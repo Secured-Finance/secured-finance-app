@@ -10,7 +10,7 @@ export const Bridge = () => {
     return (
         <Page title='Bridging Service'>
             <div className='flex items-center justify-center'>
-                <div className='flex rounded-[1rem] bg-neutral-900 p-3 shadow-deep'>
+                <div className='flex rounded-[1rem] bg-neutral-900 p-3 shadow-deep tablet:min-w-[444px]'>
                     <SquidWidget config={squidConfig} />
                 </div>
             </div>

@@ -1,6 +1,6 @@
-import { columns, mobileColumns } from './constants';
+import { desktopColumns, mobileColumns } from './constants';
 
-const combined = [...columns, ...mobileColumns];
+const combined = [...desktopColumns, ...mobileColumns];
 
 export enum CurrencyCategories {
     USDC = 'USDC',

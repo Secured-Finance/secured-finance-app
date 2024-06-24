@@ -2,47 +2,34 @@ export const mobileColumns = [
     {
         key: 'symbol',
         label: 'Symbol',
+        width: '50%',
     },
     {
         key: 'last-prices-mobile',
         label: 'Last Price (APR)',
+        width: '50%',
     },
-    // {
-    //     key: '24h-change',
-    //     label: '24H change',
-    //     isSubgraphField: true,
-    // },
 ];
 
-export const columns = [
+export const desktopColumns = [
     {
         key: 'symbol',
         label: 'Symbol',
+        width: '30%',
     },
     {
         key: 'last-prices',
         label: 'Last Price ($)',
+        width: '20%',
     },
-    // {
-    //     key: '24h-change',
-    //     label: '24H ∆ Price',
-    //     isSubgraphField: true,
-    // },
     {
         key: 'apr',
         label: 'APR',
+        width: '20%',
     },
-    // {
-    //     key: '24h-apr',
-    //     label: '24H ∆ APR',
-    //     isSubgraphField: true,
-    // },
-    // {
-    //     key: 'volume',
-    //     label: 'Volume',
-    // },
     {
         key: 'maturity',
         label: 'Time to Maturity',
+        width: '30%',
     },
 ];
