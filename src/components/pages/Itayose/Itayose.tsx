@@ -123,6 +123,7 @@ const Toolbar = ({
                                     maturity={selectedTerm}
                                     maturityList={options}
                                     onChange={onChange}
+                                    isItayosePage
                                 />
                                 <p className='whitespace-nowrap pl-1 text-[11px] leading-4 tablet:text-xs laptop:text-xs'>
                                     {`Maturity ${
@@ -325,22 +326,24 @@ export const Itayose = () => {
     return (
         <Page title='Pre-Open Order Book'>
             {preOrderDays && (
-                <Alert
-                    title={
-                        <>
-                            Secure your market position by placing limit orders
-                            up to {preOrderDays} days before trading begins with
-                            no fees. Opt for either a lend or borrow during
-                            pre-open, not both. No new pre-orders will be
-                            accepted within 1 hour prior to the start of
-                            trading. Learn more at&nbsp;
-                            <TextLink
-                                href='https://docs.secured.finance/platform-guide/unique-features/fair-price-discovery/'
-                                text='Secured Finance Docs'
-                            />
-                        </>
-                    }
-                />
+                <div className='px-3 laptop:px-0'>
+                    <Alert
+                        title={
+                            <>
+                                Secure your market position by placing limit
+                                orders up to {preOrderDays} days before trading
+                                begins with no fees. Opt for either a lend or
+                                borrow during pre-open, not both. No new
+                                pre-orders will be accepted within 1 hour prior
+                                to the start of trading. Learn more at&nbsp;
+                                <TextLink
+                                    href='https://docs.secured.finance/platform-guide/unique-features/fair-price-discovery/'
+                                    text='Secured Finance Docs'
+                                />
+                            </>
+                        }
+                    />
+                </div>
             )}
             <ThreeColumnsWithTopBar
                 topBar={

@@ -13,6 +13,7 @@ export default {
         maturityList: maturityOptions,
         maturity: maturityOptions[0],
         onChange: () => {},
+        isItayosePage: false,
     },
     parameters: {
         apolloClient: {
@@ -26,6 +27,15 @@ const Template: StoryFn<typeof CurrencyMaturityDropdown> = args => (
 );
 
 export const Default = Template.bind({});
+
+export const ItayosePage = Template.bind({});
+ItayosePage.args = {
+    isItayosePage: true,
+};
+ItayosePage.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    canvas.getByRole('button').click();
+};
 
 export const OpenedDropdown = Template.bind({});
 OpenedDropdown.play = async ({ canvasElement }) => {
