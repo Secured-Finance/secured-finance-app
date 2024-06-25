@@ -3,6 +3,7 @@ import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import {
+    SortDescriptor,
     Table,
     TableBody,
     TableCell,
@@ -39,7 +40,6 @@ export const CurrencyMaturityDropdown = ({
     maturity = maturityList[0],
     onChange,
 }: CurrencyMaturityDropdownProps) => {
-    const isTablet = useBreakpoint('laptop');
     const [searchValue, setSearchValue] = useState<string>('');
     const [currentCurrency, setCurrentCurrency] = useState<
         CurrencySymbol | undefined
@@ -61,7 +61,10 @@ export const CurrencyMaturityDropdown = ({
                     if (
                         (currentCurrency &&
                             !currentCurrency.includes(currency.value)) ||
-                        (isItayose && !data?.isItayosePeriod) ||
+                        (isItayose &&
+                            !(
+                                data?.isItayosePeriod || data?.isPreOrderPeriod
+                            )) ||
                         (searchValue &&
                             !ccyMaturity
                                 .toLowerCase()
@@ -97,11 +100,17 @@ export const CurrencyMaturityDropdown = ({
         }
     };
 
+    const handleSortChange = (descriptor: SortDescriptor) => {
+        const { column, direction } = descriptor;
+        // eslint-disable-next-line no-console
+        console.log(column, direction);
+    };
+
     return (
         <Menu>
             {({ open, close }) => (
                 <div className='relative'>
-                    <Menu.Button className='laptop:typography-desktop-sh-9 flex w-full items-center justify-between gap-2 rounded-lg bg-neutral-700 px-2 py-1.5 text-sm font-semibold leading-6 text-white laptop:min-w-[190px] laptop:py-2.5 laptop:pl-3 laptop:pr-2'>
+                    <Menu.Button className='flex w-full items-center justify-between gap-2 rounded-lg bg-neutral-700 px-2 py-1.5 text-sm font-semibold normal-case leading-6 text-white laptop:w-[226px] laptop:py-2.5 laptop:pl-3 laptop:pr-2 laptop:text-base laptop:leading-6 desktop:w-[302px] desktop:text-[22px]'>
                         <div className='flex items-center gap-2 laptop:gap-1'>
                             {CcyIcon && (
                                 <CcyIcon className='h-5 w-5 laptop:h-6 laptop:w-6' />
@@ -150,10 +159,10 @@ export const CurrencyMaturityDropdown = ({
                         </div>
 
                         <CurrencyMaturityTable
-                            isTablet={isTablet}
                             options={filteredOptions as FilteredOptionsType}
                             onOptionClick={handleOptionClick}
                             close={close}
+                            onSortChange={handleSortChange}
                         />
                     </Menu.Items>
                 </div>
@@ -231,12 +240,11 @@ const FilterButtons = ({
 };
 
 const CurrencyMaturityTable = ({
-    isTablet,
     options,
     onOptionClick,
     close,
+    onSortChange,
 }: {
-    isTablet: boolean;
     options: {
         key: string;
         display: string;
@@ -245,7 +253,9 @@ const CurrencyMaturityTable = ({
     }[];
     onOptionClick: (currency: CurrencySymbol, maturity: Maturity) => void;
     close: () => void;
+    onSortChange: (descriptor: SortDescriptor) => void;
 }) => {
+    const isTablet = useBreakpoint('laptop');
     const { data: lendingMarkets = baseContracts } = useLendingMarkets();
     const columns = isTablet ? mobileColumns : desktopColumns;
 
@@ -298,8 +308,11 @@ const CurrencyMaturityTable = ({
             isHeaderSticky
             classNames={{
                 base: 'laptop:h-[232px] overflow-auto laptop:pl-4 laptop:pr-3',
-                table: 'max-h-[400px]',
+                table: 'max-h-[400px] border-separate border-spacing-y-1',
             }}
+            onSortChange={(descriptor: SortDescriptor) =>
+                onSortChange(descriptor)
+            }
         >
             <TableHeader columns={columns}>
                 {column => (
@@ -308,6 +321,7 @@ const CurrencyMaturityTable = ({
                         key={column.key}
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         width={column.width as any}
+                        allowsSorting={column.allowsSorting}
                     >
                         {column.label}
                         <span className='absolute bottom-0 left-0 h-[1px] w-full bg-neutral-700'></span>
@@ -325,7 +339,7 @@ const CurrencyMaturityTable = ({
                         }}
                     >
                         {columnKey => (
-                            <TableCell className='typography-mobile-body-5 laptop:typography-desktop-body-5 px-0 py-2 font-numerical text-neutral-50'>
+                            <TableCell className='typography-mobile-body-5 laptop:typography-desktop-body-5 px-0 py-0 font-numerical text-neutral-50'>
                                 {renderCell(item, `${columnKey}`)}
                             </TableCell>
                         )}
