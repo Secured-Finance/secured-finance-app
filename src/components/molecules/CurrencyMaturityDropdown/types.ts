@@ -14,12 +14,15 @@ export enum CurrencyCategories {
 
 export type ColumnKey = (typeof combined)[number]['key'];
 
-export type FilteredOptionsType = {
+export type FilteredOption = {
     key: string;
     display: string;
     currency: CurrencySymbol;
     maturity: Maturity;
-}[];
+    lastPrice: string;
+    apr: string;
+    isItayoseOption: boolean;
+};
 
 export type CurrencyMaturityDropdownProps = {
     currencyList: Option<CurrencySymbol>[];
@@ -27,4 +30,5 @@ export type CurrencyMaturityDropdownProps = {
     maturityList: Option<Maturity>[];
     maturity?: Option<Maturity>;
     onChange: (currency: CurrencySymbol, maturity: Maturity) => void;
+    isItayosePage?: boolean;
 };

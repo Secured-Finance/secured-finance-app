@@ -1,5 +1,5 @@
 import { Menu } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import {
@@ -11,7 +11,10 @@ import {
     TableHeader,
     TableRow,
 } from '@nextui-org/table';
-import React, { useMemo, useState } from 'react';
+import { Key } from '@react-types/shared';
+import clsx from 'clsx';
+import { useRouter } from 'next/router';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
     baseContracts,
     useBreakpoint,
@@ -25,12 +28,12 @@ import {
     formatDuration,
     formatLoanValue,
 } from 'src/utils';
-import { LoanValue, Maturity } from 'src/utils/entities';
+import { LoanValue } from 'src/utils/entities';
 import { desktopColumns, mobileColumns } from './constants';
 import {
     ColumnKey,
     CurrencyMaturityDropdownProps,
-    FilteredOptionsType,
+    FilteredOption,
 } from './types';
 
 export const CurrencyMaturityDropdown = ({
@@ -39,32 +42,93 @@ export const CurrencyMaturityDropdown = ({
     maturityList,
     maturity = maturityList[0],
     onChange,
+    isItayosePage = false,
 }: CurrencyMaturityDropdownProps) => {
     const [searchValue, setSearchValue] = useState<string>('');
     const [currentCurrency, setCurrentCurrency] = useState<
         CurrencySymbol | undefined
     >(undefined);
     const [isItayose, setIsItayose] = useState<boolean>(false);
+    const [sortState, setSortState] = useState<{
+        column?: Key;
+        direction?: 'ascending' | 'descending';
+    }>({
+        column: undefined,
+        direction: 'ascending',
+    });
+
+    const sortOptions = useCallback(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (options: any[]) => {
+            const { column, direction } = sortState;
+
+            if (!column) {
+                return options;
+            }
+
+            return options.sort((a, b) => {
+                let aValue, bValue;
+
+                if (column === 'apr') {
+                    aValue = parseFloat(a.apr.replace('%', ''));
+                    bValue = parseFloat(b.apr.replace('%', ''));
+                } else if (column === 'maturity') {
+                    aValue = a.maturity;
+                    bValue = b.maturity;
+                } else {
+                    aValue = a[column];
+                    bValue = b[column];
+                }
+
+                if (aValue < bValue) {
+                    return direction === 'ascending' ? -1 : 1;
+                }
+                if (aValue > bValue) {
+                    return direction === 'ascending' ? 1 : -1;
+                }
+                return 0;
+            });
+        },
+        [sortState]
+    );
+
     const { data: lendingMarkets = baseContracts } = useLendingMarkets();
     const { data: currencies } = useCurrencies();
+    const router = useRouter();
 
     const CcyIcon = currencyMap[asset.value]?.icon;
 
     const filteredOptions = useMemo(() => {
-        return currencyList.flatMap(currency => {
+        let options = currencyList.flatMap(currency => {
             return maturityList
                 .map(maturity => {
                     const ccyMaturity = `${currency.label}-${maturity.label}`;
                     const data =
                         lendingMarkets[currency.value]?.[+maturity.value];
+                    const isItayoseOption =
+                        data?.isItayosePeriod || data?.isPreOrderPeriod;
+
+                    const marketUnitPrice = data?.marketUnitPrice;
+                    const openingUnitPrice = data?.openingUnitPrice;
+
+                    let lastPrice: LoanValue | undefined;
+
+                    if (openingUnitPrice) {
+                        lastPrice = LoanValue.fromPrice(
+                            openingUnitPrice,
+                            +maturity.value
+                        );
+                    } else if (marketUnitPrice) {
+                        lastPrice = LoanValue.fromPrice(
+                            marketUnitPrice,
+                            +maturity.value
+                        );
+                    }
 
                     if (
                         (currentCurrency &&
                             !currentCurrency.includes(currency.value)) ||
-                        (isItayose &&
-                            !(
-                                data?.isItayosePeriod || data?.isPreOrderPeriod
-                            )) ||
+                        (isItayose && !isItayoseOption) ||
                         (searchValue &&
                             !ccyMaturity
                                 .toLowerCase()
@@ -78,12 +142,20 @@ export const CurrencyMaturityDropdown = ({
                         display: ccyMaturity,
                         currency: currency.value,
                         maturity: maturity.value,
+                        lastPrice: formatLoanValue(lastPrice, 'price'),
+                        apr: formatLoanValue(lastPrice, 'rate'),
+                        isItayoseOption,
                     };
                 })
                 .filter(Boolean);
         });
+
+        options = sortOptions(options);
+
+        return options;
     }, [
         currencyList,
+        sortOptions,
         maturityList,
         lendingMarkets,
         currentCurrency,
@@ -91,19 +163,23 @@ export const CurrencyMaturityDropdown = ({
         searchValue,
     ]);
 
-    const handleOptionClick = (
-        currency: CurrencySymbol,
-        selectedMaturity: Maturity
-    ) => {
-        if (currency !== asset.value || selectedMaturity !== maturity.value) {
-            onChange(currency, selectedMaturity);
+    const handleOptionClick = (item: FilteredOption) => {
+        if (item.isItayoseOption) {
+            router.push('/itayose');
+        }
+
+        if (item.currency !== asset.value || item.maturity !== maturity.value) {
+            onChange(item.currency, item.maturity);
         }
     };
 
     const handleSortChange = (descriptor: SortDescriptor) => {
         const { column, direction } = descriptor;
-        // eslint-disable-next-line no-console
-        console.log(column, direction);
+
+        setSortState({
+            column: column as string,
+            direction: direction,
+        });
     };
 
     return (
@@ -112,7 +188,7 @@ export const CurrencyMaturityDropdown = ({
                 <div className='relative'>
                     <Menu.Button className='flex w-full items-center justify-between gap-2 rounded-lg bg-neutral-700 px-2 py-1.5 text-sm font-semibold normal-case leading-6 text-white laptop:w-[226px] laptop:py-2.5 laptop:pl-3 laptop:pr-2 laptop:text-base laptop:leading-6 desktop:w-[302px] desktop:text-[22px]'>
                         <div className='flex items-center gap-2 laptop:gap-1'>
-                            {CcyIcon && (
+                            {!!CcyIcon && (
                                 <CcyIcon className='h-5 w-5 laptop:h-6 laptop:w-6' />
                             )}
                             {asset.label}-{maturity.label}
@@ -155,14 +231,16 @@ export const CurrencyMaturityDropdown = ({
                                 isItayose={isItayose}
                                 setCurrentCurrency={setCurrentCurrency}
                                 setIsItayose={setIsItayose}
+                                isItayosePage={isItayosePage}
                             />
                         </div>
 
                         <CurrencyMaturityTable
-                            options={filteredOptions as FilteredOptionsType}
+                            options={filteredOptions as FilteredOption[]}
                             onOptionClick={handleOptionClick}
                             close={close}
                             onSortChange={handleSortChange}
+                            sortState={sortState}
                         />
                     </Menu.Items>
                 </div>
@@ -177,27 +255,33 @@ const FilterButtons = ({
     isItayose,
     setCurrentCurrency,
     setIsItayose,
+    isItayosePage,
 }: {
     currencies?: CurrencySymbol[];
     currentCurrency: CurrencySymbol | undefined;
     isItayose: boolean;
     setCurrentCurrency: (currency: CurrencySymbol | undefined) => void;
     setIsItayose: (value: boolean) => void;
+    isItayosePage: boolean;
 }) => {
     const FilterBtn = ({
         onClick,
         children,
         activeCondition,
+        label,
     }: {
         onClick: () => void;
         children: React.ReactNode;
         activeCondition: boolean;
+        label?: string;
     }) => (
         <button
-            className={`typography-mobile-body-5 text-neutral-400 ${
-                activeCondition ? 'text-primary-300' : ''
-            }`}
+            className={clsx('typography-mobile-body-5', {
+                'text-primary-300': activeCondition,
+                'text-neutral-400': !activeCondition,
+            })}
             onClick={onClick}
+            aria-label={label}
         >
             {children}
         </button>
@@ -214,15 +298,18 @@ const FilterButtons = ({
             >
                 All
             </FilterBtn>
-            <FilterBtn
-                activeCondition={isItayose && !currentCurrency}
-                onClick={() => {
-                    setCurrentCurrency(undefined);
-                    setIsItayose(true);
-                }}
-            >
-                Itayose
-            </FilterBtn>
+            {!isItayosePage && (
+                <FilterBtn
+                    activeCondition={isItayose && !currentCurrency}
+                    onClick={() => {
+                        setCurrentCurrency(undefined);
+                        setIsItayose(true);
+                    }}
+                    label='itayose-filter-btn'
+                >
+                    Itayose
+                </FilterBtn>
+            )}
             {currencies?.map(currency => (
                 <FilterBtn
                     key={`currency-${currency}`}
@@ -231,6 +318,7 @@ const FilterButtons = ({
                         setCurrentCurrency(currency);
                         setIsItayose(false);
                     }}
+                    label={`${currency}-filter-btn`}
                 >
                     {currency}
                 </FilterBtn>
@@ -244,35 +332,19 @@ const CurrencyMaturityTable = ({
     onOptionClick,
     close,
     onSortChange,
+    sortState,
 }: {
-    options: {
-        key: string;
-        display: string;
-        currency: CurrencySymbol;
-        maturity: Maturity;
-    }[];
-    onOptionClick: (currency: CurrencySymbol, maturity: Maturity) => void;
+    options: FilteredOption[];
+    onOptionClick: (item: FilteredOption) => void;
     close: () => void;
     onSortChange: (descriptor: SortDescriptor) => void;
+    sortState: SortDescriptor;
 }) => {
     const isTablet = useBreakpoint('laptop');
-    const { data: lendingMarkets = baseContracts } = useLendingMarkets();
     const columns = isTablet ? mobileColumns : desktopColumns;
 
     const renderCell = (option: (typeof options)[0], columnKey: ColumnKey) => {
-        const { currency, maturity } = option;
-        const data = lendingMarkets[currency]?.[+maturity];
-
-        const marketUnitPrice = data?.marketUnitPrice;
-        const openingUnitPrice = data?.openingUnitPrice;
-
-        let lastPrice: LoanValue | undefined;
-
-        if (openingUnitPrice) {
-            lastPrice = LoanValue.fromPrice(openingUnitPrice, +maturity);
-        } else if (marketUnitPrice) {
-            lastPrice = LoanValue.fromPrice(marketUnitPrice, +maturity);
-        }
+        const { maturity } = option;
 
         switch (columnKey) {
             case 'symbol':
@@ -282,16 +354,11 @@ const CurrencyMaturityTable = ({
                     </h3>
                 );
             case 'last-prices':
-                return formatLoanValue(lastPrice, 'price');
+                return option.lastPrice;
             case 'last-prices-mobile':
-                return (
-                    <span>
-                        {formatLoanValue(lastPrice, 'price')} (
-                        {formatLoanValue(lastPrice, 'rate')})
-                    </span>
-                );
+                return `${option.lastPrice} (${option.apr})`;
             case 'apr':
-                return formatLoanValue(lastPrice, 'rate');
+                return option.apr;
             case 'maturity':
                 const timestampDifference = calculateTimeDifference(+maturity);
                 return formatDuration(Math.abs(timestampDifference));
@@ -304,29 +371,64 @@ const CurrencyMaturityTable = ({
         <Table
             aria-label='Currency Maturity Dropdown'
             selectionMode='single'
-            removeWrapper
-            isHeaderSticky
             classNames={{
                 base: 'laptop:h-[232px] overflow-auto laptop:pl-4 laptop:pr-3',
                 table: 'max-h-[400px] border-separate border-spacing-y-1',
+                sortIcon: 'hidden',
             }}
             onSortChange={(descriptor: SortDescriptor) =>
                 onSortChange(descriptor)
             }
+            sortDescriptor={sortState}
+            removeWrapper
+            isHeaderSticky
         >
-            <TableHeader columns={columns}>
-                {column => (
-                    <TableColumn
-                        className='typography-mobile-body-5 laptop:typography-desktop-body-5 relative h-5 !rounded-none bg-neutral-800 px-0 font-normal text-neutral-400 laptop:bg-neutral-900'
-                        key={column.key}
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        width={column.width as any}
-                        allowsSorting={column.allowsSorting}
-                    >
-                        {column.label}
-                        <span className='absolute bottom-0 left-0 h-[1px] w-full bg-neutral-700'></span>
-                    </TableColumn>
-                )}
+            <TableHeader>
+                {columns.map(column => {
+                    const sortIconStyle = 'w-[15px]';
+                    const isColumnSortedAscending =
+                        sortState.column === column.key &&
+                        sortState.direction === 'ascending';
+                    const isColumnSortedDescending =
+                        sortState.column === column.key &&
+                        sortState.direction === 'descending';
+                    return (
+                        <TableColumn
+                            className='typography-mobile-body-5 laptop:typography-desktop-body-5 relative h-5 !rounded-none bg-neutral-800 px-0 font-normal text-neutral-400 laptop:bg-neutral-900'
+                            key={column.key}
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            width={column.width as any}
+                            allowsSorting={column.allowsSorting}
+                        >
+                            <div className='flex gap-1'>
+                                {column.label}
+                                {column.allowsSorting && (
+                                    <div className='flex w-2.5 flex-col gap-[3px]'>
+                                        <ChevronUpIcon
+                                            className={clsx(sortIconStyle, {
+                                                'text-white':
+                                                    isColumnSortedAscending,
+                                                'text-neutral-400':
+                                                    !isColumnSortedAscending &&
+                                                    !isColumnSortedDescending,
+                                            })}
+                                        />
+                                        <ChevronDownIcon
+                                            className={clsx(sortIconStyle, {
+                                                'text-white':
+                                                    isColumnSortedDescending,
+                                                'text-neutral-400':
+                                                    !isColumnSortedAscending &&
+                                                    !isColumnSortedDescending,
+                                            })}
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                            <span className='absolute bottom-0 left-0 h-[1px] w-full bg-neutral-700'></span>
+                        </TableColumn>
+                    );
+                })}
             </TableHeader>
             <TableBody items={options} emptyContent='No products found'>
                 {item => (
@@ -334,7 +436,7 @@ const CurrencyMaturityTable = ({
                         key={item.key}
                         className='cursor-pointer overflow-hidden rounded border-b border-neutral-600 laptop:border-b-0 laptop:hover:bg-neutral-700'
                         onClick={() => {
-                            onOptionClick(item.currency, item.maturity);
+                            onOptionClick(item);
                             close();
                         }}
                     >
