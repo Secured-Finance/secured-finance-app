@@ -27,7 +27,6 @@ export default {
         delistedCurrencySet: defaultDelistedStatusSet,
     },
     parameters: {
-        ...RESPONSIVE_PARAMETERS,
         apolloClient: {
             mocks: [
                 ...mockTrades,
@@ -35,6 +34,7 @@ export default {
                 ...mockFilteredUserOrderHistory,
             ],
         },
+        ...RESPONSIVE_PARAMETERS,
         chromatic: {
             ...RESPONSIVE_PARAMETERS.chromatic,
             delay: 5000,
