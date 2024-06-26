@@ -60,16 +60,15 @@ describe('Itayose Component', () => {
         });
         expect(store.getState().landingOrderForm.amount).toEqual('1');
 
-        // TODO: update with CurrencyMaturityDropdown label
-        // fireEvent.click(screen.getByRole('button', { name: 'WBTC' }));
-        // fireEvent.click(screen.getByRole('menuitem', { name: 'WFIL' }));
+        fireEvent.click(screen.getByRole('button', { name: 'WBTC-DEC2024' }));
+        fireEvent.click(screen.getByRole('row', { name: 'WFIL-DEC2024' }));
 
-        // await waitFor(() => {
-        //     expect(store.getState().landingOrderForm.amount).toEqual('1');
-        //     expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
-        //         '1'
-        //     );
-        // });
+        await waitFor(() => {
+            expect(store.getState().landingOrderForm.amount).toEqual('1');
+            expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
+                '1'
+            );
+        });
     }, 8000);
 
     it('should only show the pre-order orders of the user when they are connected', async () => {

@@ -10,7 +10,7 @@ export default {
     args: {},
     parameters: {
         apolloClient: {
-            mocks: [...mockItayoseFilteredUserOrderHistory],
+            mocks: mockItayoseFilteredUserOrderHistory,
         },
         chromatic: { delay: 5000 },
         connected: true,
