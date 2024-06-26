@@ -489,13 +489,9 @@ const QuestList = ({ chainId }: { chainId: number }) => {
                     };
                     break;
                 case QuestType.LimitOrder:
-                    label = 'Order';
-                    call = () => {
-                        router.push('/');
-                    };
-                    break;
                 case QuestType.ActivePosition:
-                    label = 'Trade';
+                    label =
+                        questType === QuestType.LimitOrder ? 'Order' : 'Trade';
                     call = () => {
                         router.push('/');
                     };
@@ -604,7 +600,7 @@ const QuestList = ({ chainId }: { chainId: number }) => {
                             )}
                         </div>
                         <div className='flex flex-row items-center justify-between whitespace-pre-wrap text-sm text-grayScale'>
-                            {item.description.replace('\\n', '\n')}
+                            {item.description.replaceAll('\\n', '\n')}
                         </div>
                     </div>
                 ))}
