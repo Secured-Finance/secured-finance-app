@@ -14,7 +14,13 @@ import {
 import { Key } from '@react-types/shared';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import {
     baseContracts,
     useBreakpoint,
@@ -56,6 +62,17 @@ export const CurrencyMaturityDropdown = ({
         column: undefined,
         direction: 'ascending',
     });
+
+    const prevSelectedValue = useRef('');
+    useEffect(() => {
+        if (
+            !prevSelectedValue ||
+            prevSelectedValue.current !== maturity.value.toString()
+        ) {
+            onChange(asset.value, maturity.value);
+        }
+        prevSelectedValue.current = maturity.value.toString();
+    }, [onChange, maturity, asset]);
 
     const sortOptions = useCallback(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -166,6 +183,7 @@ export const CurrencyMaturityDropdown = ({
     const handleOptionClick = (item: FilteredOption) => {
         if (item.isItayoseOption) {
             router.push('/itayose');
+            return;
         }
 
         if (item.currency !== asset.value || item.maturity !== maturity.value) {
