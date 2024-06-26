@@ -7,9 +7,17 @@ import {
     COIN_GECKO_SOURCE,
     CurrencySymbol,
     currencyMap,
+    formatLoanValue,
+    formatTimeStampWithTimezone,
     getTransformMaturityOption,
 } from 'src/utils';
-import { Maturity } from 'src/utils/entities';
+import { LoanValue, Maturity } from 'src/utils/entities';
+
+type CurrentMarket = {
+    value: LoanValue;
+    time: number;
+    type: 'opening' | 'block';
+};
 
 type AdvancedLendingTopBarProp = {
     selectedAsset: Option<CurrencySymbol> | undefined;
@@ -18,6 +26,7 @@ type AdvancedLendingTopBarProp = {
     selected: Option<Maturity>;
     onAssetChange: (v: CurrencySymbol) => void;
     onTermChange: (v: Maturity) => void;
+    currentMarket: CurrentMarket | undefined;
     currencyPrice: string;
     values?: [string, string, string, string];
 };
@@ -36,9 +45,21 @@ export const AdvancedLendingTopBar = ({
     selected,
     onAssetChange,
     onTermChange,
+    currentMarket,
     currencyPrice,
     values,
 }: AdvancedLendingTopBarProp) => {
+    const getTime = () => {
+        if (currentMarket) {
+            if (currentMarket.type === 'opening') {
+                return 'Opening Price';
+            } else {
+                return formatTimeStampWithTimezone(currentMarket.time);
+            }
+        }
+        return '-';
+    };
+
     const selectedTerm = useMemo(
         () => options.find(o => o.value === selected.value),
         [options, selected]
@@ -105,6 +126,30 @@ export const AdvancedLendingTopBar = ({
                                         </p>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div
+                            className={clsx(
+                                'col-span-4 pl-2 laptop:border-r laptop:border-white-10 laptop:px-2',
+                                values && 'tablet:pl-0'
+                            )}
+                        >
+                            <MarketTab
+                                name={formatLoanValue(
+                                    currentMarket?.value,
+                                    'price'
+                                )}
+                                value={`${formatLoanValue(
+                                    currentMarket?.value,
+                                    'rate'
+                                )} APR`}
+                                variant={
+                                    currentMarket ? 'green-name' : 'gray-name'
+                                }
+                                label='Current Market'
+                            />
+                            <div className='laptop:typography-caption-2 whitespace-nowrap pt-[1px] text-[11px] leading-4 text-neutral-4'>
+                                {getTime()}
                             </div>
                         </div>
                     </section>

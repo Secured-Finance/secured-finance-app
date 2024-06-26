@@ -337,6 +337,7 @@ export const AdvancedLending = ({
                         onAssetChange={handleCurrencyChange}
                         onTermChange={handleTermChange}
                         currencyPrice={usdFormat(currencyPrice, 2)}
+                        currentMarket={currentMarket}
                         values={
                             isSubgraphSupported
                                 ? [
