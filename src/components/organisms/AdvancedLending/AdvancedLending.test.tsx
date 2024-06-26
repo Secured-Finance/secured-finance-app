@@ -2,7 +2,6 @@ import { composeStories } from '@storybook/react';
 import userEvent from '@testing-library/user-event';
 import {
     emptyTransaction,
-    mockDailyVolumes,
     mockFilteredUserOrderHistory,
     mockFilteredUserTransactionHistory,
 } from 'src/stories/mocks/queries';
@@ -109,15 +108,12 @@ describe('Advanced Lending Component', () => {
             render(<Default />, {
                 apolloMocks: [
                     ...(emptyTransaction as never),
-                    ...mockDailyVolumes,
                     ...mockFilteredUserOrderHistory,
                     ...mockFilteredUserTransactionHistory,
                 ],
             })
         );
 
-        // TODO: add test for mark price and last price
-        // await waitFor(() => {
         expect(
             within(screen.getByLabelText('24h High')).getByText('0.00')
         ).toBeInTheDocument();
@@ -130,7 +126,6 @@ describe('Advanced Lending Component', () => {
         expect(
             within(screen.getByLabelText('24h Volume')).getByText('-')
         ).toBeInTheDocument();
-        // });
     });
 
     it('should only show the orders of the user related to orderbook', async () => {

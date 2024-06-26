@@ -3,14 +3,17 @@ import { Menu } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { XMarkIcon } from '@heroicons/react/24/solid';
-import { CurrencyMaturityTable, FilterButtons } from 'src/components/molecules';
-import { useBreakpoint } from 'src/hooks';
-
 import { SortDescriptor } from '@nextui-org/table';
 import { Key } from '@react-types/shared';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { baseContracts, useCurrencies, useLendingMarkets } from 'src/hooks';
+import { CurrencyMaturityTable, FilterButtons } from 'src/components/molecules';
+import {
+    baseContracts,
+    useBreakpoint,
+    useCurrencies,
+    useLendingMarkets,
+} from 'src/hooks';
 import { CurrencySymbol, currencyMap, formatLoanValue } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import { CurrencyMaturityDropdownProps, FilteredOption } from './types';
