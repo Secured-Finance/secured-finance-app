@@ -119,10 +119,6 @@ export const AdvancedLendingTopBar = ({
                                                     }))
                                                 )(selectedTerm.label)
                                             }`}
-                                            {/* TODO: handle this time */}
-                                            {/* <span className='hidden desktop:inline-flex'>
-                                                , UTC 21:00:00 (GMT+7 0900H)
-                                            </span> */}
                                         </p>
                                     </div>
                                 </div>
