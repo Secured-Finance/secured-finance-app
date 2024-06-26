@@ -13,12 +13,6 @@ import {
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 
-type CurrentMarket = {
-    value: LoanValue;
-    time: number;
-    type: 'opening' | 'block';
-};
-
 type AdvancedLendingTopBarProp = {
     selectedAsset: Option<CurrencySymbol> | undefined;
     assetList: Array<Option<CurrencySymbol>>;
@@ -31,11 +25,17 @@ type AdvancedLendingTopBarProp = {
     values?: [string, string, string, string];
 };
 
+type CurrentMarket = {
+    value: LoanValue;
+    time: number;
+    type: 'opening' | 'block';
+};
+
 const getValue = (
     values: AdvancedLendingTopBarProp['values'],
     index: IndexOf<NonNullable<AdvancedLendingTopBarProp['values']>>
 ) => {
-    return values && values[index] ? values[index] : 0;
+    return values?.[index] || 0;
 };
 
 export const AdvancedLendingTopBar = ({

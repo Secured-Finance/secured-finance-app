@@ -1,3 +1,4 @@
+import * as analytics from '@amplitude/analytics-browser';
 import { composeStories } from '@storybook/react';
 import userEvent from '@testing-library/user-event';
 import {
@@ -6,6 +7,8 @@ import {
     mockFilteredUserTransactionHistory,
 } from 'src/stories/mocks/queries';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
+import { ButtonEvents, ButtonProperties } from 'src/utils';
+
 import { fireEvent, render, screen, waitFor, within } from 'src/test-utils.js';
 import * as stories from './AdvancedLending.stories';
 
@@ -17,7 +20,7 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('Advanced Lending Component', () => {
     it('should convert the amount to new currency and track CURRENCY_CHANGE when the user change the currency', async () => {
-        // const track = jest.spyOn(analytics, 'track');
+        const track = jest.spyOn(analytics, 'track');
         const { store } = await waitFor(() =>
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
@@ -31,12 +34,11 @@ describe('Advanced Lending Component', () => {
         );
         expect(store.getState().landingOrderForm.amount).toEqual('1');
 
-        // TODO: handle this with CurrencyMaturityDropdown
-        // fireEvent.click(screen.getByRole('button', { name: 'WFIL' }));
-        // fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
-        // expect(track).toHaveBeenCalledWith(ButtonEvents.CURRENCY_CHANGE, {
-        //     [ButtonProperties.CURRENCY]: 'USDC',
-        // });
+        fireEvent.click(screen.getByRole('button', { name: 'WFIL-DEC2022' }));
+        fireEvent.click(screen.getByRole('row', { name: 'USDC-DEC2022' }));
+        expect(track).toHaveBeenCalledWith(ButtonEvents.CURRENCY_CHANGE, {
+            [ButtonProperties.CURRENCY]: 'USDC',
+        });
         await waitFor(() => {
             expect(store.getState().landingOrderForm.amount).toEqual('1');
             expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
@@ -46,7 +48,7 @@ describe('Advanced Lending Component', () => {
     }, 8000);
 
     it('should not reset the amount and emit TERM_CHANGE event when the user change the maturity', async () => {
-        // const track = jest.spyOn(analytics, 'track');
+        const track = jest.spyOn(analytics, 'track');
         const { store } = await waitFor(() =>
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
@@ -59,11 +61,11 @@ describe('Advanced Lending Component', () => {
             })
         );
         expect(store.getState().landingOrderForm.amount).toEqual('1');
-        // fireEvent.click(screen.getByRole('button', { name: 'DEC2022' }));
-        // fireEvent.click(screen.getByText('MAR2023'));
-        // expect(track).toHaveBeenCalledWith(ButtonEvents.TERM_CHANGE, {
-        //     [ButtonProperties.TERM]: 'MAR2023',
-        // });
+        fireEvent.click(screen.getByRole('button', { name: 'WFIL-DEC2022' }));
+        fireEvent.click(screen.getByText('WFIL-MAR2023'));
+        expect(track).toHaveBeenCalledWith(ButtonEvents.TERM_CHANGE, {
+            [ButtonProperties.TERM]: 'MAR2023',
+        });
         await waitFor(() => {
             expect(store.getState().landingOrderForm.amount).toEqual('1');
             expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
@@ -156,24 +158,24 @@ describe('Advanced Lending Component', () => {
         ).not.toBeInTheDocument();
     });
 
-    // it('should not show disclaimer for maximum open order limit if user has less than 20 open orders', async () => {
-    //     await waitFor(() =>
-    //         render(<OpenOrdersConnectedToWallet />, {
-    //             apolloMocks: Default.parameters?.apolloClient.mocks,
-    //         })
-    //     );
+    it('should not show disclaimer for maximum open order limit if user has less than 20 open orders', async () => {
+        await waitFor(() =>
+            render(<OpenOrdersConnectedToWallet />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+            })
+        );
 
-    //     fireEvent.click(screen.getByRole('button', { name: 'WFIL' }));
-    //     fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
+        fireEvent.click(screen.getByRole('button', { name: 'WFIL-DEC2022' }));
+        fireEvent.click(screen.getByRole('row', { name: 'USDC-DEC2022' }));
 
-    //     await waitFor(() =>
-    //         expect(
-    //             screen.queryByText(
-    //                 'You will not be able to place additional orders as you currently have the maximum number of 20 orders. Please wait for your order to be filled or cancel existing orders before adding more.'
-    //             )
-    //         ).not.toBeInTheDocument()
-    //     );
-    // });
+        await waitFor(() =>
+            expect(
+                screen.queryByText(
+                    'You will not be able to place additional orders as you currently have the maximum number of 20 orders. Please wait for your order to be filled or cancel existing orders before adding more.'
+                )
+            ).not.toBeInTheDocument()
+        );
+    });
 
     it('should show disclaimer and tooltip for maximum open order limit if user has 20 open orders', async () => {
         await waitFor(() =>
