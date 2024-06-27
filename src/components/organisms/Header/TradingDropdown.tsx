@@ -20,11 +20,14 @@ export const TradingDropdown = () => {
             {({ close }) => (
                 <>
                     <Menu.Button>
-                        <div className='group flex h-full w-full flex-col text-center'>
+                        <div className='group relative flex h-full w-full flex-col text-center'>
                             <div
-                                className={clsx('h-1 w-full', {
-                                    'bg-starBlue': isActive,
-                                })}
+                                className={clsx(
+                                    'absolute left-0 top-0 h-1 w-full',
+                                    {
+                                        'bg-starBlue': isActive,
+                                    }
+                                )}
                             />
                             <div
                                 className={clsx(
@@ -64,7 +67,7 @@ export const TradingDropdown = () => {
                         leaveFrom='transform scale-100 opacity-100'
                         leaveTo='transform scale-95 opacity-0'
                     >
-                        <Menu.Items className='absolute -left-[128px] top-20 flex w-[128px] flex-col rounded-b-xl bg-neutral-800 py-1'>
+                        <Menu.Items className='absolute -left-[128px] top-16 flex w-[128px] flex-col rounded-b-xl bg-neutral-800 py-1'>
                             {links.map((tradingLink, i) => {
                                 return (
                                     <Menu.Item

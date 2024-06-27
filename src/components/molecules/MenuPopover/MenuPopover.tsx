@@ -14,7 +14,7 @@ export const MenuPopover = ({}) => {
                         <Popover.Button
                             as='button'
                             data-cy='popover-button'
-                            className='typography-nav-menu-default mt-1 flex h-4 flex-row items-center gap-2.5 whitespace-nowrap text-neutral-8 opacity-70 outline-none duration-300 focus-within:text-secondary7 focus-within:opacity-100 hover:text-secondary7 hover:opacity-100 hover:ease-in-out'
+                            className='typography-nav-menu-default mt-[3px] flex h-4 flex-row items-center gap-2.5 whitespace-nowrap text-neutral-8 opacity-70 outline-none duration-300 focus-within:text-secondary7 focus-within:opacity-100 hover:text-secondary7 hover:opacity-100 hover:ease-in-out'
                         >
                             <p>More</p>
                             <ChevronDownIcon className='h-4 w-4' />

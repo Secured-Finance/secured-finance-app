@@ -118,4 +118,12 @@ describe('Header component', () => {
         expect(screen.queryByTestId('testnet-info')).not.toBeInTheDocument();
         expect(screen.queryByTestId('testnet-alert')).not.toBeInTheDocument();
     });
+
+    it('should not display SF Points if the user is not logged in', async () => {
+        render(<Primary />);
+
+        await waitFor(() => {
+            expect(screen.queryByText('164 Points')).not.toBeInTheDocument(); //
+        });
+    });
 });
