@@ -32,8 +32,9 @@ import {
     Separator,
     Spinner,
     StatsBox,
+    TextLink,
 } from 'src/components/atoms';
-import { InfoToolTip, Tooltip } from 'src/components/molecules';
+import { Alert, InfoToolTip, Tooltip } from 'src/components/molecules';
 import {
     DepositCollateral,
     generateCollateralList,
@@ -293,7 +294,7 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
                     ) : (
                         <>
                             <p className='text-center text-lg text-white'>
-                                Join the Secured Finance points program!
+                                Join the Secured Finance Points Program!
                             </p>
                             {referralCode && (
                                 <p className='mt-2 text-center text-secondary7'>
@@ -658,6 +659,22 @@ export const PointsDashboard = () => {
     const chainId = useSelector((state: RootState) => state.blockchain.chainId);
     return (
         <Page title='Point Dashboard' name='point-dashboard'>
+            <div className='px-3 laptop:px-0'>
+                <Alert
+                    title={
+                        <>
+                            Earn SF Points with Your Contributions to the
+                            Secured Finance Protocol. Learn more about the
+                            points system and calculations at the&nbsp;
+                            <TextLink
+                                href='https://docs.secured.finance/top/secured-finance-points-sfp'
+                                text='Secured Finance Docs'
+                            />
+                        </>
+                    }
+                    isShowCloseButton={false}
+                />
+            </div>
             <TwoColumns>
                 <div className='grid grid-cols-1 gap-y-7'>
                     <UserPointInfo chainId={chainId} />
