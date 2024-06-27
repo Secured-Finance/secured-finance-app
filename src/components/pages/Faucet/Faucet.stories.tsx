@@ -1,6 +1,7 @@
 import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
 import type { Meta, StoryFn } from '@storybook/react';
 import {
+    WithGraphClient,
     withAppLayout,
     withBalance,
     withWalletProvider,
@@ -11,7 +12,12 @@ export default {
     title: 'Pages/Faucet',
     component: Faucet,
     args: {},
-    decorators: [withAppLayout, withBalance, withWalletProvider],
+    decorators: [
+        withAppLayout,
+        withBalance,
+        withWalletProvider,
+        WithGraphClient,
+    ],
     parameters: {
         ...RESPONSIVE_PARAMETERS,
         layout: 'fullscreen',
