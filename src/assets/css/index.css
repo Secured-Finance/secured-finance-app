@@ -142,4 +142,8 @@
   .wormhole {
     background-image: url(../img/wormhole.png);
   }
+
+  .candlestick-bg {
+    background-image: url(../img/candlestick-bg.png);
+  }
 }

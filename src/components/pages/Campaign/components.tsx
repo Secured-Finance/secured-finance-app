@@ -3,11 +3,10 @@ import { BuildingLibraryIcon } from '@heroicons/react/20/solid';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import Badge from 'src/assets/icons/badge.svg';
 import LockClose from 'src/assets/icons/lock-close.svg';
 import LockOpen from 'src/assets/icons/lock-open.svg';
 import Coins from 'src/assets/img/2d coins.svg';
-import Glow from 'src/assets/img/glow.svg';
-import SfPoints from 'src/assets/img/sf-points.svg';
 import { CurrencyIcon } from 'src/components/atoms';
 import { useBreakpoint } from 'src/hooks';
 import {
@@ -23,7 +22,7 @@ import { stages } from './constants';
 
 export const Banner = ({ text }: { text: string }) => {
     return (
-        <div className='laptop:typography-desktop-sh-8 desktop:typography-desktop-sh-7 w-fit rounded-3xl border border-primary-500 bg-primary-700 px-[18px] py-2 text-xs font-semibold uppercase leading-[18px] text-neutral-200 laptop:px-8'>
+        <div className='laptop:typography-desktop-sh-8 desktop:typography-desktop-sh-7 w-fit rounded-3xl border border-tertiary-500 bg-tertiary-500/30 px-[18px] py-2 text-xs font-semibold uppercase leading-[18px] text-neutral-200 laptop:px-8'>
             {text}
         </div>
     );
@@ -69,7 +68,7 @@ export const StageBanner = () => {
                     );
                 })
             ) : (
-                <Stage text='Core Fueling' index={1} active />
+                <Stage text='Orbital Contracts' index={2} active />
             )}
         </div>
     );
@@ -87,10 +86,10 @@ const SFPoints = () => (
     <Link
         href='https://docs.secured.finance/top/secured-finance-points-sfp'
         target='_blank'
-        className='flex flex-shrink-0 flex-nowrap tablet:ml-1 laptop:ml-0 min-[1119px]:ml-0 desktop:ml-1'
+        className='flex flex-shrink-0 flex-nowrap laptop:ml-0 desktop:ml-1'
     >
-        <span className='typography-mobile-body-5 tablet:typography-desktop-body-5 desktop:typography-desktop-body-3 flex items-center justify-center gap-2 rounded-lg bg-starBlue-20 px-2 py-1 font-semibold uppercase laptop:rounded-xl desktop:px-3 desktop:py-2'>
-            <SfPoints className='h-[18px] w-[18px] tablet:h-3.5 tablet:w-3.5 laptop:h-4 laptop:w-4 desktop:h-[18px] desktop:w-[18px]' />{' '}
+        <span className='typography-mobile-body-5 tablet:typography-desktop-body-4 desktop:typography-desktop-body-3 flex items-center justify-center gap-1 rounded-lg bg-tertiary-500/20 py-1 pl-2 pr-3 font-semibold tablet:gap-1.5 tablet:rounded-xl tablet:py-2 tablet:pl-2.5 tablet:pr-3 laptop:ml-0 laptop:rounded-xl desktop:px-3 desktop:py-2'>
+            <Badge className='h-[18px] w-[18px] tablet:h-3.5 tablet:w-3.5 laptop:h-4 laptop:w-4 desktop:h-[18px] desktop:w-[18px]' />{' '}
             <span className='underline'>SF Points</span>
         </span>
     </Link>
@@ -138,7 +137,7 @@ export const CampaignStatus = ({
                         </span>
                     </div>
                     <span className='typography-mobile-body-5 tablet:typography-desktop-body-4 text-neutral-300 desktop:text-base desktop:leading-6'>
-                        Jun 19, 12:00 AM (UTC) - Jun 28, 12:00 AM (UTC)
+                        Jun 29, 12:00 AM (UTC) - Aug 28, 12:00 AM (UTC)
                     </span>
                 </div>
                 <div className='flex flex-col gap-3 tablet:flex-row tablet:justify-between tablet:gap-5'>
@@ -187,9 +186,9 @@ export const CampaignStatus = ({
                 </div>
             </div>
             <div className='flex flex-col gap-2 tablet:items-start laptop:gap-5 desktop:gap-6'>
-                <span className='tablet:typography-desktop-body-5 laptop:typography-desktop-body-4 desktop:typography-desktop-body-3 typography-mobile-body-5 inline-flex w-full flex-wrap items-center text-neutral-50 laptop:flex-shrink-0 laptop:whitespace-nowrap'>
-                    Quest Goal: Deposit following collateral assets and earn
-                    double <SFPoints />
+                <span className='tablet:typography-desktop-body-5 laptop:typography-desktop-body-4 desktop:typography-desktop-body-3 typography-mobile-body-5 inline-flex w-full flex-wrap items-center text-neutral-50'>
+                    Quest Goal: Place limit orders and keep active positions for
+                    the following assets and earn <SFPoints />
                 </span>
                 <div className='flex flex-row items-center gap-3 laptop:gap-4'>
                     <div className='relative flex w-1/2 flex-row items-center justify-center gap-2 overflow-hidden rounded-2xl bg-chart-fil/20 px-8 py-2 laptop:w-fit'>
@@ -219,22 +218,27 @@ export const CampaignStatus = ({
     );
 };
 
-export const DepositCard = ({
-    onDepositClick,
-}: {
-    onDepositClick: () => void;
-}) => {
+export const DepositCard = () => {
     return (
-        <div className='relative flex max-w-[752px] items-end overflow-hidden rounded-3xl border border-blue laptop:h-auto laptop:w-[50%] laptop:border-2 desktop:w-[46%]'>
-            <div className='wormhole absolute left-0 top-0 h-full w-full bg-[rgb(39,52,119)] bg-cover bg-center'></div>
+        <div className='relative flex max-w-[752px] items-center overflow-hidden rounded-3xl border border-blue laptop:h-auto laptop:w-[50%] laptop:flex-col laptop:justify-between laptop:border-2 desktop:w-[46%] desktop:justify-end'>
+            <div className='candlestick-bg absolute left-0 top-0 h-full w-full bg-cover bg-center'></div>
+            <div className='absolute inset-0 bg-neutral-900/50'></div>
             <div className='absolute right-4 top-[5px] flex items-center justify-center laptop:inset-0'>
-                <Glow className='absolute hidden h-[300px] w-[420px] laptop:flex' />
+                {/* <Glow className='absolute hidden h-[300px] w-[420px] laptop:flex' /> */}
                 <Coins className='z-2 relative h-[70px] w-auto laptop:-mt-[40px] laptop:h-[200px] laptop:w-[220px]' />
             </div>
 
+            <span className='laptop:typography-desktop-body-1 relative hidden max-w-[50%] text-base font-semibold leading-6 text-white laptop:ml-6 laptop:mr-auto laptop:mt-6 laptop:block laptop:max-w-[200px] desktop:hidden desktop:text-[22px] desktop:leading-8'>
+                Earn 2X{' '}
+                <Link href='/points' className='underline'>
+                    points
+                </Link>{' '}
+                by depositing FIL/iFIL
+            </span>
+
             {/* eslint-disable-next-line prettier/prettier */}
-            <div className='z-1 relative flex w-full flex-col justify-between gap-4 p-4 min-[645px]:gap-8 tablet:p-6 laptop:flex-row laptop:items-end'>
-                <span className='tablet:typography-mobile-body-1 block max-w-[50%] text-base font-semibold leading-6 text-white laptop:max-w-[200px] laptop:text-[18px] laptop:leading-6 desktop:text-[22px] desktop:leading-8'>
+            <div className='z-1 relative flex w-full flex-col justify-between gap-4 p-4 min-[645px]:gap-8 tablet:p-6 laptop:flex-row laptop:items-end desktop:items-center'>
+                <span className='tablet:typography-mobile-body-1 block max-w-[50%] text-base font-semibold leading-6 text-white laptop:hidden laptop:max-w-[200px] laptop:text-[18px] laptop:leading-6 desktop:block desktop:text-[22px] desktop:leading-8'>
                     Earn 2X{' '}
                     <Link href='/points' className='underline'>
                         points
@@ -242,13 +246,40 @@ export const DepositCard = ({
                     by depositing FIL/iFIL
                 </span>
 
-                <button
-                    className='flex w-full items-center justify-center gap-2.5 rounded-2xl bg-primary-500 px-8 py-3 text-4 font-semibold leading-5 text-white hover:bg-primary-700 laptop:w-[142px] laptop:rounded-lg laptop:px-5 laptop:py-3 laptop:leading-5 desktop:w-[257px]'
-                    onClick={onDepositClick}
-                >
-                    <BuildingLibraryIcon className='h-4 w-4 flex-shrink-0' />
-                    Deposit
-                </button>
+                <Link href='/' className='laptop:w-full desktop:w-auto'>
+                    <button className='border-primary-200 relative flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-2xl border-2 bg-[linear-gradient(90deg,_#5162FF_0%,_#303B99_100%)] px-8 py-3 text-4 font-semibold leading-5 text-white hover:border-primary-500 active:border-primary-700 laptop:w-full laptop:rounded-lg laptop:px-5 laptop:py-2.5 laptop:leading-5 desktop:w-[257px] min-[1920px]:w-[344px]'>
+                        <svg
+                            xmlns='http://www.w3.org/2000/svg'
+                            width='67'
+                            height='44'
+                            viewBox='0 0 67 44'
+                            fill='none'
+                            className='absolute right-1/2 -translate-x-[137%]'
+                        >
+                            <path
+                                opacity='0.2'
+                                d='M56 0L67 0L11 44H0L56 0Z'
+                                fill='#1E293B'
+                            />
+                        </svg>
+                        <svg
+                            xmlns='http://www.w3.org/2000/svg'
+                            width='192'
+                            height='44'
+                            viewBox='0 0 192 44'
+                            fill='none'
+                            className='absolute right-1/2 translate-x-[29%]'
+                        >
+                            <path
+                                opacity='0.2'
+                                d='M56 0H191.5L135.5 44H0L56 0Z'
+                                fill='#1E293B'
+                            />
+                        </svg>
+                        <BuildingLibraryIcon className='z-1 relative h-4 w-4 flex-shrink-0' />
+                        <span className='z-1 relative'>Place Limit Order</span>
+                    </button>
+                </Link>
             </div>
         </div>
     );
