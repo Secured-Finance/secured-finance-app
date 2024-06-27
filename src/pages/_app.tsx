@@ -2,13 +2,17 @@ import * as amplitude from '@amplitude/analytics-browser';
 import { pageViewTrackingPlugin } from '@amplitude/plugin-page-view-tracking-browser';
 import {
     ApolloClient,
+    ApolloLink,
     ApolloProvider,
     InMemoryCache,
     createHttpLink,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { NextUIProvider } from '@nextui-org/system';
-import { GraphClientProvider } from '@secured-finance/sf-graph-client';
+import {
+    GraphApolloClient,
+    GraphClientProvider,
+} from '@secured-finance/sf-graph-client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AppProps } from 'next/app';
@@ -115,11 +119,6 @@ const authLink = setContext((_, { headers }) => {
     };
 });
 
-const client = new ApolloClient({
-    link: authLink.concat(httpLink),
-    cache: new InMemoryCache(),
-});
-
 function App({ Component, pageProps }: AppProps) {
     const router = useRouter();
     return (
@@ -157,6 +156,15 @@ const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const currentNetwork = useSelector((state: RootState) =>
         selectNetworkName(state)
     );
+
+    const client = new ApolloClient({
+        link: ApolloLink.split(
+            operation => operation.getContext().type === 'point-dashboard',
+            authLink.concat(httpLink),
+            new GraphApolloClient({ network: currentNetwork }).link
+        ),
+        cache: new InMemoryCache(),
+    });
 
     return (
         <CookiesProvider>
