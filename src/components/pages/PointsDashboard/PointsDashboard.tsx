@@ -15,6 +15,7 @@ import {
 import { capitalCase, snakeCase } from 'change-case';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
+import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import CountUp from 'react-countup';
@@ -31,8 +32,9 @@ import {
     Separator,
     Spinner,
     StatsBox,
+    TextLink,
 } from 'src/components/atoms';
-import { InfoToolTip, Tooltip } from 'src/components/molecules';
+import { Alert, InfoToolTip, Tooltip } from 'src/components/molecules';
 import {
     DepositCollateral,
     generateCollateralList,
@@ -52,6 +54,7 @@ import {
 import { useAccount, useConnect, useSignMessage } from 'wagmi';
 
 const POLL_INTERVAL = 600000; // 10 minutes
+const POINT_API_QUERY_OPTIONS = { context: { type: 'point-dashboard' } };
 
 const ReferralCode = ({ code }: { code: string }) => {
     return (
@@ -136,12 +139,20 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
         QuestType.Referral,
     ];
     const [cookies, setCookie, removeCookie] = useCookies();
-    const [getNonce] = useNonceLazyQuery({ fetchPolicy: 'no-cache' });
+    const [getNonce] = useNonceLazyQuery({
+        fetchPolicy: 'no-cache',
+        ...POINT_API_QUERY_OPTIONS,
+    });
     const { isLoading, signMessageAsync, reset } = useSignMessage();
     const { address, isConnected } = useAccount();
-    const [verify, { data: verifyData, loading, error }] = useVerifyMutation();
+    const [verify, { data: verifyData, loading, error }] = useVerifyMutation(
+        POINT_API_QUERY_OPTIONS
+    );
     const [getUser, { data: userData, loading: loadingUser, refetch }] =
-        useGetUserLazyQuery({ pollInterval: POLL_INTERVAL });
+        useGetUserLazyQuery({
+            pollInterval: POLL_INTERVAL,
+            ...POINT_API_QUERY_OPTIONS,
+        });
 
     useEffect(() => {
         if (verifyData) {
@@ -292,7 +303,7 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
                     ) : (
                         <>
                             <p className='text-center text-lg text-white'>
-                                Join the Secured Finance points program!
+                                Join the Secured Finance Points Program!
                             </p>
                             {referralCode && (
                                 <p className='mt-2 text-center text-secondary7'>
@@ -354,6 +365,7 @@ const QuestList = ({ chainId }: { chainId: number }) => {
     const { connectors } = useConnect();
     const { data, loading } = useGetQuestsQuery({
         pollInterval: POLL_INTERVAL,
+        ...POINT_API_QUERY_OPTIONS,
     });
     const collateralBalances = useCollateralBalances();
     const { data: collateralCurrencies = [] } = useCollateralCurrencies();
@@ -370,6 +382,98 @@ const QuestList = ({ chainId }: { chainId: number }) => {
     const provider = readWalletFromStore();
     const connector = connectors.find(connect => connect.name === provider);
 
+    const PointTag = ({
+        point,
+        questType,
+        isHighlight,
+    }: {
+        point: number;
+        questType: QuestType;
+        isHighlight: boolean;
+    }) => {
+        const prefix = [
+            QuestType.LimitOrder,
+            QuestType.ActivePosition,
+        ].includes(questType)
+            ? 'Up to '
+            : '';
+        const suffix = [QuestType.DailyLogin, QuestType.Referral].includes(
+            questType
+        )
+            ? 'pt'
+            : 'pt / $';
+
+        return (
+            <div className='whitespace-nowrap'>
+                <Chip
+                    label={prefix + point.toString() + suffix}
+                    color={isHighlight ? ChipColors.Yellow : ChipColors.Blue}
+                />
+            </div>
+        );
+    };
+
+    const BonusPointTags = ({
+        bonusPoints,
+        questType,
+        questPoint,
+    }: {
+        bonusPoints: Record<string, number>;
+        questType: QuestType;
+        questPoint: number;
+    }) => {
+        const BonusPointTag = ({
+            label,
+            color,
+        }: {
+            label: string;
+            color: ChipColors;
+        }) => (
+            <div className='whitespace-nowrap'>
+                <Chip label={label} color={color} />
+            </div>
+        );
+
+        const bonusPointTags = useMemo(() => {
+            const tags = [];
+            if (questType === QuestType.LimitOrder) {
+                if (bonusPoints['lend'] > 0) {
+                    tags.push(
+                        <div className='pl-2' key={'lend'}>
+                            <BonusPointTag
+                                label={`LEND ${Number(
+                                    (
+                                        (questPoint + bonusPoints['lend']) /
+                                        questPoint
+                                    ).toFixed(1)
+                                )}x`}
+                                color={ChipColors.Teal}
+                            />
+                        </div>
+                    );
+                }
+                if (bonusPoints['borrow'] > 0) {
+                    tags.push(
+                        <div className='pl-2' key={'borrow'}>
+                            <BonusPointTag
+                                label={`BORROW ${Number(
+                                    (
+                                        (questPoint + bonusPoints['borrow']) /
+                                        questPoint
+                                    ).toFixed(1)
+                                )}x`}
+                                color={ChipColors.Red}
+                            />
+                        </div>
+                    );
+                }
+            }
+            return tags;
+        }, [bonusPoints, questPoint, questType]);
+
+        return <>{bonusPointTags}</>;
+    };
+
     const QuestActionButton = ({
         questType,
         questChainId,
@@ -381,41 +485,57 @@ const QuestList = ({ chainId }: { chainId: number }) => {
         questCurrencies?: string[] | null;
         startAt: string | null;
     }) => {
-        switch (questType) {
-            case QuestType.Deposit:
-                return (
-                    <Button
-                        size={ButtonSizes.md}
-                        disabled={
-                            startAt ? dayjs().isBefore(dayjs(startAt)) : false
+        const router = useRouter();
+
+        let label: string | undefined;
+        let call: () => void | undefined;
+
+        if (questChainId && questCurrencies) {
+            switch (questType) {
+                case QuestType.Deposit:
+                    label = 'Deposit';
+                    call = () => {
+                        setIsDefaultDepositCcySymbol(questCurrencies[0]);
+                        setIsOpenDepositModal(true);
+                    };
+                    break;
+                case QuestType.LimitOrder:
+                case QuestType.ActivePosition:
+                    label =
+                        questType === QuestType.LimitOrder ? 'Order' : 'Trade';
+                    call = () => {
+                        router.push('/');
+                    };
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if (label) {
+            return (
+                <Button
+                    size={ButtonSizes.md}
+                    disabled={
+                        startAt ? dayjs().isBefore(dayjs(startAt)) : false
+                    }
+                    onClick={() => {
+                        if (questChainId !== chainId) {
+                            connector
+                                ?.switchChain?.(Number(questChainId))
+                                .then(() => {
+                                    setTimeout(() => call(), 500);
+                                });
+                        } else {
+                            call();
                         }
-                        onClick={() => {
-                            if (questChainId && questCurrencies) {
-                                if (questChainId !== chainId) {
-                                    connector
-                                        ?.switchChain?.(Number(questChainId))
-                                        .then(() => {
-                                            setTimeout(() => {
-                                                setIsDefaultDepositCcySymbol(
-                                                    questCurrencies[0]
-                                                );
-                                                setIsOpenDepositModal(true);
-                                            }, 500);
-                                        });
-                                } else {
-                                    setIsDefaultDepositCcySymbol(
-                                        questCurrencies[0]
-                                    );
-                                    setIsOpenDepositModal(true);
-                                }
-                            }
-                        }}
-                    >
-                        Deposit
-                    </Button>
-                );
-            default:
-                return <> </>;
+                    }}
+                >
+                    {label}
+                </Button>
+            );
+        } else {
+            return <></>;
         }
     };
 
@@ -453,23 +573,20 @@ const QuestList = ({ chainId }: { chainId: number }) => {
                                 startAt={item.startAt}
                             />
                         </div>
+
                         <div className='typography-caption-2 flex flex-row items-center text-secondary7'>
-                            <Chip
-                                label={
-                                    item.point.toString() +
-                                    ([
-                                        QuestType.DailyLogin,
-                                        QuestType.Referral,
-                                    ].includes(item.questType)
-                                        ? 'pt'
-                                        : 'pt / $')
-                                }
-                                color={
-                                    item.isHighlight
-                                        ? ChipColors.Yellow
-                                        : ChipColors.Blue
-                                }
+                            <PointTag
+                                point={item.point}
+                                questType={item.questType}
+                                isHighlight={item.isHighlight}
                             />
+                            {item.bonusPoints && (
+                                <BonusPointTags
+                                    bonusPoints={item.bonusPoints}
+                                    questType={item.questType}
+                                    questPoint={item.point}
+                                />
+                            )}
                             {item.currencies && (
                                 <div className='flex pl-3'>
                                     {item.currencies.map(ccy => (
@@ -483,7 +600,6 @@ const QuestList = ({ chainId }: { chainId: number }) => {
                                     ))}
                                 </div>
                             )}
-
                             {(item.startAt || item.endAt) && (
                                 <div className='pl-2'>
                                     {`${formatDate(
@@ -494,8 +610,8 @@ const QuestList = ({ chainId }: { chainId: number }) => {
                                 </div>
                             )}
                         </div>
-                        <div className='flex flex-row items-center justify-between text-sm text-grayScale'>
-                            {item.description}
+                        <div className='flex flex-row items-center justify-between whitespace-pre-wrap text-sm text-grayScale'>
+                            {item.description.replaceAll('\\n', '\n')}
                         </div>
                     </div>
                 ))}
@@ -515,6 +631,7 @@ const Leaderboard = () => {
     const { data, loading } = useGetUsersQuery({
         variables: { page: 1, limit: 20 },
         pollInterval: POLL_INTERVAL,
+        ...POINT_API_QUERY_OPTIONS,
     });
 
     return (
@@ -553,6 +670,22 @@ export const PointsDashboard = () => {
     const chainId = useSelector((state: RootState) => state.blockchain.chainId);
     return (
         <Page title='Point Dashboard' name='point-dashboard'>
+            <div className='px-3 laptop:px-0'>
+                <Alert
+                    title={
+                        <>
+                            Earn SF Points with Your Contributions to the
+                            Secured Finance Protocol. Learn more about the
+                            points system and calculations at the&nbsp;
+                            <TextLink
+                                href='https://docs.secured.finance/top/secured-finance-points-sfp'
+                                text='Secured Finance Docs'
+                            />
+                        </>
+                    }
+                    isShowCloseButton={false}
+                />
+            </div>
             <TwoColumns>
                 <div className='grid grid-cols-1 gap-y-7'>
                     <UserPointInfo chainId={chainId} />
