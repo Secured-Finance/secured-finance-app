@@ -37,6 +37,7 @@ import { TradingDropdown } from './TradingDropdown';
 import { DEV_LINKS, PRODUCTION_LINKS } from './constants';
 
 const POLL_INTERVAL = 600000; // 10 minutes
+const POINT_API_QUERY_OPTIONS = { context: { type: 'point-dashboard' } };
 
 const HeaderMessage = ({
     chainId,
@@ -81,9 +82,11 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     const isMobile = useBreakpoint('tablet');
     const { address, isConnected } = useAccount();
 
-    const [cookies] = useCookies(['verified_data']);
+    const [cookies] = useCookies();
+
     const [getUser, { data: userData, refetch }] = useGetUserLazyQuery({
         pollInterval: POLL_INTERVAL,
+        ...POINT_API_QUERY_OPTIONS,
     });
 
     useEffect(() => {
@@ -272,7 +275,7 @@ const PointsTag = ({
 
     const handleOnClick = () => {
         if (isConnected) {
-            router.push('/points');
+            router.pathname !== '/points' && router.push('/points');
             return;
         }
 
