@@ -7,7 +7,6 @@ import Badge from 'src/assets/icons/badge.svg';
 import LockClose from 'src/assets/icons/lock-close.svg';
 import LockOpen from 'src/assets/icons/lock-open.svg';
 import Coins from 'src/assets/img/2d coins.svg';
-import Glow from 'src/assets/img/glow.svg';
 import { CurrencyIcon } from 'src/components/atoms';
 import { useBreakpoint } from 'src/hooks';
 import {
@@ -142,12 +141,12 @@ export const CampaignStatus = ({
                     </span>
                 </div>
                 <div className='flex flex-col gap-3 tablet:flex-row tablet:justify-between tablet:gap-5'>
-                    <div className='flex flex-col gap-2 tablet:h-full tablet:w-[48%] tablet:justify-center laptop:w-[176px] laptop:justify-stretch desktop:w-[55%]'>
+                    <div className='flex flex-col gap-2 tablet:h-[152px] tablet:w-[48%] tablet:justify-center laptop:h-full laptop:w-[176px] laptop:justify-stretch desktop:w-[55%]'>
                         <span className='typography-mobile-body-5 flex text-neutral-300 tablet:hidden'>
                             {campaignStartCopy}
                         </span>
-                        <div className='tablet:px-4.5 flex w-full flex-col gap-2 rounded-[14px] bg-white-5 px-4 py-2 tablet:justify-center tablet:py-6 laptop:h-full'>
-                            <span className='typography-mobile-body-4 hidden justify-center text-neutral-50/80 tablet:flex laptop:justify-start'>
+                        <div className='tablet:px-4.5 flex w-full flex-col gap-2 rounded-[14px] bg-white-5 px-4 py-2 tablet:h-full tablet:justify-center tablet:py-6'>
+                            <span className='typography-mobile-body-4 hidden justify-center whitespace-nowrap text-neutral-50/80 tablet:flex laptop:justify-start'>
                                 {campaignStartCopy}
                             </span>
                             <Timer
@@ -159,7 +158,7 @@ export const CampaignStatus = ({
                         <span className='typography-mobile-body-5 flex text-neutral-300 tablet:hidden'>
                             Total Value Locked
                         </span>
-                        <div className='flex w-full flex-col gap-2 rounded-[14px] bg-white-5 px-5 py-2 tablet:justify-center tablet:p-4 laptop:h-[166px] laptop:p-4'>
+                        <div className='flex h-full w-full flex-col gap-2 rounded-[14px] bg-white-5 px-5 py-2 tablet:justify-center tablet:p-4 laptop:p-4'>
                             <span className='tablet:typography-desktop-body-4 hidden text-4 leading-8 text-neutral-50/80 tablet:mb-1 tablet:flex'>
                                 Total Value Locked
                             </span>
@@ -222,9 +221,9 @@ export const CampaignStatus = ({
 export const DepositCard = () => {
     return (
         <div className='relative flex max-w-[752px] items-center overflow-hidden rounded-3xl border border-blue laptop:h-auto laptop:w-[50%] laptop:flex-col laptop:justify-between laptop:border-2 desktop:w-[46%] desktop:justify-end'>
-            <div className='candlestick-bg absolute left-0 top-0 h-full w-full bg-cover bg-center bg-no-repeat laptop:bg-contain desktop:bg-cover'></div>
+            <div className='candlestick-bg-mobile laptop:candlestick-bg-alt desktop:candlestick-bg absolute left-0 top-0 h-full w-full bg-cover bg-right bg-no-repeat laptop:bg-center desktop:bg-cover'></div>
             <div className='absolute right-4 top-[5px] flex items-center justify-center laptop:inset-0'>
-                <Glow className='absolute hidden h-[300px] w-[420px] laptop:flex' />
+                {/* <Glow className='absolute hidden h-[300px] w-[420px] laptop:flex' /> */}
                 <Coins className='z-2 relative h-[70px] w-auto laptop:-mt-[40px] laptop:h-[200px] laptop:w-[220px]' />
             </div>
 
