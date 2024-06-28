@@ -32,8 +32,9 @@ import {
     Separator,
     Spinner,
     StatsBox,
+    TextLink,
 } from 'src/components/atoms';
-import { InfoToolTip, Tooltip } from 'src/components/molecules';
+import { Alert, InfoToolTip, Tooltip } from 'src/components/molecules';
 import {
     DepositCollateral,
     generateCollateralList,
@@ -53,6 +54,7 @@ import {
 import { useAccount, useConnect, useSignMessage } from 'wagmi';
 
 const POLL_INTERVAL = 600000; // 10 minutes
+const POINT_API_QUERY_OPTIONS = { context: { type: 'point-dashboard' } };
 
 const ReferralCode = ({ code }: { code: string }) => {
     return (
@@ -137,12 +139,20 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
         QuestType.Referral,
     ];
     const [cookies, setCookie, removeCookie] = useCookies();
-    const [getNonce] = useNonceLazyQuery({ fetchPolicy: 'no-cache' });
+    const [getNonce] = useNonceLazyQuery({
+        fetchPolicy: 'no-cache',
+        ...POINT_API_QUERY_OPTIONS,
+    });
     const { isLoading, signMessageAsync, reset } = useSignMessage();
     const { address, isConnected } = useAccount();
-    const [verify, { data: verifyData, loading, error }] = useVerifyMutation();
+    const [verify, { data: verifyData, loading, error }] = useVerifyMutation(
+        POINT_API_QUERY_OPTIONS
+    );
     const [getUser, { data: userData, loading: loadingUser, refetch }] =
-        useGetUserLazyQuery({ pollInterval: POLL_INTERVAL });
+        useGetUserLazyQuery({
+            pollInterval: POLL_INTERVAL,
+            ...POINT_API_QUERY_OPTIONS,
+        });
 
     useEffect(() => {
         if (verifyData) {
@@ -293,7 +303,7 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
                     ) : (
                         <>
                             <p className='text-center text-lg text-white'>
-                                Join the Secured Finance points program!
+                                Join the Secured Finance Points Program!
                             </p>
                             {referralCode && (
                                 <p className='mt-2 text-center text-secondary7'>
@@ -355,6 +365,7 @@ const QuestList = ({ chainId }: { chainId: number }) => {
     const { connectors } = useConnect();
     const { data, loading } = useGetQuestsQuery({
         pollInterval: POLL_INTERVAL,
+        ...POINT_API_QUERY_OPTIONS,
     });
     const collateralBalances = useCollateralBalances();
     const { data: collateralCurrencies = [] } = useCollateralCurrencies();
@@ -489,7 +500,9 @@ const QuestList = ({ chainId }: { chainId: number }) => {
                     };
                     break;
                 case QuestType.LimitOrder:
-                    label = 'Open Order';
+                case QuestType.ActivePosition:
+                    label =
+                        questType === QuestType.LimitOrder ? 'Order' : 'Trade';
                     call = () => {
                         router.push('/');
                     };
@@ -597,8 +610,8 @@ const QuestList = ({ chainId }: { chainId: number }) => {
                                 </div>
                             )}
                         </div>
-                        <div className='flex flex-row items-center justify-between text-sm text-grayScale'>
-                            {item.description}
+                        <div className='flex flex-row items-center justify-between whitespace-pre-wrap text-sm text-grayScale'>
+                            {item.description.replaceAll('\\n', '\n')}
                         </div>
                     </div>
                 ))}
@@ -618,6 +631,7 @@ const Leaderboard = () => {
     const { data, loading } = useGetUsersQuery({
         variables: { page: 1, limit: 20 },
         pollInterval: POLL_INTERVAL,
+        ...POINT_API_QUERY_OPTIONS,
     });
 
     return (
@@ -656,6 +670,22 @@ export const PointsDashboard = () => {
     const chainId = useSelector((state: RootState) => state.blockchain.chainId);
     return (
         <Page title='Point Dashboard' name='point-dashboard'>
+            <div className='px-3 laptop:px-0'>
+                <Alert
+                    title={
+                        <>
+                            Earn SF Points with Your Contributions to the
+                            Secured Finance Protocol. Learn more about the
+                            points system and calculations at the&nbsp;
+                            <TextLink
+                                href='https://docs.secured.finance/top/secured-finance-points-sfp'
+                                text='Secured Finance Docs'
+                            />
+                        </>
+                    }
+                    isShowCloseButton={false}
+                />
+            </div>
             <TwoColumns>
                 <div className='grid grid-cols-1 gap-y-7'>
                     <UserPointInfo chainId={chainId} />

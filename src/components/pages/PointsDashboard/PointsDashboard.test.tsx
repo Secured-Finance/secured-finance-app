@@ -19,7 +19,7 @@ describe('PointsDashboard Component', () => {
             })
         );
         expect(
-            screen.getByText('Join the Secured Finance points program!')
+            screen.getByText('Join the Secured Finance Points Program!')
         ).toBeInTheDocument();
         expect(
             screen.getByRole('button', { name: 'Join' })
