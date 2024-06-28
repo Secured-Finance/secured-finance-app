@@ -7,6 +7,7 @@ import Badge from 'src/assets/icons/badge.svg';
 import LockClose from 'src/assets/icons/lock-close.svg';
 import LockOpen from 'src/assets/icons/lock-open.svg';
 import Coins from 'src/assets/img/2d coins.svg';
+import Glow from 'src/assets/img/glow.svg';
 import { CurrencyIcon } from 'src/components/atoms';
 import { useBreakpoint } from 'src/hooks';
 import {
@@ -86,7 +87,7 @@ const SFPoints = () => (
     <Link
         href='https://docs.secured.finance/top/secured-finance-points-sfp'
         target='_blank'
-        className='flex flex-shrink-0 flex-nowrap laptop:ml-0 desktop:ml-1'
+        className='relative top-1 inline-block tablet:top-0 tablet:ml-1 laptop:top-1 desktop:ml-0'
     >
         <span className='typography-mobile-body-5 tablet:typography-desktop-body-4 desktop:typography-desktop-body-3 flex items-center justify-center gap-1 rounded-lg bg-tertiary-500/20 py-1 pl-2 pr-3 font-semibold tablet:gap-1.5 tablet:rounded-xl tablet:py-2 tablet:pl-2.5 tablet:pr-3 laptop:ml-0 laptop:rounded-xl desktop:px-3 desktop:py-2'>
             <Badge className='h-[18px] w-[18px] tablet:h-3.5 tablet:w-3.5 laptop:h-4 laptop:w-4 desktop:h-[18px] desktop:w-[18px]' />{' '}
@@ -141,11 +142,11 @@ export const CampaignStatus = ({
                     </span>
                 </div>
                 <div className='flex flex-col gap-3 tablet:flex-row tablet:justify-between tablet:gap-5'>
-                    <div className='flex flex-col gap-2 tablet:h-full tablet:w-[48%] tablet:justify-center laptop:w-[176px] desktop:w-[55%]'>
+                    <div className='flex flex-col gap-2 tablet:h-full tablet:w-[48%] tablet:justify-center laptop:w-[176px] laptop:justify-stretch desktop:w-[55%]'>
                         <span className='typography-mobile-body-5 flex text-neutral-300 tablet:hidden'>
                             {campaignStartCopy}
                         </span>
-                        <div className='flex w-full flex-col gap-2 rounded-[14px] bg-white-5 px-4 py-2 tablet:h-[152px] tablet:justify-center tablet:p-6 laptop:h-auto desktop:h-full'>
+                        <div className='tablet:px-4.5 flex w-full flex-col gap-2 rounded-[14px] bg-white-5 px-4 py-2 tablet:justify-center tablet:py-6 laptop:h-full'>
                             <span className='typography-mobile-body-4 hidden justify-center text-neutral-50/80 tablet:flex laptop:justify-start'>
                                 {campaignStartCopy}
                             </span>
@@ -186,7 +187,7 @@ export const CampaignStatus = ({
                 </div>
             </div>
             <div className='flex flex-col gap-2 tablet:items-start laptop:gap-5 desktop:gap-6'>
-                <span className='tablet:typography-desktop-body-5 laptop:typography-desktop-body-4 desktop:typography-desktop-body-3 typography-mobile-body-5 inline-flex w-full flex-wrap items-center text-neutral-50'>
+                <span className='tablet:typography-desktop-body-5 laptop:typography-desktop-body-4 desktop:typography-desktop-body-3 typography-mobile-body-5 mb-1 inline-block w-full flex-wrap items-center text-neutral-50 tablet:inline-flex laptop:inline-block'>
                     Quest Goal: Place limit orders and keep active positions for
                     the following assets and earn <SFPoints />
                 </span>
@@ -221,10 +222,9 @@ export const CampaignStatus = ({
 export const DepositCard = () => {
     return (
         <div className='relative flex max-w-[752px] items-center overflow-hidden rounded-3xl border border-blue laptop:h-auto laptop:w-[50%] laptop:flex-col laptop:justify-between laptop:border-2 desktop:w-[46%] desktop:justify-end'>
-            <div className='candlestick-bg absolute left-0 top-0 h-full w-full bg-cover bg-center'></div>
-            <div className='absolute inset-0 bg-neutral-900/50'></div>
+            <div className='candlestick-bg absolute left-0 top-0 h-full w-full bg-cover bg-center bg-no-repeat laptop:bg-contain desktop:bg-cover'></div>
             <div className='absolute right-4 top-[5px] flex items-center justify-center laptop:inset-0'>
-                {/* <Glow className='absolute hidden h-[300px] w-[420px] laptop:flex' /> */}
+                <Glow className='absolute hidden h-[300px] w-[420px] laptop:flex' />
                 <Coins className='z-2 relative h-[70px] w-auto laptop:-mt-[40px] laptop:h-[200px] laptop:w-[220px]' />
             </div>
 
@@ -247,14 +247,14 @@ export const DepositCard = () => {
                 </span>
 
                 <Link href='/' className='laptop:w-full desktop:w-auto'>
-                    <button className='border-primary-200 relative flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-2xl border-2 bg-[linear-gradient(90deg,_#5162FF_0%,_#303B99_100%)] px-8 py-3 text-4 font-semibold leading-5 text-white hover:border-primary-500 active:border-primary-700 laptop:w-full laptop:rounded-lg laptop:px-5 laptop:py-2.5 laptop:leading-5 desktop:w-[257px] min-[1920px]:w-[344px]'>
+                    <button className='border-primary-200 relative flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-2xl border-2 bg-[linear-gradient(90deg,_#5162FF_0%,_#303B99_100%)] px-8 py-2.5 text-4 font-semibold leading-5 text-white hover:border-primary-500 hover:bg-[linear-gradient(90deg,_#303B99_0%,_#303B99_100%)] active:border-primary-700 laptop:w-full laptop:rounded-lg laptop:px-5 laptop:py-2.5 laptop:leading-5 desktop:w-[257px] min-[1920px]:w-[344px]'>
                         <svg
                             xmlns='http://www.w3.org/2000/svg'
                             width='67'
                             height='44'
                             viewBox='0 0 67 44'
                             fill='none'
-                            className='absolute right-1/2 -translate-x-[137%]'
+                            className='absolute right-1/2 -translate-x-[131%]'
                         >
                             <path
                                 opacity='0.2'
@@ -264,15 +264,15 @@ export const DepositCard = () => {
                         </svg>
                         <svg
                             xmlns='http://www.w3.org/2000/svg'
-                            width='192'
+                            width='269'
                             height='44'
-                            viewBox='0 0 192 44'
+                            viewBox='0 0 269 44'
                             fill='none'
-                            className='absolute right-1/2 translate-x-[29%]'
+                            className='absolute left-1/2 -translate-x-1/2'
                         >
                             <path
                                 opacity='0.2'
-                                d='M56 0H191.5L135.5 44H0L56 0Z'
+                                d='M56 0L268.5 0L212.5 44H0L56 0Z'
                                 fill='#1E293B'
                             />
                         </svg>
