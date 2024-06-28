@@ -10,9 +10,8 @@ import {
     useValueLockedByCurrency,
 } from 'src/hooks';
 // import { RootState } from 'src/store/types';
-import { CurrencySymbol, readWalletFromStore } from 'src/utils';
+import { CurrencySymbol } from 'src/utils';
 import { isProdEnv } from 'src/utils/displayUtils';
-import { useConnect } from 'wagmi';
 import { Banner, CampaignStatus, DepositCard, StageBanner } from './components';
 import {
     DEV_COLLATERAL_CURRENCIES,
@@ -21,8 +20,8 @@ import {
 
 export const Campaign = () => {
     const [openModal, setOpenModal] = useState(false);
-    const { connectors } = useConnect();
-    const provider = readWalletFromStore();
+    // const { connectors } = useConnect();
+    // const provider = readWalletFromStore();
     // const chainId = useSelector((state: RootState) => state.blockchain.chainId);
     // const connector = connectors.find(connect => connect.name === provider);
 
