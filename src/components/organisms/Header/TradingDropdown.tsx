@@ -31,7 +31,7 @@ export const TradingDropdown = () => {
                             />
                             <div
                                 className={clsx(
-                                    'flex h-full items-center justify-center gap-2 pl-[30px] pr-[23px]',
+                                    'flex h-full items-center justify-center gap-2 laptop:w-[100px]',
                                     {
                                         'bg-gradient-to-b from-tabGradient-blue-start to-tabGradient-blue-end':
                                             isActive,
@@ -40,10 +40,10 @@ export const TradingDropdown = () => {
                             >
                                 <p
                                     className={clsx(
-                                        'typography-nav-menu-default flex h-4 items-center gap-2.5 whitespace-nowrap text-neutral-8 duration-300 group-hover:opacity-100 group-hover:ease-in-out',
+                                        'typography-nav-menu-default flex h-4 items-center gap-1 whitespace-nowrap duration-300',
                                         {
-                                            'opacity-100': isActive,
-                                            'opacity-70': !isActive,
+                                            'text-neutral-50': isActive,
+                                            'text-neutral-200': !isActive,
                                         }
                                     )}
                                     data-testid={`${text}-tab`}
@@ -67,7 +67,7 @@ export const TradingDropdown = () => {
                         leaveFrom='transform scale-100 opacity-100'
                         leaveTo='transform scale-95 opacity-0'
                     >
-                        <Menu.Items className='absolute -left-[128px] top-16 flex w-[128px] flex-col rounded-b-xl bg-neutral-800 py-1'>
+                        <Menu.Items className='absolute -left-[100px] top-16 flex w-[128px] flex-col rounded-b-xl bg-neutral-800 py-1'>
                             {links.map((tradingLink, i) => {
                                 return (
                                     <Menu.Item
