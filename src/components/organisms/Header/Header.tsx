@@ -2,7 +2,7 @@ import { useGetUserLazyQuery } from '@secured-finance/sf-point-client';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useDispatch, useSelector } from 'react-redux';
 import Badge from 'src/assets/icons/badge.svg';
@@ -20,7 +20,11 @@ import {
     NetworkSelector,
     Settings,
 } from 'src/components/molecules';
-import { WalletDialog, WalletPopover } from 'src/components/organisms';
+import {
+    ConnectWalletDialog,
+    WalletDialog,
+    WalletPopover,
+} from 'src/components/organisms';
 import { useBreakpoint } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
@@ -71,6 +75,8 @@ const HeaderMessage = ({
 };
 
 const Header = ({ showNavigation }: { showNavigation: boolean }) => {
+    const [isConnectWalletDialogOpen, setIsConnectWalletDialogOpen] =
+        useState<boolean>(false);
     const dispatch = useDispatch();
     const isMobile = useBreakpoint('tablet');
     const { address, isConnected } = useAccount();
@@ -121,9 +127,9 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                     data-cy='header'
                     className='grid h-14 w-full grid-flow-col bg-neutral-800 px-4 tablet:h-16 tablet:px-5 laptop:grid-flow-col'
                 >
-                    <div className='col-span-2 flex flex-row items-center gap-8 desktop:gap-12'>
-                        <Link href='/'>
-                            <SFLogo className='hidden desktop:inline desktop:h-4 desktop:w-[160px]' />
+                    <div className='col-span-2 flex flex-row items-center gap-6 largeDesktop:gap-8'>
+                        <Link href='/' className='flex'>
+                            <SFLogo className='hidden desktop:inline desktop:h-4 desktop:w-[160px] largeDesktop:h-5 largeDesktop:w-[200px]' />
                             <SFLogoSmall className='inline h-7 w-7 desktop:hidden' />
                         </Link>
                         {showNavigation && (
@@ -149,6 +155,9 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                         <PointsTag
                             isConnected={isConnected}
                             points={userPoints}
+                            handleOpenConnectWalletDialog={() =>
+                                setIsConnectWalletDialogOpen(true)
+                            }
                         />
                         {isConnected && address ? (
                             <>
@@ -193,6 +202,14 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                         </div>
                     </div>
                     <WalletDialog />
+                    <ConnectWalletDialog
+                        isOpen={isConnectWalletDialogOpen}
+                        onClose={() => setIsConnectWalletDialogOpen(false)}
+                        handleConnectWallet={() => {
+                            setIsConnectWalletDialogOpen(false);
+                            dispatch(setWalletDialogOpen(true));
+                        }}
+                    />
                 </nav>
             </div>
         </>
@@ -223,7 +240,7 @@ const ItemLink = ({
                 text={text}
                 active={useCheckActive()}
                 isFullHeight
-                className='laptop:px-[1.875rem]'
+                className='laptop:w-[100px]'
             />
         </Link>
     );
@@ -232,10 +249,13 @@ const ItemLink = ({
 const PointsTag = ({
     points,
     isConnected,
+    handleOpenConnectWalletDialog,
 }: {
     points?: number;
     isConnected: boolean;
+    handleOpenConnectWalletDialog: () => void;
 }) => {
+    const router = useRouter();
     let pointsDisplay = '';
 
     if (points) {
@@ -248,9 +268,18 @@ const PointsTag = ({
         }
     }
 
+    const handleOnClick = () => {
+        if (isConnected) {
+            router.push('/points');
+            return;
+        }
+
+        handleOpenConnectWalletDialog();
+    };
+
     return (
-        <Link
-            href='/points'
+        <button
+            onClick={() => handleOnClick()}
             className={clsx(
                 'typography-mobile-body-5 tablet:typography-desktop-body-4 flex h-8 flex-shrink-0 items-center justify-center gap-1 rounded-lg border border-tertiary-500 bg-tertiary-700/30 px-2.5 py-[5px] font-semibold text-neutral-50 hover:bg-tertiary-700 active:border-transparent tablet:h-10 tablet:rounded-xl tablet:pr-3',
                 {
@@ -261,7 +290,7 @@ const PointsTag = ({
         >
             <Badge className='flex h-[13px] w-[13px] flex-shrink-0 tablet:h-4 tablet:w-4' />
             {isConnected && points !== undefined && <>{pointsDisplay}</>}
-        </Link>
+        </button>
     );
 };
 
