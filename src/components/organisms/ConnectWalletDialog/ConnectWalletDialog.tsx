@@ -18,6 +18,7 @@ export const ConnectWalletDialog = ({
             onClick={handleConnectWallet}
             isOpen={isOpen}
             onClose={onClose}
+            showCancelButton
         >
             <div className='mx-auto flex h-[100px] w-[100px] items-center justify-center rounded-full border border-white/[19%] bg-white/[5%]'>
                 <Badge className='h-16 w-16' />
