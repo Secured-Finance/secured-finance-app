@@ -256,6 +256,8 @@ const PointsTag = ({
     handleOpenConnectWalletDialog: () => void;
 }) => {
     const router = useRouter();
+    const showPoints = isConnected && points;
+
     let pointsDisplay = '';
 
     if (points) {
@@ -281,9 +283,10 @@ const PointsTag = ({
         <button
             onClick={() => handleOnClick()}
             className={clsx(
-                'typography-mobile-body-5 tablet:typography-desktop-body-4 flex h-8 flex-shrink-0 items-center justify-center gap-1 rounded-lg border border-tertiary-500 bg-tertiary-700/30 px-2.5 py-[5px] font-semibold text-neutral-50 hover:bg-tertiary-700 active:border-transparent tablet:h-10 tablet:rounded-xl tablet:pr-3',
+                'typography-mobile-body-5 tablet:typography-desktop-body-4 flex h-8 flex-shrink-0 items-center justify-center gap-1 rounded-lg border border-tertiary-500 bg-tertiary-700/30 px-2.5 py-[5px] font-semibold text-neutral-50 hover:bg-tertiary-700 active:border-transparent tablet:h-10 tablet:rounded-xl',
                 {
-                    'w-8 tablet:w-10 tablet:pr-2.5': !isConnected,
+                    'w-8 tablet:w-10 tablet:pr-2.5': !showPoints,
+                    'tablet:pr-3': showPoints,
                 }
             )}
             aria-label='Points Tag'
