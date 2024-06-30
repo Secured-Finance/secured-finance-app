@@ -1,11 +1,24 @@
+import { CurrencySymbol } from 'src/utils';
+
+export const prodQuestChainId = 314;
+export const devQuestChainId = 314159;
+export const DEV_COLLATERAL_CURRENCIES = [
+    CurrencySymbol.tFIL,
+    CurrencySymbol.iFIL,
+];
+export const PROD_COLLATERAL_CURRENCIES = [
+    CurrencySymbol.FIL,
+    CurrencySymbol.iFIL,
+];
+
 export const stages = [
     {
         text: 'Core Fueling',
-        active: true,
+        active: false,
     },
     {
         text: 'Orbital Contracts',
-        active: false,
+        active: true,
     },
     {
         text: 'Stellar Minting',
