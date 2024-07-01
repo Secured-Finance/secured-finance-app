@@ -22,7 +22,8 @@ export function removeMarketFromStore(_market: SavedMarket) {
     const updatedMarkets = savedMarkets.filter(
         (savedMarket: SavedMarket) =>
             savedMarket.market !== _market.market ||
-            savedMarket.address !== _market.address
+            savedMarket.address !== _market.address ||
+            savedMarket.chainId !== _market.chainId
     );
     localStorage.setItem(SAVED_MARKETS_KEY, JSON.stringify(updatedMarkets));
 }
@@ -34,6 +35,7 @@ export function isMarketInStore(_market: SavedMarket): boolean {
     return savedMarkets.some(
         (savedMarket: SavedMarket) =>
             savedMarket.market === _market.market &&
-            savedMarket.address === _market.address
+            savedMarket.address === _market.address &&
+            savedMarket.chainId === _market.chainId
     );
 }

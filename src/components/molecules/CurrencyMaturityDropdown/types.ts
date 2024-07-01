@@ -15,6 +15,7 @@ export type FilteredOption = {
     lastPrice: string;
     apr: string;
     isItayoseOption: boolean;
+    isFavourite: boolean;
 };
 
 export type CurrencyMaturityDropdownProps = {

@@ -1,3 +1,4 @@
+import { withWalletProvider } from '.storybook/decorators';
 import { Meta, StoryFn } from '@storybook/react';
 import { within } from '@storybook/testing-library';
 import { currencyList, maturityOptions } from 'src/stories/mocks/fixtures';
@@ -6,6 +7,7 @@ import { CurrencyMaturityDropdown } from './CurrencyMaturityDropdown';
 export default {
     title: 'Molecules/CurrencyMaturityDropdown',
     component: CurrencyMaturityDropdown,
+    decorators: [withWalletProvider],
     args: {
         currencyList: currencyList,
         asset: currencyList[0],
