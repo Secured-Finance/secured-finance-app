@@ -1,7 +1,9 @@
 import {
     ChevronDownIcon as AngleDownIcon,
     ChevronUpIcon,
+    StarIcon,
 } from '@heroicons/react/24/outline';
+import { StarIcon as FilledStarIcon } from '@heroicons/react/24/solid';
 import {
     SortDescriptor,
     Table,
@@ -12,8 +14,17 @@ import {
     TableRow,
 } from '@nextui-org/table';
 import clsx from 'clsx';
+import { useCallback, useState } from 'react';
 import { useBreakpoint } from 'src/hooks';
+import { SavedMarket } from 'src/types';
 import { calculateTimeDifference, formatDuration } from 'src/utils';
+import {
+    isMarketInStore,
+    readMarketsFromStore,
+    removeMarketFromStore,
+    writeMarketInStore,
+} from 'src/utils/markets';
+import { useAccount } from 'wagmi';
 import { desktopColumns, mobileColumns } from './constants';
 import { ColumnKey, FilteredOption } from './types';
 
@@ -32,30 +43,70 @@ export const CurrencyMaturityTable = ({
 }) => {
     const isTablet = useBreakpoint('laptop');
     const columns = isTablet ? mobileColumns : desktopColumns;
+    const [savedMarkets, setSavedMarkets] = useState(() => {
+        return readMarketsFromStore();
+    });
+    const { address, isConnected } = useAccount();
 
-    const renderCell = (option: (typeof options)[0], columnKey: ColumnKey) => {
-        const { maturity } = option;
+    const renderCell = useCallback(
+        (option: (typeof options)[0], columnKey: ColumnKey) => {
+            const { maturity } = option;
 
-        switch (columnKey) {
-            case 'symbol':
-                return (
-                    <h3 className='flex items-center gap-1 font-secondary'>
-                        {option.display}
-                    </h3>
-                );
-            case 'last-prices':
-                return option.lastPrice;
-            case 'last-prices-mobile':
-                return `${option.lastPrice} (${option.apr})`;
-            case 'apr':
-                return option.apr;
-            case 'maturity':
-                const timestampDifference = calculateTimeDifference(+maturity);
-                return formatDuration(Math.abs(timestampDifference));
-            default:
-                return null;
-        }
-    };
+            const toggleSave = (market: string) => {
+                const marketEntry = { market, address };
+
+                if (isMarketInStore(marketEntry)) {
+                    removeMarketFromStore(marketEntry);
+                } else {
+                    writeMarketInStore(marketEntry);
+                }
+                setSavedMarkets(readMarketsFromStore());
+            };
+
+            switch (columnKey) {
+                case 'symbol':
+                    return (
+                        <h3 className='flex items-center gap-1 font-secondary'>
+                            {isConnected && (
+                                <button
+                                    onClick={e => {
+                                        e.stopPropagation();
+                                        toggleSave(option.display);
+                                    }}
+                                >
+                                    {savedMarkets.some(
+                                        (savedMarket: SavedMarket) =>
+                                            savedMarket.market ===
+                                                option.display &&
+                                            savedMarket.address === address
+                                    ) ? (
+                                        <FilledStarIcon className='h-3.5 w-3.5 text-warning-300' />
+                                    ) : (
+                                        <StarIcon className='h-3.5 w-3.5' />
+                                    )}
+                                </button>
+                            )}
+
+                            {option.display}
+                        </h3>
+                    );
+                case 'last-prices':
+                    return option.lastPrice;
+                case 'last-prices-mobile':
+                    return `${option.lastPrice} (${option.apr})`;
+                case 'apr':
+                    return option.apr;
+                case 'maturity':
+                    const timestampDifference = calculateTimeDifference(
+                        +maturity
+                    );
+                    return formatDuration(Math.abs(timestampDifference));
+                default:
+                    return null;
+            }
+        },
+        [savedMarkets, address, isConnected]
+    );
 
     return (
         <Table

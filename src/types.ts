@@ -107,3 +107,8 @@ export enum HistoricalDataIntervals {
     '1W' = '604800',
     '1MTH' = '2592000',
 }
+
+export interface SavedMarket {
+    market: string;
+    address: `0x${string}` | undefined;
+}
