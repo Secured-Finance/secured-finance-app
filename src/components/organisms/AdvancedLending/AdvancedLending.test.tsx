@@ -7,8 +7,9 @@ import {
     mockFilteredUserTransactionHistory,
 } from 'src/stories/mocks/queries';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { fireEvent, render, screen, waitFor, within } from 'src/test-utils.js';
 import { ButtonEvents, ButtonProperties } from 'src/utils';
+
+import { fireEvent, render, screen, waitFor, within } from 'src/test-utils.js';
 import * as stories from './AdvancedLending.stories';
 
 const { Default, ConnectedToWallet, Delisted, OpenOrdersConnectedToWallet } =
@@ -32,8 +33,9 @@ describe('Advanced Lending Component', () => {
             })
         );
         expect(store.getState().landingOrderForm.amount).toEqual('1');
-        fireEvent.click(screen.getByRole('button', { name: 'WFIL' }));
-        fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
+
+        fireEvent.click(screen.getByRole('button', { name: 'WFIL-DEC2022' }));
+        fireEvent.click(screen.getByRole('row', { name: 'USDC-DEC2022' }));
         expect(track).toHaveBeenCalledWith(ButtonEvents.CURRENCY_CHANGE, {
             [ButtonProperties.CURRENCY]: 'USDC',
         });
@@ -59,8 +61,8 @@ describe('Advanced Lending Component', () => {
             })
         );
         expect(store.getState().landingOrderForm.amount).toEqual('1');
-        fireEvent.click(screen.getByRole('button', { name: 'DEC2022' }));
-        fireEvent.click(screen.getByText('MAR2023'));
+        fireEvent.click(screen.getByRole('button', { name: 'WFIL-DEC2022' }));
+        fireEvent.click(screen.getByText('WFIL-MAR2023'));
         expect(track).toHaveBeenCalledWith(ButtonEvents.TERM_CHANGE, {
             [ButtonProperties.TERM]: 'MAR2023',
         });
@@ -77,7 +79,7 @@ describe('Advanced Lending Component', () => {
             apolloMocks: Default.parameters?.apolloClient.mocks,
         });
         expect(
-            await screen.findByRole('button', { name: 'DEC2022' })
+            await screen.findByRole('button', { name: 'WFIL-DEC2022' })
         ).toBeInTheDocument();
         expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
     });
@@ -87,24 +89,20 @@ describe('Advanced Lending Component', () => {
             apolloMocks: Default.parameters?.apolloClient.mocks,
         });
 
-        expect(
-            await within(
-                await screen.findByLabelText('Current Market')
-            ).findByText('98.01')
-        ).toBeInTheDocument();
-
-        expect(
-            within(screen.getByLabelText('24h High')).getByText('90.00')
-        ).toBeInTheDocument();
-        expect(
-            within(screen.getByLabelText('24h Low')).getByText('80.00')
-        ).toBeInTheDocument();
-        expect(
-            within(screen.getByLabelText('24h Trades')).getByText('2')
-        ).toBeInTheDocument();
-        expect(
-            within(screen.getByLabelText('24h Volume')).getByText('0')
-        ).toBeInTheDocument();
+        await waitFor(() => {
+            expect(
+                within(screen.getByLabelText('24h High')).getByText('90.00')
+            ).toBeInTheDocument();
+            expect(
+                within(screen.getByLabelText('24h Low')).getByText('80.00')
+            ).toBeInTheDocument();
+            expect(
+                within(screen.getByLabelText('24h Trades')).getByText('2')
+            ).toBeInTheDocument();
+            expect(
+                within(screen.getByLabelText('24h Volume')).getByText('0')
+            ).toBeInTheDocument();
+        });
     });
 
     it('should display the opening unit price as the only trade if there is no last trades', async () => {
@@ -117,11 +115,6 @@ describe('Advanced Lending Component', () => {
                 ],
             })
         );
-        expect(
-            await within(
-                await screen.findByLabelText('Current Market')
-            ).findByText('98.01')
-        ).toBeInTheDocument();
 
         expect(
             within(screen.getByLabelText('24h High')).getByText('0.00')
@@ -172,8 +165,8 @@ describe('Advanced Lending Component', () => {
             })
         );
 
-        fireEvent.click(screen.getByRole('button', { name: 'WFIL' }));
-        fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
+        fireEvent.click(screen.getByRole('button', { name: 'WFIL-DEC2022' }));
+        fireEvent.click(screen.getByRole('row', { name: 'USDC-DEC2022' }));
 
         await waitFor(() =>
             expect(

@@ -11,10 +11,9 @@ describe('AdvancedLendingTopBar Component', () => {
         render(<Default />);
 
         expect(
-            screen.getByRole('button', { name: 'WFIL' })
+            screen.getByRole('button', { name: 'WFIL-DEC2022' })
         ).toBeInTheDocument();
         expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
-
         expect(screen.getByText('80.00')).toBeInTheDocument();
         expect(screen.getByText('25.03% APR')).toBeInTheDocument();
         expect(
@@ -41,7 +40,7 @@ describe('AdvancedLendingTopBar Component', () => {
         render(<Default />);
 
         expect(
-            screen.getByRole('button', { name: 'WFIL' })
+            screen.getByRole('button', { name: 'WFIL-DEC2022' })
         ).toBeInTheDocument();
         const source = screen.getByRole('link');
         expect(source).toBeInTheDocument();
