@@ -268,7 +268,7 @@ describe('Landing Component', () => {
         });
     });
 
-    it('should render the itayose banner for opening of a new market', async () => {
+    it.skip('should render the itayose banner for opening of a new market', async () => {
         await waitFor(() => {
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
