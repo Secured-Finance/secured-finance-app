@@ -149,4 +149,16 @@
   .wormhole {
     background-image: url(../img/wormhole.png);
   }
+
+  .candlestick-bg-mobile {
+    background-image: url(../img/candlestick-bg-mobile.png);
+  }
+
+  .candlestick-bg {
+    background-image: url(../img/candlestick-bg.png);
+  }
+
+  .candlestick-bg-alt {
+    background-image: url(../img/candlestick-bg-alt.png);
+  }
 }
