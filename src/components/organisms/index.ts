@@ -5,6 +5,7 @@ export * from './CollateralInput';
 export * from './CollateralOrganism';
 export * from './CollateralTab';
 export * from './ConnectWalletCard';
+export * from './ConnectWalletDialog';
 export * from './DepositCollateral';
 export * from './EmergencyRedeemDialog';
 export * from './GlobalItayoseMultiCurveChart';

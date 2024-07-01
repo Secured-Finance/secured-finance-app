@@ -62,7 +62,7 @@ export const Campaign = () => {
     return (
         <div className='campaign'>
             {/* eslint-disable-next-line prettier/prettier */}
-            <div className='container mx-auto flex flex-col gap-3 px-6 pb-8 pt-6  tablet:gap-7 laptop:gap-14 laptop:pb-[80px] laptop:pt-10 min-[1920px]:max-w-[1776px]'>
+            <div className='container mx-auto flex flex-col gap-3 px-6 pb-8 pt-6  tablet:gap-7 laptop:gap-14 laptop:pb-[80px] laptop:pt-10 largeDesktop:max-w-[1776px]'>
                 <div className='flex justify-center'>
                     <div className='flex w-full flex-col items-center gap-2 tablet:gap-3 laptop:gap-4 desktop:gap-6'>
                         <Banner text='STAGE 2: ORBITAL CONTRACTS'></Banner>

@@ -26,7 +26,7 @@ export const Settings = ({ isProduction }: { isProduction: boolean }) => {
                     <Popover.Button
                         data-cy='settings-button'
                         aria-label='Settings Button'
-                        className='flex items-center rounded-lg bg-neutral-800 p-[7px] ring-1 ring-neutral-500 focus:outline-none tablet:rounded-xl tablet:px-3.5 tablet:py-[13px] tablet:ring-[1.5px]'
+                        className='flex items-center rounded-lg bg-neutral-800 p-[7px] ring-1 ring-neutral-500 focus:outline-none tablet:rounded-xl tablet:p-[11px] tablet:ring-[1.5px]'
                     >
                         <Gear className='h-18px w-18px' />
                     </Popover.Button>

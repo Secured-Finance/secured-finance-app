@@ -1,5 +1,6 @@
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
+import { GetUserDocument } from '@secured-finance/sf-point-client';
 import { OrderType, TransactionList } from 'src/types';
 import { Maturity } from 'src/utils/entities';
 import {
@@ -951,6 +952,30 @@ export const mockTransactionCandleStick = [
                     transactionCandleSticks: mockCandleStickData,
                 },
             };
+        },
+    },
+];
+
+export const userPoints = [
+    {
+        request: {
+            query: GetUserDocument,
+        },
+        result: {
+            data: {
+                user: {
+                    id: '1',
+                    walletAddress: '0x123',
+                    point: 164,
+                    rank: 1,
+                    joindAt: '2024-05-30T13:39:49.165Z',
+                    referralCode: 'ABCDEFG123',
+                    pointDetails: {
+                        deposit: 100,
+                        referral: 50,
+                    },
+                },
+            },
         },
     },
 ];
