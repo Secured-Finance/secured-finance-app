@@ -14,16 +14,9 @@ import {
     TableRow,
 } from '@nextui-org/table';
 import clsx from 'clsx';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { useBreakpoint } from 'src/hooks';
-import { SavedMarket } from 'src/types';
 import { calculateTimeDifference, formatDuration } from 'src/utils';
-import {
-    isMarketInStore,
-    readMarketsFromStore,
-    removeMarketFromStore,
-    writeMarketInStore,
-} from 'src/utils/markets';
 import { useAccount } from 'wagmi';
 import { desktopColumns, mobileColumns } from './constants';
 import { ColumnKey, FilteredOption } from './types';
@@ -34,34 +27,25 @@ export const CurrencyMaturityTable = ({
     close,
     onSortChange,
     sortState,
+    onFavouriteToggle,
 }: {
     options: FilteredOption[];
     onOptionClick: (item: FilteredOption) => void;
     close: () => void;
     onSortChange: (descriptor: SortDescriptor) => void;
     sortState: SortDescriptor;
+    onFavouriteToggle: (market: string) => void;
 }) => {
     const isTablet = useBreakpoint('laptop');
     const columns = isTablet ? mobileColumns : desktopColumns;
-    const [savedMarkets, setSavedMarkets] = useState(() => {
-        return readMarketsFromStore();
-    });
-    const { address, isConnected } = useAccount();
+    // const [savedMarkets, setSavedMarkets] = useState(() => {
+    //     return readMarketsFromStore();
+    // });
+    const { isConnected } = useAccount();
 
     const renderCell = useCallback(
         (option: (typeof options)[0], columnKey: ColumnKey) => {
-            const { maturity } = option;
-
-            const toggleSave = (market: string) => {
-                const marketEntry = { market, address };
-
-                if (isMarketInStore(marketEntry)) {
-                    removeMarketFromStore(marketEntry);
-                } else {
-                    writeMarketInStore(marketEntry);
-                }
-                setSavedMarkets(readMarketsFromStore());
-            };
+            const { maturity, lastPrice, apr, display, isFavourite } = option;
 
             switch (columnKey) {
                 case 'symbol':
@@ -71,15 +55,10 @@ export const CurrencyMaturityTable = ({
                                 <button
                                     onClick={e => {
                                         e.stopPropagation();
-                                        toggleSave(option.display);
+                                        onFavouriteToggle(display);
                                     }}
                                 >
-                                    {savedMarkets.some(
-                                        (savedMarket: SavedMarket) =>
-                                            savedMarket.market ===
-                                                option.display &&
-                                            savedMarket.address === address
-                                    ) ? (
+                                    {isFavourite ? (
                                         <FilledStarIcon className='h-3.5 w-3.5 text-warning-300' />
                                     ) : (
                                         <StarIcon className='h-3.5 w-3.5' />
@@ -91,11 +70,11 @@ export const CurrencyMaturityTable = ({
                         </h3>
                     );
                 case 'last-prices':
-                    return option.lastPrice;
+                    return lastPrice;
                 case 'last-prices-mobile':
-                    return `${option.lastPrice} (${option.apr})`;
+                    return `${lastPrice} (${apr})`;
                 case 'apr':
-                    return option.apr;
+                    return apr;
                 case 'maturity':
                     const timestampDifference = calculateTimeDifference(
                         +maturity
@@ -105,7 +84,7 @@ export const CurrencyMaturityTable = ({
                     return null;
             }
         },
-        [savedMarkets, address, isConnected]
+        [isConnected, onFavouriteToggle]
     );
 
     return (

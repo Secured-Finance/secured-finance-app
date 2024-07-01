@@ -7,6 +7,7 @@ import { SortDescriptor } from '@nextui-org/table';
 import { Key } from '@react-types/shared';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { CurrencyMaturityTable, FilterButtons } from 'src/components/molecules';
 import {
     baseContracts,
@@ -14,8 +15,19 @@ import {
     useCurrencies,
     useLendingMarkets,
 } from 'src/hooks';
-import { CurrencySymbol, currencyMap, formatLoanValue } from 'src/utils';
+import { RootState } from 'src/store/types';
+import { SavedMarket } from 'src/types';
+import {
+    CurrencySymbol,
+    currencyMap,
+    formatLoanValue,
+    isMarketInStore,
+    readMarketsFromStore,
+    removeMarketFromStore,
+    writeMarketInStore,
+} from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
+import { useAccount } from 'wagmi';
 import { CurrencyMaturityDropdownProps, FilteredOption } from './types';
 
 export const CurrencyMaturityDropdown = ({
@@ -29,6 +41,11 @@ export const CurrencyMaturityDropdown = ({
     const isTablet = useBreakpoint('laptop');
     const [searchValue, setSearchValue] = useState<string>('');
     const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+    const [isFavourites, setIsFavourites] = useState<boolean>(false);
+    const { address } = useAccount();
+    const [savedMarkets, setSavedMarkets] = useState(() => {
+        return readMarketsFromStore();
+    });
 
     useLockBodyScroll(isTablet && isDropdownOpen);
 
@@ -43,6 +60,9 @@ export const CurrencyMaturityDropdown = ({
         column: undefined,
         direction: 'ascending',
     });
+    const currentChainId = useSelector(
+        (state: RootState) => state.blockchain.chainId
+    );
 
     const prevSelectedValue = useRef('');
     useEffect(() => {
@@ -123,6 +143,13 @@ export const CurrencyMaturityDropdown = ({
                         );
                     }
 
+                    const isFavourite = savedMarkets.some(
+                        (savedMarket: SavedMarket) =>
+                            savedMarket.market === ccyMaturity &&
+                            savedMarket.address === address &&
+                            savedMarket.chainId === currentChainId
+                    );
+
                     if (
                         (currentCurrency &&
                             !currentCurrency.includes(currency.value)) ||
@@ -130,7 +157,8 @@ export const CurrencyMaturityDropdown = ({
                         (searchValue &&
                             !ccyMaturity
                                 .toLowerCase()
-                                .includes(searchValue.toLowerCase()))
+                                .includes(searchValue.toLowerCase())) ||
+                        (isFavourites && !isFavourite)
                     ) {
                         return null;
                     }
@@ -143,6 +171,7 @@ export const CurrencyMaturityDropdown = ({
                         lastPrice: formatLoanValue(lastPrice, 'price'),
                         apr: formatLoanValue(lastPrice, 'rate'),
                         isItayoseOption,
+                        isFavourite,
                     };
                 })
                 .filter(Boolean);
@@ -159,6 +188,10 @@ export const CurrencyMaturityDropdown = ({
         currentCurrency,
         isItayose,
         searchValue,
+        savedMarkets,
+        address,
+        isFavourites,
+        currentChainId,
     ]);
 
     const handleOptionClick = (item: FilteredOption) => {
@@ -179,6 +212,21 @@ export const CurrencyMaturityDropdown = ({
             column: column as string,
             direction: direction,
         });
+    };
+
+    const handleFavouriteToggle = (market: string) => {
+        const targetFavourite: SavedMarket = {
+            market,
+            address,
+            chainId: currentChainId,
+        };
+
+        if (isMarketInStore(targetFavourite)) {
+            removeMarketFromStore(targetFavourite);
+        } else {
+            writeMarketInStore(targetFavourite);
+        }
+        setSavedMarkets(readMarketsFromStore());
     };
 
     return (
@@ -240,6 +288,8 @@ export const CurrencyMaturityDropdown = ({
                                     setCurrentCurrency={setCurrentCurrency}
                                     setIsItayose={setIsItayose}
                                     isItayosePage={isItayosePage}
+                                    isFavourites={isFavourites}
+                                    setIsFavourites={setIsFavourites}
                                 />
                             </div>
 
@@ -249,6 +299,7 @@ export const CurrencyMaturityDropdown = ({
                                 close={() => setIsDropdownOpen(false)}
                                 onSortChange={handleSortChange}
                                 sortState={sortState}
+                                onFavouriteToggle={handleFavouriteToggle}
                             />
                         </Menu.Items>
                     )}
