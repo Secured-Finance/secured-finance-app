@@ -19,6 +19,11 @@ export const PRODUCTION_LINKS = [
         link: '/campaign',
         dataCy: 'campaign',
     },
+    {
+        text: 'Bridge',
+        link: '/bridge',
+        dataCy: 'bridge',
+    },
 ];
 
 export const DEV_LINKS = [
