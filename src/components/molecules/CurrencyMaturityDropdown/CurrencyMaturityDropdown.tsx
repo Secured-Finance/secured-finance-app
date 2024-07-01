@@ -246,7 +246,10 @@ export const CurrencyMaturityDropdown = ({
                             <CurrencyMaturityTable
                                 options={filteredOptions as FilteredOption[]}
                                 onOptionClick={handleOptionClick}
-                                close={() => setIsDropdownOpen(false)}
+                                close={() => {
+                                    setIsDropdownOpen(false);
+                                    close();
+                                }}
                                 onSortChange={handleSortChange}
                                 sortState={sortState}
                             />
