@@ -16,6 +16,9 @@ export default {
         onChange: () => {},
         isItayosePage: false,
     },
+    parameters: {
+        connected: true,
+    },
 } as Meta<typeof CurrencyMaturityDropdown>;
 
 const Template: StoryFn<typeof CurrencyMaturityDropdown> = args => (
@@ -29,12 +32,6 @@ ItayosePage.args = {
     isItayosePage: true,
 };
 ItayosePage.play = async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    canvas.getByRole('button').click();
-};
-
-export const OpenedDropdown = Template.bind({});
-OpenedDropdown.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     canvas.getByRole('button').click();
 };

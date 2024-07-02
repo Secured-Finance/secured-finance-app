@@ -38,9 +38,6 @@ export const CurrencyMaturityTable = ({
 }) => {
     const isTablet = useBreakpoint('laptop');
     const columns = isTablet ? mobileColumns : desktopColumns;
-    // const [savedMarkets, setSavedMarkets] = useState(() => {
-    //     return readMarketsFromStore();
-    // });
     const { isConnected } = useAccount();
 
     const renderCell = useCallback(
@@ -57,6 +54,11 @@ export const CurrencyMaturityTable = ({
                                         e.stopPropagation();
                                         onFavouriteToggle(display);
                                     }}
+                                    aria-label={`${
+                                        isFavourite ? 'Remove' : 'Add'
+                                    } ${display} ${
+                                        isFavourite ? 'from' : 'to'
+                                    } favourites`}
                                 >
                                     {isFavourite ? (
                                         <FilledStarIcon className='h-3.5 w-3.5 text-warning-300' />
@@ -65,7 +67,6 @@ export const CurrencyMaturityTable = ({
                                     )}
                                 </button>
                             )}
-
                             {option.display}
                         </h3>
                     );
@@ -158,7 +159,12 @@ export const CurrencyMaturityTable = ({
                     );
                 })}
             </TableHeader>
-            <TableBody items={options} emptyContent='No products found'>
+            <TableBody
+                items={options}
+                emptyContent={
+                    <span className='text-neutral-4'>No products found</span>
+                }
+            >
                 {item => (
                     <TableRow
                         key={item.key}
