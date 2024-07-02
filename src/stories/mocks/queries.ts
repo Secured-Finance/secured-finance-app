@@ -79,7 +79,7 @@ export const mockUserTransactionHistory = [
             variables: {
                 address: '',
                 skip: 0,
-                first: 1000,
+                count: 1000,
                 awaitRefetchQueries: true,
             },
         },
@@ -108,7 +108,7 @@ export const mockUserTransactionHistory = [
             variables: {
                 address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
                 skip: 0,
-                first: 1000,
+                count: 1000,
                 awaitRefetchQueries: true,
             },
         },
@@ -137,7 +137,7 @@ export const mockUserTransactionHistory = [
             variables: {
                 address: '',
                 skip: 0,
-                first: 20,
+                count: 20,
                 awaitRefetchQueries: true,
             },
         },
@@ -167,7 +167,7 @@ export const mockUserTransactionHistory = [
             variables: {
                 address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
                 skip: 0,
-                first: 20,
+                count: 20,
                 awaitRefetchQueries: true,
             },
         },
@@ -202,7 +202,7 @@ export const mockUserTransactionHistory = [
             variables: {
                 address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
                 skip: 20,
-                first: 20,
+                count: 20,
                 awaitRefetchQueries: true,
             },
         },
@@ -237,7 +237,7 @@ export const mockUserTransactionHistory = [
             variables: {
                 address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
                 skip: 40,
-                first: 20,
+                count: 20,
                 awaitRefetchQueries: true,
             },
         },
@@ -272,7 +272,7 @@ export const mockUserTransactionHistory = [
             variables: {
                 address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
                 skip: 60,
-                first: 20,
+                count: 20,
                 awaitRefetchQueries: true,
             },
         },
@@ -538,7 +538,7 @@ export const mockUserOrderHistory = [
             variables: {
                 address: '',
                 skip: 0,
-                first: 1000,
+                count: 1000,
                 awaitRefetchQueries: true,
             },
         },
@@ -567,7 +567,7 @@ export const mockUserOrderHistory = [
             variables: {
                 address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
                 skip: 0,
-                first: 1000,
+                count: 1000,
                 awaitRefetchQueries: true,
             },
         },
@@ -596,7 +596,7 @@ export const mockUserOrderHistory = [
             variables: {
                 address: '',
                 skip: 0,
-                first: 20,
+                count: 20,
                 awaitRefetchQueries: true,
             },
         },
@@ -625,7 +625,7 @@ export const mockUserOrderHistory = [
             variables: {
                 address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
                 skip: 0,
-                first: 20,
+                count: 20,
                 awaitRefetchQueries: true,
             },
         },
@@ -657,7 +657,7 @@ export const mockUserOrderHistory = [
             variables: {
                 address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
                 skip: 20,
-                first: 20,
+                count: 20,
                 awaitRefetchQueries: true,
             },
         },
@@ -692,7 +692,7 @@ export const mockUserOrderHistory = [
             variables: {
                 address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
                 skip: 40,
-                first: 20,
+                count: 20,
                 awaitRefetchQueries: true,
             },
         },
@@ -860,8 +860,6 @@ export const mockTransactionCandleStick = [
                 interval: '300',
                 currency: wfilBytes32,
                 maturity: dec22Fixture.toNumber(),
-                first: 1000,
-                skip: 0,
                 awaitRefetchQueries: true,
             },
         },
@@ -885,8 +883,6 @@ export const mockTransactionCandleStick = [
                 interval: '3600',
                 currency: wfilBytes32,
                 maturity: dec22Fixture.toNumber(),
-                first: 1000,
-                skip: 0,
                 awaitRefetchQueries: true,
             },
         },
@@ -910,8 +906,6 @@ export const mockTransactionCandleStick = [
                 interval: '21600',
                 currency: wfilBytes32,
                 maturity: dec22Fixture.toNumber(),
-                first: 1000,
-                skip: 0,
                 awaitRefetchQueries: true,
             },
         },
@@ -935,8 +929,6 @@ export const mockTransactionCandleStick = [
                 interval: '86400',
                 currency: wfilBytes32,
                 maturity: dec22Fixture.toNumber(),
-                first: 1000,
-                skip: 0,
                 awaitRefetchQueries: true,
             },
         },

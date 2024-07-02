@@ -81,7 +81,7 @@ export const PortfolioManagement = () => {
         {
             address: address?.toLowerCase() ?? '',
             skip: offsetOrders,
-            first: offset,
+            count: offset,
         },
         queries.UserOrderHistoryDocument,
         'user',
@@ -91,7 +91,7 @@ export const PortfolioManagement = () => {
         {
             address: address?.toLowerCase() ?? '',
             skip: offsetTransactions,
-            first: offset,
+            count: offset,
         },
         queries.UserTransactionHistoryDocument,
         'user',

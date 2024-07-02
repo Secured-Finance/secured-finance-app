@@ -41,8 +41,6 @@ export const HistoricalWidget = () => {
             interval: selectedTimeScale,
             currency: toBytes32(currency),
             maturity: maturity,
-            first: 1000,
-            skip: 0,
         },
         queries.TransactionCandleStickDocument
     );
