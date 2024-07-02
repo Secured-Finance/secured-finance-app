@@ -78,4 +78,23 @@ describe('CurrencyMaturityDropdown', () => {
 
         expect(screen.queryByText('No products found')).toBeInTheDocument();
     });
+
+    it('should toggle favourite button when clicked', async () => {
+        render(<Default />);
+
+        const button = screen.getByRole('button', { name: 'WBTC-DEC2022' });
+        fireEvent.click(button);
+
+        await waitFor(() => {
+            const favouriteBtn = screen.getByLabelText(
+                'Add WBTC-DEC2022 to favourites'
+            );
+            expect(favouriteBtn).toBeInTheDocument();
+            fireEvent.click(favouriteBtn);
+        });
+
+        expect(
+            screen.getByLabelText('Remove WBTC-DEC2022 from favourites')
+        ).toBeInTheDocument();
+    });
 });

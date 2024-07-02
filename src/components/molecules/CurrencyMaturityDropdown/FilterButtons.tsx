@@ -43,6 +43,16 @@ export const FilterButtons = ({
         </button>
     );
 
+    const handleFilterClick = (
+        currency?: CurrencySymbol,
+        isItayose = false,
+        isFavourites = false
+    ) => {
+        setCurrentCurrency(currency);
+        setIsItayose(isItayose);
+        setIsFavourites(isFavourites);
+    };
+
     return (
         <div className='flex items-center gap-[13.5px]'>
             <FilterBtn
@@ -50,31 +60,21 @@ export const FilterButtons = ({
                     !currentCurrency && !isItayose && !isFavourites
                 }
                 onClick={() => {
-                    setCurrentCurrency(undefined);
-                    setIsItayose(false);
-                    setIsFavourites(false);
+                    handleFilterClick();
                 }}
             >
                 All
             </FilterBtn>
             <FilterBtn
                 activeCondition={isFavourites}
-                onClick={() => {
-                    setCurrentCurrency(undefined);
-                    setIsItayose(false);
-                    setIsFavourites(true);
-                }}
+                onClick={() => handleFilterClick(undefined, false, true)}
             >
                 Favourites
             </FilterBtn>
             {!isItayosePage && (
                 <FilterBtn
                     activeCondition={isItayose}
-                    onClick={() => {
-                        setCurrentCurrency(undefined);
-                        setIsItayose(true);
-                        setIsFavourites(false);
-                    }}
+                    onClick={() => handleFilterClick(undefined, true, false)}
                     label='itayose-filter-btn'
                 >
                     Itayose
@@ -84,11 +84,7 @@ export const FilterButtons = ({
                 <FilterBtn
                     key={`currency-${currency}`}
                     activeCondition={currentCurrency === currency}
-                    onClick={() => {
-                        setCurrentCurrency(currency);
-                        setIsItayose(false);
-                        setIsFavourites(false);
-                    }}
+                    onClick={() => handleFilterClick(currency, false, false)}
                     label={`${currency}-filter-btn`}
                 >
                     {currency}
