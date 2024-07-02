@@ -10,6 +10,7 @@ export * from './events/interface';
 export * from './fee';
 export * from './formatNumbers';
 export * from './links';
+export * from './markets';
 export * from './networks';
 export * from './portfolio';
 export * from './protocol';

@@ -1,6 +1,7 @@
 import clsx from 'clsx';
+import { useCallback, useMemo } from 'react';
 import { MarketTab, Option } from 'src/components/atoms';
-import { HorizontalAssetSelector } from 'src/components/molecules';
+import { CurrencyMaturityDropdown } from 'src/components/molecules';
 import { IndexOf } from 'src/types';
 import {
     COIN_GECKO_SOURCE,
@@ -8,16 +9,17 @@ import {
     currencyMap,
     formatLoanValue,
     formatTimeStampWithTimezone,
+    getTransformMaturityOption,
 } from 'src/utils';
-import { LoanValue } from 'src/utils/entities';
+import { LoanValue, Maturity } from 'src/utils/entities';
 
-type AdvancedLendingTopBarProp<T> = {
+type AdvancedLendingTopBarProp = {
     selectedAsset: Option<CurrencySymbol> | undefined;
     assetList: Array<Option<CurrencySymbol>>;
-    options: Array<Option<T>>;
-    selected: Option<T>;
+    options: Array<Option<Maturity>>;
+    selected: Option<Maturity>;
     onAssetChange: (v: CurrencySymbol) => void;
-    onTermChange: (v: T) => void;
+    onTermChange: (v: Maturity) => void;
     currentMarket: CurrentMarket | undefined;
     currencyPrice: string;
     values?: [string, string, string, string];
@@ -30,13 +32,13 @@ type CurrentMarket = {
 };
 
 const getValue = (
-    values: AdvancedLendingTopBarProp<unknown>['values'],
-    index: IndexOf<NonNullable<AdvancedLendingTopBarProp<unknown>['values']>>
+    values: AdvancedLendingTopBarProp['values'],
+    index: IndexOf<NonNullable<AdvancedLendingTopBarProp['values']>>
 ) => {
-    return values && values[index] ? values[index] : 0;
+    return values?.[index] || 0;
 };
 
-export const AdvancedLendingTopBar = <T extends string = string>({
+export const AdvancedLendingTopBar = ({
     selectedAsset,
     assetList,
     options,
@@ -46,7 +48,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
     currentMarket,
     currencyPrice,
     values,
-}: AdvancedLendingTopBarProp<T>) => {
+}: AdvancedLendingTopBarProp) => {
     const getTime = () => {
         if (currentMarket) {
             if (currentMarket.type === 'opening') {
@@ -56,6 +58,23 @@ export const AdvancedLendingTopBar = <T extends string = string>({
             }
         }
         return '-';
+    };
+
+    const selectedTerm = useMemo(
+        () => options.find(o => o.value === selected.value),
+        [options, selected]
+    );
+
+    const handleTermChange = useCallback(
+        (v: Maturity) => {
+            onTermChange(v);
+        },
+        [onTermChange]
+    );
+
+    const onChange = (asset: CurrencySymbol, maturity: Maturity) => {
+        handleTermChange(maturity);
+        onAssetChange(asset);
     };
 
     return (
@@ -76,18 +95,34 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                     >
                         <div
                             className={clsx(
-                                'col-span-8 laptop:col-span-8 laptop:pr-0',
+                                'col-span-7 pr-[11px] laptop:col-span-8 laptop:pr-0',
                                 values && 'tablet:col-span-12 tablet:pr-9'
                             )}
                         >
-                            <HorizontalAssetSelector
-                                selectedAsset={selectedAsset}
-                                assetList={assetList}
-                                options={options}
-                                selected={selected}
-                                onAssetChange={onAssetChange}
-                                onTermChange={onTermChange}
-                            />
+                            <div className='grid grid-cols-1 gap-x-3 gap-y-1 text-neutral-4 desktop:gap-x-5'>
+                                <div className='flex flex-col items-start'>
+                                    <div className='flex w-full flex-col gap-1'>
+                                        <CurrencyMaturityDropdown
+                                            asset={selectedAsset}
+                                            currencyList={assetList}
+                                            maturity={selectedTerm}
+                                            maturityList={options}
+                                            onChange={onChange}
+                                        />
+                                        <p className='whitespace-nowrap pl-1 text-[11px] leading-4 tablet:text-xs laptop:text-xs'>
+                                            {`Maturity ${
+                                                selectedTerm &&
+                                                getTransformMaturityOption(
+                                                    options.map(o => ({
+                                                        ...o,
+                                                        value: o.value.toString(),
+                                                    }))
+                                                )(selectedTerm.label)
+                                            }`}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div
                             className={clsx(

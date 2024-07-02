@@ -1,4 +1,5 @@
 import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
+import { withWalletProvider } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
 import { currencyList, maturityOptions } from 'src/stories/mocks/fixtures';
 import { LoanValue } from 'src/utils/entities';
@@ -9,17 +10,17 @@ const lastTradePrice = 8000;
 export default {
     title: 'Molecules/AdvancedLendingTopBar',
     component: AdvancedLendingTopBar,
+    decorators: [withWalletProvider],
     args: {
         selectedAsset: currencyList[2],
         assetList: currencyList,
-        options: maturityOptions.map(o => ({
-            label: o.label,
-            value: o.value.toString(),
-        })),
+        options: maturityOptions,
         selected: {
             label: maturityOptions[0].label,
-            value: maturityOptions[0].value.toString(),
+            value: maturityOptions[0].value,
         },
+        onAssetChange: () => {},
+        onTermChange: () => {},
         currentMarket: {
             value: LoanValue.fromPrice(
                 lastTradePrice,
@@ -28,9 +29,6 @@ export default {
             time: 1646920200,
             type: 'block',
         },
-
-        onAssetChange: () => {},
-        onTermChange: () => {},
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,
