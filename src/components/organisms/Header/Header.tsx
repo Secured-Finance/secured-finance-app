@@ -265,11 +265,11 @@ const PointsTag = ({
 
     if (points) {
         if (points < 1000) {
-            pointsDisplay = `${points} points`;
+            pointsDisplay = `${points} Points`;
         } else if (points < 1000000) {
-            pointsDisplay = `${Math.floor(points / 100) / 10}K points`;
+            pointsDisplay = `${Math.floor(points / 100) / 10}K Points`;
         } else {
-            pointsDisplay = `${Math.floor(points / 100000) / 10}M points`;
+            pointsDisplay = `${Math.floor(points / 100000) / 10}M Points`;
         }
     }
 
@@ -286,7 +286,7 @@ const PointsTag = ({
         <button
             onClick={() => handleOnClick()}
             className={clsx(
-                'typography-mobile-body-5 tablet:typography-desktop-body-4 flex h-8 flex-shrink-0 items-center justify-center gap-1 rounded-lg border border-tertiary-500 bg-tertiary-700/30 px-2.5 py-[5px] font-semibold text-neutral-50 hover:bg-tertiary-700 active:border-transparent tablet:h-10 tablet:rounded-xl',
+                'typography-mobile-body-5 tablet:typography-desktop-body-4 flex h-8 flex-shrink-0 items-center justify-center gap-1 rounded-lg bg-tertiary-700/30 px-2.5 py-[5px] font-semibold text-neutral-50 ring-1 ring-tertiary-500 hover:bg-tertiary-700 active:border-transparent tablet:h-10 tablet:rounded-xl tablet:ring-[1.5px]',
                 {
                     'w-8 tablet:w-10 tablet:pr-2.5': !showPoints,
                     'tablet:pr-3': showPoints,
