@@ -346,7 +346,7 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
                                 }}
                                 disabled={!isConnected || isLoading || loading}
                             >
-                                Join
+                                {!isConnected ? 'Connect Wallet' : 'Join'}
                             </Button>
                         </>
                     )}

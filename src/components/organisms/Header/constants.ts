@@ -10,6 +10,11 @@ export const PRODUCTION_LINKS = [
         dataCy: 'history',
     },
     {
+        text: 'Bridge',
+        link: '/bridge',
+        dataCy: 'bridge',
+    },
+    {
         text: 'Points',
         link: '/points',
         dataCy: 'points',

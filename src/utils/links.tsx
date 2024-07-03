@@ -33,7 +33,7 @@ export const LinkList: ExternalLink[] = [
     },
     {
         text: 'Join us on Discord',
-        href: 'https://discord.com/invite/FqrdfQgmjT',
+        href: 'https://discord.gg/3kytCrv3qY',
         icon: <Discord className='h-5 w-5 text-white' />,
     },
 ];
