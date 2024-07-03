@@ -1,6 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Spinner } from 'src/components/atoms';
 import {
     Alert,
@@ -32,7 +32,6 @@ import {
     useLastPrices,
     useLendingMarkets,
     useOrderList,
-    usePagination,
     usePositions,
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
@@ -60,12 +59,9 @@ export const TabSpinner = () => (
         <Spinner />
     </div>
 );
-const offset = 20;
 
 export const PortfolioManagement = () => {
     const { address } = useAccount();
-    const [offsetTransactions, setOffsetTransactions] = useState(0);
-    const [offsetOrders, setOffsetOrders] = useState(0);
     const [selectedTable, setSelectedTable] = useState(
         TableType.ACTIVE_POSITION
     );
@@ -80,23 +76,21 @@ export const PortfolioManagement = () => {
     const userOrderHistory = useGraphClientHook(
         {
             address: address?.toLowerCase() ?? '',
-            skip: offsetOrders,
-            first: offset,
         },
-        queries.UserOrderHistoryDocument,
+        queries.FullUserOrderHistoryDocument,
         'user',
         selectedTable !== TableType.ORDER_HISTORY
     );
+
     const userTransactionHistory = useGraphClientHook(
         {
             address: address?.toLowerCase() ?? '',
-            skip: offsetTransactions,
-            first: offset,
         },
-        queries.UserTransactionHistoryDocument,
+        queries.FullUserTransactionHistoryDocument,
         'user',
         selectedTable !== TableType.MY_TRANSACTIONS
     );
+
     const { data: usedCurrencies = [] } = useCurrenciesForOrders(address);
     const { data: orderList = emptyOrderList } = useOrderList(
         address,
@@ -138,34 +132,8 @@ export const PortfolioManagement = () => {
 
     const { data: positions } = usePositions(address, usedCurrencies);
 
-    const dataUser = useMemo(() => {
-        if (selectedTable === TableType.MY_TRANSACTIONS)
-            return (
-                userTransactionHistory.data?.transactions[0]?.user.id ??
-                undefined
-            );
-        if (selectedTable === TableType.ORDER_HISTORY)
-            return userOrderHistory.data?.orders[0]?.user.id ?? undefined;
-    }, [
-        selectedTable,
-        userOrderHistory.data?.orders,
-        userTransactionHistory.data?.transactions,
-    ]);
-
-    const paginatedTransactions = usePagination(
-        userTransactionHistory.data?.transactions ?? [],
-        dataUser,
-        address
-    );
-
-    const paginatedOrderHistory = usePagination(
-        userOrderHistory.data?.orders ?? [],
-        dataUser,
-        address
-    );
-
     const sortedOrderHistory = useMemo(() => {
-        return paginatedOrderHistory
+        return (userOrderHistory.data?.orders ?? [])
             .map(order => {
                 if (checkOrderIsFilled(order, orderList.inactiveOrderList)) {
                     return {
@@ -181,7 +149,7 @@ export const PortfolioManagement = () => {
                 }
             })
             .sort((a, b) => sortOrders(a, b));
-    }, [orderList.inactiveOrderList, paginatedOrderHistory]);
+    }, [orderList.inactiveOrderList, userOrderHistory.data?.orders]);
 
     const { data: priceMap } = useLastPrices();
 
@@ -233,13 +201,14 @@ export const PortfolioManagement = () => {
 
     const myTransactions = useMemo(() => {
         const tradesFromCon = formatOrders(orderList.inactiveOrderList);
-        return [...tradesFromCon, ...paginatedTransactions];
-    }, [orderList.inactiveOrderList, paginatedTransactions]);
-
-    const myTransactionsDataCount: number =
-        userTransactionHistory.data?.transactionCount &&
-        parseInt(userTransactionHistory.data?.transactionCount) +
-            orderList.inactiveOrderList.length;
+        return [
+            ...tradesFromCon,
+            ...(userTransactionHistory.data?.transactions ?? []),
+        ];
+    }, [
+        orderList.inactiveOrderList,
+        userTransactionHistory.data?.transactions,
+    ]);
 
     const scrollToBottom = () => {
         window.scrollTo({
@@ -261,11 +230,6 @@ export const PortfolioManagement = () => {
 
     const userDelistedCurrenciesArray = Array.from(userDelistedCurrenciesSet);
     const isUnderCollateralThreshold = useIsUnderCollateralThreshold(address);
-
-    useEffect(() => {
-        setOffsetOrders(0);
-        setOffsetTransactions(0);
-    }, [address]);
 
     return (
         <Page title='Portfolio Management' name='portfolio-management'>
@@ -384,11 +348,8 @@ export const PortfolioManagement = () => {
                             <OrderHistoryTable
                                 data={sortedOrderHistory}
                                 pagination={{
-                                    totalData: parseInt(
-                                        userOrderHistory.data?.orderCount
-                                    ),
-                                    getMoreData: () =>
-                                        setOffsetOrders(offsetOrders + offset),
+                                    totalData: sortedOrderHistory.length,
+                                    getMoreData: () => {},
                                     containerHeight: 300,
                                 }}
                             />
@@ -399,14 +360,8 @@ export const PortfolioManagement = () => {
                             <MyTransactionsTable
                                 data={myTransactions}
                                 pagination={{
-                                    totalData: myTransactionsDataCount,
-                                    getMoreData: () => {
-                                        if (myTransactions.length >= offset) {
-                                            setOffsetTransactions(
-                                                offsetTransactions + offset
-                                            );
-                                        }
-                                    },
+                                    totalData: myTransactions.length,
+                                    getMoreData: () => {},
                                     containerHeight: 300,
                                 }}
                             />
