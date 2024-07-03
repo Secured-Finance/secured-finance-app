@@ -7,8 +7,8 @@ import {
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import {
-    mockUserOrderHistory,
-    mockUserTransactionHistory,
+    mockFullUserOrderHistory,
+    mockFullUserTransactionHistory,
 } from 'src/stories/mocks/queries';
 import { PortfolioManagement } from './PortfolioManagement';
 
@@ -19,7 +19,10 @@ export default {
     decorators: [withBalance, withAppLayout, withWalletProvider],
     parameters: {
         apolloClient: {
-            mocks: [...mockUserTransactionHistory, ...mockUserOrderHistory],
+            mocks: [
+                ...mockFullUserTransactionHistory,
+                ...mockFullUserOrderHistory,
+            ],
         },
         connected: true,
         ...RESPONSIVE_PARAMETERS,
@@ -41,12 +44,14 @@ Default.parameters = {
 };
 
 export const ConnectedToWallet = Template.bind({});
+
 export const DisplayOpenOrders = Template.bind({});
 DisplayOpenOrders.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const openOrdersTab = canvas.getByTestId('Open Orders');
     openOrdersTab.click();
 };
+
 export const DisplayMyTransactions = Template.bind({});
 DisplayMyTransactions.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);

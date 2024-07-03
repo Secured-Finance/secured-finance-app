@@ -303,6 +303,65 @@ export const mockUserTransactionHistory = [
     },
 ];
 
+export const mockFullUserTransactionHistory = [
+    {
+        request: {
+            query: queries.FullUserTransactionHistoryDocument,
+            variables: {
+                address: '',
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    transactions: [],
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        transactions: [],
+                    },
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.FullUserTransactionHistoryDocument,
+            variables: {
+                address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    transactions: generateMyTransactions(
+                        '500000000000000000000',
+                        0
+                    ),
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        transactions: generateMyTransactions(
+                            '500000000000000000000',
+                            0
+                        ),
+                    },
+                },
+            };
+        },
+    },
+];
+
 export const mockFilteredUserTransactionHistory = [
     {
         request: {
@@ -723,6 +782,62 @@ export const mockUserOrderHistory = [
     },
 ];
 
+export const mockFullUserOrderHistory = [
+    {
+        request: {
+            query: queries.FullUserOrderHistoryDocument,
+            variables: {
+                address: '',
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    orders: [],
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        orders: [],
+                    },
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.FullUserOrderHistoryDocument,
+            variables: {
+                address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    orders: generateMyOrderHistory('1000000000000000000000', 0),
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        orders: generateMyOrderHistory(
+                            '1000000000000000000000',
+                            0
+                        ),
+                    },
+                },
+            };
+        },
+    },
+];
+
 export const mockDailyVolumes = [
     {
         request: {
@@ -860,8 +975,6 @@ export const mockTransactionCandleStick = [
                 interval: '300',
                 currency: wfilBytes32,
                 maturity: dec22Fixture.toNumber(),
-                first: 1000,
-                skip: 0,
                 awaitRefetchQueries: true,
             },
         },
@@ -885,8 +998,6 @@ export const mockTransactionCandleStick = [
                 interval: '3600',
                 currency: wfilBytes32,
                 maturity: dec22Fixture.toNumber(),
-                first: 1000,
-                skip: 0,
                 awaitRefetchQueries: true,
             },
         },
@@ -910,8 +1021,6 @@ export const mockTransactionCandleStick = [
                 interval: '21600',
                 currency: wfilBytes32,
                 maturity: dec22Fixture.toNumber(),
-                first: 1000,
-                skip: 0,
                 awaitRefetchQueries: true,
             },
         },
@@ -935,8 +1044,6 @@ export const mockTransactionCandleStick = [
                 interval: '86400',
                 currency: wfilBytes32,
                 maturity: dec22Fixture.toNumber(),
-                first: 1000,
-                skip: 0,
                 awaitRefetchQueries: true,
             },
         },
