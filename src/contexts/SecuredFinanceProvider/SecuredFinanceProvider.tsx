@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { QUERIES_TO_INVALIDATE } from 'src/hooks';
 import { useWalletStore } from 'src/hooks/useWallet';
 import {
+    Networks,
     updateChainError,
     updateChainId,
     updateLatestBlock,
@@ -123,6 +124,9 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
     useEffect(() => {
         if (chain) {
             dispatchChainError(chain.id);
+        } else {
+            // TODO: remove this after FIL Dev Summit 09 July 2024
+            dispatchChainError(+Networks[42161]);
         }
     }, [chain, dispatchChainError]);
 
