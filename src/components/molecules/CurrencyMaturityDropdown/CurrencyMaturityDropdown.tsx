@@ -5,6 +5,7 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import { SortDescriptor } from '@nextui-org/table';
 import { Key } from '@react-types/shared';
+// import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { CurrencyMaturityTable, FilterButtons } from 'src/components/molecules';
@@ -12,9 +13,18 @@ import {
     baseContracts,
     useBreakpoint,
     useCurrencies,
+    // useGraphClientHook,
+    // useIsSubgraphSupported,
+    // useLastPrices,
     useLendingMarkets,
 } from 'src/hooks';
-import { CurrencySymbol, currencyMap, formatLoanValue } from 'src/utils';
+// import useSF from 'src/hooks/useSecuredFinance';
+import {
+    CurrencySymbol,
+    // computeTotalDailyVolumeInUSD,
+    currencyMap,
+    formatLoanValue,
+} from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import { CurrencyMaturityDropdownProps, FilteredOption } from './types';
 
@@ -29,6 +39,26 @@ export const CurrencyMaturityDropdown = ({
     const isTablet = useBreakpoint('laptop');
     const [searchValue, setSearchValue] = useState<string>('');
     const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+    // const { data: priceList } = useLastPrices();
+
+    // const securedFinance = useSF();
+    // const currentChainId = securedFinance?.config.chain.id;
+
+    // const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
+
+    // const dailyVolumes = useGraphClientHook(
+    //     {}, // no variables
+    //     queries.DailyVolumesDocument,
+    //     'dailyVolumes',
+    //     !isSubgraphSupported
+    // );
+
+    // const { volumePerCurrency } = computeTotalDailyVolumeInUSD(
+    //     dailyVolumes.data ?? [],
+    //     priceList
+    // );
+
+    const { data: currencies } = useCurrencies();
 
     useLockBodyScroll(isTablet && isDropdownOpen);
 
@@ -91,7 +121,6 @@ export const CurrencyMaturityDropdown = ({
     );
 
     const { data: lendingMarkets = baseContracts } = useLendingMarkets();
-    const { data: currencies } = useCurrencies();
     const router = useRouter();
 
     const CcyIcon = currencyMap[asset.value]?.icon;
