@@ -16,6 +16,7 @@ describe('computeTotalDailyVolumeInUSD', () => {
         expect(computeTotalDailyVolumeInUSD([], assetPriceMap)).toEqual({
             totalVolumeUSD: ZERO_BI,
             volumePerCurrency: expectedVolumes,
+            volumePerMarket: {},
         });
     });
 
@@ -37,6 +38,10 @@ describe('computeTotalDailyVolumeInUSD', () => {
         ).toEqual({
             totalVolumeUSD: BigInt(3942030),
             volumePerCurrency: expectedVolumes,
+            volumePerMarket: {
+                'WFIL-1669852800': BigInt(3942000),
+                'USDC-1669852800': BigInt(30),
+            },
         });
     });
 });

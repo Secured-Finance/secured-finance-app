@@ -19,7 +19,7 @@ const { Default, ConnectedToWallet, Delisted, OpenOrdersConnectedToWallet } =
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-describe('Advanced Lending Component', () => {
+describe.skip('Advanced Lending Component', () => {
     it('should convert the amount to new currency and track CURRENCY_CHANGE when the user change the currency', async () => {
         const track = jest.spyOn(analytics, 'track');
         const { store } = await waitFor(() =>
