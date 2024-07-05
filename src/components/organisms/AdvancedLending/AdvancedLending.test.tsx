@@ -19,7 +19,7 @@ const { Default, ConnectedToWallet, Delisted, OpenOrdersConnectedToWallet } =
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-describe.skip('Advanced Lending Component', () => {
+describe('Advanced Lending Component', () => {
     it('should convert the amount to new currency and track CURRENCY_CHANGE when the user change the currency', async () => {
         const track = jest.spyOn(analytics, 'track');
         const { store } = await waitFor(() =>
@@ -85,7 +85,7 @@ describe.skip('Advanced Lending Component', () => {
         expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
     });
 
-    it('should display the last trades in the top bar', async () => {
+    it.skip('should display the last trades in the top bar', async () => {
         render(<Default />, {
             apolloMocks: Default.parameters?.apolloClient.mocks,
         });
