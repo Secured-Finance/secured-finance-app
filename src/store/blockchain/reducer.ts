@@ -1,14 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { getEnvShort } from 'src/utils';
+import { Environment } from 'src/utils';
 import { Blockchain } from './type';
-
-const env = getEnvShort();
-
-const TEMP_ARBITRUM_NETWORK_ID = env === 'prod' ? 42161 : 421614;
 
 const initialState: Blockchain = {
     latestBlock: 0,
-    chainId: TEMP_ARBITRUM_NETWORK_ID,
+    chainId: process.env.SF_ENV === Environment.PRODUCTION ? 42161 : 421614,
     chainError: true,
     lastActionTimestamp: 0,
     testnetEnabled: false,
