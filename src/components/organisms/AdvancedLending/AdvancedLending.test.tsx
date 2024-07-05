@@ -85,7 +85,7 @@ describe('Advanced Lending Component', () => {
         expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
     });
 
-    it.skip('should display the last trades in the top bar', async () => {
+    it('should display the last trades in the top bar', async () => {
         render(<Default />, {
             apolloMocks: Default.parameters?.apolloClient.mocks,
         });
