@@ -17,25 +17,31 @@ export const desktopColumns = [
     {
         key: 'symbol',
         label: 'Symbol',
-        width: '30%',
+        width: '20%',
         allowsSorting: false,
     },
     {
         key: 'last-prices',
         label: 'Last Price',
-        width: '20%',
+        width: '10%',
         allowsSorting: false,
     },
     {
         key: 'apr',
         label: 'APR',
-        width: '20%',
+        width: '10%',
+        allowsSorting: true,
+    },
+    {
+        key: 'volume',
+        label: 'Volume',
+        width: '15%',
         allowsSorting: true,
     },
     {
         key: 'maturity',
         label: 'Time to Maturity',
-        width: '30%',
+        width: '20%',
         allowsSorting: true,
     },
 ];

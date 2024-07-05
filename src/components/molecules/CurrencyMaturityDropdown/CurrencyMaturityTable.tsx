@@ -13,7 +13,7 @@ import {
 } from '@nextui-org/table';
 import clsx from 'clsx';
 import { useBreakpoint } from 'src/hooks';
-import { calculateTimeDifference, formatDuration } from 'src/utils';
+import { calculateTimeDifference, formatDuration, usdFormat } from 'src/utils';
 import { desktopColumns, mobileColumns } from './constants';
 import { ColumnKey, FilteredOption } from './types';
 
@@ -52,6 +52,8 @@ export const CurrencyMaturityTable = ({
             case 'maturity':
                 const timestampDifference = calculateTimeDifference(+maturity);
                 return formatDuration(Math.abs(timestampDifference));
+            case 'volume':
+                return option.volume ? usdFormat(option.volume) : '-';
             default:
                 return null;
         }

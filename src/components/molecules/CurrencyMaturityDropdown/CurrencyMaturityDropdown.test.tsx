@@ -10,13 +10,17 @@ const { Default, ItayosePage } = composeStories(stories);
 
 describe('CurrencyMaturityDropdown', () => {
     it('should render a selected market', () => {
-        render(<Default />);
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
 
         expect(screen.getByText('WBTC-DEC2022')).toBeInTheDocument();
     });
 
     it('should show the dropdown when the button is clicked', () => {
-        render(<Default />);
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
         const button = screen.getByRole('button', { name: 'WBTC-DEC2022' });
         fireEvent.click(button);
 
@@ -26,7 +30,9 @@ describe('CurrencyMaturityDropdown', () => {
     });
 
     it('should not render Itayose filter in Itayose page', () => {
-        render(<ItayosePage />);
+        render(<ItayosePage />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
         const button = screen.getByRole('button', { name: 'WBTC-DEC2022' });
         fireEvent.click(button);
 
@@ -36,7 +42,9 @@ describe('CurrencyMaturityDropdown', () => {
     });
 
     it('should only show associated markets when user selects on currency filter', async () => {
-        render(<Default />);
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
         const button = screen.getByRole('button', { name: 'WBTC-DEC2022' });
         fireEvent.click(button);
 
@@ -49,7 +57,9 @@ describe('CurrencyMaturityDropdown', () => {
     });
 
     it('should filter markets based on search input', async () => {
-        render(<Default />);
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
 
         const button = screen.getByRole('button', { name: 'WBTC-DEC2022' });
         fireEvent.click(button);
@@ -67,7 +77,9 @@ describe('CurrencyMaturityDropdown', () => {
     });
 
     it('should render relevant message when no products are found', () => {
-        render(<Default />);
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
 
         const button = screen.getByRole('button', { name: 'WBTC-DEC2022' });
         fireEvent.click(button);

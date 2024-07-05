@@ -3,6 +3,7 @@ import { composeStories } from '@storybook/react';
 import userEvent from '@testing-library/user-event';
 import {
     emptyTransaction,
+    mockDailyVolumes,
     mockFilteredUserOrderHistory,
     mockFilteredUserTransactionHistory,
 } from 'src/stories/mocks/queries';
@@ -110,6 +111,7 @@ describe('Advanced Lending Component', () => {
             render(<Default />, {
                 apolloMocks: [
                     ...(emptyTransaction as never),
+                    ...mockDailyVolumes,
                     ...mockFilteredUserOrderHistory,
                     ...mockFilteredUserTransactionHistory,
                 ],
