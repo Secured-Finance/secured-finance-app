@@ -5,7 +5,7 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import { SortDescriptor } from '@nextui-org/table';
 import { Key } from '@react-types/shared';
-// import queries from '@secured-finance/sf-graph-client/dist/graphclients';
+import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { CurrencyMaturityTable, FilterButtons } from 'src/components/molecules';
@@ -13,15 +13,15 @@ import {
     baseContracts,
     useBreakpoint,
     useCurrencies,
-    // useGraphClientHook,
-    // useIsSubgraphSupported,
-    // useLastPrices,
+    useGraphClientHook,
+    useIsSubgraphSupported,
+    useLastPrices,
     useLendingMarkets,
 } from 'src/hooks';
-// import useSF from 'src/hooks/useSecuredFinance';
+import useSF from 'src/hooks/useSecuredFinance';
 import {
     CurrencySymbol,
-    // computeTotalDailyVolumeInUSD,
+    computeTotalDailyVolumeInUSD,
     currencyMap,
     formatLoanValue,
 } from 'src/utils';
@@ -39,26 +39,26 @@ export const CurrencyMaturityDropdown = ({
     const isTablet = useBreakpoint('laptop');
     const [searchValue, setSearchValue] = useState<string>('');
     const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
-    // const { data: priceList } = useLastPrices();
-
-    // const securedFinance = useSF();
-    // const currentChainId = securedFinance?.config.chain.id;
-
-    // const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
-
-    // const dailyVolumes = useGraphClientHook(
-    //     {}, // no variables
-    //     queries.DailyVolumesDocument,
-    //     'dailyVolumes',
-    //     !isSubgraphSupported
-    // );
-
-    // const { volumePerCurrency } = computeTotalDailyVolumeInUSD(
-    //     dailyVolumes.data ?? [],
-    //     priceList
-    // );
-
     const { data: currencies } = useCurrencies();
+
+    const { data: priceList } = useLastPrices();
+
+    const securedFinance = useSF();
+    const currentChainId = securedFinance?.config.chain.id;
+
+    const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
+
+    const dailyVolumes = useGraphClientHook(
+        {}, // no variables
+        queries.DailyVolumesDocument,
+        'dailyVolumes',
+        !isSubgraphSupported
+    );
+
+    const { volumePerMarket } = computeTotalDailyVolumeInUSD(
+        dailyVolumes.data ?? [],
+        priceList
+    );
 
     useLockBodyScroll(isTablet && isDropdownOpen);
 
@@ -129,11 +129,13 @@ export const CurrencyMaturityDropdown = ({
         let options = currencyList.flatMap(currency => {
             return maturityList
                 .map(maturity => {
-                    const ccyMaturity = `${currency.label}-${maturity.label}`;
+                    const marketLabel = `${currency.label}-${maturity.label}`;
+                    const marketKey = `${currency.value}-${maturity.value}`;
                     const data =
                         lendingMarkets[currency.value]?.[+maturity.value];
                     const isItayoseOption =
                         data?.isItayosePeriod || data?.isPreOrderPeriod;
+                    const volumeInUSD = volumePerMarket[marketKey];
 
                     const marketUnitPrice = data?.marketUnitPrice;
                     const openingUnitPrice = data?.openingUnitPrice;
@@ -157,7 +159,7 @@ export const CurrencyMaturityDropdown = ({
                             !currentCurrency.includes(currency.value)) ||
                         (isItayose && !isItayoseOption) ||
                         (searchValue &&
-                            !ccyMaturity
+                            !marketLabel
                                 .toLowerCase()
                                 .includes(searchValue.toLowerCase()))
                     ) {
@@ -165,12 +167,13 @@ export const CurrencyMaturityDropdown = ({
                     }
 
                     return {
-                        key: ccyMaturity,
-                        display: ccyMaturity,
+                        key: marketLabel,
+                        display: marketLabel,
                         currency: currency.value,
                         maturity: maturity.value,
                         lastPrice: formatLoanValue(lastPrice, 'price'),
                         apr: formatLoanValue(lastPrice, 'rate'),
+                        volume: volumeInUSD,
                         isItayoseOption,
                     };
                 })
@@ -188,6 +191,7 @@ export const CurrencyMaturityDropdown = ({
         currentCurrency,
         isItayose,
         searchValue,
+        volumePerMarket,
     ]);
 
     const handleOptionClick = (item: FilteredOption) => {
