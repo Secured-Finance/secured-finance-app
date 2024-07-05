@@ -1130,3 +1130,8 @@ export const preOpenOrders = [
         calculationDate: mar23Fixture.toNumber(),
     },
 ];
+
+export const volumePerMarket = {
+    'WFIL-1669852800': BigInt(3942000),
+    'USDC-1669852800': BigInt(30),
+};

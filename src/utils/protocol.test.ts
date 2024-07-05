@@ -4,6 +4,7 @@ import {
     dailyVolumes,
     dec22Fixture,
     usdcBytes32,
+    volumePerMarket,
 } from 'src/stories/mocks/fixtures';
 import { ZERO_BI } from './collateral';
 import { createCurrencyMap } from './currencyList';
@@ -38,10 +39,7 @@ describe('computeTotalDailyVolumeInUSD', () => {
         ).toEqual({
             totalVolumeUSD: BigInt(3942030),
             volumePerCurrency: expectedVolumes,
-            volumePerMarket: {
-                'WFIL-1669852800': BigInt(3942000),
-                'USDC-1669852800': BigInt(30),
-            },
+            volumePerMarket,
         });
     });
 });
