@@ -24,16 +24,16 @@ type ChainInformation = {
 
 // it is important to keep sepolia as first chain in this list
 const testnetNetworks: Chain[] = [
-    sepolia,
     arbitrumSepolia,
+    sepolia,
     avalancheFuji,
     filecoinCalibration,
 ];
 
 // it is important to keep mainnet as first chain in this list
 const mainnetNetworks: Chain[] = [
-    mainnet,
     arbitrum,
+    mainnet,
     avalanche,
     polygonZkEvm,
     filecoin,

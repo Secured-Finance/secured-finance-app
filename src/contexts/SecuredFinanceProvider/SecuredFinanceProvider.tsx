@@ -12,7 +12,6 @@ import {
 } from 'src/store/blockchain';
 import { RootState } from 'src/store/types';
 import {
-    getEnvShort,
     getSupportedChainIds,
     getSupportedNetworks,
     readWalletFromStore,
@@ -34,8 +33,6 @@ import {
 } from 'wagmi';
 
 export const CACHED_PROVIDER_KEY = 'CACHED_PROVIDER_KEY';
-const env = getEnvShort();
-const TEMP_ARBITRUM_NETWORK_ID = env === 'prod' ? 42161 : 421614;
 
 declare global {
     interface Window {
@@ -126,9 +123,6 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
     useEffect(() => {
         if (chain) {
             dispatchChainError(chain.id);
-        } else {
-            // TODO: remove this after FIL Dev Summit 09 July 2024
-            dispatchChainError(TEMP_ARBITRUM_NETWORK_ID);
         }
     }, [chain, dispatchChainError]);
 
