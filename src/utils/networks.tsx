@@ -23,6 +23,7 @@ type ChainInformation = {
 };
 
 // it is important to keep sepolia as first chain in this list
+// arbitrumSepolia used as a temporary first chain
 const testnetNetworks: Chain[] = [
     arbitrumSepolia,
     sepolia,
@@ -31,6 +32,7 @@ const testnetNetworks: Chain[] = [
 ];
 
 // it is important to keep mainnet as first chain in this list
+// arbitrum used as a temporary first chain
 const mainnetNetworks: Chain[] = [
     arbitrum,
     mainnet,
