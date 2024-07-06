@@ -1,4 +1,4 @@
-import { Button, ButtonSizes } from 'src/components/atoms';
+import { Button, ButtonSizes, ButtonVariants } from 'src/components/atoms';
 
 type MenuItem = { text: string; onClick: () => void; disabled?: boolean };
 
@@ -7,7 +7,8 @@ const MenuItem = ({ text, onClick, disabled = false }: MenuItem) => {
         <Button
             onClick={onClick}
             disabled={disabled}
-            size={ButtonSizes.sm}
+            size={ButtonSizes.xs}
+            variant={ButtonVariants.secondary}
             fullWidth
             className='min-w-fit'
         >
@@ -15,6 +16,7 @@ const MenuItem = ({ text, onClick, disabled = false }: MenuItem) => {
         </Button>
     );
 };
+
 export const TableActionMenu = ({ items }: { items: MenuItem[] }) => {
     return (
         <div className={`grid grid-cols-${items.length}-actions gap-x-2`}>

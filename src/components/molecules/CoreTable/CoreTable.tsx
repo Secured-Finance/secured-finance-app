@@ -123,21 +123,18 @@ export const CoreTable = <T,>({
         >
             {coreTableOptions.showHeaders ? (
                 <thead
-                    className={clsx(
-                        'typography-caption-2 px-6 text-slateGray',
-                        {
-                            'after:absolute after:bottom-0 after:z-20 after:w-full after:border-b after:border-white-10':
-                                coreTableOptions.border &&
-                                coreTableOptions.stickyHeader,
-                            'h-14 py-4': !coreTableOptions.compact,
-                            'h-5 py-1': coreTableOptions.compact,
-                            'sticky inset-0 z-20 bg-[#1D2739]':
-                                coreTableOptions.stickyHeader,
-                            'border-b border-white-10':
-                                coreTableOptions.border &&
-                                !coreTableOptions.stickyHeader,
-                        }
-                    )}
+                    className={clsx('text-2.5 leading-5 text-neutral-300', {
+                        'after:absolute after:bottom-0 after:z-20 after:w-full after:border-b after:border-neutral-600':
+                            coreTableOptions.border &&
+                            coreTableOptions.stickyHeader,
+                        'h-8 py-1.5': !coreTableOptions.compact,
+                        'h-5 py-1': coreTableOptions.compact,
+                        'sticky inset-0 z-20 bg-neutral-900':
+                            coreTableOptions.stickyHeader,
+                        'border-b border-neutral-600':
+                            coreTableOptions.border &&
+                            !coreTableOptions.stickyHeader,
+                    })}
                 >
                     {table.getHeaderGroups().map(headerGroup => (
                         <tr
@@ -149,7 +146,7 @@ export const CoreTable = <T,>({
                                     data-testid={`${coreTableOptions.name}-header-cell`}
                                     key={header.id}
                                     className={clsx(
-                                        'whitespace-nowrap py-2 pr-1 text-center font-bold tablet:px-1',
+                                        'whitespace-nowrap pr-1 text-center font-normal tablet:px-1',
                                         {
                                             'sticky left-0 z-10 bg-[#161E2E] after:absolute after:-right-4 after:-top-0 after:z-10 after:h-full after:w-5 after:bg-gradient-to-r after:from-black-40 after:to-transparent tablet:relative tablet:left-auto tablet:z-auto tablet:bg-transparent tablet:after:hidden':
                                                 coreTableOptions.responsive &&

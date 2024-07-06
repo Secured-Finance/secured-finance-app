@@ -110,8 +110,8 @@
   }
 
   .scrollbar-table::-webkit-scrollbar {
-    height: 6px;
-    width: 6px;
+    height: 4px;
+    width: 4px;
   }
 
   .scrollbar-table::-webkit-scrollbar-corner {
@@ -119,7 +119,7 @@
   }
 
   .scrollbar-table::-webkit-scrollbar-thumb {
-    background: rgba(119, 126, 144, 1);
+    background: rgba(148, 163, 184, 1);
     border-radius: 50px;
   }
 }

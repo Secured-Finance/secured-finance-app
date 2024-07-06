@@ -110,7 +110,7 @@ export const OrderTable = ({
                                 <TableActionMenu
                                     items={[
                                         {
-                                            text: 'Remove Order',
+                                            text: 'Cancel',
                                             onClick: removeOrder,
                                         },
                                     ]}
@@ -119,7 +119,7 @@ export const OrderTable = ({
                             {variant === 'compact' && (
                                 <button
                                     className='group h-5 w-5 hover:bg-white-10'
-                                    aria-label='Remove Order'
+                                    aria-label='Cancel Order'
                                     onClick={removeOrder}
                                 >
                                     <XMarkIcon className='h-5 w-5 text-secondary7 group-hover:text-starBlue group-active:text-starBlue' />
