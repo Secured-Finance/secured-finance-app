@@ -18,6 +18,7 @@ import {
     CollateralEvents,
     CollateralInfo,
     CurrencySymbol,
+    ZERO_BI,
     amountFormatterFromBase,
     amountFormatterToBase,
     formatAmount,
@@ -140,6 +141,7 @@ export const DepositCollateral = ({
     }, [onClose, state.currentStep]);
 
     const optionList = Object.values(collateralList);
+
     const defaultCcyIndex = optionList.findIndex(
         col => col.symbol === defaultCcySymbol
     );
@@ -155,9 +157,7 @@ export const DepositCollateral = ({
             state.currentStep === Step.depositCollateral &&
             (!collateralBigInt ||
                 collateralBigInt >
-                    amountFormatterToBase[asset](
-                        collateralList[asset]?.available ?? 0
-                    ))
+                    (collateralList[asset]?.availableFullValue ?? ZERO_BI))
         );
     }, [asset, collateralBigInt, collateralList, state.currentStep]);
 
