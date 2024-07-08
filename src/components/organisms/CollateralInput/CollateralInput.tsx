@@ -9,6 +9,7 @@ interface CollateralInputProps {
     asset: CurrencySymbol;
     onAmountChange?: (v: string | undefined) => void;
     amount: string | undefined;
+    onFullCoverage: () => void;
 }
 
 export const CollateralInput = ({
@@ -16,6 +17,7 @@ export const CollateralInput = ({
     availableAmount,
     onAmountChange,
     amount,
+    onFullCoverage,
 }: CollateralInputProps) => {
     const handleAmountChange = useCallback(
         (inputAmount: string | undefined) => {
@@ -36,16 +38,19 @@ export const CollateralInput = ({
 
     const handleClick = useCallback(
         (percentage: number) => {
+            if (percentage === 1) {
+                onFullCoverage();
+                return;
+            }
+
             const amount =
-                percentage === 1
-                    ? availableAmount
-                    : Math.floor(percentage * availableAmount * 10000) /
-                      10000.0;
+                Math.floor(percentage * availableAmount * 10000) / 10000.0;
+
             if (onAmountChange) {
                 onAmountChange(amount.toString());
             }
         },
-        [availableAmount, onAmountChange]
+        [availableAmount, onAmountChange, onFullCoverage]
     );
 
     return (

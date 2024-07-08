@@ -1,4 +1,4 @@
-import { useCallback, useReducer, useState } from 'react';
+import { useCallback, useEffect, useReducer, useState } from 'react';
 import { CollateralSelector, Spinner } from 'src/components/atoms';
 import {
     Dialog,
@@ -117,9 +117,14 @@ export const DepositCollateral = ({
         'Your deposit transaction has failed.'
     );
     const [txHash, setTxHash] = useState<string | undefined>();
-    const collateralBigInt = amountFormatterToBase[asset](
-        Number(collateral ?? '')
-    );
+
+    const [collateralBigInt, setCollateralBigInt] = useState<bigint>(ZERO_BI);
+
+    useEffect(() => {
+        setCollateralBigInt(
+            amountFormatterToBase[asset](Number(collateral ?? ''))
+        );
+    }, [asset, collateral]);
 
     const { data: priceList } = useLastPrices();
     const { onDepositCollateral } = useDepositCollateral(
@@ -245,6 +250,17 @@ export const DepositCollateral = ({
                                     availableAmount={
                                         collateralList[asset]?.available ?? 0
                                     }
+                                    onFullCoverage={() => {
+                                        setCollateralBigInt(
+                                            collateralList[asset]
+                                                ?.availableFullValue ?? ZERO_BI
+                                        );
+                                        setCollateral(
+                                            collateralList[
+                                                asset
+                                            ]?.available.toString()
+                                        );
+                                    }}
                                     amount={collateral}
                                 />
                             </div>

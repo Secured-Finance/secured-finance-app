@@ -1,4 +1,4 @@
-import { useCallback, useReducer, useState } from 'react';
+import { useCallback, useEffect, useReducer, useState } from 'react';
 import { CollateralSelector, Spinner } from 'src/components/atoms';
 import {
     Dialog,
@@ -17,6 +17,7 @@ import {
     AddressUtils,
     CollateralInfo,
     CurrencySymbol,
+    ZERO_BI,
     amountFormatterFromBase,
     amountFormatterToBase,
     formatAmount,
@@ -119,9 +120,13 @@ export const WithdrawCollateral = ({
     const [errorMessage, setErrorMessage] = useState(
         'Your withdrawal transaction has failed.'
     );
-    const collateralBigInt = amountFormatterToBase[asset](
-        Number(collateral ?? '')
-    );
+    const [collateralBigInt, setCollateralBigInt] = useState<bigint>(ZERO_BI);
+
+    useEffect(() => {
+        setCollateralBigInt(
+            amountFormatterToBase[asset](Number(collateral ?? ''))
+        );
+    }, [asset, collateral]);
 
     const { data: priceList } = useLastPrices();
     const { onWithdrawCollateral } = useWithdrawCollateral(
@@ -236,12 +241,21 @@ export const WithdrawCollateral = ({
                                 <CollateralInput
                                     price={priceList[asset]}
                                     asset={asset}
-                                    onAmountChange={(v: string | undefined) =>
-                                        setCollateral(v)
-                                    }
+                                    onAmountChange={setCollateral}
                                     availableAmount={
                                         collateralList[asset]?.available ?? 0
                                     }
+                                    onFullCoverage={() => {
+                                        setCollateralBigInt(
+                                            collateralList[asset]
+                                                ?.availableFullValue ?? ZERO_BI
+                                        );
+                                        setCollateral(
+                                            collateralList[
+                                                asset
+                                            ]?.available.toString()
+                                        );
+                                    }}
                                     amount={collateral}
                                 />
                                 <div className='typography-caption-2 h-fit rounded-xl border border-red px-3 py-2 text-slateGray'>
