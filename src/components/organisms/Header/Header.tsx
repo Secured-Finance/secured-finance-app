@@ -33,7 +33,6 @@ import { getSupportedNetworks } from 'src/utils';
 import { AddressUtils } from 'src/utils/address';
 import { isProdEnv } from 'src/utils/displayUtils';
 import { useAccount } from 'wagmi';
-import { TradingDropdown } from './TradingDropdown';
 import { DEV_LINKS, PRODUCTION_LINKS } from './constants';
 
 const POLL_INTERVAL = 600000; // 10 minutes
@@ -137,7 +136,6 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                         </Link>
                         {showNavigation && (
                             <div className='hidden h-full flex-row laptop:flex'>
-                                <TradingDropdown />
                                 {LINKS.map(link => (
                                     <div
                                         key={link.text}
@@ -147,6 +145,9 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                                             text={link.text}
                                             dataCy={link.dataCy}
                                             link={link.link}
+                                            alternateLinks={
+                                                link?.alternateLinks
+                                            }
                                         />
                                     </div>
                                 ))}
