@@ -145,13 +145,6 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
                     return previous;
                 }
 
-                if (
-                    previous.config.chain.id !==
-                    securedFinanceLib.config.chain.id
-                ) {
-                    return securedFinanceLib;
-                }
-
                 if (isConnected) {
                     return securedFinanceLib;
                 }
