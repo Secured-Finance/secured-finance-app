@@ -14,6 +14,7 @@ export type CollateralInfo = {
     symbol: CurrencySymbol;
     name: string;
     available: number;
+    availableFullValue: bigint;
 };
 
 export const generateWalletInformation = (
