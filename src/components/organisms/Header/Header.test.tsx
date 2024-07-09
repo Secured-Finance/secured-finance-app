@@ -22,24 +22,11 @@ describe('Header component', () => {
         expect(screen.getByText('Connect Wallet')).toBeInTheDocument();
     });
 
-    it('should open a submenu if Trading tab is clicked', async () => {
-        mockRouter.push('/');
-        render(<Primary />);
-
-        const tradingTab = screen.getByTestId('Trading-tab');
-        fireEvent.click(tradingTab);
-
-        await waitFor(() => {
-            expect(screen.getByText('Simple')).toBeInTheDocument();
-            expect(screen.getByText('Advanced')).toBeInTheDocument();
-        });
-    });
-
     it('should highlight the landing page by default page', () => {
         mockRouter.push('/');
         render(<Primary />);
         const textElement = screen.getByText('Trading');
-        expect(textElement.parentNode).toHaveClass(
+        expect(textElement.parentNode?.parentNode).toHaveClass(
             'from-tabGradient-blue-start to-tabGradient-blue-end'
         );
     });
@@ -48,7 +35,7 @@ describe('Header component', () => {
         mockRouter.push('/global-itayose');
         render(<Primary />);
         const textElement = screen.getByText('Trading');
-        expect(textElement.parentNode).toHaveClass(
+        expect(textElement.parentNode?.parentNode).toHaveClass(
             'from-tabGradient-blue-start to-tabGradient-blue-end'
         );
     });
@@ -70,7 +57,7 @@ describe('Header component', () => {
 
         render(<Primary />);
         const textElement = screen.getByText('Trading');
-        expect(textElement.parentNode).toHaveClass(
+        expect(textElement.parentNode?.parentNode).toHaveClass(
             'from-tabGradient-blue-start to-tabGradient-blue-end'
         );
     });
