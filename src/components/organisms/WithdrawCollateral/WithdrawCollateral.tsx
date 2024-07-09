@@ -121,12 +121,20 @@ export const WithdrawCollateral = ({
         'Your withdrawal transaction has failed.'
     );
     const [collateralBigInt, setCollateralBigInt] = useState<bigint>(ZERO_BI);
+    const [isFullCoverage, setIsFullCoverage] = useState<boolean>(false);
 
     useEffect(() => {
-        setCollateralBigInt(
-            amountFormatterToBase[asset](Number(collateral ?? ''))
-        );
-    }, [asset, collateral]);
+        if (!isFullCoverage) {
+            setCollateralBigInt(
+                amountFormatterToBase[asset](Number(collateral ?? ''))
+            );
+        } else {
+            setCollateralBigInt(
+                collateralList[asset]?.availableFullValue ?? ZERO_BI
+            );
+            setCollateral(collateralList[asset]?.available.toString());
+        }
+    }, [asset, collateral, isFullCoverage, collateralList, collateralBigInt]);
 
     const { data: priceList } = useLastPrices();
     const { onWithdrawCollateral } = useWithdrawCollateral(
@@ -208,8 +216,10 @@ export const WithdrawCollateral = ({
     );
 
     const handleChange = useCallback((v: CollateralInfo) => {
-        setAsset(v.symbol);
+        setIsFullCoverage(false);
         setCollateral(undefined);
+        setCollateralBigInt(ZERO_BI);
+        setAsset(v.symbol);
     }, []);
 
     return (
@@ -242,20 +252,11 @@ export const WithdrawCollateral = ({
                                     price={priceList[asset]}
                                     asset={asset}
                                     onAmountChange={setCollateral}
+                                    fullCoverage={isFullCoverage}
+                                    setFullCoverage={setIsFullCoverage}
                                     availableAmount={
                                         collateralList[asset]?.available ?? 0
                                     }
-                                    onFullCoverage={() => {
-                                        setCollateralBigInt(
-                                            collateralList[asset]
-                                                ?.availableFullValue ?? ZERO_BI
-                                        );
-                                        setCollateral(
-                                            collateralList[
-                                                asset
-                                            ]?.available.toString()
-                                        );
-                                    }}
                                     amount={collateral}
                                 />
                                 <div className='typography-caption-2 h-fit rounded-xl border border-red px-3 py-2 text-slateGray'>

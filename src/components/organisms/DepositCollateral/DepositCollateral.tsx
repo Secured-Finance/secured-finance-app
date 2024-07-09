@@ -119,12 +119,20 @@ export const DepositCollateral = ({
     const [txHash, setTxHash] = useState<string | undefined>();
 
     const [collateralBigInt, setCollateralBigInt] = useState<bigint>(ZERO_BI);
+    const [isFullCoverage, setIsFullCoverage] = useState<boolean>(false);
 
     useEffect(() => {
-        setCollateralBigInt(
-            amountFormatterToBase[asset](Number(collateral ?? ''))
-        );
-    }, [asset, collateral]);
+        if (!isFullCoverage) {
+            setCollateralBigInt(
+                amountFormatterToBase[asset](Number(collateral ?? ''))
+            );
+        } else {
+            setCollateralBigInt(
+                collateralList[asset]?.availableFullValue ?? ZERO_BI
+            );
+            setCollateral(collateralList[asset]?.available.toString());
+        }
+    }, [asset, collateral, isFullCoverage, collateralList, collateralBigInt]);
 
     const { data: priceList } = useLastPrices();
     const { onDepositCollateral } = useDepositCollateral(
@@ -218,7 +226,9 @@ export const DepositCollateral = ({
     );
 
     const handleChange = useCallback((v: CollateralInfo) => {
+        setIsFullCoverage(false);
         setCollateral(undefined);
+        setCollateralBigInt(ZERO_BI);
         setAsset(v.symbol);
     }, []);
 
@@ -247,20 +257,11 @@ export const DepositCollateral = ({
                                     price={priceList[asset]}
                                     asset={asset}
                                     onAmountChange={setCollateral}
+                                    fullCoverage={isFullCoverage}
+                                    setFullCoverage={setIsFullCoverage}
                                     availableAmount={
                                         collateralList[asset]?.available ?? 0
                                     }
-                                    onFullCoverage={() => {
-                                        setCollateralBigInt(
-                                            collateralList[asset]
-                                                ?.availableFullValue ?? ZERO_BI
-                                        );
-                                        setCollateral(
-                                            collateralList[
-                                                asset
-                                            ]?.available.toString()
-                                        );
-                                    }}
                                     amount={collateral}
                                 />
                             </div>
