@@ -335,11 +335,18 @@ export function hexToCurrencySymbol(hex: string) {
 
 const convertToBlockchainUnit = (amount: number | string, ccy: Currency) => {
     const value = new BigNumberJS(amount).multipliedBy(10 ** ccy.decimals);
-    if (value.isNaN() || value.isLessThan(new BigNumberJS(1))) {
+
+    if (
+        value.isNaN() ||
+        value.isLessThan(new BigNumberJS(1)) ||
+        value.toString().includes('.')
+    ) {
         return ZERO_BI;
     }
     return BigInt(value.toString());
 };
+
+// 8319065.023175453;
 
 const convertFromBlockchainUnit = (amount: bigint, ccy: Currency) => {
     const value = new BigNumberJS(amount.toString()).dividedBy(
