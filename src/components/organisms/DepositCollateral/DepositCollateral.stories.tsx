@@ -13,11 +13,13 @@ export default {
         collateralList: {
             [CurrencySymbol.ETH]: {
                 symbol: CurrencySymbol.ETH,
+                availableFullValue: BigInt('10000000000000000000'),
                 available: 10,
                 name: 'Ethereum',
             },
             [CurrencySymbol.USDC]: {
                 symbol: CurrencySymbol.USDC,
+                availableFullValue: BigInt('50000000'),
                 available: 50,
                 name: 'USDC',
             },
