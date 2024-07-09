@@ -163,10 +163,7 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                                     }
                                 />
                                 <WalletPopover
-                                    wallet={AddressUtils.format(
-                                        address,
-                                        isMobile ? 2 : 6
-                                    )}
+                                    wallet={AddressUtils.format(address, 6)}
                                     networkName={
                                         securedFinance?.config?.network ??
                                         'Unknown'
