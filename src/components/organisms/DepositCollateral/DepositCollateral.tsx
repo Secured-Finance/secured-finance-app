@@ -134,14 +134,6 @@ export const DepositCollateral = ({
         }
     }, [asset, collateral, isFullCoverage, collateralList, collateralBigInt]);
 
-    useEffect(() => {
-        return () => {
-            setCollateral(undefined);
-            setCollateralBigInt(ZERO_BI);
-            setIsFullCoverage(false);
-        };
-    }, []);
-
     const { data: priceList } = useLastPrices();
     const { onDepositCollateral } = useDepositCollateral(
         asset,
@@ -151,6 +143,11 @@ export const DepositCollateral = ({
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
+
+        setCollateral(undefined);
+        setCollateralBigInt(ZERO_BI);
+        setIsFullCoverage(false);
+
         if (state.currentStep === Step.depositCollateral) {
             trackButtonEvent(
                 ButtonEvents.CANCEL_BUTTON,

@@ -136,14 +136,6 @@ export const WithdrawCollateral = ({
         }
     }, [asset, collateral, isFullCoverage, collateralList, collateralBigInt]);
 
-    useEffect(() => {
-        return () => {
-            setCollateral(undefined);
-            setCollateralBigInt(ZERO_BI);
-            setIsFullCoverage(false);
-        };
-    }, []);
-
     const { data: priceList } = useLastPrices();
     const { onWithdrawCollateral } = useWithdrawCollateral(
         asset,
@@ -152,6 +144,11 @@ export const WithdrawCollateral = ({
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
+
+        setCollateral(undefined);
+        setCollateralBigInt(ZERO_BI);
+        setIsFullCoverage(false);
+
         if (state.currentStep === Step.withdrawCollateral) {
             trackButtonEvent(
                 ButtonEvents.CANCEL_BUTTON,
