@@ -18,6 +18,9 @@ export default {
 
 const Template: StoryFn<typeof CollateralInput> = args => {
     const [value, setValue] = useState(args.amount);
+    const [isFullCoverage, setIsFullCoverage] = useState<boolean>(
+        args.fullCoverage
+    );
     const handleAmountChange = (newValue: string | undefined) => {
         setValue(newValue);
     };
@@ -26,6 +29,8 @@ const Template: StoryFn<typeof CollateralInput> = args => {
             {...args}
             amount={value}
             onAmountChange={handleAmountChange}
+            fullCoverage={isFullCoverage}
+            setFullCoverage={setIsFullCoverage}
         />
     );
 };
