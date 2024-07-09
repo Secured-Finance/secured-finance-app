@@ -35,13 +35,15 @@ const POLL_INTERVAL = 600000; // 10 minutes
 const POINT_API_QUERY_OPTIONS = { context: { type: 'point-dashboard' } };
 
 const HeaderMessage = ({
+    isChainIdDetected,
     chainId,
     chainError,
 }: {
+    isChainIdDetected: boolean;
     chainId: number;
     chainError: boolean;
 }) => {
-    if (chainId) {
+    if (chainId && isChainIdDetected) {
         if (chainError) {
             return (
                 <div
@@ -106,6 +108,9 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     const currentChainId = useSelector(
         (state: RootState) => state.blockchain.chainId
     );
+    const isChainIdDetected = useSelector(
+        (state: RootState) => state.blockchain.isChainIdDetected
+    );
     const isProduction = isProdEnv();
 
     const LINKS = isProduction ? PRODUCTION_LINKS : DEV_LINKS;
@@ -116,6 +121,7 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
         <>
             <div className='relative'>
                 <HeaderMessage
+                    isChainIdDetected={isChainIdDetected}
                     chainId={currentChainId}
                     chainError={chainError}
                 />

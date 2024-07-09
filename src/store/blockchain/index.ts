@@ -6,6 +6,7 @@ export const {
     updateChainError,
     updateLastActionTimestamp,
     updateTestnetEnabled,
+    updateIsChainIdDetected,
 } = blockchainSlice.actions;
 export default blockchainSlice.reducer;
 

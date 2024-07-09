@@ -12,6 +12,7 @@ const initialState: Blockchain = {
     chainError: true,
     lastActionTimestamp: 0,
     testnetEnabled: false,
+    isChainIdDetected: false,
 };
 
 const blockchainSlice = createSlice({
@@ -32,6 +33,9 @@ const blockchainSlice = createSlice({
         },
         updateTestnetEnabled(state, action: PayloadAction<boolean>) {
             state.testnetEnabled = action.payload;
+        },
+        updateIsChainIdDetected(state, action: PayloadAction<boolean>) {
+            state.isChainIdDetected = action.payload;
         },
     },
 });

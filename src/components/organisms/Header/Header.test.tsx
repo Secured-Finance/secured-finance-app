@@ -62,17 +62,25 @@ describe('Header component', () => {
         );
     });
 
-    it('should render testnet info header on chainError false', () => {
+    it('should render testnet info header on chainError false and isChainIdDetected true', () => {
         mockRouter.push('/');
 
-        render(<Primary />);
+        render(<Primary />, {
+            preloadedState: {
+                blockchain: {
+                    chainId: 11155111,
+                    chainError: false,
+                    isChainIdDetected: true,
+                },
+            },
+        });
         expect(screen.getByTestId('testnet-info')).toBeInTheDocument();
         expect(
             screen.getByText('You are visiting Secured Finance on testnet')
         ).toBeInTheDocument();
     });
 
-    it('should render testnet alert header on chainError true', () => {
+    it('should render testnet alert header on chainError and isChainIdDetected true', () => {
         mockRouter.push('/');
 
         render(<Primary />, {
@@ -80,6 +88,7 @@ describe('Header component', () => {
                 blockchain: {
                     chainId: 11155111,
                     chainError: true,
+                    isChainIdDetected: true,
                 },
             },
         });
