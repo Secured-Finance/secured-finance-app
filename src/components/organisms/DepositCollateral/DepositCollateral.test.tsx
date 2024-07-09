@@ -133,7 +133,7 @@ describe('DepositCollateral component', () => {
                 collateralList={{
                     [CurrencySymbol.ETH]: {
                         symbol: CurrencySymbol.ETH,
-                        availableFullValue: BigInt(10),
+                        availableFullValue: BigInt('10000000000000000000'),
                         available: 10,
                         name: 'Ethereum',
                     },

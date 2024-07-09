@@ -13,6 +13,7 @@ export default {
         price: 100,
         availableAmount: 10,
         asset: asset,
+        setFullCoverage: () => {},
     },
 } as Meta<typeof CollateralInput>;
 
@@ -24,13 +25,19 @@ const Template: StoryFn<typeof CollateralInput> = args => {
     const handleAmountChange = (newValue: string | undefined) => {
         setValue(newValue);
     };
+    const handleCoverage = (value: boolean) => {
+        setIsFullCoverage(value);
+        args.setFullCoverage(value);
+        setValue(args.availableAmount.toString());
+    };
+
     return (
         <CollateralInput
             {...args}
             amount={value}
             onAmountChange={handleAmountChange}
             fullCoverage={isFullCoverage}
-            setFullCoverage={setIsFullCoverage}
+            setFullCoverage={handleCoverage}
         />
     );
 };

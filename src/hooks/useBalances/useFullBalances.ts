@@ -11,7 +11,7 @@ import {
 import { useCurrencies } from '../useCurrencies';
 import { useERC20Balance } from './useERC20Balance';
 
-export const zeroBalances = createCurrencyMap<bigint>(ZERO_BI);
+const zeroBalances = createCurrencyMap<bigint>(ZERO_BI);
 
 export const useFullBalances = () => {
     const balances: Record<CurrencySymbol, bigint> = {
