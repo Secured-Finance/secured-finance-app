@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
-import { useCollateralCurrencies } from 'src/hooks';
+import { useCollateralCurrencies, useFullBalances } from 'src/hooks';
 import { CurrencySymbol } from 'src/utils';
-import { useFullBalances } from './useFullBalances';
 
 export const useCollateralBalances = () => {
     const fullBalances = useFullBalances();
