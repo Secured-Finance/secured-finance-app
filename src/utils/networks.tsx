@@ -49,15 +49,15 @@ export const getSupportedNetworks = () => {
 
 export const SupportedChainsList: ChainInformation[] = [
     {
-        chain: mainnet,
-        icon: (
-            <Ethereum className='h-4 w-4 rounded-full tablet:h-5 tablet:w-5' />
-        ),
-    },
-    {
         chain: arbitrum,
         icon: (
             <Arbitrum className='h-4 w-4 rounded-full tablet:h-5 tablet:w-5' />
+        ),
+    },
+    {
+        chain: mainnet,
+        icon: (
+            <Ethereum className='h-4 w-4 rounded-full tablet:h-5 tablet:w-5' />
         ),
     },
     {
@@ -73,15 +73,15 @@ export const SupportedChainsList: ChainInformation[] = [
         ),
     },
     {
-        chain: sepolia,
-        icon: (
-            <Ethereum className='h-4 w-4 rounded-full tablet:h-5 tablet:w-5' />
-        ),
-    },
-    {
         chain: arbitrumSepolia,
         icon: (
             <Arbitrum className='h-4 w-4 rounded-full tablet:h-5 tablet:w-5' />
+        ),
+    },
+    {
+        chain: sepolia,
+        icon: (
+            <Ethereum className='h-4 w-4 rounded-full tablet:h-5 tablet:w-5' />
         ),
     },
     {

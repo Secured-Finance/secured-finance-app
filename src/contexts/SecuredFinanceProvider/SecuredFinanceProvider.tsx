@@ -8,6 +8,7 @@ import { useWalletStore } from 'src/hooks/useWallet';
 import {
     updateChainError,
     updateChainId,
+    updateIsChainIdDetected,
     updateLatestBlock,
 } from 'src/store/blockchain';
 import { RootState } from 'src/store/types';
@@ -110,6 +111,7 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
                 const chainId = await window.ethereum.request({
                     method: 'eth_chainId',
                 });
+                dispatch(updateIsChainIdDetected(true));
                 dispatchChainError(hexToNumber(chainId));
             }
         };
@@ -118,7 +120,7 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
         return () => {
             window.ethereum?.removeListener('chainChanged', handleChainChanged);
         };
-    }, [dispatchChainError, handleChainChanged]);
+    }, [dispatchChainError, handleChainChanged, dispatch]);
 
     useEffect(() => {
         if (chain) {
@@ -141,13 +143,6 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
 
                 if (securedFinanceLib.config.chain.id !== chainId) {
                     return previous;
-                }
-
-                if (
-                    previous.config.chain.id !==
-                    securedFinanceLib.config.chain.id
-                ) {
-                    return securedFinanceLib;
                 }
 
                 if (isConnected) {
