@@ -33,6 +33,7 @@ export const useERC20Balance = (address: string | undefined) => {
                     return [
                         token.symbol,
                         amountFormatterFromBase[token.symbol](balance),
+                        balance,
                     ];
                 },
                 enabled: !!securedFinance && !!address && tokens.length > 0,

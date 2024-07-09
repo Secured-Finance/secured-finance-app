@@ -23,6 +23,26 @@ describe('CollateralInput component', () => {
         expect(screen.getByText('$500.00')).toBeInTheDocument();
     });
 
+    it('should call setFullCoverage with false when 50% button is clicked', () => {
+        const setFullCoverage = jest.fn();
+        render(<Default setFullCoverage={setFullCoverage} />);
+        const tab = screen.getByTestId(50);
+        fireEvent.click(tab);
+        expect(setFullCoverage).toHaveBeenCalledWith(false);
+        expect(screen.getByRole('textbox').getAttribute('value')).toBe('5');
+        expect(screen.getByText('$500.00')).toBeInTheDocument();
+    });
+
+    it('should call setFullCoverage with true when 100% button is clicked', () => {
+        const setFullCoverage = jest.fn();
+        render(<Default setFullCoverage={setFullCoverage} />);
+        const tab = screen.getByTestId(100);
+        fireEvent.click(tab);
+        expect(setFullCoverage).toHaveBeenCalledWith(true);
+        expect(screen.getByRole('textbox').getAttribute('value')).toBe('10');
+        expect(screen.getByText('$1,000.00')).toBeInTheDocument();
+    });
+
     it('should change fontsize according to length of input', async () => {
         render(<Default />);
         const input = screen.getByRole('textbox');
