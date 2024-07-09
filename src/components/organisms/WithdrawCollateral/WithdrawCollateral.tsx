@@ -136,6 +136,14 @@ export const WithdrawCollateral = ({
         }
     }, [asset, collateral, isFullCoverage, collateralList, collateralBigInt]);
 
+    useEffect(() => {
+        return () => {
+            setCollateral(undefined);
+            setCollateralBigInt(ZERO_BI);
+            setIsFullCoverage(false);
+        };
+    }, []);
+
     const { data: priceList } = useLastPrices();
     const { onWithdrawCollateral } = useWithdrawCollateral(
         asset,
