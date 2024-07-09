@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { HTMLAttributes, Ref, forwardRef, useState } from 'react';
-import Burger from 'src/assets/img/burger.svg';
+import Burger from 'src/assets/img/menu.svg';
 import SFLogoSmall from 'src/assets/img/small-logo.svg';
 import { CloseButton } from 'src/components/atoms';
 import { LinkList } from 'src/utils';
