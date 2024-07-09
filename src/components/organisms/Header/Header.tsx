@@ -263,10 +263,10 @@ const PointsTag = ({
                 }
             }}
             className={clsx(
-                'typography-mobile-body-5 tablet:typography-desktop-body-4 flex h-8 flex-shrink-0 items-center justify-center gap-1 rounded-lg bg-tertiary-700/30 px-2.5 py-[5px] font-semibold text-neutral-50 ring-1 ring-tertiary-500 hover:bg-tertiary-700 active:border-transparent tablet:h-10 tablet:rounded-xl tablet:ring-[1.5px]',
+                'typography-mobile-body-5 tablet:typography-desktop-body-4 flex h-8 flex-shrink-0 items-center justify-center gap-1 rounded-lg bg-neutral-800 px-2.5 py-[5px] font-semibold text-neutral-50 ring-1 ring-neutral-500 hover:bg-tertiary-700/10 hover:ring-tertiary-500 active:border-transparent tablet:h-10 tablet:rounded-xl tablet:pr-3 tablet:ring-[1.5px]',
                 {
-                    'tablet:pr-2.5': !showPoints,
-                    'tablet:pr-3': showPoints,
+                    'tablet:pl-3': !showPoints,
+                    'tablet:pl-2.5': showPoints,
                 }
             )}
             aria-label='Points Tag'
