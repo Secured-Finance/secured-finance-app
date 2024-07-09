@@ -117,6 +117,7 @@ const user = [
                         deposit: 100,
                         referral: 50,
                     },
+                    boostPercentage: 500,
                 },
             },
         },
