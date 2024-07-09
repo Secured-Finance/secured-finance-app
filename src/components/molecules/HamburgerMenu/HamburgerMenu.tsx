@@ -4,10 +4,9 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { HTMLAttributes, Ref, forwardRef, useState } from 'react';
-import Burger from 'src/assets/img/burger.svg';
+import Burger from 'src/assets/img/menu.svg';
 import SFLogoSmall from 'src/assets/img/small-logo.svg';
 import { CloseButton } from 'src/components/atoms';
-import { TRADING_LINKS } from 'src/components/organisms';
 import { LinkList } from 'src/utils';
 import { UrlObject } from 'url';
 
@@ -84,8 +83,6 @@ export const HamburgerMenu = ({
     links: { label: string; link: string }[];
 }) => {
     const [showMore, setShowMore] = useState<boolean>(false);
-    const [showTradingSublinks, setShowTradingSublinks] =
-        useState<boolean>(false);
 
     return (
         <Menu>
@@ -115,47 +112,6 @@ export const HamburgerMenu = ({
                                 <CloseButton onClick={close} />
                             </div>
                             <div className='w-full flex-col items-start text-primary-50'>
-                                <Menu.Item
-                                    as='div'
-                                    className='typography-mobile-h-6 flex w-full items-center'
-                                >
-                                    <button
-                                        onClick={e => {
-                                            e.preventDefault();
-                                            setShowTradingSublinks(
-                                                !showTradingSublinks
-                                            );
-                                        }}
-                                        aria-label='Trading'
-                                        className={clsx(
-                                            'flex items-center justify-between gap-2 px-2 py-1.5 text-center focus:outline-none'
-                                        )}
-                                    >
-                                        {TRADING_LINKS.text}
-                                        <ChevronRightIcon
-                                            className={clsx(
-                                                'relative top-[1px] inline h-6 w-6',
-                                                {
-                                                    'rotate-90':
-                                                        showTradingSublinks,
-                                                }
-                                            )}
-                                        />
-                                    </button>
-                                </Menu.Item>
-
-                                {showTradingSublinks && (
-                                    <div className='w-full px-4'>
-                                        {TRADING_LINKS.links.map(link => (
-                                            <MobileItemLink
-                                                key={link.text}
-                                                text={link.text}
-                                                href={link.link}
-                                            />
-                                        ))}
-                                    </div>
-                                )}
-
                                 {links.map(link => (
                                     <MenuItemLink
                                         key={link.label}
