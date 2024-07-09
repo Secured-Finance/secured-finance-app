@@ -117,6 +117,7 @@ const user = [
                         deposit: 100,
                         referral: 50,
                     },
+                    boostPercentage: 500,
                 },
             },
         },
@@ -179,6 +180,11 @@ const Template: StoryFn<typeof PointsDashboard> = () => {
 };
 
 export const Default = Template.bind({});
+
+export const NotConnected = Template.bind({});
+NotConnected.parameters = {
+    connected: false,
+};
 
 export const JoinedPointProgram = Template.bind({});
 JoinedPointProgram.parameters = {

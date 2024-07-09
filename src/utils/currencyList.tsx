@@ -335,7 +335,8 @@ export function hexToCurrencySymbol(hex: string) {
 
 const convertToBlockchainUnit = (amount: number | string, ccy: Currency) => {
     const value = new BigNumberJS(amount).multipliedBy(10 ** ccy.decimals);
-    if (value.isLessThan(new BigNumberJS(1))) {
+
+    if (value.isNaN() || value.isLessThan(new BigNumberJS(1))) {
         return ZERO_BI;
     }
     return BigInt(value.toString());
