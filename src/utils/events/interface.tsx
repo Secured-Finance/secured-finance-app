@@ -12,6 +12,8 @@ export enum OrderEvents {
 export enum ButtonEvents {
     DEPOSIT_COLLATERAL_BUTTON = 'Deposit Collateral Button',
     WITHDRAW_COLLATERAL_BUTTON = 'Withdraw Collateral Button',
+    DEPOSIT_ZC_TOKEN_BUTTON = 'Deposit ZC Token Button',
+    WITHDRAW_ZC_TOKEN_BUTTON = 'Withdraw ZC Token Button',
     PLACE_ORDER_BUTTON = 'Place Order Button',
     ORDER_TYPE = 'Order Type',
     ORDER_SIDE = 'Order Side',
