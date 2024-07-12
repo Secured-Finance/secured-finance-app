@@ -1,7 +1,7 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import { withWalletProvider } from 'src/../.storybook/decorators';
 import { emptyCollateralBook } from 'src/hooks';
-import { collateralBook37 } from 'src/stories/mocks/fixtures';
+import { collateralBook37, zcBonds } from 'src/stories/mocks/fixtures';
 import { CollateralOrganism } from './CollateralOrganism';
 
 export default {
@@ -10,6 +10,7 @@ export default {
     args: {
         collateralBook: emptyCollateralBook,
         netAssetValue: 0,
+        zcBonds: [],
     },
     decorators: [withWalletProvider],
 } as Meta<typeof CollateralOrganism>;
@@ -28,4 +29,5 @@ ConnectedToWallet.parameters = {
 ConnectedToWallet.args = {
     collateralBook: collateralBook37,
     netAssetValue: 12700.34,
+    zcBonds,
 };

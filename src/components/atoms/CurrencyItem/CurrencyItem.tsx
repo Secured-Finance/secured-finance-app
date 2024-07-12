@@ -11,6 +11,7 @@ import {
 export const CurrencyItem = ({
     amount,
     ccy,
+    label,
     price,
     align = 'left',
     color = 'neutral',
@@ -23,6 +24,7 @@ export const CurrencyItem = ({
 }: {
     amount?: number;
     ccy: CurrencySymbol;
+    label?: string;
     price?: number;
     align?: Alignment;
     compact?: boolean;
@@ -42,7 +44,9 @@ export const CurrencyItem = ({
     }
 
     let firstLine: string;
-    if (amount !== undefined) {
+    if (label !== undefined) {
+        firstLine = label;
+    } else if (amount !== undefined) {
         firstLine = ordinaryFormat(amount, minDecimals, maxDecimals);
         if (showCurrency) {
             firstLine += ` ${ccy}`;

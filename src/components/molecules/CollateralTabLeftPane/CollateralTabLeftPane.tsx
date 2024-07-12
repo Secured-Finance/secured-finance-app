@@ -1,28 +1,49 @@
 import { track } from '@amplitude/analytics-browser';
 import clsx from 'clsx';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
     AssetInformation,
+    AssetInformationValue,
     Button,
-    CollateralInformationTable,
     CollateralManagementConciseTab,
 } from 'src/components/atoms';
-import { CollateralBook, useCollateralCurrencies } from 'src/hooks';
+import { HorizontalTab } from 'src/components/molecules';
+import {
+    CollateralBook,
+    useCollateralCurrencies,
+    useLastPrices,
+} from 'src/hooks';
 import { RootState } from 'src/store/types';
 import {
     ButtonEvents,
     CurrencySymbol,
     ZERO_BI,
     amountFormatterFromBase,
+    convertFromGvUnit,
+    convertToZcTokenName,
     usdFormat,
 } from 'src/utils';
+import { Maturity } from 'src/utils/entities';
 
+export interface ZCBond {
+    currency: CurrencySymbol;
+    maturity?: Maturity;
+    amount: bigint;
+    tokenAmount: bigint;
+}
 interface CollateralTabLeftPaneProps {
     account: string | undefined;
-    onClick: (step: 'deposit' | 'withdraw') => void;
+    onClick: (
+        step:
+            | 'deposit'
+            | 'withdraw'
+            | 'deposit-zc-tokens'
+            | 'withdraw-zc-tokens'
+    ) => void;
     collateralBook: CollateralBook;
     netAssetValue: number;
+    zcBonds: ZCBond[];
 }
 
 const getInformationText = (collateralCurrencies: CurrencySymbol[]) => {
@@ -62,17 +83,34 @@ const checkAssetQuantityExist = (
     return exist;
 };
 
+export enum TableType {
+    TOKENS = 0,
+    ZC_BONDS,
+}
+
+const EMPTY_COLLATERAL_MESSAGE =
+    'Deposit collateral from your connected wallet to enable lending service on Secured Finance.';
+const PERPETUAL_ZC_BONDS_INFORMATION =
+    'Auto-rolled lending positions. These ZC Bonds can be withdrawn as Perpetual ZC Tokens based ERC20 standard. ' +
+    'These token amounts are counted with Genesis Value, expressed as the asset value of the Genesis Date.';
+const FIXED_MATURITY_ZC_BONDS_INFORMATION =
+    'Lending positions in each order book. These ZC Bonds can be withdrawn as fixed maturity ZC Tokens based ERC20 standard. ' +
+    'These token amounts are counted with Future Value.';
+
 export const CollateralTabLeftPane = ({
     account,
     onClick,
     collateralBook,
     netAssetValue,
+    zcBonds,
 }: CollateralTabLeftPaneProps) => {
+    const [selectedTable, setSelectedTable] = useState(TableType.TOKENS);
     const chainError = useSelector(
         (state: RootState) => state.blockchain.chainError
     );
 
     const { data: collateralCurrencies = [] } = useCollateralCurrencies();
+    const { data: priceList } = useLastPrices();
 
     const collateralQuantityExist = useMemo(() => {
         return checkAssetQuantityExist(collateralBook.collateral);
@@ -81,12 +119,72 @@ export const CollateralTabLeftPane = ({
         return checkAssetQuantityExist(collateralBook.nonCollateral);
     }, [collateralBook.nonCollateral]);
 
+    const [collateralInformation, nonCollateralInformation] = useMemo(() => {
+        return [collateralBook.collateral, collateralBook.nonCollateral].map(
+            collateral =>
+                Object.entries(collateral).reduce<AssetInformationValue[]>(
+                    (acc, [key, quantity]) => {
+                        const symbol = key as CurrencySymbol;
+                        const amount =
+                            amountFormatterFromBase[symbol](quantity);
+                        const price = priceList[symbol];
+                        acc.push({
+                            currency: symbol,
+                            label: key,
+                            amount,
+                            price,
+                            totalPrice: amount * price,
+                        });
+                        return acc;
+                    },
+                    []
+                )
+        );
+    }, [collateralBook, priceList]);
+
+    const [perpetualZcBonds, nonPerpetualZcBonds] = useMemo(() => {
+        const perpetualZcBonds: AssetInformationValue[] = [];
+        const nonPerpetualZcBonds: AssetInformationValue[] = [];
+
+        for (const zcBond of zcBonds) {
+            if (zcBond.maturity) {
+                nonPerpetualZcBonds.push({
+                    currency: zcBond.currency,
+                    label: convertToZcTokenName(
+                        zcBond.currency,
+                        zcBond.maturity
+                    ),
+                    amount: amountFormatterFromBase[zcBond.currency](
+                        zcBond.tokenAmount
+                    ),
+                    price: priceList[zcBond.currency],
+                    totalPrice:
+                        amountFormatterFromBase[zcBond.currency](
+                            zcBond.amount
+                        ) * priceList[zcBond.currency],
+                });
+            } else {
+                perpetualZcBonds.push({
+                    currency: zcBond.currency,
+                    label: convertToZcTokenName(zcBond.currency),
+                    amount: convertFromGvUnit(zcBond.tokenAmount),
+                    price: priceList[zcBond.currency],
+                    totalPrice:
+                        amountFormatterFromBase[zcBond.currency](
+                            zcBond.amount
+                        ) * priceList[zcBond.currency],
+                });
+            }
+        }
+        return [perpetualZcBonds, nonPerpetualZcBonds];
+    }, [zcBonds, priceList]);
+
     const totalCollateralInUSD = account ? collateralBook.usdCollateral : 0;
 
     return (
-        <div className='flex min-h-[400px] w-full flex-col border-white-10 tablet:w-64 tablet:border-r'>
-            <div className='flex-grow tablet:border-b tablet:border-white-10'>
-                <div className='m-6 flex flex-col gap-1'>
+        <div className='flex min-h-[400px] w-full flex-col border-white-10 tablet:w-80 tablet:border-r'>
+            <div className='flex-grow border-b border-white-10'>
+                <div className='flex flex-col gap-1 border-b border-white-10 p-4'>
                     <span className='typography-body-2 h-6 w-fit text-slateGray'>
                         Net Asset Value
                     </span>
@@ -113,35 +211,8 @@ export const CollateralTabLeftPane = ({
                         balance.
                     </div>
                 ) : (
-                    <div>
-                        <div className='mx-5 my-6 hidden flex-col gap-6 tablet:flex'>
-                            {collateralQuantityExist && (
-                                <AssetInformation
-                                    header='Collateral Assets'
-                                    informationText={getInformationText(
-                                        collateralCurrencies
-                                    )}
-                                    collateralBook={collateralBook.collateral}
-                                ></AssetInformation>
-                            )}
-                            {nonCollateralQuantityExist && (
-                                <AssetInformation
-                                    header='Non-collateral Assets'
-                                    informationText='Not eligible as collateral'
-                                    collateralBook={
-                                        collateralBook.nonCollateral
-                                    }
-                                ></AssetInformation>
-                            )}
-                            {!collateralQuantityExist && (
-                                <div className='typography-caption w-40 text-grayScale'>
-                                    Deposit collateral from your connected
-                                    wallet to enable lending service on Secured
-                                    Finance.
-                                </div>
-                            )}
-                        </div>
-                        <div className='mx-3 mt-6 flex flex-col gap-3 tablet:hidden'>
+                    <>
+                        <div className='flex flex-col gap-3 border-b border-white-10 px-3 py-6 tablet:hidden'>
                             <CollateralManagementConciseTab
                                 collateralCoverage={
                                     collateralBook.coverage / 100
@@ -155,68 +226,81 @@ export const CollateralTabLeftPane = ({
                                 account={account}
                                 totalCollateralInUSD={totalCollateralInUSD}
                             />
-                            {collateralQuantityExist && (
-                                <CollateralInformationTable
-                                    data={(
-                                        Object.entries(
-                                            collateralBook.collateral
-                                        ) as [CurrencySymbol, bigint][]
-                                    )
-                                        .filter(
-                                            ([_asset, quantity]) =>
-                                                quantity !== ZERO_BI
-                                        )
-                                        .map(([asset, quantity]) => {
-                                            return {
-                                                asset: asset,
-                                                quantity:
-                                                    amountFormatterFromBase[
-                                                        asset
-                                                    ](quantity),
-                                            };
-                                        })}
-                                    assetTitle='Collateral Asset'
-                                />
-                            )}
-                            {nonCollateralQuantityExist && (
-                                <CollateralInformationTable
-                                    data={(
-                                        Object.entries(
-                                            collateralBook.nonCollateral
-                                        ) as [CurrencySymbol, bigint][]
-                                    )
-                                        .filter(
-                                            ([_asset, quantity]) =>
-                                                quantity !== ZERO_BI
-                                        )
-                                        .map(([asset, quantity]) => {
-                                            return {
-                                                asset: asset,
-                                                quantity:
-                                                    amountFormatterFromBase[
-                                                        asset
-                                                    ](quantity),
-                                            };
-                                        })}
-                                    assetTitle='Non-Collateral Asset'
-                                />
-                            )}
-                            {!collateralQuantityExist && (
-                                <div className='typography-caption gap-2 text-grayScale'>
-                                    Deposit collateral from your connected
-                                    wallet to enable lending service on Secured
-                                    Finance.
-                                </div>
-                            )}
                         </div>
-                    </div>
+                        <HorizontalTab
+                            className='border-hidden'
+                            tabTitles={['Tokens', 'ZC Bonds']}
+                            onTabChange={setSelectedTable}
+                        >
+                            {/* Tokens Tab */}
+                            <div className='mx-4 my-1 flex-col gap-2 tablet:flex'>
+                                {collateralQuantityExist && (
+                                    <AssetInformation
+                                        header='Collateral'
+                                        informationText={getInformationText(
+                                            collateralCurrencies
+                                        )}
+                                        values={collateralInformation}
+                                    ></AssetInformation>
+                                )}
+                                {nonCollateralQuantityExist && (
+                                    <AssetInformation
+                                        header='Non-collateral'
+                                        informationText='Not eligible as collateral'
+                                        values={nonCollateralInformation}
+                                    ></AssetInformation>
+                                )}
+                                {!collateralQuantityExist && (
+                                    <div className='typography-caption pt-2 text-grayScale'>
+                                        {EMPTY_COLLATERAL_MESSAGE}
+                                    </div>
+                                )}
+                            </div>
+                            {/* ZC Bonds Tab */}
+                            <div className='mx-4 my-1 flex-col gap-2 tablet:flex'>
+                                {Object.keys(perpetualZcBonds).length > 0 && (
+                                    <AssetInformation
+                                        header='Perpetual'
+                                        informationText={
+                                            PERPETUAL_ZC_BONDS_INFORMATION
+                                        }
+                                        values={perpetualZcBonds}
+                                        isZC
+                                    />
+                                )}
+                                {Object.keys(nonPerpetualZcBonds).length >
+                                    0 && (
+                                    <AssetInformation
+                                        header='Fixed Maturity'
+                                        informationText={
+                                            FIXED_MATURITY_ZC_BONDS_INFORMATION
+                                        }
+                                        values={nonPerpetualZcBonds}
+                                        isZC
+                                    />
+                                )}
+                                {Object.keys(perpetualZcBonds).length === 0 &&
+                                    Object.keys(nonPerpetualZcBonds).length ===
+                                        0 && (
+                                        <div className='typography-caption pt-2 text-grayScale'>
+                                            No ZC Bonds Found.
+                                        </div>
+                                    )}
+                            </div>
+                        </HorizontalTab>
+                    </>
                 )}
             </div>
-            <div className='flex h-24 flex-row items-center justify-center gap-4 px-6'>
+            <div className='flex h-16 flex-row items-center justify-center gap-4 px-4'>
                 <Button
                     onClick={() => {
-                        onClick('deposit');
-                        track(ButtonEvents.DEPOSIT_COLLATERAL_BUTTON);
+                        if (selectedTable === TableType.TOKENS) {
+                            onClick('deposit');
+                            track(ButtonEvents.DEPOSIT_COLLATERAL_BUTTON);
+                        } else {
+                            onClick('deposit-zc-tokens');
+                            track(ButtonEvents.DEPOSIT_ZC_TOKEN_BUTTON);
+                        }
                     }}
                     disabled={!account || chainError}
                     data-testid='deposit-collateral'
@@ -227,8 +311,13 @@ export const CollateralTabLeftPane = ({
                 <Button
                     disabled={!account || netAssetValue <= 0 || chainError}
                     onClick={() => {
-                        onClick('withdraw');
-                        track(ButtonEvents.WITHDRAW_COLLATERAL_BUTTON);
+                        if (selectedTable === TableType.TOKENS) {
+                            onClick('withdraw');
+                            track(ButtonEvents.WITHDRAW_COLLATERAL_BUTTON);
+                        } else {
+                            onClick('withdraw-zc-tokens');
+                            track(ButtonEvents.WITHDRAW_ZC_TOKEN_BUTTON);
+                        }
                     }}
                     data-testid='withdraw-collateral'
                     fullWidth={true}

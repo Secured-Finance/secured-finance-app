@@ -15,14 +15,14 @@ describe('test AssetInformation component', () => {
         expect(screen.getByText('Collateral Assets')).toBeInTheDocument();
         expect(screen.getByText('ETH')).toBeInTheDocument();
 
-        expect(await screen.findByText('$2,000.34')).toBeInTheDocument();
+        expect(await screen.findByText('$123.00')).toBeInTheDocument();
         expect(screen.getByText('1.200')).toBeInTheDocument();
-        expect(screen.getByText('$2,400.41')).toBeInTheDocument();
+        expect(screen.getByText('$1,234.00')).toBeInTheDocument();
 
         expect(screen.getByText('USDC')).toBeInTheDocument();
-        expect(screen.getByText('$1.00')).toBeInTheDocument();
-        expect(screen.getByText('10')).toBeInTheDocument();
-        expect(screen.getByText('$10.00')).toBeInTheDocument();
+        expect(screen.getByText('$1.01')).toBeInTheDocument();
+        expect(screen.getByText('1,000')).toBeInTheDocument();
+        expect(screen.getByText('$1,010.00')).toBeInTheDocument();
     });
 
     it('should display the information popover on mouse enter', async () => {
@@ -40,13 +40,13 @@ describe('test AssetInformation component', () => {
         render(<ZeroUsdcCollateral />);
         expect(screen.getByText('Collateral Assets')).toBeInTheDocument();
         expect(screen.getByText('ETH')).toBeInTheDocument();
-        expect(await screen.findByText('$2,000.34')).toBeInTheDocument();
+        expect(await screen.findByText('$123.00')).toBeInTheDocument();
         expect(screen.getByText('1.200')).toBeInTheDocument();
-        expect(screen.getByText('$2,400.41')).toBeInTheDocument();
+        expect(screen.getByText('$1,234.00')).toBeInTheDocument();
 
         expect(screen.queryByText('USDC')).not.toBeInTheDocument();
-        expect(screen.queryByText('$1')).not.toBeInTheDocument();
-        expect(screen.queryByText('10 USDC')).not.toBeInTheDocument();
-        expect(screen.queryByText('$10')).not.toBeInTheDocument();
+        expect(screen.queryByText('$1.01')).not.toBeInTheDocument();
+        expect(screen.queryByText('1,000')).not.toBeInTheDocument();
+        expect(screen.queryByText('$1,010.00')).not.toBeInTheDocument();
     });
 });
