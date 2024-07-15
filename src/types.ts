@@ -1,7 +1,7 @@
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { Option } from 'src/components/atoms';
-import { Maturity } from 'src/utils/entities';
+import { LoanValue, Maturity } from 'src/utils/entities';
 import { Hex } from 'viem';
 import { useAccount } from 'wagmi';
 import { CurrencySymbol } from './utils';
@@ -107,3 +107,9 @@ export enum HistoricalDataIntervals {
     '1W' = '604800',
     '1MTH' = '2592000',
 }
+
+export type CurrentMarket = {
+    value: LoanValue;
+    time: number;
+    type: 'opening' | 'block';
+};

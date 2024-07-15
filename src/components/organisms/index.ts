@@ -12,6 +12,7 @@ export * from './Header';
 export * from './HistoricalWidget';
 export * from './LendingCard';
 export * from './LineChartTab';
+export * from './MarketInfoDialog';
 export * from './MarketLoanWidget';
 export * from './MultiCurveChart';
 export * from './MyTransactionsTable';

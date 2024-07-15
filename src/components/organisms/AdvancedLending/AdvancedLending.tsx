@@ -78,14 +78,22 @@ const useTradeHistoryDetails = (
         let max = 0;
         let sum = ZERO_BI;
         let count = 0;
+        let minFirst = undefined; // Initialize minFirst to true
+
         if (!transactions.length) {
             min = 0;
             max = 0;
         }
         for (const t of transactions) {
             const price = t.averagePrice * 10000;
-            if (price < min) min = price;
-            if (price > max) max = price;
+            if (price < min) {
+                min = price;
+                minFirst = true; // Set minFirst to true if a new minimum is encountered
+            }
+            if (price > max) {
+                max = price;
+                minFirst = false; // Set minFirst to false if a new maximum is encountered
+            }
             sum += BigInt(t.amount);
             count++;
         }
@@ -95,6 +103,7 @@ const useTradeHistoryDetails = (
             max: LoanValue.fromPrice(max, maturity.toNumber()),
             sum: currencyMap[currency].fromBaseUnit(sum),
             count,
+            minFirst,
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currency, maturity.toNumber(), transactions.length]);
@@ -215,6 +224,8 @@ export const AdvancedLending = ({
         currency,
         maturity
     );
+
+    console.log('orderBook', orderBook);
 
     const filteredOrderList = useMarketOrderList(address, currency, maturity);
 
@@ -358,6 +369,15 @@ export const AdvancedLending = ({
                                                 tradeHistoryDetails.sum
                                             )
                                           : '-',
+                                      formatLoanValue(
+                                          tradeHistoryDetails.max,
+                                          'rate'
+                                      ),
+                                      formatLoanValue(
+                                          tradeHistoryDetails.min,
+                                          'rate'
+                                      ),
+                                      tradeHistoryDetails.minFirst,
                                   ]
                                 : undefined
                         }
