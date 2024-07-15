@@ -7,17 +7,14 @@ import { formatDate } from '@secured-finance/sf-core';
 import {
     QuestType,
     useGetQuestsQuery,
-    useGetUserLazyQuery,
     useGetUsersQuery,
     useNonceLazyQuery,
-    useVerifyMutation,
 } from '@secured-finance/sf-point-client';
 import { capitalCase, snakeCase } from 'change-case';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
-import { useEffect, useMemo, useState } from 'react';
-import { useCookies } from 'react-cookie';
+import { useMemo, useState } from 'react';
 import CountUp from 'react-countup';
 import { useDispatch, useSelector } from 'react-redux';
 import { SiweMessage } from 'siwe';
@@ -40,7 +37,11 @@ import {
     generateCollateralList,
 } from 'src/components/organisms';
 import { Page, TwoColumns } from 'src/components/templates';
-import { useCollateralBalances, useCollateralCurrencies } from 'src/hooks';
+import {
+    useCollateralBalances,
+    useCollateralCurrencies,
+    usePoints,
+} from 'src/hooks';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
 import {
@@ -130,6 +131,12 @@ const ReferralCode = ({ code }: { code: string }) => {
 };
 
 const UserPointInfo = ({ chainId }: { chainId: number }) => {
+    const {
+        user: { loading: loadingUser, data: userData },
+        verifiedData,
+        verify,
+        loading,
+    } = usePoints();
     const searchParams = new URLSearchParams(document.location.search);
     const referralCode = searchParams.get('ref');
     const questTypes = [
@@ -139,61 +146,17 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
         QuestType.ActivePosition,
         QuestType.Referral,
     ];
-    const [cookies, setCookie, removeCookie] = useCookies();
     const [getNonce] = useNonceLazyQuery({
         fetchPolicy: 'no-cache',
         ...POINT_API_QUERY_OPTIONS,
     });
     const { isLoading, signMessageAsync, reset } = useSignMessage();
     const { address, isConnected } = useAccount();
-    const [verify, { data: verifyData, loading, error }] = useVerifyMutation(
-        POINT_API_QUERY_OPTIONS
-    );
-    const [getUser, { data: userData, loading: loadingUser, refetch }] =
-        useGetUserLazyQuery({
-            pollInterval: POLL_INTERVAL,
-            ...POINT_API_QUERY_OPTIONS,
-        });
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        if (verifyData) {
-            const expires = dayjs().add(1, 'day').toDate();
-            const verifiedData = {
-                token: verifyData?.verify.token,
-                walletAddress: verifyData?.verify.walletAddress,
-            };
-            setCookie('verified_data', verifiedData, {
-                expires,
-            });
-        }
-    }, [verifyData, setCookie]);
-
-    useEffect(() => {
-        if (cookies.verified_data) {
-            userData?.user.walletAddress &&
-            userData?.user.walletAddress !== address
-                ? refetch()
-                : getUser();
-        }
-    }, [
-        cookies.verified_data,
-        getUser,
-        address,
-        userData?.user.walletAddress,
-        refetch,
-    ]);
-
-    useEffect(() => {
-        const walletAddress = cookies.verified_data?.walletAddress;
-        if (error || (walletAddress && walletAddress !== address)) {
-            removeCookie('verified_data');
-        }
-    }, [error, removeCookie, cookies.verified_data, address]);
 
     return (
         <GradientBox>
-            {cookies.verified_data && userData ? (
+            {verifiedData && address && userData ? (
                 <>
                     <div className='items-center pb-2 pt-8 text-center text-lg font-bold text-white'>
                         Total Points
