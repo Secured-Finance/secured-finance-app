@@ -59,25 +59,34 @@ export const MyTransactionsTable = ({
     const isTablet = useBreakpoint('laptop');
     const columns = useMemo(
         () => [
-            loanTypeColumnDefinition(columnHelper, 'Type', 'type'),
             contractColumnDefinition(
                 columnHelper,
-                'Contract',
+                'Symbol',
                 'contract',
-                variant
+                variant,
+                undefined,
+                'left',
+                'left'
             ),
-            amountColumnDefinition(
-                columnHelper,
-                'Amount',
-                'amount',
-                row => row.amount,
-                { compact: true, color: true, fontSize: 'typography-caption-2' }
-            ),
-            priceYieldColumnDef('Price/DF', 'price', 'price'),
+            loanTypeColumnDefinition(columnHelper, 'Type', 'type'),
+            priceYieldColumnDef('Price', 'price', 'price'),
             priceYieldColumnDef('APR%', 'apr', 'rate'),
             amountColumnDefinition(
                 columnHelper,
-                'FV',
+                'Executed Amount',
+                'amount',
+                row => row.amount,
+                {
+                    compact: true,
+                    color: false,
+                    fontSize: 'typography-caption-2',
+                },
+                '',
+                'right'
+            ),
+            amountColumnDefinition(
+                columnHelper,
+                'Future Value (FV)',
                 'futureValue',
                 row =>
                     getFVWithFee(
@@ -87,9 +96,11 @@ export const MyTransactionsTable = ({
                     ),
                 {
                     compact: true,
-                    color: true,
+                    color: false,
                     fontSize: 'typography-caption-2',
-                }
+                },
+                '',
+                'right'
             ),
         ],
         [variant]
@@ -109,6 +120,8 @@ export const MyTransactionsTable = ({
                 name: 'my-transactions-table',
                 stickyFirstColumn: true,
                 pagination: pagination,
+                border: false,
+                compact: true,
             }}
         />
     );

@@ -119,7 +119,7 @@ export const HorizontalTab = ({
                         })}
                     </div>
                 </HeadlessTab.List>
-                <HeadlessTab.Panels className='h-full min-h-[25vh] bg-neutral-900 pb-2 tablet:rounded-b-xl'>
+                <HeadlessTab.Panels className='h-full min-h-[350px] bg-neutral-900 pb-2 tablet:rounded-b-xl'>
                     {arrayChildren[selectedIndex]}
                 </HeadlessTab.Panels>
             </div>

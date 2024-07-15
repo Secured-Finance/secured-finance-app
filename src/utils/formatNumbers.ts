@@ -86,6 +86,21 @@ export const formatTimestamp = (timestamp: number) => {
     }).format(date);
 };
 
+export const formatTimestampDDMMYY = (timestamp: number) => {
+    const date = new Date(timestamp * 1000);
+    const formattedDate = new Intl.DateTimeFormat('en-GB', {
+        day: '2-digit',
+        month: '2-digit',
+        year: '2-digit',
+        timeZone: 'UTC',
+    }).format(date);
+
+    const hours = date.getUTCHours().toString().padStart(2, '0');
+    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+
+    return `${formattedDate}, ${hours}:${minutes}`;
+};
+
 export const formatTimestampWithMonth = (timestamp: number) => {
     const date = new Date(timestamp * 1000);
 

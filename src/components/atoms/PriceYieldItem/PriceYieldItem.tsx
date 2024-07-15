@@ -16,20 +16,19 @@ export const PriceYieldItem = ({
 }) => {
     return (
         <div
-            className={clsx('flex w-12 flex-col', {
+            className={clsx('flex flex-col', {
                 'text-right': align === 'right',
                 'text-center': align === 'center',
                 'text-left': align === 'left',
+                'w-12': !compact,
+                'w-fit': compact,
             })}
         >
             <span
-                className={clsx(
-                    {
-                        'typography-caption-2': compact === true,
-                        'typography-caption': compact === false,
-                    },
-                    'h-6 text-neutral-6'
-                )}
+                className={clsx({
+                    'typography-caption-2 text-white': compact,
+                    'typography-caption h-6 text-neutral-6': !compact,
+                })}
             >
                 {formatLoanValue(loanValue, firstLineType)}
             </span>

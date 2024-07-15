@@ -36,7 +36,7 @@ export const TableContractCell = ({
             return `${ccy}`;
         if (variant === 'contractOnly')
             return `${getUTCMonthYear(maturity.toNumber())}`;
-        return `${ccy}-${getUTCMonthYear(maturity.toNumber())}`;
+        return `${ccy}-${getUTCMonthYear(maturity.toNumber(), true)}`;
     }, [ccy, maturity, variant]);
 
     const iconSize = useMemo(() => {
@@ -64,9 +64,11 @@ export const TableContractCell = ({
     return (
         <div className='flex flex-col'>
             <div
-                className={clsx('flex h-6 flex-row justify-start gap-2', {
+                className={clsx('flex flex-row items-center justify-start', {
                     'tablet:w-32':
                         variant !== 'contractOnly' && variant !== 'compact',
+                    'h-fit gap-1': variant === 'compact',
+                    'h-6 gap-2': variant !== 'compact',
                 })}
             >
                 {variant !== 'contractOnly' ? (
@@ -82,7 +84,7 @@ export const TableContractCell = ({
                         <CurrencyIcon ccy={ccy} variant={iconSize} />
                     </div>
                 ) : null}
-                <span className='typography-caption-2 text-neutral-6'>
+                <span className='typography-desktop-body-5 text-neutral-6'>
                     {contract}
                 </span>
                 {delistedContractSide !== undefined && (

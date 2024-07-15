@@ -15,7 +15,7 @@ export const CurrencyIcon = ({
             className={clsx({
                 'h-6 w-6': variant === 'default',
                 'h-9 w-9': variant === 'large',
-                'h-5 w-5': variant === 'small',
+                'h-4 w-4': variant === 'small',
                 'h-[18px] w-[18px]': variant === 'campaign',
             })}
             role='img'
