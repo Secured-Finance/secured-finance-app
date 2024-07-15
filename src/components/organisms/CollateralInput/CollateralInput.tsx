@@ -9,6 +9,8 @@ interface CollateralInputProps {
     asset: CurrencySymbol;
     onAmountChange?: (v: string | undefined) => void;
     amount: string | undefined;
+    fullCoverage: boolean;
+    setFullCoverage: (v: boolean) => void;
 }
 
 export const CollateralInput = ({
@@ -16,6 +18,8 @@ export const CollateralInput = ({
     availableAmount,
     onAmountChange,
     amount,
+    fullCoverage,
+    setFullCoverage,
 }: CollateralInputProps) => {
     const handleAmountChange = useCallback(
         (inputAmount: string | undefined) => {
@@ -27,25 +31,34 @@ export const CollateralInput = ({
             ) {
                 return;
             }
+            if (fullCoverage) {
+                // to enable typing to edit value
+                setFullCoverage(false);
+            }
             if (onAmountChange) {
                 onAmountChange(inputAmount);
             }
         },
-        [amount, onAmountChange]
+        [amount, onAmountChange, fullCoverage, setFullCoverage]
     );
 
     const handleClick = useCallback(
         (percentage: number) => {
+            if (percentage === 1) {
+                setFullCoverage(true);
+                return;
+            }
+
+            setFullCoverage(false);
+
             const amount =
-                percentage === 1
-                    ? availableAmount
-                    : Math.floor(percentage * availableAmount * 10000) /
-                      10000.0;
+                Math.floor(percentage * availableAmount * 10000) / 10000.0;
+
             if (onAmountChange) {
                 onAmountChange(amount.toString());
             }
         },
-        [availableAmount, onAmountChange]
+        [availableAmount, onAmountChange, setFullCoverage]
     );
 
     return (

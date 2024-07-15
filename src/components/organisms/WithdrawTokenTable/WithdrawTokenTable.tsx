@@ -43,6 +43,7 @@ export const WithdrawTokenTable = ({ data }: { data: TokenPosition[] }) => {
                 [ccy]: {
                     symbol: ccy,
                     name: currencyMap[ccy].name,
+                    availableFullValue: amount,
                     available: amountFormatterFromBase[ccy](amount),
                 },
             };
