@@ -4,12 +4,12 @@ import { ordinaryFormat } from 'src/utils';
 
 export interface MarketTabProps {
     name: string;
-    value: string | number;
+    value?: string | number | boolean;
     source?: string;
     variant?: 'default' | 'green-name' | 'gray-name';
     label?: string;
 }
-
+// typography - caption;
 export const MarketTab = ({
     name,
     value,
@@ -20,7 +20,6 @@ export const MarketTab = ({
     return (
         <section
             className={clsx('flex h-fit flex-grow flex-col', {
-                'gap-1': variant === 'default',
                 'gap-[1.5px]': variant === 'green-name',
             })}
             aria-label={label ?? name}
@@ -31,7 +30,7 @@ export const MarketTab = ({
                         variant === 'green-name',
                     'typography-button-3 whitespace-nowrap leading-8 text-slateGray':
                         variant === 'gray-name',
-                    'whitespace-nowrap text-[11px] leading-4 text-slateGray laptop:text-xs':
+                    'laptop:typography-caption-2 whitespace-nowrap text-[11px] text-neutral-400':
                         variant === 'default',
                 })}
             >
@@ -44,7 +43,7 @@ export const MarketTab = ({
                             variant === 'green-name',
                         'typography-caption whitespace-nowrap text-slateGray':
                             variant === 'gray-name',
-                        'text-sm font-semibold leading-5 text-neutral-8 laptop:font-normal':
+                        'typography-caption leading-4 text-neutral-50 desktop:leading-6':
                             variant === 'default',
                     },
                     'flex items-center'

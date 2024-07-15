@@ -1,6 +1,10 @@
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
 import { MAX_COVERAGE } from './collateral';
 import { divide } from './currencyList';
 import { LoanValue } from './entities';
+
+dayjs.extend(duration);
 
 export const usdFormat = (
     number: number | bigint,
@@ -104,4 +108,22 @@ export const formatTimeStampWithTimezone = (timestamp: number) => {
     return new Intl.DateTimeFormat('en-GB', {
         timeStyle: 'long',
     }).format(date);
+};
+
+const padNumber = (num: number, length: number): string => {
+    return num.toString().padStart(length, '0');
+};
+
+export const formatRemainingTime = (seconds: number): string => {
+    const remainingDuration = dayjs.duration(seconds, 'seconds');
+    const months = remainingDuration.months();
+    const days = remainingDuration.days() + months * 30; // Convert months to days
+    const hours = remainingDuration.hours();
+    const minutes = remainingDuration.minutes();
+    const secs = remainingDuration.seconds();
+
+    return `${padNumber(days, 2)}:${padNumber(hours, 2)}:${padNumber(
+        minutes,
+        2
+    )}:${padNumber(secs, 2)}`;
 };
