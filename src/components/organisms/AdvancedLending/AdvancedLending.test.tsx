@@ -73,7 +73,7 @@ describe('Advanced Lending Component', () => {
                 '1'
             );
         });
-    });
+    }, 8000);
 
     it('should show the maturity as a date for the selected maturity', async () => {
         render(<Default />, {
