@@ -4,12 +4,12 @@ import { ordinaryFormat } from 'src/utils';
 
 export interface MarketTabProps {
     name: string;
-    value?: string | number | boolean;
+    value?: number | React.ReactNode;
     source?: string;
     variant?: 'default' | 'green-name' | 'gray-name';
     label?: string;
 }
-// typography - caption;
+
 export const MarketTab = ({
     name,
     value,

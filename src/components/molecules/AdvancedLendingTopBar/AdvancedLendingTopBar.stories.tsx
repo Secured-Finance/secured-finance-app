@@ -45,6 +45,6 @@ export const Default = Template.bind({});
 
 export const Values = Template.bind({});
 Values.args = {
-    values: ['26.16', '24.2', '894', '10,000,000'],
+    // values: ['26.16', '24.2', '894', '10,000,000'],
     currencyPrice: '23000',
 };

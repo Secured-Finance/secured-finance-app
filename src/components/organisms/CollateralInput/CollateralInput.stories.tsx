@@ -28,7 +28,9 @@ const Template: StoryFn<typeof CollateralInput> = args => {
     const handleCoverage = (value: boolean) => {
         setIsFullCoverage(value);
         args.setFullCoverage(value);
-        setValue(args.availableAmount.toString());
+        if (value) {
+            setValue(args.availableAmount.toString());
+        }
     };
 
     return (
