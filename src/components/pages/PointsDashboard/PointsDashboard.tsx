@@ -19,7 +19,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import CountUp from 'react-countup';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { SiweMessage } from 'siwe';
 import {
     Button,
@@ -41,6 +41,7 @@ import {
 } from 'src/components/organisms';
 import { Page, TwoColumns } from 'src/components/templates';
 import { useCollateralBalances, useCollateralCurrencies } from 'src/hooks';
+import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
@@ -153,6 +154,7 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
             pollInterval: POLL_INTERVAL,
             ...POINT_API_QUERY_OPTIONS,
         });
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (verifyData) {
@@ -314,6 +316,11 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
                                 className='mx-auto mt-4'
                                 size={ButtonSizes.lg}
                                 onClick={async () => {
+                                    if (!isConnected) {
+                                        dispatch(setWalletDialogOpen(true));
+                                        return;
+                                    }
+
                                     const { data } = await getNonce();
 
                                     const message = new SiweMessage({
@@ -344,7 +351,7 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
 
                                     reset();
                                 }}
-                                disabled={!isConnected || isLoading || loading}
+                                disabled={isLoading || loading}
                             >
                                 {!isConnected ? 'Connect Wallet' : 'Join'}
                             </Button>
@@ -669,30 +676,32 @@ const Leaderboard = () => {
 export const PointsDashboard = () => {
     const chainId = useSelector((state: RootState) => state.blockchain.chainId);
     return (
-        <Page title='Point Dashboard' name='point-dashboard'>
-            <div className='px-3 laptop:px-0'>
-                <Alert
-                    title={
-                        <>
-                            Earn SF Points with Your Contributions to the
-                            Secured Finance Protocol. Learn more about the
-                            points system and calculations at the&nbsp;
-                            <TextLink
-                                href='https://docs.secured.finance/top/secured-finance-points-sfp'
-                                text='Secured Finance Docs'
-                            />
-                        </>
-                    }
-                    isShowCloseButton={false}
-                />
-            </div>
-            <TwoColumns>
-                <div className='grid grid-cols-1 gap-y-7'>
-                    <UserPointInfo chainId={chainId} />
-                    <QuestList chainId={chainId} />
+        <>
+            <Page title='Point Dashboard' name='point-dashboard'>
+                <div className='px-3 laptop:px-0'>
+                    <Alert
+                        title={
+                            <>
+                                Earn SF Points with Your Contributions to the
+                                Secured Finance Protocol. Learn more about the
+                                points system and calculations at the&nbsp;
+                                <TextLink
+                                    href='https://docs.secured.finance/top/secured-finance-points-sfp'
+                                    text='Secured Finance Docs'
+                                />
+                            </>
+                        }
+                        isShowCloseButton={false}
+                    />
                 </div>
-                <Leaderboard />
-            </TwoColumns>
-        </Page>
+                <TwoColumns>
+                    <div className='grid grid-cols-1 gap-y-7'>
+                        <UserPointInfo chainId={chainId} />
+                        <QuestList chainId={chainId} />
+                    </div>
+                    <Leaderboard />
+                </TwoColumns>
+            </Page>
+        </>
     );
 };

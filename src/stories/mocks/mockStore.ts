@@ -12,6 +12,7 @@ export const initialStore = {
         chainId: 11155111,
         chainError: false,
         testnetEnabled: true,
+        isChainIdDetected: true,
     },
     landingOrderForm: {
         currency: CurrencySymbol.WFIL,

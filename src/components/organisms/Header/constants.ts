@@ -1,5 +1,11 @@
 export const PRODUCTION_LINKS = [
     {
+        text: 'Trading',
+        link: '/',
+        alternateLinks: ['/global-itayose', '/itayose'],
+        dataCy: 'trading',
+    },
+    {
         text: 'Markets',
         link: '/dashboard',
         dataCy: 'terminal',

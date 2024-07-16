@@ -1,4 +1,4 @@
-import { useCallback, useReducer, useState } from 'react';
+import { useCallback, useEffect, useReducer, useState } from 'react';
 import { CollateralSelector, Spinner } from 'src/components/atoms';
 import {
     Dialog,
@@ -18,6 +18,7 @@ import {
     CollateralEvents,
     CollateralInfo,
     CurrencySymbol,
+    ZERO_BI,
     amountFormatterFromBase,
     amountFormatterToBase,
     formatAmount,
@@ -116,9 +117,22 @@ export const DepositCollateral = ({
         'Your deposit transaction has failed.'
     );
     const [txHash, setTxHash] = useState<string | undefined>();
-    const collateralBigInt = amountFormatterToBase[asset](
-        Number(collateral ?? '')
-    );
+
+    const [collateralBigInt, setCollateralBigInt] = useState<bigint>(ZERO_BI);
+    const [isFullCoverage, setIsFullCoverage] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (!isFullCoverage) {
+            setCollateralBigInt(
+                amountFormatterToBase[asset](Number(collateral ?? ''))
+            );
+        } else {
+            setCollateralBigInt(
+                collateralList[asset]?.availableFullValue ?? ZERO_BI
+            );
+            setCollateral(collateralList[asset]?.available.toString());
+        }
+    }, [asset, collateral, isFullCoverage, collateralList, collateralBigInt]);
 
     const { data: priceList } = useLastPrices();
     const { onDepositCollateral } = useDepositCollateral(
@@ -129,6 +143,11 @@ export const DepositCollateral = ({
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
+
+        setCollateral(undefined);
+        setCollateralBigInt(ZERO_BI);
+        setIsFullCoverage(false);
+
         if (state.currentStep === Step.depositCollateral) {
             trackButtonEvent(
                 ButtonEvents.CANCEL_BUTTON,
@@ -140,6 +159,7 @@ export const DepositCollateral = ({
     }, [onClose, state.currentStep]);
 
     const optionList = Object.values(collateralList);
+
     const defaultCcyIndex = optionList.findIndex(
         col => col.symbol === defaultCcySymbol
     );
@@ -155,9 +175,7 @@ export const DepositCollateral = ({
             state.currentStep === Step.depositCollateral &&
             (!collateralBigInt ||
                 collateralBigInt >
-                    amountFormatterToBase[asset](
-                        collateralList[asset]?.available ?? 0
-                    ))
+                    (collateralList[asset]?.availableFullValue ?? ZERO_BI))
         );
     }, [asset, collateralBigInt, collateralList, state.currentStep]);
 
@@ -213,7 +231,9 @@ export const DepositCollateral = ({
     );
 
     const handleChange = useCallback((v: CollateralInfo) => {
+        setIsFullCoverage(false);
         setCollateral(undefined);
+        setCollateralBigInt(ZERO_BI);
         setAsset(v.symbol);
     }, []);
 
@@ -242,6 +262,8 @@ export const DepositCollateral = ({
                                     price={priceList[asset]}
                                     asset={asset}
                                     onAmountChange={setCollateral}
+                                    fullCoverage={isFullCoverage}
+                                    setFullCoverage={setIsFullCoverage}
                                     availableAmount={
                                         collateralList[asset]?.available ?? 0
                                     }

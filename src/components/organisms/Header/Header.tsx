@@ -2,7 +2,7 @@ import { useGetUserLazyQuery } from '@secured-finance/sf-point-client';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import { useDispatch, useSelector } from 'react-redux';
 import Badge from 'src/assets/icons/badge.svg';
@@ -20,11 +20,7 @@ import {
     NetworkSelector,
     Settings,
 } from 'src/components/molecules';
-import {
-    ConnectWalletDialog,
-    WalletDialog,
-    WalletPopover,
-} from 'src/components/organisms';
+import { WalletDialog, WalletPopover } from 'src/components/organisms';
 import { useBreakpoint } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
@@ -33,20 +29,21 @@ import { getSupportedNetworks } from 'src/utils';
 import { AddressUtils } from 'src/utils/address';
 import { isProdEnv } from 'src/utils/displayUtils';
 import { useAccount } from 'wagmi';
-import { TradingDropdown } from './TradingDropdown';
 import { DEV_LINKS, PRODUCTION_LINKS } from './constants';
 
 const POLL_INTERVAL = 600000; // 10 minutes
 const POINT_API_QUERY_OPTIONS = { context: { type: 'point-dashboard' } };
 
 const HeaderMessage = ({
+    isChainIdDetected,
     chainId,
     chainError,
 }: {
+    isChainIdDetected: boolean;
     chainId: number;
     chainError: boolean;
 }) => {
-    if (chainId) {
+    if (chainId && isChainIdDetected) {
         if (chainError) {
             return (
                 <div
@@ -76,8 +73,6 @@ const HeaderMessage = ({
 };
 
 const Header = ({ showNavigation }: { showNavigation: boolean }) => {
-    const [isConnectWalletDialogOpen, setIsConnectWalletDialogOpen] =
-        useState<boolean>(false);
     const dispatch = useDispatch();
     const isMobile = useBreakpoint('tablet');
     const { address, isConnected } = useAccount();
@@ -113,6 +108,9 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     const currentChainId = useSelector(
         (state: RootState) => state.blockchain.chainId
     );
+    const isChainIdDetected = useSelector(
+        (state: RootState) => state.blockchain.isChainIdDetected
+    );
     const isProduction = isProdEnv();
 
     const LINKS = isProduction ? PRODUCTION_LINKS : DEV_LINKS;
@@ -123,6 +121,7 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
         <>
             <div className='relative'>
                 <HeaderMessage
+                    isChainIdDetected={isChainIdDetected}
                     chainId={currentChainId}
                     chainError={chainError}
                 />
@@ -137,7 +136,6 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                         </Link>
                         {showNavigation && (
                             <div className='hidden h-full flex-row laptop:flex'>
-                                <TradingDropdown />
                                 {LINKS.map(link => (
                                     <div
                                         key={link.text}
@@ -147,6 +145,9 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                                             text={link.text}
                                             dataCy={link.dataCy}
                                             link={link.link}
+                                            alternateLinks={
+                                                link?.alternateLinks
+                                            }
                                         />
                                     </div>
                                 ))}
@@ -158,9 +159,6 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                         <PointsTag
                             isConnected={isConnected}
                             points={userPoints}
-                            handleOpenConnectWalletDialog={() =>
-                                setIsConnectWalletDialogOpen(true)
-                            }
                         />
                         {isConnected && address ? (
                             <>
@@ -171,10 +169,7 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                                     }
                                 />
                                 <WalletPopover
-                                    wallet={AddressUtils.format(
-                                        address,
-                                        isMobile ? 2 : 6
-                                    )}
+                                    wallet={AddressUtils.format(address, 6)}
                                     networkName={
                                         securedFinance?.config?.network ??
                                         'Unknown'
@@ -205,14 +200,6 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                         </div>
                     </div>
                     <WalletDialog />
-                    <ConnectWalletDialog
-                        isOpen={isConnectWalletDialogOpen}
-                        onClose={() => setIsConnectWalletDialogOpen(false)}
-                        handleConnectWallet={() => {
-                            setIsConnectWalletDialogOpen(false);
-                            dispatch(setWalletDialogOpen(true));
-                        }}
-                    />
                 </nav>
             </div>
         </>
@@ -252,11 +239,9 @@ const ItemLink = ({
 const PointsTag = ({
     points,
     isConnected,
-    handleOpenConnectWalletDialog,
 }: {
     points?: number;
     isConnected: boolean;
-    handleOpenConnectWalletDialog: () => void;
 }) => {
     const router = useRouter();
     const showPoints = isConnected && points;
@@ -273,29 +258,24 @@ const PointsTag = ({
         }
     }
 
-    const handleOnClick = () => {
-        if (isConnected) {
-            router.pathname !== '/points' && router.push('/points');
-            return;
-        }
-
-        handleOpenConnectWalletDialog();
-    };
-
     return (
         <button
-            onClick={() => handleOnClick()}
+            onClick={() => {
+                if (router.pathname !== '/points') {
+                    router.push('/points');
+                }
+            }}
             className={clsx(
-                'typography-mobile-body-5 tablet:typography-desktop-body-4 flex h-8 flex-shrink-0 items-center justify-center gap-1 rounded-lg bg-tertiary-700/30 px-2.5 py-[5px] font-semibold text-neutral-50 ring-1 ring-tertiary-500 hover:bg-tertiary-700 active:border-transparent tablet:h-10 tablet:rounded-xl tablet:ring-[1.5px]',
+                'typography-mobile-body-5 tablet:typography-desktop-body-4 flex h-8 flex-shrink-0 items-center justify-center gap-1 rounded-lg bg-neutral-800 px-2.5 py-[5px] font-semibold text-neutral-50 ring-1 ring-neutral-500 hover:bg-tertiary-700/10 hover:ring-tertiary-500 active:border-transparent tablet:h-10 tablet:rounded-xl tablet:pr-3 tablet:ring-[1.5px]',
                 {
-                    'w-8 tablet:w-10 tablet:pr-2.5': !showPoints,
-                    'tablet:pr-3': showPoints,
+                    'tablet:pl-3': !showPoints,
+                    'tablet:pl-2.5': showPoints,
                 }
             )}
             aria-label='Points Tag'
         >
             <Badge className='flex h-[13px] w-[13px] flex-shrink-0 tablet:h-4 tablet:w-4' />
-            {isConnected && points !== undefined && <>{pointsDisplay}</>}
+            {isConnected && points !== undefined ? pointsDisplay : 'Points'}
         </button>
     );
 };
