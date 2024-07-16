@@ -4,4 +4,5 @@ export type Blockchain = {
     chainError: boolean;
     lastActionTimestamp: number;
     testnetEnabled: boolean;
+    isChainIdDetected: boolean;
 };

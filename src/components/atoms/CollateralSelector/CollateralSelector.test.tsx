@@ -32,6 +32,7 @@ describe('CollateralSelector component', () => {
 
         expect(onChange).toBeCalledTimes(1);
         expect(onChange).toHaveBeenLastCalledWith({
+            availableFullValue: BigInt('1000000000'),
             available: 1000,
             name: 'USDC',
             symbol: 'USDC',
@@ -44,9 +45,10 @@ describe('CollateralSelector component', () => {
 
         expect(onChange).toBeCalledTimes(2);
         expect(onChange).toHaveBeenLastCalledWith({
-            available: 120,
+            availableFullValue: BigInt('120000000000000000000'),
             name: 'Ethereum',
             symbol: 'ETH',
+            available: 120,
         });
     });
 
@@ -59,6 +61,7 @@ describe('CollateralSelector component', () => {
                     symbol: CurrencySymbol.ETH,
                     available: 120,
                     name: 'Ethereum',
+                    availableFullValue: BigInt('120000000000000000000'),
                 }}
             />
         );
@@ -68,6 +71,7 @@ describe('CollateralSelector component', () => {
             available: 120,
             name: 'Ethereum',
             symbol: CurrencySymbol.ETH,
+            availableFullValue: BigInt('120000000000000000000'),
         });
 
         expect(screen.getByText('Ethereum')).toBeInTheDocument();

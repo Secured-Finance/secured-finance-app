@@ -1,5 +1,6 @@
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
+import { GetUserDocument } from '@secured-finance/sf-point-client';
 import { OrderType, TransactionList } from 'src/types';
 import { Maturity } from 'src/utils/entities';
 import {
@@ -295,6 +296,65 @@ export const mockUserTransactionHistory = [
                         transactions: generateMyTransactions(
                             '800000000000000000000',
                             60
+                        ),
+                    },
+                },
+            };
+        },
+    },
+];
+
+export const mockFullUserTransactionHistory = [
+    {
+        request: {
+            query: queries.FullUserTransactionHistoryDocument,
+            variables: {
+                address: '',
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    transactions: [],
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        transactions: [],
+                    },
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.FullUserTransactionHistoryDocument,
+            variables: {
+                address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    transactions: generateMyTransactions(
+                        '500000000000000000000',
+                        0
+                    ),
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        transactions: generateMyTransactions(
+                            '500000000000000000000',
+                            0
                         ),
                     },
                 },
@@ -723,6 +783,62 @@ export const mockUserOrderHistory = [
     },
 ];
 
+export const mockFullUserOrderHistory = [
+    {
+        request: {
+            query: queries.FullUserOrderHistoryDocument,
+            variables: {
+                address: '',
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    orders: [],
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        orders: [],
+                    },
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.FullUserOrderHistoryDocument,
+            variables: {
+                address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    orders: generateMyOrderHistory('1000000000000000000000', 0),
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        orders: generateMyOrderHistory(
+                            '1000000000000000000000',
+                            0
+                        ),
+                    },
+                },
+            };
+        },
+    },
+];
+
 export const mockDailyVolumes = [
     {
         request: {
@@ -860,8 +976,6 @@ export const mockTransactionCandleStick = [
                 interval: '300',
                 currency: wfilBytes32,
                 maturity: dec22Fixture.toNumber(),
-                first: 1000,
-                skip: 0,
                 awaitRefetchQueries: true,
             },
         },
@@ -885,8 +999,6 @@ export const mockTransactionCandleStick = [
                 interval: '3600',
                 currency: wfilBytes32,
                 maturity: dec22Fixture.toNumber(),
-                first: 1000,
-                skip: 0,
                 awaitRefetchQueries: true,
             },
         },
@@ -910,8 +1022,6 @@ export const mockTransactionCandleStick = [
                 interval: '21600',
                 currency: wfilBytes32,
                 maturity: dec22Fixture.toNumber(),
-                first: 1000,
-                skip: 0,
                 awaitRefetchQueries: true,
             },
         },
@@ -935,8 +1045,6 @@ export const mockTransactionCandleStick = [
                 interval: '86400',
                 currency: wfilBytes32,
                 maturity: dec22Fixture.toNumber(),
-                first: 1000,
-                skip: 0,
                 awaitRefetchQueries: true,
             },
         },
@@ -951,6 +1059,31 @@ export const mockTransactionCandleStick = [
                     transactionCandleSticks: mockCandleStickData,
                 },
             };
+        },
+    },
+];
+
+export const userPoints = [
+    {
+        request: {
+            query: GetUserDocument,
+        },
+        result: {
+            data: {
+                user: {
+                    id: '1',
+                    walletAddress: '0x123',
+                    point: 164,
+                    rank: 1,
+                    joindAt: '2024-05-30T13:39:49.165Z',
+                    referralCode: 'ABCDEFG123',
+                    pointDetails: {
+                        deposit: 100,
+                        referral: 50,
+                    },
+                    boostPercentage: 500,
+                },
+            },
         },
     },
 ];
