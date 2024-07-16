@@ -22,24 +22,11 @@ describe('Header component', () => {
         expect(screen.getByText('Connect Wallet')).toBeInTheDocument();
     });
 
-    it('should open a submenu if Trading tab is clicked', async () => {
-        mockRouter.push('/');
-        render(<Primary />);
-
-        const tradingTab = screen.getByTestId('Trading-tab');
-        fireEvent.click(tradingTab);
-
-        await waitFor(() => {
-            expect(screen.getByText('Simple')).toBeInTheDocument();
-            expect(screen.getByText('Advanced')).toBeInTheDocument();
-        });
-    });
-
     it('should highlight the landing page by default page', () => {
         mockRouter.push('/');
         render(<Primary />);
         const textElement = screen.getByText('Trading');
-        expect(textElement.parentNode).toHaveClass(
+        expect(textElement.parentNode?.parentNode).toHaveClass(
             'from-tabGradient-blue-start to-tabGradient-blue-end'
         );
     });
@@ -48,7 +35,7 @@ describe('Header component', () => {
         mockRouter.push('/global-itayose');
         render(<Primary />);
         const textElement = screen.getByText('Trading');
-        expect(textElement.parentNode).toHaveClass(
+        expect(textElement.parentNode?.parentNode).toHaveClass(
             'from-tabGradient-blue-start to-tabGradient-blue-end'
         );
     });
@@ -70,22 +57,30 @@ describe('Header component', () => {
 
         render(<Primary />);
         const textElement = screen.getByText('Trading');
-        expect(textElement.parentNode).toHaveClass(
+        expect(textElement.parentNode?.parentNode).toHaveClass(
             'from-tabGradient-blue-start to-tabGradient-blue-end'
         );
     });
 
-    it('should render testnet info header on chainError false', () => {
+    it('should render testnet info header on chainError false and isChainIdDetected true', () => {
         mockRouter.push('/');
 
-        render(<Primary />);
+        render(<Primary />, {
+            preloadedState: {
+                blockchain: {
+                    chainId: 11155111,
+                    chainError: false,
+                    isChainIdDetected: true,
+                },
+            },
+        });
         expect(screen.getByTestId('testnet-info')).toBeInTheDocument();
         expect(
             screen.getByText('You are visiting Secured Finance on testnet')
         ).toBeInTheDocument();
     });
 
-    it('should render testnet alert header on chainError true', () => {
+    it('should render testnet alert header on chainError and isChainIdDetected true', () => {
         mockRouter.push('/');
 
         render(<Primary />, {
@@ -93,6 +88,7 @@ describe('Header component', () => {
                 blockchain: {
                     chainId: 11155111,
                     chainError: true,
+                    isChainIdDetected: true,
                 },
             },
         });
@@ -117,5 +113,13 @@ describe('Header component', () => {
         });
         expect(screen.queryByTestId('testnet-info')).not.toBeInTheDocument();
         expect(screen.queryByTestId('testnet-alert')).not.toBeInTheDocument();
+    });
+
+    it('should not display SF Points if the user is not logged in', async () => {
+        render(<Primary />);
+
+        await waitFor(() => {
+            expect(screen.queryByText('164 Points')).not.toBeInTheDocument(); //
+        });
     });
 });

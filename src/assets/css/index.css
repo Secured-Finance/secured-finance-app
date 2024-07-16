@@ -96,7 +96,8 @@
 
     @media screen and (max-width: 767px) {
       background-image: url(../img/app-bg-mobile.png);
-      background-attachment: unset;
+      background-color: #002133;
+      background-size: 100% 100%;
     }
   }
 }

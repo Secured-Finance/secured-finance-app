@@ -22,7 +22,7 @@ describe('PointsDashboard Component', () => {
             screen.getByText('Join the Secured Finance Points Program!')
         ).toBeInTheDocument();
         expect(
-            screen.getByRole('button', { name: 'Join' })
+            screen.queryAllByRole('button', { name: 'Connect Wallet' })[1]
         ).toBeInTheDocument();
     });
 });

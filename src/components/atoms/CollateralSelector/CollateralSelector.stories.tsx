@@ -5,11 +5,13 @@ import { CollateralSelector } from './CollateralSelector';
 const assetList = [
     {
         symbol: CurrencySymbol.USDC,
+        availableFullValue: BigInt('1000000000'),
         available: 1000,
         name: 'USDC',
     },
     {
         symbol: CurrencySymbol.ETH,
+        availableFullValue: BigInt('120000000000000000000'),
         available: 120,
         name: 'Ethereum',
     },

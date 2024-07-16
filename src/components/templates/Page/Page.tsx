@@ -13,7 +13,7 @@ export const Page = ({
 }) => {
     return (
         <div
-            className='mx-auto mt-3 flex flex-col gap-2 tablet:min-w-[728px] laptop:mt-6 laptop:min-w-[970px] laptop:gap-4 laptop:px-6 desktop:min-w-[1120px] desktop:max-w-[1920px]'
+            className='relative mx-auto mt-3 flex flex-col gap-2 tablet:min-w-[728px] laptop:mt-6 laptop:min-w-[970px] laptop:gap-4 laptop:px-6 desktop:min-w-[1120px] desktop:max-w-[1920px]'
             data-testid={name}
         >
             {alertComponent && (

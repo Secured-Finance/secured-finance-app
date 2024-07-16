@@ -14,22 +14,26 @@ export default {
             [CurrencySymbol.ETH]: {
                 symbol: CurrencySymbol.ETH,
                 available: 1,
+                availableFullValue: BigInt('1000000000000000000'),
                 name: 'Ethereum',
             },
             [CurrencySymbol.WFIL]: {
                 symbol: CurrencySymbol.WFIL,
                 available: 100,
+                availableFullValue: BigInt('100000000000000000000'),
                 name: 'filecoin',
             },
             [CurrencySymbol.USDC]: {
                 symbol: CurrencySymbol.USDC,
                 available: 50,
+                availableFullValue: BigInt('50000000'),
                 name: 'USDC',
             },
 
             [CurrencySymbol.WBTC]: {
                 symbol: CurrencySymbol.WBTC,
                 available: 1.12349999,
+                availableFullValue: BigInt('112349999'),
                 name: 'Bitcoin',
             },
         },
