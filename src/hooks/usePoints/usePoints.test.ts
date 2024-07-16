@@ -11,12 +11,12 @@ describe('usePoints', () => {
 
     it('should handle loading state', () => {
         const { result } = renderHook(() => usePoints());
-        expect(result.current.loading).toBe(false);
+        expect(result.current.verification.loading).toBe(false);
     });
 
     it('should return verify function', () => {
         const { result } = renderHook(() => usePoints());
 
-        expect(result.current.verify).toBeInstanceOf(Function);
+        expect(result.current.verification.verify).toBeInstanceOf(Function);
     });
 });

@@ -133,9 +133,7 @@ const ReferralCode = ({ code }: { code: string }) => {
 const UserPointInfo = ({ chainId }: { chainId: number }) => {
     const {
         user: { loading: loadingUser, data: userData },
-        verifiedData,
-        verify,
-        loading,
+        verification: { verify, loading, data: verifiedData },
     } = usePoints();
     const searchParams = new URLSearchParams(document.location.search);
     const referralCode = searchParams.get('ref');
