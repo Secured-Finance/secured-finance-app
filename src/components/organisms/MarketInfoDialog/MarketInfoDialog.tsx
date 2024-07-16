@@ -11,6 +11,7 @@ import {
     formatLoanValue,
     formatRemainingTime,
 } from 'src/utils';
+import { LoanValue } from 'src/utils/entities';
 import { mapCurrencyToIcon } from './constants';
 
 dayjs.extend(duration);
@@ -22,7 +23,15 @@ export interface MarketInfoDialogProps {
     currentMarket?: CurrentMarket;
     currencyPrice: string;
     priceSource?: string;
-    dailyStats: Record<string, string | number | boolean | undefined>;
+    dailyStats?: {
+        high: string;
+        low: string;
+        volume: string;
+        rateHigh: string;
+        rateLow: string;
+        isIncreased?: boolean;
+    };
+    lastLoanValue?: LoanValue;
 }
 
 export const MarketInfoDialog = ({
@@ -33,6 +42,7 @@ export const MarketInfoDialog = ({
     currencyPrice,
     priceSource,
     dailyStats,
+    lastLoanValue,
 }: MarketInfoDialogProps) => {
     const lastPrice = formatLoanValue(currentMarket?.value, 'price');
     const rate = formatLoanValue(currentMarket?.value, 'rate');
@@ -110,8 +120,15 @@ export const MarketInfoDialog = ({
                             <li className='flex justify-between'>
                                 <span>Last Price (APR)</span>
                                 <div className='flex flex-col items-end'>
-                                    <span>96.90</span>
-                                    <span>21.32%</span>
+                                    <span>
+                                        {formatLoanValue(
+                                            lastLoanValue,
+                                            'price'
+                                        )}
+                                    </span>
+                                    <span>
+                                        {formatLoanValue(lastLoanValue, 'rate')}
+                                    </span>
                                 </div>
                             </li>
                             <li className='flex justify-between'>
@@ -123,15 +140,15 @@ export const MarketInfoDialog = ({
                             </li>
                             <li className='flex justify-between'>
                                 <span>24H High</span>
-                                <span>{dailyStats.high}</span>
+                                <span>{dailyStats?.high}</span>
                             </li>
                             <li className='flex justify-between'>
                                 <span>24H Low</span>
-                                <span>{dailyStats.low}</span>
+                                <span>{dailyStats?.low}</span>
                             </li>
                             <li className='flex justify-between'>
                                 <span>24H Volume</span>
-                                <span>{dailyStats.volume}</span>
+                                <span>{dailyStats?.volume}</span>
                             </li>
                             <li className='flex justify-between'>
                                 <span>{currency} Price</span>

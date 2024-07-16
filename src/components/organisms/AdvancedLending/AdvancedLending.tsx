@@ -59,7 +59,6 @@ import {
     formatOrders,
     getMappedOrderStatus,
     hexToCurrencySymbol,
-    ordinaryFormat,
     sortOrders,
     toOptions,
     usdFormat,
@@ -217,6 +216,7 @@ export const AdvancedLending = ({
     }, [maturity, maturitiesOptionList]);
 
     const data = useMarket(currency, maturity);
+
     const marketUnitPrice = data?.marketUnitPrice;
     const openingUnitPrice = data?.openingUnitPrice;
 
@@ -224,8 +224,6 @@ export const AdvancedLending = ({
         currency,
         maturity
     );
-
-    console.log('orderBook', orderBook);
 
     const filteredOrderList = useMarketOrderList(address, currency, maturity);
 
@@ -352,33 +350,28 @@ export const AdvancedLending = ({
                         onTermChange={handleTermChange}
                         currentMarket={currentMarket}
                         currencyPrice={usdFormat(currencyPrice, 2)}
-                        values={
+                        marketInfo={
                             isSubgraphSupported
-                                ? [
-                                      formatLoanValue(
+                                ? {
+                                      high: formatLoanValue(
                                           tradeHistoryDetails.max,
                                           'price'
                                       ),
-                                      formatLoanValue(
+                                      low: formatLoanValue(
                                           tradeHistoryDetails.min,
                                           'price'
                                       ),
-                                      tradeHistoryDetails.count.toString(),
-                                      tradeHistoryDetails.sum
-                                          ? ordinaryFormat(
-                                                tradeHistoryDetails.sum
-                                            )
-                                          : '-',
-                                      formatLoanValue(
+                                      volume: tradeHistoryDetails.count.toString(),
+                                      rateHigh: formatLoanValue(
                                           tradeHistoryDetails.max,
                                           'rate'
                                       ),
-                                      formatLoanValue(
+                                      rateLow: formatLoanValue(
                                           tradeHistoryDetails.min,
                                           'rate'
                                       ),
-                                      tradeHistoryDetails.minFirst,
-                                  ]
+                                      isIncreased: tradeHistoryDetails.minFirst,
+                                  }
                                 : undefined
                         }
                     />

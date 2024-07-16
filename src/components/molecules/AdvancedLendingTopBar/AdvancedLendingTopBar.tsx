@@ -1,12 +1,17 @@
+import { toBytes32 } from '@secured-finance/sf-graph-client';
+import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import DocumentTextIcon from 'src/assets/icons/document-text.svg';
-import { MarketTab, Option } from 'src/components/atoms';
+import { MarketTab } from 'src/components/atoms';
 import { HorizontalAssetSelector } from 'src/components/molecules';
 import { MarketInfoDialog } from 'src/components/organisms';
-import { CurrentMarket, IndexOf } from 'src/types';
+import { useGraphClientHook, useIsSubgraphSupported } from 'src/hooks';
+import useSF from 'src/hooks/useSecuredFinance';
+import { percentFormat } from 'src/utils';
+
 import {
     COIN_GECKO_SOURCE,
     CurrencySymbol,
@@ -15,35 +20,10 @@ import {
     formatRemainingTime,
     formatTimeStampWithTimezone,
 } from 'src/utils';
+import { LoanValue } from 'src/utils/entities';
+import { AdvancedLendingTopBarProp } from './types';
 
 dayjs.extend(duration);
-
-type AdvancedLendingTopBarProp<T> = {
-    selectedAsset: Option<CurrencySymbol> | undefined;
-    assetList: Array<Option<CurrencySymbol>>;
-    options: Array<Option<T>>;
-    selected: Option<T>;
-    onAssetChange: (v: CurrencySymbol) => void;
-    onTermChange: (v: T) => void;
-    currentMarket: CurrentMarket | undefined;
-    currencyPrice: string;
-    values?: [
-        string,
-        string,
-        string,
-        string,
-        string,
-        string,
-        boolean | undefined
-    ];
-};
-
-const getValue = (
-    values: AdvancedLendingTopBarProp<unknown>['values'],
-    index: IndexOf<NonNullable<AdvancedLendingTopBarProp<unknown>['values']>>
-) => {
-    return values && values[index] ? values[index] : 0;
-};
 
 export const AdvancedLendingTopBar = <T extends string = string>({
     selectedAsset,
@@ -54,12 +34,25 @@ export const AdvancedLendingTopBar = <T extends string = string>({
     onTermChange,
     currentMarket,
     currencyPrice,
-    values,
+    marketInfo,
 }: AdvancedLendingTopBarProp<T>) => {
+    const securedFinance = useSF();
+    const currentChainId = securedFinance?.config.chain.id;
+    const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
     const maturity = currentMarket?.value.maturity ?? 0;
 
+    const [timestamp, setTimestamp] = useState<number>(1643713200);
     const [isMarketInfoDialogOpen, setIsMarketInfoDialogOpen] =
         useState<boolean>(false);
+    const [remainingTime, setRemainingTime] = useState<number>(
+        maturity - dayjs().unix()
+    );
+
+    const priceHigh = marketInfo?.high;
+    const priceLow = marketInfo?.low;
+    const rateHigh = marketInfo?.rateHigh;
+    const rateLow = marketInfo?.rateLow;
+
     const getTime = () => {
         if (currentMarket) {
             if (currentMarket.type === 'opening') {
@@ -71,16 +64,132 @@ export const AdvancedLendingTopBar = <T extends string = string>({
         return '-';
     };
 
-    const dailyStats: Record<string, string | number | boolean | undefined> = {
-        high: getValue(values, 0),
-        low: getValue(values, 1),
-        volume: getValue(values, 3),
-        isIncreased: getValue(values, 6),
-    };
+    const allTransactions = useGraphClientHook(
+        {
+            currency: toBytes32(selectedAsset?.value as string),
+            maturity: maturity,
+            from: -1,
+            to: timestamp,
+        },
+        queries.TransactionHistoryDocument,
+        'transactionHistory',
+        !isSubgraphSupported
+    ).data;
 
-    const [remainingTime, setRemainingTime] = useState<number>(
-        maturity - dayjs().unix()
-    );
+    const lastLoanValue = useMemo(() => {
+        const lastPrice = allTransactions?.[0]
+            ? allTransactions[0]?.averagePrice * 10000
+            : 0;
+        return LoanValue.fromPrice(lastPrice, maturity);
+    }, [allTransactions, maturity]);
+
+    const PriceRateChange = () => {
+        const invalidPercentage = '-.--%';
+
+        if (
+            !priceHigh ||
+            !priceLow ||
+            !rateHigh ||
+            !rateLow ||
+            marketInfo?.isIncreased === undefined
+        ) {
+            return (
+                <div className='flex items-center gap-1'>
+                    <span>{invalidPercentage}</span>
+                    <span>({invalidPercentage})</span>
+                </div>
+            );
+        }
+
+        const high = parseFloat(priceHigh as string);
+        const low = parseFloat(priceLow as string);
+        const rateHighParsed = parseFloat(rateHigh as string);
+        const rateLowParsed = parseFloat(rateLow as string);
+
+        if (
+            isNaN(high) ||
+            isNaN(low) ||
+            isNaN(rateHighParsed) ||
+            isNaN(rateLowParsed)
+        ) {
+            return (
+                <div className='flex items-center gap-1'>
+                    <span>{invalidPercentage}</span>
+                    <span>({invalidPercentage})</span>
+                </div>
+            );
+        }
+
+        // Handle case where both values are 0.00
+        if (high === 0 && low === 0) {
+            return (
+                <div className='flex items-center gap-1'>
+                    <span>0.00%</span>
+                    <span>(0.00%)</span>
+                </div>
+            );
+        }
+
+        // Handle case where both rates are 0.00%
+        if (rateHighParsed === 0 && rateLowParsed === 0) {
+            return (
+                <div className='flex items-center gap-1'>
+                    <span>0.00%</span>
+                    <span>(0.00%)</span>
+                </div>
+            );
+        }
+
+        let percentageChange: number;
+        let ratePercentageChange: number;
+
+        if (marketInfo?.isIncreased) {
+            if (low === 0 || rateLowParsed === 0) {
+                return (
+                    <div className='flex items-center gap-1'>
+                        <span>{invalidPercentage}</span>
+                        <span>({invalidPercentage})</span>
+                    </div>
+                );
+            }
+            percentageChange = ((high - low) / low) * 100;
+            ratePercentageChange =
+                ((rateHighParsed - rateLowParsed) / rateLowParsed) * 100;
+        } else {
+            if (high === 0 || rateHighParsed === 0) {
+                return (
+                    <div className='flex items-center gap-1'>
+                        <span>{invalidPercentage}</span>
+                        <span>({invalidPercentage})</span>
+                    </div>
+                );
+            }
+            percentageChange = ((low - high) / high) * 100;
+            ratePercentageChange =
+                ((rateLowParsed - rateHighParsed) / rateHighParsed) * 100;
+        }
+
+        const formattedPercentage = percentFormat(percentageChange, 100, 2, 2);
+        const formattedRatePercentage = percentFormat(
+            ratePercentageChange,
+            100,
+            2,
+            2
+        );
+        const sign = marketInfo?.isIncreased ? '+' : '-';
+
+        return (
+            <div className='flex items-center gap-1'>
+                <span>
+                    {sign}
+                    {formattedPercentage}
+                </span>
+                <span>
+                    ({sign} {formattedRatePercentage})
+                </span>
+            </div>
+        );
+    };
 
     useEffect(() => {
         const updateCountdown = () => {
@@ -102,33 +211,9 @@ export const AdvancedLendingTopBar = <T extends string = string>({
         return () => clearInterval(interval);
     }, [maturity]);
 
-    const priceHigh = getValue(values, 0);
-    const priceLow = getValue(values, 1);
-
-    const getPercentagePriceChange = () => {
-        if (dailyStats.isIncreased === undefined || !priceHigh || !priceLow) {
-            return '-';
-        }
-
-        const high = parseFloat(priceHigh as string);
-        const low = parseFloat(priceLow as string);
-
-        let percentageChange = 0;
-        if (dailyStats.isIncreased) {
-            if (low === 0) {
-                return '-';
-            }
-            percentageChange = ((high - low) / low) * 100;
-
-            return `+${percentageChange.toFixed(2)}%`;
-        } else {
-            if (high === 0) {
-                return '-';
-            }
-            percentageChange = ((low - high) / high) * 100;
-            return `-${percentageChange.toFixed(2)}%`;
-        }
-    };
+    useEffect(() => {
+        setTimestamp(Math.round(new Date().getTime() / 1000));
+    }, []);
 
     return (
         <>
@@ -143,7 +228,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                         <section
                             className={clsx(
                                 'col-span-12 grid grid-cols-12 gap-3 border-neutral-600 laptop:w-[25%] laptop:gap-y-0 laptop:border-r laptop:px-6 laptop:py-4',
-                                values && 'tablet:gap-y-6'
+                                marketInfo && 'tablet:gap-y-6'
                             )}
                         >
                             <div
@@ -152,7 +237,6 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                                 )}
                             >
                                 {/* TODO: replace this with CurrencyMaturityDropdown */}
-
                                 <HorizontalAssetSelector
                                     selectedAsset={selectedAsset}
                                     assetList={assetList}
@@ -166,7 +250,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                             <div
                                 className={clsx(
                                     'col-span-2 pl-2 laptop:col-span-4 laptop:hidden',
-                                    values && 'tablet:pl-0'
+                                    marketInfo && 'tablet:pl-0'
                                 )}
                             >
                                 <button
@@ -177,28 +261,6 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                                 >
                                     <DocumentTextIcon className='h-4 w-4 text-neutral-300' />
                                 </button>
-                                {/* TODO: remove this chunk. using hidden to hide it during dev */}
-                                <div className='hidden'>
-                                    <MarketTab
-                                        name={formatLoanValue(
-                                            currentMarket?.value,
-                                            'price'
-                                        )}
-                                        value={`${formatLoanValue(
-                                            currentMarket?.value,
-                                            'rate'
-                                        )} APR`}
-                                        variant={
-                                            currentMarket
-                                                ? 'green-name'
-                                                : 'gray-name'
-                                        }
-                                        label='Current Market'
-                                    />
-                                    <div className='laptop:typography-caption-2 whitespace-nowrap pt-[1px] text-[11px] leading-4 text-neutral-4'>
-                                        {getTime()}
-                                    </div>
-                                </div>
                             </div>
                         </section>
 
@@ -227,40 +289,39 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                             <div className='flex w-[16%] flex-col px-3 desktop:w-[13%]'>
                                 <MarketTab
                                     name='Last Price'
-                                    value={'96.89 (5.25%)'}
+                                    value={`${formatLoanValue(
+                                        lastLoanValue,
+                                        'price'
+                                    )} (${formatLoanValue(
+                                        lastLoanValue,
+                                        'rate'
+                                    )})`}
                                 />
                             </div>
                             <div className='flex w-auto flex-col px-3 desktop:w-[19%]'>
-                                {/* TODO: address APR change */}
                                 <MarketTab
                                     name='24H Price Change (APR)'
-                                    value={`${getPercentagePriceChange()} (???% APR)`}
+                                    value={<PriceRateChange />}
                                 />
                             </div>
-                            {values && (
+                            {marketInfo && (
                                 <>
                                     <div className='hidden desktop:flex desktop:w-[11%]'>
                                         <MarketTab
                                             name='24h High (APR)'
-                                            value={`${getValue(
-                                                values,
-                                                0
-                                            )} (${getValue(values, 4)})`}
+                                            value={`${marketInfo.high} (${marketInfo.rateHigh})`}
                                         />
                                     </div>
                                     <div className='hidden desktop:flex desktop:w-[11%]'>
                                         <MarketTab
                                             name='24h Low (APR)'
-                                            value={`${getValue(
-                                                values,
-                                                1
-                                            )} (${getValue(values, 5)})`}
+                                            value={`${marketInfo.low} (${marketInfo.rateLow})`}
                                         />
                                     </div>
                                     <div className='w-[13%] px-3 desktop:w-[9%]'>
                                         <MarketTab
                                             name='24h Volume'
-                                            value={getValue(values, 3)}
+                                            value={marketInfo.volume}
                                         />
                                     </div>
                                 </>
@@ -291,7 +352,8 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                 currentMarket={currentMarket}
                 currencyPrice={currencyPrice || '0'}
                 priceSource={handleSource(selectedAsset?.value)}
-                dailyStats={dailyStats}
+                dailyStats={marketInfo}
+                lastLoanValue={lastLoanValue}
             />
         </>
     );
