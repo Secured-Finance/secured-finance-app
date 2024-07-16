@@ -11,7 +11,7 @@ import {
     WithdrawCollateral,
     WithdrawZCToken,
 } from 'src/components/organisms';
-import { CollateralBook, useBalances, useCurrencies } from 'src/hooks';
+import { CollateralBook, useCurrencies, useFullBalances } from 'src/hooks';
 import {
     CollateralInfo,
     CurrencySymbol,
@@ -63,7 +63,7 @@ export const CollateralTab = ({
         '' | 'deposit' | 'withdraw' | 'deposit-zc-tokens' | 'withdraw-zc-tokens'
     >('');
 
-    const balances = useBalances();
+    const balances = useFullBalances();
     const { data: currencies = [] } = useCurrencies(true);
 
     const depositCollateralList = useMemo(
