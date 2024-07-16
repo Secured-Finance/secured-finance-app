@@ -6,11 +6,13 @@ import duration from 'dayjs/plugin/duration';
 import { useEffect, useMemo, useState } from 'react';
 import DocumentTextIcon from 'src/assets/icons/document-text.svg';
 import { MarketTab } from 'src/components/atoms';
-import { HorizontalAssetSelector } from 'src/components/molecules';
+import {
+    HorizontalAssetSelector,
+    PriceRateChange,
+} from 'src/components/molecules';
 import { MarketInfoDialog } from 'src/components/organisms';
 import { useGraphClientHook, useIsSubgraphSupported } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
-import { percentFormat } from 'src/utils';
 
 import {
     COIN_GECKO_SOURCE,
@@ -48,11 +50,6 @@ export const AdvancedLendingTopBar = <T extends string = string>({
         maturity - dayjs().unix()
     );
 
-    const priceHigh = marketInfo?.high;
-    const priceLow = marketInfo?.low;
-    const rateHigh = marketInfo?.rateHigh;
-    const rateLow = marketInfo?.rateLow;
-
     const getTime = () => {
         if (currentMarket) {
             if (currentMarket.type === 'opening') {
@@ -82,114 +79,6 @@ export const AdvancedLendingTopBar = <T extends string = string>({
             : 0;
         return LoanValue.fromPrice(lastPrice, maturity);
     }, [allTransactions, maturity]);
-
-    const PriceRateChange = () => {
-        const invalidPercentage = '-.--%';
-
-        if (
-            !priceHigh ||
-            !priceLow ||
-            !rateHigh ||
-            !rateLow ||
-            marketInfo?.isIncreased === undefined
-        ) {
-            return (
-                <div className='flex items-center gap-1'>
-                    <span>{invalidPercentage}</span>
-                    <span>({invalidPercentage})</span>
-                </div>
-            );
-        }
-
-        const high = parseFloat(priceHigh as string);
-        const low = parseFloat(priceLow as string);
-        const rateHighParsed = parseFloat(rateHigh as string);
-        const rateLowParsed = parseFloat(rateLow as string);
-
-        if (
-            isNaN(high) ||
-            isNaN(low) ||
-            isNaN(rateHighParsed) ||
-            isNaN(rateLowParsed)
-        ) {
-            return (
-                <div className='flex items-center gap-1'>
-                    <span>{invalidPercentage}</span>
-                    <span>({invalidPercentage})</span>
-                </div>
-            );
-        }
-
-        // Handle case where both values are 0.00
-        if (high === 0 && low === 0) {
-            return (
-                <div className='flex items-center gap-1'>
-                    <span>0.00%</span>
-                    <span>(0.00%)</span>
-                </div>
-            );
-        }
-
-        // Handle case where both rates are 0.00%
-        if (rateHighParsed === 0 && rateLowParsed === 0) {
-            return (
-                <div className='flex items-center gap-1'>
-                    <span>0.00%</span>
-                    <span>(0.00%)</span>
-                </div>
-            );
-        }
-
-        let percentageChange: number;
-        let ratePercentageChange: number;
-
-        if (marketInfo?.isIncreased) {
-            if (low === 0 || rateLowParsed === 0) {
-                return (
-                    <div className='flex items-center gap-1'>
-                        <span>{invalidPercentage}</span>
-                        <span>({invalidPercentage})</span>
-                    </div>
-                );
-            }
-            percentageChange = ((high - low) / low) * 100;
-            ratePercentageChange =
-                ((rateHighParsed - rateLowParsed) / rateLowParsed) * 100;
-        } else {
-            if (high === 0 || rateHighParsed === 0) {
-                return (
-                    <div className='flex items-center gap-1'>
-                        <span>{invalidPercentage}</span>
-                        <span>({invalidPercentage})</span>
-                    </div>
-                );
-            }
-            percentageChange = ((low - high) / high) * 100;
-            ratePercentageChange =
-                ((rateLowParsed - rateHighParsed) / rateHighParsed) * 100;
-        }
-
-        const formattedPercentage = percentFormat(percentageChange, 100, 2, 2);
-        const formattedRatePercentage = percentFormat(
-            ratePercentageChange,
-            100,
-            2,
-            2
-        );
-        const sign = marketInfo?.isIncreased ? '+' : '-';
-
-        return (
-            <div className='flex items-center gap-1'>
-                <span>
-                    {sign}
-                    {formattedPercentage}
-                </span>
-                <span>
-                    ({sign} {formattedRatePercentage})
-                </span>
-            </div>
-        );
-    };
 
     useEffect(() => {
         const updateCountdown = () => {
@@ -301,7 +190,17 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                             <div className='flex w-auto flex-col px-3 desktop:w-[19%]'>
                                 <MarketTab
                                     name='24H Price Change (APR)'
-                                    value={<PriceRateChange />}
+                                    value={
+                                        <PriceRateChange
+                                            priceHigh={marketInfo?.high}
+                                            priceLow={marketInfo?.low}
+                                            rateHigh={marketInfo?.rateHigh}
+                                            rateLow={marketInfo?.rateLow}
+                                            isIncreased={
+                                                marketInfo?.isIncreased
+                                            }
+                                        />
+                                    }
                                 />
                             </div>
                             {marketInfo && (

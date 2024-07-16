@@ -10,11 +10,11 @@ describe('test Market Tab component', () => {
         expect(screen.getByLabelText('24h Volume')).toBeInTheDocument();
         expect(screen.getByText('24h Volume')).toBeInTheDocument();
         expect(screen.getByText('24h Volume')).toHaveClass(
-            'whitespace-nowrap text-[11px] leading-4 text-slateGray'
+            'laptop:typography-caption-2 whitespace-nowrap text-[11px] text-neutral-400'
         );
         expect(screen.getByText('10,000')).toBeInTheDocument();
         expect(screen.getByText('10,000')).toHaveClass(
-            'text-sm font-semibold leading-5 text-neutral-8'
+            'typography-caption leading-4 text-neutral-50 desktop:leading-6 flex items-center'
         );
     });
 
