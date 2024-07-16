@@ -73,7 +73,7 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
 
     const {
         user: { data: userData },
-        verifiedData,
+        verification: { data: verifiedData },
     } = usePoints();
 
     const userPoints = userData?.user.point;

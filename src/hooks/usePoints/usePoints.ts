@@ -62,8 +62,10 @@ export const usePoints = () => {
             loading: loadingUser,
             data: userData,
         },
-        verifiedData: cookies.verified_data,
-        verify,
-        loading,
+        verification: {
+            data: cookies.verified_data,
+            verify,
+            loading,
+        },
     };
 };
