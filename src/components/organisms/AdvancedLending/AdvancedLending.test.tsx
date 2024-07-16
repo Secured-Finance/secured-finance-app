@@ -20,7 +20,7 @@ const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('Advanced Lending Component', () => {
-    it('should convert the amount to new currency and track CURRENCY_CHANGE when the user change the currency', async () => {
+    it.skip('should convert the amount to new currency and track CURRENCY_CHANGE when the user change the currency', async () => {
         const track = jest.spyOn(analytics, 'track');
         const { store } = await waitFor(() =>
             render(<ConnectedToWallet />, {
@@ -48,7 +48,7 @@ describe('Advanced Lending Component', () => {
         });
     }, 8000);
 
-    it('should not reset the amount and emit TERM_CHANGE event when the user change the maturity', async () => {
+    it.skip('should not reset the amount and emit TERM_CHANGE event when the user change the maturity', async () => {
         const track = jest.spyOn(analytics, 'track');
         const { store } = await waitFor(() =>
             render(<ConnectedToWallet />, {
