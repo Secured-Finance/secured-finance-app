@@ -217,7 +217,7 @@ export const CurrencyMaturityDropdown = ({
     return (
         <Menu>
             {({ open, close }) => (
-                <div className=''>
+                <div>
                     <Menu.Button
                         className='flex w-full items-center justify-between gap-2 rounded-lg bg-neutral-700 px-2 py-1.5 text-sm font-semibold normal-case leading-6 text-white laptop:w-[226px] laptop:py-2.5 laptop:pl-3 laptop:pr-2 laptop:text-base laptop:leading-6 desktop:w-[302px] desktop:text-[22px]'
                         onClick={() => setIsDropdownOpen(!open)}
