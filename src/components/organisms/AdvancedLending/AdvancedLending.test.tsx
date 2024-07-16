@@ -73,7 +73,7 @@ describe('Advanced Lending Component', () => {
                 '1'
             );
         });
-    }, 8000);
+    });
 
     it('should show the maturity as a date for the selected maturity', async () => {
         render(<Default />, {
@@ -86,9 +86,11 @@ describe('Advanced Lending Component', () => {
     });
 
     it('should display the last trades in the top bar', async () => {
-        render(<Default />, {
-            apolloMocks: Default.parameters?.apolloClient.mocks,
-        });
+        await waitFor(() =>
+            render(<Default />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+            })
+        );
 
         await waitFor(() => {
             expect(
