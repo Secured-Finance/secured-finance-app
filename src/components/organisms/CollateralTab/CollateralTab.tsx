@@ -15,6 +15,7 @@ import { CollateralBook, useBalances, useCurrencies } from 'src/hooks';
 import {
     CollateralInfo,
     CurrencySymbol,
+    ZERO_BI,
     amountFormatterFromBase,
     currencyMap,
 } from 'src/utils';
@@ -22,7 +23,7 @@ import { Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
 export const generateCollateralList = (
-    balance: Partial<Record<CurrencySymbol, number | bigint>>,
+    balance: Partial<Record<CurrencySymbol, bigint>>,
     useAllCurrencies: boolean,
     currencies: CurrencySymbol[]
 ): Record<CurrencySymbol, CollateralInfo> => {
@@ -37,12 +38,9 @@ export const generateCollateralList = (
                     symbol: ccy,
                     name: ccy,
                     available: balance[ccy]
-                        ? typeof balance[ccy] === 'number'
-                            ? (balance[ccy] as number)
-                            : amountFormatterFromBase[ccy](
-                                  balance[ccy] as bigint
-                              )
+                        ? amountFormatterFromBase[ccy](balance[ccy] as bigint)
                         : 0,
+                    availableFullValue: balance[ccy] ?? ZERO_BI,
                 },
             };
             collateralRecords = { ...collateralRecords, ...collateralInfo };
