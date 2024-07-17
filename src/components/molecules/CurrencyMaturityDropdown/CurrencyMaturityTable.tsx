@@ -77,13 +77,6 @@ export const CurrencyMaturityTable = ({
         >
             <TableHeader>
                 {columns.map(column => {
-                    const sortIconStyle = 'relative';
-                    const isColumnSortedAscending =
-                        sortState.column === column.key &&
-                        sortState.direction === 'ascending';
-                    const isColumnSortedDescending =
-                        sortState.column === column.key &&
-                        sortState.direction === 'descending';
                     return (
                         <TableColumn
                             className='typography-mobile-body-5 laptop:typography-desktop-body-5 relative h-5 !rounded-none bg-neutral-800 px-0 font-normal text-neutral-400 laptop:bg-neutral-900'
@@ -95,34 +88,10 @@ export const CurrencyMaturityTable = ({
                             <div className='flex gap-1'>
                                 {column.label}
                                 {column.allowsSorting && (
-                                    <div className='flex w-2 flex-col justify-center'>
-                                        <ChevronUpIcon
-                                            className={clsx(
-                                                sortIconStyle,
-                                                'top-[1px]',
-                                                {
-                                                    'text-neutral-50':
-                                                        isColumnSortedAscending,
-                                                    'text-neutral-400':
-                                                        !isColumnSortedAscending &&
-                                                        !isColumnSortedDescending,
-                                                }
-                                            )}
-                                        />
-                                        <AngleDownIcon
-                                            className={clsx(
-                                                sortIconStyle,
-                                                'bottom-[1px]',
-                                                {
-                                                    'text-neutral-50':
-                                                        isColumnSortedDescending,
-                                                    'text-neutral-400':
-                                                        !isColumnSortedAscending &&
-                                                        !isColumnSortedDescending,
-                                                }
-                                            )}
-                                        />
-                                    </div>
+                                    <SortArrows
+                                        sortState={sortState}
+                                        column={column}
+                                    />
                                 )}
                             </div>
                             <span className='absolute bottom-0 left-0 h-[1px] w-full bg-neutral-700'></span>
@@ -149,5 +118,42 @@ export const CurrencyMaturityTable = ({
                 )}
             </TableBody>
         </Table>
+    );
+};
+
+const SortArrows = ({
+    sortState,
+    column,
+}: {
+    sortState: SortDescriptor;
+    column: {
+        key: string;
+        label: string;
+        width: string;
+        allowsSorting: boolean;
+    };
+}) => {
+    const sortIconStyle = 'relative';
+    const isColumnSortedAscending =
+        sortState.column === column.key && sortState.direction === 'ascending';
+    const isColumnSortedDescending =
+        sortState.column === column.key && sortState.direction === 'descending';
+    return (
+        <div className='flex w-2 flex-col justify-center'>
+            <ChevronUpIcon
+                className={clsx(sortIconStyle, 'top-[1px]', {
+                    'text-neutral-50': isColumnSortedAscending,
+                    'text-neutral-400':
+                        !isColumnSortedAscending && !isColumnSortedDescending,
+                })}
+            />
+            <AngleDownIcon
+                className={clsx(sortIconStyle, 'bottom-[1px]', {
+                    'text-neutral-50': isColumnSortedDescending,
+                    'text-neutral-400':
+                        !isColumnSortedAscending && !isColumnSortedDescending,
+                })}
+            />
+        </div>
     );
 };
