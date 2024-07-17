@@ -7,20 +7,18 @@ import { useEffect, useMemo, useState } from 'react';
 import DocumentTextIcon from 'src/assets/icons/document-text.svg';
 import { MarketTab } from 'src/components/atoms';
 import {
+    CountdownTimer,
     HorizontalAssetSelector,
     PriceRateChange,
 } from 'src/components/molecules';
 import { MarketInfoDialog } from 'src/components/organisms';
 import { useGraphClientHook, useIsSubgraphSupported } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
-
 import {
     COIN_GECKO_SOURCE,
     CurrencySymbol,
     currencyMap,
     formatLoanValue,
-    formatRemainingTime,
-    formatTimeStampWithTimezone,
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import { AdvancedLendingTopBarProp } from './types';
@@ -46,20 +44,6 @@ export const AdvancedLendingTopBar = <T extends string = string>({
     const [timestamp, setTimestamp] = useState<number>(1643713200);
     const [isMarketInfoDialogOpen, setIsMarketInfoDialogOpen] =
         useState<boolean>(false);
-    const [remainingTime, setRemainingTime] = useState<number>(
-        maturity - dayjs().unix()
-    );
-
-    const getTime = () => {
-        if (currentMarket) {
-            if (currentMarket.type === 'opening') {
-                return 'Opening Price';
-            } else {
-                return formatTimeStampWithTimezone(currentMarket.time);
-            }
-        }
-        return '-';
-    };
 
     const allTransactions = useGraphClientHook(
         {
@@ -79,26 +63,6 @@ export const AdvancedLendingTopBar = <T extends string = string>({
             : 0;
         return LoanValue.fromPrice(lastPrice, maturity);
     }, [allTransactions, maturity]);
-
-    useEffect(() => {
-        const updateCountdown = () => {
-            const now = dayjs().unix();
-            const timeLeft = maturity - now;
-
-            if (timeLeft <= 0) {
-                setRemainingTime(0);
-                clearInterval(interval);
-                return;
-            }
-
-            setRemainingTime(timeLeft);
-        };
-
-        const interval = setInterval(updateCountdown, 1000);
-        updateCountdown();
-
-        return () => clearInterval(interval);
-    }, [maturity]);
 
     useEffect(() => {
         setTimestamp(Math.round(new Date().getTime() / 1000));
@@ -143,6 +107,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                                 )}
                             >
                                 <button
+                                    data-testid='market-info-btn'
                                     onClick={() =>
                                         setIsMarketInfoDialogOpen(true)
                                     }
@@ -153,11 +118,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                             </div>
                         </section>
 
-                        <div
-                            className={clsx(
-                                'hidden justify-around laptop:flex laptop:w-[75%] laptop:items-center laptop:p-4 desktop:gap-3.5'
-                            )}
-                        >
+                        <div className='hidden justify-around laptop:flex laptop:w-[75%] laptop:items-center laptop:p-4 desktop:gap-3.5'>
                             <div className='flex w-[20%] flex-col px-3 desktop:w-[15%]'>
                                 <span className='typography-caption-2 text-neutral-400'>
                                     Mark Price (APR)
@@ -235,10 +196,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                                 />
                             </div>
                             <div className='flex flex-col px-3 laptop:w-[13%] desktop:w-[10%]'>
-                                <MarketTab
-                                    name='Countdown'
-                                    value={formatRemainingTime(remainingTime)}
-                                />
+                                <CountdownTimer maturity={maturity} />
                             </div>
                         </div>
                     </div>

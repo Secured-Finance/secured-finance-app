@@ -3,6 +3,7 @@ import { RESPONSIVE_PARAMETERS } from 'src/../.storybook/constants';
 import {
     withAppLayout,
     withBalance,
+    WithGraphClient,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import {
@@ -16,7 +17,12 @@ import { Landing } from './Landing';
 export default {
     title: 'Pages/Landing',
     component: Landing,
-    decorators: [withAppLayout, withBalance, withWalletProvider],
+    decorators: [
+        withAppLayout,
+        withBalance,
+        withWalletProvider,
+        WithGraphClient,
+    ],
     args: {
         view: 'Simple',
     },

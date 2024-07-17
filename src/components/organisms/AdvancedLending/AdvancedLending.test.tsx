@@ -5,9 +5,10 @@ import {
     emptyTransaction,
     mockFilteredUserOrderHistory,
     mockFilteredUserTransactionHistory,
+    mockTrades,
 } from 'src/stories/mocks/queries';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { fireEvent, render, screen, waitFor, within } from 'src/test-utils.js';
+import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { ButtonEvents, ButtonProperties } from 'src/utils';
 import * as stories from './AdvancedLending.stories';
 
@@ -84,27 +85,16 @@ describe('Advanced Lending Component', () => {
 
     it('should display the last trades in the top bar', async () => {
         render(<Default />, {
-            apolloMocks: Default.parameters?.apolloClient.mocks,
+            apolloMocks: mockTrades,
         });
 
-        expect(
-            await within(
-                await screen.findByLabelText('Current Market')
-            ).findByText('98.01')
-        ).toBeInTheDocument();
+        expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
 
-        expect(
-            within(screen.getByLabelText('24h High')).getByText('90.00')
-        ).toBeInTheDocument();
-        expect(
-            within(screen.getByLabelText('24h Low')).getByText('80.00')
-        ).toBeInTheDocument();
-        expect(
-            within(screen.getByLabelText('24h Trades')).getByText('2')
-        ).toBeInTheDocument();
-        expect(
-            within(screen.getByLabelText('24h Volume')).getByText('0')
-        ).toBeInTheDocument();
+        expect(screen.getByText('Mark Price (APR)')).toBeInTheDocument();
+        expect(screen.getByText('--.-- (--.--%)')).toBeInTheDocument();
+
+        expect(screen.getByText('Last Price')).toBeInTheDocument();
+        expect(screen.getAllByText('0.00 (0.00%)')[0]).toBeInTheDocument();
     });
 
     it('should display the opening unit price as the only trade if there is no last trades', async () => {
@@ -117,24 +107,14 @@ describe('Advanced Lending Component', () => {
                 ],
             })
         );
-        expect(
-            await within(
-                await screen.findByLabelText('Current Market')
-            ).findByText('98.01')
-        ).toBeInTheDocument();
 
-        expect(
-            within(screen.getByLabelText('24h High')).getByText('0.00')
-        ).toBeInTheDocument();
-        expect(
-            within(screen.getByLabelText('24h Low')).getByText('0.00')
-        ).toBeInTheDocument();
-        expect(
-            within(screen.getByLabelText('24h Trades')).getByText(0)
-        ).toBeInTheDocument();
-        expect(
-            within(screen.getByLabelText('24h Volume')).getByText('-')
-        ).toBeInTheDocument();
+        expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
+
+        expect(screen.getByText('Mark Price (APR)')).toBeInTheDocument();
+        expect(screen.getByText('--.-- (--.--%)')).toBeInTheDocument();
+
+        expect(screen.getByText('Last Price')).toBeInTheDocument();
+        expect(screen.getAllByText('0.00 (0.00%)')[1]).toBeInTheDocument();
     });
 
     it('should only show the orders of the user related to orderbook', async () => {
@@ -173,6 +153,13 @@ describe('Advanced Lending Component', () => {
         );
 
         fireEvent.click(screen.getByRole('button', { name: 'WFIL' }));
+
+        await waitFor(() => {
+            expect(
+                screen.getByRole('menuitem', { name: 'USDC' })
+            ).toBeInTheDocument();
+        });
+
         fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
 
         await waitFor(() =>
