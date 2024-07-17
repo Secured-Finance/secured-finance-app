@@ -371,7 +371,6 @@ export const WithdrawZCToken = ({
                                 <Spinner />
                             </div>
                         );
-                        break;
                     case Step.withdrawn:
                         return (
                             <SuccessPanel

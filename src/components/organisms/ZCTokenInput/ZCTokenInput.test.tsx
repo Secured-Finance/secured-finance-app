@@ -17,7 +17,7 @@ describe('ZCTokenInput component', () => {
 
     it('should update collateral amount when percentage button is clicked', () => {
         render(<Default />);
-        const tab = screen.getByTestId(50);
+        const tab = screen.getByTestId('50');
         fireEvent.click(tab);
         expect(screen.getByRole('textbox').getAttribute('value')).toBe('5');
         expect(screen.getByText('$500.00')).toBeInTheDocument();
