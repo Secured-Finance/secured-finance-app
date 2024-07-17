@@ -21,8 +21,8 @@ import {
 } from 'src/hooks';
 import {
     AddressUtils,
-    CollateralEvents,
     CurrencySymbol,
+    ZCTokenEvents,
     convertToZcTokenName,
     convertZCTokenFromBaseAmount,
     formatAmount,
@@ -33,11 +33,11 @@ import {
     ButtonEvents,
     ButtonProperties,
     trackButtonEvent,
-    trackCollateralEvent,
+    trackZCTokenEvent,
 } from 'src/utils/events';
 
 enum Step {
-    depositZCBonds = 1,
+    depositZCToken = 1,
     depositing,
     deposited,
     error,
@@ -52,8 +52,8 @@ type State = {
 };
 
 const stateRecord: Record<Step, State> = {
-    [Step.depositZCBonds]: {
-        currentStep: Step.depositZCBonds,
+    [Step.depositZCToken]: {
+        currentStep: Step.depositZCToken,
         nextStep: Step.depositing,
         title: 'Deposit ZC Bonds',
         description: '',
@@ -68,7 +68,7 @@ const stateRecord: Record<Step, State> = {
     },
     [Step.deposited]: {
         currentStep: Step.deposited,
-        nextStep: Step.depositZCBonds,
+        nextStep: Step.depositZCToken,
         title: 'Success!',
         description:
             'You have successfully deposited ZC Bonds on Secured Finance.',
@@ -76,7 +76,7 @@ const stateRecord: Record<Step, State> = {
     },
     [Step.error]: {
         currentStep: Step.error,
-        nextStep: Step.depositZCBonds,
+        nextStep: Step.depositZCToken,
         title: 'Failed!',
         description: '',
         buttonText: 'OK',
@@ -100,7 +100,7 @@ const reducer = (
             };
         default:
             return {
-                ...stateRecord[Step.depositZCBonds],
+                ...stateRecord[Step.depositZCToken],
             };
     }
 };
@@ -166,11 +166,11 @@ export const DepositZCToken = ({
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
-        if (state.currentStep === Step.depositZCBonds) {
+        if (state.currentStep === Step.depositZCToken) {
             trackButtonEvent(
                 ButtonEvents.CANCEL_BUTTON,
                 ButtonProperties.CANCEL_ACTION,
-                'Cancel Deposit Collateral'
+                'Cancel Deposit ZC Bonds'
             );
         }
         setCollateral(undefined);
@@ -192,7 +192,7 @@ export const DepositZCToken = ({
 
     const isDisabled = useCallback(() => {
         return (
-            state.currentStep === Step.depositZCBonds &&
+            state.currentStep === Step.depositZCToken &&
             (!collateral || collateral > availableTokenAmount)
         );
     }, [state.currentStep, collateral, availableTokenAmount]);
@@ -205,9 +205,10 @@ export const DepositZCToken = ({
                 dispatch({ type: 'error' });
             } else {
                 setTxHash(tx);
-                trackCollateralEvent(
-                    CollateralEvents.DEPOSIT_COLLATERAL,
+                trackZCTokenEvent(
+                    ZCTokenEvents.DEPOSIT_ZC_TOKEN,
                     currencySymbol,
+                    maturity.toNumber(),
                     collateral ?? BigInt(0),
                     source ?? ''
                 );
@@ -224,6 +225,7 @@ export const DepositZCToken = ({
         collateral,
         currencySymbol,
         handleContractTransaction,
+        maturity,
         onDepositZCToken,
         source,
     ]);
@@ -231,7 +233,7 @@ export const DepositZCToken = ({
     const onClick = useCallback(
         async (currentStep: Step) => {
             switch (currentStep) {
-                case Step.depositZCBonds:
+                case Step.depositZCToken:
                     dispatch({ type: 'next' });
                     handleDepositZCToken();
                     break;
@@ -274,11 +276,11 @@ export const DepositZCToken = ({
             callToAction={state.buttonText}
             onClick={() => onClick(state.currentStep)}
             disableActionButton={isDisabled()}
-            showCancelButton={state.currentStep === Step.depositZCBonds}
+            showCancelButton={state.currentStep === Step.depositZCToken}
         >
             {(() => {
                 switch (state.currentStep) {
-                    case Step.depositZCBonds:
+                    case Step.depositZCToken:
                         return (
                             <div className='flex w-full flex-col gap-6'>
                                 <div className='grid grid-cols-2 gap-2'>
@@ -297,6 +299,7 @@ export const DepositZCToken = ({
                                                 );
                                             }
                                         }}
+                                        testid='asset'
                                     />
                                     <Selector
                                         headerText=''
@@ -310,6 +313,7 @@ export const DepositZCToken = ({
                                                 );
                                             }
                                         }}
+                                        testid='maturity'
                                     />
                                 </div>
                                 <div className='typography-caption-2 flex items-center gap-2 rounded-lg bg-neutral-700 px-4 py-3 text-slateGray'>

@@ -14,6 +14,7 @@ interface SelectorProps {
     optionList: OptionInfo[];
     selectedOption?: OptionInfo;
     onChange: (v: OptionInfo) => void;
+    testid?: string;
 }
 
 export const Selector = ({
@@ -21,6 +22,7 @@ export const Selector = ({
     optionList,
     onChange,
     selectedOption,
+    testid = 'main',
 }: SelectorProps) => {
     const [selected, setSelected] = useState(selectedOption ?? optionList[0]);
 
@@ -43,7 +45,7 @@ export const Selector = ({
                             <div className='relative h-full'>
                                 <Listbox.Button
                                     className='flex w-full cursor-default items-center gap-2 rounded-lg border-2 border-white-40 py-3 pl-4 pr-8 focus:outline-none'
-                                    data-testid='collateral-selector-button'
+                                    data-testid={`${testid}-selector-button`}
                                 >
                                     <span className='typography-caption-2 flex h-6 items-center justify-end text-secondary7'>
                                         {selected.icon}
@@ -74,7 +76,7 @@ export const Selector = ({
                                         {optionList.map((assetObj, index) => (
                                             <Listbox.Option
                                                 key={assetObj.value}
-                                                data-testid={`option-${assetObj.value}`}
+                                                data-testid={`${testid}-option-${assetObj.value}`}
                                                 className={({ active }) =>
                                                     `relative cursor-default select-none ${
                                                         index !==

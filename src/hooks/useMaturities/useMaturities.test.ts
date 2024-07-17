@@ -16,7 +16,7 @@ describe('useMaturities', () => {
     ];
     const stringMaturities = maturities.map((v: bigint) => v.toString());
 
-    beforeAll(() => {
+    beforeEach(() => {
         mock.getMaturities.mockResolvedValueOnce(maturities);
         mock.getLatestAutoRollLog.mockResolvedValueOnce({
             unitPrice: BigInt('9800'),
