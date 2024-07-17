@@ -40,6 +40,11 @@ export enum CollateralEvents {
     WITHDRAW_COLLATERAL = 'Withdraw Collateral',
 }
 
+export enum ZCTokenEvents {
+    DEPOSIT_ZC_TOKEN = 'Deposit ZC Token',
+    WITHDRAW_ZC_TOKEN = 'Withdraw ZC Token',
+}
+
 export enum OrderProperties {
     ORDER_SIDE = 'Order Side',
     ORDER_TYPE = 'Order Type',
@@ -52,6 +57,13 @@ export enum OrderProperties {
 export enum CollateralProperties {
     ASSET_TYPE = 'Asset Type',
     AMOUNT = 'Amount',
+    SOURCE = 'Source',
+}
+
+export enum ZCTokenProperties {
+    ASSET_TYPE = 'Asset Type',
+    AMOUNT = 'Amount',
+    MATURITY = 'Maturity',
     SOURCE = 'Source',
 }
 

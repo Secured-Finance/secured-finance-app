@@ -37,8 +37,8 @@ describe('CollateralSelector component', () => {
             value: 'value1',
         });
 
-        fireEvent.click(screen.getByTestId('collateral-selector-button'));
-        fireEvent.click(screen.getByTestId('option-value1'));
+        fireEvent.click(screen.getByTestId('main-selector-button'));
+        fireEvent.click(screen.getByTestId('main-option-value1'));
         expect(screen.getByText('Label 1')).toBeInTheDocument();
         expect(screen.getByText('note 1')).toBeInTheDocument();
 

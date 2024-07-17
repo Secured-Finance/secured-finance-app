@@ -181,11 +181,11 @@ export const mockUseSF = () => {
 
         getMaturities: jest.fn(() =>
             Promise.resolve([
-                BigInt('1000'),
-                BigInt('2000'),
-                BigInt('3000'),
-                BigInt('4000'),
-                BigInt('5000'),
+                BigInt('1727395200'),
+                BigInt('1735257600'),
+                BigInt('1743120000'),
+                BigInt('1750982400'),
+                BigInt('1758844800'),
             ])
         ),
 
@@ -202,6 +202,14 @@ export const mockUseSF = () => {
         }),
 
         depositCollateral: jest.fn(() =>
+            Promise.resolve('0xb98bd7c7f656290hu071e52d1a56e6uyh98765e4')
+        ),
+
+        depositZCToken: jest.fn(() =>
+            Promise.resolve('0xb98bd7c7f656290hu071e52d1a56e6uyh98765e4')
+        ),
+
+        withdrawZCToken: jest.fn(() =>
             Promise.resolve('0xb98bd7c7f656290hu071e52d1a56e6uyh98765e4')
         ),
 
@@ -515,7 +523,7 @@ export const mockUseSF = () => {
                 lastAutoRollTime: BigInt('1609210000'),
                 lastAutoRollAmount: BigInt('1000000000000000000'),
                 next: BigInt('0'),
-                prev: BigInt('900'),
+                prev: BigInt('1719532800'),
             })
         ),
 
@@ -524,8 +532,8 @@ export const mockUseSF = () => {
                 unitPrice: BigInt('9800'),
                 lastAutoRollTime: BigInt('1609210000'),
                 lastAutoRollAmount: BigInt('1000000000000000000'),
-                next: BigInt('1000'),
-                prev: BigInt('800'),
+                next: BigInt('1727395200'),
+                prev: BigInt('1711670400'),
             })
         ),
 

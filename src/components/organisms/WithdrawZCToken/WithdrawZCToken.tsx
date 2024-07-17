@@ -27,14 +27,14 @@ import { Maturity } from 'src/utils/entities';
 import {
     ButtonEvents,
     ButtonProperties,
-    CollateralEvents,
+    ZCTokenEvents,
     trackButtonEvent,
-    trackCollateralEvent,
+    trackZCTokenEvent,
 } from 'src/utils/events';
 import { useAccount } from 'wagmi';
 
 enum Step {
-    withdrawZCBonds = 1,
+    withdrawZCToken = 1,
     withdrawing,
     withdrawn,
     error,
@@ -49,8 +49,8 @@ type State = {
 };
 
 const stateRecord: Record<Step, State> = {
-    [Step.withdrawZCBonds]: {
-        currentStep: Step.withdrawZCBonds,
+    [Step.withdrawZCToken]: {
+        currentStep: Step.withdrawZCToken,
         nextStep: Step.withdrawing,
         title: 'Withdraw ZC Bonds',
         description: '',
@@ -65,7 +65,7 @@ const stateRecord: Record<Step, State> = {
     },
     [Step.withdrawn]: {
         currentStep: Step.withdrawn,
-        nextStep: Step.withdrawZCBonds,
+        nextStep: Step.withdrawZCToken,
         title: 'Success!',
         description:
             'You have successfully withdrawn ZC Bonds on Secured Finance.',
@@ -73,7 +73,7 @@ const stateRecord: Record<Step, State> = {
     },
     [Step.error]: {
         currentStep: Step.error,
-        nextStep: Step.withdrawZCBonds,
+        nextStep: Step.withdrawZCToken,
         title: 'Failed!',
         description: '',
         buttonText: 'OK',
@@ -97,7 +97,7 @@ const reducer = (
             };
         default:
             return {
-                ...stateRecord[Step.withdrawZCBonds],
+                ...stateRecord[Step.withdrawZCToken],
             };
     }
 };
@@ -209,7 +209,7 @@ export const WithdrawZCToken = ({
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
-        if (state.currentStep === Step.withdrawZCBonds) {
+        if (state.currentStep === Step.withdrawZCToken) {
             trackButtonEvent(
                 ButtonEvents.CANCEL_BUTTON,
                 ButtonProperties.CANCEL_ACTION,
@@ -222,7 +222,7 @@ export const WithdrawZCToken = ({
 
     const isDisabled = useCallback(() => {
         return (
-            state.currentStep === Step.withdrawZCBonds &&
+            state.currentStep === Step.withdrawZCToken &&
             (!collateral ||
                 !asset ||
                 collateral > zcBondList[asset]?.availableTokenAmount)
@@ -236,9 +236,14 @@ export const WithdrawZCToken = ({
             if (!transactionStatus) {
                 dispatch({ type: 'error' });
             } else {
-                trackCollateralEvent(
-                    CollateralEvents.WITHDRAW_COLLATERAL,
+                const maturity =
+                    asset && zcBondList[asset].maturity
+                        ? zcBondList[asset].maturity?.toNumber()
+                        : 0;
+                trackZCTokenEvent(
+                    ZCTokenEvents.WITHDRAW_ZC_TOKEN,
                     currencySymbol,
+                    maturity ?? 0,
                     collateral ?? BigInt(0),
                     source ?? ''
                 );
@@ -252,17 +257,19 @@ export const WithdrawZCToken = ({
             dispatch({ type: 'error' });
         }
     }, [
+        onWithdrawZCToken,
+        handleContractTransaction,
+        asset,
+        zcBondList,
         currencySymbol,
         collateral,
-        handleContractTransaction,
-        onWithdrawZCToken,
         source,
     ]);
 
     const onClick = useCallback(
         async (currentStep: Step) => {
             switch (currentStep) {
-                case Step.withdrawZCBonds:
+                case Step.withdrawZCToken:
                     dispatch({ type: 'next' });
                     handleWithdrawZCToken();
                     break;
@@ -301,11 +308,11 @@ export const WithdrawZCToken = ({
             callToAction={state.buttonText}
             onClick={() => onClick(state.currentStep)}
             disableActionButton={isDisabled()}
-            showCancelButton={state.currentStep === Step.withdrawZCBonds}
+            showCancelButton={state.currentStep === Step.withdrawZCToken}
         >
             {(() => {
                 switch (state.currentStep) {
-                    case Step.withdrawZCBonds:
+                    case Step.withdrawZCToken:
                         return (
                             <div className='flex flex-col gap-6'>
                                 <Selector
@@ -326,6 +333,7 @@ export const WithdrawZCToken = ({
                                             ? formatOption(zcBondList[selected])
                                             : undefined
                                     }
+                                    testid='asset'
                                 />
                                 <ZCTokenInput
                                     price={priceList[currencySymbol]}
