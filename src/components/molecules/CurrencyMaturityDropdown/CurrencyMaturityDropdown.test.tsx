@@ -73,7 +73,7 @@ describe('CurrencyMaturityDropdown', () => {
         fireEvent.change(searchInput, { target: { value: 'WBTC' } });
         expect(searchInput.getAttribute('value')).toBe('WBTC');
 
-        expect(screen.queryByText('WBTC-JUN2023')).toBeInTheDocument();
+        expect(screen.getByText('WBTC-JUN2023')).toBeInTheDocument();
     });
 
     it('should render relevant message when no products are found', () => {
@@ -88,6 +88,6 @@ describe('CurrencyMaturityDropdown', () => {
         fireEvent.change(searchInput, { target: { value: 'Something' } });
         expect(searchInput.getAttribute('value')).toBe('Something');
 
-        expect(screen.queryByText('No products found')).toBeInTheDocument();
+        expect(screen.getByText('No products found')).toBeInTheDocument();
     });
 });
