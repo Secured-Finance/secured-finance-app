@@ -7,6 +7,14 @@ const combined = [...desktopColumns, ...mobileColumns];
 
 export type ColumnKey = (typeof combined)[number]['key'];
 
+export type ColumnType = {
+    key: string;
+    label: string;
+    width: string;
+    allowsSorting?: boolean;
+    className?: string;
+};
+
 export type FilteredOption = {
     key: string;
     display: string;
