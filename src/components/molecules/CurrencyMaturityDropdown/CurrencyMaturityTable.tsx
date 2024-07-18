@@ -17,7 +17,7 @@ import { useBreakpoint } from 'src/hooks';
 import { RootState } from 'src/store/types';
 import { calculateTimeDifference, formatDuration, usdFormat } from 'src/utils';
 import { desktopColumns, mobileColumns } from './constants';
-import { ColumnKey, FilteredOption } from './types';
+import { ColumnKey, ColumnType, FilteredOption } from './types';
 
 export const CurrencyMaturityTable = ({
     options,
@@ -56,7 +56,11 @@ export const CurrencyMaturityTable = ({
                 return option.apr;
             case 'maturity':
                 const timestampDifference = calculateTimeDifference(+maturity);
-                return formatDuration(Math.abs(timestampDifference));
+                return (
+                    <div className='flex justify-end pr-3'>
+                        {formatDuration(Math.abs(timestampDifference))}
+                    </div>
+                );
             case 'volume':
                 return option.volume ? usdFormat(option.volume) : '-';
             default:
@@ -72,12 +76,13 @@ export const CurrencyMaturityTable = ({
                 base: clsx(
                     'laptop:h-[232px] overflow-auto laptop:pl-4 laptop:pr-3',
                     {
-                        'h-[calc(100vh-245px)]': chainError,
-                        'h-[calc(100vh-222px)]': !chainError,
+                        'h-[calc(100vh-355px)]': chainError,
+                        'h-[calc(100vh-332px)]': !chainError,
                     }
                 ),
                 table: 'laptop:border-separate laptop:border-spacing-y-1',
                 sortIcon: 'hidden',
+                tbody: 'pb-10',
             }}
             onSortChange={(descriptor: SortDescriptor) =>
                 onSortChange(descriptor)
@@ -87,7 +92,7 @@ export const CurrencyMaturityTable = ({
             isHeaderSticky
         >
             <TableHeader>
-                {columns.map(column => {
+                {columns.map((column: ColumnType) => {
                     return (
                         <TableColumn
                             className='typography-mobile-body-5 laptop:typography-desktop-body-5 relative h-5 !rounded-none bg-neutral-800 px-0 font-normal text-neutral-400 laptop:bg-neutral-900'
@@ -96,7 +101,12 @@ export const CurrencyMaturityTable = ({
                             width={column.width as any}
                             allowsSorting={column.allowsSorting}
                         >
-                            <div className='flex gap-1'>
+                            <div
+                                className={clsx(
+                                    'flex gap-1',
+                                    column?.className
+                                )}
+                            >
                                 {column.label}
                                 {column.allowsSorting && (
                                     <SortArrows
@@ -114,7 +124,7 @@ export const CurrencyMaturityTable = ({
                 {item => (
                     <TableRow
                         key={item.key}
-                        className='cursor-pointer overflow-hidden rounded border-b border-neutral-600 laptop:border-b-0 laptop:hover:bg-neutral-700'
+                        className='cursor-pointer overflow-hidden rounded laptop:hover:bg-neutral-700'
                         onClick={() => {
                             onOptionClick(item);
                             close();
@@ -137,12 +147,7 @@ const SortArrows = ({
     column,
 }: {
     sortState: SortDescriptor;
-    column: {
-        key: string;
-        label: string;
-        width: string;
-        allowsSorting: boolean;
-    };
+    column: ColumnType;
 }) => {
     const sortIconStyle = 'relative';
     const isColumnSortedAscending =
