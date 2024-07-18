@@ -12,7 +12,9 @@ import {
     TableRow,
 } from '@nextui-org/table';
 import clsx from 'clsx';
+import { useSelector } from 'react-redux';
 import { useBreakpoint } from 'src/hooks';
+import { RootState } from 'src/store/types';
 import { calculateTimeDifference, formatDuration, usdFormat } from 'src/utils';
 import { desktopColumns, mobileColumns } from './constants';
 import { ColumnKey, FilteredOption } from './types';
@@ -30,6 +32,9 @@ export const CurrencyMaturityTable = ({
     onSortChange: (descriptor: SortDescriptor) => void;
     sortState: SortDescriptor;
 }) => {
+    const chainError = useSelector(
+        (state: RootState) => state.blockchain.chainError
+    );
     const isTablet = useBreakpoint('laptop');
     const columns = isTablet ? mobileColumns : desktopColumns;
 
@@ -64,7 +69,13 @@ export const CurrencyMaturityTable = ({
             aria-label='Currency Maturity Dropdown'
             selectionMode='single'
             classNames={{
-                base: 'laptop:h-[232px] h-[calc(100%-185px)] overflow-auto laptop:pl-4 laptop:pr-3',
+                base: clsx(
+                    'laptop:h-[232px] overflow-auto laptop:pl-4 laptop:pr-3',
+                    {
+                        'h-[calc(100vh-245px)]': chainError,
+                        'h-[calc(100vh-222px)]': !chainError,
+                    }
+                ),
                 table: 'laptop:border-separate laptop:border-spacing-y-1',
                 sortIcon: 'hidden',
             }}
