@@ -35,7 +35,7 @@ export const ZCTokenInput = ({
                 amount !== undefined &&
                 amount !== BigInt(0) &&
                 Number(inputAmount) ===
-                    Math.floor(
+                    Math.round(
                         convertZCTokenFromBaseAmount(symbol, amount, maturity) *
                             10000
                     ) /
