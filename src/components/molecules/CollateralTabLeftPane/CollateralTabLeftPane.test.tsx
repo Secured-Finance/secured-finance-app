@@ -44,8 +44,8 @@ describe('CollateralTabLeftPane component', () => {
     it('should render balance when wallet is connected and collateral is deposited', () => {
         render(<Default />);
         expect(screen.getByText('$12,700.34')).toBeInTheDocument();
-        expect(screen.getByText('Collateral Assets')).toBeInTheDocument();
-        expect(screen.getByText('Non-collateral Assets')).toBeInTheDocument();
+        expect(screen.getByText('Collateral')).toBeInTheDocument();
+        expect(screen.getByText('Non-collateral')).toBeInTheDocument();
     });
 
     it('should render enabled buttons when wallet is connected', () => {
@@ -94,7 +94,7 @@ describe('CollateralTabLeftPane component', () => {
                 'Deposit collateral from your connected wallet to enable lending service on Secured Finance.'
             )[0]
         ).toBeInTheDocument();
-        expect(screen.getByText('Non-collateral Assets')).toBeInTheDocument();
+        expect(screen.getByText('Non-collateral')).toBeInTheDocument();
     });
 
     it('should change font size as collateral increases', async () => {
