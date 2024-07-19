@@ -7,14 +7,12 @@ export const FilterButtons = ({
     isItayose,
     setCurrentCurrency,
     setIsItayose,
-    isItayosePage,
 }: {
     currencies?: CurrencySymbol[];
     currentCurrency: CurrencySymbol | undefined;
     isItayose: boolean;
     setCurrentCurrency: (currency: CurrencySymbol | undefined) => void;
     setIsItayose: (value: boolean) => void;
-    isItayosePage: boolean;
 }) => {
     const FilterBtn = ({
         onClick,
@@ -50,18 +48,16 @@ export const FilterButtons = ({
             >
                 All
             </FilterBtn>
-            {!isItayosePage && (
-                <FilterBtn
-                    activeCondition={isItayose && !currentCurrency}
-                    onClick={() => {
-                        setCurrentCurrency(undefined);
-                        setIsItayose(true);
-                    }}
-                    label='itayose-filter-btn'
-                >
-                    Itayose
-                </FilterBtn>
-            )}
+            <FilterBtn
+                activeCondition={isItayose && !currentCurrency}
+                onClick={() => {
+                    setCurrentCurrency(undefined);
+                    setIsItayose(true);
+                }}
+                label='itayose-filter-btn'
+            >
+                Itayose
+            </FilterBtn>
             {currencies?.map(currency => (
                 <FilterBtn
                     key={`currency-${currency}`}

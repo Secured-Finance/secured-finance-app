@@ -6,7 +6,7 @@ import * as stories from './CurrencyMaturityDropdown.stories';
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-const { Default, ItayosePage } = composeStories(stories);
+const { Default } = composeStories(stories);
 
 describe('CurrencyMaturityDropdown', () => {
     it('should render a selected market', () => {
@@ -27,18 +27,6 @@ describe('CurrencyMaturityDropdown', () => {
         expect(
             screen.getByLabelText('Currency Maturity Dropdown')
         ).toBeInTheDocument();
-    });
-
-    it('should not render Itayose filter in Itayose page', () => {
-        render(<ItayosePage />, {
-            apolloMocks: Default.parameters?.apolloClient.mocks,
-        });
-        const button = screen.getByRole('button', { name: 'WBTC-DEC2022' });
-        fireEvent.click(button);
-
-        expect(
-            screen.queryByLabelText('itayose-filter-btn')
-        ).not.toBeInTheDocument();
     });
 
     it('should only show associated markets when user selects on currency filter', async () => {

@@ -34,7 +34,6 @@ export const CurrencyMaturityDropdown = ({
     maturityList,
     maturity = maturityList[0],
     onChange,
-    isItayosePage = false,
 }: CurrencyMaturityDropdownProps) => {
     const isTablet = useBreakpoint('laptop');
     const [searchValue, setSearchValue] = useState<string>('');
@@ -195,13 +194,18 @@ export const CurrencyMaturityDropdown = ({
     ]);
 
     const handleOptionClick = (item: FilteredOption) => {
-        if (item.isItayoseOption) {
-            router.push('/itayose');
+        if (item.currency !== asset.value || item.maturity !== maturity.value) {
+            onChange(item.currency, item.maturity);
+        }
+
+        if (router.pathname.includes('itayose') && !item.isItayoseOption) {
+            router.push('/');
             return;
         }
 
-        if (item.currency !== asset.value || item.maturity !== maturity.value) {
-            onChange(item.currency, item.maturity);
+        if (item.isItayoseOption && item.isItayoseOption) {
+            router.push('/itayose');
+            return;
         }
     };
 
@@ -272,7 +276,6 @@ export const CurrencyMaturityDropdown = ({
                                     isItayose={isItayose}
                                     setCurrentCurrency={setCurrentCurrency}
                                     setIsItayose={setIsItayose}
-                                    isItayosePage={isItayosePage}
                                 />
                             </div>
 
