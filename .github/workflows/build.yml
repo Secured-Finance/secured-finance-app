@@ -67,6 +67,7 @@ jobs:
           NEXT_PUBLIC_GRAPHQL_SERVER_URL=${{ vars.GRAPHQL_SERVER_URL }}
           NEXT_PUBLIC_REFERRAL_MESSAGE=${{ vars.REFERRAL_MESSAGE }}
           NEXT_PUBLIC_REFERRAL_HASHTAGS=${{ vars.REFERRAL_HASHTAGS }}
+          NEXT_PUBLIC_SUBGRAPH_URL_314=${{ vars.SUBGRAPH_URL_314 }}
           EOF
 
       - name: Check Syntax with Prettier
