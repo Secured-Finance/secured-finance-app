@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { InputBase, SizeDependentStylesConfig } from 'src/components/atoms';
 import { PercentageSelector } from 'src/components/molecules';
 import {
@@ -29,6 +29,8 @@ export const ZCTokenInput = ({
     amount,
     maturity,
 }: ZCTokenInputProps) => {
+    const [inputValue, setInputValue] = useState<string | undefined>();
+
     const handleAmountChange = useCallback(
         (inputAmount: string | undefined) => {
             if (
@@ -43,6 +45,8 @@ export const ZCTokenInput = ({
             ) {
                 return;
             }
+
+            setInputValue(inputAmount);
 
             if (onAmountChange) {
                 onAmountChange(
@@ -64,24 +68,24 @@ export const ZCTokenInput = ({
                     ? availableTokenAmount
                     : (percentage * availableTokenAmount) / BigInt(100);
 
+            setInputValue(
+                amount
+                    ? Number(
+                          convertZCTokenFromBaseAmount(
+                              symbol,
+                              amount,
+                              maturity
+                          ).toFixed(4)
+                      ).toString()
+                    : undefined
+            );
+
             if (onAmountChange) {
                 onAmountChange(amount);
             }
         },
-        [availableTokenAmount, onAmountChange]
+        [availableTokenAmount, maturity, onAmountChange, symbol]
     );
-
-    const inputValue = useMemo(() => {
-        return amount
-            ? Number(
-                  convertZCTokenFromBaseAmount(
-                      symbol,
-                      amount,
-                      maturity
-                  ).toFixed(4)
-              ).toString()
-            : undefined;
-    }, [amount, maturity, symbol]);
 
     const totalPrice = useMemo(() => {
         if (amount && availableAmount && availableTokenAmount) {
