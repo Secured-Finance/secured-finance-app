@@ -295,10 +295,6 @@ export const WithdrawZCToken = ({
         []
     );
 
-    const handleCollateral = useCallback((v: bigint | undefined) => {
-        setCollateral(v);
-    }, []);
-
     return (
         <Dialog
             isOpen={isOpen}
@@ -348,7 +344,7 @@ export const WithdrawZCToken = ({
                                             ? zcBondList[asset]?.availableAmount
                                             : BigInt(0)
                                     }
-                                    onAmountChange={handleCollateral}
+                                    onAmountChange={setCollateral}
                                     symbol={currencySymbol}
                                     amount={collateral}
                                     maturity={
