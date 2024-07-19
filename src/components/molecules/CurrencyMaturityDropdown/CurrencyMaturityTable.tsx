@@ -62,7 +62,7 @@ export const CurrencyMaturityTable = ({
             case 'maturity':
                 const timestampDifference = calculateTimeDifference(+maturity);
                 return (
-                    <div className='flex justify-end pr-3'>
+                    <div className='flex justify-end whitespace-nowrap pr-3'>
                         {formatDuration(Math.abs(timestampDifference))}
                     </div>
                 );

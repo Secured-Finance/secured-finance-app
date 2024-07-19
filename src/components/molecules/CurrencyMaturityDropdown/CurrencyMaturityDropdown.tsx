@@ -223,17 +223,17 @@ export const CurrencyMaturityDropdown = ({
             {({ open, close }) => (
                 <div>
                     <Menu.Button
-                        className='flex w-full items-center justify-between gap-2 rounded-lg bg-neutral-700 px-2 py-1.5 text-sm font-semibold normal-case leading-6 text-white laptop:w-[226px] laptop:py-2.5 laptop:pl-3 laptop:pr-2 laptop:text-base laptop:leading-6 desktop:w-[302px] desktop:text-[22px]'
+                        className='flex w-full max-w-[208px] items-center justify-between gap-2 rounded-lg bg-neutral-700 px-2 py-1.5 text-sm font-semibold normal-case leading-6 text-white laptop:w-[226px] laptop:max-w-none laptop:py-2.5 laptop:pl-3 laptop:pr-2 laptop:text-base laptop:leading-6 desktop:w-[302px] desktop:text-[22px]'
                         onClick={() => setIsDropdownOpen(!open)}
                     >
-                        <div className='flex items-center gap-2 laptop:gap-1'>
+                        <div className='flex items-center gap-2 whitespace-nowrap laptop:gap-1'>
                             {!!CcyIcon && (
                                 <CcyIcon className='h-5 w-5 laptop:h-6 laptop:w-6' />
                             )}
                             {asset.label}-{maturity.label}
                         </div>
                         <ChevronDownIcon
-                            className={`h-4 w-4 text-neutral-300 laptop:h-6 laptop:w-6 ${
+                            className={`h-4 w-4 flex-shrink-0 text-neutral-300 laptop:h-6 laptop:w-6 ${
                                 open ? 'rotate-180' : ''
                             }`}
                         />
