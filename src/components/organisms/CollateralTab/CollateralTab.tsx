@@ -1,18 +1,17 @@
+import { getUTCMonthYear } from '@secured-finance/sf-core';
 import { useMemo, useState } from 'react';
 import {
     CollateralTabLeftPane,
     CollateralTabRightPane,
+    ZCBond,
 } from 'src/components/molecules';
 import {
     DepositCollateral,
+    DepositZCToken,
     WithdrawCollateral,
+    WithdrawZCToken,
 } from 'src/components/organisms';
-import {
-    CollateralBook,
-    useCollateralBalances,
-    useCollateralCurrencies,
-    useCurrencies,
-} from 'src/hooks';
+import { CollateralBook, useCurrencies, useFullBalances } from 'src/hooks';
 import {
     CollateralInfo,
     CurrencySymbol,
@@ -20,6 +19,7 @@ import {
     amountFormatterFromBase,
     currencyMap,
 } from 'src/utils';
+import { Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
 export const generateCollateralList = (
@@ -52,25 +52,23 @@ export const generateCollateralList = (
 export const CollateralTab = ({
     collateralBook,
     netAssetValue,
+    zcBonds,
 }: {
     collateralBook: CollateralBook;
     netAssetValue: number;
+    zcBonds: ZCBond[];
 }) => {
     const { address } = useAccount();
-    const [openModal, setOpenModal] = useState<'' | 'deposit' | 'withdraw'>('');
+    const [openModal, setOpenModal] = useState<
+        '' | 'deposit' | 'withdraw' | 'deposit-zc-tokens' | 'withdraw-zc-tokens'
+    >('');
 
-    const collateralBalances = useCollateralBalances();
-    const { data: collateralCurrencies = [] } = useCollateralCurrencies();
+    const balances = useFullBalances();
     const { data: currencies = [] } = useCurrencies(true);
 
     const depositCollateralList = useMemo(
-        () =>
-            generateCollateralList(
-                collateralBalances,
-                false,
-                collateralCurrencies
-            ),
-        [collateralBalances, collateralCurrencies]
+        () => generateCollateralList(balances, true, currencies),
+        [balances, currencies]
     );
 
     const withdrawCollateralList = useMemo(
@@ -90,6 +88,35 @@ export const CollateralTab = ({
         ]
     );
 
+    const withdrawZcBondList = zcBonds.reduce(
+        (acc, bond) => {
+            const key =
+                bond.currency +
+                (bond.maturity
+                    ? `-${getUTCMonthYear(bond.maturity.toNumber())}`
+                    : '');
+
+            acc[key] = {
+                symbol: bond.currency,
+                key: key,
+                availableTokenAmount: bond.tokenAmount,
+                availableAmount: bond.amount,
+                maturity: bond.maturity,
+            };
+            return acc;
+        },
+        {} as Record<
+            string,
+            {
+                symbol: CurrencySymbol;
+                key: string;
+                availableTokenAmount: bigint;
+                availableAmount: bigint;
+                maturity?: Maturity;
+            }
+        >
+    );
+
     return (
         <div className='flex w-full flex-row items-center'>
             <CollateralTabLeftPane
@@ -97,6 +124,7 @@ export const CollateralTab = ({
                 account={address}
                 collateralBook={collateralBook}
                 netAssetValue={netAssetValue}
+                zcBonds={zcBonds}
             />
             <CollateralTabRightPane
                 account={address}
@@ -108,12 +136,24 @@ export const CollateralTab = ({
                 collateralList={depositCollateralList}
                 source='Collateral Tab'
             ></DepositCollateral>
+            <DepositZCToken
+                isOpen={openModal === 'deposit-zc-tokens'}
+                onClose={() => setOpenModal('')}
+                currencyList={currencies}
+                source='Collateral Tab'
+            ></DepositZCToken>
             <WithdrawCollateral
                 isOpen={openModal === 'withdraw'}
                 onClose={() => setOpenModal('')}
                 collateralList={withdrawCollateralList}
                 source='Collateral Tab'
             ></WithdrawCollateral>
+            <WithdrawZCToken
+                isOpen={openModal === 'withdraw-zc-tokens'}
+                onClose={() => setOpenModal('')}
+                zcBondList={withdrawZcBondList}
+                source='Collateral Tab'
+            ></WithdrawZCToken>
         </div>
     );
 };

@@ -12,6 +12,8 @@ export enum OrderEvents {
 export enum ButtonEvents {
     DEPOSIT_COLLATERAL_BUTTON = 'Deposit Collateral Button',
     WITHDRAW_COLLATERAL_BUTTON = 'Withdraw Collateral Button',
+    DEPOSIT_ZC_TOKEN_BUTTON = 'Deposit ZC Token Button',
+    WITHDRAW_ZC_TOKEN_BUTTON = 'Withdraw ZC Token Button',
     PLACE_ORDER_BUTTON = 'Place Order Button',
     ORDER_TYPE = 'Order Type',
     ORDER_SIDE = 'Order Side',
@@ -38,6 +40,11 @@ export enum CollateralEvents {
     WITHDRAW_COLLATERAL = 'Withdraw Collateral',
 }
 
+export enum ZCTokenEvents {
+    DEPOSIT_ZC_TOKEN = 'Deposit ZC Token',
+    WITHDRAW_ZC_TOKEN = 'Withdraw ZC Token',
+}
+
 export enum OrderProperties {
     ORDER_SIDE = 'Order Side',
     ORDER_TYPE = 'Order Type',
@@ -50,6 +57,13 @@ export enum OrderProperties {
 export enum CollateralProperties {
     ASSET_TYPE = 'Asset Type',
     AMOUNT = 'Amount',
+    SOURCE = 'Source',
+}
+
+export enum ZCTokenProperties {
+    ASSET_TYPE = 'Asset Type',
+    AMOUNT = 'Amount',
+    MATURITY = 'Maturity',
     SOURCE = 'Source',
 }
 
