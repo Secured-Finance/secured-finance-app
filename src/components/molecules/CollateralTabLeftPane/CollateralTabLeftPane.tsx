@@ -309,7 +309,14 @@ export const CollateralTabLeftPane = ({
                     Deposit
                 </Button>
                 <Button
-                    disabled={!account || netAssetValue <= 0 || chainError}
+                    disabled={
+                        !account ||
+                        (selectedTable === TableType.TOKENS &&
+                            netAssetValue <= 0) ||
+                        (selectedTable === TableType.ZC_BONDS &&
+                            zcBonds.length === 0) ||
+                        chainError
+                    }
                     onClick={() => {
                         if (selectedTable === TableType.TOKENS) {
                             onClick('withdraw');
