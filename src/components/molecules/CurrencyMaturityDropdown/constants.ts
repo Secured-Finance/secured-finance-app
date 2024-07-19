@@ -33,6 +33,7 @@ export const desktopColumns = [
         label: 'Volume',
         width: '20%',
         allowsSorting: true,
+        isSubgraphSupported: true,
     },
     {
         key: 'maturity',

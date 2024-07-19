@@ -13,6 +13,7 @@ export type ColumnType = {
     width: string;
     allowsSorting?: boolean;
     className?: string;
+    isSubgraphSupported?: boolean;
 };
 
 export type FilteredOption = {

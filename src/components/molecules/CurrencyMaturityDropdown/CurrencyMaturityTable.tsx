@@ -13,7 +13,8 @@ import {
 } from '@nextui-org/table';
 import clsx from 'clsx';
 import { useSelector } from 'react-redux';
-import { useBreakpoint } from 'src/hooks';
+import { useBreakpoint, useIsSubgraphSupported } from 'src/hooks';
+import useSF from 'src/hooks/useSecuredFinance';
 import { RootState } from 'src/store/types';
 import { calculateTimeDifference, formatDuration, usdFormat } from 'src/utils';
 import { desktopColumns, mobileColumns } from './constants';
@@ -32,11 +33,15 @@ export const CurrencyMaturityTable = ({
     onSortChange: (descriptor: SortDescriptor) => void;
     sortState: SortDescriptor;
 }) => {
+    const securedFinance = useSF();
+    const currentChainId = securedFinance?.config.chain.id;
+
+    const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
     const chainError = useSelector(
         (state: RootState) => state.blockchain.chainError
     );
     const isTablet = useBreakpoint('laptop');
-    const columns = isTablet ? mobileColumns : desktopColumns;
+    const columns: ColumnType[] = isTablet ? mobileColumns : desktopColumns;
 
     const renderCell = (option: (typeof options)[0], columnKey: ColumnKey) => {
         const { maturity } = option;
@@ -92,33 +97,38 @@ export const CurrencyMaturityTable = ({
             isHeaderSticky
         >
             <TableHeader>
-                {columns.map((column: ColumnType) => {
-                    return (
-                        <TableColumn
-                            className='typography-mobile-body-5 laptop:typography-desktop-body-5 relative h-5 !rounded-none bg-neutral-800 px-0 font-normal text-neutral-400 laptop:bg-neutral-900'
-                            key={column.key}
-                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                            width={column.width as any}
-                            allowsSorting={column.allowsSorting}
-                        >
-                            <div
-                                className={clsx(
-                                    'flex gap-1',
-                                    column?.className
-                                )}
+                {columns
+                    .filter(
+                        col =>
+                            !(!isSubgraphSupported && col?.isSubgraphSupported)
+                    )
+                    .map((column: ColumnType) => {
+                        return (
+                            <TableColumn
+                                className='typography-mobile-body-5 laptop:typography-desktop-body-5 relative h-5 !rounded-none bg-neutral-800 px-0 font-normal text-neutral-400 laptop:bg-neutral-900'
+                                key={column.key}
+                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                width={column.width as any}
+                                allowsSorting={column.allowsSorting}
                             >
-                                {column.label}
-                                {column.allowsSorting && (
-                                    <SortArrows
-                                        sortState={sortState}
-                                        column={column}
-                                    />
-                                )}
-                            </div>
-                            <span className='absolute bottom-0 left-0 h-[1px] w-full bg-neutral-700'></span>
-                        </TableColumn>
-                    );
-                })}
+                                <div
+                                    className={clsx(
+                                        'flex gap-1',
+                                        column?.className
+                                    )}
+                                >
+                                    {column.label}
+                                    {column.allowsSorting && (
+                                        <SortArrows
+                                            sortState={sortState}
+                                            column={column}
+                                        />
+                                    )}
+                                </div>
+                                <span className='absolute bottom-0 left-0 h-[1px] w-full bg-neutral-700'></span>
+                            </TableColumn>
+                        );
+                    })}
             </TableHeader>
             <TableBody items={options} emptyContent='No products found'>
                 {item => (
