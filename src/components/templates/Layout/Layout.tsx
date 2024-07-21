@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import { Toaster } from 'src/@/components/ui/toaster';
 import { getCommitHash } from 'src/utils';
 
 export const Layout = ({
@@ -35,7 +34,6 @@ export const Layout = ({
             >
                 {footer}
             </footer>
-            <Toaster />
         </div>
     );
 };
