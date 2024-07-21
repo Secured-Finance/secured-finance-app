@@ -8,13 +8,14 @@ const { Default, Values } = composeStories(stories);
 
 describe('AdvancedLendingTopBar Component', () => {
     it('should render a AdvancedLendingTopBar without the values', () => {
-        render(<Default />);
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
 
         expect(
-            screen.getByRole('button', { name: 'WFIL' })
+            screen.getByRole('button', { name: 'WFIL-DEC2022' })
         ).toBeInTheDocument();
         expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
-
         expect(screen.getByText('80.00')).toBeInTheDocument();
         expect(screen.getByText('25.03% APR')).toBeInTheDocument();
         expect(
@@ -23,7 +24,9 @@ describe('AdvancedLendingTopBar Component', () => {
     });
 
     it('should render a AdvancedLendingTopBar with the values', () => {
-        render(<Values />);
+        render(<Values />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
 
         expect(screen.getByText('24h High')).toBeInTheDocument();
         expect(screen.getByText('24h Low')).toBeInTheDocument();
@@ -38,10 +41,12 @@ describe('AdvancedLendingTopBar Component', () => {
     });
 
     it('should render source link for the selected asset', () => {
-        render(<Default />);
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
 
         expect(
-            screen.getByRole('button', { name: 'WFIL' })
+            screen.getByRole('button', { name: 'WFIL-DEC2022' })
         ).toBeInTheDocument();
         const source = screen.getByRole('link');
         expect(source).toBeInTheDocument();
@@ -60,7 +65,10 @@ describe('AdvancedLendingTopBar Component', () => {
                         time: 1643713200,
                         type: 'opening',
                     }}
-                />
+                />,
+                {
+                    apolloMocks: Default.parameters?.apolloClient.mocks,
+                }
             );
             expect(screen.getByText('Opening Price')).toBeInTheDocument();
             expect(
@@ -76,7 +84,10 @@ describe('AdvancedLendingTopBar Component', () => {
                         time: 1643713200,
                         type: 'block',
                     }}
-                />
+                />,
+                {
+                    apolloMocks: Default.parameters?.apolloClient.mocks,
+                }
             );
             expect(
                 screen.getByText(`${formatTimeStampWithTimezone(1643713200)}`)
@@ -84,7 +95,9 @@ describe('AdvancedLendingTopBar Component', () => {
         });
 
         it('should show the current market box in gray if there is no current market', () => {
-            render(<Default currentMarket={undefined} />);
+            render(<Default currentMarket={undefined} />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+            });
             expect(
                 screen.queryByLabelText('Current Market')
             ).toBeInTheDocument();

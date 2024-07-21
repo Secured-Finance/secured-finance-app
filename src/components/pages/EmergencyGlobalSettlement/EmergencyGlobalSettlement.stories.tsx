@@ -5,6 +5,7 @@ import {
     withWalletProvider,
 } from '.storybook/decorators';
 import { Meta, StoryFn } from '@storybook/react';
+import { mockDailyVolumes } from 'src/stories/mocks/queries';
 import { EmergencyGlobalSettlement } from './EmergencyGlobalSettlement';
 
 export default {
@@ -15,6 +16,9 @@ export default {
         ...RESPONSIVE_PARAMETERS,
         layout: 'fullscreen',
         connected: true,
+        apolloClient: {
+            mocks: mockDailyVolumes,
+        },
     },
     decorators: [withAppLayout, withWalletProvider, WithGraphClient],
 } as Meta<typeof EmergencyGlobalSettlement>;

@@ -18,7 +18,6 @@ interface TabProps {
     disabled?: boolean;
 }
 
-// TODO: handle disabled state as in TabSelector (Default) story
 export const Tab = ({
     text,
     active = false,

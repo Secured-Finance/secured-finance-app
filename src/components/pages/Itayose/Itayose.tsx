@@ -14,7 +14,7 @@ import {
 } from 'src/components/atoms';
 import {
     Alert,
-    HorizontalAssetSelector,
+    CurrencyMaturityDropdown,
     HorizontalTab,
     TabSelector,
 } from 'src/components/molecules';
@@ -60,6 +60,7 @@ import {
     CurrencySymbol,
     ZERO_BI,
     getMappedOrderStatus,
+    getTransformMaturityOption,
     sortOrders,
     toOptions,
     usdFormat,
@@ -85,28 +86,58 @@ const Toolbar = ({
 }: {
     selectedAsset: Option<CurrencySymbol> | undefined;
     assetList: Array<Option<CurrencySymbol>>;
-    options: Array<Option<string>>;
-    selected: Option<string>;
+    options: Array<Option<Maturity>>;
+    selected: Option<Maturity>;
     date: number;
     nextMarketPhase: string;
     currency: CurrencySymbol;
     handleAssetChange: (v: CurrencySymbol) => void;
-    handleTermChange: (v: string) => void;
+    handleTermChange: (v: Maturity) => void;
 }) => {
     const { data: priceList } = useLastPrices();
+    const selectedTerm = useMemo(
+        () => options.find(o => o.value === selected.value),
+        [options, selected]
+    );
+
+    const onHandleTermChange = useCallback(
+        (v: Maturity) => handleTermChange(v),
+        [handleTermChange]
+    );
+
+    const onChange = (asset: CurrencySymbol, maturity: Maturity) => {
+        onHandleTermChange(maturity);
+        handleAssetChange(asset);
+    };
 
     return (
         <GradientBox shape='rectangle'>
             <div className='flex min-w-fit flex-row items-center justify-start gap-10 px-6 py-3 tablet:justify-between'>
                 <div className='w-full tablet:w-1/2'>
-                    <HorizontalAssetSelector
-                        assetList={assetList}
-                        selectedAsset={selectedAsset}
-                        options={options}
-                        selected={selected}
-                        onAssetChange={handleAssetChange}
-                        onTermChange={handleTermChange}
-                    />
+                    <div className='grid grid-cols-1 gap-x-3 gap-y-1 text-neutral-4 desktop:gap-x-5'>
+                        <div className='flex flex-col items-start'>
+                            <div className='flex w-full flex-col gap-1'>
+                                <CurrencyMaturityDropdown
+                                    asset={selectedAsset}
+                                    currencyList={assetList}
+                                    maturity={selectedTerm}
+                                    maturityList={options}
+                                    onChange={onChange}
+                                />
+                                <p className='whitespace-nowrap pl-1 text-[11px] leading-4 tablet:text-xs laptop:text-xs'>
+                                    {`Maturity ${
+                                        selectedTerm &&
+                                        getTransformMaturityOption(
+                                            options.map(o => ({
+                                                ...o,
+                                                value: o.value.toString(),
+                                            }))
+                                        )(selectedTerm.label)
+                                    }`}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div className='hidden w-full flex-row items-center justify-start gap-40 tablet:flex'>
                     <div className='typography-caption w-40 text-nebulaTeal'>
@@ -152,10 +183,9 @@ export const Itayose = () => {
     const marketPhase = useMarketPhase(currency, maturity);
     const data = useMarket(currency, maturity);
 
-    const maturityOptionList = useMaturityOptions(
-        lendingContracts,
-        market => market.isPreOrderPeriod || market.isItayosePeriod
-    );
+    // all maturity options
+    // handle select in CurrencyMaturityTable
+    const maturityOptionList = useMaturityOptions(lendingContracts);
 
     const {
         rates,
@@ -294,22 +324,24 @@ export const Itayose = () => {
     return (
         <Page title='Pre-Open Order Book'>
             {preOrderDays && (
-                <Alert
-                    title={
-                        <>
-                            Secure your market position by placing limit orders
-                            up to {preOrderDays} days before trading begins with
-                            no fees. Opt for either a lend or borrow during
-                            pre-open, not both. No new pre-orders will be
-                            accepted within 1 hour prior to the start of
-                            trading. Learn more at&nbsp;
-                            <TextLink
-                                href='https://docs.secured.finance/platform-guide/unique-features/fair-price-discovery/'
-                                text='Secured Finance Docs'
-                            />
-                        </>
-                    }
-                />
+                <div className='px-3 laptop:px-0'>
+                    <Alert
+                        title={
+                            <>
+                                Secure your market position by placing limit
+                                orders up to {preOrderDays} days before trading
+                                begins with no fees. Opt for either a lend or
+                                borrow during pre-open, not both. No new
+                                pre-orders will be accepted within 1 hour prior
+                                to the start of trading. Learn more at&nbsp;
+                                <TextLink
+                                    href='https://docs.secured.finance/platform-guide/unique-features/fair-price-discovery/'
+                                    text='Secured Finance Docs'
+                                />
+                            </>
+                        }
+                    />
+                </div>
             )}
             <ThreeColumnsWithTopBar
                 topBar={
@@ -325,13 +357,10 @@ export const Itayose = () => {
                         }
                         assetList={assetList}
                         selectedAsset={selectedAsset}
-                        options={maturityOptionList.map(o => ({
-                            label: o.label,
-                            value: o.value.toString(),
-                        }))}
+                        options={maturityOptionList}
                         selected={{
                             label: selectedTerm.label,
-                            value: selectedTerm.value.toString(),
+                            value: selectedTerm.value,
                         }}
                         currency={currency}
                         handleAssetChange={handleAssetChange}
