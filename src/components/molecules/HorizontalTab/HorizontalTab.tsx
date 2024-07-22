@@ -44,6 +44,7 @@ const TitleChip = ({
         </div>
     );
 };
+
 export const HorizontalTab = ({
     className,
     tabTitles,
@@ -75,11 +76,11 @@ export const HorizontalTab = ({
         >
             <div
                 className={clsx(
-                    'flex h-full flex-col border border-white-10 bg-gunMetal/40 shadow-tab tablet:rounded-b-2xl',
+                    'flex h-full flex-col rounded-xl border border-neutral-600 bg-neutral-900 laptop:rounded-t-none',
                     className
                 )}
             >
-                <HeadlessTab.List className='h-16 justify-start border-b border-white-10 p-3'>
+                <HeadlessTab.List className='justify-start border-b border-white-10 p-2'>
                     <div
                         className={clsx('w-full', {
                             'horizontalTab:hidden': useCustomBreakpoint,
@@ -96,7 +97,7 @@ export const HorizontalTab = ({
                                 value: selectedIndex.toString(),
                             }}
                             onChange={option => onChange(parseInt(option) || 0)}
-                            variant='fullWidth'
+                            variant='tab'
                         />
                     </div>
                     <div
@@ -123,7 +124,7 @@ export const HorizontalTab = ({
                         })}
                     </div>
                 </HeadlessTab.List>
-                <HeadlessTab.Panels className='h-full bg-cardBackground pb-2 tablet:min-h-[25vh] tablet:rounded-b-2xl'>
+                <HeadlessTab.Panels className='h-full rounded-b-xl bg-neutral-900 tablet:min-h-[25vh] laptop:rounded-b-2xl'>
                     {arrayChildren[selectedIndex]}
                 </HeadlessTab.Panels>
             </div>

@@ -13,6 +13,7 @@ import { useBlockExplorerUrl, useBreakpoint, useLastPrices } from 'src/hooks';
 import { Order, OrderHistoryList } from 'src/types';
 import {
     AmountCell,
+    MobileTableWrapper,
     OrderTimeCell,
     TextCell,
     amountColumnDefinition,
@@ -37,71 +38,85 @@ const OrderHistoryTableMobile = ({
 }) => {
     if (!data || data.length === 0) return null;
 
-    return data.map((row, index) => {
-        const ccy = hexToCurrencySymbol(row.currency);
-        const maturity = new Maturity(row.maturity);
-        const side =
-            row.side.toString() === '1' ? OrderSide.BORROW : OrderSide.LEND;
-        const inputAmount = row.inputAmount;
-        const filledAmount = row.filledAmount;
-        const unitPrice = row.inputUnitPrice;
-        const status = row.status;
-        const timestamp = Number(row.createdAt);
-        const txHash = row.txHash;
-        const blockExplorerLink = blockExplorerUrl
-            ? `${blockExplorerUrl}/tx/${txHash}`
-            : '';
+    return (
+        <MobileTableWrapper>
+            {data.map((row, index) => {
+                const ccy = hexToCurrencySymbol(row.currency);
+                const maturity = new Maturity(row.maturity);
+                const side =
+                    row.side.toString() === '1'
+                        ? OrderSide.BORROW
+                        : OrderSide.LEND;
+                const inputAmount = row.inputAmount;
+                const filledAmount = row.filledAmount;
+                const unitPrice = row.inputUnitPrice;
+                const status = row.status;
+                const timestamp = Number(row.createdAt);
+                const txHash = row.txHash;
+                const blockExplorerLink = blockExplorerUrl
+                    ? `${blockExplorerUrl}/tx/${txHash}`
+                    : '';
 
-        return (
-            ccy && (
-                <div
-                    className={clsx(
-                        'flex w-full flex-col gap-2.5 bg-neutral-900 px-5 py-4',
-                        {
-                            'border-b border-neutral-600':
-                                index !== data.length - 1,
-                        }
-                    )}
-                    key={index}
-                >
-                    <TableCardHeader
-                        currency={ccy}
-                        maturity={maturity}
-                        side={side}
-                        price={Number(unitPrice)}
-                        displayMarketPrice
-                    />
-                    <div className='flex flex-col gap-[3px]'>
-                        <HorizontalListItemTable
-                            label='Order Amount'
-                            value={
-                                <AmountCell ccy={ccy} amount={inputAmount} />
-                            }
-                        />
-                        <HorizontalListItemTable
-                            label='Filled Amount'
-                            value={
-                                <AmountCell ccy={ccy} amount={filledAmount} />
-                            }
-                        />
-                        <HorizontalListItemTable
-                            label='Status'
-                            value={<TextCell text={status} />}
-                        />
-                        <HorizontalListItemTable
-                            label='Order Time'
-                            value={
-                                <OrderTimeCell
-                                    timestamp={timestamp}
-                                    blockExplorerLink={blockExplorerLink}
+                return (
+                    ccy && (
+                        <div
+                            className={clsx(
+                                'flex w-full flex-col gap-2.5 bg-neutral-900 px-5 py-4',
+                                {
+                                    'border-b border-neutral-600':
+                                        index !== data.length - 1,
+                                }
+                            )}
+                            key={index}
+                        >
+                            <TableCardHeader
+                                currency={ccy}
+                                maturity={maturity}
+                                side={side}
+                                price={Number(unitPrice)}
+                                displayMarketPrice
+                            />
+                            <div className='flex flex-col gap-[3px]'>
+                                <HorizontalListItemTable
+                                    label='Order Amount'
+                                    value={
+                                        <AmountCell
+                                            ccy={ccy}
+                                            amount={inputAmount}
+                                        />
+                                    }
                                 />
-                            }
-                        />
-                    </div>
-                </div>
-            )
-        );
-    });
+                                <HorizontalListItemTable
+                                    label='Filled Amount'
+                                    value={
+                                        <AmountCell
+                                            ccy={ccy}
+                                            amount={filledAmount}
+                                        />
+                                    }
+                                />
+                                <HorizontalListItemTable
+                                    label='Status'
+                                    value={<TextCell text={status} />}
+                                />
+                                <HorizontalListItemTable
+                                    label='Order Time'
+                                    value={
+                                        <OrderTimeCell
+                                            timestamp={timestamp}
+                                            blockExplorerLink={
+                                                blockExplorerLink
+                                            }
+                                        />
+                                    }
+                                />
+                            </div>
+                        </div>
+                    )
+                );
+            })}
+        </MobileTableWrapper>
+    );
 };
 
 export const OrderHistoryTable = ({
