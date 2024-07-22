@@ -3,9 +3,10 @@ import { CurrencySymbol } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import { desktopColumns, mobileColumns } from './constants';
 
-const combined = [...desktopColumns, ...mobileColumns];
-
-export type ColumnKey = (typeof combined)[number]['key'];
+export type ColumnKey = (
+    | typeof desktopColumns
+    | typeof mobileColumns
+)[number]['key'];
 
 export type ColumnType = {
     key: string;
