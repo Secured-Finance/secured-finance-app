@@ -5,6 +5,7 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import { SortDescriptor } from '@nextui-org/table';
 import { Key } from '@react-types/shared';
+import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -13,12 +14,16 @@ import {
     baseContracts,
     useBreakpoint,
     useCurrencies,
+    useGraphClientHook,
+    useIsSubgraphSupported,
+    useLastPrices,
     useLendingMarkets,
 } from 'src/hooks';
 import { RootState } from 'src/store/types';
 import { SavedMarket } from 'src/types';
 import {
     CurrencySymbol,
+    computeTotalDailyVolumeInUSD,
     currencyMap,
     formatLoanValue,
     isMarketInStore,
@@ -36,7 +41,6 @@ export const CurrencyMaturityDropdown = ({
     maturityList,
     maturity = maturityList[0],
     onChange,
-    isItayosePage = false,
 }: CurrencyMaturityDropdownProps) => {
     const isTablet = useBreakpoint('laptop');
     const [searchValue, setSearchValue] = useState<string>('');
@@ -46,6 +50,27 @@ export const CurrencyMaturityDropdown = ({
     const [savedMarkets, setSavedMarkets] = useState(() => {
         return readMarketsFromStore();
     });
+    const { data: currencies } = useCurrencies();
+
+    const { data: priceList } = useLastPrices();
+
+    const currentChainId = useSelector(
+        (state: RootState) => state.blockchain.chainId
+    );
+
+    const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
+
+    const dailyVolumes = useGraphClientHook(
+        {}, // no variables
+        queries.DailyVolumesDocument,
+        'dailyVolumes',
+        !isSubgraphSupported
+    );
+
+    const { volumePerMarket } = computeTotalDailyVolumeInUSD(
+        dailyVolumes.data ?? [],
+        priceList
+    );
 
     useLockBodyScroll(isTablet && isDropdownOpen);
 
@@ -60,9 +85,6 @@ export const CurrencyMaturityDropdown = ({
         column: undefined,
         direction: 'ascending',
     });
-    const currentChainId = useSelector(
-        (state: RootState) => state.blockchain.chainId
-    );
 
     const prevSelectedValue = useRef('');
     useEffect(() => {
@@ -111,7 +133,6 @@ export const CurrencyMaturityDropdown = ({
     );
 
     const { data: lendingMarkets = baseContracts } = useLendingMarkets();
-    const { data: currencies } = useCurrencies();
     const router = useRouter();
 
     const CcyIcon = currencyMap[asset.value]?.icon;
@@ -120,11 +141,13 @@ export const CurrencyMaturityDropdown = ({
         let options = currencyList.flatMap(currency => {
             return maturityList
                 .map(maturity => {
-                    const ccyMaturity = `${currency.label}-${maturity.label}`;
+                    const marketLabel = `${currency.label}-${maturity.label}`;
+                    const marketKey = `${currency.value}-${maturity.value}`;
                     const data =
                         lendingMarkets[currency.value]?.[+maturity.value];
                     const isItayoseOption =
                         data?.isItayosePeriod || data?.isPreOrderPeriod;
+                    const volumeInUSD = volumePerMarket[marketKey];
 
                     const marketUnitPrice = data?.marketUnitPrice;
                     const openingUnitPrice = data?.openingUnitPrice;
@@ -145,7 +168,7 @@ export const CurrencyMaturityDropdown = ({
 
                     const isFavourite = savedMarkets.some(
                         (savedMarket: SavedMarket) =>
-                            savedMarket.market === ccyMaturity &&
+                            savedMarket.market === marketLabel &&
                             savedMarket.address === address &&
                             savedMarket.chainId === currentChainId
                     );
@@ -155,7 +178,7 @@ export const CurrencyMaturityDropdown = ({
                             !currentCurrency.includes(currency.value)) ||
                         (isItayose && !isItayoseOption) ||
                         (searchValue &&
-                            !ccyMaturity
+                            !marketLabel
                                 .toLowerCase()
                                 .includes(searchValue.toLowerCase())) ||
                         (isFavourites && !isFavourite)
@@ -164,12 +187,13 @@ export const CurrencyMaturityDropdown = ({
                     }
 
                     return {
-                        key: ccyMaturity,
-                        display: ccyMaturity,
+                        key: marketLabel,
+                        display: marketLabel,
                         currency: currency.value,
                         maturity: maturity.value,
                         lastPrice: formatLoanValue(lastPrice, 'price'),
                         apr: formatLoanValue(lastPrice, 'rate'),
+                        volume: volumeInUSD,
                         isItayoseOption,
                         isFavourite,
                     };
@@ -192,16 +216,22 @@ export const CurrencyMaturityDropdown = ({
         address,
         isFavourites,
         currentChainId,
+        volumePerMarket,
     ]);
 
     const handleOptionClick = (item: FilteredOption) => {
-        if (item.isItayoseOption) {
-            router.push('/itayose');
+        if (item.currency !== asset.value || item.maturity !== maturity.value) {
+            onChange(item.currency, item.maturity);
+        }
+
+        if (router.pathname.includes('itayose') && !item.isItayoseOption) {
+            router.push('/');
             return;
         }
 
-        if (item.currency !== asset.value || item.maturity !== maturity.value) {
-            onChange(item.currency, item.maturity);
+        if (item.isItayoseOption && item.isItayoseOption) {
+            router.push('/itayose');
+            return;
         }
     };
 
@@ -232,25 +262,25 @@ export const CurrencyMaturityDropdown = ({
     return (
         <Menu>
             {({ open, close }) => (
-                <div className='relative'>
+                <div>
                     <Menu.Button
-                        className='flex w-full items-center justify-between gap-2 rounded-lg bg-neutral-700 px-2 py-1.5 text-sm font-semibold normal-case leading-6 text-white laptop:w-[226px] laptop:py-2.5 laptop:pl-3 laptop:pr-2 laptop:text-base laptop:leading-6 desktop:w-[302px] desktop:text-[22px]'
+                        className='flex w-full max-w-[208px] items-center justify-between gap-2 rounded-lg bg-neutral-700 px-2 py-1.5 text-sm font-semibold normal-case leading-6 text-white laptop:w-[226px] laptop:max-w-none laptop:py-2.5 laptop:pl-3 laptop:pr-2 laptop:text-base laptop:leading-6 desktop:w-[302px] desktop:text-[22px]'
                         onClick={() => setIsDropdownOpen(!open)}
                     >
-                        <div className='flex items-center gap-2 laptop:gap-1'>
+                        <div className='flex items-center gap-2 whitespace-nowrap laptop:gap-1'>
                             {!!CcyIcon && (
                                 <CcyIcon className='h-5 w-5 laptop:h-6 laptop:w-6' />
                             )}
                             {asset.label}-{maturity.label}
                         </div>
                         <ChevronDownIcon
-                            className={`h-4 w-4 text-neutral-300 laptop:h-6 laptop:w-6 ${
+                            className={`h-4 w-4 flex-shrink-0 text-neutral-300 laptop:h-6 laptop:w-6 ${
                                 open ? 'rotate-180' : ''
                             }`}
                         />
                     </Menu.Button>
                     {isDropdownOpen && (
-                        <Menu.Items className='fixed left-0 top-[56px] z-[31] flex h-full w-full flex-col gap-3 overflow-hidden border-t-4 border-primary-500 bg-neutral-800 px-4 pt-3 tablet:top-[72px] laptop:absolute laptop:left-auto laptop:top-auto laptop:mt-1.5 laptop:h-auto laptop:w-[779px] laptop:rounded-xl laptop:border laptop:border-neutral-600 laptop:bg-neutral-900 laptop:px-0'>
+                        <Menu.Items className='absolute -top-3 left-0 z-[31] flex h-full w-full flex-col gap-3 overflow-hidden border-t-4 border-primary-500 bg-neutral-800 px-4 pt-3 laptop:left-auto laptop:top-auto laptop:mt-1.5 laptop:h-auto laptop:w-[779px] laptop:rounded-xl laptop:border laptop:border-neutral-600 laptop:bg-neutral-900 laptop:px-0'>
                             <header className='flex items-center justify-between text-neutral-50 laptop:hidden'>
                                 <div className='flex items-center gap-1'>
                                     <MagnifyingGlassIcon className='h-5 w-5' />
@@ -287,7 +317,6 @@ export const CurrencyMaturityDropdown = ({
                                     isItayose={isItayose}
                                     setCurrentCurrency={setCurrentCurrency}
                                     setIsItayose={setIsItayose}
-                                    isItayosePage={isItayosePage}
                                     isFavourites={isFavourites}
                                     setIsFavourites={setIsFavourites}
                                 />

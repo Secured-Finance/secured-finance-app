@@ -1,4 +1,4 @@
-import { useCallback, useReducer, useState } from 'react';
+import { useCallback, useEffect, useReducer, useState } from 'react';
 import { CollateralSelector, Spinner } from 'src/components/atoms';
 import {
     Dialog,
@@ -17,6 +17,7 @@ import {
     AddressUtils,
     CollateralInfo,
     CurrencySymbol,
+    ZERO_BI,
     amountFormatterFromBase,
     amountFormatterToBase,
     formatAmount,
@@ -119,9 +120,21 @@ export const WithdrawCollateral = ({
     const [errorMessage, setErrorMessage] = useState(
         'Your withdrawal transaction has failed.'
     );
-    const collateralBigInt = amountFormatterToBase[asset](
-        Number(collateral ?? '')
-    );
+    const [collateralBigInt, setCollateralBigInt] = useState<bigint>(ZERO_BI);
+    const [isFullCoverage, setIsFullCoverage] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (!isFullCoverage) {
+            setCollateralBigInt(
+                amountFormatterToBase[asset](Number(collateral ?? ''))
+            );
+        } else {
+            setCollateralBigInt(
+                collateralList[asset]?.availableFullValue ?? ZERO_BI
+            );
+            setCollateral(collateralList[asset]?.available.toString());
+        }
+    }, [asset, collateral, isFullCoverage, collateralList, collateralBigInt]);
 
     const { data: priceList } = useLastPrices();
     const { onWithdrawCollateral } = useWithdrawCollateral(
@@ -131,6 +144,11 @@ export const WithdrawCollateral = ({
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
+
+        setCollateral(undefined);
+        setCollateralBigInt(ZERO_BI);
+        setIsFullCoverage(false);
+
         if (state.currentStep === Step.withdrawCollateral) {
             trackButtonEvent(
                 ButtonEvents.CANCEL_BUTTON,
@@ -146,11 +164,9 @@ export const WithdrawCollateral = ({
             state.currentStep === Step.withdrawCollateral &&
             (!collateralBigInt ||
                 collateralBigInt >
-                    amountFormatterToBase[asset](
-                        collateralList[asset]?.available ?? 0
-                    ))
+                    (collateralList[asset]?.availableFullValue ?? ZERO_BI))
         );
-    }, [state.currentStep, collateralBigInt, asset, collateralList]);
+    }, [asset, collateralBigInt, collateralList, state.currentStep]);
 
     const handleWithdrawCollateral = useCallback(async () => {
         try {
@@ -203,8 +219,10 @@ export const WithdrawCollateral = ({
     );
 
     const handleChange = useCallback((v: CollateralInfo) => {
-        setAsset(v.symbol);
+        setIsFullCoverage(false);
         setCollateral(undefined);
+        setCollateralBigInt(ZERO_BI);
+        setAsset(v.symbol);
     }, []);
 
     return (
@@ -236,9 +254,9 @@ export const WithdrawCollateral = ({
                                 <CollateralInput
                                     price={priceList[asset]}
                                     asset={asset}
-                                    onAmountChange={(v: string | undefined) =>
-                                        setCollateral(v)
-                                    }
+                                    onAmountChange={setCollateral}
+                                    fullCoverage={isFullCoverage}
+                                    setFullCoverage={setIsFullCoverage}
                                     availableAmount={
                                         collateralList[asset]?.available ?? 0
                                     }

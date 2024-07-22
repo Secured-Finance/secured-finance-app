@@ -73,6 +73,7 @@ function renderHook(
                     serializableCheck: false,
                 }),
         }),
+        apolloMocks = null,
         ...renderOptions
     } = {}
 ) {
@@ -80,16 +81,18 @@ function renderHook(
         const queryClient = new QueryClient(defaultOptions);
         return (
             <Provider store={store}>
-                <QueryClientProvider client={queryClient}>
-                    <WagmiConfig
-                        config={createConfig({
-                            publicClient: publicClient,
-                            connectors: [connector],
-                        })}
-                    >
-                        {children}
-                    </WagmiConfig>
-                </QueryClientProvider>
+                <MockedProvider mocks={apolloMocks}>
+                    <QueryClientProvider client={queryClient}>
+                        <WagmiConfig
+                            config={createConfig({
+                                publicClient: publicClient,
+                                connectors: [connector],
+                            })}
+                        >
+                            {children}
+                        </WagmiConfig>
+                    </QueryClientProvider>
+                </MockedProvider>
             </Provider>
         );
     }

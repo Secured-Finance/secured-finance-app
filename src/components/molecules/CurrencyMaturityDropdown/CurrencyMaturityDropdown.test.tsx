@@ -6,17 +6,21 @@ import * as stories from './CurrencyMaturityDropdown.stories';
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-const { Default, ItayosePage } = composeStories(stories);
+const { Default } = composeStories(stories);
 
 describe('CurrencyMaturityDropdown', () => {
     it('should render a selected market', () => {
-        render(<Default />);
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
 
         expect(screen.getByText('WBTC-DEC2022')).toBeInTheDocument();
     });
 
     it('should show the dropdown when the button is clicked', () => {
-        render(<Default />);
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
         const button = screen.getByRole('button', { name: 'WBTC-DEC2022' });
         fireEvent.click(button);
 
@@ -25,18 +29,10 @@ describe('CurrencyMaturityDropdown', () => {
         ).toBeInTheDocument();
     });
 
-    it('should not render Itayose filter in Itayose page', () => {
-        render(<ItayosePage />);
-        const button = screen.getByRole('button', { name: 'WBTC-DEC2022' });
-        fireEvent.click(button);
-
-        expect(
-            screen.queryByLabelText('itayose-filter-btn')
-        ).not.toBeInTheDocument();
-    });
-
     it('should only show associated markets when user selects on currency filter', async () => {
-        render(<Default />);
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
         const button = screen.getByRole('button', { name: 'WBTC-DEC2022' });
         fireEvent.click(button);
 
@@ -49,7 +45,9 @@ describe('CurrencyMaturityDropdown', () => {
     });
 
     it('should filter markets based on search input', async () => {
-        render(<Default />);
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
 
         const button = screen.getByRole('button', { name: 'WBTC-DEC2022' });
         fireEvent.click(button);
@@ -63,11 +61,13 @@ describe('CurrencyMaturityDropdown', () => {
         fireEvent.change(searchInput, { target: { value: 'WBTC' } });
         expect(searchInput.getAttribute('value')).toBe('WBTC');
 
-        expect(screen.queryByText('WBTC-JUN2023')).toBeInTheDocument();
+        expect(screen.getByText('WBTC-JUN2023')).toBeInTheDocument();
     });
 
     it('should render relevant message when no products are found', () => {
-        render(<Default />);
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
 
         const button = screen.getByRole('button', { name: 'WBTC-DEC2022' });
         fireEvent.click(button);
@@ -76,11 +76,13 @@ describe('CurrencyMaturityDropdown', () => {
         fireEvent.change(searchInput, { target: { value: 'Something' } });
         expect(searchInput.getAttribute('value')).toBe('Something');
 
-        expect(screen.queryByText('No products found')).toBeInTheDocument();
+        expect(screen.getByText('No products found')).toBeInTheDocument();
     });
 
     it('should toggle favourite button when clicked', async () => {
-        render(<Default />);
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
 
         const button = screen.getByRole('button', { name: 'WBTC-DEC2022' });
         fireEvent.click(button);

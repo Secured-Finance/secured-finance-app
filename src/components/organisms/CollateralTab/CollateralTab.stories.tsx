@@ -2,7 +2,7 @@ import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import type { Meta, StoryFn } from '@storybook/react';
 import { withWalletProvider } from 'src/../.storybook/decorators';
 import { emptyCollateralBook } from 'src/hooks';
-import { collateralBook80 } from 'src/stories/mocks/fixtures';
+import { collateralBook80, zcBonds } from 'src/stories/mocks/fixtures';
 import { CollateralTab } from './CollateralTab';
 
 export default {
@@ -11,6 +11,7 @@ export default {
     args: {
         collateralBook: emptyCollateralBook,
         netAssetValue: 0,
+        zcBonds: [],
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,
@@ -35,4 +36,5 @@ ConnectedToWallet.parameters = {
 ConnectedToWallet.args = {
     collateralBook: collateralBook80,
     netAssetValue: 12700.34,
+    zcBonds,
 };

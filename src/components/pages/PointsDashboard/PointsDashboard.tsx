@@ -7,19 +7,16 @@ import { formatDate } from '@secured-finance/sf-core';
 import {
     QuestType,
     useGetQuestsQuery,
-    useGetUserLazyQuery,
     useGetUsersQuery,
     useNonceLazyQuery,
-    useVerifyMutation,
 } from '@secured-finance/sf-point-client';
 import { capitalCase, snakeCase } from 'change-case';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
-import { useEffect, useMemo, useState } from 'react';
-import { useCookies } from 'react-cookie';
+import { useMemo, useState } from 'react';
 import CountUp from 'react-countup';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { SiweMessage } from 'siwe';
 import {
     Button,
@@ -40,7 +37,12 @@ import {
     generateCollateralList,
 } from 'src/components/organisms';
 import { Page, TwoColumns } from 'src/components/templates';
-import { useCollateralBalances, useCollateralCurrencies } from 'src/hooks';
+import {
+    useCollateralBalances,
+    useCollateralCurrencies,
+    usePoints,
+} from 'src/hooks';
+import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
@@ -129,6 +131,10 @@ const ReferralCode = ({ code }: { code: string }) => {
 };
 
 const UserPointInfo = ({ chainId }: { chainId: number }) => {
+    const {
+        user: { loading: loadingUser, data: userData },
+        verification: { verify, loading, data: verifiedData },
+    } = usePoints();
     const searchParams = new URLSearchParams(document.location.search);
     const referralCode = searchParams.get('ref');
     const questTypes = [
@@ -138,60 +144,17 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
         QuestType.ActivePosition,
         QuestType.Referral,
     ];
-    const [cookies, setCookie, removeCookie] = useCookies();
     const [getNonce] = useNonceLazyQuery({
         fetchPolicy: 'no-cache',
         ...POINT_API_QUERY_OPTIONS,
     });
     const { isLoading, signMessageAsync, reset } = useSignMessage();
     const { address, isConnected } = useAccount();
-    const [verify, { data: verifyData, loading, error }] = useVerifyMutation(
-        POINT_API_QUERY_OPTIONS
-    );
-    const [getUser, { data: userData, loading: loadingUser, refetch }] =
-        useGetUserLazyQuery({
-            pollInterval: POLL_INTERVAL,
-            ...POINT_API_QUERY_OPTIONS,
-        });
-
-    useEffect(() => {
-        if (verifyData) {
-            const expires = dayjs().add(1, 'day').toDate();
-            const verifiedData = {
-                token: verifyData?.verify.token,
-                walletAddress: verifyData?.verify.walletAddress,
-            };
-            setCookie('verified_data', verifiedData, {
-                expires,
-            });
-        }
-    }, [verifyData, setCookie]);
-
-    useEffect(() => {
-        if (cookies.verified_data) {
-            userData?.user.walletAddress &&
-            userData?.user.walletAddress !== address
-                ? refetch()
-                : getUser();
-        }
-    }, [
-        cookies.verified_data,
-        getUser,
-        address,
-        userData?.user.walletAddress,
-        refetch,
-    ]);
-
-    useEffect(() => {
-        const walletAddress = cookies.verified_data?.walletAddress;
-        if (error || (walletAddress && walletAddress !== address)) {
-            removeCookie('verified_data');
-        }
-    }, [error, removeCookie, cookies.verified_data, address]);
+    const dispatch = useDispatch();
 
     return (
         <GradientBox>
-            {cookies.verified_data && userData ? (
+            {verifiedData && address && userData ? (
                 <>
                     <div className='items-center pb-2 pt-8 text-center text-lg font-bold text-white'>
                         Total Points
@@ -314,6 +277,11 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
                                 className='mx-auto mt-4'
                                 size={ButtonSizes.lg}
                                 onClick={async () => {
+                                    if (!isConnected) {
+                                        dispatch(setWalletDialogOpen(true));
+                                        return;
+                                    }
+
                                     const { data } = await getNonce();
 
                                     const message = new SiweMessage({
@@ -344,9 +312,9 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
 
                                     reset();
                                 }}
-                                disabled={!isConnected || isLoading || loading}
+                                disabled={isLoading || loading}
                             >
-                                Join
+                                {!isConnected ? 'Connect Wallet' : 'Join'}
                             </Button>
                         </>
                     )}
@@ -669,30 +637,32 @@ const Leaderboard = () => {
 export const PointsDashboard = () => {
     const chainId = useSelector((state: RootState) => state.blockchain.chainId);
     return (
-        <Page title='Point Dashboard' name='point-dashboard'>
-            <div className='px-3 laptop:px-0'>
-                <Alert
-                    title={
-                        <>
-                            Earn SF Points with Your Contributions to the
-                            Secured Finance Protocol. Learn more about the
-                            points system and calculations at the&nbsp;
-                            <TextLink
-                                href='https://docs.secured.finance/top/secured-finance-points-sfp'
-                                text='Secured Finance Docs'
-                            />
-                        </>
-                    }
-                    isShowCloseButton={false}
-                />
-            </div>
-            <TwoColumns>
-                <div className='grid grid-cols-1 gap-y-7'>
-                    <UserPointInfo chainId={chainId} />
-                    <QuestList chainId={chainId} />
+        <>
+            <Page title='Point Dashboard' name='point-dashboard'>
+                <div className='px-3 laptop:px-0'>
+                    <Alert
+                        title={
+                            <>
+                                Earn SF Points with Your Contributions to the
+                                Secured Finance Protocol. Learn more about the
+                                points system and calculations at the&nbsp;
+                                <TextLink
+                                    href='https://docs.secured.finance/top/secured-finance-points-sfp'
+                                    text='Secured Finance Docs'
+                                />
+                            </>
+                        }
+                        isShowCloseButton={false}
+                    />
                 </div>
-                <Leaderboard />
-            </TwoColumns>
-        </Page>
+                <TwoColumns>
+                    <div className='grid grid-cols-1 gap-y-7'>
+                        <UserPointInfo chainId={chainId} />
+                        <QuestList chainId={chainId} />
+                    </div>
+                    <Leaderboard />
+                </TwoColumns>
+            </Page>
+        </>
     );
 };

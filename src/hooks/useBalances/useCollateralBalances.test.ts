@@ -21,10 +21,12 @@ describe('useCollateralBalances', () => {
         await waitFor(() =>
             expect(mock.getERC20Balance).toHaveBeenCalledTimes(3)
         );
-        expect(result.current).toEqual({
-            [CurrencySymbol.ETH]: 0,
-            [CurrencySymbol.WBTC]: 300,
-            [CurrencySymbol.USDC]: 4000,
+
+        // Necessary to clone as bigint cannot be serialized
+        expect(JSON.parse(JSON.stringify(result.current))).toEqual({
+            [CurrencySymbol.USDC]: '4000000000',
+            [CurrencySymbol.ETH]: '0',
+            [CurrencySymbol.WBTC]: '30000000000',
         });
     });
 });

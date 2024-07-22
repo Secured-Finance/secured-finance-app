@@ -1,6 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Spinner } from 'src/components/atoms';
 import {
     Alert,
@@ -8,6 +8,7 @@ import {
     DELISTED_CURRENCIES_KEY,
     HorizontalTab,
     StatsBar,
+    ZCBond,
 } from 'src/components/molecules';
 import {
     ActiveTradeTable,
@@ -26,13 +27,14 @@ import {
     useCollateralBook,
     useCurrenciesForOrders,
     useCurrencyDelistedStatus,
+    useGenesisValues,
     useGraphClientHook,
     useIsSubgraphSupported,
     useIsUnderCollateralThreshold,
     useLastPrices,
     useLendingMarkets,
+    useMarketLists,
     useOrderList,
-    usePagination,
     usePositions,
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
@@ -46,6 +48,7 @@ import {
     sortOrders,
     usdFormat,
 } from 'src/utils';
+import { Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
 export enum TableType {
@@ -60,12 +63,9 @@ export const TabSpinner = () => (
         <Spinner />
     </div>
 );
-const offset = 20;
 
 export const PortfolioManagement = () => {
     const { address } = useAccount();
-    const [offsetTransactions, setOffsetTransactions] = useState(0);
-    const [offsetOrders, setOffsetOrders] = useState(0);
     const [selectedTable, setSelectedTable] = useState(
         TableType.ACTIVE_POSITION
     );
@@ -80,23 +80,21 @@ export const PortfolioManagement = () => {
     const userOrderHistory = useGraphClientHook(
         {
             address: address?.toLowerCase() ?? '',
-            skip: offsetOrders,
-            first: offset,
         },
-        queries.UserOrderHistoryDocument,
+        queries.FullUserOrderHistoryDocument,
         'user',
         selectedTable !== TableType.ORDER_HISTORY
     );
+
     const userTransactionHistory = useGraphClientHook(
         {
             address: address?.toLowerCase() ?? '',
-            skip: offsetTransactions,
-            first: offset,
         },
-        queries.UserTransactionHistoryDocument,
+        queries.FullUserTransactionHistoryDocument,
         'user',
         selectedTable !== TableType.MY_TRANSACTIONS
     );
+
     const { data: usedCurrencies = [] } = useCurrenciesForOrders(address);
     const { data: orderList = emptyOrderList } = useOrderList(
         address,
@@ -137,35 +135,71 @@ export const PortfolioManagement = () => {
     ]);
 
     const { data: positions } = usePositions(address, usedCurrencies);
+    const genesisValues = useGenesisValues(
+        address,
+        positions?.positions || []
+    ).map(({ data }) => data);
+    const { openMarkets } = useMarketLists();
 
-    const dataUser = useMemo(() => {
-        if (selectedTable === TableType.MY_TRANSACTIONS)
-            return (
-                userTransactionHistory.data?.transactions[0]?.user.id ??
-                undefined
-            );
-        if (selectedTable === TableType.ORDER_HISTORY)
-            return userOrderHistory.data?.orders[0]?.user.id ?? undefined;
-    }, [
-        selectedTable,
-        userOrderHistory.data?.orders,
-        userTransactionHistory.data?.transactions,
-    ]);
+    const zcBonds = useMemo(() => {
+        const lendingPositions = positions?.positions.filter(
+            position => position.amount >= 0
+        );
 
-    const paginatedTransactions = usePagination(
-        userTransactionHistory.data?.transactions ?? [],
-        dataUser,
-        address
-    );
+        const zcBonds: ZCBond[] = [];
 
-    const paginatedOrderHistory = usePagination(
-        userOrderHistory.data?.orders ?? [],
-        dataUser,
-        address
-    );
+        lendingPositions?.map(position => {
+            const currency = hexToCurrencySymbol(position.currency);
+
+            if (currency) {
+                const targetMarkets = openMarkets.filter(
+                    openMarket => openMarket.currency === position.currency
+                );
+                const hasGenesisValue =
+                    targetMarkets.length > 0 &&
+                    targetMarkets[0].maturity.toString() === position.maturity;
+                const {
+                    amountInPV: genesisValueAmountInPV = BigInt(0),
+                    amountInFV: genesisValueAmountInFV = BigInt(0),
+                    amount: tokenAmount,
+                } = genesisValues.find(
+                    genesisValue => genesisValue?.currency === currency
+                ) ?? {};
+
+                if (hasGenesisValue && tokenAmount && tokenAmount > 0) {
+                    zcBonds.push({
+                        currency,
+                        amount: genesisValueAmountInPV,
+                        tokenAmount: tokenAmount,
+                    });
+                    const remainingAmount =
+                        position.amount - genesisValueAmountInPV;
+                    const remainingTokenAmount =
+                        position.futureValue - genesisValueAmountInFV;
+                    if (remainingAmount > 0) {
+                        zcBonds.push({
+                            currency,
+                            maturity: new Maturity(position.maturity),
+                            amount: remainingAmount,
+                            tokenAmount: remainingTokenAmount,
+                        });
+                    }
+                } else {
+                    zcBonds.push({
+                        currency,
+                        maturity: new Maturity(position.maturity),
+                        amount: position.amount,
+                        tokenAmount: position.futureValue,
+                    });
+                }
+            }
+        });
+
+        return zcBonds;
+    }, [positions, genesisValues, openMarkets]);
 
     const sortedOrderHistory = useMemo(() => {
-        return paginatedOrderHistory
+        return (userOrderHistory.data?.orders ?? [])
             .map(order => {
                 if (checkOrderIsFilled(order, orderList.inactiveOrderList)) {
                     return {
@@ -181,7 +215,7 @@ export const PortfolioManagement = () => {
                 }
             })
             .sort((a, b) => sortOrders(a, b));
-    }, [orderList.inactiveOrderList, paginatedOrderHistory]);
+    }, [orderList.inactiveOrderList, userOrderHistory.data?.orders]);
 
     const { data: priceMap } = useLastPrices();
 
@@ -233,13 +267,14 @@ export const PortfolioManagement = () => {
 
     const myTransactions = useMemo(() => {
         const tradesFromCon = formatOrders(orderList.inactiveOrderList);
-        return [...tradesFromCon, ...paginatedTransactions];
-    }, [orderList.inactiveOrderList, paginatedTransactions]);
-
-    const myTransactionsDataCount: number =
-        userTransactionHistory.data?.transactionCount &&
-        parseInt(userTransactionHistory.data?.transactionCount) +
-            orderList.inactiveOrderList.length;
+        return [
+            ...tradesFromCon,
+            ...(userTransactionHistory.data?.transactions ?? []),
+        ];
+    }, [
+        orderList.inactiveOrderList,
+        userTransactionHistory.data?.transactions,
+    ]);
 
     const scrollToBottom = () => {
         window.scrollTo({
@@ -261,11 +296,6 @@ export const PortfolioManagement = () => {
 
     const userDelistedCurrenciesArray = Array.from(userDelistedCurrenciesSet);
     const isUnderCollateralThreshold = useIsUnderCollateralThreshold(address);
-
-    useEffect(() => {
-        setOffsetOrders(0);
-        setOffsetTransactions(0);
-    }, [address]);
 
     return (
         <Page title='Portfolio Management' name='portfolio-management'>
@@ -335,6 +365,7 @@ export const PortfolioManagement = () => {
                     <CollateralOrganism
                         collateralBook={collateralBook}
                         netAssetValue={portfolioAnalytics.netAssetValue}
+                        zcBonds={zcBonds}
                     />
                     <HorizontalTab
                         tabTitles={
@@ -384,11 +415,8 @@ export const PortfolioManagement = () => {
                             <OrderHistoryTable
                                 data={sortedOrderHistory}
                                 pagination={{
-                                    totalData: parseInt(
-                                        userOrderHistory.data?.orderCount
-                                    ),
-                                    getMoreData: () =>
-                                        setOffsetOrders(offsetOrders + offset),
+                                    totalData: sortedOrderHistory.length,
+                                    getMoreData: () => {},
                                     containerHeight: 300,
                                 }}
                             />
@@ -399,14 +427,8 @@ export const PortfolioManagement = () => {
                             <MyTransactionsTable
                                 data={myTransactions}
                                 pagination={{
-                                    totalData: myTransactionsDataCount,
-                                    getMoreData: () => {
-                                        if (myTransactions.length >= offset) {
-                                            setOffsetTransactions(
-                                                offsetTransactions + offset
-                                            );
-                                        }
-                                    },
+                                    totalData: myTransactions.length,
+                                    getMoreData: () => {},
                                     containerHeight: 300,
                                 }}
                             />

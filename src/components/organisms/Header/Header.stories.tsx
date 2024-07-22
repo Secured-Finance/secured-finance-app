@@ -1,10 +1,12 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import {
+    WithGraphClient,
     withChainErrorEnabled,
     withWalletProvider,
 } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
+import { userPoints } from 'src/stories/mocks/queries';
 import Header from './Header';
 
 const FIGMA_STORYBOOK_LINK =
@@ -16,7 +18,7 @@ export default {
     args: {
         showNavigation: true,
     },
-    decorators: [withWalletProvider],
+    decorators: [withWalletProvider, WithGraphClient],
     parameters: {
         ...RESPONSIVE_PARAMETERS,
         viewport: {
@@ -35,13 +37,15 @@ export const Primary = Template.bind({});
 export const Connected = Template.bind({});
 Connected.parameters = {
     connected: true,
-};
-
-export const TradingMenuOpened = Template.bind({});
-TradingMenuOpened.play = async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const button = await canvas.findByTestId('Trading-tab');
-    await userEvent.click(button);
+    apolloClient: {
+        mocks: [...userPoints],
+    },
+    cookie: {
+        verified_data: {
+            token: '1234567890',
+            walletAddress: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+        },
+    },
 };
 
 export const MenuExpanded = Template.bind({});

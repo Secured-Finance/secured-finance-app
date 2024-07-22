@@ -3,13 +3,11 @@ export const mobileColumns = [
         key: 'symbol',
         label: 'Symbol',
         width: '50%',
-        allowsSorting: false,
     },
     {
         key: 'last-prices-mobile',
         label: 'Last Price (APR)',
         width: '50%',
-        allowsSorting: false,
     },
 ];
 
@@ -17,14 +15,12 @@ export const desktopColumns = [
     {
         key: 'symbol',
         label: 'Symbol',
-        width: '30%',
-        allowsSorting: false,
+        width: '25%',
     },
     {
         key: 'last-prices',
         label: 'Last Price',
         width: '20%',
-        allowsSorting: false,
     },
     {
         key: 'apr',
@@ -33,9 +29,17 @@ export const desktopColumns = [
         allowsSorting: true,
     },
     {
+        key: 'volume',
+        label: 'Volume',
+        width: '20%',
+        allowsSorting: true,
+        isSubgraphSupported: true,
+    },
+    {
         key: 'maturity',
         label: 'Time to Maturity',
-        width: '30%',
+        width: '15%',
         allowsSorting: true,
+        className: 'justify-end text-right',
     },
 ];

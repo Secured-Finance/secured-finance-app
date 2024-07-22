@@ -7,6 +7,15 @@ const combined = [...desktopColumns, ...mobileColumns];
 
 export type ColumnKey = (typeof combined)[number]['key'];
 
+export type ColumnType = {
+    key: string;
+    label: string;
+    width: string;
+    allowsSorting?: boolean;
+    className?: string;
+    isSubgraphSupported?: boolean;
+};
+
 export type FilteredOption = {
     key: string;
     display: string;
@@ -16,6 +25,7 @@ export type FilteredOption = {
     apr: string;
     isItayoseOption: boolean;
     isFavourite: boolean;
+    volume: bigint;
 };
 
 export type CurrencyMaturityDropdownProps = {

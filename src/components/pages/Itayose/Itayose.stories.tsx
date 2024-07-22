@@ -1,7 +1,10 @@
 import { withAppLayout, withWalletProvider } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
-import { mockItayoseFilteredUserOrderHistory } from 'src/stories/mocks/queries';
+import {
+    mockDailyVolumes,
+    mockItayoseFilteredUserOrderHistory,
+} from 'src/stories/mocks/queries';
 import { Itayose } from './Itayose';
 
 export default {
@@ -10,7 +13,10 @@ export default {
     args: {},
     parameters: {
         apolloClient: {
-            mocks: mockItayoseFilteredUserOrderHistory,
+            mocks: [
+                ...mockItayoseFilteredUserOrderHistory,
+                ...mockDailyVolumes,
+            ],
         },
         chromatic: { delay: 5000 },
         connected: true,

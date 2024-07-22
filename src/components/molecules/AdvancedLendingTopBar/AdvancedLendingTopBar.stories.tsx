@@ -2,6 +2,7 @@ import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
 import { withWalletProvider } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
 import { currencyList, maturityOptions } from 'src/stories/mocks/fixtures';
+import { mockDailyVolumes } from 'src/stories/mocks/queries';
 import { LoanValue } from 'src/utils/entities';
 import { AdvancedLendingTopBar } from '.';
 
@@ -32,6 +33,9 @@ export default {
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,
+        apolloClient: {
+            mocks: [...mockDailyVolumes],
+        },
     },
 } as Meta<typeof AdvancedLendingTopBar>;
 

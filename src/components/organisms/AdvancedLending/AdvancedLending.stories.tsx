@@ -9,6 +9,7 @@ import {
     yieldCurveRates,
 } from 'src/stories/mocks/fixtures';
 import {
+    mockDailyVolumes,
     mockFilteredUserOrderHistory,
     mockFilteredUserTransactionHistory,
     mockTrades,
@@ -32,6 +33,7 @@ export default {
                 ...mockTrades,
                 ...mockFilteredUserTransactionHistory,
                 ...mockFilteredUserOrderHistory,
+                ...mockDailyVolumes,
             ],
         },
         ...RESPONSIVE_PARAMETERS,

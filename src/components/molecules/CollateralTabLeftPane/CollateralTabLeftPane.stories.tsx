@@ -4,6 +4,7 @@ import type { Meta, StoryFn } from '@storybook/react';
 import {
     collateralBook80,
     emptyUSDCollateral,
+    zcBonds,
 } from 'src/stories/mocks/fixtures';
 import { CollateralTabLeftPane } from './CollateralTabLeftPane';
 
@@ -15,6 +16,7 @@ export default {
         onClick: () => {},
         collateralBook: collateralBook80,
         netAssetValue: 12700.34,
+        zcBonds: zcBonds,
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,
@@ -43,5 +45,13 @@ EmptyUSDCollateralBalance.args = {
     account: 'as',
     onClick: () => {},
     collateralBook: emptyUSDCollateral,
+    netAssetValue: 600,
+};
+
+export const EmptyZCBonds = Template.bind({});
+EmptyZCBonds.args = {
+    account: 'as',
+    onClick: () => {},
+    zcBonds: [],
     netAssetValue: 600,
 };
