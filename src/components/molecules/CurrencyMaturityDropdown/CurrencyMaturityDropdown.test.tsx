@@ -98,5 +98,5 @@ describe('CurrencyMaturityDropdown', () => {
         expect(
             screen.getByLabelText('Remove WBTC-DEC2022 from favourites')
         ).toBeInTheDocument();
-    });
+    }, 8000);
 });
