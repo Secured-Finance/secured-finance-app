@@ -1,15 +1,15 @@
 import { useMemo } from 'react';
-import { useBalances, useCollateralCurrencies } from 'src/hooks';
+import { useCollateralCurrencies, useFullBalances } from 'src/hooks';
 import { CurrencySymbol } from 'src/utils';
 
 export const useCollateralBalances = () => {
-    const balances = useBalances();
+    const fullBalances = useFullBalances();
     const { data: collateralCurrencies } = useCollateralCurrencies();
 
     return useMemo(() => {
-        const result: Partial<Record<CurrencySymbol, number>> = {};
-        collateralCurrencies?.forEach(ccy => (result[ccy] = balances[ccy]));
+        const result: Partial<Record<CurrencySymbol, bigint>> = {};
+        collateralCurrencies?.forEach(ccy => (result[ccy] = fullBalances[ccy]));
 
         return result;
-    }, [balances, collateralCurrencies]);
+    }, [fullBalances, collateralCurrencies]);
 };

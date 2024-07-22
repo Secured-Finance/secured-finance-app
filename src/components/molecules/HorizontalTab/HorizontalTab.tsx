@@ -45,12 +45,14 @@ const TitleChip = ({
     );
 };
 export const HorizontalTab = ({
+    className,
     tabTitles,
     children,
     onTabChange,
     useCustomBreakpoint = false,
     tooltipMap,
 }: {
+    className?: string;
     tabTitles: string[];
     children?: React.ReactNode;
     onTabChange?: (v: number) => void;
@@ -70,9 +72,13 @@ export const HorizontalTab = ({
             selectedIndex={selectedIndex}
             onChange={onChange}
             as='div'
-            className='h-full'
         >
-            <div className='flex h-full flex-col border border-white-10 bg-gunMetal/40 shadow-tab tablet:rounded-b-2xl'>
+            <div
+                className={clsx(
+                    'flex h-full flex-col border border-white-10 bg-gunMetal/40 shadow-tab tablet:rounded-b-2xl',
+                    className
+                )}
+            >
                 <HeadlessTab.List className='h-16 justify-start border-b border-white-10 p-3'>
                     <div
                         className={clsx('w-full', {
@@ -89,9 +95,7 @@ export const HorizontalTab = ({
                                 label: tabTitles[selectedIndex],
                                 value: selectedIndex.toString(),
                             }}
-                            onChange={option =>
-                                setSelectedIndex(parseInt(option) || 0)
-                            }
+                            onChange={option => onChange(parseInt(option) || 0)}
                             variant='fullWidth'
                         />
                     </div>
@@ -119,7 +123,7 @@ export const HorizontalTab = ({
                         })}
                     </div>
                 </HeadlessTab.List>
-                <HeadlessTab.Panels className='h-full min-h-[25vh] bg-cardBackground pb-2 tablet:rounded-b-2xl'>
+                <HeadlessTab.Panels className='h-full bg-cardBackground pb-2 tablet:min-h-[25vh] tablet:rounded-b-2xl'>
                     {arrayChildren[selectedIndex]}
                 </HeadlessTab.Panels>
             </div>

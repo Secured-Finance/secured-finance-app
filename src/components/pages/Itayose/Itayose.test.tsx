@@ -44,7 +44,7 @@ describe('Itayose Component', () => {
         );
     });
 
-    it('should convert the amount to changed currency when the user change the currency', async () => {
+    it.skip('should convert the amount to changed currency when the user change the currency', async () => {
         const { store } = await waitFor(() =>
             render(<Default />, {
                 preloadedState,

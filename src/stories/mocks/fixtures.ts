@@ -7,7 +7,7 @@ import WrappedBitcoinIcon from 'src/assets/coins/wbtc.svg';
 import SFLogoSmall from 'src/assets/img/logo-small.svg';
 import MetamaskIcon from 'src/assets/img/metamask-fox.svg';
 import { Option, WalletSourceOption } from 'src/components/atoms';
-import { CurrencyOption } from 'src/components/molecules';
+import { CurrencyOption, ZCBond } from 'src/components/molecules';
 import { CollateralBook, Order, Position } from 'src/hooks';
 import {
     DailyVolumes,
@@ -1004,6 +1004,32 @@ export const emptyUSDCollateral: CollateralBook = {
     totalPresentValue: 0,
 };
 
+export const zcBonds: ZCBond[] = [
+    {
+        currency: CurrencySymbol.ETH,
+        amount: BigInt('10000000000000000'),
+        tokenAmount: BigInt('12340000000000000000000000'),
+    },
+    {
+        currency: CurrencySymbol.ETH,
+        maturity: dec22Fixture,
+        amount: BigInt('1000000000000000000000'),
+        tokenAmount: BigInt('1100000000000000000000'),
+    },
+    {
+        currency: CurrencySymbol.USDC,
+        maturity: dec22Fixture,
+        amount: BigInt('200000000'),
+        tokenAmount: BigInt('210000000'),
+    },
+    {
+        currency: CurrencySymbol.WBTC,
+        maturity: mar23Fixture,
+        amount: BigInt('3000000'),
+        tokenAmount: BigInt('3100000'),
+    },
+];
+
 function generateDailyVolumes(days: number) {
     const volumes: DailyVolumes = [];
     for (let i = 0; i < days; i++) {
@@ -1130,3 +1156,8 @@ export const preOpenOrders = [
         calculationDate: mar23Fixture.toNumber(),
     },
 ];
+
+export const volumePerMarket = {
+    'WFIL-1669852800': BigInt(3942000),
+    'USDC-1669852800': BigInt(30),
+};

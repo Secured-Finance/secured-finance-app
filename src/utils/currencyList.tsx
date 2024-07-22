@@ -3,15 +3,20 @@ import {
     Currency,
     Currency as CurrencyInterface,
     Ether,
+    getUTCMonthYear,
 } from '@secured-finance/sf-core';
 import { BigNumber as BigNumberJS } from 'bignumber.js';
 import tailwindConfig from 'src/../tailwind.config';
-import BTCIcon from 'src/assets/coins/btc.svg';
+import BtcIcon from 'src/assets/coins/btc.svg';
 import EthIcon from 'src/assets/coins/eth2.svg';
 import FilIcon from 'src/assets/coins/fil.svg';
 import IFilIcon from 'src/assets/coins/ifil.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
 import WFilIcon from 'src/assets/coins/wfil.svg';
+import ZcBtcIcon from 'src/assets/coins/zc-btc.svg';
+import ZcEthIcon from 'src/assets/coins/zc-eth.svg';
+import ZcFilIcon from 'src/assets/coins/zc-fil.svg';
+import ZcUsdcIcon from 'src/assets/coins/zc-usdc.svg';
 import { SvgIcon } from 'src/types';
 import { hexToString } from 'viem';
 import { ZERO_BI } from './collateral';
@@ -25,6 +30,7 @@ import { TFIL } from './currencies/tfil';
 import { USDC } from './currencies/usdc';
 import { WBTC } from './currencies/wbtc';
 import { WETHE } from './currencies/wethe';
+import { Maturity } from './entities';
 
 BigNumberJS.set({ EXPONENTIAL_AT: 30 }); // setting to a decent limit
 
@@ -50,6 +56,7 @@ export const currencyMap: Readonly<
         symbol: CurrencySymbol.USDC,
         name: USDC.onChain().name,
         icon: UsdcIcon,
+        zcIcon: ZcUsdcIcon,
         coinGeckoId: 'usd-coin',
         isCollateral: true,
         toBaseUnit: (amount: number) =>
@@ -68,6 +75,7 @@ export const currencyMap: Readonly<
         symbol: CurrencySymbol.aUSDC,
         name: 'aUSDC',
         icon: UsdcIcon,
+        zcIcon: ZcUsdcIcon,
         coinGeckoId: 'usd-coin',
         isCollateral: true,
         toBaseUnit: (amount: number) =>
@@ -83,10 +91,11 @@ export const currencyMap: Readonly<
     },
     [CurrencySymbol.ETH]: {
         index: 2,
-        icon: EthIcon,
         symbol: CurrencySymbol.ETH,
         // TODO: update sf-core to use the right name
         name: 'Ether',
+        icon: EthIcon,
+        zcIcon: ZcEthIcon,
         coinGeckoId: 'ethereum',
         isCollateral: true,
         toBaseUnit: (amount: number) =>
@@ -102,9 +111,10 @@ export const currencyMap: Readonly<
     },
     [CurrencySymbol.WETHe]: {
         index: 3,
-        icon: EthIcon,
         symbol: CurrencySymbol.WETHe,
         name: WETHE.onChain().name,
+        icon: EthIcon,
+        zcIcon: ZcEthIcon,
         coinGeckoId: 'weth',
         isCollateral: true,
         toBaseUnit: (amount: number) =>
@@ -122,7 +132,8 @@ export const currencyMap: Readonly<
         index: 4,
         symbol: CurrencySymbol.WBTC,
         name: WBTC.onChain().name,
-        icon: BTCIcon,
+        icon: BtcIcon,
+        zcIcon: ZcBtcIcon,
         coinGeckoId: 'wrapped-bitcoin',
         isCollateral: true,
         toBaseUnit: (amount: number) =>
@@ -140,7 +151,8 @@ export const currencyMap: Readonly<
         index: 5,
         symbol: CurrencySymbol.BTCb,
         name: BTCB.onChain().name,
-        icon: BTCIcon,
+        icon: BtcIcon,
+        zcIcon: ZcBtcIcon,
         coinGeckoId: 'wrapped-bitcoin',
         isCollateral: true,
         toBaseUnit: (amount: number) =>
@@ -156,9 +168,10 @@ export const currencyMap: Readonly<
     },
     [CurrencySymbol.FIL]: {
         index: 6,
-        icon: FilIcon,
         symbol: CurrencySymbol.FIL,
         name: 'Filecoin',
+        icon: FilIcon,
+        zcIcon: ZcFilIcon,
         coinGeckoId: 'filecoin',
         isCollateral: true,
         toBaseUnit: (amount: number) =>
@@ -174,9 +187,10 @@ export const currencyMap: Readonly<
     },
     [CurrencySymbol.tFIL]: {
         index: 7,
-        icon: FilIcon,
         symbol: CurrencySymbol.tFIL,
         name: 'Filecoin',
+        icon: FilIcon,
+        zcIcon: ZcFilIcon,
         coinGeckoId: 'filecoin',
         isCollateral: true,
         toBaseUnit: (amount: number) =>
@@ -192,9 +206,10 @@ export const currencyMap: Readonly<
     },
     [CurrencySymbol.WFIL]: {
         index: 8,
-        icon: WFilIcon,
         symbol: CurrencySymbol.WFIL,
         name: WFIL.onChain().name,
+        icon: WFilIcon,
+        zcIcon: ZcFilIcon,
         coinGeckoId: 'filecoin',
         isCollateral: false,
         toBaseUnit: (amount: number) => {
@@ -215,6 +230,7 @@ export const currencyMap: Readonly<
         symbol: CurrencySymbol.axlFIL,
         name: 'Axelar Wrapped FIL',
         icon: WFilIcon,
+        zcIcon: ZcFilIcon,
         coinGeckoId: 'filecoin',
         isCollateral: false,
         toBaseUnit: (amount: number) =>
@@ -285,6 +301,7 @@ export type CurrencyInfo = {
     name: string;
     coinGeckoId: string;
     icon: SvgIcon;
+    zcIcon?: SvgIcon;
     isCollateral: boolean;
     toBaseUnit: (amount: number) => bigint;
     fromBaseUnit: (amount: bigint) => number;
@@ -335,7 +352,8 @@ export function hexToCurrencySymbol(hex: string) {
 
 const convertToBlockchainUnit = (amount: number | string, ccy: Currency) => {
     const value = new BigNumberJS(amount).multipliedBy(10 ** ccy.decimals);
-    if (value.isLessThan(new BigNumberJS(1))) {
+
+    if (value.isNaN() || value.isLessThan(new BigNumberJS(1))) {
         return ZERO_BI;
     }
     return BigInt(value.toString());
@@ -371,3 +389,43 @@ export const divide = (
             .toFixed(precision)
     );
 };
+
+export const convertFromGvUnit = (amount: bigint) =>
+    new BigNumberJS(amount.toString())
+        .dividedBy(new BigNumberJS(10 ** 24))
+        .toNumber();
+
+export const convertToGvUnit = (amount: number) =>
+    BigInt(
+        new BigNumberJS(amount)
+            .multipliedBy(new BigNumberJS(10 ** 24))
+            .dp(0)
+            .toFixed()
+    );
+
+export const convertZCTokenFromBaseAmount = (
+    symbol: CurrencySymbol,
+    amount: bigint,
+    maturity?: Maturity
+) =>
+    !maturity || maturity.isZero()
+        ? convertFromGvUnit(amount)
+        : amountFormatterFromBase[symbol](amount);
+export const convertZCTokenToBaseAmount = (
+    symbol: CurrencySymbol,
+    amount: number,
+    maturity?: Maturity
+) =>
+    !maturity || maturity.isZero()
+        ? convertToGvUnit(amount)
+        : amountFormatterToBase[symbol](amount);
+
+export const convertToZcTokenName = (
+    symbol: CurrencySymbol,
+    maturity?: Maturity
+) =>
+    `ZC ${symbol}${
+        !maturity || maturity.isZero()
+            ? ''
+            : ` ${getUTCMonthYear(maturity.toNumber(), true)}`
+    }`;
