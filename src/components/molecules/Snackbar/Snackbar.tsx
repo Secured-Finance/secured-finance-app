@@ -1,47 +1,29 @@
 import { XMarkIcon } from '@heroicons/react/20/solid';
 import * as Toast from '@radix-ui/react-toast';
 import clsx from 'clsx';
-import { cloneElement, useRef, useState } from 'react';
+import { cloneElement } from 'react';
 import { snackbarIconMapping, variantStyle } from './constants';
-import { SnackbarVariants } from './types';
-
-export type SnackbarProps = {
-    title: string;
-    message: React.ReactNode;
-    variant: SnackbarVariants;
-};
+import { SnackbarProps, SnackbarVariants } from './types';
 
 export const Snackbar = ({
     title,
     message,
     variant = SnackbarVariants.Alert,
+    open,
+    handleOpen,
+    duration = 5000,
 }: SnackbarProps) => {
-    const [open, setOpen] = useState(false);
-    const timerRef = useRef(0);
-
     const icon = snackbarIconMapping[variant];
 
     return (
         <Toast.Provider swipeDirection='right'>
-            <button
-                onClick={() => {
-                    setOpen(false);
-                    window.clearTimeout(timerRef.current);
-                    timerRef.current = window.setTimeout(() => {
-                        setOpen(true);
-                    }, 100);
-                }}
-            >
-                Open snackbar!
-            </button>
-
             <Toast.Root
                 className={clsx(
                     'inline-flex max-w-[343px] rounded-md border border-neutral-600 bg-neutral-700 py-2 pl-2.5 pr-2 text-neutral-50'
                 )}
                 open={open}
-                onOpenChange={setOpen}
-                duration={5000}
+                onOpenChange={handleOpen}
+                duration={duration}
             >
                 <div className='relative flex flex-row items-start gap-1.5'>
                     {icon &&
@@ -60,20 +42,14 @@ export const Snackbar = ({
                         </Toast.Description>
                     </div>
 
-                    <button
-                        className='absolute right-0 top-0'
-                        onClick={() => {
-                            setOpen(false);
-                            window.clearTimeout(timerRef.current);
-                        }}
-                    >
+                    <Toast.Close className='absolute right-0 top-0'>
                         <XMarkIcon
                             className={clsx(
                                 variantStyle[variant],
                                 'h-[13px] w-[13px]'
                             )}
                         />
-                    </button>
+                    </Toast.Close>
                 </div>
             </Toast.Root>
             <Toast.Viewport className='ToastViewport' />

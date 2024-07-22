@@ -9,6 +9,7 @@ import {
     Alert,
     AlertSeverity,
     HorizontalTab,
+    Snackbar,
     TabSelector,
 } from 'src/components/molecules';
 import {
@@ -116,6 +117,7 @@ export const AdvancedLending = ({
         selectLandingOrderForm(state.landingOrderForm)
     );
     const [timestamp, setTimestamp] = useState<number>(1643713200);
+    const [isOpen, setIsOpen] = useState(true);
     const [selectedTable, setSelectedTable] = useState(
         TableType.ACTIVE_POSITION
     );
@@ -530,6 +532,13 @@ export const AdvancedLending = ({
                     delistedCurrencySet={delistedCurrencySet}
                 />
             </ThreeColumnsWithTopBar>
+            <Snackbar
+                title='title of snackbar'
+                open={isOpen}
+                handleOpen={setIsOpen}
+                message='message of snackbar'
+                duration={50000000}
+            />
         </div>
     );
 };
