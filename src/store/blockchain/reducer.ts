@@ -9,7 +9,7 @@ const initialState: Blockchain = {
         process.env.SF_ENV === Environment.PRODUCTION
             ? arbitrum.id
             : arbitrumSepolia.id,
-    chainError: true,
+    chainError: false,
     lastActionTimestamp: 0,
     testnetEnabled: false,
     isChainIdDetected: false,

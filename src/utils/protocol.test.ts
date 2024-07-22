@@ -4,6 +4,7 @@ import {
     dailyVolumes,
     dec22Fixture,
     usdcBytes32,
+    volumePerMarket,
 } from 'src/stories/mocks/fixtures';
 import { ZERO_BI } from './collateral';
 import { createCurrencyMap } from './currencyList';
@@ -16,6 +17,7 @@ describe('computeTotalDailyVolumeInUSD', () => {
         expect(computeTotalDailyVolumeInUSD([], assetPriceMap)).toEqual({
             totalVolumeUSD: ZERO_BI,
             volumePerCurrency: expectedVolumes,
+            volumePerMarket: {},
         });
     });
 
@@ -37,6 +39,7 @@ describe('computeTotalDailyVolumeInUSD', () => {
         ).toEqual({
             totalVolumeUSD: BigInt(3942030),
             volumePerCurrency: expectedVolumes,
+            volumePerMarket,
         });
     });
 });

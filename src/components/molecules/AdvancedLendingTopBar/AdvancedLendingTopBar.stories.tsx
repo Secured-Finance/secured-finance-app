@@ -1,6 +1,7 @@
 import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
 import type { Meta, StoryFn } from '@storybook/react';
 import { currencyList, maturityOptions } from 'src/stories/mocks/fixtures';
+import { mockDailyVolumes } from 'src/stories/mocks/queries';
 import { LoanValue } from 'src/utils/entities';
 import { AdvancedLendingTopBar } from '.';
 
@@ -12,14 +13,13 @@ export default {
     args: {
         selectedAsset: currencyList[2],
         assetList: currencyList,
-        options: maturityOptions.map(o => ({
-            label: o.label,
-            value: o.value.toString(),
-        })),
+        options: maturityOptions,
         selected: {
             label: maturityOptions[0].label,
-            value: maturityOptions[0].value.toString(),
+            value: maturityOptions[0].value,
         },
+        onAssetChange: () => {},
+        onTermChange: () => {},
         currentMarket: {
             value: LoanValue.fromPrice(
                 lastTradePrice,
@@ -28,12 +28,12 @@ export default {
             time: 1646920200,
             type: 'block',
         },
-
-        onAssetChange: () => {},
-        onTermChange: () => {},
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,
+        apolloClient: {
+            mocks: [...mockDailyVolumes],
+        },
     },
 } as Meta<typeof AdvancedLendingTopBar>;
 
