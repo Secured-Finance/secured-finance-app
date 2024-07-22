@@ -1,4 +1,5 @@
 import type { Meta, StoryFn } from '@storybook/react';
+import { CurrencySymbol } from 'src/utils';
 import { AssetInformation } from '.';
 
 export default {
@@ -6,10 +7,22 @@ export default {
     component: AssetInformation,
     args: {
         header: 'Collateral Assets',
-        collateralBook: {
-            ETH: BigInt('1200000000000000000'),
-            USDC: BigInt('10000000'),
-        },
+        values: [
+            {
+                currency: CurrencySymbol.ETH,
+                label: CurrencySymbol.ETH,
+                amount: 1.2,
+                price: 123,
+                totalPrice: 1234,
+            },
+            {
+                currency: CurrencySymbol.USDC,
+                label: CurrencySymbol.USDC,
+                amount: 1000,
+                price: 1.01,
+                totalPrice: 1010,
+            },
+        ],
         informationText: 'Only USDC and ETH are eligible as collateral.',
     },
 } as Meta<typeof AssetInformation>;
@@ -21,8 +34,18 @@ const Template: StoryFn<typeof AssetInformation> = args => {
 export const Default = Template.bind({});
 export const ZeroUsdcCollateral = Template.bind({});
 ZeroUsdcCollateral.args = {
-    collateralBook: {
-        ETH: BigInt('1200000000000000000'),
-        USDC: BigInt('0'),
-    },
+    values: [
+        {
+            currency: CurrencySymbol.ETH,
+            label: CurrencySymbol.ETH,
+            amount: 1.2,
+            price: 123,
+            totalPrice: 1234,
+        },
+    ],
+};
+
+export const ZCToken = Template.bind({});
+ZCToken.args = {
+    isZC: true,
 };

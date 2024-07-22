@@ -69,6 +69,7 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
         lendingContracts,
         market => market.isOpened
     );
+    const allMaturityOptions = useMaturityOptions(lendingContracts);
 
     const securedFinance = useSF();
     const currentChainId = securedFinance?.config.chain.id;
@@ -152,7 +153,7 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
                 ) : (
                     <AdvancedLending
                         collateralBook={collateralBook}
-                        maturitiesOptionList={maturityOptionList}
+                        maturitiesOptionList={allMaturityOptions}
                         marketPrice={marketPrice}
                         delistedCurrencySet={delistedCurrencySet}
                     />

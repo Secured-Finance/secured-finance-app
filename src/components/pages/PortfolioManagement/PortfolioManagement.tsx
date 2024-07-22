@@ -8,6 +8,7 @@ import {
     DELISTED_CURRENCIES_KEY,
     HorizontalTab,
     StatsBar,
+    ZCBond,
 } from 'src/components/molecules';
 import {
     ActiveTradeTable,
@@ -26,11 +27,13 @@ import {
     useCollateralBook,
     useCurrenciesForOrders,
     useCurrencyDelistedStatus,
+    useGenesisValues,
     useGraphClientHook,
     useIsSubgraphSupported,
     useIsUnderCollateralThreshold,
     useLastPrices,
     useLendingMarkets,
+    useMarketLists,
     useOrderList,
     usePositions,
 } from 'src/hooks';
@@ -45,6 +48,7 @@ import {
     sortOrders,
     usdFormat,
 } from 'src/utils';
+import { Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
 export enum TableType {
@@ -131,6 +135,68 @@ export const PortfolioManagement = () => {
     ]);
 
     const { data: positions } = usePositions(address, usedCurrencies);
+    const genesisValues = useGenesisValues(
+        address,
+        positions?.positions || []
+    ).map(({ data }) => data);
+    const { openMarkets } = useMarketLists();
+
+    const zcBonds = useMemo(() => {
+        const lendingPositions = positions?.positions.filter(
+            position => position.amount >= 0
+        );
+
+        const zcBonds: ZCBond[] = [];
+
+        lendingPositions?.map(position => {
+            const currency = hexToCurrencySymbol(position.currency);
+
+            if (currency) {
+                const targetMarkets = openMarkets.filter(
+                    openMarket => openMarket.currency === position.currency
+                );
+                const hasGenesisValue =
+                    targetMarkets.length > 0 &&
+                    targetMarkets[0].maturity.toString() === position.maturity;
+                const {
+                    amountInPV: genesisValueAmountInPV = BigInt(0),
+                    amountInFV: genesisValueAmountInFV = BigInt(0),
+                    amount: tokenAmount,
+                } = genesisValues.find(
+                    genesisValue => genesisValue?.currency === currency
+                ) ?? {};
+
+                if (hasGenesisValue && tokenAmount && tokenAmount > 0) {
+                    zcBonds.push({
+                        currency,
+                        amount: genesisValueAmountInPV,
+                        tokenAmount: tokenAmount,
+                    });
+                    const remainingAmount =
+                        position.amount - genesisValueAmountInPV;
+                    const remainingTokenAmount =
+                        position.futureValue - genesisValueAmountInFV;
+                    if (remainingAmount > 0) {
+                        zcBonds.push({
+                            currency,
+                            maturity: new Maturity(position.maturity),
+                            amount: remainingAmount,
+                            tokenAmount: remainingTokenAmount,
+                        });
+                    }
+                } else {
+                    zcBonds.push({
+                        currency,
+                        maturity: new Maturity(position.maturity),
+                        amount: position.amount,
+                        tokenAmount: position.futureValue,
+                    });
+                }
+            }
+        });
+
+        return zcBonds;
+    }, [positions, genesisValues, openMarkets]);
 
     const sortedOrderHistory = useMemo(() => {
         return (userOrderHistory.data?.orders ?? [])
@@ -299,6 +365,7 @@ export const PortfolioManagement = () => {
                     <CollateralOrganism
                         collateralBook={collateralBook}
                         netAssetValue={portfolioAnalytics.netAssetValue}
+                        zcBonds={zcBonds}
                     />
                     <HorizontalTab
                         tabTitles={

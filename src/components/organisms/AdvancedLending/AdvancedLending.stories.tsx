@@ -9,6 +9,7 @@ import {
     yieldCurveRates,
 } from 'src/stories/mocks/fixtures';
 import {
+    mockDailyVolumes,
     mockFilteredUserOrderHistory,
     mockFilteredUserTransactionHistory,
     mockTrades,
@@ -32,6 +33,7 @@ export default {
                 ...mockTrades,
                 ...mockFilteredUserTransactionHistory,
                 ...mockFilteredUserOrderHistory,
+                ...mockDailyVolumes,
             ],
         },
         ...RESPONSIVE_PARAMETERS,
@@ -65,10 +67,12 @@ OpenOrdersConnectedToWallet.play = async () => {
     const openOrdersTab = screen.getByTestId('Open Orders');
     await userEvent.click(openOrdersTab);
 
-    const dec22Btn = await screen.findByRole('button', { name: 'DEC2022' });
+    const dec22Btn = await screen.findByRole('button', {
+        name: 'WFIL-DEC2022',
+    });
     await userEvent.click(dec22Btn);
 
-    const jun23Button = await screen.findByText('JUN2023');
+    const jun23Button = await screen.findByText('WFIL-JUN2023');
     await userEvent.click(jun23Button);
 };
 OpenOrdersConnectedToWallet.args = {
