@@ -12,6 +12,7 @@ import { useBreakpoint } from 'src/hooks';
 import { Transaction, TransactionHistoryList } from 'src/types';
 import {
     AmountCell,
+    MobileTableWrapper,
     amountColumnDefinition,
     contractColumnDefinition,
     formatLoanValue,
@@ -63,57 +64,65 @@ const MyTransactionsTableMobile = ({
 }) => {
     if (!data || data.length === 0) return null;
 
-    return data.map((row, index) => {
-        const ccy = hexToCurrencySymbol(row.currency);
-        const maturity = new Maturity(row.maturity);
-        const side =
-            row.side.toString() === '1' ? OrderSide.BORROW : OrderSide.LEND;
-        const amount = row.amount;
-        const averagePrice = row.averagePrice;
-        const futureValue = row.futureValue;
-        const feeInFV = row.feeInFV;
+    return (
+        <MobileTableWrapper>
+            {data.map((row, index) => {
+                const ccy = hexToCurrencySymbol(row.currency);
+                const maturity = new Maturity(row.maturity);
+                const side =
+                    row.side.toString() === '1'
+                        ? OrderSide.BORROW
+                        : OrderSide.LEND;
+                const amount = row.amount;
+                const averagePrice = row.averagePrice;
+                const futureValue = row.futureValue;
+                const feeInFV = row.feeInFV;
 
-        return (
-            ccy && (
-                <div
-                    className={clsx(
-                        'flex w-full flex-col gap-2.5 bg-neutral-900 px-5 py-4',
-                        {
-                            'border-b border-neutral-600':
-                                index !== data.length - 1,
-                        }
-                    )}
-                    key={index}
-                >
-                    <TableCardHeader
-                        currency={ccy}
-                        maturity={maturity}
-                        side={side}
-                        price={Number(averagePrice) * 10000}
-                    />
-                    <div className='flex flex-col gap-[3px]'>
-                        <HorizontalListItemTable
-                            label='Executed Amount'
-                            value={<AmountCell ccy={ccy} amount={amount} />}
-                        />
-                        <HorizontalListItemTable
-                            label='Future Value (FV)'
-                            value={
-                                <AmountCell
-                                    ccy={ccy}
-                                    amount={getFVWithFee(
-                                        BigInt(futureValue),
-                                        BigInt(feeInFV),
-                                        side
-                                    )}
+                return (
+                    ccy && (
+                        <div
+                            className={clsx(
+                                'flex w-full flex-col gap-2.5 bg-neutral-900 px-5 py-4',
+                                {
+                                    'border-b border-neutral-600':
+                                        index !== data.length - 1,
+                                }
+                            )}
+                            key={index}
+                        >
+                            <TableCardHeader
+                                currency={ccy}
+                                maturity={maturity}
+                                side={side}
+                                price={Number(averagePrice) * 10000}
+                            />
+                            <div className='flex flex-col gap-[3px]'>
+                                <HorizontalListItemTable
+                                    label='Executed Amount'
+                                    value={
+                                        <AmountCell ccy={ccy} amount={amount} />
+                                    }
                                 />
-                            }
-                        />
-                    </div>
-                </div>
-            )
-        );
-    });
+                                <HorizontalListItemTable
+                                    label='Future Value (FV)'
+                                    value={
+                                        <AmountCell
+                                            ccy={ccy}
+                                            amount={getFVWithFee(
+                                                BigInt(futureValue),
+                                                BigInt(feeInFV),
+                                                side
+                                            )}
+                                        />
+                                    }
+                                />
+                            </div>
+                        </div>
+                    )
+                );
+            })}
+        </MobileTableWrapper>
+    );
 };
 
 export const MyTransactionsTable = ({

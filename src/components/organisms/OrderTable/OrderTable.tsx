@@ -18,6 +18,7 @@ import { RemoveOrderDialog } from 'src/components/organisms';
 import { Order, useBreakpoint } from 'src/hooks';
 import {
     AmountCell,
+    MobileTableWrapper,
     OrderTimeCell,
     amountColumnDefinition,
     contractColumnDefinition,
@@ -52,67 +53,77 @@ const OrderTableMobile = ({
 }) => {
     if (!data || data.length === 0) return null;
 
-    return data.map((row, index) => {
-        const ccy = hexToCurrencySymbol(row.currency);
-        const maturity = new Maturity(row.maturity);
-        const side =
-            row.side.toString() === '1' ? OrderSide.BORROW : OrderSide.LEND;
-        const amount = row.amount;
-        const unitPrice = row.unitPrice;
-        const orderId = row.orderId;
-        const timestamp = Number(row.createdAt);
-        const calculationDate = row.calculationDate;
+    return (
+        <MobileTableWrapper>
+            {data.map((row, index) => {
+                const ccy = hexToCurrencySymbol(row.currency);
+                const maturity = new Maturity(row.maturity);
+                const side =
+                    row.side.toString() === '1'
+                        ? OrderSide.BORROW
+                        : OrderSide.LEND;
+                const amount = row.amount;
+                const unitPrice = row.unitPrice;
+                const orderId = row.orderId;
+                const timestamp = Number(row.createdAt);
+                const calculationDate = row.calculationDate;
 
-        return (
-            ccy && (
-                <div
-                    className={clsx(
-                        'flex w-full flex-col gap-2.5 bg-neutral-900 px-5 py-4',
-                        {
-                            'border-b border-neutral-600':
-                                index !== data.length - 1,
-                        }
-                    )}
-                    key={index}
-                >
-                    <TableCardHeader
-                        currency={ccy}
-                        maturity={maturity}
-                        side={side}
-                        price={Number(unitPrice)}
-                        calculationDate={calculationDate}
-                    />
-                    <div className='flex flex-col gap-[3px]'>
-                        <HorizontalListItemTable
-                            label='Order Amount'
-                            value={<AmountCell ccy={ccy} amount={amount} />}
-                        />
-                        <HorizontalListItemTable
-                            label='Order Time'
-                            value={<OrderTimeCell timestamp={timestamp} />}
-                        />
-                    </div>
-                    <Button
-                        size={ButtonSizes.sm}
-                        fullWidth
-                        variant={ButtonVariants.secondary}
-                        onClick={() =>
-                            cancelOrder({
-                                orderId: orderId,
-                                maturity: maturity,
-                                amount: new Amount(amount, ccy),
-                                side: side,
-                                isOpen: true,
-                                orderUnitPrice: Number(unitPrice),
-                            })
-                        }
-                    >
-                        Cancel
-                    </Button>
-                </div>
-            )
-        );
-    });
+                return (
+                    ccy && (
+                        <div
+                            className={clsx(
+                                'flex w-full flex-col gap-2.5 bg-neutral-900 px-5 py-4',
+                                {
+                                    'border-b border-neutral-600':
+                                        index !== data.length - 1,
+                                }
+                            )}
+                            key={index}
+                        >
+                            <TableCardHeader
+                                currency={ccy}
+                                maturity={maturity}
+                                side={side}
+                                price={Number(unitPrice)}
+                                calculationDate={calculationDate}
+                            />
+                            <div className='flex flex-col gap-[3px]'>
+                                <HorizontalListItemTable
+                                    label='Order Amount'
+                                    value={
+                                        <AmountCell ccy={ccy} amount={amount} />
+                                    }
+                                />
+                                <HorizontalListItemTable
+                                    label='Order Time'
+                                    value={
+                                        <OrderTimeCell timestamp={timestamp} />
+                                    }
+                                />
+                            </div>
+                            <Button
+                                size={ButtonSizes.sm}
+                                fullWidth
+                                variant={ButtonVariants.secondary}
+                                onClick={() =>
+                                    cancelOrder({
+                                        orderId: orderId,
+                                        maturity: maturity,
+                                        amount: new Amount(amount, ccy),
+                                        side: side,
+                                        isOpen: true,
+                                        orderUnitPrice: Number(unitPrice),
+                                    })
+                                }
+                            >
+                                Cancel
+                            </Button>
+                        </div>
+                    )
+                );
+            })}
+        </MobileTableWrapper>
+    );
 };
 
 export const OrderTable = ({

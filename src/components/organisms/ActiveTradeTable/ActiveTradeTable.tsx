@@ -24,6 +24,7 @@ import {
     AmountCell,
     CurrencySymbol,
     MaturityCell,
+    MobileTableWrapper,
     amountColumnDefinition,
     contractColumnDefinition,
     futureValueColumnDefinition,
@@ -62,91 +63,102 @@ const ActiveTradeTableMobile = ({
 }) => {
     if (!data || data.length === 0) return null;
 
-    return data.map((row, index) => {
-        const ccy = hexToCurrencySymbol(row.currency);
-        if (!ccy) return null;
+    return (
+        <MobileTableWrapper>
+            {data.map((row, index) => {
+                const ccy = hexToCurrencySymbol(row.currency);
+                if (!ccy) return null;
 
-        const maturity = new Maturity(row.maturity);
-        const amount = row.amount;
-        const absAmount = amount < 0 ? -amount : amount;
-        const futureValue = row.futureValue;
-        const marketPrice = row.marketPrice;
-        const side =
-            BigInt(futureValue) < 0 ? OrderSide.BORROW : OrderSide.LEND;
-        const reversedSide =
-            BigInt(futureValue) < 0 ? OrderSide.LEND : OrderSide.BORROW;
+                const maturity = new Maturity(row.maturity);
+                const amount = row.amount;
+                const absAmount = amount < 0 ? -amount : amount;
+                const futureValue = row.futureValue;
+                const marketPrice = row.marketPrice;
+                const side =
+                    BigInt(futureValue) < 0 ? OrderSide.BORROW : OrderSide.LEND;
+                const reversedSide =
+                    BigInt(futureValue) < 0 ? OrderSide.LEND : OrderSide.BORROW;
 
-        const items = tableActionMenu(
-            maturity.toNumber(),
-            absAmount,
-            ccy,
-            reversedSide
-        );
+                const items = tableActionMenu(
+                    maturity.toNumber(),
+                    absAmount,
+                    ccy,
+                    reversedSide
+                );
 
-        return (
-            <div
-                className={clsx(
-                    'flex w-full flex-col gap-2.5 bg-neutral-900 px-5 py-4',
-                    {
-                        'border-b border-neutral-600':
-                            index !== data.length - 1,
-                    }
-                )}
-                key={index}
-            >
-                <TableCardHeader
-                    currency={ccy}
-                    maturity={maturity}
-                    side={side}
-                    price={Number(marketPrice)}
-                />
-                <div className='flex flex-col gap-[3px]'>
-                    <HorizontalListItemTable
-                        label='Time to Maturity'
-                        value={
-                            <MaturityCell
-                                timestamp={maturity.toNumber()}
-                                side={side}
-                                currency={ccy}
-                                delistedCurrencySet={delistedCurrencySet}
-                            />
-                        }
-                    />
-                    <HorizontalListItemTable
-                        label='Present Value (PV)'
-                        value={
-                            <AmountCell
-                                ccy={ccy}
-                                amount={
-                                    isPastDate(maturity.toNumber())
-                                        ? undefined
-                                        : amount
+                return (
+                    <div
+                        className={clsx(
+                            'flex w-full flex-col gap-2.5 bg-neutral-900 px-5 py-4',
+                            {
+                                'border-b border-neutral-600':
+                                    index !== data.length - 1,
+                            }
+                        )}
+                        key={index}
+                    >
+                        <TableCardHeader
+                            currency={ccy}
+                            maturity={maturity}
+                            side={side}
+                            price={Number(marketPrice)}
+                        />
+                        <div className='flex flex-col gap-[3px]'>
+                            <HorizontalListItemTable
+                                label='Time to Maturity'
+                                value={
+                                    <MaturityCell
+                                        timestamp={maturity.toNumber()}
+                                        side={side}
+                                        currency={ccy}
+                                        delistedCurrencySet={
+                                            delistedCurrencySet
+                                        }
+                                    />
                                 }
                             />
-                        }
-                    />
-                    <HorizontalListItemTable
-                        label='Future Value (FV)'
-                        value={<AmountCell ccy={ccy} amount={futureValue} />}
-                    />
-                </div>
-                {items && (
-                    <div className='flex gap-2.5'>
-                        {items.map((item, index) => {
-                            return (
-                                <MenuItem
-                                    key={index}
-                                    text={item.text}
-                                    disabled={item.disabled}
-                                    onClick={item.onClick}
-                                />
-                            );
-                        })}
+                            <HorizontalListItemTable
+                                label='Present Value (PV)'
+                                value={
+                                    <AmountCell
+                                        ccy={ccy}
+                                        amount={
+                                            isPastDate(maturity.toNumber())
+                                                ? undefined
+                                                : amount
+                                        }
+                                    />
+                                }
+                            />
+                            <HorizontalListItemTable
+                                label='Future Value (FV)'
+                                value={
+                                    <AmountCell
+                                        ccy={ccy}
+                                        amount={futureValue}
+                                    />
+                                }
+                            />
+                        </div>
+                        {items && (
+                            <div className='flex gap-2.5'>
+                                {items.map((item, index) => {
+                                    return (
+                                        <MenuItem
+                                            key={index}
+                                            text={item.text}
+                                            disabled={item.disabled}
+                                            onClick={item.onClick}
+                                        />
+                                    );
+                                })}
+                            </div>
+                        )}
                     </div>
-                )}
-            </div>
-        );
-    });
+                );
+            })}
+        </MobileTableWrapper>
+    );
 };
 
 export const ActiveTradeTable = ({

@@ -123,3 +123,15 @@ export const MaturityCell = ({
         </div>
     );
 };
+
+export const MobileTableWrapper = ({
+    children,
+}: {
+    children: React.ReactNode;
+}) => {
+    return (
+        <div className='scrollbar-table max-h-[600px] overflow-y-scroll rounded-b-xl'>
+            {children}
+        </div>
+    );
+};
