@@ -88,7 +88,7 @@ export const CurrencyMaturityTable = ({
                     return option.apr;
                 case 'maturity':
                     const timestampDifference = calculateTimeDifference(
-                        +option.display
+                        +option.maturity
                     );
                     return (
                         <div className='flex justify-end whitespace-nowrap pr-3'>
