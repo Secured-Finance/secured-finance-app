@@ -286,7 +286,7 @@ export const AdvancedLending = ({
     );
 
     const handleTermChange = useCallback(
-        (v: string) => {
+        (v: Maturity) => {
             dispatch(setMaturity(Number(v)));
             dispatch(resetUnitPrice());
             trackButtonEvent(
@@ -331,18 +331,15 @@ export const AdvancedLending = ({
                     <AdvancedLendingTopBar
                         selectedAsset={selectedAsset}
                         assetList={assetList}
-                        options={maturitiesOptionList.map(o => ({
-                            label: o.label,
-                            value: o.value.toString(),
-                        }))}
+                        options={maturitiesOptionList}
                         selected={{
                             label: selectedTerm.label,
-                            value: selectedTerm.value.toString(),
+                            value: selectedTerm.value,
                         }}
                         onAssetChange={handleCurrencyChange}
                         onTermChange={handleTermChange}
-                        currentMarket={currentMarket}
                         currencyPrice={usdFormat(currencyPrice, 2)}
+                        currentMarket={currentMarket}
                         values={
                             isSubgraphSupported
                                 ? [

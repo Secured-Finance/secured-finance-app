@@ -181,11 +181,11 @@ export const mockUseSF = () => {
 
         getMaturities: jest.fn(() =>
             Promise.resolve([
-                BigInt('1000'),
-                BigInt('2000'),
-                BigInt('3000'),
-                BigInt('4000'),
-                BigInt('5000'),
+                BigInt('1727395200'),
+                BigInt('1735257600'),
+                BigInt('1743120000'),
+                BigInt('1750982400'),
+                BigInt('1758844800'),
             ])
         ),
 
@@ -202,6 +202,14 @@ export const mockUseSF = () => {
         }),
 
         depositCollateral: jest.fn(() =>
+            Promise.resolve('0xb98bd7c7f656290hu071e52d1a56e6uyh98765e4')
+        ),
+
+        depositZCToken: jest.fn(() =>
+            Promise.resolve('0xb98bd7c7f656290hu071e52d1a56e6uyh98765e4')
+        ),
+
+        withdrawZCToken: jest.fn(() =>
             Promise.resolve('0xb98bd7c7f656290hu071e52d1a56e6uyh98765e4')
         ),
 
@@ -224,6 +232,10 @@ export const mockUseSF = () => {
             }
             return Promise.resolve(balance);
         }),
+
+        getERC20TokenBalance: jest.fn(() =>
+            Promise.resolve(BigInt('1000000000000000000'))
+        ),
 
         cancelLendingOrder: jest.fn(() =>
             Promise.resolve('0xb98bd7c7f656290hu071e52d1a56e6uyh98765e4')
@@ -495,6 +507,42 @@ export const mockUseSF = () => {
 
         getTotalPresentValueInBaseCurrency: jest.fn(() =>
             Promise.resolve(BigInt(250000000000))
+        ),
+
+        getZCToken: jest.fn(() =>
+            Promise.resolve('0x1234567890123456789012345678901234567890')
+        ),
+
+        getWithdrawableZCTokenAmount: jest.fn(() =>
+            Promise.resolve(BigInt('1000000000000000000'))
+        ),
+
+        getLatestAutoRollLog: jest.fn(() =>
+            Promise.resolve({
+                unitPrice: BigInt('9800'),
+                lastAutoRollTime: BigInt('1609210000'),
+                lastAutoRollAmount: BigInt('1000000000000000000'),
+                next: BigInt('0'),
+                prev: BigInt('1719532800'),
+            })
+        ),
+
+        getAutoRollLog: jest.fn(() =>
+            Promise.resolve({
+                unitPrice: BigInt('9800'),
+                lastAutoRollTime: BigInt('1609210000'),
+                lastAutoRollAmount: BigInt('1000000000000000000'),
+                next: BigInt('1727395200'),
+                prev: BigInt('1711670400'),
+            })
+        ),
+
+        getGenesisValue: jest.fn(() =>
+            Promise.resolve([
+                BigInt('1000000000000000000'),
+                BigInt('2000000000000000000'),
+                BigInt('3000000000000000000'),
+            ])
         ),
 
         tokenVault: {
