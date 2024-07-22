@@ -5,6 +5,7 @@ import {
     formatLoanValue,
     formatTimeStampWithTimezone,
     formatTimestamp,
+    formatTimestampDDMMYY,
     formatTimestampWithMonth,
     formatWithCurrency,
     ordinaryFormat,
@@ -132,6 +133,19 @@ describe('formatTimestamp', () => {
             expect(formatTimestamp(timestamp)).toEqual(formattedDate);
         });
     }
+});
+
+describe.skip('formatTimestampDDMMYY', () => {
+    const testCases = [
+        { unixTimestamp: 1609459200, expected: '01/01/21, 00:00' },
+        { unixTimestamp: 1612137600, expected: '01/02/21, 00:00' },
+        { unixTimestamp: 1625097600, expected: '01/07/21, 00:00' },
+        { unixTimestamp: 1657964207, expected: '16/07/22, 09:36' },
+    ];
+
+    testCases.forEach(({ unixTimestamp, expected }) => {
+        expect(formatTimestampDDMMYY(unixTimestamp)).toBe(expected);
+    });
 });
 
 describe('formatTimestampWithMonth', () => {

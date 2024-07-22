@@ -6,7 +6,13 @@ import * as dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { useCallback, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { CoreTable, TableActionMenu } from 'src/components/molecules';
+import { HorizontalListItemTable } from 'src/components/atoms';
+import {
+    CoreTable,
+    MenuItem,
+    TableActionMenu,
+    TableCardHeader,
+} from 'src/components/molecules';
 import { UnwindDialog, UnwindDialogType } from 'src/components/organisms';
 import { Position, useBreakpoint, useLastPrices } from 'src/hooks';
 import {
@@ -15,26 +21,133 @@ import {
     setMaturity,
 } from 'src/store/landingOrderForm';
 import {
+    AmountCell,
     CurrencySymbol,
-    hexToCurrencySymbol,
-    isMaturityPastDays,
-    isPastDate,
-} from 'src/utils';
-import { Amount, Maturity } from 'src/utils/entities';
-import {
+    MaturityCell,
     amountColumnDefinition,
     contractColumnDefinition,
     futureValueColumnDefinition,
+    hexToCurrencySymbol,
+    isMaturityPastDays,
+    isPastDate,
     loanTypeFromFVColumnDefinition,
     priceYieldColumnDefinition,
     tableHeaderDefinition,
-} from 'src/utils/tableDefinitions';
+} from 'src/utils';
+import { Amount, Maturity } from 'src/utils/entities';
 
 const columnHelper = createColumnHelper<
     Position & { underMinimalCollateral?: boolean }
 >();
 
 const DEFAULT_HEIGHT = 300;
+
+const ActiveTradeTableMobile = ({
+    data,
+    tableActionMenu,
+    delistedCurrencySet,
+}: {
+    data: (Position & { underMinimalCollateral?: boolean })[];
+    tableActionMenu: (
+        maturity: number,
+        amount: bigint,
+        ccy: CurrencySymbol,
+        side: OrderSide
+    ) => {
+        text: string;
+        onClick: () => void;
+        disabled?: boolean;
+    }[];
+    delistedCurrencySet: Set<CurrencySymbol>;
+}) => {
+    if (!data || data.length === 0) return null;
+
+    return data.map((row, index) => {
+        const ccy = hexToCurrencySymbol(row.currency);
+        if (!ccy) return null;
+
+        const maturity = new Maturity(row.maturity);
+        const amount = row.amount;
+        const absAmount = amount < 0 ? -amount : amount;
+        const futureValue = row.futureValue;
+        const marketPrice = row.marketPrice;
+        const side =
+            BigInt(futureValue) < 0 ? OrderSide.BORROW : OrderSide.LEND;
+        const reversedSide =
+            BigInt(futureValue) < 0 ? OrderSide.LEND : OrderSide.BORROW;
+
+        const items = tableActionMenu(
+            maturity.toNumber(),
+            absAmount,
+            ccy,
+            reversedSide
+        );
+
+        return (
+            <div
+                className={clsx(
+                    'flex w-full flex-col gap-2.5 bg-neutral-900 px-5 py-4',
+                    {
+                        'border-b border-neutral-600':
+                            index !== data.length - 1,
+                    }
+                )}
+                key={index}
+            >
+                <TableCardHeader
+                    currency={ccy}
+                    maturity={maturity}
+                    side={side}
+                    price={Number(marketPrice)}
+                />
+                <div className='flex flex-col gap-[3px]'>
+                    <HorizontalListItemTable
+                        label='Time to Maturity'
+                        value={
+                            <MaturityCell
+                                timestamp={maturity.toNumber()}
+                                side={side}
+                                currency={ccy}
+                                delistedCurrencySet={delistedCurrencySet}
+                            />
+                        }
+                    />
+                    <HorizontalListItemTable
+                        label='Present Value (PV)'
+                        value={
+                            <AmountCell
+                                ccy={ccy}
+                                amount={
+                                    isPastDate(maturity.toNumber())
+                                        ? undefined
+                                        : amount
+                                }
+                            />
+                        }
+                    />
+                    <HorizontalListItemTable
+                        label='Future Value (FV)'
+                        value={<AmountCell ccy={ccy} amount={futureValue} />}
+                    />
+                </div>
+                {items && (
+                    <div className='flex gap-2.5'>
+                        {items.map((item, index) => {
+                            return (
+                                <MenuItem
+                                    key={index}
+                                    text={item.text}
+                                    disabled={item.disabled}
+                                    onClick={item.onClick}
+                                />
+                            );
+                        })}
+                    </div>
+                )}
+            </div>
+        );
+    });
+};
 
 export const ActiveTradeTable = ({
     data,
@@ -309,27 +422,29 @@ export const ActiveTradeTable = ({
         ]
     );
 
-    const columnsForTabletMobile = [
-        columns[1],
-        columns[0],
-        ...columns.slice(2),
-    ];
-
     return (
         <>
-            <CoreTable
-                data={data}
-                columns={isTablet ? columnsForTabletMobile : columns}
-                options={{
-                    name: 'active-trade-table',
-                    stickyFirstColumn: true,
-                    pagination: {
-                        containerHeight: height || DEFAULT_HEIGHT,
-                        getMoreData: () => {},
-                        totalData: data.length,
-                    },
-                }}
-            />
+            {isTablet ? (
+                <ActiveTradeTableMobile
+                    data={data}
+                    tableActionMenu={getTableActionMenu}
+                    delistedCurrencySet={delistedCurrencySet}
+                />
+            ) : (
+                <CoreTable
+                    data={data}
+                    columns={columns}
+                    options={{
+                        name: 'active-trade-table',
+                        stickyFirstColumn: true,
+                        pagination: {
+                            containerHeight: height || DEFAULT_HEIGHT,
+                            getMoreData: () => {},
+                            totalData: data.length,
+                        },
+                    }}
+                />
+            )}
             {unwindDialogData && (
                 <UnwindDialog
                     isOpen={unwindDialogData.show}
