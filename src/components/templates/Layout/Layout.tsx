@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { Toaster } from 'src/components/ui/toaster';
+import { Toaster } from 'src/components/molecules/Snackbar/toaster';
 import { getCommitHash } from 'src/utils';
 
 export const Layout = ({

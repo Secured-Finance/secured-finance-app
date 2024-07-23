@@ -2,7 +2,7 @@ import { withToaster } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
 import { within } from '@storybook/testing-library';
 import { Button } from 'src/components/atoms';
-import { useToast } from 'src/components/ui/use-toast';
+import { useToast } from 'src/components/molecules/Snackbar/use-toast';
 import { Snackbar } from './Snackbar';
 import { SnackbarVariants } from './types';
 

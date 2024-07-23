@@ -4,7 +4,7 @@
 import * as React from 'react';
 
 import { SnackbarVariants } from 'src/components/molecules';
-import type { ToastProps } from 'src/components/ui/toast';
+import type { ToastProps } from 'src/components/molecules/Snackbar/toast';
 
 const TOAST_LIMIT = 1;
 const TOAST_REMOVE_DELAY = 1000000;

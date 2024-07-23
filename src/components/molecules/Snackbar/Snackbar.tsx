@@ -7,7 +7,7 @@ import {
     ToastDescription,
     ToastTitle,
     ToastViewport,
-} from 'src/components/ui/toast';
+} from 'src/components/molecules/Snackbar/toast';
 import { snackbarIconMapping, variantStyle } from './constants';
 import { SnackbarProps, SnackbarVariants } from './types';
 
