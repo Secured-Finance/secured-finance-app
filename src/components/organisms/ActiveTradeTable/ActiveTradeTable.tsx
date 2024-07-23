@@ -61,8 +61,6 @@ const ActiveTradeTableMobile = ({
     }[];
     delistedCurrencySet: Set<CurrencySymbol>;
 }) => {
-    if (!data || data.length === 0) return null;
-
     return (
         <MobileTableWrapper>
             {data.map((row, index) => {
@@ -103,7 +101,7 @@ const ActiveTradeTableMobile = ({
                             side={side}
                             price={Number(marketPrice)}
                         />
-                        <div className='flex flex-col gap-[3px]'>
+                        <div className='flex flex-col'>
                             <HorizontalListItemTable
                                 label='Time to Maturity'
                                 value={

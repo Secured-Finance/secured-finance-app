@@ -135,7 +135,7 @@ describe('formatTimestamp', () => {
     }
 });
 
-describe.skip('formatTimestampDDMMYY', () => {
+describe('formatTimestampDDMMYY', () => {
     const testCases = [
         { unixTimestamp: 1609459200, expected: '01/01/21, 00:00' },
         { unixTimestamp: 1612137600, expected: '01/02/21, 00:00' },
