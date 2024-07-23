@@ -1,8 +1,12 @@
+import { withToaster } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
-import { useState } from 'react';
+import { within } from '@storybook/testing-library';
 import { Button } from 'src/components/atoms';
+import { useToast } from 'src/components/ui/use-toast';
 import { Snackbar } from './Snackbar';
 import { SnackbarVariants } from './types';
+
+const TEMP_DURATION = 100000;
 
 export default {
     title: 'Molecules/Snackbar',
@@ -11,18 +15,31 @@ export default {
         title: 'Alert title',
         message:
             'Interactively monetize corporate alignments and fully tested niche markets.',
-        duration: 50000,
+        variant: SnackbarVariants.Alert,
+    },
+    decorators: [withToaster],
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+        canvas.getByRole('button', { name: 'Show Snackbar' }).click();
     },
 } as Meta<typeof Snackbar>;
 
 const Template: StoryFn<typeof Snackbar> = args => {
-    const [open, setOpen] = useState<boolean>(false);
+    const { toast } = useToast();
 
     return (
-        <div>
-            <Button onClick={() => setOpen(true)}>Open</Button>
-            <Snackbar {...args} open={open} handleOpen={setOpen} />
-        </div>
+        <Button
+            onClick={() =>
+                toast({
+                    title: args.title as string,
+                    description: args.message,
+                    variant: args.variant,
+                    duration: TEMP_DURATION,
+                })
+            }
+        >
+            Show Snackbar
+        </Button>
     );
 };
 

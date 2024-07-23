@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { Toaster } from 'src/components/ui/toaster';
 import { getCommitHash } from 'src/utils';
 
 export const Layout = ({
@@ -24,7 +25,10 @@ export const Layout = ({
                 <header className='sticky top-0 z-30 w-full bg-neutral-900'>
                     {navBar}
                 </header>
-                <main className='w-full'>{children}</main>
+                <main className='relative w-full'>
+                    {children}
+                    <Toaster />
+                </main>
             </div>
             <footer
                 className={clsx('w-full', {

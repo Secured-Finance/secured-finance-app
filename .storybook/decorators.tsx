@@ -6,6 +6,8 @@ import 'src/bigIntPatch';
 import { Footer } from 'src/components/atoms';
 import Header from 'src/components/organisms/Header/Header';
 import { Layout } from 'src/components/templates';
+import { ToastProvider } from 'src/components/ui/toast';
+import { Toaster } from 'src/components/ui/toaster';
 import { updateChainError } from 'src/store/blockchain';
 import { connectWallet, updateBalance } from 'src/store/wallet';
 import { account, connector, publicClient } from 'src/stories/mocks/mockWallet';
@@ -84,4 +86,15 @@ export const withChainErrorEnabled = (Story: StoryFn) => {
     }, [dispatch]);
 
     return <Story />;
+};
+
+export const withToaster = (Story: StoryFn) => {
+    return (
+        <ToastProvider>
+            <div className='h-16'>
+                <Story />
+                <Toaster />
+            </div>
+        </ToastProvider>
+    );
 };

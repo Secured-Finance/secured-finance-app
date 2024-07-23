@@ -7,10 +7,8 @@ export enum SnackbarVariants {
 }
 
 export type SnackbarProps = {
-    title: string;
+    title?: React.ReactNode;
     message: React.ReactNode;
     variant?: SnackbarVariants;
-    open: boolean;
-    handleOpen: (value: boolean) => void;
     duration?: number;
 };
