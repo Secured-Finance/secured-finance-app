@@ -130,7 +130,7 @@ export const MobileTableWrapper = ({
     children: React.ReactNode;
 }) => {
     return (
-        <div className='scrollbar-table max-h-[600px] overflow-y-scroll rounded-b-xl'>
+        <div className='scrollbar-table max-h-[600px] min-h-[25vh] overflow-y-scroll rounded-b-xl'>
             {children}
         </div>
     );

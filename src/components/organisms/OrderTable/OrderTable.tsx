@@ -51,8 +51,6 @@ const OrderTableMobile = ({
     data: OpenOrder[];
     cancelOrder: (v: RemoveOrderDialogDataType) => void;
 }) => {
-    if (!data || data.length === 0) return null;
-
     return (
         <MobileTableWrapper>
             {data.map((row, index) => {
@@ -87,7 +85,7 @@ const OrderTableMobile = ({
                                 price={Number(unitPrice)}
                                 calculationDate={calculationDate}
                             />
-                            <div className='flex flex-col gap-[3px]'>
+                            <div className='flex flex-col'>
                                 <HorizontalListItemTable
                                     label='Order Amount'
                                     value={

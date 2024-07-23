@@ -62,8 +62,6 @@ const MyTransactionsTableMobile = ({
 }: {
     data: TransactionHistoryList;
 }) => {
-    if (!data || data.length === 0) return null;
-
     return (
         <MobileTableWrapper>
             {data.map((row, index) => {
@@ -96,7 +94,7 @@ const MyTransactionsTableMobile = ({
                                 side={side}
                                 price={Number(averagePrice) * 10000}
                             />
-                            <div className='flex flex-col gap-[3px]'>
+                            <div className='flex flex-col'>
                                 <HorizontalListItemTable
                                     label='Executed Amount'
                                     value={
