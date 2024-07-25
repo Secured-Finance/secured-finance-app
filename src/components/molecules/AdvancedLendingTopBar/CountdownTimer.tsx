@@ -31,7 +31,11 @@ export const CountdownTimer = ({ maturity }: { maturity: number }) => {
     return (
         <MarketTab
             name='Countdown'
-            value={formatRemainingTime(remainingTime)}
+            value={
+                <span className='tabular-nums'>
+                    {formatRemainingTime(remainingTime)}
+                </span>
+            }
         />
     );
 };
