@@ -127,3 +127,20 @@ export const formatRemainingTime = (seconds: number): string => {
         2
     )}:${padNumber(secs, 2)}`;
 };
+
+export const formatDuration = (durationMs: number) => {
+    const msPerDay = 24 * 60 * 60 * 1000; // Milliseconds in a day
+    const daysInYear = 365.25; // Average number of days in a year accounting for leap years
+
+    // Calculate the duration in days
+    const durationInDays = durationMs / msPerDay;
+
+    // Calculate the fraction of the year
+    const fractionOfYear = durationInDays / daysInYear;
+
+    // Format the fraction of year to two decimal places
+    const fractionOfYearFormatted = fractionOfYear.toFixed(2);
+
+    // Return the formatted string
+    return `${fractionOfYearFormatted}Y (${Math.round(durationInDays)} days)`;
+};

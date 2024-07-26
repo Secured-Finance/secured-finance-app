@@ -1,9 +1,6 @@
-import { useGetUserLazyQuery } from '@secured-finance/sf-point-client';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-import { useCookies } from 'react-cookie';
 import { useDispatch, useSelector } from 'react-redux';
 import Badge from 'src/assets/icons/badge.svg';
 import SFLogo from 'src/assets/img/logo.svg';
@@ -21,7 +18,7 @@ import {
     Settings,
 } from 'src/components/molecules';
 import { WalletDialog, WalletPopover } from 'src/components/organisms';
-import { useBreakpoint } from 'src/hooks';
+import { useBreakpoint, usePoints } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
@@ -30,9 +27,6 @@ import { AddressUtils } from 'src/utils/address';
 import { isProdEnv } from 'src/utils/displayUtils';
 import { useAccount } from 'wagmi';
 import { DEV_LINKS, PRODUCTION_LINKS } from './constants';
-
-const POLL_INTERVAL = 600000; // 10 minutes
-const POINT_API_QUERY_OPTIONS = { context: { type: 'point-dashboard' } };
 
 const HeaderMessage = ({
     isChainIdDetected,
@@ -77,27 +71,10 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     const isMobile = useBreakpoint('tablet');
     const { address, isConnected } = useAccount();
 
-    const [cookies] = useCookies();
-
-    const [getUser, { data: userData, refetch }] = useGetUserLazyQuery({
-        pollInterval: POLL_INTERVAL,
-        ...POINT_API_QUERY_OPTIONS,
-    });
-
-    useEffect(() => {
-        if (cookies.verified_data) {
-            userData?.user.walletAddress &&
-            userData?.user.walletAddress !== address
-                ? refetch()
-                : getUser();
-        }
-    }, [
-        cookies.verified_data,
-        getUser,
-        address,
-        userData?.user.walletAddress,
-        refetch,
-    ]);
+    const {
+        user: { data: userData },
+        verification: { data: verifiedData },
+    } = usePoints();
 
     const userPoints = userData?.user.point;
 
@@ -157,7 +134,7 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                     </div>
                     <div className='col-span-2 flex flex-row items-center justify-end gap-2 laptop:col-span-1 laptop:gap-2.5'>
                         <PointsTag
-                            isConnected={isConnected}
+                            isConnected={verifiedData && address && userData}
                             points={userPoints}
                         />
                         {isConnected && address ? (

@@ -21,7 +21,7 @@ const WalletOption = ({
                     <div className='flex w-full items-center justify-between space-x-12'>
                         <div className='flex items-center'>
                             <RadioGroup.Label>
-                                <span className='flex'>
+                                <span className='flex items-center'>
                                     <Icon className='h-8 w-8' />
                                     <p className='typography-body-2 ml-6 text-grayScale'>
                                         {name}

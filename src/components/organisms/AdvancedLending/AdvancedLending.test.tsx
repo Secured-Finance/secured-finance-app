@@ -3,6 +3,7 @@ import { composeStories } from '@storybook/react';
 import userEvent from '@testing-library/user-event';
 import {
     emptyTransaction,
+    mockDailyVolumes,
     mockFilteredUserOrderHistory,
     mockFilteredUserTransactionHistory,
     mockTrades,
@@ -10,6 +11,7 @@ import {
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { ButtonEvents, ButtonProperties } from 'src/utils';
+
 import * as stories from './AdvancedLending.stories';
 
 const { Default, ConnectedToWallet, Delisted, OpenOrdersConnectedToWallet } =
@@ -33,8 +35,9 @@ describe('Advanced Lending Component', () => {
             })
         );
         expect(store.getState().landingOrderForm.amount).toEqual('1');
-        fireEvent.click(screen.getByRole('button', { name: 'WFIL' }));
-        fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
+
+        fireEvent.click(screen.getByRole('button', { name: 'WFIL-DEC2022' }));
+        fireEvent.click(screen.getByRole('row', { name: 'USDC-DEC2022' }));
         expect(track).toHaveBeenCalledWith(ButtonEvents.CURRENCY_CHANGE, {
             [ButtonProperties.CURRENCY]: 'USDC',
         });
@@ -60,8 +63,8 @@ describe('Advanced Lending Component', () => {
             })
         );
         expect(store.getState().landingOrderForm.amount).toEqual('1');
-        fireEvent.click(screen.getByRole('button', { name: 'DEC2022' }));
-        fireEvent.click(screen.getByText('MAR2023'));
+        fireEvent.click(screen.getByRole('button', { name: 'WFIL-DEC2022' }));
+        fireEvent.click(screen.getByText('WFIL-MAR2023'));
         expect(track).toHaveBeenCalledWith(ButtonEvents.TERM_CHANGE, {
             [ButtonProperties.TERM]: 'MAR2023',
         });
@@ -78,7 +81,7 @@ describe('Advanced Lending Component', () => {
             apolloMocks: Default.parameters?.apolloClient.mocks,
         });
         expect(
-            await screen.findByRole('button', { name: 'DEC2022' })
+            await screen.findByRole('button', { name: 'WFIL-DEC2022' })
         ).toBeInTheDocument();
         expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
     });
@@ -102,6 +105,7 @@ describe('Advanced Lending Component', () => {
             render(<Default />, {
                 apolloMocks: [
                     ...(emptyTransaction as never),
+                    ...mockDailyVolumes,
                     ...mockFilteredUserOrderHistory,
                     ...mockFilteredUserTransactionHistory,
                 ],
@@ -152,15 +156,8 @@ describe('Advanced Lending Component', () => {
             })
         );
 
-        fireEvent.click(screen.getByRole('button', { name: 'WFIL' }));
-
-        await waitFor(() => {
-            expect(
-                screen.getByRole('menuitem', { name: 'USDC' })
-            ).toBeInTheDocument();
-        });
-
-        fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
+        fireEvent.click(screen.getByRole('button', { name: 'WFIL-DEC2022' }));
+        fireEvent.click(screen.getByRole('row', { name: 'WFIL-SEP2024' }));
 
         await waitFor(() =>
             expect(

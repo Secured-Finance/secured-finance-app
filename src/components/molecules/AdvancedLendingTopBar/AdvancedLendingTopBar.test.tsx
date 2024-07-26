@@ -11,7 +11,7 @@ describe('AdvancedLendingTopBar Component', () => {
         });
 
         expect(
-            screen.getByRole('button', { name: 'WFIL' })
+            screen.getByRole('button', { name: 'WFIL-DEC2022' })
         ).toBeInTheDocument();
         expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
 
@@ -26,10 +26,12 @@ describe('AdvancedLendingTopBar Component', () => {
     });
 
     it('should render source link for the selected asset', () => {
-        render(<Default />);
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
 
         expect(
-            screen.getByRole('button', { name: 'WFIL' })
+            screen.getByRole('button', { name: 'WFIL-DEC2022' })
         ).toBeInTheDocument();
         const source = screen.getByRole('link');
         expect(source).toBeInTheDocument();

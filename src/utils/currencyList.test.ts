@@ -1,3 +1,4 @@
+// import { getUTCMonthYear } from '@secured-finance/sf-core';
 import {
     ethBytes32,
     usdcBytes32,
@@ -8,6 +9,11 @@ import {
     CurrencySymbol,
     amountFormatterFromBase,
     amountFormatterToBase,
+    convertFromGvUnit,
+    convertToGvUnit,
+    convertToZcTokenName,
+    convertZCTokenFromBaseAmount,
+    convertZCTokenToBaseAmount,
     currencyMap,
     divide,
     hexToCurrencySymbol,
@@ -15,6 +21,7 @@ import {
     toCurrency,
     toCurrencySymbol,
 } from './currencyList';
+import { Maturity } from './entities';
 
 const wfil = currencyMap.WFIL;
 const eth = currencyMap.ETH;
@@ -270,5 +277,110 @@ describe('divide', () => {
     it('should divide bigint and a number with precision', () => {
         expect(divide(8060, BigInt(100))).toEqual(80.6);
         expect(divide(BigInt(80612), 99123, 4)).toEqual(0.8133);
+    });
+});
+
+describe('ZC Tokens', () => {
+    describe('convertFromGvUnit', () => {
+        it('should convert from GV unit correctly', () => {
+            expect(convertFromGvUnit(BigInt('1000000000000000000000000'))).toBe(
+                1
+            );
+            expect(convertFromGvUnit(BigInt('500000000000000000000000'))).toBe(
+                0.5
+            );
+        });
+    });
+
+    describe('convertToGvUnit', () => {
+        it('should convert to GV unit correctly', () => {
+            expect(convertToGvUnit(1)).toBe(
+                BigInt('1000000000000000000000000')
+            );
+            expect(convertToGvUnit(0.5)).toBe(
+                BigInt('500000000000000000000000')
+            );
+        });
+    });
+
+    describe('convertZCTokenFromBaseAmount', () => {
+        it('should convert from base amount when maturity is zero or undefined', () => {
+            expect(
+                convertZCTokenFromBaseAmount(
+                    CurrencySymbol.USDC,
+                    BigInt('1000000000000000000000000')
+                )
+            ).toBe(1);
+            expect(
+                convertZCTokenFromBaseAmount(
+                    CurrencySymbol.USDC,
+                    BigInt('1000000000000000000000000'),
+                    { isZero: () => true } as Maturity
+                )
+            ).toBe(1);
+        });
+
+        it('should use amountFormatterFromBase when maturity is not zero', () => {
+            const mockMaturity = { isZero: () => false } as Maturity;
+            const mockAmount = BigInt(1000000); // 1 USD in base units
+            expect(
+                convertZCTokenFromBaseAmount(
+                    CurrencySymbol.USDC,
+                    mockAmount,
+                    mockMaturity
+                )
+            ).toBe(1);
+        });
+    });
+
+    describe('convertZCTokenToBaseAmount', () => {
+        it('should convert to base amount when maturity is zero or undefined', () => {
+            expect(
+                convertZCTokenToBaseAmount(CurrencySymbol.USDC, 1).toString()
+            ).toBe('1000000000000000000000000');
+            expect(
+                convertZCTokenToBaseAmount(CurrencySymbol.USDC, 1, {
+                    isZero: () => true,
+                } as Maturity).toString()
+            ).toBe('1000000000000000000000000');
+        });
+
+        it('should use amountFormatterToBase when maturity is not zero', () => {
+            const mockMaturity = { isZero: () => false } as Maturity;
+            expect(
+                convertZCTokenToBaseAmount(
+                    CurrencySymbol.USDC,
+                    1,
+                    mockMaturity
+                ).toString()
+            ).toBe('1000000');
+            expect(
+                convertZCTokenToBaseAmount(
+                    CurrencySymbol.ETH,
+                    2.5,
+                    mockMaturity
+                ).toString()
+            ).toBe('2500000000000000000');
+        });
+    });
+
+    describe('convertToZcTokenName', () => {
+        it('should return correct name when maturity is zero or undefined', () => {
+            expect(convertToZcTokenName(CurrencySymbol.USDC)).toBe('ZC USDC');
+            expect(
+                convertToZcTokenName(CurrencySymbol.USDC, {
+                    isZero: () => true,
+                } as Maturity)
+            ).toBe('ZC USDC');
+        });
+
+        it('should return correct name with maturity', () => {
+            expect(
+                convertToZcTokenName(CurrencySymbol.USDC, {
+                    isZero: () => false,
+                    toNumber: () => 1623456789,
+                } as Maturity)
+            ).toBe('ZC USDC JUN2021');
+        });
     });
 });

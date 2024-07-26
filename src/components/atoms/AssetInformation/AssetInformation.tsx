@@ -1,28 +1,30 @@
-import { CurrencyIcon, CurrencyItem } from 'src/components/atoms';
+import { CurrencyIcon, CurrencyItem, ZCTokenIcon } from 'src/components/atoms';
 import { InfoToolTip } from 'src/components/molecules';
-import { CollateralBook, useLastPrices } from 'src/hooks';
-import {
-    CurrencySymbol,
-    ZERO_BI,
-    amountFormatterFromBase,
-    currencyMap,
-} from 'src/utils';
+import { CurrencySymbol, currencyMap, ordinaryFormat } from 'src/utils';
+
+export interface AssetInformationValue {
+    currency: CurrencySymbol;
+    label: string;
+    amount: number;
+    price: number;
+    totalPrice: number;
+}
 
 interface AssetInformationProps {
     header: string;
     informationText: string;
-    collateralBook: CollateralBook['collateral' | 'nonCollateral'];
+    values: AssetInformationValue[];
+    isZC?: boolean;
 }
 
 export const AssetInformation = ({
     header,
     informationText,
-    collateralBook,
+    values,
+    isZC,
 }: AssetInformationProps) => {
-    const { data: priceList } = useLastPrices();
-
     return (
-        collateralBook && (
+        values.length > 0 && (
             <div className='flex h-fit w-full flex-col gap-2'>
                 <div className='flex h-7 flex-row items-center gap-2 border-b border-white-10'>
                     <div className='typography-caption-2 leading-4 text-white-50'>
@@ -32,44 +34,39 @@ export const AssetInformation = ({
                         {informationText}
                     </InfoToolTip>
                 </div>
-                {collateralBook &&
-                    (
-                        Object.entries(collateralBook) as [
-                            CurrencySymbol,
-                            bigint
-                        ][]
-                    )
-                        .filter(([_asset, quantity]) => quantity !== ZERO_BI)
-                        .map(([asset, quantity]) => (
-                            <div
-                                className='flex h-10 w-full flex-row items-center gap-2'
-                                key={asset}
-                            >
-                                <div>
-                                    <CurrencyIcon ccy={asset} />
-                                </div>
-                                <div className='flex w-full flex-row justify-between'>
-                                    <CurrencyItem
-                                        ccy={asset}
-                                        price={priceList[asset]}
-                                    />
-                                    <CurrencyItem
-                                        amount={amountFormatterFromBase[asset](
-                                            quantity
-                                        )}
-                                        ccy={asset}
-                                        price={priceList[asset]}
-                                        align='right'
-                                        minDecimals={
-                                            currencyMap[asset].roundingDecimal
-                                        }
-                                        maxDecimals={
-                                            currencyMap[asset].roundingDecimal
-                                        }
-                                    />
-                                </div>
+                {values.map(
+                    ({ currency, label, amount, price, totalPrice }) => (
+                        <div
+                            className='flex h-10 w-full flex-row items-center gap-2'
+                            key={label}
+                        >
+                            <div>
+                                {isZC ? (
+                                    <ZCTokenIcon ccy={currency} />
+                                ) : (
+                                    <CurrencyIcon ccy={currency} />
+                                )}
                             </div>
-                        ))}
+                            <div className='flex w-full flex-row justify-between'>
+                                <CurrencyItem
+                                    ccy={currency}
+                                    label={label}
+                                    price={price}
+                                />
+                                <CurrencyItem
+                                    label={ordinaryFormat(
+                                        amount,
+                                        currencyMap[currency].roundingDecimal,
+                                        currencyMap[currency].roundingDecimal
+                                    )}
+                                    ccy={currency}
+                                    price={totalPrice}
+                                    align='right'
+                                />
+                            </div>
+                        </div>
+                    )
+                )}
             </div>
         )
     );

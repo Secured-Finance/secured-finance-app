@@ -1,9 +1,10 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import { WithGraphClient } from '.storybook/decorators';
-import type { Meta, StoryFn } from '@storybook/react';
+import type { Meta } from '@storybook/react';
+import { StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
 import { currencyList, maturityOptions } from 'src/stories/mocks/fixtures';
-import { mockTrades } from 'src/stories/mocks/queries';
+import { mockDailyVolumes, mockTrades } from 'src/stories/mocks/queries';
 import { LoanValue } from 'src/utils/entities';
 import { AdvancedLendingTopBar } from '.';
 
@@ -15,13 +16,10 @@ export default {
     args: {
         selectedAsset: currencyList[2],
         assetList: currencyList,
-        options: maturityOptions.map(o => ({
-            label: o.label,
-            value: o.value.toString(),
-        })),
+        options: maturityOptions,
         selected: {
             label: maturityOptions[0].label,
-            value: maturityOptions[0].value.toString(),
+            value: maturityOptions[0].value,
         },
         onAssetChange: () => {},
         onTermChange: () => {},
@@ -37,7 +35,7 @@ export default {
     },
     parameters: {
         apolloClient: {
-            mocks: [...mockTrades],
+            mocks: [...mockTrades, ...mockDailyVolumes],
         },
         ...RESPONSIVE_PARAMETERS,
         viewport: {

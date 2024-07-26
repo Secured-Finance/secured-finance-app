@@ -12,6 +12,8 @@ import {
     CollateralProperties,
     InterfaceEvents,
     InterfaceProperties,
+    ZCTokenEvents,
+    ZCTokenProperties,
 } from './interface';
 
 export async function associateWallet(
@@ -44,6 +46,22 @@ export function trackCollateralEvent(
         [CollateralProperties.AMOUNT]:
             amountFormatterFromBase[assetType](amount).toString(),
         [CollateralProperties.SOURCE]: source,
+    });
+}
+
+export function trackZCTokenEvent(
+    event: ZCTokenEvents,
+    assetType: CurrencySymbol,
+    maturity: number,
+    amount: bigint,
+    source: string
+) {
+    track(event, {
+        [ZCTokenProperties.ASSET_TYPE]: assetType,
+        [ZCTokenProperties.MATURITY]: maturity,
+        [ZCTokenProperties.AMOUNT]:
+            amountFormatterFromBase[assetType](amount).toString(),
+        [ZCTokenProperties.SOURCE]: source,
     });
 }
 

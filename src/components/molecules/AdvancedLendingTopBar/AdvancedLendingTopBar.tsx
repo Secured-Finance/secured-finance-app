@@ -3,12 +3,12 @@ import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import DocumentTextIcon from 'src/assets/icons/document-text.svg';
 import { MarketTab } from 'src/components/atoms';
 import {
     CountdownTimer,
-    HorizontalAssetSelector,
+    CurrencyMaturityDropdown,
     PriceRateChange,
 } from 'src/components/molecules';
 import { MarketInfoDialog } from 'src/components/organisms';
@@ -16,16 +16,17 @@ import { useGraphClientHook, useIsSubgraphSupported } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import {
     COIN_GECKO_SOURCE,
-    CurrencySymbol,
     currencyMap,
+    CurrencySymbol,
     formatLoanValue,
+    getTransformMaturityOption,
 } from 'src/utils';
-import { LoanValue } from 'src/utils/entities';
+import { LoanValue, Maturity } from 'src/utils/entities';
 import { AdvancedLendingTopBarProp } from './types';
 
 dayjs.extend(duration);
 
-export const AdvancedLendingTopBar = <T extends string = string>({
+export const AdvancedLendingTopBar = ({
     selectedAsset,
     assetList,
     options,
@@ -35,7 +36,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
     currentMarket,
     currencyPrice,
     marketInfo,
-}: AdvancedLendingTopBarProp<T>) => {
+}: AdvancedLendingTopBarProp) => {
     const securedFinance = useSF();
     const currentChainId = securedFinance?.config.chain.id;
     const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
@@ -68,6 +69,23 @@ export const AdvancedLendingTopBar = <T extends string = string>({
         setTimestamp(Math.round(new Date().getTime() / 1000));
     }, []);
 
+    const selectedTerm = useMemo(
+        () => options.find(o => o.value === selected.value),
+        [options, selected]
+    );
+
+    const handleTermChange = useCallback(
+        (v: Maturity) => {
+            onTermChange(v);
+        },
+        [onTermChange]
+    );
+
+    const onChange = (asset: CurrencySymbol, maturity: Maturity) => {
+        handleTermChange(maturity);
+        onAssetChange(asset);
+    };
+
     return (
         <>
             <div>
@@ -78,31 +96,39 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                             'grid grid-cols-12 gap-y-3 px-4 pb-[1.1875rem] pt-4 laptop:flex laptop:px-0 laptop:py-0'
                         )}
                     >
-                        <section
+                        <div
                             className={clsx(
                                 'col-span-12 grid grid-cols-12 gap-3 border-neutral-600 laptop:w-[25%] laptop:gap-y-0 laptop:border-r laptop:px-6 laptop:py-4',
                                 marketInfo && 'tablet:gap-y-6'
                             )}
                         >
-                            <div
-                                className={clsx(
-                                    'col-span-10 laptop:col-span-12 laptop:pr-0'
-                                )}
-                            >
-                                {/* TODO: replace this with CurrencyMaturityDropdown */}
-                                <HorizontalAssetSelector
-                                    selectedAsset={selectedAsset}
-                                    assetList={assetList}
-                                    options={options}
-                                    selected={selected}
-                                    onAssetChange={onAssetChange}
-                                    onTermChange={onTermChange}
-                                />
+                            <div className='col-span-8 grid gap-x-3 gap-y-1 text-neutral-4 laptop:col-span-12 desktop:gap-x-5'>
+                                <div className='flex flex-col items-start'>
+                                    <div className='flex w-full flex-col gap-1'>
+                                        <CurrencyMaturityDropdown
+                                            asset={selectedAsset}
+                                            currencyList={assetList}
+                                            maturity={selectedTerm}
+                                            maturityList={options}
+                                            onChange={onChange}
+                                        />
+                                        <p className='whitespace-nowrap pl-1 text-[11px] leading-4 tablet:text-xs laptop:text-xs'>
+                                            {`Maturity ${
+                                                selectedTerm &&
+                                                getTransformMaturityOption(
+                                                    options.map(o => ({
+                                                        ...o,
+                                                        value: o.value.toString(),
+                                                    }))
+                                                )(selectedTerm.label)
+                                            }`}
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
-
                             <div
                                 className={clsx(
-                                    'col-span-2 pl-2 laptop:col-span-4 laptop:hidden',
+                                    'col-span-4 flex justify-end pl-2 laptop:hidden',
                                     marketInfo && 'tablet:pl-0'
                                 )}
                             >
@@ -116,7 +142,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                                     <DocumentTextIcon className='h-4 w-4 text-neutral-300' />
                                 </button>
                             </div>
-                        </section>
+                        </div>
 
                         <div className='hidden justify-around laptop:flex laptop:w-[75%] laptop:items-center laptop:p-4 desktop:gap-3.5'>
                             <div className='flex w-[20%] flex-col px-3 desktop:w-[15%]'>
