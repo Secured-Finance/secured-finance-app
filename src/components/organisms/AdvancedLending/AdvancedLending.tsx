@@ -447,6 +447,8 @@ export const AdvancedLending = ({
                             onTabChange={setSelectedTable}
                             useCustomBreakpoint={true}
                             tooltipMap={tooltipMap}
+                            headerClassName='bg-neutral-900'
+                            panelClassName='bg-neutral-900'
                         >
                             <ActiveTradeTable
                                 data={

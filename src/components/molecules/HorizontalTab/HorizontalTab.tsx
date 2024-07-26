@@ -46,14 +46,16 @@ const TitleChip = ({
 };
 
 export const HorizontalTab = ({
-    className,
+    headerClassName,
+    panelClassName,
     tabTitles,
     children,
     onTabChange,
     useCustomBreakpoint = false,
     tooltipMap,
 }: {
-    className?: string;
+    headerClassName?: string;
+    panelClassName?: string;
     tabTitles: string[];
     children?: React.ReactNode;
     onTabChange?: (v: number) => void;
@@ -76,11 +78,11 @@ export const HorizontalTab = ({
         >
             <div
                 className={clsx(
-                    'flex h-full flex-col rounded-xl border border-neutral-600 bg-neutral-900 laptop:rounded-t-none',
-                    className
+                    'flex h-full flex-col rounded-xl border border-neutral-600 bg-gunMetal/40 laptop:rounded-t-none',
+                    headerClassName
                 )}
             >
-                <HeadlessTab.List className='justify-start border-b border-white-10 p-2'>
+                <HeadlessTab.List className='justify-start border-b border-white-10 px-4 py-3'>
                     <div
                         className={clsx('w-full', {
                             'horizontalTab:hidden': useCustomBreakpoint,
@@ -124,7 +126,12 @@ export const HorizontalTab = ({
                         })}
                     </div>
                 </HeadlessTab.List>
-                <HeadlessTab.Panels className='h-full rounded-b-xl bg-neutral-900 tablet:min-h-[25vh] laptop:rounded-b-2xl'>
+                <HeadlessTab.Panels
+                    className={clsx(
+                        'h-full rounded-b-xl bg-cardBackground tablet:min-h-[25vh] laptop:rounded-b-2xl',
+                        panelClassName
+                    )}
+                >
                     {arrayChildren[selectedIndex]}
                 </HeadlessTab.Panels>
             </div>

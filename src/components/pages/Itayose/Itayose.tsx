@@ -430,6 +430,8 @@ export const Itayose = () => {
                             }
                             onTabChange={setSelectedTable}
                             useCustomBreakpoint={true}
+                            headerClassName='bg-neutral-900'
+                            panelClassName='bg-neutral-900'
                         >
                             <OrderTable
                                 data={filteredOrderList}
