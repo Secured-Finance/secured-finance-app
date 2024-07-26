@@ -379,6 +379,8 @@ export const PortfolioManagement = () => {
                                 : ['Active Positions', 'Open Orders']
                         }
                         onTabChange={setSelectedTable}
+                        headerClassName='bg-neutral-900'
+                        panelClassName='bg-neutral-900'
                     >
                         <ActiveTradeTable
                             data={

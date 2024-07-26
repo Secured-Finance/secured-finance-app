@@ -207,7 +207,7 @@ export const ActiveTradeTable = ({
                     },
                 },
                 {
-                    text: 'Unwind',
+                    text: 'Close',
                     onClick: (): void => {
                         setUnwindDialogData({
                             maturity: new Maturity(maturity),
@@ -223,7 +223,7 @@ export const ActiveTradeTable = ({
                 return items;
             }
 
-            let label = 'Unwind';
+            let label = 'Close';
             let type: UnwindDialogType;
             let disableAction;
 
