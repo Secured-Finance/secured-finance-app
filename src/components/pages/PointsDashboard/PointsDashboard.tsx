@@ -48,7 +48,6 @@ import {
     CurrencySymbol,
     SupportedChainsList,
     getReferralHashtags,
-    getReferralMessage,
     ordinaryFormat,
     percentFormat,
     readWalletFromStore,
@@ -105,15 +104,22 @@ const ReferralCode = ({ code }: { code: string }) => {
                                         <button
                                             type='button'
                                             className='flex h-8 w-8 items-center justify-center rounded-2xl bg-gunMetal'
-                                            onClick={() =>
+                                            onClick={() => {
+                                                const message = `Join the @Secured_Fi Points Program! ✨\n\nSign up through the link below and receive 500 points as a welcome gift! Plus, enjoy a 5% boost on points earned. 🎁\n\n${window.location.origin}${window.location.pathname}?ref=${code}\n\nComplete various quests and earn chances for future $SFT airdrops! 🪂`;
+                                                const text =
+                                                    encodeURIComponent(message);
+                                                const hashtags =
+                                                    encodeURIComponent(
+                                                        getReferralHashtags()
+                                                    );
+                                                const quoteTweetUrl =
+                                                    'https://x.com/Secured_Fi/status/1803767846973169675';
+
                                                 window.open(
-                                                    `https://x.com/intent/tweet?text=${getReferralMessage()}&url=${
-                                                        window.location.origin +
-                                                        window.location.pathname
-                                                    }?ref=${code}&hashtags=${getReferralHashtags()}`,
+                                                    `https://x.com/intent/tweet?text=${text}&url=${quoteTweetUrl}&hashtags=${hashtags}`,
                                                     '_blank'
-                                                )
-                                            }
+                                                );
+                                            }}
                                         >
                                             <ShareIcon className='h-5 w-5 text-slateGray hover:text-planetaryPurple' />
                                         </button>
