@@ -47,12 +47,12 @@ import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
     SupportedChainsList,
-    getReferralHashtags,
     ordinaryFormat,
     percentFormat,
     readWalletFromStore,
 } from 'src/utils';
 import { useAccount, useConnect, useSignMessage } from 'wagmi';
+import { getShareMessage, quoteTweetUrl } from './constants';
 
 const POLL_INTERVAL = 600000; // 10 minutes
 const POINT_API_QUERY_OPTIONS = { context: { type: 'point-dashboard' } };
@@ -105,18 +105,11 @@ const ReferralCode = ({ code }: { code: string }) => {
                                             type='button'
                                             className='flex h-8 w-8 items-center justify-center rounded-2xl bg-gunMetal'
                                             onClick={() => {
-                                                const message = `Join the @Secured_Fi Points Program! ✨\n\nSign up through the link below and receive 500 points as a welcome gift! Plus, enjoy a 5% boost on points earned. 🎁\n\n${window.location.origin}${window.location.pathname}?ref=${code}\n\nComplete various quests and earn chances for future $SFT airdrops! 🪂`;
                                                 const text =
-                                                    encodeURIComponent(message);
-                                                const hashtags =
-                                                    encodeURIComponent(
-                                                        getReferralHashtags()
-                                                    );
-                                                const quoteTweetUrl =
-                                                    'https://x.com/Secured_Fi/status/1803767846973169675';
+                                                    getShareMessage(code);
 
                                                 window.open(
-                                                    `https://x.com/intent/tweet?text=${text}&url=${quoteTweetUrl}&hashtags=${hashtags}`,
+                                                    `https://x.com/intent/tweet?text=${text}&url=${quoteTweetUrl}`,
                                                     '_blank'
                                                 );
                                             }}

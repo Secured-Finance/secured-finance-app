@@ -74,15 +74,3 @@ export const getGraphqlServerUrl = (): string => {
     assert(graphqlServerUrl, 'NEXT_PUBLIC_GRAPHQL_SERVER_URL is not set');
     return graphqlServerUrl;
 };
-
-export const getReferralMessage = (): string => {
-    const referralMessage = process.env.NEXT_PUBLIC_REFERRAL_MESSAGE;
-    assert(referralMessage, 'NEXT_PUBLIC_REFERRAL_MESSAGE is not set');
-    return referralMessage;
-};
-
-export const getReferralHashtags = (): string => {
-    const referralHashtags = process.env.NEXT_PUBLIC_REFERRAL_HASHTAGS;
-    assert(referralHashtags, 'NEXT_PUBLIC_REFERRAL_HASHTAGS is not set');
-    return referralHashtags;
-};
