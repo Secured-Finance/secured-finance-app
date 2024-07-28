@@ -164,7 +164,7 @@ export const HorizontalTabTable = ({
                     'flex h-full flex-col rounded-xl border border-neutral-600 bg-neutral-900 laptop:rounded-t-none'
                 )}
             >
-                <HeadlessTab.List className='justify-start border-b border-white-10 px-4 py-3 laptop:h-16 laptop:px-3'>
+                <HeadlessTab.List className='justify-start border-b border-white-10 px-4 py-3 laptop:h-fit laptop:px-3'>
                     <div
                         className={clsx('w-full', {
                             'horizontalTab:hidden': useCustomBreakpoint,
