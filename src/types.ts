@@ -111,5 +111,5 @@ export enum HistoricalDataIntervals {
 export interface SavedMarket {
     market: string;
     address: `0x${string}` | undefined;
-    chainId: number;
+    chainId?: number;
 }
