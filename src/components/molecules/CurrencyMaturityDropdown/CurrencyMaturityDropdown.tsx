@@ -8,7 +8,6 @@ import { Key } from '@react-types/shared';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { CurrencyMaturityTable, FilterButtons } from 'src/components/molecules';
 import {
     baseContracts,
@@ -19,7 +18,7 @@ import {
     useLastPrices,
     useLendingMarkets,
 } from 'src/hooks';
-import { RootState } from 'src/store/types';
+import useSF from 'src/hooks/useSecuredFinance';
 import { SavedMarket } from 'src/types';
 import {
     CurrencySymbol,
@@ -54,9 +53,8 @@ export const CurrencyMaturityDropdown = ({
 
     const { data: priceList } = useLastPrices();
 
-    const currentChainId = useSelector(
-        (state: RootState) => state.blockchain.chainId
-    );
+    const securedFinance = useSF();
+    const currentChainId = securedFinance?.config.chain.id;
 
     const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
 
