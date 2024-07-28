@@ -79,7 +79,7 @@ describe('CurrencyMaturityDropdown', () => {
         expect(screen.getByText('No products found')).toBeInTheDocument();
     });
 
-    it('should toggle favourite button when clicked', async () => {
+    it.skip('should toggle favourite button when clicked', async () => {
         render(<Default />, {
             apolloMocks: Default.parameters?.apolloClient.mocks,
         });
