@@ -228,7 +228,7 @@ export const CollateralTabLeftPane = ({
                             />
                         </div>
                         <HorizontalTab
-                            headerClassName='border-hidden'
+                            className='border-hidden'
                             tabTitles={['Tokens', 'ZC Bonds']}
                             onTabChange={setSelectedTable}
                         >
