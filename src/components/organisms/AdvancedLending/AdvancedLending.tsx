@@ -8,7 +8,7 @@ import {
     AdvancedLendingTopBar,
     Alert,
     AlertSeverity,
-    HorizontalTab,
+    HorizontalTabTable,
     TabSelector,
 } from 'src/components/molecules';
 import {
@@ -433,7 +433,7 @@ export const AdvancedLending = ({
                         )}
                     </div>
                     <div className='col-span-12 laptop:w-full'>
-                        <HorizontalTab
+                        <HorizontalTabTable
                             tabTitles={
                                 isSubgraphSupported
                                     ? [
@@ -518,7 +518,7 @@ export const AdvancedLending = ({
                                     variant='contractOnly'
                                 />
                             )}
-                        </HorizontalTab>
+                        </HorizontalTabTable>
                     </div>
                 </>
                 <AdvancedLendingOrderCard
