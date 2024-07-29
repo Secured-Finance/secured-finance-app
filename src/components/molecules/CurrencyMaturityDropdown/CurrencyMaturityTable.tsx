@@ -14,7 +14,7 @@ import {
     TableRow,
 } from '@nextui-org/table';
 import clsx from 'clsx';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useBreakpoint, useIsSubgraphSupported } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
@@ -41,6 +41,10 @@ export const CurrencyMaturityTable = ({
 }) => {
     const securedFinance = useSF();
     const currentChainId = securedFinance?.config.chain.id;
+
+    const sortedOptions = useMemo(() => {
+        return options;
+    }, [options]);
 
     const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
     const chainError = useSelector(
@@ -162,7 +166,7 @@ export const CurrencyMaturityTable = ({
                     })}
             </TableHeader>
             <TableBody
-                items={options}
+                items={sortedOptions}
                 emptyContent={
                     <span className='text-neutral-4'>No products found</span>
                 }

@@ -100,30 +100,33 @@ export const CurrencyMaturityDropdown = ({
         (options: any[]) => {
             const { column, direction } = sortState;
 
-            if (!column) {
-                return options;
-            }
-
             return options.sort((a, b) => {
-                let aValue, bValue;
-
-                if (column === 'apr') {
-                    aValue = parseFloat(a.apr.replace('%', ''));
-                    bValue = parseFloat(b.apr.replace('%', ''));
-                } else if (column === 'maturity') {
-                    aValue = a.maturity;
-                    bValue = b.maturity;
-                } else {
-                    aValue = a[column];
-                    bValue = b[column];
+                if (a.isFavourite !== b.isFavourite) {
+                    return b.isFavourite ? 1 : -1;
                 }
 
-                if (aValue < bValue) {
-                    return direction === 'ascending' ? -1 : 1;
+                if (column) {
+                    let aValue, bValue;
+
+                    if (column === 'apr') {
+                        aValue = parseFloat(a.apr.replace('%', ''));
+                        bValue = parseFloat(b.apr.replace('%', ''));
+                    } else if (column === 'maturity') {
+                        aValue = a.maturity;
+                        bValue = b.maturity;
+                    } else {
+                        aValue = a[column];
+                        bValue = b[column];
+                    }
+
+                    if (aValue < bValue) {
+                        return direction === 'ascending' ? -1 : 1;
+                    }
+                    if (aValue > bValue) {
+                        return direction === 'ascending' ? 1 : -1;
+                    }
                 }
-                if (aValue > bValue) {
-                    return direction === 'ascending' ? 1 : -1;
-                }
+
                 return 0;
             });
         },
