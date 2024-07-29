@@ -1,4 +1,3 @@
-import { XMarkIcon } from '@heroicons/react/24/solid';
 import { OrderSide } from '@secured-finance/sf-client';
 import { createColumnHelper } from '@tanstack/react-table';
 import clsx from 'clsx';
@@ -126,11 +125,9 @@ const OrderTableMobile = ({
 
 export const OrderTable = ({
     data,
-    variant = 'default',
     height,
 }: {
     data: OpenOrder[];
-    variant?: 'compact' | 'default';
     height?: number;
 }) => {
     const isTablet = useBreakpoint('laptop');
@@ -140,16 +137,17 @@ export const OrderTable = ({
         () => [
             contractColumnDefinition(
                 columnHelper,
-                'Contract',
+                'Symbol',
                 'contract',
-                variant === 'default' ? 'compact' : 'contractOnly',
+                'compact',
                 undefined,
+                'left',
                 'left'
             ),
             loanTypeColumnDefinition(columnHelper, 'Type', 'type'),
             priceYieldColumnDefinition(
                 columnHelper,
-                'Price',
+                'Order Price',
                 'price',
                 row => row.unitPrice,
                 'compact'
@@ -164,14 +162,16 @@ export const OrderTable = ({
             ),
             amountColumnDefinition(
                 columnHelper,
-                'Amount',
+                'Order Amount',
                 'amount',
                 row => row.amount,
                 {
                     compact: true,
                     color: false,
                     fontSize: 'typography-caption-2',
-                }
+                },
+                '',
+                'right'
             ),
             dateAndTimeColumnDefinition(
                 columnHelper,
@@ -203,33 +203,22 @@ export const OrderTable = ({
                     };
 
                     return (
-                        <div className='flex justify-center'>
-                            {variant === 'default' && (
-                                <TableActionMenu
-                                    items={[
-                                        {
-                                            text: 'Remove Order',
-                                            onClick: removeOrder,
-                                        },
-                                    ]}
-                                />
-                            )}
-                            {variant === 'compact' && (
-                                <button
-                                    className='group h-5 w-5 hover:bg-white-10'
-                                    aria-label='Remove Order'
-                                    onClick={removeOrder}
-                                >
-                                    <XMarkIcon className='h-5 w-5 text-secondary7 group-hover:text-starBlue group-active:text-starBlue' />
-                                </button>
-                            )}
-                        </div>
+                        <TableActionMenu
+                            items={[
+                                {
+                                    text: 'Cancel',
+                                    onClick: removeOrder,
+                                },
+                            ]}
+                        />
                     );
                 },
-                header: () => <div className='p-2'>Actions</div>,
+                header: () => (
+                    <div className='flex justify-start p-2'>Actions</div>
+                ),
             }),
         ],
-        [variant]
+        []
     );
 
     return (
@@ -251,6 +240,8 @@ export const OrderTable = ({
                             getMoreData: () => {},
                             totalData: data.length,
                         },
+                        border: false,
+                        compact: true,
                     }}
                 />
             )}

@@ -168,7 +168,7 @@ export const ActiveTradeTable = ({
     data: (Position & { underMinimalCollateral?: boolean })[];
     delistedCurrencySet: Set<CurrencySymbol>;
     height?: number;
-    variant?: 'contractOnly' | 'default';
+    variant?: 'compact' | 'default';
 }) => {
     const [unwindDialogData, setUnwindDialogData] = useState<{
         maturity: Maturity;
@@ -284,9 +284,9 @@ export const ActiveTradeTable = ({
                     60;
 
                 if (dayToMaturity > 1) {
-                    return <span className='mx-1'>{dayToMaturity} Days</span>;
+                    return <span className='mx-1'>{dayToMaturity} days</span>;
                 } else if (dayToMaturity === 1) {
-                    return `${dayToMaturity} Day`;
+                    return `${dayToMaturity} day`;
                 } else {
                     return (
                         <>
@@ -318,14 +318,16 @@ export const ActiveTradeTable = ({
 
     const columns = useMemo(
         () => [
-            loanTypeFromFVColumnDefinition(columnHelper, 'Type', 'side'),
             contractColumnDefinition(
                 columnHelper,
-                'Contract',
+                'Symbol',
                 'contract',
                 variant,
-                delistedCurrencySet
+                delistedCurrencySet,
+                'left',
+                'left'
             ),
+            loanTypeFromFVColumnDefinition(columnHelper, 'Type', 'side'),
             columnHelper.accessor('maturity', {
                 cell: info => {
                     const ccy = hexToCurrencySymbol(info.row.original.currency);
@@ -337,14 +339,18 @@ export const ActiveTradeTable = ({
                             : OrderSide.LEND;
 
                     return (
-                        <div className='grid w-40 justify-center tablet:w-full'>
+                        <div className='flex h-5 w-40 items-center justify-center gap-1 tablet:w-fit'>
                             <div
-                                className={clsx('typography-caption w-full', {
-                                    'text-galacticOrange':
-                                        ccy && delistedCurrencySet.has(ccy),
-                                    'text-neutral7':
-                                        ccy && !delistedCurrencySet.has(ccy),
-                                })}
+                                className={clsx(
+                                    'typography-desktop-body-6 w-full',
+                                    {
+                                        'text-galacticOrange':
+                                            ccy && delistedCurrencySet.has(ccy),
+                                        'text-white':
+                                            ccy &&
+                                            !delistedCurrencySet.has(ccy),
+                                    }
+                                )}
                             >
                                 {getMaturityDisplayValue(
                                     maturityTimestamp,
@@ -352,49 +358,53 @@ export const ActiveTradeTable = ({
                                     ccy
                                 )}
                             </div>
-                            <span className='typography-caption-2 h-5 w-full text-neutral-4'>
+                            <span className='w-full text-2.5 leading-3 text-neutral-400'>
                                 {formatDate(maturityTimestamp)}
                             </span>
                         </div>
                     );
                 },
                 header: tableHeaderDefinition(
-                    'Maturity',
-                    'Maturity of a loan contract is the date on which the contract is set to expire.'
+                    'Time to Maturity',
+                    'Maturity of a loan contract is the date on which the contract is set to expire.',
+                    'left'
                 ),
             }),
-            futureValueColumnDefinition(
+            priceYieldColumnDefinition(
                 columnHelper,
-                'FV',
-                'futureValue',
-                row => row.futureValue,
-                { color: true, priceList: priceList, compact: false },
-                'Future Value (FV) of a loan contract is the obligation value of the contract at time of maturity.'
+                'Mark Price',
+                'marketPrice',
+                row =>
+                    isPastDate(Number(row.maturity))
+                        ? BigInt(10000)
+                        : row.marketPrice,
+                'compact',
+                'price',
+                'Market Price is the volume-weighted average unit price of filled orders at the last block.'
             ),
             amountColumnDefinition(
                 columnHelper,
-                'PV',
+                'Present Value (PV)',
                 'amount',
                 row =>
                     isPastDate(Number(row.maturity)) ? undefined : row.amount,
                 {
                     color: false,
                     priceList: priceList,
-                    compact: false,
+                    compact: true,
+                    fontSize: 'typography-desktop-body-5',
                 },
-                'Present Value (PV) is the current worth of the contract, taking into account the time value of money.'
+                'Present Value (PV) is the current worth of the contract, taking into account the time value of money.',
+                'right'
             ),
-            priceYieldColumnDefinition(
+            futureValueColumnDefinition(
                 columnHelper,
-                'Market Price',
-                'marketPrice',
-                row =>
-                    isPastDate(Number(row.maturity))
-                        ? BigInt(10000)
-                        : row.marketPrice,
-                'default',
-                'price',
-                'Market Price is the volume-weighted average unit price of filled orders at the last block.'
+                'Future Value (FV)',
+                'futureValue',
+                row => row.futureValue,
+                { color: false, priceList: priceList, compact: true },
+                'Future Value (FV) of a loan contract is the obligation value of the contract at time of maturity.',
+                'right'
             ),
             columnHelper.display({
                 id: 'actions',
@@ -420,7 +430,9 @@ export const ActiveTradeTable = ({
                         />
                     );
                 },
-                header: () => <div className='p-2'>Actions</div>,
+                header: () => (
+                    <div className='flex justify-start p-2'>Actions</div>
+                ),
             }),
         ],
         [
@@ -452,6 +464,8 @@ export const ActiveTradeTable = ({
                             getMoreData: () => {},
                             totalData: data.length,
                         },
+                        border: false,
+                        compact: true,
                     }}
                 />
             )}

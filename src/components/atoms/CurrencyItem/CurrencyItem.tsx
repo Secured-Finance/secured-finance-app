@@ -65,7 +65,7 @@ export const CurrencyItem = ({
             })}
         >
             <span
-                className={clsx(fontSize, 'h-6', {
+                className={clsx(fontSize, {
                     'text-galacticOrange': color === 'negative',
                     'text-nebulaTeal': color === 'positive',
                     'text-neutral-8': color === 'neutral',
@@ -73,6 +73,7 @@ export const CurrencyItem = ({
                     'justify-center': align === 'center' && warning,
                     'justify-end': align === 'right' && warning,
                     'justify-start': align === 'left' && warning,
+                    'h-6': !compact,
                 })}
             >
                 <span>{firstLine}</span>

@@ -7,7 +7,7 @@ export const MenuItem = ({ text, onClick, disabled = false }: MenuItem) => {
         <Button
             onClick={onClick}
             disabled={disabled}
-            size={ButtonSizes.sm}
+            size={ButtonSizes.xs}
             fullWidth
             className='min-w-fit'
             variant={ButtonVariants.secondary}
