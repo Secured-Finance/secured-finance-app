@@ -41,14 +41,18 @@ export const useLastPrices = () => {
         },
         initialData: () =>
             [
-                [CurrencySymbol.WBTC, ZERO_BI],
-                [CurrencySymbol.ETH, ZERO_BI],
                 [CurrencySymbol.USDC, ZERO_BI],
-                [CurrencySymbol.WFIL, ZERO_BI],
                 [CurrencySymbol.aUSDC, ZERO_BI],
+                [CurrencySymbol.ETH, ZERO_BI],
+                [CurrencySymbol.WETHe, ZERO_BI],
+                [CurrencySymbol.WBTC, ZERO_BI],
+                [CurrencySymbol.BTCb, ZERO_BI],
+                [CurrencySymbol.FIL, ZERO_BI],
+                [CurrencySymbol.tFIL, ZERO_BI],
+                [CurrencySymbol.WFIL, ZERO_BI],
                 [CurrencySymbol.axlFIL, ZERO_BI],
+                [CurrencySymbol.iFIL, ZERO_BI],
             ] as [CurrencySymbol, bigint][],
-
         enabled: !!securedFinance && isCurrencySuccess,
     });
 };
