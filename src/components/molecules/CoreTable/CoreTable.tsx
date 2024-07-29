@@ -124,16 +124,16 @@ export const CoreTable = <T,>({
             {coreTableOptions.showHeaders ? (
                 <thead
                     className={clsx(
-                        'typography-caption-2 px-6 text-slateGray',
+                        'h-8 py-1.5 text-2.5 leading-5 text-neutral-300',
                         {
-                            'after:absolute after:bottom-0 after:z-20 after:w-full after:border-b after:border-white-10':
+                            'after:absolute after:bottom-0 after:z-20 after:w-full after:border-b after:border-neutral-600':
                                 coreTableOptions.border &&
                                 coreTableOptions.stickyHeader,
                             'h-14 py-4': !coreTableOptions.compact,
                             'h-5 py-1': coreTableOptions.compact,
-                            'sticky inset-0 z-20 bg-[#1D2739]':
+                            'sticky inset-0 z-20 bg-neutral-900':
                                 coreTableOptions.stickyHeader,
-                            'border-b border-white-10':
+                            'border-b border-neutral-600':
                                 coreTableOptions.border &&
                                 !coreTableOptions.stickyHeader,
                         }
@@ -149,9 +149,9 @@ export const CoreTable = <T,>({
                                     data-testid={`${coreTableOptions.name}-header-cell`}
                                     key={header.id}
                                     className={clsx(
-                                        'whitespace-nowrap py-2 pr-1 text-center font-bold tablet:px-1',
+                                        'whitespace-nowrap text-center font-normal tablet:px-2',
                                         {
-                                            'sticky left-0 z-10 bg-[#161E2E] after:absolute after:-right-4 after:-top-0 after:z-10 after:h-full after:w-5 after:bg-gradient-to-r after:from-black-40 after:to-transparent tablet:relative tablet:left-auto tablet:z-auto tablet:bg-transparent tablet:after:hidden':
+                                            'sticky left-0 z-10 bg-cardBackground after:absolute after:-right-4 after:-top-0 after:z-10 after:h-full after:w-5 after:bg-gradient-to-r after:from-black-40 after:to-transparent tablet:relative tablet:left-auto tablet:z-auto tablet:bg-transparent tablet:after:hidden':
                                                 coreTableOptions.responsive &&
                                                 columnIndex === 0 &&
                                                 coreTableOptions?.stickyFirstColumn,
@@ -176,13 +176,13 @@ export const CoreTable = <T,>({
                     isLoading(rowIndex, rows.length) ? (
                         <tr key={rowIndex} className='animate-pulse'>
                             <td colSpan={row.getVisibleCells().length}>
-                                <div className='h-7 min-w-fit bg-[#808080]/20'></div>
+                                <div className='h-5 min-w-fit bg-[#808080]/20'></div>
                             </td>
                         </tr>
                     ) : (
                         <tr
                             key={row.id}
-                            className={clsx('h-7', {
+                            className={clsx('h-5', {
                                 'cursor-pointer': coreTableOptions.hoverRow?.(
                                     row.id
                                 ),
@@ -203,14 +203,14 @@ export const CoreTable = <T,>({
                                 <td
                                     key={cell.id}
                                     className={clsx(
-                                        'min-w-fit whitespace-nowrap pr-1 text-center font-medium tablet:px-1',
+                                        'min-w-fit whitespace-nowrap text-center font-medium tablet:px-4',
                                         {
                                             'sticky left-0 z-10 bg-[#161E2E] after:absolute after:-right-4 after:-top-0 after:z-10 after:h-full after:w-5 after:bg-gradient-to-r after:from-black-40 after:to-transparent tablet:relative tablet:left-auto tablet:z-auto tablet:bg-transparent tablet:after:hidden':
                                                 coreTableOptions.responsive &&
                                                 cellIndex === 0 &&
                                                 coreTableOptions?.stickyFirstColumn,
                                             'py-2': !coreTableOptions.compact,
-                                            'py-1': coreTableOptions.compact,
+                                            'pb-1': coreTableOptions.compact,
                                         }
                                     )}
                                 >

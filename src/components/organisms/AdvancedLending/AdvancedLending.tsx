@@ -485,13 +485,9 @@ export const AdvancedLending = ({
                                 }
                                 height={350}
                                 delistedCurrencySet={delistedCurrencySet}
-                                variant='contractOnly'
-                            />
-                            <OrderTable
-                                data={filteredOrderList}
                                 variant='compact'
-                                height={350}
                             />
+                            <OrderTable data={filteredOrderList} height={350} />
                             {userOrderHistory.loading ? (
                                 <TabSpinner />
                             ) : (
@@ -502,7 +498,7 @@ export const AdvancedLending = ({
                                         getMoreData: () => {},
                                         containerHeight: 350,
                                     }}
-                                    variant='contractOnly'
+                                    variant='compact'
                                 />
                             )}
                             {userTransactionHistory.loading ? (
@@ -515,7 +511,7 @@ export const AdvancedLending = ({
                                         getMoreData: () => {},
                                         containerHeight: 350,
                                     }}
-                                    variant='contractOnly'
+                                    variant='compact'
                                 />
                             )}
                         </HorizontalTabTable>

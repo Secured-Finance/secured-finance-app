@@ -18,10 +18,10 @@ const TitleChip = ({
         <div
             data-testid={title}
             className={clsx(
-                'typography-caption-2 flex w-fit items-center justify-center gap-2 whitespace-nowrap px-5 py-3',
+                'flex w-fit items-center justify-center gap-2 whitespace-nowrap rounded-[100px] px-6 py-2 text-3 leading-4 text-neutral-50',
                 {
-                    'rounded-3xl bg-black-30 text-neutral-8': selected,
-                    'text-neutral-4': !selected,
+                    'bg-primary-700': selected,
+                    'bg-neutral-700 hover:bg-neutral-600': !selected,
                 }
             )}
         >
@@ -161,10 +161,10 @@ export const HorizontalTabTable = ({
         >
             <div
                 className={clsx(
-                    'flex h-full flex-col rounded-xl border border-neutral-600 bg-neutral-900 laptop:rounded-t-none'
+                    'flex h-full flex-col rounded-xl border border-neutral-600 bg-neutral-900 laptop:rounded-b-2xl laptop:rounded-t-none'
                 )}
             >
-                <HeadlessTab.List className='justify-start border-b border-white-10 px-4 py-3 laptop:h-fit laptop:px-3'>
+                <HeadlessTab.List className='justify-start border-b border-neutral-600 px-4 py-3 laptop:h-fit laptop:px-3'>
                     <div
                         className={clsx('w-full', {
                             'horizontalTab:hidden': useCustomBreakpoint,
@@ -185,9 +185,9 @@ export const HorizontalTabTable = ({
                         />
                     </div>
                     <div
-                        className={clsx('hidden', {
-                            'horizontalTab:block': useCustomBreakpoint,
-                            'tablet:block': !useCustomBreakpoint,
+                        className={clsx('hidden gap-4', {
+                            'horizontalTab:flex': useCustomBreakpoint,
+                            'tablet:flex': !useCustomBreakpoint,
                         })}
                     >
                         {tabTitles.map((title, index) => {
