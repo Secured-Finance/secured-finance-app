@@ -44,7 +44,7 @@ export const CurrencyMaturityDropdown = ({
     const isTablet = useBreakpoint('laptop');
     const [searchValue, setSearchValue] = useState<string>('');
     const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
-    const [isFavourites, setIsFavourites] = useState<boolean>(false);
+    const [isFavorites, setIsFavorites] = useState<boolean>(false);
     const { address } = useAccount();
     const [savedMarkets, setSavedMarkets] = useState(() => {
         return readMarketsFromStore();
@@ -179,7 +179,7 @@ export const CurrencyMaturityDropdown = ({
                             !marketLabel
                                 .toLowerCase()
                                 .includes(searchValue.toLowerCase())) ||
-                        (isFavourites && !isFavourite)
+                        (isFavorites && !isFavourite)
                     ) {
                         return null;
                     }
@@ -212,7 +212,7 @@ export const CurrencyMaturityDropdown = ({
         searchValue,
         savedMarkets,
         address,
-        isFavourites,
+        isFavorites,
         currentChainId,
         volumePerMarket,
     ]);
@@ -315,8 +315,8 @@ export const CurrencyMaturityDropdown = ({
                                     isItayose={isItayose}
                                     setCurrentCurrency={setCurrentCurrency}
                                     setIsItayose={setIsItayose}
-                                    isFavourites={isFavourites}
-                                    setIsFavourites={setIsFavourites}
+                                    isFavorites={isFavorites}
+                                    setIsFavorites={setIsFavorites}
                                 />
                             </div>
 

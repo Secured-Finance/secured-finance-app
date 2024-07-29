@@ -89,14 +89,14 @@ describe('CurrencyMaturityDropdown', () => {
 
         await waitFor(() => {
             const favouriteBtn = screen.getByLabelText(
-                'Add WBTC-DEC2022 to favourites'
+                'Add WBTC-DEC2022 to favorites'
             );
             expect(favouriteBtn).toBeInTheDocument();
             fireEvent.click(favouriteBtn);
         });
 
         expect(
-            screen.getByLabelText('Remove WBTC-DEC2022 from favourites')
+            screen.getByLabelText('Remove WBTC-DEC2022 from favorites')
         ).toBeInTheDocument();
     }, 8000);
 });
