@@ -68,7 +68,7 @@ export const CurrencyMaturityTable = ({
                                         isFavourite ? 'Remove' : 'Add'
                                     } ${display} ${
                                         isFavourite ? 'from' : 'to'
-                                    } favourites`}
+                                    } favorites`}
                                 >
                                     {isFavourite ? (
                                         <FilledStarIcon className='h-3.5 w-3.5 text-warning-300' />
