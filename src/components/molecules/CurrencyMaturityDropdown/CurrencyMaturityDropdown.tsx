@@ -109,11 +109,14 @@ export const CurrencyMaturityDropdown = ({
                     let aValue, bValue;
 
                     if (column === 'apr') {
-                        aValue = parseFloat(a.apr.replace('%', ''));
-                        bValue = parseFloat(b.apr.replace('%', ''));
+                        aValue = parseFloat(a.apr.replace('%', '')) || 0;
+                        bValue = parseFloat(b.apr.replace('%', '')) || 0;
                     } else if (column === 'maturity') {
                         aValue = a.maturity;
                         bValue = b.maturity;
+                    } else if (column === 'volume') {
+                        aValue = a.volume || BigInt(0);
+                        bValue = b.volume || BigInt(0);
                     } else {
                         aValue = a[column];
                         bValue = b[column];
