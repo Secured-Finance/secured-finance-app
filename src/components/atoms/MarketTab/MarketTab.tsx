@@ -1,4 +1,3 @@
-import clsx from 'clsx';
 import ArrowUpSquare from 'src/assets/icons/arrow-up-square.svg';
 import { ordinaryFormat } from 'src/utils';
 
@@ -12,13 +11,13 @@ export interface MarketTabProps {
 export const MarketTab = ({ name, value, source, label }: MarketTabProps) => {
     return (
         <section
-            className={clsx('flex h-fit flex-grow flex-col')}
+            className='flex h-fit flex-grow flex-col'
             aria-label={label ?? name}
         >
             <span className='laptop:typography-caption-2 whitespace-nowrap text-[11px] text-neutral-400'>
                 {name}
             </span>
-            <span className='typography-caption flex items-center leading-4 text-neutral-50 desktop:leading-6'>
+            <span className='typography-caption flex items-center whitespace-nowrap leading-4 text-neutral-50 desktop:leading-6'>
                 {typeof value === 'number'
                     ? ordinaryFormat(value, 0, 4)
                     : value}
