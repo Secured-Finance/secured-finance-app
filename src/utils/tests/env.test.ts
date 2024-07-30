@@ -5,8 +5,6 @@ import {
     getEnvironment,
     getGraphqlServerUrl,
     getNonSubgraphSupportedChainIds,
-    getReferralHashtags,
-    getReferralMessage,
     getSubgraphUrl,
     getSupportedChainIds,
     getUsePackageVersion,
@@ -150,38 +148,6 @@ describe('getGraphqlServerUrl', () => {
         process.env.NEXT_PUBLIC_GRAPHQL_SERVER_URL = '';
         expect(() => getGraphqlServerUrl()).toThrowError(
             'NEXT_PUBLIC_GRAPHQL_SERVER_URL is not set'
-        );
-    });
-});
-
-describe('getReferralMessage', () => {
-    it('should return the value of the environment variable', () => {
-        process.env.NEXT_PUBLIC_REFERRAL_MESSAGE = 'test';
-        const referralMessage = getReferralMessage();
-        expect(referralMessage).toBe('test');
-        expect(typeof referralMessage).toBe('string');
-    });
-
-    it('should throw error if variable is not set', () => {
-        process.env.NEXT_PUBLIC_REFERRAL_MESSAGE = '';
-        expect(() => getReferralMessage()).toThrowError(
-            'NEXT_PUBLIC_REFERRAL_MESSAGE is not set'
-        );
-    });
-});
-
-describe('getReferralHashtags', () => {
-    it('should return the value of the environment variable', () => {
-        process.env.NEXT_PUBLIC_REFERRAL_HASHTAGS = 'test';
-        const referralHashtags = getReferralHashtags();
-        expect(referralHashtags).toBe('test');
-        expect(typeof referralHashtags).toBe('string');
-    });
-
-    it('should throw error if variable is not set', () => {
-        process.env.NEXT_PUBLIC_REFERRAL_HASHTAGS = '';
-        expect(() => getReferralHashtags()).toThrowError(
-            'NEXT_PUBLIC_REFERRAL_HASHTAGS is not set'
         );
     });
 });
