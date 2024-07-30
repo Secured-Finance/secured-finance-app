@@ -130,8 +130,7 @@ const padNumber = (num: number, length: number): string => {
 
 export const formatRemainingTime = (seconds: number): string => {
     const remainingDuration = dayjs.duration(seconds, 'seconds');
-    const months = remainingDuration.months();
-    const days = remainingDuration.days() + months * 30; // Convert months to days
+    const days = Math.floor(remainingDuration.asDays());
     const hours = remainingDuration.hours();
     const minutes = remainingDuration.minutes();
     const secs = remainingDuration.seconds();

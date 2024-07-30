@@ -149,7 +149,7 @@ export const AdvancedLendingTopBar = ({
                                 <span className='typography-caption-2 text-neutral-400'>
                                     Mark Price (APR)
                                 </span>
-                                <span className='typography-desktop-body-3 font-semibold text-neutral-50'>
+                                <span className='typography-desktop-body-3 whitespace-nowrap font-semibold text-neutral-50'>
                                     {formatLoanValue(
                                         currentMarket?.value,
                                         'price'
