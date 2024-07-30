@@ -30,7 +30,7 @@ export const useTotalValueLockedAndCurrencies = () => {
             val += BigInt(
                 Math.floor(
                     currencyMap[ccy].fromBaseUnit(valueLockedByCurrency[ccy]) *
-                        priceList[ccy]
+                        (priceList[ccy] ?? 0)
                 )
             );
         }
