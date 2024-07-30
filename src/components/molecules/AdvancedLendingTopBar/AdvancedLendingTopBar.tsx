@@ -222,7 +222,9 @@ export const AdvancedLendingTopBar = ({
                                 />
                             </div>
                             <div className='flex flex-col px-3 laptop:w-[13%] desktop:w-[10%]'>
-                                <CountdownTimer maturity={maturity} />
+                                <CountdownTimer
+                                    maturity={selected.value.toNumber()}
+                                />
                             </div>
                         </div>
                     </div>

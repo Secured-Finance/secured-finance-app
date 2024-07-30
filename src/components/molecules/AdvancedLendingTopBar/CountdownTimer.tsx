@@ -11,6 +11,7 @@ export const CountdownTimer = ({ maturity }: { maturity: number }) => {
     useEffect(() => {
         const updateCountdown = () => {
             const now = dayjs().unix();
+
             const timeLeft = maturity - now;
 
             if (timeLeft <= 0) {
