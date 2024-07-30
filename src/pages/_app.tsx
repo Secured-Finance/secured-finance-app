@@ -159,13 +159,15 @@ const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         chainId: state.blockchain.chainId,
     }));
 
+    const subgraphUrl = getSubgraphUrl(chainId);
+
     const client = new ApolloClient({
         link: ApolloLink.split(
             operation => operation.getContext().type === 'point-dashboard',
             authLink.concat(httpLink),
-            getSubgraphUrl(chainId)
+            subgraphUrl
                 ? createHttpLink({
-                      uri: getSubgraphUrl(chainId),
+                      uri: subgraphUrl,
                   })
                 : new GraphApolloClient({ network }).link
         ),

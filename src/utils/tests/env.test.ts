@@ -195,9 +195,9 @@ describe('getSubgraphUrl', () => {
     });
 
     it('should return empty if variable is not set', () => {
-        process.env.NEXT_PUBLIC_SUBGRAPH_URL_314 = '';
+        delete process.env.NEXT_PUBLIC_SUBGRAPH_URL_314;
         const subgraphUrl = getSubgraphUrl(314);
-        expect(subgraphUrl).toBe('');
+        expect(subgraphUrl).toBe(undefined);
     });
 
     it('should return undefined if the input is not a supported chain', () => {
