@@ -1,5 +1,5 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
-import { WithGraphClient } from '.storybook/decorators';
+import { WithGraphClient, withWalletProvider } from '.storybook/decorators';
 import type { Meta } from '@storybook/react';
 import { StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
@@ -13,6 +13,7 @@ const lastTradePrice = 8000;
 export default {
     title: 'Molecules/AdvancedLendingTopBar',
     component: AdvancedLendingTopBar,
+    decorators: [withWalletProvider, WithGraphClient],
     args: {
         selectedAsset: currencyList[2],
         assetList: currencyList,
@@ -42,7 +43,6 @@ export default {
             disable: true,
         },
     },
-    decorators: [WithGraphClient],
 } as Meta<typeof AdvancedLendingTopBar>;
 
 const Template: StoryFn<typeof AdvancedLendingTopBar> = args => (

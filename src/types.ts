@@ -113,3 +113,8 @@ export type CurrentMarket = {
     time: number;
     type: 'opening' | 'block';
 };
+export interface SavedMarket {
+    market: string;
+    address: `0x${string}` | undefined;
+    chainId?: number;
+}
