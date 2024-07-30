@@ -8,17 +8,20 @@ export const mapCurrencyToIcon = (
     currency?: CurrencySymbol | undefined
 ): JSX.Element | undefined => {
     switch (currency) {
-        case CurrencySymbol.USDC || CurrencySymbol.aUSDC:
+        case CurrencySymbol.USDC:
+        case CurrencySymbol.aUSDC:
             return <USDC />;
-        case CurrencySymbol.ETH || CurrencySymbol.WETHe:
+        case CurrencySymbol.ETH:
+        case CurrencySymbol.WETHe:
             return <ETH />;
-        case CurrencySymbol.FIL ||
-            CurrencySymbol.tFIL ||
-            CurrencySymbol.WFIL ||
-            CurrencySymbol.axlFIL ||
-            CurrencySymbol.iFIL:
+        case CurrencySymbol.FIL:
+        case CurrencySymbol.tFIL:
+        case CurrencySymbol.WFIL:
+        case CurrencySymbol.axlFIL:
+        case CurrencySymbol.iFIL:
             return <FIL />;
-        case CurrencySymbol.WBTC || CurrencySymbol.BTCb:
+        case CurrencySymbol.WBTC:
+        case CurrencySymbol.BTCb:
             return <WBTC />;
         default:
             return undefined;
