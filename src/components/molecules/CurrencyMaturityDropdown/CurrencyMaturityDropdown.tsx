@@ -145,10 +145,16 @@ export const CurrencyMaturityDropdown = ({
         let options = currencyList.flatMap(currency => {
             return maturityList
                 .map(maturity => {
-                    const marketLabel = `${currency.label}-${maturity.label}`;
-                    const marketKey = `${currency.value}-${maturity.value}`;
                     const data =
                         lendingMarkets[currency.value]?.[+maturity.value];
+
+                    if (data?.isMatured) {
+                        return null;
+                    }
+
+                    const marketLabel = `${currency.label}-${maturity.label}`;
+                    const marketKey = `${currency.value}-${maturity.value}`;
+
                     const isItayoseOption =
                         data?.isItayosePeriod || data?.isPreOrderPeriod;
                     const volumeInUSD = volumePerMarket[marketKey];
