@@ -32,6 +32,7 @@ export * from './SuccessPanel';
 export * from './TabGroup';
 export * from './TabSelector';
 export * from './TableActionMenu';
+export * from './TableCardHeader';
 export * from './TableContractCell';
 export * from './TableHeader';
 export * from './TermSelector';

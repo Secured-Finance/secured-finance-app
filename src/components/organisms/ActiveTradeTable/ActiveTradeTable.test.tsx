@@ -82,13 +82,13 @@ describe('ActiveTradeTable Component', () => {
     it('should display buttons with the user options', () => {
         render(<Default />);
         expect(screen.getAllByText('Add/Reduce')[0]).toBeInTheDocument();
-        expect(screen.getAllByText('Unwind')[0]).toBeInTheDocument();
+        expect(screen.getAllByText('Close')[0]).toBeInTheDocument();
     });
 
-    it('should display the unwind dialog when clicking on the Unwind Position button', () => {
+    it('should display the unwind dialog when clicking on the Close Position button', () => {
         render(<Default />);
         expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-        fireEvent.click(screen.getAllByRole('button', { name: 'Unwind' })[0]);
+        fireEvent.click(screen.getAllByRole('button', { name: 'Close' })[0]);
         expect(screen.getByRole('dialog')).toBeInTheDocument();
     });
 
@@ -165,18 +165,17 @@ describe('ActiveTradeTable Component', () => {
             expect(activeRowFvAndPv).toHaveLength(2);
         });
 
-        it('should display unwind position till maturity', () => {
+        it('should display close position till maturity', () => {
             render(<Delisted />);
             const closeToMaturityRow = screen.getAllByRole('row')[5];
             expect(closeToMaturityRow).toHaveTextContent('Feb 2, 2022');
             expect(closeToMaturityRow).toHaveTextContent('22h');
 
-            const unwindButton = within(closeToMaturityRow).getByRole(
-                'button',
-                { name: 'Unwind' }
-            );
-            expect(unwindButton).toBeInTheDocument();
-            fireEvent.click(unwindButton);
+            const closeButton = within(closeToMaturityRow).getByRole('button', {
+                name: 'Close',
+            });
+            expect(closeButton).toBeInTheDocument();
+            fireEvent.click(closeButton);
             expect(screen.getByRole('dialog')).toBeInTheDocument();
         });
 

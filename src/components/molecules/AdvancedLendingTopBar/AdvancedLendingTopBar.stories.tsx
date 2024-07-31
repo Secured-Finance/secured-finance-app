@@ -1,4 +1,5 @@
 import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
+import { withWalletProvider } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
 import { currencyList, maturityOptions } from 'src/stories/mocks/fixtures';
 import { mockDailyVolumes } from 'src/stories/mocks/queries';
@@ -10,6 +11,7 @@ const lastTradePrice = 8000;
 export default {
     title: 'Molecules/AdvancedLendingTopBar',
     component: AdvancedLendingTopBar,
+    decorators: [withWalletProvider],
     args: {
         selectedAsset: currencyList[2],
         assetList: currencyList,

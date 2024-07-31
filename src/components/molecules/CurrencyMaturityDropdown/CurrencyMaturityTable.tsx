@@ -1,7 +1,9 @@
 import {
     ChevronDownIcon as AngleDownIcon,
     ChevronUpIcon,
+    StarIcon,
 } from '@heroicons/react/24/outline';
+import { StarIcon as FilledStarIcon } from '@heroicons/react/24/solid';
 import {
     SortDescriptor,
     Table,
@@ -12,11 +14,13 @@ import {
     TableRow,
 } from '@nextui-org/table';
 import clsx from 'clsx';
+import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useBreakpoint, useIsSubgraphSupported } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { RootState } from 'src/store/types';
 import { calculateTimeDifference, formatDuration, usdFormat } from 'src/utils';
+import { useAccount } from 'wagmi';
 import { desktopColumns, mobileColumns } from './constants';
 import { ColumnKey, ColumnType, FilteredOption } from './types';
 
@@ -26,12 +30,14 @@ export const CurrencyMaturityTable = ({
     close,
     onSortChange,
     sortState,
+    onFavouriteToggle,
 }: {
     options: FilteredOption[];
     onOptionClick: (item: FilteredOption) => void;
     close: () => void;
     onSortChange: (descriptor: SortDescriptor) => void;
     sortState: SortDescriptor;
+    onFavouriteToggle: (market: string) => void;
 }) => {
     const securedFinance = useSF();
     const currentChainId = securedFinance?.config.chain.id;
@@ -41,37 +47,62 @@ export const CurrencyMaturityTable = ({
         (state: RootState) => state.blockchain.chainError
     );
     const isTablet = useBreakpoint('laptop');
+    const { isConnected } = useAccount();
     const columns: ColumnType[] = isTablet ? mobileColumns : desktopColumns;
 
-    const renderCell = (option: (typeof options)[0], columnKey: ColumnKey) => {
-        const { maturity } = option;
+    const renderCell = useCallback(
+        (option: (typeof options)[0], columnKey: ColumnKey) => {
+            const { display, isFavourite } = option;
 
-        switch (columnKey) {
-            case 'symbol':
-                return (
-                    <h3 className='flex items-center gap-1 font-secondary'>
-                        {option.display}
-                    </h3>
-                );
-            case 'last-prices':
-                return option.lastPrice;
-            case 'last-prices-mobile':
-                return `${option.lastPrice} (${option.apr})`;
-            case 'apr':
-                return option.apr;
-            case 'maturity':
-                const timestampDifference = calculateTimeDifference(+maturity);
-                return (
-                    <div className='flex justify-end whitespace-nowrap pr-3'>
-                        {formatDuration(Math.abs(timestampDifference))}
-                    </div>
-                );
-            case 'volume':
-                return option.volume ? usdFormat(option.volume) : '-';
-            default:
-                return null;
-        }
-    };
+            switch (columnKey) {
+                case 'symbol':
+                    return (
+                        <h3 className='flex items-center gap-1 font-secondary'>
+                            {isConnected && (
+                                <button
+                                    onClick={e => {
+                                        e.stopPropagation();
+                                        onFavouriteToggle(display);
+                                    }}
+                                    aria-label={`${
+                                        isFavourite ? 'Remove' : 'Add'
+                                    } ${display} ${
+                                        isFavourite ? 'from' : 'to'
+                                    } favourites`}
+                                >
+                                    {isFavourite ? (
+                                        <FilledStarIcon className='h-3.5 w-3.5 text-warning-300' />
+                                    ) : (
+                                        <StarIcon className='h-3.5 w-3.5' />
+                                    )}
+                                </button>
+                            )}
+                            {display}
+                        </h3>
+                    );
+                case 'last-prices':
+                    return option.lastPrice;
+                case 'last-prices-mobile':
+                    return `${option.lastPrice} (${option.apr})`;
+                case 'apr':
+                    return option.apr;
+                case 'maturity':
+                    const timestampDifference = calculateTimeDifference(
+                        +option.maturity
+                    );
+                    return (
+                        <div className='flex justify-end whitespace-nowrap pr-3'>
+                            {formatDuration(Math.abs(timestampDifference))}
+                        </div>
+                    );
+                case 'volume':
+                    return option.volume ? usdFormat(option.volume) : '-';
+                default:
+                    return null;
+            }
+        },
+        [isConnected, onFavouriteToggle]
+    );
 
     return (
         <Table
@@ -130,7 +161,12 @@ export const CurrencyMaturityTable = ({
                         );
                     })}
             </TableHeader>
-            <TableBody items={options} emptyContent='No products found'>
+            <TableBody
+                items={options}
+                emptyContent={
+                    <span className='text-neutral-4'>No products found</span>
+                }
+            >
                 {item => (
                     <TableRow
                         key={item.key}
