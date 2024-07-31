@@ -58,7 +58,11 @@ export const MarketInfoDialog = ({
     }, [maturity]);
 
     return (
-        <Dialog open={isOpen} onClose={onClose} className='relative z-[31]'>
+        <Dialog
+            open={isOpen}
+            onClose={onClose}
+            className='relative z-[31] laptop:hidden'
+        >
             <div className='fixed inset-0 bg-backgroundBlur backdrop-blur-sm' />
             <div className='fixed inset-0 flex items-center justify-center'>
                 <Dialog.Panel className='flex w-[79%] min-w-[295px] flex-col gap-3 rounded-xl border border-neutral-600 bg-neutral-900 p-5'>
