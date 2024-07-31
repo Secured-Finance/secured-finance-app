@@ -132,10 +132,9 @@ export const MarketInfoDialog = ({
                                 <span>24h Volume</span>
                                 <Tooltip
                                     iconElement={
-                                        <span>{dailyStats?.volume}</span>
+                                        <span>{dailyStats?.volumeInUSD}</span>
                                     }
                                 >
-                                    {/* TODO: handle display of value in native currency */}
                                     <span>
                                         24h Vol:{' '}
                                         {formatWithCurrency(

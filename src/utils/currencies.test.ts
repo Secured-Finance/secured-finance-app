@@ -1,10 +1,12 @@
 import { WalletSource as Source } from '@secured-finance/sf-client';
 import {
+    COIN_GECKO_SOURCE,
     generateWalletInformation,
     generateWalletSourceInformation,
+    handlePriceSource,
     WalletSource,
 } from './currencies';
-import { CurrencySymbol } from './currencyList';
+import { currencyMap, CurrencySymbol } from './currencyList';
 
 describe('currencies.generateWalletInformation', () => {
     it('should return walletInformation as AssetDisclosureProps', () => {
@@ -68,5 +70,17 @@ describe('currencies.generateWalletSourceInformation', () => {
         expect(options[1].source).toEqual(Source.SF_VAULT);
         expect(options[0].available).toEqual(1000);
         expect(options[1].available).toEqual(500);
+    });
+});
+
+describe('currencies.handlePriceSource', () => {
+    it('should return CoinGecko price source specific to currency provided', () => {
+        const source = handlePriceSource(CurrencySymbol.USDC);
+
+        expect(source).toEqual(
+            COIN_GECKO_SOURCE.concat(
+                currencyMap[CurrencySymbol.USDC].coinGeckoId
+            )
+        );
     });
 });

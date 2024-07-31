@@ -10,6 +10,7 @@ import {
     CountdownTimer,
     CurrencyMaturityDropdown,
     PriceRateChange,
+    Tooltip,
 } from 'src/components/molecules';
 import { MarketInfoDialog } from 'src/components/organisms';
 import { useGraphClientHook, useIsSubgraphSupported } from 'src/hooks';
@@ -17,6 +18,7 @@ import useSF from 'src/hooks/useSecuredFinance';
 import {
     CurrencySymbol,
     formatLoanValue,
+    formatWithCurrency,
     getTransformMaturityOption,
     handlePriceSource,
 } from 'src/utils';
@@ -199,10 +201,32 @@ export const AdvancedLendingTopBar = ({
                                         />
                                     </div>
                                     <div className='w-[13%] px-3 desktop:w-[9%]'>
-                                        <MarketTab
-                                            name='24h Volume'
-                                            value={marketInfo.volume}
-                                        />
+                                        <section
+                                            className='flex h-fit flex-grow flex-col'
+                                            aria-label={'24h Volume'}
+                                        >
+                                            <span className='laptop:typography-caption-2 whitespace-nowrap text-[11px] text-neutral-400'>
+                                                24h Volume
+                                            </span>
+                                            <Tooltip
+                                                iconElement={
+                                                    <span className='typography-caption flex items-center whitespace-nowrap leading-4 text-neutral-50 desktop:leading-6'>
+                                                        {formatWithCurrency(
+                                                            Number(
+                                                                marketInfo?.volume
+                                                            ) || 0,
+                                                            selectedAsset?.value as CurrencySymbol,
+                                                            5
+                                                        )}
+                                                    </span>
+                                                }
+                                            >
+                                                <span>
+                                                    24h Vol:{' '}
+                                                    {marketInfo?.volumeInUSD}
+                                                </span>
+                                            </Tooltip>
+                                        </section>
                                     </div>
                                 </>
                             )}
