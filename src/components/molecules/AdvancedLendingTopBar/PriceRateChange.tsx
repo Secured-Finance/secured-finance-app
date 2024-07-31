@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { DailyMarketInfo } from 'src/types';
 import { percentFormat } from 'src/utils';
 
@@ -22,6 +23,11 @@ export const PriceRateChange = ({
 
     const { high, low, rateHigh, rateLow, isIncreased } = marketInfo;
 
+    const style = clsx({
+        'text-success-300': isIncreased === true,
+        'text-error-300': !isIncreased === false,
+    });
+
     if (!high || !low || !rateHigh || !rateLow || isIncreased === undefined) {
         return <StaticRateDisplay value={invalidPercentage} />;
     }
@@ -32,10 +38,10 @@ export const PriceRateChange = ({
     const rateLowParsed = parseFloat(rateLow);
 
     if (
-        isNaN(priceHigh) ||
-        isNaN(priceLow) ||
-        isNaN(rateHighParsed) ||
-        isNaN(rateLowParsed)
+        Number.isNaN(priceHigh) ||
+        Number.isNaN(priceLow) ||
+        Number.isNaN(rateHighParsed) ||
+        Number.isNaN(rateLowParsed)
     ) {
         return <StaticRateDisplay value={invalidPercentage} />;
     }
@@ -76,8 +82,14 @@ export const PriceRateChange = ({
 
     return (
         <div className='flex flex-col items-center gap-1 laptop:flex-row'>
-            <span>{formattedPercentage}</span>
-            <span>({formattedRatePercentage})</span>
+            <span className={style}>
+                {isIncreased && '+'}
+                {formattedPercentage}
+            </span>
+            <span className={style}>
+                ({isIncreased && '+'}
+                {formattedRatePercentage})
+            </span>
         </div>
     );
 };
