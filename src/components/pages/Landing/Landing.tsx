@@ -21,9 +21,9 @@ import {
     RateType,
     baseContracts,
     emptyCollateralBook,
+    useBalances,
     useCollateralBook,
     useCurrencyDelistedStatus,
-    useFullBalances,
     useGraphClientHook,
     useIsSubgraphSupported,
     useLendingMarkets,
@@ -54,7 +54,7 @@ const ITAYOSE_PERIOD = 60 * 60 * 1000; // 1 hour in milli-seconds
 export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
     const dispatch = useDispatch();
     const { address, isConnected } = useAccount();
-    const balance = useFullBalances();
+    const balance = useBalances();
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
     const { currency, side, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
