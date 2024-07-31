@@ -6,7 +6,7 @@ import {
     Alert,
     AlertSeverity,
     DELISTED_CURRENCIES_KEY,
-    HorizontalTab,
+    HorizontalTabTable,
     StatsBar,
     ZCBond,
 } from 'src/components/molecules';
@@ -367,7 +367,7 @@ export const PortfolioManagement = () => {
                         netAssetValue={portfolioAnalytics.netAssetValue}
                         zcBonds={zcBonds}
                     />
-                    <HorizontalTab
+                    <HorizontalTabTable
                         tabTitles={
                             isSubgraphSupported
                                 ? [
@@ -433,7 +433,7 @@ export const PortfolioManagement = () => {
                                 }}
                             />
                         )}
-                    </HorizontalTab>
+                    </HorizontalTabTable>
                     <Disclaimer
                         showDelistedCurrencyDisclaimer={
                             userDelistedCurrenciesArray.length > 0

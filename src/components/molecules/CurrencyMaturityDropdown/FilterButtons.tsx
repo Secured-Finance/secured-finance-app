@@ -7,12 +7,16 @@ export const FilterButtons = ({
     isItayose,
     setCurrentCurrency,
     setIsItayose,
+    isFavourites,
+    setIsFavourites,
 }: {
     currencies?: CurrencySymbol[];
     currentCurrency: CurrencySymbol | undefined;
     isItayose: boolean;
     setCurrentCurrency: (currency: CurrencySymbol | undefined) => void;
     setIsItayose: (value: boolean) => void;
+    isFavourites: boolean;
+    setIsFavourites: (value: boolean) => void;
 }) => {
     const FilterBtn = ({
         onClick,
@@ -37,23 +41,37 @@ export const FilterButtons = ({
         </button>
     );
 
+    const handleFilterClick = (
+        currency?: CurrencySymbol,
+        isItayose = false,
+        isFavourites = false
+    ) => {
+        setCurrentCurrency(currency);
+        setIsItayose(isItayose);
+        setIsFavourites(isFavourites);
+    };
+
     return (
         <div className='flex items-center gap-[13.5px]'>
             <FilterBtn
-                activeCondition={!currentCurrency && !isItayose}
+                activeCondition={
+                    !currentCurrency && !isItayose && !isFavourites
+                }
                 onClick={() => {
-                    setCurrentCurrency(undefined);
-                    setIsItayose(false);
+                    handleFilterClick();
                 }}
             >
                 All
             </FilterBtn>
             <FilterBtn
+                activeCondition={isFavourites}
+                onClick={() => handleFilterClick(undefined, false, true)}
+            >
+                Favourites
+            </FilterBtn>
+            <FilterBtn
                 activeCondition={isItayose && !currentCurrency}
-                onClick={() => {
-                    setCurrentCurrency(undefined);
-                    setIsItayose(true);
-                }}
+                onClick={() => handleFilterClick(undefined, true, false)}
                 label='itayose-filter-btn'
             >
                 Itayose
@@ -62,10 +80,7 @@ export const FilterButtons = ({
                 <FilterBtn
                     key={`currency-${currency}`}
                     activeCondition={currentCurrency === currency}
-                    onClick={() => {
-                        setCurrentCurrency(currency);
-                        setIsItayose(false);
-                    }}
+                    onClick={() => handleFilterClick(currency, false, false)}
                     label={`${currency}-filter-btn`}
                 >
                     {currency}

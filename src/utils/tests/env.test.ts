@@ -5,8 +5,7 @@ import {
     getEnvironment,
     getGraphqlServerUrl,
     getNonSubgraphSupportedChainIds,
-    getReferralHashtags,
-    getReferralMessage,
+    getSubgraphUrl,
     getSupportedChainIds,
     getUsePackageVersion,
     getWalletConnectId,
@@ -153,34 +152,22 @@ describe('getGraphqlServerUrl', () => {
     });
 });
 
-describe('getReferralMessage', () => {
+describe('getSubgraphUrl', () => {
     it('should return the value of the environment variable', () => {
-        process.env.NEXT_PUBLIC_REFERRAL_MESSAGE = 'test';
-        const referralMessage = getReferralMessage();
-        expect(referralMessage).toBe('test');
-        expect(typeof referralMessage).toBe('string');
+        process.env.NEXT_PUBLIC_SUBGRAPH_URL_314 = 'test';
+        const subgraphUrl = getSubgraphUrl(314);
+        expect(subgraphUrl).toBe('test');
+        expect(typeof subgraphUrl).toBe('string');
     });
 
-    it('should throw error if variable is not set', () => {
-        process.env.NEXT_PUBLIC_REFERRAL_MESSAGE = '';
-        expect(() => getReferralMessage()).toThrowError(
-            'NEXT_PUBLIC_REFERRAL_MESSAGE is not set'
-        );
-    });
-});
-
-describe('getReferralHashtags', () => {
-    it('should return the value of the environment variable', () => {
-        process.env.NEXT_PUBLIC_REFERRAL_HASHTAGS = 'test';
-        const referralHashtags = getReferralHashtags();
-        expect(referralHashtags).toBe('test');
-        expect(typeof referralHashtags).toBe('string');
+    it('should return empty if variable is not set', () => {
+        delete process.env.NEXT_PUBLIC_SUBGRAPH_URL_314;
+        const subgraphUrl = getSubgraphUrl(314);
+        expect(subgraphUrl).toBe(undefined);
     });
 
-    it('should throw error if variable is not set', () => {
-        process.env.NEXT_PUBLIC_REFERRAL_HASHTAGS = '';
-        expect(() => getReferralHashtags()).toThrowError(
-            'NEXT_PUBLIC_REFERRAL_HASHTAGS is not set'
-        );
+    it('should return undefined if the input is not a supported chain', () => {
+        const subgraphUrl = getSubgraphUrl(1);
+        expect(subgraphUrl).toBe(undefined);
     });
 });

@@ -47,13 +47,12 @@ import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
     SupportedChainsList,
-    getReferralHashtags,
-    getReferralMessage,
     ordinaryFormat,
     percentFormat,
     readWalletFromStore,
 } from 'src/utils';
 import { useAccount, useConnect, useSignMessage } from 'wagmi';
+import { getShareMessage, quoteTweetUrl } from './constants';
 
 const POLL_INTERVAL = 600000; // 10 minutes
 const POINT_API_QUERY_OPTIONS = { context: { type: 'point-dashboard' } };
@@ -105,15 +104,15 @@ const ReferralCode = ({ code }: { code: string }) => {
                                         <button
                                             type='button'
                                             className='flex h-8 w-8 items-center justify-center rounded-2xl bg-gunMetal'
-                                            onClick={() =>
+                                            onClick={() => {
+                                                const text =
+                                                    getShareMessage(code);
+
                                                 window.open(
-                                                    `https://x.com/intent/tweet?text=${getReferralMessage()}&url=${
-                                                        window.location.origin +
-                                                        window.location.pathname
-                                                    }?ref=${code}&hashtags=${getReferralHashtags()}`,
+                                                    `https://x.com/intent/tweet?text=${text}&url=${quoteTweetUrl}`,
                                                     '_blank'
-                                                )
-                                            }
+                                                );
+                                            }}
                                         >
                                             <ShareIcon className='h-5 w-5 text-slateGray hover:text-planetaryPurple' />
                                         </button>

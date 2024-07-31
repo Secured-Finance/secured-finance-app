@@ -15,7 +15,7 @@ import {
 import {
     Alert,
     CurrencyMaturityDropdown,
-    HorizontalTab,
+    HorizontalTabTable,
     TabSelector,
 } from 'src/components/molecules';
 import {
@@ -422,7 +422,7 @@ export const Itayose = () => {
                         )}
                     </div>
                     <div className='col-span-12 laptop:w-full'>
-                        <HorizontalTab
+                        <HorizontalTabTable
                             tabTitles={
                                 isSubgraphSupported
                                     ? ['Open Orders', 'Order History']
@@ -449,7 +449,7 @@ export const Itayose = () => {
                                     variant='contractOnly'
                                 />
                             )}
-                        </HorizontalTab>
+                        </HorizontalTabTable>
                     </div>
                 </>
 
