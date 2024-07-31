@@ -7,7 +7,7 @@ export default {
     component: CollateralInformation,
     args: {
         asset: CurrencySymbol.ETH,
-        quantity: 1.2,
+        quantity: BigInt('1200000000000000000'),
     },
 } as Meta<typeof CollateralInformation>;
 

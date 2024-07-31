@@ -33,6 +33,7 @@ describe('LendingCard Component', () => {
         ...initialStore,
         wallet: {
             address: '0x1',
+            balance: '0',
         },
         blockchain: {
             chainId: 11155111,

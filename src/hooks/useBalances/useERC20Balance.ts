@@ -3,7 +3,7 @@ import { useQueries } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
-import { ZERO_BI, amountFormatterFromBase, currencyMap } from 'src/utils';
+import { ZERO_BI, currencyMap } from 'src/utils';
 import { useCurrencies } from '../useCurrencies';
 
 export const useERC20Balance = (address: string | undefined) => {
@@ -30,11 +30,7 @@ export const useERC20Balance = (address: string | undefined) => {
                     return balance ?? ZERO_BI;
                 },
                 select: (balance: bigint) => {
-                    return [
-                        token.symbol,
-                        amountFormatterFromBase[token.symbol](balance),
-                        balance,
-                    ];
+                    return [token.symbol, balance];
                 },
                 enabled: !!securedFinance && !!address && tokens.length > 0,
             };

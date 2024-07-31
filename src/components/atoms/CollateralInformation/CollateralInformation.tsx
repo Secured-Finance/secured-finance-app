@@ -4,7 +4,7 @@ import { CurrencySymbol, currencyMap } from 'src/utils';
 
 export interface CollateralInformationProps {
     asset: CurrencySymbol;
-    quantity: number;
+    quantity: bigint;
 }
 
 export const CollateralInformation = ({
