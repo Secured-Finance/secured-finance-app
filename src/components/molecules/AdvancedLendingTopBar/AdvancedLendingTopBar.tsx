@@ -15,11 +15,10 @@ import { MarketInfoDialog } from 'src/components/organisms';
 import { useGraphClientHook, useIsSubgraphSupported } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import {
-    COIN_GECKO_SOURCE,
-    currencyMap,
     CurrencySymbol,
     formatLoanValue,
     getTransformMaturityOption,
+    handlePriceSource,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { AdvancedLendingTopBarProp } from './types';
@@ -46,7 +45,8 @@ export const AdvancedLendingTopBar = ({
     const [isMarketInfoDialogOpen, setIsMarketInfoDialogOpen] =
         useState<boolean>(false);
 
-    const allTransactions = useGraphClientHook(
+    // TODO: find out when to refetch
+    const { data: allTransactions } = useGraphClientHook(
         {
             currency: toBytes32(selectedAsset?.value as string),
             maturity: maturity,
@@ -56,7 +56,7 @@ export const AdvancedLendingTopBar = ({
         queries.TransactionHistoryDocument,
         'transactionHistory',
         !isSubgraphSupported
-    ).data;
+    );
 
     const lastLoanValue = useMemo(() => {
         const lastPrice = allTransactions?.[0]
@@ -176,16 +176,10 @@ export const AdvancedLendingTopBar = ({
                             </div>
                             <div className='flex w-auto flex-col px-3 desktop:w-[19%]'>
                                 <MarketTab
-                                    name='24H Price Change (APR)'
+                                    name='24h Price Change (APR)'
                                     value={
                                         <PriceRateChange
-                                            priceHigh={marketInfo?.high}
-                                            priceLow={marketInfo?.low}
-                                            rateHigh={marketInfo?.rateHigh}
-                                            rateLow={marketInfo?.rateLow}
-                                            isIncreased={
-                                                marketInfo?.isIncreased
-                                            }
+                                            marketInfo={marketInfo}
                                         />
                                     }
                                 />
@@ -218,7 +212,9 @@ export const AdvancedLendingTopBar = ({
                                 <MarketTab
                                     name={`${selectedAsset?.value} Price`}
                                     value={currencyPrice || '0'}
-                                    source={handleSource(selectedAsset?.value)}
+                                    source={handlePriceSource(
+                                        selectedAsset?.value
+                                    )}
                                 />
                             </div>
                             <div className='flex flex-col px-3 laptop:w-[13%] desktop:w-[10%]'>
@@ -236,13 +232,9 @@ export const AdvancedLendingTopBar = ({
                 currency={selectedAsset?.value}
                 currentMarket={currentMarket}
                 currencyPrice={currencyPrice || '0'}
-                priceSource={handleSource(selectedAsset?.value)}
                 dailyStats={marketInfo}
                 lastLoanValue={lastLoanValue}
             />
         </>
     );
 };
-
-const handleSource = (asset: CurrencySymbol | undefined) =>
-    asset && COIN_GECKO_SOURCE.concat(currencyMap[asset].coinGeckoId);

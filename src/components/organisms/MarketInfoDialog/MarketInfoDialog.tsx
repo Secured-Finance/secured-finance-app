@@ -1,38 +1,23 @@
 import { Dialog } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/20/solid';
+import { formatDate } from '@secured-finance/sf-core';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import { cloneElement, useEffect, useState } from 'react';
 import ArrowUpSquare from 'src/assets/icons/arrow-up-square.svg';
 import DocumentTextIcon from 'src/assets/icons/document-text.svg';
-import { CurrentMarket } from 'src/types';
+import { PriceRateChange, Tooltip } from 'src/components/molecules';
 import {
     CurrencySymbol,
     formatLoanValue,
     formatRemainingTime,
+    formatWithCurrency,
+    handlePriceSource,
 } from 'src/utils';
-import { LoanValue } from 'src/utils/entities';
 import { mapCurrencyToIcon } from './constants';
+import { MarketInfoDialogProps } from './types';
 
 dayjs.extend(duration);
-
-export interface MarketInfoDialogProps {
-    isOpen: boolean;
-    onClose: () => void;
-    currency?: CurrencySymbol;
-    currentMarket?: CurrentMarket;
-    currencyPrice: string;
-    priceSource?: string;
-    dailyStats?: {
-        high: string;
-        low: string;
-        volume: string;
-        rateHigh: string;
-        rateLow: string;
-        isIncreased?: boolean;
-    };
-    lastLoanValue?: LoanValue;
-}
 
 export const MarketInfoDialog = ({
     isOpen,
@@ -40,7 +25,6 @@ export const MarketInfoDialog = ({
     currency,
     currentMarket,
     currencyPrice,
-    priceSource,
     dailyStats,
     lastLoanValue,
 }: MarketInfoDialogProps) => {
@@ -48,11 +32,12 @@ export const MarketInfoDialog = ({
     const rate = formatLoanValue(currentMarket?.value, 'rate');
     const maturity = currentMarket?.value.maturity ?? 0;
     const currencyIcon = mapCurrencyToIcon(currency as CurrencySymbol);
-    const [remainingTime, setRemainingTime] = useState<number>(
-        maturity - dayjs().unix()
-    );
+    const [remainingTime, setRemainingTime] = useState<number>(0);
+
+    const priceSource = handlePriceSource(currency as CurrencySymbol);
 
     useEffect(() => {
+        setRemainingTime(maturity - dayjs().unix());
         const updateCountdown = () => {
             const now = dayjs().unix();
             const timeLeft = maturity - now;
@@ -104,7 +89,7 @@ export const MarketInfoDialog = ({
                                             {currency}
                                         </h3>
                                         <span className='typography-mobile-body-6'>
-                                            21:00:59 (GMT+7)
+                                            {formatDate(maturity)}
                                         </span>
                                     </div>
                                 </div>
@@ -132,23 +117,34 @@ export const MarketInfoDialog = ({
                                 </div>
                             </li>
                             <li className='flex justify-between'>
-                                <span>24H Change</span>
-                                <div className='flex flex-col items-end'>
-                                    <span>+9.68%</span>
-                                    <span>(-10.00% APR)</span>
-                                </div>
+                                <span>24h Change</span>
+                                <PriceRateChange marketInfo={dailyStats} />
                             </li>
                             <li className='flex justify-between'>
-                                <span>24H High</span>
+                                <span>24h High</span>
                                 <span>{dailyStats?.high}</span>
                             </li>
                             <li className='flex justify-between'>
-                                <span>24H Low</span>
+                                <span>24h Low</span>
                                 <span>{dailyStats?.low}</span>
                             </li>
                             <li className='flex justify-between'>
-                                <span>24H Volume</span>
-                                <span>{dailyStats?.volume}</span>
+                                <span>24h Volume</span>
+                                <Tooltip
+                                    iconElement={
+                                        <span>{dailyStats?.volume}</span>
+                                    }
+                                >
+                                    {/* TODO: handle display of value in native currency */}
+                                    <span>
+                                        24h Vol:{' '}
+                                        {formatWithCurrency(
+                                            Number(dailyStats?.volume) || 0,
+                                            currency as CurrencySymbol,
+                                            5
+                                        )}
+                                    </span>
+                                </Tooltip>
                             </li>
                             <li className='flex justify-between'>
                                 <span>{currency} Price</span>

@@ -358,7 +358,11 @@ export const AdvancedLending = ({
                                           tradeHistoryDetails.min,
                                           'price'
                                       ),
-                                      volume: tradeHistoryDetails.count.toString(),
+                                      volume: tradeHistoryDetails.sum.toString(),
+                                      volumeInUSD: usdFormat(
+                                          currencyPrice *
+                                              tradeHistoryDetails.sum
+                                      ),
                                       rateHigh: formatLoanValue(
                                           tradeHistoryDetails.max,
                                           'rate'
