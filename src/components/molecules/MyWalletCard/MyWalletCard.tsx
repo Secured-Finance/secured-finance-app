@@ -14,7 +14,7 @@ import {
     AssetDisclosure,
     AssetDisclosureProps,
 } from 'src/components/molecules';
-import { useFullBalances } from 'src/hooks';
+import { useBalances } from 'src/hooks';
 import {
     CurrencySymbol,
     WalletSource,
@@ -30,7 +30,7 @@ export const MyWalletCard = ({
     information: Partial<Record<WalletSource, CurrencySymbol[]>>;
     hideBridge?: boolean;
 }) => {
-    const balanceRecord = useFullBalances();
+    const balanceRecord = useBalances();
 
     const assetMap: AssetDisclosureProps[] = useMemo(
         () =>

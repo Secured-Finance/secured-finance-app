@@ -1,16 +1,16 @@
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
 import { ZERO_BI, createCurrencyMap } from 'src/utils';
-import { useFullBalances } from './useFullBalances';
+import { useBalances } from './useBalances';
 
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
 const preloadedState = { wallet: { address: '0x1', balance: 0 } };
 
-describe('useFullBalances', () => {
+describe('useBalances', () => {
     it('should return full balances of all currencies', async () => {
-        const { result } = renderHook(() => useFullBalances(), {
+        const { result } = renderHook(() => useBalances(), {
             preloadedState: preloadedState,
         });
 

@@ -16,9 +16,9 @@ import { SubtabGroup, TabGroup } from 'src/components/molecules';
 import { NewOrderBookWidget, OrderAction } from 'src/components/organisms';
 import {
     CollateralBook,
+    useBalances,
     useBorrowableAmount,
     useBreakpoint,
-    useFullBalances,
     useLastPrices,
     useMarket,
 } from 'src/hooks';
@@ -103,7 +103,7 @@ export function AdvancedLendingOrderCard({
 
     const [sliderValue, setSliderValue] = useState(0.0);
 
-    const balanceRecord = useFullBalances();
+    const balanceRecord = useBalances();
     const isTablet = useBreakpoint('laptop');
 
     const loanValue = useMemo(() => {

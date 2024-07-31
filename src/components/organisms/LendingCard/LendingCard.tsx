@@ -11,9 +11,9 @@ import {
 import { OrderAction } from 'src/components/organisms';
 import {
     CollateralBook,
+    useBalances,
     useBorrowableAmount,
     useCurrencies,
-    useFullBalances,
     useLastPrices,
 } from 'src/hooks';
 import {
@@ -67,7 +67,7 @@ export const LendingCard = ({
     const { data: currencies } = useCurrencies();
     const assetList = toOptions(currencies, currency);
 
-    const balanceRecord = useFullBalances();
+    const balanceRecord = useBalances();
 
     const selectedTerm = useMemo(() => {
         return (
