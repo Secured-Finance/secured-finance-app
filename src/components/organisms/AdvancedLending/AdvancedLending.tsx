@@ -360,8 +360,10 @@ export const AdvancedLending = ({
                                       ),
                                       volume: tradeHistoryDetails.sum.toString(),
                                       volumeInUSD: usdFormat(
-                                          currencyPrice *
-                                              tradeHistoryDetails.sum
+                                          Math.floor(
+                                              currencyPrice *
+                                                  tradeHistoryDetails.sum
+                                          )
                                       ),
                                       rateHigh: formatLoanValue(
                                           tradeHistoryDetails.max,
