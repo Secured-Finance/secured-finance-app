@@ -118,3 +118,13 @@ export interface SavedMarket {
     address: `0x${string}` | undefined;
     chainId?: number;
 }
+
+export type DailyMarketInfo = {
+    high: string;
+    low: string;
+    volume: string;
+    volumeInUSD: string;
+    rateHigh: string;
+    rateLow: string;
+    isIncreased?: boolean;
+};
