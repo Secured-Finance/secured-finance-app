@@ -4,7 +4,6 @@ import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
     ZERO_BI,
-    amountFormatterToBase,
     createCurrencyMap,
     currencyMap,
 } from 'src/utils';
@@ -31,15 +30,14 @@ export const useFullBalances = () => {
     }, [currencies]);
 
     if (nativeCurrency) {
-        balances[nativeCurrency.symbol] =
-            amountFormatterToBase[nativeCurrency.symbol](balance);
+        balances[nativeCurrency.symbol] = BigInt(balance);
     }
 
     const balanceQueriesResults = useERC20Balance(address);
 
     balanceQueriesResults.forEach(value => {
         if (value.data) {
-            balances[value.data[0] as CurrencySymbol] = value.data[2] as bigint;
+            balances[value.data[0] as CurrencySymbol] = value.data[1] as bigint;
         }
     });
 

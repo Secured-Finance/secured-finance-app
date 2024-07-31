@@ -16,9 +16,9 @@ import { SubtabGroup, TabGroup } from 'src/components/molecules';
 import { NewOrderBookWidget, OrderAction } from 'src/components/organisms';
 import {
     CollateralBook,
-    useBalances,
     useBorrowableAmount,
     useBreakpoint,
+    useFullBalances,
     useLastPrices,
     useMarket,
 } from 'src/hooks';
@@ -26,7 +26,6 @@ import { useOrderbook } from 'src/hooks/useOrderbook';
 import {
     resetUnitPrice,
     selectLandingOrderForm,
-    selectLandingOrderInputs,
     setAmount,
     setOrderType,
     setSide,
@@ -52,7 +51,7 @@ import {
     prefixTilde,
     usdFormat,
 } from 'src/utils';
-import { AMOUNT_PRECISION, Amount, LoanValue } from 'src/utils/entities';
+import { Amount, LoanValue } from 'src/utils/entities';
 import {
     InteractionEvents,
     InteractionProperties,
@@ -90,6 +89,7 @@ export function AdvancedLendingOrderCard({
         unitPrice,
         maturity,
         sourceAccount,
+        unitPriceExists,
     } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
@@ -100,20 +100,17 @@ export function AdvancedLendingOrderCard({
     );
 
     const { address, isConnected } = useAccount();
-    const { amountInput, unitPriceInput } = useSelector((state: RootState) =>
-        selectLandingOrderInputs(state.landingOrderForm)
-    );
 
     const [sliderValue, setSliderValue] = useState(0.0);
 
-    const balanceRecord = useBalances();
+    const balanceRecord = useFullBalances();
     const isTablet = useBreakpoint('laptop');
 
     const loanValue = useMemo(() => {
         if (!maturity) return LoanValue.ZERO;
-        if (unitPrice !== undefined) {
+        if (unitPrice !== undefined && !isNaN(unitPrice)) {
             return LoanValue.fromPrice(
-                Number(unitPrice),
+                unitPrice * 100.0,
                 maturity,
                 calculationDate
             );
@@ -124,13 +121,17 @@ export function AdvancedLendingOrderCard({
 
     const unitPriceValue = useMemo(() => {
         if (!maturity) return undefined;
-        if (unitPriceInput !== undefined) {
-            return unitPriceInput;
+        if (unitPrice !== undefined) {
+            if (unitPriceExists) {
+                return unitPrice.toString();
+            } else {
+                return undefined;
+            }
         }
         if (!marketPrice) return undefined;
         if (!isConnected) return undefined;
         return (marketPrice / 100.0).toString();
-    }, [maturity, marketPrice, unitPriceInput, isConnected]);
+    }, [maturity, marketPrice, unitPrice, isConnected, unitPriceExists]);
 
     const dispatch = useDispatch();
 
@@ -207,11 +208,9 @@ export function AdvancedLendingOrderCard({
     const balanceToLend = useMemo(() => {
         return selectedWalletSource.source === WalletSource.METAMASK
             ? balanceRecord[currency]
-            : amountFormatterFromBase[currency](
-                  collateralBook.nonCollateral[currency] ||
-                      collateralBook.withdrawableCollateral[currency] ||
-                      ZERO_BI
-              );
+            : collateralBook.nonCollateral[currency] ||
+                  collateralBook.withdrawableCollateral[currency] ||
+                  ZERO_BI;
     }, [
         balanceRecord,
         collateralBook.nonCollateral,
@@ -228,23 +227,26 @@ export function AdvancedLendingOrderCard({
         });
         dispatch(
             setAmount(
-                (
-                    Math.floor(percentage * available * AMOUNT_PRECISION) /
-                    (100.0 * AMOUNT_PRECISION)
-                ).toString()
+                ((BigInt(percentage) * available) / BigInt(100)).toString()
             )
         );
         setSliderValue(percentage);
     };
 
     const handleInputChange = (v: string) => {
-        dispatch(setAmount(v));
+        const inputValue = amountFormatterToBase[currency](Number(v));
+
+        dispatch(setAmount(inputValue.toString()));
         const available =
             side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
-        const inputValue = Number(v);
-        available > 0
-            ? setSliderValue(Math.min(100.0, (inputValue * 100.0) / available))
-            : setSliderValue(0.0);
+        if (available > 0) {
+            const percentage = (inputValue * BigInt(100)) / available;
+            setSliderValue(
+                Number(percentage > BigInt(100) ? BigInt(100) : percentage)
+            );
+        } else {
+            setSliderValue(0);
+        }
     };
 
     useEffect(() => {
@@ -258,20 +260,19 @@ export function AdvancedLendingOrderCard({
         const available =
             source === WalletSource.METAMASK
                 ? balanceRecord[currency]
-                : amountFormatterFromBase[currency](
-                      collateralBook.nonCollateral[currency] ||
-                          collateralBook.withdrawableCollateral[currency] ||
-                          ZERO_BI
-                  );
-        const inputAmount =
-            amount > amountFormatterToBase[currency](available)
-                ? available
-                : amountFormatterFromBase[currency](amount);
+                : collateralBook.nonCollateral[currency] ||
+                  collateralBook.withdrawableCollateral[currency] ||
+                  ZERO_BI;
+
+        const inputAmount = amount > available ? available : amount;
 
         dispatch(setAmount(inputAmount.toString()));
+        const percentage = (inputAmount * BigInt(100)) / available;
         available
-            ? setSliderValue(Math.min(100.0, (inputAmount * 100.0) / available))
-            : setSliderValue(0.0);
+            ? setSliderValue(
+                  Number(percentage > BigInt(100) ? BigInt(100) : percentage)
+              )
+            : setSliderValue(0);
     };
 
     const isInvalidBondPrice = unitPrice === 0 && orderType === OrderType.LIMIT;
@@ -282,11 +283,7 @@ export function AdvancedLendingOrderCard({
             (preOrderPosition === 'lend' && side === OrderSide.BORROW));
 
     const shouldDisableActionButton =
-        getAmountValidation(
-            amountFormatterFromBase[currency](amount),
-            balanceToLend,
-            side
-        ) ||
+        getAmountValidation(amount, balanceToLend, side) ||
         isInvalidBondPrice ||
         showPreOrderError;
 
@@ -377,7 +374,7 @@ export function AdvancedLendingOrderCard({
 
                             <ErrorInfo
                                 showError={getAmountValidation(
-                                    amountFormatterFromBase[currency](amount),
+                                    amount,
                                     balanceToLend,
                                     side
                                 )}
@@ -435,7 +432,13 @@ export function AdvancedLendingOrderCard({
                             <div className='text-slateGray'>{`Available To Borrow (${currency.toString()})`}</div>
                             <div className='text-right text-planetaryPurple'>
                                 {prefixTilde(
-                                    ordinaryFormat(availableToBorrow, 0, 6)
+                                    ordinaryFormat(
+                                        amountFormatterFromBase[currency](
+                                            availableToBorrow
+                                        ),
+                                        0,
+                                        6
+                                    )
                                 )}
                             </div>
                         </div>
@@ -443,7 +446,9 @@ export function AdvancedLendingOrderCard({
                     <OrderInputBox
                         field='Amount'
                         unit={currency}
-                        initialValue={amountInput}
+                        initialValue={amountFormatterFromBase[currency](
+                            amount
+                        ).toString()}
                         onValueChange={v =>
                             handleInputChange((v as string) ?? '')
                         }

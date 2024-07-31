@@ -21,9 +21,9 @@ import {
     RateType,
     baseContracts,
     emptyCollateralBook,
-    useBalances,
     useCollateralBook,
     useCurrencyDelistedStatus,
+    useFullBalances,
     useGraphClientHook,
     useIsSubgraphSupported,
     useLendingMarkets,
@@ -38,7 +38,7 @@ import {
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { OrderType } from 'src/types';
-import { CurrencySymbol } from 'src/utils';
+import { CurrencySymbol, ZERO_BI } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
@@ -54,7 +54,7 @@ const ITAYOSE_PERIOD = 60 * 60 * 1000; // 1 hour in milli-seconds
 export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
     const dispatch = useDispatch();
     const { address, isConnected } = useAccount();
-    const balance = useBalances();
+    const balance = useFullBalances();
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
     const { currency, side, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
@@ -111,7 +111,7 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
     }, [view, dispatch]);
 
     const isShowWelcomeAlert =
-        Object.values(balance).every(v => v === 0) || !isConnected;
+        Object.values(balance).every(v => v === ZERO_BI) || !isConnected;
 
     return (
         <Page

@@ -1,7 +1,4 @@
-import landingOrderFormSlice, {
-    selectLandingOrderForm,
-    selectLandingOrderInputs,
-} from './reducer';
+import landingOrderFormSlice, { selectLandingOrderForm } from './reducer';
 
 export default landingOrderFormSlice.reducer;
 export const {
@@ -17,4 +14,4 @@ export const {
     setIsBorrowedCollateral,
 } = landingOrderFormSlice.actions;
 
-export { selectLandingOrderForm, selectLandingOrderInputs };
+export { selectLandingOrderForm };
