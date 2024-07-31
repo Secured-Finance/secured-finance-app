@@ -40,12 +40,11 @@ export const PriceRateChange = ({
         return <StaticRateDisplay value={invalidPercentage} />;
     }
 
-    // Handle cases where both prices or both rates are 0.00
-    if (
-        (priceHigh === 0 && priceLow === 0) ||
-        (rateHighParsed === 0 && rateLowParsed === 0)
-    ) {
-        return <StaticRateDisplay value={'0.00%'} />;
+    const bothPricesZero = priceHigh === 0 && priceLow === 0;
+    const bothRatesZero = rateHighParsed === 0 && rateLowParsed === 0;
+
+    if (bothPricesZero || bothRatesZero) {
+        return <StaticRateDisplay value='0.00%' />;
     }
 
     let percentageChange: number;

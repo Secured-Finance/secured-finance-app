@@ -47,17 +47,17 @@ export const AdvancedLendingTopBar = ({
     const [isMarketInfoDialogOpen, setIsMarketInfoDialogOpen] =
         useState<boolean>(false);
 
-    // TODO: find out when to refetch
     const { data: allTransactions } = useGraphClientHook(
         {
-            currency: toBytes32(selectedAsset?.value as string),
+            currency: toBytes32(selectedAsset?.value as CurrencySymbol),
             maturity: maturity,
             from: -1,
             to: timestamp,
         },
         queries.TransactionHistoryDocument,
         'transactionHistory',
-        !isSubgraphSupported
+        !isSubgraphSupported,
+        true
     );
 
     const lastLoanValue = useMemo(() => {
