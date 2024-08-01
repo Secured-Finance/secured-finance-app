@@ -128,3 +128,11 @@ export type DailyMarketInfo = {
     rateLow: string;
     isIncreased?: boolean;
 };
+
+export type LastPricePerMarket = Record<
+    string,
+    {
+        price: number;
+        timestamp: number;
+    }
+>;

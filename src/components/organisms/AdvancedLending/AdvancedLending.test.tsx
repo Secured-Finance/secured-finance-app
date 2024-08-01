@@ -96,7 +96,7 @@ describe('Advanced Lending Component', () => {
         expect(screen.getByText('Mark Price (APR)')).toBeInTheDocument();
         expect(screen.getByText('--.-- (--.--%)')).toBeInTheDocument();
 
-        expect(screen.getByText('Last Price')).toBeInTheDocument();
+        expect(screen.getByText('Last Price (APR)')).toBeInTheDocument();
         expect(screen.getAllByText('0.00 (0.00%)')[0]).toBeInTheDocument();
     });
 
@@ -117,7 +117,7 @@ describe('Advanced Lending Component', () => {
         expect(screen.getByText('Mark Price (APR)')).toBeInTheDocument();
         expect(screen.getByText('--.-- (--.--%)')).toBeInTheDocument();
 
-        expect(screen.getByText('Last Price')).toBeInTheDocument();
+        expect(screen.getByText('Last Price (APR)')).toBeInTheDocument();
         expect(screen.getAllByText('0.00 (0.00%)')[1]).toBeInTheDocument();
     });
 

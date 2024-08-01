@@ -19,7 +19,7 @@ export const desktopColumns = [
     },
     {
         key: 'last-prices',
-        label: 'Last Price',
+        label: 'Last Price (APR)',
         width: '20%',
     },
     {
