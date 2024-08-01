@@ -61,7 +61,9 @@ describe('CurrencyMaturityDropdown', () => {
         fireEvent.change(searchInput, { target: { value: 'WBTC' } });
         expect(searchInput.getAttribute('value')).toBe('WBTC');
 
-        expect(screen.getByText('WBTC-JUN2023')).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.getByText('WBTC-JUN2023')).toBeInTheDocument();
+        });
     });
 
     it('should render relevant message when no products are found', () => {

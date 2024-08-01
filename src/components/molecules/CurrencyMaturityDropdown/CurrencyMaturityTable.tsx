@@ -80,9 +80,9 @@ export const CurrencyMaturityTable = ({
                             {display}
                         </h3>
                     );
-                case 'last-prices':
+                case 'mark-prices':
                     return option.lastPrice;
-                case 'last-prices-mobile':
+                case 'mark-prices-mobile':
                     return `${option.lastPrice} (${option.apr})`;
                 case 'apr':
                     return option.apr;
