@@ -69,16 +69,20 @@ const networks = getSupportedNetworks().filter(chain =>
     chainIds.includes(chain.id)
 );
 
-const { chains, publicClient } = configureChains(networks, [
-    alchemyProvider({
-        apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ?? '',
-    }),
-    publicProvider(),
-]);
+const { chains, publicClient, webSocketPublicClient } = configureChains(
+    networks,
+    [
+        alchemyProvider({
+            apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ?? '',
+        }),
+        publicProvider(),
+    ]
+);
 
 const config = createConfig({
     autoConnect: false,
     publicClient: publicClient,
+    webSocketPublicClient,
     connectors: [
         new MetaMaskConnector({ chains }),
         new WalletConnectConnector({

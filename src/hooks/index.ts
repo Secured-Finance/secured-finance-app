@@ -19,6 +19,7 @@ export * from './useIsSubgraphSupported';
 export * from './useIsUnderCollateralThreshold';
 export * from './useItayoseEstimation';
 export * from './useLastPrices';
+export * from './useLastPricesPerMarket';
 export * from './useLendingMarkets';
 export * from './useLoanValues';
 export * from './useMarketLists';

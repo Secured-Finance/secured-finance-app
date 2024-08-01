@@ -126,26 +126,31 @@ export const MarketInfoDialog = ({
                             </li>
                             <li className='flex justify-between'>
                                 <span>24h High</span>
-                                <span>{dailyStats?.high}</span>
+                                <span>
+                                    {dailyStats?.high} ({dailyStats?.rateHigh})
+                                </span>
                             </li>
                             <li className='flex justify-between'>
                                 <span>24h Low</span>
-                                <span>{dailyStats?.low}</span>
+                                <span>
+                                    {dailyStats?.low} ({dailyStats?.rateLow})
+                                </span>
                             </li>
                             <li className='flex justify-between'>
                                 <span>24h Volume</span>
                                 <Tooltip
                                     iconElement={
-                                        <span>{dailyStats?.volumeInUSD}</span>
+                                        <span>
+                                            {formatWithCurrency(
+                                                Number(dailyStats?.volume) || 0,
+                                                currency as CurrencySymbol,
+                                                5
+                                            )}
+                                        </span>
                                     }
                                 >
                                     <span>
-                                        24h Vol:{' '}
-                                        {formatWithCurrency(
-                                            Number(dailyStats?.volume) || 0,
-                                            currency as CurrencySymbol,
-                                            5
-                                        )}
+                                        24h Vol: {dailyStats?.volumeInUSD}
                                     </span>
                                 </Tooltip>
                             </li>

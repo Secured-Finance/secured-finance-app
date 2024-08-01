@@ -23,11 +23,6 @@ export const PriceRateChange = ({
 
     const { high, low, rateHigh, rateLow, isIncreased } = marketInfo;
 
-    const style = clsx({
-        'text-success-300': isIncreased === true,
-        'text-error-300': !isIncreased === false,
-    });
-
     if (!high || !low || !rateHigh || !rateLow || isIncreased === undefined) {
         return <StaticRateDisplay value={invalidPercentage} />;
     }
@@ -56,39 +51,45 @@ export const PriceRateChange = ({
     let percentageChange: number;
     let ratePercentageChange: number;
 
+    console.log('isIncreased', isIncreased);
+
     if (isIncreased) {
         if (priceLow === 0 || rateLowParsed === 0) {
             return <StaticRateDisplay value={invalidPercentage} />;
         }
         percentageChange = ((priceHigh - priceLow) / priceLow) * 100;
-        ratePercentageChange =
-            ((rateHighParsed - rateLowParsed) / rateLowParsed) * 100;
+        ratePercentageChange = rateHighParsed - rateLowParsed;
     } else {
         if (priceHigh === 0 || rateHighParsed === 0) {
             return <StaticRateDisplay value={invalidPercentage} />;
         }
         percentageChange = ((priceLow - priceHigh) / priceHigh) * 100;
-        ratePercentageChange =
-            ((rateLowParsed - rateHighParsed) / rateHighParsed) * 100;
+        ratePercentageChange = rateLowParsed - rateHighParsed;
     }
 
     const formattedPercentage = percentFormat(percentageChange, 100, 2, 2);
-    const formattedRatePercentage = percentFormat(
-        ratePercentageChange,
-        100,
-        2,
-        2
-    );
+
+    const isZeroAPR = ratePercentageChange === 0;
+    const isDecreasedAPR = ratePercentageChange.toString().includes('-');
 
     return (
         <div className='flex flex-col items-center gap-1 laptop:flex-row'>
-            <span className={style}>
+            <span
+                className={clsx({
+                    'text-success-300': isIncreased === true,
+                    'text-error-300': isIncreased === false,
+                })}
+            >
                 {isIncreased && '+'}
                 {formattedPercentage}
             </span>
-            <span className={style}>
-                ({isIncreased && '+'}
-                {formattedRatePercentage})
+            <span
+                className={clsx({
+                    'text-success-300': isDecreasedAPR === false && !isZeroAPR,
+                    'text-error-300': isDecreasedAPR === true && !isZeroAPR,
+                })}
+            >
+                ({ratePercentageChange.toFixed(2)}% APR)
             </span>
         </div>
     );

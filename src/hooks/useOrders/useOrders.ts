@@ -31,7 +31,8 @@ export const useOrders = () => {
             side: OrderSide,
             amount: bigint,
             unitPrice: number,
-            sourceWallet: WalletSource
+            sourceWallet: WalletSource,
+            onApproved?: (isApproved: boolean) => Promise<void> | void
         ) => {
             try {
                 if (!securedFinance) return;
@@ -42,7 +43,8 @@ export const useOrders = () => {
                     side,
                     amount,
                     sourceWallet,
-                    unitPrice
+                    unitPrice,
+                    onApproved
                 );
 
                 return tx;
@@ -78,7 +80,8 @@ export const useOrders = () => {
             side: OrderSide,
             amount: bigint,
             unitPrice: number,
-            sourceWallet: WalletSource
+            sourceWallet: WalletSource,
+            onApproved?: (isApproved: boolean) => Promise<void> | void
         ) => {
             try {
                 if (!securedFinance) return;
@@ -89,7 +92,8 @@ export const useOrders = () => {
                     side,
                     amount,
                     sourceWallet,
-                    unitPrice
+                    unitPrice,
+                    onApproved
                 );
 
                 return tx;

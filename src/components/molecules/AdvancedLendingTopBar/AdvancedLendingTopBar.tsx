@@ -67,14 +67,14 @@ export const AdvancedLendingTopBar = ({
         return LoanValue.fromPrice(lastPrice, maturity);
     }, [allTransactions, maturity]);
 
-    useEffect(() => {
-        setTimestamp(Math.round(new Date().getTime() / 1000));
-    }, []);
-
     const selectedTerm = useMemo(
         () => options.find(o => o.value === selected.value),
         [options, selected]
     );
+
+    useEffect(() => {
+        setTimestamp(Math.round(new Date().getTime() / 1000));
+    }, [selectedAsset, selectedTerm]);
 
     const handleTermChange = useCallback(
         (v: Maturity) => {
