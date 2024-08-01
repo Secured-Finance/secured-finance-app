@@ -186,9 +186,11 @@ export const LendingCard = ({
                             onAmountChange={v =>
                                 dispatch(
                                     setAmount(
-                                        amountFormatterToBase[currency](
-                                            Number(v)
-                                        ).toString()
+                                        v === ''
+                                            ? ''
+                                            : amountFormatterToBase[currency](
+                                                  Number(v)
+                                              ).toString()
                                     )
                                 )
                             }
