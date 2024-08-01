@@ -89,6 +89,7 @@ export function AdvancedLendingOrderCard({
         unitPrice,
         maturity,
         sourceAccount,
+        amountExists,
         unitPriceExists,
     } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
@@ -108,7 +109,7 @@ export function AdvancedLendingOrderCard({
 
     const loanValue = useMemo(() => {
         if (!maturity) return LoanValue.ZERO;
-        if (unitPrice !== undefined && !isNaN(unitPrice)) {
+        if (unitPrice !== undefined && unitPriceExists) {
             return LoanValue.fromPrice(
                 unitPrice * 100.0,
                 maturity,
@@ -117,16 +118,14 @@ export function AdvancedLendingOrderCard({
         }
         if (!marketPrice) return LoanValue.ZERO;
         return LoanValue.fromPrice(marketPrice, maturity, calculationDate);
-    }, [maturity, unitPrice, marketPrice, calculationDate]);
+    }, [maturity, unitPrice, unitPriceExists, marketPrice, calculationDate]);
 
     const unitPriceValue = useMemo(() => {
         if (!maturity) return undefined;
-        if (unitPrice !== undefined) {
-            if (unitPriceExists) {
-                return unitPrice.toString();
-            } else {
-                return undefined;
-            }
+        if (!unitPriceExists) {
+            return undefined;
+        } else if (unitPrice !== undefined) {
+            return unitPrice.toString();
         }
         if (!marketPrice) return undefined;
         if (!isConnected) return undefined;
@@ -236,7 +235,7 @@ export function AdvancedLendingOrderCard({
     const handleInputChange = (v: string) => {
         const inputValue = amountFormatterToBase[currency](Number(v));
 
-        dispatch(setAmount(inputValue.toString()));
+        dispatch(setAmount(v === '' ? '' : inputValue.toString()));
         const available =
             side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
         if (available > 0) {
@@ -446,9 +445,13 @@ export function AdvancedLendingOrderCard({
                     <OrderInputBox
                         field='Amount'
                         unit={currency}
-                        initialValue={amountFormatterFromBase[currency](
-                            amount
-                        ).toString()}
+                        initialValue={
+                            amountExists
+                                ? amountFormatterFromBase[currency](
+                                      amount
+                                  ).toString()
+                                : ''
+                        }
                         onValueChange={v =>
                             handleInputChange((v as string) ?? '')
                         }
