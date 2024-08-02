@@ -139,7 +139,7 @@ export const PortfolioManagement = () => {
         address,
         positions?.positions || []
     ).map(({ data }) => data);
-    const { openMarkets } = useMarketLists();
+    const { allMarkets } = useMarketLists();
 
     const zcBonds = useMemo(() => {
         const lendingPositions = positions?.positions.filter(
@@ -152,8 +152,8 @@ export const PortfolioManagement = () => {
             const currency = hexToCurrencySymbol(position.currency);
 
             if (currency) {
-                const targetMarkets = openMarkets.filter(
-                    openMarket => openMarket.currency === position.currency
+                const targetMarkets = allMarkets.filter(
+                    market => market.currency === position.currency
                 );
                 const hasGenesisValue =
                     targetMarkets.length > 0 &&
@@ -196,7 +196,7 @@ export const PortfolioManagement = () => {
         });
 
         return zcBonds;
-    }, [positions, genesisValues, openMarkets]);
+    }, [positions, genesisValues, allMarkets]);
 
     const sortedOrderHistory = useMemo(() => {
         return (userOrderHistory.data?.orders ?? [])
