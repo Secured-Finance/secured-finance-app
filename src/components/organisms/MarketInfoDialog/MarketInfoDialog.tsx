@@ -58,11 +58,7 @@ export const MarketInfoDialog = ({
     }, [maturity]);
 
     return (
-        <Dialog
-            open={isOpen}
-            onClose={onClose}
-            className='relative z-[31] laptop:hidden'
-        >
+        <Dialog open={isOpen} onClose={onClose} className='relative z-[31]'>
             <div className='fixed inset-0 bg-backgroundBlur backdrop-blur-sm' />
             <div className='fixed inset-0 flex items-center justify-center'>
                 <Dialog.Panel className='flex w-[79%] min-w-[295px] flex-col gap-3 rounded-xl border border-neutral-600 bg-neutral-900 p-5'>
@@ -73,7 +69,7 @@ export const MarketInfoDialog = ({
                         </h2>
                         <button
                             className='flex h-8 w-8 items-center justify-center rounded-full border border-neutral-600'
-                            onClick={() => onClose()}
+                            onClick={onClose}
                         >
                             <XMarkIcon className='h-4 w-4 text-neutral-50' />
                         </button>

@@ -1,9 +1,12 @@
-import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
+import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
 import { WithGraphClient, withWalletProvider } from '.storybook/decorators';
 import type { Meta } from '@storybook/react';
 import { StoryFn } from '@storybook/react';
-import { userEvent, within } from '@storybook/testing-library';
-import { currencyList, maturityOptions } from 'src/stories/mocks/fixtures';
+import {
+    currencyList,
+    dailyMarketStats,
+    maturityOptions,
+} from 'src/stories/mocks/fixtures';
 import { mockDailyVolumes, mockTrades } from 'src/stories/mocks/queries';
 import { LoanValue } from 'src/utils/entities';
 import { AdvancedLendingTopBar } from '.';
@@ -33,6 +36,7 @@ export default {
             type: 'block',
         },
         currencyPrice: '$4.05',
+        marketInfo: dailyMarketStats,
     },
     parameters: {
         apolloClient: {
@@ -50,16 +54,3 @@ const Template: StoryFn<typeof AdvancedLendingTopBar> = args => (
 );
 
 export const Default = Template.bind({});
-
-export const MarketInfoDialog = Template.bind({});
-MarketInfoDialog.parameters = {
-    chromatic: { viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET] },
-    viewport: {
-        defaultViewport: 'mobile',
-    },
-};
-MarketInfoDialog.play = async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const button = await canvas.findByTestId('market-info-btn');
-    await userEvent.click(button);
-};

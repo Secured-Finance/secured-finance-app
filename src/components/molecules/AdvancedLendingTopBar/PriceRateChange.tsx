@@ -4,7 +4,7 @@ import { percentFormat } from 'src/utils';
 
 const StaticRateDisplay = ({ value }: { value: string }) => {
     return (
-        <div className='flex flex-col items-center gap-1 laptop:flex-row'>
+        <div className='flex flex-col items-end gap-1 laptop:flex-row laptop:items-center'>
             <span>{value}</span>
             <span>({value})</span>
         </div>
@@ -51,8 +51,6 @@ export const PriceRateChange = ({
     let percentageChange: number;
     let ratePercentageChange: number;
 
-    console.log('isIncreased', isIncreased);
-
     if (isIncreased) {
         if (priceLow === 0 || rateLowParsed === 0) {
             return <StaticRateDisplay value={invalidPercentage} />;
@@ -69,15 +67,16 @@ export const PriceRateChange = ({
 
     const formattedPercentage = percentFormat(percentageChange, 100, 2, 2);
 
+    const isZeroChange = percentageChange === 0;
     const isZeroAPR = ratePercentageChange === 0;
     const isDecreasedAPR = ratePercentageChange.toString().includes('-');
 
     return (
-        <div className='flex flex-col items-center gap-1 laptop:flex-row'>
+        <div className='flex flex-col items-end gap-1 laptop:flex-row laptop:items-center'>
             <span
                 className={clsx({
-                    'text-success-300': isIncreased === true,
-                    'text-error-300': isIncreased === false,
+                    'text-success-300': isIncreased === true && !isZeroChange,
+                    'text-error-300': isIncreased === false && !isZeroChange,
                 })}
             >
                 {isIncreased && '+'}
@@ -89,7 +88,8 @@ export const PriceRateChange = ({
                     'text-error-300': isDecreasedAPR === true && !isZeroAPR,
                 })}
             >
-                ({ratePercentageChange.toFixed(2)}% APR)
+                ({!isDecreasedAPR && !isZeroAPR && '+'}
+                {ratePercentageChange.toFixed(2)}% APR)
             </span>
         </div>
     );

@@ -15,9 +15,7 @@ import {
     useBlockExplorerUrl,
     useHandleContractTransaction,
     useIsUnderCollateralThreshold,
-    useLastPricesPerMarket,
 } from 'src/hooks';
-import useSF from 'src/hooks/useSecuredFinance';
 import { OrderType, PlaceOrderFunction } from 'src/types';
 import {
     AddressUtils,
@@ -135,15 +133,6 @@ export const PlaceOrder = ({
         }
     };
 
-    const securedFinance = useSF();
-    const currentChainId = securedFinance?.config.chain.id;
-
-    const { updateLastPricesPerMarket } = useLastPricesPerMarket(
-        maturity.toNumber(),
-        orderAmount.currency,
-        currentChainId
-    );
-
     const { blockExplorerUrl } = useBlockExplorerUrl();
     const handleContractTransaction = useHandleContractTransaction();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
@@ -205,9 +194,6 @@ export const PlaceOrder = ({
                 } else {
                     setTxHash(tx);
 
-                    updateLastPricesPerMarket(unitPrice, Date.now());
-                    // save to localStorage: ccy, maturity, chainId, amount, unitPrice
-
                     track(OrderEvents.ORDER_PLACED, {
                         [OrderProperties.ORDER_SIDE]:
                             side === OrderSide.BORROW ? 'Borrow' : 'Lend',
@@ -229,13 +215,7 @@ export const PlaceOrder = ({
                 dispatch({ type: 'error' });
             }
         },
-        [
-            onPlaceOrder,
-            handleContractTransaction,
-            orderType,
-            orderAmount.value,
-            updateLastPricesPerMarket,
-        ]
+        [onPlaceOrder, handleContractTransaction, orderType, orderAmount.value]
     );
 
     const onClick = useCallback(
