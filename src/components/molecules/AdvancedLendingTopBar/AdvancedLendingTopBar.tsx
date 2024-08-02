@@ -166,7 +166,7 @@ export const AdvancedLendingTopBar = ({
                             </div>
                             <div className='flex w-[16%] flex-col px-3 desktop:w-[13%]'>
                                 <MarketTab
-                                    name='Last Price'
+                                    name='Last Price (APR)'
                                     value={`${formatLoanValue(
                                         lastLoanValue,
                                         'price'

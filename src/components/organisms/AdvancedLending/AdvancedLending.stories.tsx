@@ -31,9 +31,9 @@ export default {
         apolloClient: {
             mocks: [
                 ...mockTrades,
+                ...mockDailyVolumes,
                 ...mockFilteredUserTransactionHistory,
                 ...mockFilteredUserOrderHistory,
-                ...mockDailyVolumes,
             ],
         },
         ...RESPONSIVE_PARAMETERS,
