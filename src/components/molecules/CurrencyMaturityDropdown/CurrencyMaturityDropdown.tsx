@@ -101,10 +101,6 @@ export const CurrencyMaturityDropdown = ({
             const { column, direction } = sortState;
 
             return options.sort((a, b) => {
-                if (a.isFavourite !== b.isFavourite) {
-                    return b.isFavourite ? 1 : -1;
-                }
-
                 if (column) {
                     let aValue, bValue;
 
