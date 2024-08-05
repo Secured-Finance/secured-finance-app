@@ -105,8 +105,8 @@ export const CurrencyMaturityDropdown = ({
                     let aValue, bValue;
 
                     if (column === 'apr') {
-                        aValue = parseFloat(a.apr.replace('%', '')) || 0;
-                        bValue = parseFloat(b.apr.replace('%', '')) || 0;
+                        aValue = parseFloat(a.apr?.replace('%', '')) || 0;
+                        bValue = parseFloat(b.apr?.replace('%', '')) || 0;
                     } else if (column === 'maturity') {
                         aValue = a.maturity;
                         bValue = b.maturity;
@@ -286,7 +286,7 @@ export const CurrencyMaturityDropdown = ({
                         />
                     </Menu.Button>
                     {isDropdownOpen && (
-                        <Menu.Items className='absolute -top-3 left-0 z-[29] flex h-full w-full flex-col gap-3 overflow-hidden border-t-4 border-primary-500 bg-neutral-800 px-4 pt-3 laptop:left-auto laptop:top-auto laptop:mt-1.5 laptop:h-auto laptop:w-[779px] laptop:rounded-xl laptop:border laptop:border-neutral-600 laptop:bg-neutral-900 laptop:px-0'>
+                        <Menu.Items className='absolute -top-3 left-0 z-[25] flex h-full w-full flex-col gap-3 overflow-hidden border-t-4 border-primary-500 bg-neutral-800 px-4 pt-3 laptop:left-auto laptop:top-auto laptop:mt-1.5 laptop:h-auto laptop:w-[779px] laptop:rounded-xl laptop:border laptop:border-neutral-600 laptop:bg-neutral-900 laptop:px-0'>
                             <header className='flex items-center justify-between text-neutral-50 laptop:hidden'>
                                 <div className='flex items-center gap-1'>
                                     <MagnifyingGlassIcon className='h-5 w-5' />
