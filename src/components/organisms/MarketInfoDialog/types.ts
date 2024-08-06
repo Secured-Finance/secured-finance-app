@@ -10,4 +10,6 @@ export interface MarketInfoDialogProps {
     currencyPrice: string;
     dailyStats?: DailyMarketInfo;
     lastLoanValue?: LoanValue;
+    percentageChange: number | null;
+    aprChange: number | null;
 }

@@ -1,5 +1,6 @@
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
+import { TransactionCandleStick } from '@secured-finance/sf-graph-client/dist/graphclients/development/.graphclient';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
@@ -15,6 +16,7 @@ import {
 import { MarketInfoDialog } from 'src/components/organisms';
 import { useGraphClientHook, useIsSubgraphSupported } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
+import { HistoricalDataIntervals } from 'src/types';
 import {
     CurrencySymbol,
     formatLoanValue,
@@ -58,6 +60,99 @@ export const AdvancedLendingTopBar = ({
         'transactionHistory',
         !isSubgraphSupported,
         true
+    );
+
+    const historicalTradeData = useGraphClientHook(
+        {
+            interval: HistoricalDataIntervals['5M'],
+            currency: toBytes32(selectedAsset?.value as CurrencySymbol),
+            maturity: maturity,
+        },
+        queries.TransactionCandleStickDocument
+    );
+
+    const getDailyPriceChange = useCallback(
+        (
+            data?: Pick<
+                TransactionCandleStick,
+                | 'maturity'
+                | 'currency'
+                | 'interval'
+                | 'timestamp'
+                | 'open'
+                | 'close'
+                | 'high'
+                | 'low'
+                | 'average'
+                | 'volume'
+                | 'volumeInFV'
+            >[]
+        ) => {
+            if (!data || data.length === 0)
+                return { percentageChange: null, aprChange: null };
+
+            const sortedData = [...data].sort(
+                (a, b) => +b.timestamp - +a.timestamp
+            );
+
+            const latestTimestamp = parseInt(sortedData[0].timestamp);
+
+            // Get today's 12 AM timestamp
+            const todayMidnight = new Date();
+            todayMidnight.setHours(0, 0, 0, 0);
+            const todayMidnightTimestamp = Math.floor(
+                todayMidnight.getTime() / 1000
+            );
+
+            // Today's bond price
+            let todaysLoanValue = null;
+            for (const entry of sortedData) {
+                if (+entry.timestamp >= todayMidnightTimestamp) {
+                    const price = parseFloat(entry.average);
+                    todaysLoanValue = LoanValue.fromPrice(price, maturity);
+                    break;
+                }
+            }
+
+            // Get 24 hours ago timestamp
+            const yesterdayTimestamp = latestTimestamp - 24 * 60 * 60;
+
+            // Find the price from 24 hours ago
+            let prevLoanValue = null;
+            for (const entry of sortedData) {
+                if (+entry.timestamp <= yesterdayTimestamp) {
+                    const price = parseFloat(entry.average);
+                    prevLoanValue = LoanValue.fromPrice(price, maturity);
+                    break;
+                }
+            }
+
+            const todaysPrice = todaysLoanValue?.price;
+            const prevPrice = prevLoanValue?.price;
+
+            const todaysAPR = todaysLoanValue?.apr.toNormalizedNumber();
+            const prevAPR = prevLoanValue?.apr.toNormalizedNumber();
+
+            if (
+                todaysPrice === undefined ||
+                prevPrice === undefined ||
+                todaysAPR === undefined ||
+                prevAPR === undefined
+            ) {
+                return { percentageChange: null, aprChange: null };
+            }
+
+            const percentageChange =
+                ((todaysPrice - prevPrice) / prevPrice) * 100;
+            const aprChange = todaysAPR - prevAPR;
+
+            return { percentageChange, aprChange };
+        },
+        [maturity]
+    );
+
+    const { percentageChange, aprChange } = getDailyPriceChange(
+        historicalTradeData?.data?.transactionCandleSticks
     );
 
     const lastLoanValue = useMemo(() => {
@@ -146,7 +241,7 @@ export const AdvancedLendingTopBar = ({
                             </div>
                         </div>
 
-                        <div className='hidden justify-around laptop:flex laptop:w-[75%] laptop:items-center laptop:p-4 desktop:gap-3.5'>
+                        <div className='hidden justify-around laptop:flex laptop:w-[75%] laptop:items-center laptop:px-7 laptop:py-4 desktop:gap-3.5'>
                             <div className='flex w-[20%] flex-col desktop:w-[15%]'>
                                 <span className='typography-caption-2 text-neutral-400'>
                                     Mark Price (APR)
@@ -181,7 +276,8 @@ export const AdvancedLendingTopBar = ({
                                     name='24h Price Change (APR)'
                                     value={
                                         <PriceRateChange
-                                            marketInfo={marketInfo}
+                                            percentageChange={percentageChange}
+                                            aprChange={aprChange}
                                         />
                                     }
                                 />
@@ -256,6 +352,8 @@ export const AdvancedLendingTopBar = ({
                 currencyPrice={currencyPrice || '0'}
                 dailyStats={marketInfo}
                 lastLoanValue={lastLoanValue}
+                percentageChange={percentageChange}
+                aprChange={aprChange}
             />
         </>
     );

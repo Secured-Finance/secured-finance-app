@@ -373,7 +373,6 @@ export const AdvancedLending = ({
                                           tradeHistoryDetails.min,
                                           'rate'
                                       ),
-                                      isIncreased: tradeHistoryDetails.minFirst,
                                   }
                                 : undefined
                         }
