@@ -1,6 +1,4 @@
 import clsx from 'clsx';
-import { DailyMarketInfo } from 'src/types';
-import { percentFormat } from 'src/utils';
 
 const StaticRateDisplay = ({ value }: { value: string }) => {
     return (
@@ -12,84 +10,50 @@ const StaticRateDisplay = ({ value }: { value: string }) => {
 };
 
 export const PriceRateChange = ({
-    marketInfo,
+    percentageChange,
+    aprChange,
 }: {
-    marketInfo?: DailyMarketInfo;
+    percentageChange: number | null;
+    aprChange: number | null;
 }) => {
-    const invalidPercentage = '-.--%';
-    if (!marketInfo) {
-        return <StaticRateDisplay value={invalidPercentage} />;
+    if (!percentageChange || !aprChange) {
+        return <StaticRateDisplay value='-.--%' />;
     }
 
-    const { high, low, rateHigh, rateLow, isIncreased } = marketInfo;
+    let percentageChangeDisplay = '';
+    let aprChangeDisplay = '';
 
-    if (!high || !low || !rateHigh || !rateLow || isIncreased === undefined) {
-        return <StaticRateDisplay value={invalidPercentage} />;
+    if (percentageChange > 0) {
+        percentageChangeDisplay = `+${percentageChange.toFixed(2)}%`;
+    }
+    if (percentageChange < 0) {
+        percentageChangeDisplay = `${percentageChange.toFixed(2)}%`;
     }
 
-    const priceHigh = parseFloat(high);
-    const priceLow = parseFloat(low);
-    const rateHighParsed = parseFloat(rateHigh);
-    const rateLowParsed = parseFloat(rateLow);
-
-    if (
-        Number.isNaN(priceHigh) ||
-        Number.isNaN(priceLow) ||
-        Number.isNaN(rateHighParsed) ||
-        Number.isNaN(rateLowParsed)
-    ) {
-        return <StaticRateDisplay value={invalidPercentage} />;
+    if (aprChange > 0) {
+        aprChangeDisplay = `+${aprChange.toFixed(2)}%`;
     }
-
-    const bothPricesZero = priceHigh === 0 && priceLow === 0;
-    const bothRatesZero = rateHighParsed === 0 && rateLowParsed === 0;
-
-    if (bothPricesZero || bothRatesZero) {
-        return <StaticRateDisplay value='0.00%' />;
+    if (aprChange < 0) {
+        aprChangeDisplay = `${aprChange.toFixed(2)}%`;
     }
-
-    let percentageChange: number;
-    let ratePercentageChange: number;
-
-    if (isIncreased) {
-        if (priceLow === 0 || rateLowParsed === 0) {
-            return <StaticRateDisplay value={invalidPercentage} />;
-        }
-        percentageChange = ((priceHigh - priceLow) / priceLow) * 100;
-        ratePercentageChange = rateHighParsed - rateLowParsed;
-    } else {
-        if (priceHigh === 0 || rateHighParsed === 0) {
-            return <StaticRateDisplay value={invalidPercentage} />;
-        }
-        percentageChange = ((priceLow - priceHigh) / priceHigh) * 100;
-        ratePercentageChange = rateLowParsed - rateHighParsed;
-    }
-
-    const formattedPercentage = percentFormat(percentageChange, 100, 2, 2);
-
-    const isZeroChange = percentageChange === 0;
-    const isZeroAPR = ratePercentageChange === 0;
-    const isDecreasedAPR = ratePercentageChange.toString().includes('-');
 
     return (
         <div className='flex flex-col items-end gap-1 laptop:flex-row laptop:items-center'>
             <span
                 className={clsx({
-                    'text-success-300': isIncreased === true && !isZeroChange,
-                    'text-error-300': isIncreased === false && !isZeroChange,
+                    'text-success-300': percentageChange > 0,
+                    'text-error-300': percentageChange < 0,
                 })}
             >
-                {isIncreased && '+'}
-                {formattedPercentage}
+                {percentageChangeDisplay}
             </span>
             <span
                 className={clsx({
-                    'text-success-300': isDecreasedAPR === false && !isZeroAPR,
-                    'text-error-300': isDecreasedAPR === true && !isZeroAPR,
+                    'text-success-300': aprChange > 0,
+                    'text-error-300': aprChange < 0,
                 })}
             >
-                ({!isDecreasedAPR && !isZeroAPR && '+'}
-                {ratePercentageChange.toFixed(2)}% APR)
+                ({aprChangeDisplay} APR)
             </span>
         </div>
     );

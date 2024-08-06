@@ -1170,5 +1170,4 @@ export const dailyMarketStats = {
     volumeInUSD: usdFormat(2152),
     rateHigh: '11.84%',
     rateLow: '18.46%',
-    isIncreased: true,
 };
