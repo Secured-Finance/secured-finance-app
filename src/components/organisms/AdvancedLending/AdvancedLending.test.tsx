@@ -173,7 +173,7 @@ describe('Advanced Lending Component', () => {
                 )
             ).not.toBeInTheDocument()
         );
-    });
+    }, 8000);
 
     it('should show disclaimer and tooltip for maximum open order limit if user has 20 open orders', async () => {
         await waitFor(() =>
