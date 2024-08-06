@@ -31,6 +31,7 @@ import { RootState } from 'src/store/types';
 import {
     getAmplitudeApiKey,
     getGraphqlServerUrl,
+    getSubgraphUrl,
     getSupportedChainIds,
     getSupportedNetworks,
     getWalletConnectId,
@@ -157,15 +158,22 @@ function App({ Component, pageProps }: AppProps) {
 }
 
 const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const currentNetwork = useSelector((state: RootState) =>
-        selectNetworkName(state)
-    );
+    const { network, chainId } = useSelector((state: RootState) => ({
+        network: selectNetworkName(state),
+        chainId: state.blockchain.chainId,
+    }));
+
+    const subgraphUrl = getSubgraphUrl(chainId);
 
     const client = new ApolloClient({
         link: ApolloLink.split(
             operation => operation.getContext().type === 'point-dashboard',
             authLink.concat(httpLink),
-            new GraphApolloClient({ network: currentNetwork }).link
+            subgraphUrl
+                ? createHttpLink({
+                      uri: subgraphUrl,
+                  })
+                : new GraphApolloClient({ network }).link
         ),
         cache: new InMemoryCache(),
     });
@@ -174,7 +182,7 @@ const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <CookiesProvider>
             <NextUIProvider>
                 <QueryClientProvider client={queryClient}>
-                    <GraphClientProvider network={currentNetwork}>
+                    <GraphClientProvider network={network}>
                         <ApolloProvider client={client}>
                             <WagmiConfig config={config}>
                                 <SecuredFinanceProvider>
