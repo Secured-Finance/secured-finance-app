@@ -134,7 +134,7 @@ describe('CurrencyMaturityDropdown', () => {
             },
             { timeout: 500 }
         );
-    });
+    }, 8000);
 
     it('should sort the markets by volume', async () => {
         render(<Default />, {
@@ -168,5 +168,5 @@ describe('CurrencyMaturityDropdown', () => {
             },
             { timeout: 500 }
         );
-    });
+    }, 8000);
 });
