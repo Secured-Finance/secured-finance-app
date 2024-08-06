@@ -18,5 +18,6 @@ describe('useMarketList', () => {
         await waitFor(() =>
             expect(result.current.itayoseMarkets).toHaveLength(4)
         );
+        await waitFor(() => expect(result.current.allMarkets).toHaveLength(36));
     });
 });
