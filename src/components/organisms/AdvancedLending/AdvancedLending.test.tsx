@@ -157,7 +157,14 @@ describe('Advanced Lending Component', () => {
         );
 
         fireEvent.click(screen.getByRole('button', { name: 'WFIL-DEC2022' }));
-        fireEvent.click(screen.getByRole('row', { name: 'WFIL-MAR2023' }));
+
+        await waitFor(() => {
+            expect(
+                screen.getByRole('row', { name: 'USDC-DEC2022' })
+            ).toBeInTheDocument();
+        });
+
+        fireEvent.click(screen.getByRole('row', { name: 'USDC-DEC2022' }));
 
         await waitFor(() =>
             expect(

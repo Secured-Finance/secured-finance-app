@@ -44,7 +44,7 @@ export const CurrencyMaturityDropdown = ({
     const isTablet = useBreakpoint('laptop');
     const [searchValue, setSearchValue] = useState<string>('');
     const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
-    const [isFavourites, setIsFavourites] = useState<boolean>(false);
+    const [isFavorites, setIsFavorites] = useState<boolean>(false);
     const { address } = useAccount();
     const [savedMarkets, setSavedMarkets] = useState(() => {
         return readMarketsFromStore();
@@ -100,30 +100,32 @@ export const CurrencyMaturityDropdown = ({
         (options: any[]) => {
             const { column, direction } = sortState;
 
-            if (!column) {
-                return options;
-            }
-
             return options.sort((a, b) => {
-                let aValue, bValue;
+                if (column) {
+                    let aValue, bValue;
 
-                if (column === 'apr') {
-                    aValue = parseFloat(a.apr.replace('%', ''));
-                    bValue = parseFloat(b.apr.replace('%', ''));
-                } else if (column === 'maturity') {
-                    aValue = a.maturity;
-                    bValue = b.maturity;
-                } else {
-                    aValue = a[column];
-                    bValue = b[column];
+                    if (column === 'apr') {
+                        aValue = parseFloat(a.apr?.replace('%', '')) || 0;
+                        bValue = parseFloat(b.apr?.replace('%', '')) || 0;
+                    } else if (column === 'maturity') {
+                        aValue = a.maturity;
+                        bValue = b.maturity;
+                    } else if (column === 'volume') {
+                        aValue = a.volume || BigInt(0);
+                        bValue = b.volume || BigInt(0);
+                    } else {
+                        aValue = a[column];
+                        bValue = b[column];
+                    }
+
+                    if (aValue < bValue) {
+                        return direction === 'ascending' ? -1 : 1;
+                    }
+                    if (aValue > bValue) {
+                        return direction === 'ascending' ? 1 : -1;
+                    }
                 }
 
-                if (aValue < bValue) {
-                    return direction === 'ascending' ? -1 : 1;
-                }
-                if (aValue > bValue) {
-                    return direction === 'ascending' ? 1 : -1;
-                }
                 return 0;
             });
         },
@@ -139,10 +141,16 @@ export const CurrencyMaturityDropdown = ({
         let options = currencyList.flatMap(currency => {
             return maturityList
                 .map(maturity => {
-                    const marketLabel = `${currency.label}-${maturity.label}`;
-                    const marketKey = `${currency.value}-${maturity.value}`;
                     const data =
                         lendingMarkets[currency.value]?.[+maturity.value];
+
+                    if (data?.isMatured || !data?.isActive) {
+                        return null;
+                    }
+
+                    const marketLabel = `${currency.label}-${maturity.label}`;
+                    const marketKey = `${currency.value}-${maturity.value}`;
+
                     const isItayoseOption =
                         data?.isItayosePeriod || data?.isPreOrderPeriod;
                     const volumeInUSD = volumePerMarket[marketKey];
@@ -179,7 +187,7 @@ export const CurrencyMaturityDropdown = ({
                             !marketLabel
                                 .toLowerCase()
                                 .includes(searchValue.toLowerCase())) ||
-                        (isFavourites && !isFavourite)
+                        (isFavorites && !isFavourite)
                     ) {
                         return null;
                     }
@@ -212,7 +220,7 @@ export const CurrencyMaturityDropdown = ({
         searchValue,
         savedMarkets,
         address,
-        isFavourites,
+        isFavorites,
         currentChainId,
         volumePerMarket,
     ]);
@@ -278,7 +286,7 @@ export const CurrencyMaturityDropdown = ({
                         />
                     </Menu.Button>
                     {isDropdownOpen && (
-                        <Menu.Items className='absolute -top-3 left-0 z-[29] flex h-full w-full flex-col gap-3 overflow-hidden border-t-4 border-primary-500 bg-neutral-800 px-4 pt-3 laptop:left-auto laptop:top-auto laptop:mt-1.5 laptop:h-auto laptop:w-[779px] laptop:rounded-xl laptop:border laptop:border-neutral-600 laptop:bg-neutral-900 laptop:px-0'>
+                        <Menu.Items className='absolute -top-3 left-0 z-[25] flex h-full w-full flex-col gap-3 overflow-hidden border-t-4 border-primary-500 bg-neutral-800 px-4 pt-3 laptop:left-auto laptop:top-auto laptop:mt-1.5 laptop:h-auto laptop:w-[779px] laptop:rounded-xl laptop:border laptop:border-neutral-600 laptop:bg-neutral-900 laptop:px-0'>
                             <header className='flex items-center justify-between text-neutral-50 laptop:hidden'>
                                 <div className='flex items-center gap-1'>
                                     <MagnifyingGlassIcon className='h-5 w-5' />
@@ -315,8 +323,8 @@ export const CurrencyMaturityDropdown = ({
                                     isItayose={isItayose}
                                     setCurrentCurrency={setCurrentCurrency}
                                     setIsItayose={setIsItayose}
-                                    isFavourites={isFavourites}
-                                    setIsFavourites={setIsFavourites}
+                                    isFavorites={isFavorites}
+                                    setIsFavorites={setIsFavorites}
                                 />
                             </div>
 

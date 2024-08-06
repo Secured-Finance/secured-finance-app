@@ -5,8 +5,8 @@ export const mobileColumns = [
         width: '50%',
     },
     {
-        key: 'last-prices-mobile',
-        label: 'Last Price (APR)',
+        key: 'mark-prices-mobile',
+        label: 'Mark Price (APR)',
         width: '50%',
     },
 ];
@@ -18,8 +18,8 @@ export const desktopColumns = [
         width: '25%',
     },
     {
-        key: 'last-prices',
-        label: 'Last Price (APR)',
+        key: 'mark-prices',
+        label: 'Mark Price',
         width: '20%',
     },
     {
