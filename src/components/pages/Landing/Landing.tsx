@@ -69,7 +69,11 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
         lendingContracts,
         market => market.isOpened
     );
-    const allMaturityOptions = useMaturityOptions(lendingContracts);
+
+    const nonMaturedMarketOptionList = useMaturityOptions(
+        lendingContracts,
+        market => !market.isMatured
+    );
 
     const securedFinance = useSF();
     const currentChainId = securedFinance?.config.chain.id;
@@ -135,6 +139,7 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
             >
                 {view === 'Simple' ? (
                     <div className='mt-6 flex flex-row items-center justify-center px-3 tablet:px-5 laptop:px-0'>
+                        {/* TODO: pass not matured markets to LendingCard when simple UI redesign is ready */}
                         <LendingCard
                             collateralBook={collateralBook}
                             maturitiesOptionList={maturityOptionList}
@@ -153,7 +158,7 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
                 ) : (
                     <AdvancedLending
                         collateralBook={collateralBook}
-                        maturitiesOptionList={allMaturityOptions}
+                        maturitiesOptionList={nonMaturedMarketOptionList}
                         marketPrice={marketPrice}
                         delistedCurrencySet={delistedCurrencySet}
                     />

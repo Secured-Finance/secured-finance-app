@@ -183,9 +183,10 @@ export const Itayose = () => {
     const marketPhase = useMarketPhase(currency, maturity);
     const data = useMarket(currency, maturity);
 
-    // all maturity options
-    // handle select in CurrencyMaturityTable
-    const maturityOptionList = useMaturityOptions(lendingContracts);
+    const maturityOptionList = useMaturityOptions(
+        lendingContracts,
+        market => !market.isMatured
+    );
 
     const {
         rates,
