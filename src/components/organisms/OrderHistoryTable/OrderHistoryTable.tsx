@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { useMemo } from 'react';
 import { HorizontalListItemTable } from 'src/components/atoms';
 import {
-    CoreTable,
+    CompactCoreTable,
     Pagination,
     TableActionMenu,
     TableCardHeader,
@@ -23,6 +23,7 @@ import {
     inputAmountColumnDefinition,
     inputPriceYieldColumnDefinition,
     loanTypeColumnDefinition,
+    priceYieldColumnDefinition,
     tableHeaderDefinition,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
@@ -121,10 +122,12 @@ export const OrderHistoryTable = ({
     data,
     pagination,
     variant = 'default',
+    isLoading,
 }: {
     data: OrderHistoryList;
     pagination?: Pagination;
     variant?: 'compact' | 'default';
+    isLoading?: boolean;
 }) => {
     const { data: priceList } = useLastPrices();
     const isTablet = useBreakpoint('laptop');
@@ -147,6 +150,14 @@ export const OrderHistoryTable = ({
                 'Price',
                 'price',
                 row => row.inputUnitPrice
+            ),
+            priceYieldColumnDefinition(
+                columnHelper,
+                'APR%',
+                'yield',
+                row => row.inputUnitPrice,
+                'compact',
+                'rate'
             ),
             inputAmountColumnDefinition(
                 columnHelper,
@@ -213,7 +224,7 @@ export const OrderHistoryTable = ({
                         </div>
                     );
                 },
-                header: () => <div className='p-2'>Actions</div>,
+                header: () => <div className='px-2'>Actions</div>,
             }),
         ],
         [blockExplorerUrl, priceList, variant]
@@ -225,16 +236,14 @@ export const OrderHistoryTable = ({
             blockExplorerUrl={blockExplorerUrl}
         />
     ) : (
-        <CoreTable
+        <CompactCoreTable
             columns={columns}
             data={data}
             options={{
                 name: 'order-history-table',
-                stickyFirstColumn: true,
                 pagination: pagination,
-                border: false,
-                compact: true,
             }}
+            isLoading={isLoading}
         />
     );
 };

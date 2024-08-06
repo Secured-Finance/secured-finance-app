@@ -21,7 +21,7 @@ import {
     OrderHistoryTable,
     OrderTable,
 } from 'src/components/organisms';
-import { TabSpinner, TableType } from 'src/components/pages';
+import { TableType } from 'src/components/pages';
 import { ThreeColumnsWithTopBar } from 'src/components/templates';
 import {
     CollateralBook,
@@ -488,32 +488,26 @@ export const AdvancedLending = ({
                                 variant='compact'
                             />
                             <OrderTable data={filteredOrderList} height={350} />
-                            {userOrderHistory.loading ? (
-                                <TabSpinner />
-                            ) : (
-                                <OrderHistoryTable
-                                    data={sortedOrderHistory}
-                                    pagination={{
-                                        totalData: sortedOrderHistory.length,
-                                        getMoreData: () => {},
-                                        containerHeight: 350,
-                                    }}
-                                    variant='compact'
-                                />
-                            )}
-                            {userTransactionHistory.loading ? (
-                                <TabSpinner />
-                            ) : (
-                                <MyTransactionsTable
-                                    data={myTransactions}
-                                    pagination={{
-                                        totalData: myTransactions.length,
-                                        getMoreData: () => {},
-                                        containerHeight: 350,
-                                    }}
-                                    variant='compact'
-                                />
-                            )}
+                            <OrderHistoryTable
+                                data={sortedOrderHistory}
+                                pagination={{
+                                    totalData: sortedOrderHistory.length,
+                                    getMoreData: () => {},
+                                    containerHeight: 350,
+                                }}
+                                variant='compact'
+                                isLoading={userOrderHistory.loading}
+                            />
+                            <MyTransactionsTable
+                                data={myTransactions}
+                                pagination={{
+                                    totalData: myTransactions.length,
+                                    getMoreData: () => {},
+                                    containerHeight: 350,
+                                }}
+                                variant='compact'
+                                isLoading={userTransactionHistory.loading}
+                            />
                         </HorizontalTabTable>
                     </div>
                 </>

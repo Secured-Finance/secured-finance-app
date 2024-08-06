@@ -10,6 +10,7 @@ import {
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { TabSpinner } from 'src/components/pages';
 
 export interface Pagination {
     getMoreData: () => void;
@@ -43,6 +44,19 @@ const DEFAULT_OPTIONS: CoreTableOptions = {
     showHeaders: true,
     compact: false,
     stickyFirstColumn: false,
+    stickyHeader: true,
+};
+
+const COMPACT_DEFAULT_OPTIONS: CoreTableOptions = {
+    border: true,
+    name: 'core-table',
+    onLineClick: undefined,
+    hoverRow: undefined,
+    hideColumnIds: undefined,
+    responsive: true,
+    showHeaders: true,
+    compact: true,
+    stickyFirstColumn: true,
     stickyHeader: true,
 };
 
@@ -124,16 +138,16 @@ export const CoreTable = <T,>({
             {coreTableOptions.showHeaders ? (
                 <thead
                     className={clsx(
-                        'h-8 py-1.5 text-2.5 leading-5 text-neutral-300',
+                        'typography-caption-2 px-6 text-slateGray',
                         {
-                            'after:absolute after:bottom-0 after:z-20 after:w-full after:border-b after:border-neutral-600':
+                            'after:absolute after:bottom-0 after:z-20 after:w-full after:border-b after:border-white-10':
                                 coreTableOptions.border &&
                                 coreTableOptions.stickyHeader,
                             'h-14 py-4': !coreTableOptions.compact,
                             'h-5 py-1': coreTableOptions.compact,
-                            'sticky inset-0 z-20 bg-neutral-900':
+                            'sticky inset-0 z-20 bg-[#1D2739]':
                                 coreTableOptions.stickyHeader,
-                            'border-b border-neutral-600':
+                            'border-b border-white-10':
                                 coreTableOptions.border &&
                                 !coreTableOptions.stickyHeader,
                         }
@@ -149,9 +163,9 @@ export const CoreTable = <T,>({
                                     data-testid={`${coreTableOptions.name}-header-cell`}
                                     key={header.id}
                                     className={clsx(
-                                        'whitespace-nowrap text-center font-normal tablet:px-2',
+                                        'whitespace-nowrap py-2 pr-1 text-center font-bold tablet:px-1',
                                         {
-                                            'sticky left-0 z-10 bg-cardBackground after:absolute after:-right-4 after:-top-0 after:z-10 after:h-full after:w-5 after:bg-gradient-to-r after:from-black-40 after:to-transparent tablet:relative tablet:left-auto tablet:z-auto tablet:bg-transparent tablet:after:hidden':
+                                            'sticky left-0 z-10 bg-[#161E2E] after:absolute after:-right-4 after:-top-0 after:z-10 after:h-full after:w-5 after:bg-gradient-to-r after:from-black-40 after:to-transparent tablet:relative tablet:left-auto tablet:z-auto tablet:bg-transparent tablet:after:hidden':
                                                 coreTableOptions.responsive &&
                                                 columnIndex === 0 &&
                                                 coreTableOptions?.stickyFirstColumn,
@@ -176,13 +190,13 @@ export const CoreTable = <T,>({
                     isLoading(rowIndex, rows.length) ? (
                         <tr key={rowIndex} className='animate-pulse'>
                             <td colSpan={row.getVisibleCells().length}>
-                                <div className='h-5 min-w-fit bg-[#808080]/20'></div>
+                                <div className='h-7 min-w-fit bg-[#808080]/20'></div>
                             </td>
                         </tr>
                     ) : (
                         <tr
                             key={row.id}
-                            className={clsx('h-5', {
+                            className={clsx('h-7', {
                                 'cursor-pointer': coreTableOptions.hoverRow?.(
                                     row.id
                                 ),
@@ -203,14 +217,14 @@ export const CoreTable = <T,>({
                                 <td
                                     key={cell.id}
                                     className={clsx(
-                                        'min-w-fit whitespace-nowrap text-center font-medium tablet:px-4',
+                                        'min-w-fit whitespace-nowrap pr-1 text-center font-medium tablet:px-1',
                                         {
                                             'sticky left-0 z-10 bg-[#161E2E] after:absolute after:-right-4 after:-top-0 after:z-10 after:h-full after:w-5 after:bg-gradient-to-r after:from-black-40 after:to-transparent tablet:relative tablet:left-auto tablet:z-auto tablet:bg-transparent tablet:after:hidden':
                                                 coreTableOptions.responsive &&
                                                 cellIndex === 0 &&
                                                 coreTableOptions?.stickyFirstColumn,
                                             'py-2': !coreTableOptions.compact,
-                                            'pb-1': coreTableOptions.compact,
+                                            'py-1': coreTableOptions.compact,
                                         }
                                     )}
                                 >
@@ -252,6 +266,168 @@ export const CoreTable = <T,>({
             >
                 {coreTable}
             </PaginatedScrolling>
+        </div>
+    );
+};
+
+export const CompactCoreTable = <T,>({
+    data,
+    columns,
+    options = COMPACT_DEFAULT_OPTIONS,
+    isLoading = false,
+}: {
+    data: Array<T>;
+    columns: ColumnDef<T, any>[];
+    options?: Partial<CoreTableOptions>;
+    isLoading?: boolean;
+}) => {
+    const [sorting, setSorting] = useState<SortingState>([]);
+    const coreTableOptions: CoreTableOptions = {
+        ...DEFAULT_OPTIONS,
+        ...options,
+    };
+    const [hasMoreData, setHasMoreData] = useState(
+        !!coreTableOptions.pagination?.totalData &&
+            coreTableOptions.pagination?.totalData > 0
+    );
+
+    useEffect(() => {
+        if (
+            !!coreTableOptions.pagination?.totalData &&
+            coreTableOptions.pagination?.totalData > 0
+        )
+            setHasMoreData(true);
+        else {
+            setHasMoreData(false);
+        }
+    }, [coreTableOptions.pagination?.totalData]);
+
+    useEffect(() => {
+        if (
+            coreTableOptions.pagination?.totalData &&
+            data.length >= coreTableOptions.pagination.totalData
+        ) {
+            setHasMoreData(false);
+        }
+    }, [coreTableOptions.pagination?.totalData, data]);
+
+    const filteredColumns = columns.filter(column => {
+        if (
+            coreTableOptions.hideColumnIds === undefined ||
+            column.id === undefined
+        ) {
+            return true;
+        }
+        return !coreTableOptions.hideColumnIds.includes(column.id);
+    });
+
+    const configuration = {
+        data: data,
+        columns: filteredColumns,
+        getCoreRowModel: getCoreRowModel(),
+        state: {
+            sorting,
+        },
+        onSortingChange: setSorting,
+        getSortedRowModel: getSortedRowModel(),
+    };
+
+    const table = useReactTable<T>(configuration);
+
+    const rows = table.getRowModel().rows;
+
+    const coreTable = (
+        <table
+            className={clsx('w-full', {
+                'table-fixed': !coreTableOptions.responsive,
+            })}
+            data-testid={coreTableOptions.name}
+        >
+            {coreTableOptions.showHeaders ? (
+                <thead
+                    className={clsx(
+                        'sticky inset-0 z-20 h-8 bg-neutral-900 py-1.5 text-2.5 leading-5 text-neutral-300 after:absolute after:bottom-0 after:z-20 after:w-full after:border-b after:border-neutral-600'
+                    )}
+                >
+                    {table.getHeaderGroups().map(headerGroup => (
+                        <tr
+                            key={headerGroup.id}
+                            data-testid={`${coreTableOptions.name}-header`}
+                        >
+                            {headerGroup.headers.map(header => (
+                                <th
+                                    data-testid={`${coreTableOptions.name}-header-cell`}
+                                    key={header.id}
+                                    className='whitespace-nowrap text-center font-normal tablet:px-2'
+                                >
+                                    {header.isPlaceholder
+                                        ? null
+                                        : flexRender(
+                                              header.column.columnDef.header,
+                                              header.getContext()
+                                          )}
+                                </th>
+                            ))}
+                        </tr>
+                    ))}
+                </thead>
+            ) : null}
+
+            <tbody>
+                {rows.map(row => (
+                    <tr
+                        key={row.id}
+                        className='h-5'
+                        data-testid={`${coreTableOptions.name}-row`}
+                    >
+                        {row.getVisibleCells().map(cell => (
+                            <td
+                                key={cell.id}
+                                className={clsx(
+                                    'min-w-fit whitespace-nowrap pb-1 text-center font-medium tablet:px-4'
+                                )}
+                            >
+                                {flexRender(
+                                    cell.column.columnDef.cell,
+                                    cell.getContext()
+                                )}
+                            </td>
+                        ))}
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    );
+
+    const fetchMoreData = () => {
+        if (data.length > 0) {
+            coreTableOptions?.pagination?.getMoreData();
+        }
+    };
+
+    return (
+        <div
+            className={clsx({
+                'overflow-x-auto overflow-y-visible text-white laptop:overflow-visible':
+                    coreTableOptions.responsive,
+            })}
+        >
+            {isLoading ? (
+                <TabSpinner />
+            ) : (
+                <PaginatedScrolling
+                    data={data}
+                    fetchMoreData={fetchMoreData}
+                    hasMoreData={hasMoreData}
+                    containerHeight={
+                        coreTableOptions?.pagination?.containerHeight
+                            ? coreTableOptions.pagination.containerHeight
+                            : undefined
+                    }
+                >
+                    {coreTable}
+                </PaginatedScrolling>
+            )}
         </div>
     );
 };

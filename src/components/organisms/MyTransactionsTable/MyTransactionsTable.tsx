@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { useMemo } from 'react';
 import { HorizontalListItemTable } from 'src/components/atoms';
 import {
-    CoreTable,
+    CompactCoreTable,
     Pagination,
     TableCardHeader,
 } from 'src/components/molecules';
@@ -127,10 +127,12 @@ export const MyTransactionsTable = ({
     data,
     pagination,
     variant = 'compact',
+    isLoading = false,
 }: {
     data: TransactionHistoryList;
     pagination?: Pagination;
     variant?: 'contractOnly' | 'compact';
+    isLoading?: boolean;
 }) => {
     const isTablet = useBreakpoint('laptop');
     const columns = useMemo(
@@ -185,16 +187,14 @@ export const MyTransactionsTable = ({
     return isTablet ? (
         <MyTransactionsTableMobile data={data} />
     ) : (
-        <CoreTable
+        <CompactCoreTable
             data={data}
             columns={columns}
             options={{
                 name: 'my-transactions-table',
-                stickyFirstColumn: true,
                 pagination: pagination,
-                border: false,
-                compact: true,
             }}
+            isLoading={isLoading}
         />
     );
 };
