@@ -7,16 +7,16 @@ export const FilterButtons = ({
     isItayose,
     setCurrentCurrency,
     setIsItayose,
-    isFavourites,
-    setIsFavourites,
+    isFavorites,
+    setIsFavorites,
 }: {
     currencies?: CurrencySymbol[];
     currentCurrency: CurrencySymbol | undefined;
     isItayose: boolean;
     setCurrentCurrency: (currency: CurrencySymbol | undefined) => void;
     setIsItayose: (value: boolean) => void;
-    isFavourites: boolean;
-    setIsFavourites: (value: boolean) => void;
+    isFavorites: boolean;
+    setIsFavorites: (value: boolean) => void;
 }) => {
     const FilterBtn = ({
         onClick,
@@ -44,19 +44,17 @@ export const FilterButtons = ({
     const handleFilterClick = (
         currency?: CurrencySymbol,
         isItayose = false,
-        isFavourites = false
+        isFavorites = false
     ) => {
         setCurrentCurrency(currency);
         setIsItayose(isItayose);
-        setIsFavourites(isFavourites);
+        setIsFavorites(isFavorites);
     };
 
     return (
         <div className='flex items-center gap-[13.5px]'>
             <FilterBtn
-                activeCondition={
-                    !currentCurrency && !isItayose && !isFavourites
-                }
+                activeCondition={!currentCurrency && !isItayose && !isFavorites}
                 onClick={() => {
                     handleFilterClick();
                 }}
@@ -64,10 +62,10 @@ export const FilterButtons = ({
                 All
             </FilterBtn>
             <FilterBtn
-                activeCondition={isFavourites}
+                activeCondition={isFavorites}
                 onClick={() => handleFilterClick(undefined, false, true)}
             >
-                Favourites
+                Favorites
             </FilterBtn>
             <FilterBtn
                 activeCondition={isItayose && !currentCurrency}
