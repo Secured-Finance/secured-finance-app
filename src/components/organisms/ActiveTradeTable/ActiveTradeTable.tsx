@@ -8,7 +8,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { HorizontalListItemTable } from 'src/components/atoms';
 import {
-    CoreTable,
+    CompactCoreTable,
     MenuItem,
     TableActionMenu,
     TableCardHeader,
@@ -380,7 +380,18 @@ export const ActiveTradeTable = ({
                         : row.marketPrice,
                 'compact',
                 'price',
-                'Market Price is the volume-weighted average unit price of filled orders at the last block.'
+                'Mark Price is the volume-weighted average unit price of filled orders at the last block.'
+            ),
+            priceYieldColumnDefinition(
+                columnHelper,
+                'APR%',
+                'yield',
+                row =>
+                    isPastDate(Number(row.maturity))
+                        ? BigInt(10000)
+                        : row.marketPrice,
+                'compact',
+                'rate'
             ),
             amountColumnDefinition(
                 columnHelper,
@@ -431,7 +442,7 @@ export const ActiveTradeTable = ({
                     );
                 },
                 header: () => (
-                    <div className='flex justify-start p-2'>Actions</div>
+                    <div className='flex justify-start px-2'>Actions</div>
                 ),
             }),
         ],
@@ -453,19 +464,16 @@ export const ActiveTradeTable = ({
                     delistedCurrencySet={delistedCurrencySet}
                 />
             ) : (
-                <CoreTable
+                <CompactCoreTable
                     data={data}
                     columns={columns}
                     options={{
                         name: 'active-trade-table',
-                        stickyFirstColumn: true,
                         pagination: {
                             containerHeight: height || DEFAULT_HEIGHT,
                             getMoreData: () => {},
                             totalData: data.length,
                         },
-                        border: false,
-                        compact: true,
                     }}
                 />
             )}

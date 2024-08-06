@@ -9,7 +9,7 @@ import {
     HorizontalListItemTable,
 } from 'src/components/atoms';
 import {
-    CoreTable,
+    CompactCoreTable,
     TableActionMenu,
     TableCardHeader,
 } from 'src/components/molecules';
@@ -214,7 +214,7 @@ export const OrderTable = ({
                     );
                 },
                 header: () => (
-                    <div className='flex justify-start p-2'>Actions</div>
+                    <div className='flex justify-start px-2'>Actions</div>
                 ),
             }),
         ],
@@ -229,19 +229,16 @@ export const OrderTable = ({
                     cancelOrder={v => setRemoveOrderDialogData(v)}
                 />
             ) : (
-                <CoreTable
+                <CompactCoreTable
                     columns={columns}
                     data={data}
                     options={{
                         name: 'open-order-table',
-                        stickyFirstColumn: true,
                         pagination: {
                             containerHeight: height || DEFAULT_HEIGHT,
                             getMoreData: () => {},
                             totalData: data.length,
                         },
-                        border: false,
-                        compact: true,
                     }}
                 />
             )}
