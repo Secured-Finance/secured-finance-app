@@ -101,9 +101,9 @@ export const HorizontalTab = ({
                         />
                     </div>
                     <div
-                        className={clsx('hidden', {
-                            'horizontalTab:block': useCustomBreakpoint,
-                            'tablet:block': !useCustomBreakpoint,
+                        className={clsx('hidden gap-2', {
+                            'horizontalTab:flex': useCustomBreakpoint,
+                            'tablet:flex': !useCustomBreakpoint,
                         })}
                     >
                         {tabTitles.map((title, index) => {
