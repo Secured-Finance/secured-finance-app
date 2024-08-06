@@ -8,6 +8,11 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 const { Default } = composeStories(stories);
 
+const openDropdown = () => {
+    const button = screen.getByRole('button', { name: 'WBTC-DEC2022' });
+    fireEvent.click(button);
+};
+
 describe('CurrencyMaturityDropdown', () => {
     it('should render a selected market', () => {
         render(<Default />, {
@@ -21,8 +26,7 @@ describe('CurrencyMaturityDropdown', () => {
         render(<Default />, {
             apolloMocks: Default.parameters?.apolloClient.mocks,
         });
-        const button = screen.getByRole('button', { name: 'WBTC-DEC2022' });
-        fireEvent.click(button);
+        openDropdown();
 
         expect(
             screen.getByLabelText('Currency Maturity Dropdown')
@@ -33,8 +37,7 @@ describe('CurrencyMaturityDropdown', () => {
         render(<Default />, {
             apolloMocks: Default.parameters?.apolloClient.mocks,
         });
-        const button = screen.getByRole('button', { name: 'WBTC-DEC2022' });
-        fireEvent.click(button);
+        openDropdown();
 
         await waitFor(() => {
             const currencyFilterBtn = screen.getByLabelText('WBTC-filter-btn');
@@ -49,8 +52,7 @@ describe('CurrencyMaturityDropdown', () => {
             apolloMocks: Default.parameters?.apolloClient.mocks,
         });
 
-        const button = screen.getByRole('button', { name: 'WBTC-DEC2022' });
-        fireEvent.click(button);
+        openDropdown();
 
         const searchInput = screen.getByRole('textbox');
         fireEvent.change(searchInput, { target: { value: 'ETH' } });
@@ -86,8 +88,7 @@ describe('CurrencyMaturityDropdown', () => {
             apolloMocks: Default.parameters?.apolloClient.mocks,
         });
 
-        const button = screen.getByRole('button', { name: 'WBTC-DEC2022' });
-        fireEvent.click(button);
+        openDropdown();
 
         await waitFor(() => {
             const favouriteBtn = screen.getByLabelText(
@@ -100,5 +101,72 @@ describe('CurrencyMaturityDropdown', () => {
         expect(
             screen.getByLabelText('Remove WBTC-DEC2022 from favorites')
         ).toBeInTheDocument();
-    }, 8000);
+    });
+
+    it('should sort the markets by APR', async () => {
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
+
+        openDropdown();
+
+        const sortByAPR = screen.getByRole('columnheader', { name: 'APR' });
+        expect(sortByAPR).toBeInTheDocument();
+
+        await waitFor(() => {
+            expect(
+                screen.getByRole('heading', { name: 'WBTC-DEC2022' })
+            ).toBeInTheDocument();
+        });
+
+        const table = await screen.findByRole('grid');
+        const tbody = table.querySelector('tbody');
+
+        const getTopRow = () => tbody?.querySelectorAll('tr')[0];
+
+        expect(getTopRow()).toHaveTextContent('WBTC-DEC2022');
+
+        fireEvent.click(sortByAPR);
+
+        await waitFor(
+            () => {
+                expect(getTopRow()).toHaveTextContent('WBTC-SEP2024');
+            },
+            { timeout: 500 }
+        );
+    });
+
+    it('should sort the markets by volume', async () => {
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
+
+        openDropdown();
+
+        const sortByVol = screen.getByRole('columnheader', { name: 'Volume' });
+        expect(sortByVol).toBeInTheDocument();
+
+        await waitFor(() => {
+            expect(
+                screen.getByRole('heading', { name: 'WBTC-DEC2022' })
+            ).toBeInTheDocument();
+        });
+
+        const table = await screen.findByRole('grid');
+        const tbody = table.querySelector('tbody');
+
+        const getTopRow = () => tbody?.querySelectorAll('tr')[0];
+
+        expect(getTopRow()).not.toHaveTextContent('$3,942,000');
+
+        fireEvent.click(sortByVol);
+        fireEvent.click(sortByVol);
+
+        await waitFor(
+            () => {
+                expect(getTopRow()).toHaveTextContent('$3,942,000');
+            },
+            { timeout: 500 }
+        );
+    });
 });
