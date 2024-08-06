@@ -20,3 +20,4 @@ export * from './strings';
 export * from './tableDefinitions';
 export * from './validation';
 export * from './wallet';
+export * from './errorMessages';

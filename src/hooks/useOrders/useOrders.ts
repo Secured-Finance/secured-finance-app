@@ -48,6 +48,7 @@ export const useOrders = () => {
                 return tx;
             } catch (error) {
                 console.error(error);
+                throw error;
             }
         },
         [securedFinance]
