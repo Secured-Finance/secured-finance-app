@@ -19,7 +19,12 @@ import { useSelector } from 'react-redux';
 import { useBreakpoint, useIsSubgraphSupported } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { RootState } from 'src/store/types';
-import { calculateTimeDifference, formatDuration, usdFormat } from 'src/utils';
+import {
+    calculateTimeDifference,
+    currencyMap,
+    formatDuration,
+    usdFormat,
+} from 'src/utils';
 import { useAccount } from 'wagmi';
 import { desktopColumns, mobileColumns } from './constants';
 import { ColumnKey, ColumnType, FilteredOption } from './types';
@@ -52,12 +57,14 @@ export const CurrencyMaturityTable = ({
 
     const renderCell = useCallback(
         (option: (typeof options)[0], columnKey: ColumnKey) => {
-            const { display, isFavourite } = option;
+            const { display, isFavourite, currency } = option;
+
+            const CcyIcon = currencyMap[currency]?.icon;
 
             switch (columnKey) {
                 case 'symbol':
                     return (
-                        <h3 className='flex items-center gap-1 font-secondary'>
+                        <h3 className='flex items-center gap-1 font-secondary laptop:gap-1.5'>
                             {isConnected && (
                                 <button
                                     onClick={e => {
@@ -68,7 +75,7 @@ export const CurrencyMaturityTable = ({
                                         isFavourite ? 'Remove' : 'Add'
                                     } ${display} ${
                                         isFavourite ? 'from' : 'to'
-                                    } favourites`}
+                                    } favorites`}
                                 >
                                     {isFavourite ? (
                                         <FilledStarIcon className='h-3.5 w-3.5 text-warning-300' />
@@ -77,12 +84,15 @@ export const CurrencyMaturityTable = ({
                                     )}
                                 </button>
                             )}
-                            {display}
+                            <div className='flex items-center gap-1'>
+                                <CcyIcon className='h-4 w-4' />
+                                {display}
+                            </div>
                         </h3>
                     );
-                case 'last-prices':
+                case 'mark-prices':
                     return option.lastPrice;
-                case 'last-prices-mobile':
+                case 'mark-prices-mobile':
                     return `${option.lastPrice} (${option.apr})`;
                 case 'apr':
                     return option.apr;

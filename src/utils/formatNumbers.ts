@@ -133,6 +133,10 @@ export const formatDuration = (durationMs: number) => {
     // Format the fraction of year to two decimal places
     const fractionOfYearFormatted = fractionOfYear.toFixed(2);
 
+    const daysLeft = Math.round(durationInDays);
+
     // Return the formatted string
-    return `${fractionOfYearFormatted}Y (${Math.round(durationInDays)} days)`;
+    return `${fractionOfYearFormatted}Y (${daysLeft} ${
+        daysLeft === 1 ? 'day' : 'days'
+    })`;
 };
