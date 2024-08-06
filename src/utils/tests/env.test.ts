@@ -5,6 +5,7 @@ import {
     getEnvironment,
     getGraphqlServerUrl,
     getNonSubgraphSupportedChainIds,
+    getSubgraphUrl,
     getSupportedChainIds,
     getUsePackageVersion,
     getWalletConnectId,
@@ -148,5 +149,25 @@ describe('getGraphqlServerUrl', () => {
         expect(() => getGraphqlServerUrl()).toThrowError(
             'NEXT_PUBLIC_GRAPHQL_SERVER_URL is not set'
         );
+    });
+});
+
+describe('getSubgraphUrl', () => {
+    it('should return the value of the environment variable', () => {
+        process.env.NEXT_PUBLIC_SUBGRAPH_URL_314 = 'test';
+        const subgraphUrl = getSubgraphUrl(314);
+        expect(subgraphUrl).toBe('test');
+        expect(typeof subgraphUrl).toBe('string');
+    });
+
+    it('should return empty if variable is not set', () => {
+        delete process.env.NEXT_PUBLIC_SUBGRAPH_URL_314;
+        const subgraphUrl = getSubgraphUrl(314);
+        expect(subgraphUrl).toBe(undefined);
+    });
+
+    it('should return undefined if the input is not a supported chain', () => {
+        const subgraphUrl = getSubgraphUrl(1);
+        expect(subgraphUrl).toBe(undefined);
     });
 });
