@@ -13,13 +13,13 @@ describe('useBorrowableAmount', () => {
         );
 
         const value = result.current;
-        expect(value.data).toEqual(0);
+        expect(value.data.toString()).toEqual('0');
 
         await waitFor(() => {
             expect(mock.tokenVault.getBorrowableAmount).toHaveBeenCalledTimes(
                 1
             );
-            expect(result.current.data).toEqual(0.1);
+            expect(result.current.data.toString()).toEqual('10000000');
         });
     });
 });

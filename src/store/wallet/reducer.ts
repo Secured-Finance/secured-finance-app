@@ -12,7 +12,7 @@ const walletSlice = createSlice({
         connectWallet(state, action: PayloadAction<string>) {
             state.address = action.payload;
         },
-        updateBalance(state, action: PayloadAction<number>) {
+        updateBalance(state, action: PayloadAction<string>) {
             state.balance = action.payload;
         },
         resetWallet(state) {

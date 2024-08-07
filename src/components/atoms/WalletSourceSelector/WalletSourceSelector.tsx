@@ -5,7 +5,12 @@ import { Fragment, useMemo } from 'react';
 import { ExpandIndicator, Separator } from 'src/components/atoms';
 import { useBreakpoint } from 'src/hooks';
 import { SvgIcon } from 'src/types';
-import { AddressUtils, CurrencySymbol, ordinaryFormat } from 'src/utils';
+import {
+    AddressUtils,
+    currencyMap,
+    CurrencySymbol,
+    ordinaryFormat,
+} from 'src/utils';
 import { AMOUNT_PRECISION } from 'src/utils/entities';
 
 interface WalletSourceSelectorProps {
@@ -17,17 +22,23 @@ interface WalletSourceSelectorProps {
 
 export type WalletSourceOption = {
     source: WalletSource;
-    available: number;
+    available: bigint;
     asset: CurrencySymbol;
     iconSVG: SvgIcon;
 };
 
-const formatOption = (available: number, asset: CurrencySymbol) => {
+const formatOption = (
+    available: bigint,
+    asset: CurrencySymbol,
+    showAssetName = false
+) => {
     return `${ordinaryFormat(
-        Math.floor(available * AMOUNT_PRECISION) / AMOUNT_PRECISION,
+        Math.floor(
+            currencyMap[asset].fromBaseUnit(available) * AMOUNT_PRECISION
+        ) / AMOUNT_PRECISION,
         0,
         6
-    )} ${asset}`;
+    )} ${showAssetName ? ` ${asset}` : ''}`;
 };
 
 const formatSource = (walletSource: WalletSource, account: string) => {
@@ -112,13 +123,9 @@ export const WalletSourceSelector = ({
                                             {isLaptop ? 'Avl.' : 'Available'}
                                         </span>
                                         {account
-                                            ? ordinaryFormat(
-                                                  Math.floor(
-                                                      selectedOption.available *
-                                                          AMOUNT_PRECISION
-                                                  ) / AMOUNT_PRECISION,
-                                                  0,
-                                                  6
+                                            ? formatOption(
+                                                  selectedOption.available,
+                                                  selectedOption.asset
                                               )
                                             : '--'}
                                     </div>
@@ -161,7 +168,8 @@ export const WalletSourceSelector = ({
                                                             <span className='typography-caption-2 leading-4 text-planetaryPurple'>
                                                                 {formatOption(
                                                                     assetObj.available,
-                                                                    assetObj.asset
+                                                                    assetObj.asset,
+                                                                    true
                                                                 )}
                                                             </span>
                                                         </div>

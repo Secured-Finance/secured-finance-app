@@ -32,7 +32,7 @@ describe('CollateralUsageSection Component', () => {
         render(
             <Default
                 currency={CurrencySymbol.USDC}
-                availableToBorrow={5203.154}
+                availableToBorrow={BigInt('5203154000')}
             />
         );
 
