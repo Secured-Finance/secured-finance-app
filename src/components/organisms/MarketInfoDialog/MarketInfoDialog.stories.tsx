@@ -24,7 +24,7 @@ export default {
             type: 'block',
         },
         currencyPrice: '20',
-        dailyStats: dailyMarketStats,
+        marketInfo: dailyMarketStats,
         lastLoanValue: LoanValue.fromPrice(
             lastTradePrice,
             maturityOptions[0].value.toNumber()

@@ -8,7 +8,7 @@ export interface MarketInfoDialogProps {
     currency?: CurrencySymbol;
     currentMarket?: CurrentMarket;
     currencyPrice: string;
-    dailyStats?: DailyMarketInfo;
+    marketInfo?: DailyMarketInfo;
     lastLoanValue?: LoanValue;
     percentageChange: number | null;
     aprChange: number | null;
