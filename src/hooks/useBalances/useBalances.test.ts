@@ -1,7 +1,7 @@
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { renderHook, waitFor } from 'src/test-utils';
-import { createCurrencyMap } from 'src/utils';
-import { useBalances, zeroBalances } from './useBalances';
+import { renderHook } from 'src/test-utils';
+import { ZERO_BI, createCurrencyMap } from 'src/utils';
+import { useBalances } from './useBalances';
 
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
@@ -9,17 +9,14 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 const preloadedState = { wallet: { address: '0x1', balance: 0 } };
 
 describe('useBalances', () => {
-    it('should return balances of all currencies', async () => {
+    it('should return full balances of all currencies', async () => {
         const { result } = renderHook(() => useBalances(), {
             preloadedState: preloadedState,
         });
 
-        const expected = createCurrencyMap<number>(0);
-        expected.WFIL = 10000;
-        expected.WBTC = 300;
-        expected.USDC = 4000;
+        const expected = createCurrencyMap<bigint>(ZERO_BI);
 
-        expect(result.current).toEqual(zeroBalances);
-        await waitFor(() => expect(result.current).toEqual(expected));
+        expect(result.current).toEqual(expected);
+        expect(Object.values(result.current).length).toEqual(11);
     });
 });

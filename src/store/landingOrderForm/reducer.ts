@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { ViewType } from 'src/components/atoms';
 import { OrderType } from 'src/types';
-import { amountFormatterToBase, CurrencySymbol } from 'src/utils';
+import { CurrencySymbol } from 'src/utils';
 
 type LandingOrderFormStore = {
     currency: CurrencySymbol;
@@ -68,17 +68,10 @@ const landingOrderFormSlice = createSlice({
 export const selectLandingOrderForm = (state: LandingOrderFormStore) => {
     return {
         ...state,
-        amount: amountFormatterToBase[state.currency](Number(state.amount)),
-        unitPrice: state.unitPrice
-            ? Number(state.unitPrice) * 100.0
-            : undefined,
-    };
-};
-
-export const selectLandingOrderInputs = (state: LandingOrderFormStore) => {
-    return {
-        amountInput: state.amount,
-        unitPriceInput: state.unitPrice,
+        amount: BigInt(state.amount),
+        unitPrice: state.unitPrice ? Number(state.unitPrice) : undefined,
+        amountExists: state.amount !== '',
+        unitPriceExists: state.unitPrice !== '',
     };
 };
 

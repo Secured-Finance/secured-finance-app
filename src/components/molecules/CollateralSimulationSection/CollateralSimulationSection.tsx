@@ -69,11 +69,14 @@ export const CollateralSimulationSection = ({
 
     const coverage = Number(orderEstimationInfo?.coverage ?? 0);
 
+    const remainingToBorrowBitInt =
+        side === OrderSide.BORROW
+            ? availableToBorrow - tradeAmount.toBigInt()
+            : availableToBorrow;
+
     const remainingToBorrow = Math.max(
         0,
-        side === OrderSide.BORROW
-            ? availableToBorrow - tradeAmount.value
-            : availableToBorrow
+        amountFormatterFromBase[tradeAmount.currency](remainingToBorrowBitInt)
     );
 
     const items: [string | React.ReactNode, string | React.ReactNode][] = [

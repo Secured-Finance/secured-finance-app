@@ -21,7 +21,7 @@ import { useCollateralBalances } from 'src/hooks/useBalances';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { ButtonEvents, amountFormatterFromBase } from 'src/utils';
+import { ButtonEvents } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
@@ -77,8 +77,8 @@ export const OrderAction = ({
     const { data: availableToBorrow } = useBorrowableAmount(address, currency);
 
     const canBorrow = useMemo(
-        () => availableToBorrow >= amountFormatterFromBase[currency](amount),
-        [amount, availableToBorrow, currency]
+        () => availableToBorrow >= amount,
+        [amount, availableToBorrow]
     );
 
     const getButtonText = () => {

@@ -7,8 +7,14 @@ export default {
     component: CollateralInformationTable,
     args: {
         data: [
-            { asset: CurrencySymbol.ETH, quantity: 1.2 },
-            { asset: CurrencySymbol.USDC, quantity: 100 },
+            {
+                asset: CurrencySymbol.ETH,
+                quantity: BigInt('1200000000000000000'),
+            },
+            {
+                asset: CurrencySymbol.USDC,
+                quantity: BigInt('100000000'),
+            },
         ],
         assetTitle: 'Asset',
     },
