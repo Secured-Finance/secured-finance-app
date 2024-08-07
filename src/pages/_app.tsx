@@ -9,16 +9,14 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { NextUIProvider } from '@nextui-org/system';
-import {
-    GraphApolloClient,
-    GraphClientProvider,
-} from '@secured-finance/sf-graph-client';
+import { GraphApolloClient } from '@secured-finance/sf-graph-client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AppProps } from 'next/app';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { useMemo } from 'react';
 import { Cookies, CookiesProvider } from 'react-cookie';
 import { Provider, useSelector } from 'react-redux';
 import 'src/bigIntPatch';
@@ -158,39 +156,40 @@ function App({ Component, pageProps }: AppProps) {
 }
 
 const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const { network, chainId } = useSelector((state: RootState) => ({
-        network: selectNetworkName(state),
-        chainId: state.blockchain.chainId,
-    }));
+    const { network, chainId } = useSelector(
+        (state: RootState) => ({
+            network: selectNetworkName(state),
+            chainId: state.blockchain.chainId,
+        }),
+        (prev, next) =>
+            prev.network === next.network && prev.chainId === next.chainId
+    );
 
-    const subgraphUrl = getSubgraphUrl(chainId);
-
-    const client = new ApolloClient({
-        link: ApolloLink.split(
-            operation => operation.getContext().type === 'point-dashboard',
-            authLink.concat(httpLink),
-            subgraphUrl
-                ? createHttpLink({
-                      uri: subgraphUrl,
-                  })
-                : new GraphApolloClient({ network }).link
-        ),
-        cache: new InMemoryCache(),
-    });
+    const client = useMemo(() => {
+        const subgraphUrl = getSubgraphUrl(chainId);
+        return new ApolloClient({
+            link: ApolloLink.split(
+                operation => operation.getContext().type === 'point-dashboard',
+                authLink.concat(httpLink),
+                subgraphUrl
+                    ? createHttpLink({ uri: subgraphUrl })
+                    : new GraphApolloClient({ network }).link
+            ),
+            cache: new InMemoryCache(),
+        });
+    }, [network, chainId]);
 
     return (
         <CookiesProvider>
             <NextUIProvider>
                 <QueryClientProvider client={queryClient}>
-                    <GraphClientProvider network={network}>
-                        <ApolloProvider client={client}>
-                            <WagmiConfig config={config}>
-                                <SecuredFinanceProvider>
-                                    {children}
-                                </SecuredFinanceProvider>
-                            </WagmiConfig>
-                        </ApolloProvider>
-                    </GraphClientProvider>
+                    <ApolloProvider client={client}>
+                        <WagmiConfig config={config}>
+                            <SecuredFinanceProvider>
+                                {children}
+                            </SecuredFinanceProvider>
+                        </WagmiConfig>
+                    </ApolloProvider>
                     <ReactQueryDevtools initialIsOpen={false} />
                 </QueryClientProvider>
             </NextUIProvider>

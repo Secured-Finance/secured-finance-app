@@ -443,13 +443,13 @@ export const maturityOptions: MaturityOptionList = [
 export const walletSourceList: WalletSourceOption[] = [
     {
         source: WalletSource.METAMASK,
-        available: 1000,
+        available: BigInt('100000000000'),
         asset: CurrencySymbol.WBTC,
         iconSVG: MetamaskIcon,
     },
     {
         source: WalletSource.SF_VAULT,
-        available: 0.000492,
+        available: BigInt('49200'),
         asset: CurrencySymbol.WBTC,
         iconSVG: SFLogoSmall,
     },

@@ -50,7 +50,7 @@ const Template: StoryFn<typeof OrderAction> = args => {
     useEffect(() => {
         const timerId = setTimeout(() => {
             dispatch(setCurrency(CurrencySymbol.USDC));
-            dispatch(setAmount('500'));
+            dispatch(setAmount('500000000'));
             dispatch(setSide(OrderSide.BORROW));
             dispatch(setMaturity(dec22Fixture.toNumber()));
         }, 200);
@@ -65,7 +65,7 @@ const NotEnoughCollateralTemplate: StoryFn<typeof OrderAction> = args => {
     useEffect(() => {
         const timerId = setTimeout(() => {
             dispatch(setCurrency(CurrencySymbol.USDC));
-            dispatch(setAmount('6000'));
+            dispatch(setAmount('6000000000'));
             dispatch(setSide(OrderSide.BORROW));
             dispatch(setMaturity(dec22Fixture.toNumber()));
         }, 200);
