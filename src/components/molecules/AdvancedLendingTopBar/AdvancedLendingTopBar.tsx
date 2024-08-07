@@ -48,7 +48,7 @@ export const AdvancedLendingTopBar = ({
     const [isMarketInfoDialogOpen, setIsMarketInfoDialogOpen] =
         useState<boolean>(false);
 
-    const { data: allTransactions } = useGraphClientHook(
+    const { data: lastTransaction } = useGraphClientHook(
         {
             currency: toBytes32(selectedAsset?.value as CurrencySymbol),
             maturity: maturity,
@@ -56,7 +56,7 @@ export const AdvancedLendingTopBar = ({
             to: timestamp,
         },
         queries.TransactionHistoryDocument,
-        'transactionHistory',
+        'lastTransaction',
         !isSubgraphSupported,
         true
     );
@@ -133,11 +133,12 @@ export const AdvancedLendingTopBar = ({
     }, [historicalTradeData.data?.transactionCandleSticks, maturity]);
 
     const lastLoanValue = useMemo(() => {
-        const lastPrice = allTransactions?.[0]
-            ? allTransactions[0]?.averagePrice * 10000
-            : 0;
+        if (!lastTransaction || !lastTransaction.length) return undefined;
+
+        const lastPrice = Math.ceil(lastTransaction?.[0]?.averagePrice * 10000);
+
         return LoanValue.fromPrice(lastPrice, maturity);
-    }, [allTransactions, maturity]);
+    }, [lastTransaction, maturity]);
 
     const selectedTerm = useMemo(
         () => options.find(o => o.value === selected.value),
