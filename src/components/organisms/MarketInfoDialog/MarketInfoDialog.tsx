@@ -25,7 +25,7 @@ export const MarketInfoDialog = ({
     currency,
     currentMarket,
     currencyPrice,
-    dailyStats,
+    marketInfo,
     lastLoanValue,
     percentageChange,
     aprChange,
@@ -128,13 +128,13 @@ export const MarketInfoDialog = ({
                             <li className='flex justify-between'>
                                 <span>24h High</span>
                                 <span>
-                                    {dailyStats?.high} ({dailyStats?.rateHigh})
+                                    {marketInfo?.high} ({marketInfo?.rateHigh})
                                 </span>
                             </li>
                             <li className='flex justify-between'>
                                 <span>24h Low</span>
                                 <span>
-                                    {dailyStats?.low} ({dailyStats?.rateLow})
+                                    {marketInfo?.low} ({marketInfo?.rateLow})
                                 </span>
                             </li>
                             <li className='flex justify-between'>
@@ -143,7 +143,7 @@ export const MarketInfoDialog = ({
                                     iconElement={
                                         <span>
                                             {formatWithCurrency(
-                                                Number(dailyStats?.volume) || 0,
+                                                Number(marketInfo?.volume) || 0,
                                                 currency as CurrencySymbol,
                                                 5
                                             )}
@@ -151,7 +151,7 @@ export const MarketInfoDialog = ({
                                     }
                                 >
                                     <span>
-                                        24h Vol: {dailyStats?.volumeInUSD}
+                                        24h Vol: {marketInfo?.volumeInUSD}
                                     </span>
                                 </Tooltip>
                             </li>

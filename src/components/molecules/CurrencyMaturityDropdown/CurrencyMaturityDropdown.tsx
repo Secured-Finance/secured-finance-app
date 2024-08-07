@@ -144,10 +144,6 @@ export const CurrencyMaturityDropdown = ({
                     const data =
                         lendingMarkets[currency.value]?.[+maturity.value];
 
-                    if (data?.isMatured || !data?.isActive) {
-                        return null;
-                    }
-
                     const marketLabel = `${currency.label}-${maturity.label}`;
                     const marketKey = `${currency.value}-${maturity.value}`;
 
@@ -226,10 +222,6 @@ export const CurrencyMaturityDropdown = ({
     ]);
 
     const handleOptionClick = (item: FilteredOption) => {
-        if (item.currency !== asset.value || item.maturity !== maturity.value) {
-            onChange(item.currency, item.maturity);
-        }
-
         if (router.pathname.includes('itayose') && !item.isItayoseOption) {
             router.push('/');
             return;
@@ -238,6 +230,10 @@ export const CurrencyMaturityDropdown = ({
         if (item.isItayoseOption && item.isItayoseOption) {
             router.push('/itayose');
             return;
+        }
+
+        if (item.currency !== asset.value || item.maturity !== maturity.value) {
+            onChange(item.currency, item.maturity);
         }
     };
 
