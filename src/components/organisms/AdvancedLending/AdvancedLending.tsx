@@ -223,7 +223,7 @@ export const AdvancedLending = ({
 
     const filteredOrderList = useMarketOrderList(address, currency, maturity);
 
-    const transactionHistory = useGraphClientHook(
+    const { data: transactionHistory } = useGraphClientHook(
         {
             currency: toBytes32(currency),
             maturity: maturity,
@@ -233,7 +233,7 @@ export const AdvancedLending = ({
         queries.TransactionHistoryDocument,
         'transactionHistory',
         !isSubgraphSupported
-    ).data;
+    );
 
     const tradeHistoryDetails = useTradeHistoryDetails(
         transactionHistory ?? [],
