@@ -18,6 +18,7 @@ export default {
     args: {
         data: positions,
         delistedCurrencySet: defaultDelistedStatusSet,
+        variant: 'compact',
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,

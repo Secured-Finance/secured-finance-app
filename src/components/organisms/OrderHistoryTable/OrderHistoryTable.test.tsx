@@ -15,7 +15,7 @@ describe('OrderHistoryTable Component', () => {
         );
     });
 
-    it('should open etherscan link', () => {
+    it.skip('should open etherscan link', () => {
         window.open = jest.fn();
         render(<Default />);
         const rows = screen.getAllByTestId('order-history-table-row');

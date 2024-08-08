@@ -432,11 +432,7 @@ export const Itayose = () => {
                             onTabChange={setSelectedTable}
                             useCustomBreakpoint={true}
                         >
-                            <OrderTable
-                                data={filteredOrderList}
-                                variant='compact'
-                                height={350}
-                            />
+                            <OrderTable data={filteredOrderList} height={350} />
                             {userOrderHistory.loading ? (
                                 <TabSpinner />
                             ) : (
@@ -447,7 +443,7 @@ export const Itayose = () => {
                                         getMoreData: () => {},
                                         containerHeight: 350,
                                     }}
-                                    variant='contractOnly'
+                                    variant='compact'
                                 />
                             )}
                         </HorizontalTabTable>

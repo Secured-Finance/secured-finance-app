@@ -13,13 +13,16 @@ export const variantStyle: { [key in ButtonVariants]: string } = {
 };
 
 export const sizeStyle: { [key in ButtonSizes]: string } = {
+    [ButtonSizes.xxs]: 'rounded-md px-2.5 py-0.5',
     [ButtonSizes.xs]: 'rounded-md px-2.5 py-1',
     [ButtonSizes.sm]: 'rounded-lg px-3 py-[7px]',
     [ButtonSizes.md]: 'rounded-[0.625rem] px-3.5 py-2.5',
     [ButtonSizes.lg]: 'rounded-xl py-3 px-5',
 };
+
 export const textStyle: { [key in ButtonSizes]: string } = {
-    [ButtonSizes.xs]: 'text-2xs leading-[14px]',
+    [ButtonSizes.xxs]: 'text-2.5 leading-[14px]',
+    [ButtonSizes.xs]: 'text-2.5 leading-[14px]',
     [ButtonSizes.sm]: 'text-xs leading-4',
     [ButtonSizes.md]: 'text-sm leading-[18px]',
     [ButtonSizes.lg]: 'text-base leading-5',

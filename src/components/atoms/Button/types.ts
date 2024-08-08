@@ -5,6 +5,7 @@ export enum ButtonVariants {
 }
 
 export enum ButtonSizes {
+    xxs = 'xxs',
     xs = 'xs',
     sm = 'sm',
     md = 'md',

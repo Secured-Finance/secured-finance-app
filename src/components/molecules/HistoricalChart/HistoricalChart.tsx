@@ -268,7 +268,10 @@ export function HistoricalChart({
         'z-10 flex gap-4 text-2xs text-neutral-4 font-medium text-[11px] tablet:text-xs leading-4 pt-2 laptop:pt-1.5 px-4';
 
     return (
-        <div className='bg-neutral-900 pt-1 font-tertiary laptop:pt-2.5'>
+        <div
+            className='bg-neutral-900 pt-1 font-tertiary laptop:pt-2.5'
+            data-chromatic='ignore'
+        >
             <div className={clsx(titleOfChartClass)}>
                 {Object.entries(legendData)
                     .filter(([key, _]) => legendArray.includes(key))

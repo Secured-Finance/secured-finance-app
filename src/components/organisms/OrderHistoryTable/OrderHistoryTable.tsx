@@ -4,9 +4,8 @@ import clsx from 'clsx';
 import { useMemo } from 'react';
 import { HorizontalListItemTable } from 'src/components/atoms';
 import {
-    CoreTable,
+    CompactCoreTable,
     Pagination,
-    TableActionMenu,
     TableCardHeader,
 } from 'src/components/molecules';
 import { useBlockExplorerUrl, useBreakpoint, useLastPrices } from 'src/hooks';
@@ -18,11 +17,12 @@ import {
     TextCell,
     amountColumnDefinition,
     contractColumnDefinition,
-    dateAndTimeColumnDefinition,
+    dateTimeViewColumnDefinition,
     hexToCurrencySymbol,
     inputAmountColumnDefinition,
     inputPriceYieldColumnDefinition,
     loanTypeColumnDefinition,
+    priceYieldColumnDefinition,
     tableHeaderDefinition,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
@@ -121,10 +121,12 @@ export const OrderHistoryTable = ({
     data,
     pagination,
     variant = 'default',
+    isLoading,
 }: {
     data: OrderHistoryList;
     pagination?: Pagination;
-    variant?: 'contractOnly' | 'default';
+    variant?: 'compact' | 'default';
+    isLoading?: boolean;
 }) => {
     const { data: priceList } = useLastPrices();
     const isTablet = useBreakpoint('laptop');
@@ -132,73 +134,71 @@ export const OrderHistoryTable = ({
 
     const columns = useMemo(
         () => [
-            loanTypeColumnDefinition(columnHelper, 'Type', 'type'),
             contractColumnDefinition(
                 columnHelper,
-                'Contract',
+                'Symbol',
                 'contract',
-                variant
+                variant,
+                undefined,
+                'left',
+                'left'
             ),
+            loanTypeColumnDefinition(columnHelper, 'Type', 'type'),
             inputPriceYieldColumnDefinition(
                 columnHelper,
                 'Price',
                 'price',
                 row => row.inputUnitPrice
             ),
+            priceYieldColumnDefinition(
+                columnHelper,
+                'APR%',
+                'yield',
+                row => row.inputUnitPrice,
+                'compact',
+                'rate'
+            ),
+            inputAmountColumnDefinition(
+                columnHelper,
+                'Order Amount',
+                'amount',
+                row => row.inputAmount,
+                {
+                    compact: true,
+                    color: false,
+                    priceList: priceList,
+                    fontSize: 'typography-desktop-body-5',
+                }
+            ),
             amountColumnDefinition(
                 columnHelper,
                 'Filled Amount',
                 'filledAmount',
                 row => row.filledAmount,
-                { compact: false, color: true, priceList: priceList }
-            ),
-            inputAmountColumnDefinition(
-                columnHelper,
-                'Amount',
-                'amount',
-                row => row.inputAmount,
-                { compact: false, color: true, priceList: priceList }
+                {
+                    compact: true,
+                    color: false,
+                    priceList: priceList,
+                    fontSize: 'typography-desktop-body-5',
+                },
+                '',
+                'right'
             ),
             columnHelper.accessor('status', {
                 cell: info => (
-                    <div className='typography-caption'>{info.getValue()}</div>
+                    <div className='typography-desktop-body-5 flex justify-start text-white'>
+                        {info.getValue()}
+                    </div>
                 ),
-                header: tableHeaderDefinition('Status'),
+                header: tableHeaderDefinition('Status', '', 'left'),
             }),
-            dateAndTimeColumnDefinition(
+            dateTimeViewColumnDefinition(
                 columnHelper,
                 'Order Time',
                 'createdAt',
                 row => row.createdAt,
-                'typography-caption'
+                blockExplorerUrl
             ),
-            columnHelper.display({
-                id: 'actions',
-                cell: info => {
-                    const txHash = info.row.original.txHash;
-                    const blockExplorerLink = blockExplorerUrl
-                        ? `${blockExplorerUrl}/tx/${txHash}`
-                        : '';
-                    return (
-                        <div className='flex justify-center'>
-                            <TableActionMenu
-                                items={[
-                                    {
-                                        text: 'View',
-                                        onClick: () => {
-                                            window.open(
-                                                blockExplorerLink,
-                                                '_blank'
-                                            );
-                                        },
-                                    },
-                                ]}
-                            />
-                        </div>
-                    );
-                },
-                header: () => <div className='p-2'>Actions</div>,
-            }),
         ],
         [blockExplorerUrl, priceList, variant]
     );
@@ -209,14 +209,14 @@ export const OrderHistoryTable = ({
             blockExplorerUrl={blockExplorerUrl}
         />
     ) : (
-        <CoreTable
+        <CompactCoreTable
             columns={columns}
             data={data}
             options={{
                 name: 'order-history-table',
-                stickyFirstColumn: true,
                 pagination: pagination,
             }}
+            isLoading={isLoading}
         />
     );
 };

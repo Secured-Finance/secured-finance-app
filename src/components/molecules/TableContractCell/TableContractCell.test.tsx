@@ -42,7 +42,7 @@ describe('TableContractCell Component', () => {
 
         it('should display a smaller image in the compact variant', () => {
             render(<Compact />);
-            expect(screen.getByRole('img')).toHaveClass('w-5 h-5');
+            expect(screen.getByRole('img')).toHaveClass('w-4 h-4');
         });
     });
 

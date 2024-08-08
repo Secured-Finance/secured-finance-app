@@ -68,7 +68,7 @@ const Container = ({
                 'justify-start': align === 'left',
                 'justify-center': align === 'center',
                 'justify-end': align === 'right',
-                'px-3': horizontalPadding,
+                'px-2': horizontalPadding,
             })}
         >
             {children}
