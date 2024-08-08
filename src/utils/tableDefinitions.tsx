@@ -301,7 +301,8 @@ export const loanTypeColumnDefinition = <T extends SideProperty>(
 export const loanTypeFromFVColumnDefinition = <T extends FutureValueProperty>(
     columnHelper: ColumnHelper<T>,
     title: string,
-    id: string
+    id: string,
+    align: Alignment = 'center'
 ) => {
     const assessorFn: AccessorFn<T, bigint> = row => row.futureValue;
 
@@ -310,7 +311,13 @@ export const loanTypeFromFVColumnDefinition = <T extends FutureValueProperty>(
         cell: info => {
             if (info.getValue() === ZERO_BI) return null;
             return (
-                <div className='flex w-[70px] justify-start'>
+                <div
+                    className={clsx('flex w-[70px]', {
+                        'justify-start': align === 'left',
+                        'mx-auto justify-center': align === 'center',
+                        'justify-end': align === 'right',
+                    })}
+                >
                     <Chip
                         isFullWidth
                         size={ChipSizes.lg}
@@ -324,7 +331,7 @@ export const loanTypeFromFVColumnDefinition = <T extends FutureValueProperty>(
                 </div>
             );
         },
-        header: tableHeaderDefinition(title, '', 'left'),
+        header: tableHeaderDefinition(title, '', align),
     });
 };
 
