@@ -13,7 +13,7 @@ import { useDispatch } from 'react-redux';
 import ShowFirstIcon from 'src/assets/icons/orderbook-first.svg';
 import ShowAllIcon from 'src/assets/icons/orderbook-full.svg';
 import ShowLastIcon from 'src/assets/icons/orderbook-last.svg';
-import { DropdownSelector, Option, Spinner, Tab } from 'src/components/atoms';
+import { DropdownSelector, Option, Spinner } from 'src/components/atoms';
 import { InfoToolTip, TableHeader } from 'src/components/molecules';
 import {
     AggregationFactorType,
@@ -465,7 +465,7 @@ export const NewOrderBookWidget = ({
     };
 
     return (
-        <div className='flex h-full w-full flex-col justify-start gap-y-1 overflow-hidden border-white-10 laptop:flex-col-reverse laptop:gap-y-0 laptop:rounded-b-xl laptop:border laptop:bg-cardBackground/60 laptop:shadow-tab'>
+        <div className='flex h-full w-full flex-col justify-start gap-y-1 overflow-hidden border-white-10 laptop:flex-col-reverse laptop:gap-y-0'>
             <div className='h-full'>
                 {orderbook.isPending ? (
                     <div className='table h-full w-full'>
@@ -602,11 +602,6 @@ export const NewOrderBookWidget = ({
                             />
                         </div>
                     )}
-                </div>
-                <div className='hidden border-neutral-600 laptop:block laptop:border-b'>
-                    <div className='h-[60px]'>
-                        <Tab text='Order Book' active={true} />
-                    </div>
                 </div>
             </div>
         </div>
