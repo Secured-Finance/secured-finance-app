@@ -9,9 +9,8 @@ export const MenuItem = ({ text, onClick, disabled = false }: MenuItem) => {
         <Button
             onClick={onClick}
             disabled={disabled}
-            size={isTablet ? ButtonSizes.sm : ButtonSizes.xs}
-            fullWidth
-            className='min-w-fit'
+            size={isTablet ? ButtonSizes.sm : ButtonSizes.xxs}
+            fullWidth={isTablet}
             variant={ButtonVariants.secondary}
         >
             {text}
@@ -21,7 +20,7 @@ export const MenuItem = ({ text, onClick, disabled = false }: MenuItem) => {
 
 export const TableActionMenu = ({ items }: { items: MenuItem[] }) => {
     return (
-        <div className={`grid grid-cols-${items.length}-actions gap-x-2`}>
+        <div className='flex w-fit gap-2'>
             {items.map((item, index) => (
                 <MenuItem
                     key={index}

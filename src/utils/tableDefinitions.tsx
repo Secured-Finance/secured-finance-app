@@ -1,4 +1,5 @@
 /* eslint-disable react/display-name */
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
 import { OrderSide } from '@secured-finance/sf-client';
 import {
     AccessorFn,
@@ -195,19 +196,17 @@ export const inputAmountColumnDefinition = <T extends InputAmountColumnType>(
 
             return (
                 <div className='flex w-full items-center justify-end whitespace-nowrap'>
-                    <div className='flex justify-end'>
-                        <CurrencyItem
-                            amount={inputAmount}
-                            ccy={ccy}
-                            align='right'
-                            price={options.priceList?.[ccy]}
-                            color={options.color ? color : undefined}
-                            compact={options.compact}
-                            fontSize={options.fontSize}
-                            minDecimals={currencyMap[ccy].roundingDecimal}
-                            maxDecimals={currencyMap[ccy].roundingDecimal}
-                        />
-                    </div>
+                    <CurrencyItem
+                        amount={inputAmount}
+                        ccy={ccy}
+                        align='right'
+                        price={options.priceList?.[ccy]}
+                        color={options.color ? color : undefined}
+                        compact={options.compact}
+                        fontSize={options.fontSize}
+                        minDecimals={currencyMap[ccy].roundingDecimal}
+                        maxDecimals={currencyMap[ccy].roundingDecimal}
+                    />
                 </div>
             );
         },
@@ -280,10 +279,10 @@ export const loanTypeColumnDefinition = <T extends SideProperty>(
         cell: info => {
             const value = info.getValue();
             return (
-                <div className='flex w-[70px] justify-start'>
+                <div className='flex w-[45px] justify-start'>
                     <Chip
                         isFullWidth
-                        size={ChipSizes.lg}
+                        size={ChipSizes.md}
                         color={
                             value.toString() === '1'
                                 ? ChipColors.Red
@@ -312,7 +311,7 @@ export const loanTypeFromFVColumnDefinition = <T extends FutureValueProperty>(
             if (info.getValue() === ZERO_BI) return null;
             return (
                 <div
-                    className={clsx('flex w-[70px]', {
+                    className={clsx('flex w-[45px]', {
                         'justify-start': align === 'left',
                         'mx-auto justify-center': align === 'center',
                         'justify-end': align === 'right',
@@ -320,7 +319,7 @@ export const loanTypeFromFVColumnDefinition = <T extends FutureValueProperty>(
                 >
                     <Chip
                         isFullWidth
-                        size={ChipSizes.lg}
+                        size={ChipSizes.md}
                         color={
                             info.getValue() < 0
                                 ? ChipColors.Red
@@ -529,5 +528,44 @@ export const dateAndTimeColumnDefinition = <T extends { createdAt: bigint }>(
             );
         },
         header: tableHeaderDefinition(title, titleHint, 'right'),
+    });
+};
+
+export const dateTimeViewColumnDefinition = <
+    T extends { createdAt: bigint; txHash: string }
+>(
+    columnHelper: ColumnHelper<T>,
+    title: string,
+    id: string,
+    accessor: AccessorFn<T, bigint>,
+    blockExplorerUrl?: string,
+    titleHint?: string
+) => {
+    return columnHelper.accessor(accessor, {
+        id: id,
+        cell: info => {
+            const txHash = info.row.original.txHash;
+            const blockExplorerLink = blockExplorerUrl
+                ? `${blockExplorerUrl}/tx/${txHash}`
+                : '';
+            return (
+                <div className='flex items-center justify-start gap-0.5'>
+                    <div className='flex flex-col text-right'>
+                        <span className='typography-desktop-body-5 text-white'>
+                            {formatTimestampDDMMYY(+info.getValue().toString())}
+                        </span>
+                    </div>
+                    {blockExplorerLink && (
+                        <ArrowTopRightOnSquareIcon
+                            className='h-4 w-4 cursor-pointer text-primary-300'
+                            onClick={() => {
+                                window.open(blockExplorerLink, '_blank');
+                            }}
+                        />
+                    )}
+                </div>
+            );
+        },
+        header: tableHeaderDefinition(title, titleHint, 'left'),
     });
 };

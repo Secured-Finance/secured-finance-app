@@ -74,10 +74,10 @@ export const HorizontalTabTable = ({
         >
             <div
                 className={clsx(
-                    'flex h-full flex-col rounded-xl border border-neutral-600 bg-neutral-900 laptop:rounded-b-2xl laptop:rounded-t-none'
+                    'flex h-full flex-col rounded-xl border border-neutral-600 bg-neutral-900 laptop:rounded-t-none'
                 )}
             >
-                <HeadlessTab.List className='justify-start border-b border-neutral-600 px-4 py-3 laptop:h-fit laptop:px-3'>
+                <HeadlessTab.List className='justify-start border-b border-neutral-600 px-4 py-3 laptop:h-fit laptop:py-3.5'>
                     <div
                         className={clsx('w-full', {
                             'horizontalTab:hidden': useCustomBreakpoint,
@@ -123,7 +123,7 @@ export const HorizontalTabTable = ({
                 </HeadlessTab.List>
                 <HeadlessTab.Panels
                     className={clsx(
-                        'h-full rounded-b-xl bg-neutral-900 tablet:min-h-[25vh] laptop:rounded-b-2xl'
+                        'h-full rounded-b-xl bg-neutral-900 pb-2 tablet:min-h-[25vh]'
                     )}
                 >
                     {arrayChildren[selectedIndex]}
