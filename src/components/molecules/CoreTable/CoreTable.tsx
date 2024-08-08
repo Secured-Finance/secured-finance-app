@@ -10,7 +10,7 @@ import {
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { TabSpinner } from 'src/components/pages';
+import { Spinner } from 'src/components/atoms';
 
 export interface Pagination {
     getMoreData: () => void;
@@ -59,6 +59,12 @@ const COMPACT_DEFAULT_OPTIONS: CoreTableOptions = {
     stickyFirstColumn: true,
     stickyHeader: true,
 };
+
+const CompactCoreTableSpinner = () => (
+    <div className='flex h-[350px] w-full items-center justify-center'>
+        <Spinner />
+    </div>
+);
 
 export const CoreTable = <T,>({
     data,
@@ -415,7 +421,7 @@ export const CompactCoreTable = <T,>({
             })}
         >
             {isLoading ? (
-                <TabSpinner />
+                <CompactCoreTableSpinner />
             ) : (
                 <PaginatedScrolling
                     data={data}

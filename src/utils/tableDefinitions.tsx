@@ -373,6 +373,7 @@ export const contractColumnDefinition = <
                         'justify-start': alignCell === 'left',
                         'justify-center': alignCell === 'center',
                         'justify-end': alignCell === 'right',
+                        'px-3': variant === 'currencyOnly',
                     })}
                 >
                     <TableContractCell
