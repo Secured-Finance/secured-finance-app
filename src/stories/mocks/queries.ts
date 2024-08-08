@@ -862,6 +862,47 @@ export const mockDailyVolumes = [
     },
 ];
 
+export const mockRecentTrades = [
+    {
+        request: {
+            query: queries.TransactionHistoryDocument,
+            variables: {
+                currency: usdcBytes32,
+                maturity: dec22Fixture.toNumber(),
+                from: -1,
+                to: 1643713200,
+                first: 100,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                transactionHistory: tradesUSDC,
+                lastTransaction: tradesUSDC[0],
+            },
+        },
+    },
+    {
+        request: {
+            query: queries.TransactionHistoryDocument,
+            variables: {
+                currency: usdcBytes32,
+                maturity: dec22Fixture.toNumber(),
+                from: -1,
+                to: 1669852800,
+                first: 100,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                transactionHistory: tradesUSDC,
+                lastTransaction: tradesUSDC[0],
+            },
+        },
+    },
+];
+
 const today = 1643713200;
 const yesterday = today - 24 * 3600;
 const today2 = 1638356400;
