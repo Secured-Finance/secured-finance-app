@@ -129,12 +129,10 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
                 // do nothing
             }
 
-            const amount = currencyMap[ccy].fromBaseUnit(value as bigint);
-
             const Component = (
                 <div className='flex items-start justify-end gap-2'>
                     <CurrencyItem
-                        amount={amount}
+                        amount={value}
                         ccy={ccy}
                         align='right'
                         price={options.priceList?.[ccy]}
@@ -199,7 +197,7 @@ export const inputAmountColumnDefinition = <T extends InputAmountColumnType>(
                 <div className='flex w-full items-center justify-end whitespace-nowrap'>
                     <div className='flex justify-end'>
                         <CurrencyItem
-                            amount={currencyMap[ccy].fromBaseUnit(inputAmount)}
+                            amount={inputAmount}
                             ccy={ccy}
                             align='right'
                             price={options.priceList?.[ccy]}
@@ -251,9 +249,7 @@ export const futureValueColumnDefinition = <T extends AmountColumnType>(
                 <div className='flex w-full items-center justify-end whitespace-nowrap'>
                     <div className='flex justify-end'>
                         <CurrencyItem
-                            amount={currencyMap[ccy].fromBaseUnit(
-                                info.getValue() as bigint
-                            )}
+                            amount={info.getValue()}
                             ccy={ccy}
                             align='right'
                             price={options.priceList?.[ccy]}

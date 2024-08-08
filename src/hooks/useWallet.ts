@@ -1,9 +1,8 @@
-import { BigNumber as BigNumberJS } from 'bignumber.js';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'src/store/types';
 import { connectWallet, resetWallet, updateBalance } from 'src/store/wallet';
-import { useAccount, useBalance, usePublicClient } from 'wagmi';
+import { useAccount, useBalance } from 'wagmi';
 
 export const useWalletStore = () => {
     const dispatch = useDispatch();
@@ -12,14 +11,6 @@ export const useWalletStore = () => {
         address,
         watch: true,
     });
-    const publicClient = usePublicClient();
-    const decimals = publicClient.chain.nativeCurrency.decimals;
-
-    const nativeCurrencyBalance = balance?.value
-        ? new BigNumberJS(balance.value.toString())
-              .dividedBy(10 ** decimals)
-              .toNumber()
-        : 0;
     const block = useSelector(
         (state: RootState) => state.blockchain.latestBlock
     );
@@ -34,7 +25,7 @@ export const useWalletStore = () => {
 
     useEffect(() => {
         if (isConnected && address) {
-            dispatch(updateBalance(nativeCurrencyBalance));
+            dispatch(updateBalance(balance?.value.toString() || '0'));
         }
-    }, [address, dispatch, isConnected, nativeCurrencyBalance, block]);
+    }, [address, dispatch, isConnected, balance, block]);
 };

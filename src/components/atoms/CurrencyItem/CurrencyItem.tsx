@@ -22,7 +22,7 @@ export const CurrencyItem = ({
     showCurrency = false,
     warning,
 }: {
-    amount?: number;
+    amount?: bigint;
     ccy: CurrencySymbol;
     label?: string;
     price?: number;
@@ -35,19 +35,24 @@ export const CurrencyItem = ({
     warning?: string;
 } & ColorFormat) => {
     let secondLine: string;
+    const currency = currencyMap[ccy];
     if (amount !== undefined && price !== undefined) {
-        secondLine = usdFormat(amount * price, 2);
+        secondLine = usdFormat(currency.fromBaseUnit(amount) * price, 2);
     } else if (price) {
         secondLine = usdFormat(price, 2);
     } else {
-        secondLine = currencyMap[ccy].name;
+        secondLine = currency.name;
     }
 
     let firstLine: string;
     if (label !== undefined) {
         firstLine = label;
     } else if (amount !== undefined) {
-        firstLine = ordinaryFormat(amount, minDecimals, maxDecimals);
+        firstLine = ordinaryFormat(
+            currency.fromBaseUnit(amount),
+            minDecimals,
+            maxDecimals
+        );
         if (showCurrency) {
             firstLine += ` ${ccy}`;
         }

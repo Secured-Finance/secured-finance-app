@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
-import { useCollateralCurrencies, useFullBalances } from 'src/hooks';
+import { useBalances, useCollateralCurrencies } from 'src/hooks';
 import { CurrencySymbol } from 'src/utils';
 
 export const useCollateralBalances = () => {
-    const fullBalances = useFullBalances();
+    const fullBalances = useBalances();
     const { data: collateralCurrencies } = useCollateralCurrencies();
 
     return useMemo(() => {
