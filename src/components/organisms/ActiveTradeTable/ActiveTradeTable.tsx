@@ -327,7 +327,12 @@ export const ActiveTradeTable = ({
                 'left',
                 'left'
             ),
-            loanTypeFromFVColumnDefinition(columnHelper, 'Type', 'side'),
+            loanTypeFromFVColumnDefinition(
+                columnHelper,
+                'Type',
+                'side',
+                'left'
+            ),
             columnHelper.accessor('maturity', {
                 cell: info => {
                     const ccy = hexToCurrencySymbol(info.row.original.currency);
