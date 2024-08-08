@@ -144,10 +144,6 @@ export const CurrencyMaturityDropdown = ({
                     const data =
                         lendingMarkets[currency.value]?.[+maturity.value];
 
-                    if (data?.isMatured || !data?.isActive) {
-                        return null;
-                    }
-
                     const marketLabel = `${currency.label}-${maturity.label}`;
                     const marketKey = `${currency.value}-${maturity.value}`;
 
@@ -226,10 +222,6 @@ export const CurrencyMaturityDropdown = ({
     ]);
 
     const handleOptionClick = (item: FilteredOption) => {
-        if (item.currency !== asset.value || item.maturity !== maturity.value) {
-            onChange(item.currency, item.maturity);
-        }
-
         if (router.pathname.includes('itayose') && !item.isItayoseOption) {
             router.push('/');
             return;
@@ -238,6 +230,10 @@ export const CurrencyMaturityDropdown = ({
         if (item.isItayoseOption && item.isItayoseOption) {
             router.push('/itayose');
             return;
+        }
+
+        if (item.currency !== asset.value || item.maturity !== maturity.value) {
+            onChange(item.currency, item.maturity);
         }
     };
 
@@ -270,7 +266,7 @@ export const CurrencyMaturityDropdown = ({
             {({ open, close }) => (
                 <div>
                     <Menu.Button
-                        className='flex w-full max-w-[208px] items-center justify-between gap-2 rounded-lg bg-neutral-700 px-2 py-1.5 text-sm font-semibold normal-case leading-6 text-white laptop:w-[226px] laptop:max-w-none laptop:py-2.5 laptop:pl-3 laptop:pr-2 laptop:text-base laptop:leading-6 desktop:w-[302px] desktop:text-[22px]'
+                        className='flex w-full max-w-[208px] items-center justify-between gap-2 rounded-lg bg-neutral-700 px-2 py-1.5 text-sm font-semibold normal-case leading-6 text-white laptop:max-w-[302px] laptop:py-2.5 laptop:pl-3 laptop:pr-2 laptop:text-base laptop:leading-6 desktop:w-[302px] desktop:text-[22px]'
                         onClick={() => setIsDropdownOpen(!open)}
                     >
                         <div className='flex items-center gap-2 whitespace-nowrap laptop:gap-1'>

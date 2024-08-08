@@ -1,8 +1,13 @@
 import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
-import { withWalletProvider } from '.storybook/decorators';
-import type { Meta, StoryFn } from '@storybook/react';
-import { currencyList, maturityOptions } from 'src/stories/mocks/fixtures';
-import { mockDailyVolumes } from 'src/stories/mocks/queries';
+import { WithGraphClient, withWalletProvider } from '.storybook/decorators';
+import type { Meta } from '@storybook/react';
+import { StoryFn } from '@storybook/react';
+import {
+    currencyList,
+    dailyMarketStats,
+    maturityOptions,
+} from 'src/stories/mocks/fixtures';
+import { mockDailyVolumes, mockTrades } from 'src/stories/mocks/queries';
 import { LoanValue } from 'src/utils/entities';
 import { AdvancedLendingTopBar } from '.';
 
@@ -11,7 +16,7 @@ const lastTradePrice = 8000;
 export default {
     title: 'Molecules/AdvancedLendingTopBar',
     component: AdvancedLendingTopBar,
-    decorators: [withWalletProvider],
+    decorators: [withWalletProvider, WithGraphClient],
     args: {
         selectedAsset: currencyList[2],
         assetList: currencyList,
@@ -30,11 +35,16 @@ export default {
             time: 1646920200,
             type: 'block',
         },
+        currencyPrice: '$4.05',
+        marketInfo: dailyMarketStats,
     },
     parameters: {
-        ...RESPONSIVE_PARAMETERS,
         apolloClient: {
-            mocks: [...mockDailyVolumes],
+            mocks: [...mockTrades, ...mockDailyVolumes],
+        },
+        ...RESPONSIVE_PARAMETERS,
+        viewport: {
+            disable: true,
         },
     },
 } as Meta<typeof AdvancedLendingTopBar>;
@@ -44,9 +54,3 @@ const Template: StoryFn<typeof AdvancedLendingTopBar> = args => (
 );
 
 export const Default = Template.bind({});
-
-export const Values = Template.bind({});
-Values.args = {
-    values: ['26.16', '24.2', '894', '10,000,000'],
-    currencyPrice: '23000',
-};

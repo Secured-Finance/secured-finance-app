@@ -59,7 +59,6 @@ import {
     formatOrders,
     getMappedOrderStatus,
     hexToCurrencySymbol,
-    ordinaryFormat,
     sortOrders,
     toOptions,
     usdFormat,
@@ -78,14 +77,19 @@ const useTradeHistoryDetails = (
         let max = 0;
         let sum = ZERO_BI;
         let count = 0;
+
         if (!transactions.length) {
             min = 0;
             max = 0;
         }
         for (const t of transactions) {
             const price = t.averagePrice * 10000;
-            if (price < min) min = price;
-            if (price > max) max = price;
+            if (price < min) {
+                min = price;
+            }
+            if (price > max) {
+                max = price;
+            }
             sum += BigInt(t.amount);
             count++;
         }
@@ -208,6 +212,7 @@ export const AdvancedLending = ({
     }, [maturity, maturitiesOptionList]);
 
     const data = useMarket(currency, maturity);
+
     const marketUnitPrice = data?.marketUnitPrice;
     const openingUnitPrice = data?.openingUnitPrice;
 
@@ -218,7 +223,7 @@ export const AdvancedLending = ({
 
     const filteredOrderList = useMarketOrderList(address, currency, maturity);
 
-    const transactionHistory = useGraphClientHook(
+    const { data: transactionHistory } = useGraphClientHook(
         {
             currency: toBytes32(currency),
             maturity: maturity,
@@ -228,7 +233,7 @@ export const AdvancedLending = ({
         queries.TransactionHistoryDocument,
         'transactionHistory',
         !isSubgraphSupported
-    ).data;
+    );
 
     const tradeHistoryDetails = useTradeHistoryDetails(
         transactionHistory ?? [],
@@ -307,6 +312,17 @@ export const AdvancedLending = ({
 
     const tooltipMap: Record<number, string> = {};
 
+    const dailyMarketInfo = {
+        high: formatLoanValue(tradeHistoryDetails.max, 'price'),
+        low: formatLoanValue(tradeHistoryDetails.min, 'price'),
+        volume: tradeHistoryDetails.sum.toString(),
+        volumeInUSD: usdFormat(
+            Math.floor(currencyPrice * tradeHistoryDetails.sum)
+        ),
+        rateHigh: formatLoanValue(tradeHistoryDetails.max, 'rate'),
+        rateLow: formatLoanValue(tradeHistoryDetails.min, 'rate'),
+    };
+
     if (maximumOpenOrderLimit)
         tooltipMap[1] =
             'You have too many open orders. Please ensure that you have fewer than 20 orders to place more orders.';
@@ -338,25 +354,8 @@ export const AdvancedLending = ({
                         onTermChange={handleTermChange}
                         currencyPrice={usdFormat(currencyPrice, 2)}
                         currentMarket={currentMarket}
-                        values={
-                            isSubgraphSupported
-                                ? [
-                                      formatLoanValue(
-                                          tradeHistoryDetails.max,
-                                          'price'
-                                      ),
-                                      formatLoanValue(
-                                          tradeHistoryDetails.min,
-                                          'price'
-                                      ),
-                                      tradeHistoryDetails.count.toString(),
-                                      tradeHistoryDetails.sum
-                                          ? ordinaryFormat(
-                                                tradeHistoryDetails.sum
-                                            )
-                                          : '-',
-                                  ]
-                                : undefined
+                        marketInfo={
+                            isSubgraphSupported ? dailyMarketInfo : undefined
                         }
                     />
                 }

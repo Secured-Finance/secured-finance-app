@@ -4,7 +4,7 @@ import MetamaskIcon from 'src/assets/img/metamask-fox.svg';
 import { WalletSourceOption } from 'src/components/atoms';
 import { AssetDisclosureProps } from 'src/components/molecules';
 import { ZERO_BI } from './collateral';
-import { CurrencySymbol } from './currencyList';
+import { currencyMap, CurrencySymbol } from './currencyList';
 
 export enum WalletSource {
     METAMASK = 'METAMASK',
@@ -77,3 +77,6 @@ export const generateWalletSourceInformation = (
 // till Sepolia v0.0.10: 21118
 export const PREVIOUS_TOTAL_USERS = 21118;
 export const COIN_GECKO_SOURCE = 'https://www.coingecko.com/en/coins/';
+
+export const handlePriceSource = (asset: CurrencySymbol | undefined) =>
+    asset && COIN_GECKO_SOURCE.concat(currencyMap[asset].coinGeckoId);
