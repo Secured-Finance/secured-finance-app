@@ -71,7 +71,7 @@ export const TabSelector: React.FC<TabSelectorProps> = ({
                 </HeadlessTab.List>
                 {util && <div className='h-full w-full'>{util}</div>}
             </div>
-            <HeadlessTab.Panels className='min-h-[25vh] overflow-hidden bg-neutral-900 laptop:rounded-b-2xl'>
+            <HeadlessTab.Panels className='relative min-h-[25vh] overflow-hidden bg-neutral-900 laptop:rounded-b-2xl'>
                 {arrayChildren[selectedIndex]}
             </HeadlessTab.Panels>
         </HeadlessTab.Group>
