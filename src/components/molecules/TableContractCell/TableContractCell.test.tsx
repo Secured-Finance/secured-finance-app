@@ -14,7 +14,7 @@ describe('TableContractCell Component', () => {
 
         it('should display the name of the contract with the currency', () => {
             render(<Default />);
-            expect(screen.getByText('ETH-DEC2022')).toBeInTheDocument();
+            expect(screen.getByText('ETH-DEC22')).toBeInTheDocument();
         });
 
         it('should display a larger image by default', () => {

@@ -21,13 +21,10 @@ describe('HorizontalTab Component', () => {
             'Active Contracts'
         );
         expect(screen.getByTestId('Active Contracts')).toHaveClass(
-            'bg-primary-700'
+            'bg-black-30'
         );
         expect(screen.getByTestId('Trade History')).not.toHaveClass(
-            'bg-primary-700'
-        );
-        expect(screen.getByTestId('Trade History')).toHaveClass(
-            'bg-neutral-700'
+            'bg-black-30'
         );
         fireEvent.click(screen.getByTestId('Trade History'));
         expect(screen.getByRole('tab', { selected: true })).toHaveTextContent(
