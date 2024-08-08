@@ -284,15 +284,13 @@ export const ActiveTradeTable = ({
                     60;
 
                 if (dayToMaturity > 1) {
-                    return <span className='mx-1'>{dayToMaturity} days</span>;
+                    return <span>{dayToMaturity} days</span>;
                 } else if (dayToMaturity === 1) {
-                    return <span className='mx-1'>{dayToMaturity} day</span>;
+                    return <span>{dayToMaturity} day</span>;
                 } else {
                     return (
                         <>
-                            {diffHours !== 0 && (
-                                <span className='mx-1'>{diffHours}h</span>
-                            )}
+                            {diffHours !== 0 && <span>{diffHours}h</span>}
                             {diffMinutes !== 0 && <span>{diffMinutes}m</span>}
                         </>
                     );

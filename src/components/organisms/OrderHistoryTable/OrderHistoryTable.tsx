@@ -6,7 +6,6 @@ import { HorizontalListItemTable } from 'src/components/atoms';
 import {
     CompactCoreTable,
     Pagination,
-    TableActionMenu,
     TableCardHeader,
 } from 'src/components/molecules';
 import { useBlockExplorerUrl, useBreakpoint, useLastPrices } from 'src/hooks';
@@ -18,7 +17,7 @@ import {
     TextCell,
     amountColumnDefinition,
     contractColumnDefinition,
-    dateAndTimeColumnDefinition,
+    dateTimeViewColumnDefinition,
     hexToCurrencySymbol,
     inputAmountColumnDefinition,
     inputPriceYieldColumnDefinition,
@@ -193,39 +192,13 @@ export const OrderHistoryTable = ({
                 ),
                 header: tableHeaderDefinition('Status', '', 'left'),
             }),
-            dateAndTimeColumnDefinition(
+            dateTimeViewColumnDefinition(
                 columnHelper,
                 'Order Time',
                 'createdAt',
-                row => row.createdAt
+                row => row.createdAt,
+                blockExplorerUrl
             ),
-            columnHelper.display({
-                id: 'actions',
-                cell: info => {
-                    const txHash = info.row.original.txHash;
-                    const blockExplorerLink = blockExplorerUrl
-                        ? `${blockExplorerUrl}/tx/${txHash}`
-                        : '';
-                    return (
-                        <div className='flex justify-center'>
-                            <TableActionMenu
-                                items={[
-                                    {
-                                        text: 'View',
-                                        onClick: () => {
-                                            window.open(
-                                                blockExplorerLink,
-                                                '_blank'
-                                            );
-                                        },
-                                    },
-                                ]}
-                            />
-                        </div>
-                    );
-                },
-                header: () => <div className='px-2'>Actions</div>,
-            }),
         ],
         [blockExplorerUrl, priceList, variant]
     );

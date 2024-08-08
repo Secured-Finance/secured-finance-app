@@ -374,17 +374,19 @@ export const CompactCoreTable = <T,>({
             ) : null}
 
             <tbody>
-                {rows.map(row => (
+                {rows.map((row, index) => (
                     <tr
                         key={row.id}
-                        className='h-5'
                         data-testid={`${coreTableOptions.name}-row`}
                     >
                         {row.getVisibleCells().map(cell => (
                             <td
                                 key={cell.id}
                                 className={clsx(
-                                    'min-w-fit whitespace-nowrap pb-1 text-center font-medium tablet:px-4'
+                                    'min-w-fit whitespace-nowrap px-4 pb-1 text-center font-medium',
+                                    {
+                                        'pt-2': index === 0,
+                                    }
                                 )}
                             >
                                 {flexRender(
