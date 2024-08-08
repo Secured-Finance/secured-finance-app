@@ -3,7 +3,8 @@ import SFLogoSmall from 'src/assets/img/logo-small.svg';
 import MetamaskIcon from 'src/assets/img/metamask-fox.svg';
 import { WalletSourceOption } from 'src/components/atoms';
 import { AssetDisclosureProps } from 'src/components/molecules';
-import { amountFormatterFromBase, CurrencySymbol } from './currencyList';
+import { ZERO_BI } from './collateral';
+import { CurrencySymbol } from './currencyList';
 
 export enum WalletSource {
     METAMASK = 'METAMASK',
@@ -19,7 +20,7 @@ export type CollateralInfo = {
 
 export const generateWalletInformation = (
     accounts: Partial<Record<WalletSource, string>>,
-    balance: Record<string, number>,
+    balance: Record<string, bigint>,
     information: Partial<Record<WalletSource, CurrencySymbol[]>>
 ): AssetDisclosureProps[] => {
     const collateralRecords = [];
@@ -38,7 +39,7 @@ export const generateWalletInformation = (
                 const asset = currenciesArray[j];
                 data.push({
                     asset: asset,
-                    quantity: balance[asset] ? balance[asset] : 0,
+                    quantity: balance[asset] ? balance[asset] : ZERO_BI,
                 });
             }
             collateralRecords.push({
@@ -53,7 +54,7 @@ export const generateWalletInformation = (
 
 export const generateWalletSourceInformation = (
     asset: CurrencySymbol,
-    metamaskBalance: number,
+    metamaskBalance: bigint,
     vaultBalance?: bigint
 ): WalletSourceOption[] => {
     return [
@@ -65,9 +66,7 @@ export const generateWalletSourceInformation = (
         },
         {
             source: Source.SF_VAULT,
-            available: vaultBalance
-                ? amountFormatterFromBase[asset](vaultBalance)
-                : 0,
+            available: vaultBalance || ZERO_BI,
             asset: asset,
             iconSVG: SFLogoSmall,
         },

@@ -1,14 +1,19 @@
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/store/types';
-import { CurrencySymbol, createCurrencyMap, currencyMap } from 'src/utils';
+import {
+    CurrencySymbol,
+    ZERO_BI,
+    createCurrencyMap,
+    currencyMap,
+} from 'src/utils';
 import { useCurrencies } from '../useCurrencies';
 import { useERC20Balance } from './useERC20Balance';
 
-export const zeroBalances = createCurrencyMap<number>(0);
+const zeroBalances = createCurrencyMap<bigint>(ZERO_BI);
 
 export const useBalances = () => {
-    const balances: Record<CurrencySymbol, number> = {
+    const balances: Record<CurrencySymbol, bigint> = {
         ...zeroBalances,
     };
 
@@ -25,13 +30,14 @@ export const useBalances = () => {
     }, [currencies]);
 
     if (nativeCurrency) {
-        balances[nativeCurrency.symbol] = balance;
+        balances[nativeCurrency.symbol] = BigInt(balance);
     }
 
     const balanceQueriesResults = useERC20Balance(address);
+
     balanceQueriesResults.forEach(value => {
         if (value.data) {
-            balances[value.data[0] as CurrencySymbol] = value.data[1] as number;
+            balances[value.data[0] as CurrencySymbol] = value.data[1] as bigint;
         }
     });
 

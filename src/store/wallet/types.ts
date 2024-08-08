@@ -1,9 +1,9 @@
 export interface WalletsStore {
     address: string;
-    balance: number;
+    balance: string;
 }
 
 export const defaultWallet: WalletsStore = {
     address: '',
-    balance: 0,
+    balance: '0',
 };

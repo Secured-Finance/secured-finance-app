@@ -23,12 +23,13 @@ const preloadedState = {
         currency: CurrencySymbol.USDC,
         maturity: dec22Fixture,
         side: OrderSide.BORROW,
-        amount: '500',
+        amount: '500000000',
         unitPrice: '95',
         orderType: OrderType.LIMIT,
     },
     wallet: {
         address: '0x1',
+        balance: '0',
     },
     blockchain: {
         chainError: false,
@@ -207,14 +208,14 @@ describe('AdvancedLendingOrderCard Component', () => {
 
         await waitFor(() => {
             fireEvent.change(slider, { target: { value: 50 } });
-            expect(input).toHaveValue('2,601.5749');
+            expect(input).toHaveValue('2,601.575');
         });
 
         expect(track).toHaveBeenCalledWith(InteractionEvents.SLIDER, {
             [InteractionProperties.SLIDER_VALUE]: 50,
         });
         fireEvent.change(slider, { target: { value: 100 } });
-        expect(input).toHaveValue('5,203.1499');
+        expect(input).toHaveValue('5,203.15');
         expect(track).toHaveBeenCalledWith(InteractionEvents.SLIDER, {
             [InteractionProperties.SLIDER_VALUE]: 100,
         });
@@ -229,6 +230,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                         ...preloadedState.landingOrderForm,
                         currency: CurrencySymbol.WFIL,
                         side: OrderSide.LEND,
+                        amount: '500000000000000000000',
                     },
                 },
             });
@@ -262,6 +264,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                         ...preloadedState.landingOrderForm,
                         currency: CurrencySymbol.WFIL,
                         side: OrderSide.LEND,
+                        amount: '500000000000000000000',
                     },
                 },
             })
@@ -304,6 +307,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                         ...preloadedState.landingOrderForm,
                         currency: CurrencySymbol.WFIL,
                         side: OrderSide.LEND,
+                        amount: '500000000000000000000',
                     },
                 },
             })
@@ -339,6 +343,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                     ...preloadedState.landingOrderForm,
                     currency: CurrencySymbol.WFIL,
                     side: OrderSide.LEND,
+                    amount: '500000000000000000000',
                 },
             },
         });
@@ -371,6 +376,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                 landingOrderForm: {
                     ...preloadedState.landingOrderForm,
                     currency: CurrencySymbol.WFIL,
+                    amount: '500000000000000000000',
                 },
             },
         });
@@ -395,6 +401,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                     ...preloadedState.landingOrderForm,
                     side: OrderSide.BORROW,
                     currency: CurrencySymbol.WFIL,
+                    amount: '500000000000000000000',
                 },
             },
         });
@@ -414,6 +421,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                     ...preloadedState.landingOrderForm,
                     side: OrderSide.LEND,
                     currency: CurrencySymbol.WFIL,
+                    amount: '500000000000000000000',
                 },
             },
         });
@@ -466,6 +474,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                         landingOrderForm: {
                             ...preloadedState.landingOrderForm,
                             currency: CurrencySymbol.WFIL,
+                            amount: '500000000000000000000',
                         },
                     },
                 }

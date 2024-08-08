@@ -11,7 +11,7 @@ describe('CurrencyAmountItem Component', () => {
     });
 
     it('should render the currency amount in USD with two decimals', () => {
-        render(<Default amount={100} price={5} />);
+        render(<Default amount={BigInt('100000000000000000000')} price={5} />);
         expect(screen.getByText('$500.00')).toBeInTheDocument();
     });
 
