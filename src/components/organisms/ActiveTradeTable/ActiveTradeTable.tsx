@@ -286,7 +286,7 @@ export const ActiveTradeTable = ({
                 if (dayToMaturity > 1) {
                     return <span className='mx-1'>{dayToMaturity} days</span>;
                 } else if (dayToMaturity === 1) {
-                    return `${dayToMaturity} day`;
+                    return <span className='mx-1'>{dayToMaturity} day</span>;
                 } else {
                     return (
                         <>
