@@ -21,7 +21,7 @@ import {
 import useSF from 'src/hooks/useSecuredFinance';
 import { currencyMap, ordinaryFormat } from 'src/utils';
 import { columns } from './constants';
-import { RecentTradesTableProps } from './types';
+import { RecentTradesTableProps, TradeMetadata } from './types';
 
 export const RecentTradesTable = ({
     currency,
@@ -94,10 +94,8 @@ export const RecentTradesTable = ({
                     </span>
                 }
             >
-                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                {(item: any) => (
+                {(item: TradeMetadata) => (
                     <TableRow key={1} className='py-0 text-white laptop:h-6'>
-                        {/* TODO: change to execution price */}
                         <TableCell
                             className={clsx(
                                 'border-b border-neutral-600 py-0 laptop:h-6',
