@@ -57,8 +57,7 @@ export const AdvancedLendingTopBar = ({
         },
         queries.TransactionHistoryDocument,
         'lastTransaction',
-        !isSubgraphSupported,
-        true
+        !isSubgraphSupported
     );
 
     const historicalTradeData = useGraphClientHook(
@@ -135,7 +134,7 @@ export const AdvancedLendingTopBar = ({
     const lastLoanValue = useMemo(() => {
         if (!lastTransaction || !lastTransaction.length) return undefined;
 
-        const lastPrice = Math.ceil(lastTransaction?.[0]?.averagePrice * 10000);
+        const lastPrice = Number(lastTransaction?.[0]?.executionPrice);
 
         return LoanValue.fromPrice(lastPrice, maturity);
     }, [lastTransaction, maturity]);

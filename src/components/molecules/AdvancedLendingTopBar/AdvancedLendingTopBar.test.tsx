@@ -11,7 +11,7 @@ describe('AdvancedLendingTopBar Component', () => {
         });
 
         expect(
-            screen.getByRole('button', { name: 'WFIL-DEC2022' })
+            screen.getByRole('button', { name: 'USDC-DEC2022' })
         ).toBeInTheDocument();
         expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
 
@@ -21,8 +21,8 @@ describe('AdvancedLendingTopBar Component', () => {
         expect(screen.getByText('Last Price (APR)')).toBeInTheDocument();
         expect(screen.getByText('--.-- (--.--%)')).toBeInTheDocument();
 
-        expect(screen.getByText('WFIL Price')).toBeInTheDocument();
-        expect(screen.getByText('$4.05')).toBeInTheDocument();
+        expect(screen.getByText('USDC Price')).toBeInTheDocument();
+        expect(screen.getByText('$1.00')).toBeInTheDocument();
     });
 
     it('should render source link for the selected asset', () => {
@@ -31,13 +31,13 @@ describe('AdvancedLendingTopBar Component', () => {
         });
 
         expect(
-            screen.getByRole('button', { name: 'WFIL-DEC2022' })
+            screen.getByRole('button', { name: 'USDC-DEC2022' })
         ).toBeInTheDocument();
         const source = screen.getByRole('link');
         expect(source).toBeInTheDocument();
         expect(source).toHaveAttribute(
             'href',
-            'https://www.coingecko.com/en/coins/filecoin'
+            'https://www.coingecko.com/en/coins/usd-coin'
         );
     });
 });

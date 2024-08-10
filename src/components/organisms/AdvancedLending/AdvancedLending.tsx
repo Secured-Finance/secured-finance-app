@@ -83,7 +83,7 @@ const useTradeHistoryDetails = (
             max = 0;
         }
         for (const t of transactions) {
-            const price = t.averagePrice * 10000;
+            const price = +t.executionPrice;
             if (price < min) {
                 min = price;
             }
@@ -138,7 +138,6 @@ export const AdvancedLending = ({
 
     const securedFinance = useSF();
     const currentChainId = securedFinance?.config.chain.id;
-
     const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
 
     useEffect(() => {

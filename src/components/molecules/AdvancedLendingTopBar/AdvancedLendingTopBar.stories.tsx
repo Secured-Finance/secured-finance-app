@@ -18,7 +18,7 @@ export default {
     component: AdvancedLendingTopBar,
     decorators: [withWalletProvider, WithGraphClient],
     args: {
-        selectedAsset: currencyList[2],
+        selectedAsset: currencyList[3],
         assetList: currencyList,
         options: maturityOptions,
         selected: {
@@ -35,7 +35,7 @@ export default {
             time: 1646920200,
             type: 'block',
         },
-        currencyPrice: '$4.05',
+        currencyPrice: '$1.00',
         marketInfo: dailyMarketStats,
     },
     parameters: {
