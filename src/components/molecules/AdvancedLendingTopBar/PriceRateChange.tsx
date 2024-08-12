@@ -17,7 +17,7 @@ export const PriceRateChange = ({
     aprChange: number | null;
 }) => {
     if (!percentageChange || !aprChange) {
-        return <StaticRateDisplay value='-.--%' />;
+        return <StaticRateDisplay value='--.--%' />;
     }
 
     let percentageChangeDisplay = '';
