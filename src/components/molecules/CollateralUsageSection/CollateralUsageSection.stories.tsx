@@ -9,7 +9,7 @@ export default {
     args: {
         collateralCoverage: collateralBook37.coverage,
         currency: CurrencySymbol.WFIL,
-        availableToBorrow: 867.192,
+        availableToBorrow: BigInt('867192000000000000000'),
     },
 } as Meta<typeof CollateralUsageSection>;
 

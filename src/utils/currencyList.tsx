@@ -12,6 +12,7 @@ import EthIcon from 'src/assets/coins/eth2.svg';
 import FilIcon from 'src/assets/coins/fil.svg';
 import IFilIcon from 'src/assets/coins/ifil.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
+import WBtcIcon from 'src/assets/coins/wbtc.svg';
 import WFilIcon from 'src/assets/coins/wfil.svg';
 import ZcBtcIcon from 'src/assets/coins/zc-btc.svg';
 import ZcEthIcon from 'src/assets/coins/zc-eth.svg';
@@ -132,7 +133,7 @@ export const currencyMap: Readonly<
         index: 4,
         symbol: CurrencySymbol.WBTC,
         name: WBTC.onChain().name,
-        icon: BtcIcon,
+        icon: WBtcIcon,
         zcIcon: ZcBtcIcon,
         coinGeckoId: 'wrapped-bitcoin',
         isCollateral: true,

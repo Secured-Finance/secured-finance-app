@@ -64,7 +64,7 @@ export const withBalance = (Story: StoryFn) => {
     const dispatch = useDispatch();
     useEffect(() => {
         const timeoutId = setTimeout(() => {
-            dispatch(updateBalance(2000));
+            dispatch(updateBalance('2000000000000000000000'));
         }, 300);
 
         return () => clearTimeout(timeoutId);
