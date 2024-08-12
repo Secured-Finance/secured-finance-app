@@ -6,7 +6,7 @@ export default {
     title: 'Atoms/CurrencyItem',
     component: CurrencyItem,
     args: {
-        amount: 1000,
+        amount: BigInt('1000000000000000000000'),
         ccy: CurrencySymbol.WFIL,
         price: 8.2,
         align: 'left',
@@ -44,7 +44,7 @@ CurrencyName.args = {
 
 export const CurrencyAmountInColor = Template.bind({});
 CurrencyAmountInColor.args = {
-    amount: 1000,
+    amount: BigInt('1000000000000000000000'),
     ccy: CurrencySymbol.WFIL,
     price: 8.2,
     align: 'left',
@@ -53,7 +53,7 @@ CurrencyAmountInColor.args = {
 
 export const Compact = Template.bind({});
 Compact.args = {
-    amount: 1000,
+    amount: BigInt('1000000000000000000000'),
     ccy: CurrencySymbol.WFIL,
     price: 8.2,
     align: 'left',
@@ -62,7 +62,7 @@ Compact.args = {
 
 export const ShowCurrency = Template.bind({});
 ShowCurrency.args = {
-    amount: 1000,
+    amount: BigInt('1000000000000000000000'),
     ccy: CurrencySymbol.WFIL,
     price: 8.2,
     align: 'right',
@@ -71,7 +71,7 @@ ShowCurrency.args = {
 
 export const Warning = Template.bind({});
 Warning.args = {
-    amount: 1000,
+    amount: BigInt('1000000000000000000000'),
     ccy: CurrencySymbol.WFIL,
     price: 8.2,
     align: 'right',

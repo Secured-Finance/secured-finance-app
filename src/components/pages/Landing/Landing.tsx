@@ -38,7 +38,7 @@ import {
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { OrderType } from 'src/types';
-import { CurrencySymbol } from 'src/utils';
+import { CurrencySymbol, ZERO_BI } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
@@ -69,7 +69,11 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
         lendingContracts,
         market => market.isOpened
     );
-    const allMaturityOptions = useMaturityOptions(lendingContracts);
+
+    const nonMaturedMarketOptionList = useMaturityOptions(
+        lendingContracts,
+        market => !market.isMatured
+    );
 
     const securedFinance = useSF();
     const currentChainId = securedFinance?.config.chain.id;
@@ -111,7 +115,7 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
     }, [view, dispatch]);
 
     const isShowWelcomeAlert =
-        Object.values(balance).every(v => v === 0) || !isConnected;
+        Object.values(balance).every(v => v === ZERO_BI) || !isConnected;
 
     return (
         <Page
@@ -135,6 +139,7 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
             >
                 {view === 'Simple' ? (
                     <div className='mt-6 flex flex-row items-center justify-center px-3 tablet:px-5 laptop:px-0'>
+                        {/* TODO: pass not matured markets to LendingCard when simple UI redesign is ready */}
                         <LendingCard
                             collateralBook={collateralBook}
                             maturitiesOptionList={maturityOptionList}
@@ -153,7 +158,7 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
                 ) : (
                     <AdvancedLending
                         collateralBook={collateralBook}
-                        maturitiesOptionList={allMaturityOptions}
+                        maturitiesOptionList={nonMaturedMarketOptionList}
                         marketPrice={marketPrice}
                         delistedCurrencySet={delistedCurrencySet}
                     />
