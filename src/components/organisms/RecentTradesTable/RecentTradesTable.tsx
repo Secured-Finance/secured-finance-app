@@ -20,6 +20,7 @@ import {
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { currencyMap, ordinaryFormat } from 'src/utils';
+import { LoanValue } from 'src/utils/entities';
 import { columns } from './constants';
 import { RecentTradesTableProps, TradeMetadata } from './types';
 
@@ -51,6 +52,8 @@ export const RecentTradesTable = ({
         'transactionHistory',
         !isSubgraphSupported
     );
+
+    console.log('transactionHistory', transactionHistory);
 
     return (
         <Table
@@ -94,50 +97,60 @@ export const RecentTradesTable = ({
                     </span>
                 }
             >
-                {(item: TradeMetadata) => (
-                    <TableRow key={1} className='py-0 text-white laptop:h-6'>
-                        <TableCell
-                            className={clsx(
-                                'border-b border-neutral-600 py-0 laptop:h-6',
-                                {
-                                    'text-secondary-300': item.side === 0,
-                                    'text-error-300': item.side === 1,
-                                }
-                            )}
+                {(item: TradeMetadata) => {
+                    const loanValue = LoanValue.fromPrice(
+                        +item.executionPrice,
+                        maturity
+                    );
+                    console.log('loanValue of each', loanValue);
+                    return (
+                        <TableRow
+                            key={1}
+                            className='py-0 text-white laptop:h-6'
                         >
-                            {/* TODO: handle math properly. this is for display prototyping only */}
-                            {(item.averagePrice * 100).toFixed(2)}
-                        </TableCell>
-                        <TableCell className='border-b border-neutral-600 py-0 laptop:h-6'>
-                            {ordinaryFormat(
-                                currencyMap[currency].fromBaseUnit(
-                                    BigInt(+item.amount)
-                                ),
-                                currencyMap[currency].roundingDecimal,
-                                currencyMap[currency].roundingDecimal
-                            )}
-                        </TableCell>
-                        <TableCell className='border-b border-neutral-600 py-0 laptop:h-6'>
-                            {/* TODO: pass txHash here */}
-                            <a
-                                href={
-                                    blockExplorerUrl
-                                        ? `${blockExplorerUrl}/tx/${'0x1234'}`
-                                        : ''
-                                }
-                                target='_blank'
-                                rel='noreferrer'
+                            <TableCell
+                                className={clsx(
+                                    'border-b border-neutral-600 py-0 laptop:h-6',
+                                    {
+                                        'text-secondary-300': item.side === 0,
+                                        'text-error-300': item.side === 1,
+                                    }
+                                )}
                             >
-                                <span className='flex items-center justify-end gap-1'>
-                                    {dayjs
-                                        .unix(+item.createdAt)
-                                        .format('HH:mm:ss')}{' '}
-                                    <ArrowUpSquare className='relative -top-[1px] h-[15px] w-[15px]' />
-                                </span>
-                            </a>
-                        </TableCell>
-                    </TableRow>
-                )}
+                                {/* TODO: handle execution price and display */}
+                                {item.executionPrice}
+                            </TableCell>
+                            <TableCell className='border-b border-neutral-600 py-0 laptop:h-6'>
+                                {ordinaryFormat(
+                                    currencyMap[currency].fromBaseUnit(
+                                        BigInt(+item.amount)
+                                    ),
+                                    currencyMap[currency].roundingDecimal,
+                                    currencyMap[currency].roundingDecimal
+                                )}
+                            </TableCell>
+                            <TableCell className='border-b border-neutral-600 py-0 laptop:h-6'>
+                                {/* TODO: pass txHash here */}
+                                <a
+                                    href={
+                                        blockExplorerUrl
+                                            ? `${blockExplorerUrl}/tx/${item.txHash}`
+                                            : ''
+                                    }
+                                    target='_blank'
+                                    rel='noreferrer'
+                                >
+                                    <span className='flex items-center justify-end gap-1'>
+                                        {dayjs
+                                            .unix(+item.createdAt)
+                                            .format('HH:mm:ss')}{' '}
+                                        <ArrowUpSquare className='relative -top-[1px] h-[15px] w-[15px]' />
+                                    </span>
+                                </a>
+                            </TableCell>
+                        </TableRow>
+                    );
+                }}
             </TableBody>
         </Table>
     );
