@@ -2,7 +2,7 @@ import { Token } from '@secured-finance/sf-core';
 
 export class AXLFIL extends Token {
     private constructor() {
-        super(18, 'axlFIL', 'Axelar Wrapped FIL');
+        super(18, 'axlFIL', 'Axelar Wrapped FIL', true);
     }
 
     private static instance: AXLFIL;

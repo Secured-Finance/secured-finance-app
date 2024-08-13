@@ -38,7 +38,7 @@ import {
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { OrderType } from 'src/types';
-import { CurrencySymbol } from 'src/utils';
+import { CurrencySymbol, ZERO_BI } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
@@ -115,7 +115,7 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
     }, [view, dispatch]);
 
     const isShowWelcomeAlert =
-        Object.values(balance).every(v => v === 0) || !isConnected;
+        Object.values(balance).every(v => v === ZERO_BI) || !isConnected;
 
     return (
         <Page
