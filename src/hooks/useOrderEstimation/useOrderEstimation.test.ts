@@ -15,7 +15,7 @@ const preloadedState = {
         currency: CurrencySymbol.USDC,
         side: OrderSide.BORROW,
         maturity: dec22Fixture.toNumber(),
-        amount: '5',
+        amount: '5000000',
         unitPrice: '98',
         isBorrowedCollateral: false,
         sourceAccount: WalletSource.METAMASK,

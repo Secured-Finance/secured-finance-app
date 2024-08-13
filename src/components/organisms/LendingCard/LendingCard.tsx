@@ -18,7 +18,6 @@ import {
 } from 'src/hooks';
 import {
     selectLandingOrderForm,
-    selectLandingOrderInputs,
     setAmount,
     setCurrency,
     setMaturity,
@@ -56,12 +55,10 @@ export const LendingCard = ({
     marketPrice: number | undefined;
     delistedCurrencySet: Set<CurrencySymbol>;
 }) => {
-    const { currency, maturity, side, sourceAccount, amount } = useSelector(
-        (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
-    );
-    const { amountInput } = useSelector((state: RootState) =>
-        selectLandingOrderInputs(state.landingOrderForm)
-    );
+    const { currency, maturity, side, sourceAccount, amount, amountExists } =
+        useSelector((state: RootState) =>
+            selectLandingOrderForm(state.landingOrderForm)
+        );
 
     const dispatch = useDispatch();
     const { address } = useAccount();
@@ -108,11 +105,9 @@ export const LendingCard = ({
     const balanceToLend = useMemo(() => {
         return selectedWalletSource.source === WalletSource.METAMASK
             ? balanceRecord[currency]
-            : amountFormatterFromBase[currency](
-                  collateralBook.nonCollateral[currency] ||
-                      collateralBook.withdrawableCollateral[currency] ||
-                      ZERO_BI
-              );
+            : collateralBook.nonCollateral[currency] ||
+                  collateralBook.withdrawableCollateral[currency] ||
+                  ZERO_BI;
     }, [
         balanceRecord,
         collateralBook.nonCollateral,
@@ -138,15 +133,10 @@ export const LendingCard = ({
         const available =
             source === WalletSource.METAMASK
                 ? balanceRecord[currency]
-                : amountFormatterFromBase[currency](
-                      collateralBook.nonCollateral[currency] ||
-                          collateralBook.withdrawableCollateral[currency] ||
-                          ZERO_BI
-                  );
-        const inputAmount =
-            amount > amountFormatterToBase[currency](available)
-                ? available
-                : amountFormatterFromBase[currency](amount);
+                : collateralBook.nonCollateral[currency] ||
+                  collateralBook.withdrawableCollateral[currency] ||
+                  ZERO_BI;
+        const inputAmount = amount > available ? available : amount;
         dispatch(setAmount(inputAmount.toString()));
     };
 
@@ -193,8 +183,24 @@ export const LendingCard = ({
                             options={assetList}
                             selected={selectedAsset}
                             priceList={assetPriceMap}
-                            onAmountChange={v => dispatch(setAmount(v))}
-                            initialValue={amountInput}
+                            onAmountChange={v =>
+                                dispatch(
+                                    setAmount(
+                                        v === ''
+                                            ? ''
+                                            : amountFormatterToBase[currency](
+                                                  Number(v)
+                                              ).toString()
+                                    )
+                                )
+                            }
+                            initialValue={
+                                amountExists
+                                    ? amountFormatterFromBase[currency](
+                                          amount
+                                      ).toString()
+                                    : ''
+                            }
                             onAssetChange={v => {
                                 handleCurrencyChange(v);
                                 trackButtonEvent(
@@ -207,7 +213,7 @@ export const LendingCard = ({
                         {side === OrderSide.LEND && (
                             <ErrorInfo
                                 showError={getAmountValidation(
-                                    amountFormatterFromBase[currency](amount),
+                                    amount,
                                     balanceToLend,
                                     side
                                 )}
@@ -265,7 +271,7 @@ export const LendingCard = ({
                     loanValue={marketValue}
                     renderSide
                     validation={getAmountValidation(
-                        amountFormatterFromBase[currency](amount),
+                        amount,
                         balanceToLend,
                         side
                     )}
