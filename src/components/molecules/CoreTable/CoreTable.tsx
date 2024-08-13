@@ -60,8 +60,17 @@ const COMPACT_DEFAULT_OPTIONS: CoreTableOptions = {
     stickyHeader: true,
 };
 
-const CompactCoreTableSpinner = () => (
-    <div className='flex h-[350px] w-full items-center justify-center'>
+export const COMPACT_TABLE_DEFAULT_HEIGHT = 300;
+
+const CompactCoreTableSpinner = ({
+    height,
+}: {
+    height: number | undefined;
+}) => (
+    <div
+        className='flex w-full items-center justify-center'
+        style={{ height: height || COMPACT_TABLE_DEFAULT_HEIGHT }}
+    >
         <Spinner />
     </div>
 );
@@ -413,6 +422,10 @@ export const CompactCoreTable = <T,>({
         }
     };
 
+    const containerHeight = coreTableOptions?.pagination?.containerHeight
+        ? coreTableOptions.pagination.containerHeight
+        : undefined;
+
     return (
         <div
             className={clsx({
@@ -421,17 +434,13 @@ export const CompactCoreTable = <T,>({
             })}
         >
             {isLoading ? (
-                <CompactCoreTableSpinner />
+                <CompactCoreTableSpinner height={containerHeight} />
             ) : (
                 <PaginatedScrolling
                     data={data}
                     fetchMoreData={fetchMoreData}
                     hasMoreData={hasMoreData}
-                    containerHeight={
-                        coreTableOptions?.pagination?.containerHeight
-                            ? coreTableOptions.pagination.containerHeight
-                            : undefined
-                    }
+                    containerHeight={containerHeight}
                 >
                     {coreTable}
                 </PaginatedScrolling>

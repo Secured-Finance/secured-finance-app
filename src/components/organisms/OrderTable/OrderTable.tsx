@@ -9,6 +9,7 @@ import {
     HorizontalListItemTable,
 } from 'src/components/atoms';
 import {
+    COMPACT_TABLE_DEFAULT_HEIGHT,
     CompactCoreTable,
     TableActionMenu,
     TableCardHeader,
@@ -31,8 +32,6 @@ import { Amount, Maturity } from 'src/utils/entities';
 export type OpenOrder = Order & { calculationDate?: number };
 
 const columnHelper = createColumnHelper<OpenOrder>();
-
-const DEFAULT_HEIGHT = 300;
 
 type RemoveOrderDialogDataType = {
     orderId: bigint;
@@ -235,7 +234,8 @@ export const OrderTable = ({
                     options={{
                         name: 'open-order-table',
                         pagination: {
-                            containerHeight: height || DEFAULT_HEIGHT,
+                            containerHeight:
+                                height || COMPACT_TABLE_DEFAULT_HEIGHT,
                             getMoreData: () => {},
                             totalData: data.length,
                         },

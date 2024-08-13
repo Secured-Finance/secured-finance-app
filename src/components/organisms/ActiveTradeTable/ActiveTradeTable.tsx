@@ -8,6 +8,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { HorizontalListItemTable } from 'src/components/atoms';
 import {
+    COMPACT_TABLE_DEFAULT_HEIGHT,
     CompactCoreTable,
     MenuItem,
     TableActionMenu,
@@ -40,8 +41,6 @@ import { Amount, Maturity } from 'src/utils/entities';
 const columnHelper = createColumnHelper<
     Position & { underMinimalCollateral?: boolean }
 >();
-
-const DEFAULT_HEIGHT = 300;
 
 const ActiveTradeTableMobile = ({
     data,
@@ -480,7 +479,8 @@ export const ActiveTradeTable = ({
                     options={{
                         name: 'active-trade-table',
                         pagination: {
-                            containerHeight: height || DEFAULT_HEIGHT,
+                            containerHeight:
+                                height || COMPACT_TABLE_DEFAULT_HEIGHT,
                             getMoreData: () => {},
                             totalData: data.length,
                         },
