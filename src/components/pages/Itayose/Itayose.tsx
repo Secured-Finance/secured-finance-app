@@ -25,7 +25,6 @@ import {
     OrderHistoryTable,
     OrderTable,
 } from 'src/components/organisms';
-import { TabSpinner } from 'src/components/pages';
 import { Page, ThreeColumnsWithTopBar } from 'src/components/templates';
 import {
     MarketPhase,
@@ -433,19 +432,16 @@ export const Itayose = () => {
                             useCustomBreakpoint={true}
                         >
                             <OrderTable data={filteredOrderList} height={350} />
-                            {userOrderHistory.loading ? (
-                                <TabSpinner />
-                            ) : (
-                                <OrderHistoryTable
-                                    data={sortedOrderHistory}
-                                    pagination={{
-                                        totalData: sortedOrderHistory.length,
-                                        getMoreData: () => {},
-                                        containerHeight: 350,
-                                    }}
-                                    variant='compact'
-                                />
-                            )}
+                            <OrderHistoryTable
+                                data={sortedOrderHistory}
+                                pagination={{
+                                    totalData: sortedOrderHistory.length,
+                                    getMoreData: () => {},
+                                    containerHeight: 350,
+                                }}
+                                variant='compact'
+                                isLoading={userOrderHistory.loading}
+                            />
                         </HorizontalTabTable>
                     </div>
                 </>
