@@ -23,7 +23,6 @@ import {
     OrderEvents,
     OrderProperties,
     formatAmount,
-    getErrorMessageFromSignature,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 import {
@@ -31,7 +30,7 @@ import {
     ButtonProperties,
     trackButtonEvent,
 } from 'src/utils/events';
-import { ContractFunctionExecutionError } from 'viem';
+import { BaseError, ContractFunctionRevertedError } from 'viem';
 import { useAccount } from 'wagmi';
 
 enum Step {
@@ -210,24 +209,15 @@ export const PlaceOrder = ({
                     dispatch({ type: 'next' });
                 }
             } catch (e) {
-                if (e instanceof ContractFunctionExecutionError) {
-                    const cause = e.cause as { signature?: string };
-                    const signature = cause.signature;
-                    if (signature) {
-                        const errorMessage =
-                            getErrorMessageFromSignature(signature);
-                        if (errorMessage) {
-                            setErrorMessage(errorMessage);
-                            dispatch({ type: 'error' });
-                            return;
-                        }
+                if (e instanceof BaseError) {
+                    const revertError = e.walk(
+                        e => e instanceof ContractFunctionRevertedError
+                    );
+                    if (revertError instanceof ContractFunctionRevertedError) {
+                        if (revertError.data?.errorName)
+                            setErrorMessage(revertError.data?.errorName);
                     }
                 }
-
-                if (e instanceof Error) {
-                    setErrorMessage(e.message);
-                }
-
                 dispatch({ type: 'error' });
             }
         },
