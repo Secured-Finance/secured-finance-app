@@ -4,13 +4,13 @@ import { CheckboxSizes } from './types';
 
 export const Checkbox = ({
     isChecked = false,
-    size = CheckboxSizes.md,
     onChange,
+    size = CheckboxSizes.md,
     disabled = false,
 }: {
     isChecked: boolean;
-    size?: CheckboxSizes;
     onChange: (v: boolean) => void;
+    size?: CheckboxSizes;
     disabled?: boolean;
 }) => {
     return (
