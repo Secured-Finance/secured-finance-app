@@ -123,7 +123,7 @@ export const HorizontalTabTable = ({
                 </HeadlessTab.List>
                 <HeadlessTab.Panels
                     className={clsx(
-                        'h-full rounded-b-xl bg-neutral-900 pb-2 tablet:min-h-[25vh]'
+                        'h-full rounded-b-xl bg-neutral-900 tablet:min-h-[25vh] laptop:pb-2'
                     )}
                 >
                     {arrayChildren[selectedIndex]}
