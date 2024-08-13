@@ -401,6 +401,7 @@ export const CompactCoreTable = <T,>({
                                     'min-w-fit whitespace-nowrap px-4 pb-1 text-center font-medium',
                                     {
                                         'pt-2': index === 0,
+                                        'pt-0': index !== 0,
                                     }
                                 )}
                             >
