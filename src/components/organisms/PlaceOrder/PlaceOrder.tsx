@@ -214,9 +214,16 @@ export const PlaceOrder = ({
                         e => e instanceof ContractFunctionRevertedError
                     );
                     if (revertError instanceof ContractFunctionRevertedError) {
-                        if (revertError.data?.errorName)
+                        if (revertError.data?.errorName) {
                             setErrorMessage(revertError.data?.errorName);
+                            dispatch({ type: 'error' });
+                            return;
+                        }
                     }
+                }
+
+                if (e instanceof Error) {
+                    setErrorMessage(e.message);
                 }
                 dispatch({ type: 'error' });
             }
