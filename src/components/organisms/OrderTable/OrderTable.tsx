@@ -168,7 +168,7 @@ export const OrderTable = ({
                 {
                     compact: true,
                     color: false,
-                    fontSize: 'typography-caption-2',
+                    fontSize: 'typography-caption-2 font-numerical',
                 },
                 '',
                 'right'

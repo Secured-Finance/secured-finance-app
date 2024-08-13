@@ -22,7 +22,6 @@ import {
     inputAmountColumnDefinition,
     inputPriceYieldColumnDefinition,
     loanTypeColumnDefinition,
-    priceYieldColumnDefinition,
     tableHeaderDefinition,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
@@ -148,14 +147,14 @@ export const OrderHistoryTable = ({
                 columnHelper,
                 'Price',
                 'price',
-                row => row.inputUnitPrice
+                row => row.inputUnitPrice,
+                'price'
             ),
-            priceYieldColumnDefinition(
+            inputPriceYieldColumnDefinition(
                 columnHelper,
                 'APR%',
                 'yield',
                 row => row.inputUnitPrice,
-                'compact',
                 'rate'
             ),
             inputAmountColumnDefinition(
@@ -167,7 +166,7 @@ export const OrderHistoryTable = ({
                     compact: true,
                     color: false,
                     priceList: priceList,
-                    fontSize: 'typography-desktop-body-5',
+                    fontSize: 'typography-desktop-body-5 font-numerical',
                 }
             ),
             amountColumnDefinition(
@@ -179,7 +178,7 @@ export const OrderHistoryTable = ({
                     compact: true,
                     color: false,
                     priceList: priceList,
-                    fontSize: 'typography-desktop-body-5',
+                    fontSize: 'typography-desktop-body-5 font-numerical',
                 },
                 '',
                 'right'

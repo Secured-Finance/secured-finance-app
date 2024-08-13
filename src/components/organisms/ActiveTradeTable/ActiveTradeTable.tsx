@@ -290,7 +290,9 @@ export const ActiveTradeTable = ({
                 } else {
                     return (
                         <>
-                            {diffHours !== 0 && <span>{diffHours}h</span>}
+                            {diffHours !== 0 && (
+                                <span className='mr-1'>{diffHours}h</span>
+                            )}
                             {diffMinutes !== 0 && <span>{diffMinutes}m</span>}
                         </>
                     );
@@ -341,26 +343,31 @@ export const ActiveTradeTable = ({
                             ? OrderSide.BORROW
                             : OrderSide.LEND;
 
+                    const maturityValue = getMaturityDisplayValue(
+                        maturityTimestamp,
+                        side,
+                        ccy
+                    );
+
                     return (
                         <div className='flex h-5 w-40 items-center justify-center gap-1 tablet:w-fit'>
-                            <div
-                                className={clsx(
-                                    'typography-desktop-body-6 w-full',
-                                    {
-                                        'text-galacticOrange':
-                                            ccy && delistedCurrencySet.has(ccy),
-                                        'text-white':
-                                            ccy &&
-                                            !delistedCurrencySet.has(ccy),
-                                    }
-                                )}
-                            >
-                                {getMaturityDisplayValue(
-                                    maturityTimestamp,
-                                    side,
-                                    ccy
-                                )}
-                            </div>
+                            {maturityValue && (
+                                <div
+                                    className={clsx(
+                                        'typography-desktop-body-6 w-full',
+                                        {
+                                            'text-galacticOrange':
+                                                ccy &&
+                                                delistedCurrencySet.has(ccy),
+                                            'text-white':
+                                                ccy &&
+                                                !delistedCurrencySet.has(ccy),
+                                        }
+                                    )}
+                                >
+                                    {maturityValue}
+                                </div>
+                            )}
                             <span className='w-full text-2.5 leading-3 text-neutral-400'>
                                 {formatDate(maturityTimestamp)}
                             </span>
@@ -406,7 +413,7 @@ export const ActiveTradeTable = ({
                     color: false,
                     priceList: priceList,
                     compact: true,
-                    fontSize: 'typography-desktop-body-5',
+                    fontSize: 'typography-desktop-body-5 font-numerical',
                 },
                 'Present Value (PV) is the current worth of the contract, taking into account the time value of money.',
                 'right'
