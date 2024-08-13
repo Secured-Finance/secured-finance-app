@@ -26,7 +26,7 @@ export const PriceYieldItem = ({
         >
             <span
                 className={clsx({
-                    'typography-caption-2 text-white': compact,
+                    'typography-caption-2 font-numerical text-white': compact,
                     'typography-caption h-6 text-neutral-6': !compact,
                 })}
             >

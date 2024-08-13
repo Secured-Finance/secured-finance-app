@@ -34,7 +34,7 @@ const priceYieldColumnDef = (
         cell: info => {
             return (
                 <div className='flex justify-center'>
-                    <span className='typography-caption-2 text-white'>
+                    <span className='typography-caption-2 font-numerical text-white'>
                         {formatLoanValue(
                             LoanValue.fromPrice(
                                 Number(info.getValue().toString() * 10000), //TODO: remove this hack
@@ -157,7 +157,7 @@ export const MyTransactionsTable = ({
                 {
                     compact: true,
                     color: false,
-                    fontSize: 'typography-caption-2',
+                    fontSize: 'typography-caption-2 font-numerical',
                 },
                 '',
                 'right'
@@ -175,7 +175,7 @@ export const MyTransactionsTable = ({
                 {
                     compact: true,
                     color: false,
-                    fontSize: 'typography-caption-2',
+                    fontSize: 'typography-caption-2 font-numerical',
                 },
                 '',
                 'right'

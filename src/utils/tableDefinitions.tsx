@@ -256,7 +256,7 @@ export const futureValueColumnDefinition = <T extends AmountColumnType>(
                             compact={options.compact}
                             minDecimals={currencyMap[ccy].roundingDecimal}
                             maxDecimals={currencyMap[ccy].roundingDecimal}
-                            fontSize='typography-desktop-body-5'
+                            fontSize='typography-desktop-body-5 font-numerical'
                         />
                     </div>
                 </div>
@@ -481,7 +481,8 @@ export const inputPriceYieldColumnDefinition = <T extends { maturity: string }>(
     columnHelper: ColumnHelper<T>,
     title: string,
     id: string,
-    accessor: AccessorFn<T, bigint>
+    accessor: AccessorFn<T, bigint>,
+    type: Parameters<typeof PriceYieldItem>[0]['firstLineType'] = 'price'
 ) => {
     return columnHelper.accessor(accessor, {
         id: id,
@@ -489,14 +490,16 @@ export const inputPriceYieldColumnDefinition = <T extends { maturity: string }>(
             return (
                 <div className='flex'>
                     {Number(info.getValue().toString()) === 0 ? (
-                        <div className='typography-caption'>Market Price</div>
+                        <div className='typography-caption-2 text-white'>
+                            {type === 'price' ? 'Market Price' : '--'}
+                        </div>
                     ) : (
                         <PriceYieldItem
                             loanValue={LoanValue.fromPrice(
                                 Number(info.getValue().toString()),
                                 Number(info.row.original.maturity.toString())
                             )}
-                            firstLineType='price'
+                            firstLineType={type}
                             align='left'
                             compact
                         />
@@ -521,7 +524,7 @@ export const dateAndTimeColumnDefinition = <T extends { createdAt: bigint }>(
             return (
                 <div className='flex justify-end'>
                     <div className='flex flex-col text-right'>
-                        <span className='typography-desktop-body-5 text-white'>
+                        <span className='typography-desktop-body-5 font-numerical text-white'>
                             {formatTimestampDDMMYY(+info.getValue().toString())}
                         </span>
                     </div>
