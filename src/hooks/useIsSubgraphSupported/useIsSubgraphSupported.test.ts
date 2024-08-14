@@ -3,6 +3,7 @@ import { useIsSubgraphSupported } from './useIsSubgraphSupported';
 
 jest.mock('src/utils/env', () => ({
     getNonSubgraphSupportedChainIds: () => [314, 314159],
+    getEnvironment: () => 'development',
 }));
 
 describe('useIsSubgraphSupported', () => {
