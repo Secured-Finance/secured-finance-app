@@ -19,7 +19,7 @@ import {
     useIsSubgraphSupported,
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
-import { currencyMap, ordinaryFormat } from 'src/utils';
+import { currencyMap, formatLoanValue, ordinaryFormat } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import { columns } from './constants';
 import { RecentTradesTableProps, TradeMetadata } from './types';
@@ -47,13 +47,13 @@ export const RecentTradesTable = ({
             from: -1,
             to: timestamp,
             first: 100,
+            side: 1,
+            // side: 0, // TODO: handle this once sf-graph-client updates. Temporarily added to enable response
         },
         queries.TransactionHistoryDocument,
         'transactionHistory',
         !isSubgraphSupported
     );
-
-    console.log('transactionHistory', transactionHistory);
 
     return (
         <Table
@@ -78,12 +78,14 @@ export const RecentTradesTable = ({
                     <TableColumn
                         key={column.key}
                         className={clsx(
-                            'h-8 w-1/3 !rounded-none border-b border-neutral-600 bg-neutral-900 px-4 font-normal text-neutral-300 laptop:h-6',
+                            'h-8 !rounded-none border-b border-neutral-600 bg-neutral-900 font-normal text-neutral-300 first:pl-4 last:pr-4 laptop:h-6',
                             column.className
                         )}
                     >
-                        {column.label}{' '}
-                        {column.key === 'size' && `(${currency})`}
+                        <span className='relative top-[1px]'>
+                            {column.label}{' '}
+                            {column.key === 'size' && `(${currency})`}
+                        </span>
                     </TableColumn>
                 ))}
             </TableHeader>
@@ -102,7 +104,6 @@ export const RecentTradesTable = ({
                         +item.executionPrice,
                         maturity
                     );
-                    console.log('loanValue of each', loanValue);
                     return (
                         <TableRow
                             key={1}
@@ -110,15 +111,14 @@ export const RecentTradesTable = ({
                         >
                             <TableCell
                                 className={clsx(
-                                    'border-b border-neutral-600 py-0 laptop:h-6',
+                                    'border-b border-neutral-600 py-0 pl-4 laptop:h-6',
                                     {
                                         'text-secondary-300': item.side === 0,
                                         'text-error-300': item.side === 1,
                                     }
                                 )}
                             >
-                                {/* TODO: handle execution price and display */}
-                                {item.executionPrice}
+                                {formatLoanValue(loanValue, 'price')}
                             </TableCell>
                             <TableCell className='border-b border-neutral-600 py-0 laptop:h-6'>
                                 {ordinaryFormat(
@@ -129,8 +129,7 @@ export const RecentTradesTable = ({
                                     currencyMap[currency].roundingDecimal
                                 )}
                             </TableCell>
-                            <TableCell className='border-b border-neutral-600 py-0 laptop:h-6'>
-                                {/* TODO: pass txHash here */}
+                            <TableCell className='border-b border-neutral-600 py-0 pl-0 pr-4 laptop:h-6'>
                                 <a
                                     href={
                                         blockExplorerUrl
@@ -143,7 +142,7 @@ export const RecentTradesTable = ({
                                     <span className='flex items-center justify-end gap-1'>
                                         {dayjs
                                             .unix(+item.createdAt)
-                                            .format('HH:mm:ss')}{' '}
+                                            .format('DD/MM/YY, HH:mm')}
                                         <ArrowUpSquare className='relative -top-[1px] h-[15px] w-[15px]' />
                                     </span>
                                 </a>
