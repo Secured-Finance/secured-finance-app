@@ -7,10 +7,11 @@ export const columns = [
     {
         key: 'size',
         label: 'Size',
+        className: 'w-[12%]',
     },
     {
         key: 'time',
         label: 'Time',
-        className: 'text-right w-[45%]',
+        className: 'text-right w-[58%]',
     },
 ];
