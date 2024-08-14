@@ -2,6 +2,7 @@ export const columns = [
     {
         key: 'price',
         label: 'Price',
+        className: 'w-[30%]',
     },
     {
         key: 'size',
@@ -10,6 +11,6 @@ export const columns = [
     {
         key: 'time',
         label: 'Time',
-        className: 'text-right',
+        className: 'text-right w-[45%]',
     },
 ];
