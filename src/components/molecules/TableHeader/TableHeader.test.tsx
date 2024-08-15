@@ -35,7 +35,7 @@ describe('TableHeader Component', () => {
 
     it('should add horizontal padding by default', () => {
         render(<Default />);
-        expect(screen.getByTestId('table-header-wrapper')).toHaveClass('px-3');
+        expect(screen.getByTestId('table-header-wrapper')).toHaveClass('px-2');
     });
 
     it('should remove horizontal padding when horizontalPadding is falsy', () => {

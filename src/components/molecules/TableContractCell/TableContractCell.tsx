@@ -36,11 +36,14 @@ export const TableContractCell = ({
             return `${ccy}`;
         if (variant === 'contractOnly')
             return `${getUTCMonthYear(maturity.toNumber())}`;
-        return `${ccy}-${getUTCMonthYear(maturity.toNumber())}`;
+        return `${ccy}-${getUTCMonthYear(
+            maturity.toNumber(),
+            variant === 'compact'
+        )}`;
     }, [ccy, maturity, variant]);
 
     const iconSize = useMemo(() => {
-        if (variant === 'compact') return 'small';
+        if (variant === 'compact') return 'xs';
         if (variant === 'currencyOnly') return 'large';
         return 'default';
     }, [variant]);
@@ -64,25 +67,27 @@ export const TableContractCell = ({
     return (
         <div className='flex flex-col'>
             <div
-                className={clsx('flex h-6 flex-row justify-start gap-2', {
+                className={clsx('flex flex-row justify-start', {
                     'tablet:w-32':
                         variant !== 'contractOnly' && variant !== 'compact',
+                    'h-fit gap-1': variant === 'compact',
+                    'h-6 gap-2': variant !== 'compact',
                 })}
             >
                 {variant !== 'contractOnly' ? (
                     <div
-                        className={clsx({
+                        className={clsx('flex', {
                             'mt-1':
                                 variant === 'default' ||
                                 variant === 'currencyOnly' ||
                                 variant === 'compactCurrencyOnly',
-                            'mt-0': variant === 'compact',
+                            'items-center': variant === 'compact',
                         })}
                     >
                         <CurrencyIcon ccy={ccy} variant={iconSize} />
                     </div>
                 ) : null}
-                <span className='typography-caption-2 text-neutral-6'>
+                <span className='typography-desktop-body-5 text-neutral-6'>
                     {contract}
                 </span>
                 {delistedContractSide !== undefined && (
