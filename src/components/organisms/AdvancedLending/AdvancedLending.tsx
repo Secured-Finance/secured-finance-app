@@ -57,6 +57,7 @@ import {
     currencyMap,
     formatLoanValue,
     formatOrders,
+    formatWithCurrency,
     getMappedOrderStatus,
     hexToCurrencySymbol,
     sortOrders,
@@ -76,7 +77,6 @@ const useTradeHistoryDetails = (
         let min = 10000;
         let max = 0;
         let sum = ZERO_BI;
-        let count = 0;
 
         if (!transactions.length) {
             min = 0;
@@ -91,14 +91,12 @@ const useTradeHistoryDetails = (
                 max = price;
             }
             sum += BigInt(t.amount);
-            count++;
         }
 
         return {
             min: LoanValue.fromPrice(min, maturity.toNumber()),
             max: LoanValue.fromPrice(max, maturity.toNumber()),
             sum: currencyMap[currency].fromBaseUnit(sum),
-            count,
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currency, maturity.toNumber(), transactions.length]);
@@ -228,17 +226,35 @@ export const AdvancedLending = ({
             maturity: maturity,
             from: timestamp - 24 * 3600,
             to: timestamp,
+            sides: [OrderSide.LEND, OrderSide.BORROW],
         },
         queries.TransactionHistoryDocument,
         'transactionHistory',
         !isSubgraphSupported
     );
 
+    const selectedAsset = useMemo(() => {
+        return assetList.find(option => option.value === currency);
+    }, [currency, assetList]);
+
     const tradeHistoryDetails = useTradeHistoryDetails(
         transactionHistory ?? [],
         currency,
         selectedTerm.value
     );
+
+    const dailyMarketInfo = {
+        high: formatLoanValue(tradeHistoryDetails.max, 'price'),
+        low: formatLoanValue(tradeHistoryDetails.min, 'price'),
+        volume: formatWithCurrency(
+            tradeHistoryDetails.sum || 0,
+            selectedAsset?.value as CurrencySymbol,
+            currencyMap[selectedAsset?.value as CurrencySymbol].roundingDecimal
+        ),
+        volumeInUSD: usdFormat(currencyPrice * tradeHistoryDetails.sum),
+        rateHigh: formatLoanValue(tradeHistoryDetails.max, 'rate'),
+        rateLow: formatLoanValue(tradeHistoryDetails.min, 'rate'),
+    };
 
     const {
         rates,
@@ -269,10 +285,6 @@ export const AdvancedLending = ({
         maturity,
         openingUnitPrice,
     ]);
-
-    const selectedAsset = useMemo(() => {
-        return assetList.find(option => option.value === currency);
-    }, [currency, assetList]);
 
     const handleCurrencyChange = useCallback(
         (v: CurrencySymbol) => {
@@ -310,17 +322,6 @@ export const AdvancedLending = ({
     const maximumOpenOrderLimit = orderList.activeOrderList.length >= 20;
 
     const tooltipMap: Record<number, string> = {};
-
-    const dailyMarketInfo = {
-        high: formatLoanValue(tradeHistoryDetails.max, 'price'),
-        low: formatLoanValue(tradeHistoryDetails.min, 'price'),
-        volume: tradeHistoryDetails.sum.toString(),
-        volumeInUSD: usdFormat(
-            Math.floor(currencyPrice * tradeHistoryDetails.sum)
-        ),
-        rateHigh: formatLoanValue(tradeHistoryDetails.max, 'rate'),
-        rateLow: formatLoanValue(tradeHistoryDetails.min, 'rate'),
-    };
 
     if (maximumOpenOrderLimit)
         tooltipMap[1] =
