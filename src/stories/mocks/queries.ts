@@ -1,3 +1,4 @@
+import { OrderSide } from '@secured-finance/sf-client';
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { GetUserDocument } from '@secured-finance/sf-point-client';
@@ -883,6 +884,7 @@ function getTransactionQuery(
                 maturity: maturity.toNumber(),
                 from: from,
                 to: to,
+                sides: [OrderSide.LEND, OrderSide.BORROW],
                 awaitRefetchQueries: true,
             },
         },

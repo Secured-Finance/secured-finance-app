@@ -3,18 +3,18 @@ import { XMarkIcon } from '@heroicons/react/20/solid';
 import { formatDate } from '@secured-finance/sf-core';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-import { cloneElement, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ArrowUpSquare from 'src/assets/icons/arrow-up-square.svg';
 import DocumentTextIcon from 'src/assets/icons/document-text.svg';
 import { PriceRateChange, Tooltip } from 'src/components/molecules';
 import {
+    currencyMap,
     CurrencySymbol,
     formatLoanValue,
     formatRemainingTime,
     formatWithCurrency,
     handlePriceSource,
 } from 'src/utils';
-import { mapCurrencyToIcon } from './constants';
 import { MarketInfoDialogProps } from './types';
 
 dayjs.extend(duration);
@@ -33,7 +33,7 @@ export const MarketInfoDialog = ({
     const lastPrice = formatLoanValue(currentMarket?.value, 'price');
     const rate = formatLoanValue(currentMarket?.value, 'rate');
     const maturity = currentMarket?.value.maturity ?? 0;
-    const currencyIcon = mapCurrencyToIcon(currency as CurrencySymbol);
+    const CurrencyIcon = currencyMap[currency as CurrencySymbol].icon;
     const [remainingTime, setRemainingTime] = useState<number>(0);
 
     const priceSource = handlePriceSource(currency as CurrencySymbol);
@@ -81,10 +81,7 @@ export const MarketInfoDialog = ({
                             <li className='flex justify-between'>
                                 <div className='flex items-center gap-1.5 pb-1'>
                                     <div className='p-[3px]'>
-                                        {currencyIcon &&
-                                            cloneElement(currencyIcon, {
-                                                className: 'h-[22px] w-[22px]',
-                                            })}
+                                        <CurrencyIcon className='h-[22px] w-[22px]' />
                                     </div>
                                     <div className='flex flex-col'>
                                         <h3 className='font-semibold text-white'>
@@ -145,7 +142,9 @@ export const MarketInfoDialog = ({
                                             {formatWithCurrency(
                                                 Number(marketInfo?.volume) || 0,
                                                 currency as CurrencySymbol,
-                                                5
+                                                currencyMap[
+                                                    currency as CurrencySymbol
+                                                ].roundingDecimal
                                             )}
                                         </span>
                                     }

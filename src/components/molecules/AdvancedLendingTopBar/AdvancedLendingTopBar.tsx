@@ -1,3 +1,4 @@
+import { OrderSide } from '@secured-finance/sf-client';
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import clsx from 'clsx';
@@ -19,7 +20,6 @@ import { HistoricalDataIntervals } from 'src/types';
 import {
     CurrencySymbol,
     formatLoanValue,
-    formatWithCurrency,
     getTransformMaturityOption,
     handlePriceSource,
 } from 'src/utils';
@@ -54,13 +54,14 @@ export const AdvancedLendingTopBar = ({
             maturity: maturity,
             from: -1,
             to: timestamp,
+            sides: [OrderSide.LEND, OrderSide.BORROW],
         },
         queries.TransactionHistoryDocument,
         'lastTransaction',
         !isSubgraphSupported
     );
 
-    const historicalTradeData = useGraphClientHook(
+    const { data: historicalData } = useGraphClientHook(
         {
             interval: HistoricalDataIntervals['5M'],
             currency: toBytes32(selectedAsset?.value as CurrencySymbol),
@@ -70,7 +71,7 @@ export const AdvancedLendingTopBar = ({
     );
 
     const dailyStats = useMemo(() => {
-        const data = historicalTradeData.data?.transactionCandleSticks;
+        const data = historicalData?.transactionCandleSticks;
         if (!data || data.length === 0)
             return { percentageChange: null, aprChange: null };
 
@@ -129,7 +130,7 @@ export const AdvancedLendingTopBar = ({
         const aprChange = todaysAPR - prevAPR;
 
         return { percentageChange, aprChange };
-    }, [historicalTradeData.data?.transactionCandleSticks, maturity]);
+    }, [historicalData?.transactionCandleSticks, maturity]);
 
     const lastLoanValue = useMemo(() => {
         if (!lastTransaction || !lastTransaction.length) return undefined;
@@ -286,13 +287,7 @@ export const AdvancedLendingTopBar = ({
                                             <Tooltip
                                                 iconElement={
                                                     <span className='typography-caption flex items-center whitespace-nowrap leading-4 text-neutral-50 desktop:leading-6'>
-                                                        {formatWithCurrency(
-                                                            Number(
-                                                                marketInfo?.volume
-                                                            ) || 0,
-                                                            selectedAsset?.value as CurrencySymbol,
-                                                            5
-                                                        )}
+                                                        {marketInfo?.volume}
                                                     </span>
                                                 }
                                             >
