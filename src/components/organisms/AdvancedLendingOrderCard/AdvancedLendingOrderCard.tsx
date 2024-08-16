@@ -321,7 +321,7 @@ export function AdvancedLendingOrderCard({
         variant: TabVariant[option],
     }));
     return (
-        <div className='h-full rounded-b-xl border-white-10 pb-7 laptop:border laptop:bg-cardBackground laptop:bg-opacity-60'>
+        <div className='h-full rounded-b-xl border-white-10 bg-neutral-900 pb-7 laptop:border'>
             <div className='h-11 border-b border-neutral-600 laptop:h-[60px]'>
                 <TabGroup
                     options={orderSideOptions}
