@@ -1067,7 +1067,7 @@ export const tradesWFIL: TransactionList = [
         currency: wfilBytes32,
         averagePrice: 0.8,
         executionPrice: 8000,
-        txHash: '0x1234567890123456789012345678901234567890123456789012345678901234',
+        txHash: toBytes32('hash'),
     },
     {
         amount: 1000000000000,
@@ -1077,7 +1077,7 @@ export const tradesWFIL: TransactionList = [
         currency: wfilBytes32,
         averagePrice: 0.9,
         executionPrice: 9000,
-        txHash: '0x1234567890123456789012345678901234567890123456789012345678901234',
+        txHash: toBytes32('hash'),
     },
 ];
 
@@ -1090,7 +1090,7 @@ export const tradesETH: TransactionList = [
         currency: ethBytes32,
         averagePrice: 0.8,
         executionPrice: 8000,
-        txHash: '0x1234567890123456789012345678901234567890123456789012345678901234',
+        txHash: toBytes32('hash'),
     },
     {
         amount: 1000000000000,
@@ -1100,7 +1100,7 @@ export const tradesETH: TransactionList = [
         currency: ethBytes32,
         averagePrice: 0.9,
         executionPrice: 9000,
-        txHash: '0x1234567890123456789012345678901234567890123456789012345678901234',
+        txHash: toBytes32('hash'),
     },
 ];
 
@@ -1113,7 +1113,7 @@ export const tradesUSDC: TransactionList = [
         currency: usdcBytes32,
         averagePrice: 0.8,
         executionPrice: 8000,
-        txHash: '0x1234567890123456789012345678901234567890123456789012345678901234',
+        txHash: toBytes32('hash'),
     },
     {
         amount: 1000000000000,
@@ -1123,7 +1123,7 @@ export const tradesUSDC: TransactionList = [
         currency: usdcBytes32,
         averagePrice: 0.9,
         executionPrice: 9000,
-        txHash: '0x1234567890123456789012345678901234567890123456789012345678901234',
+        txHash: toBytes32('hash'),
     },
 ];
 
@@ -1136,7 +1136,7 @@ export const tradesWBTC: TransactionList = [
         currency: wbtcBytes32,
         averagePrice: 0.8,
         executionPrice: 8000,
-        txHash: '0x1234567890123456789012345678901234567890123456789012345678901234',
+        txHash: toBytes32('hash'),
     },
     {
         amount: 1000000000000,
@@ -1146,7 +1146,7 @@ export const tradesWBTC: TransactionList = [
         currency: wbtcBytes32,
         averagePrice: 0.9,
         executionPrice: 9000,
-        txHash: '0x1234567890123456789012345678901234567890123456789012345678901234',
+        txHash: toBytes32('hash'),
     },
 ];
 

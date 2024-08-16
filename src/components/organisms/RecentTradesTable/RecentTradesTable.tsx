@@ -79,12 +79,10 @@ export const RecentTradesTable = ({
             from: -1,
             to: timestamp,
             first: 100,
-            side: showSide,
-            // TODO: handle this once sf-graph-client updates. Temporarily added to enable response
-            // sides:
-            //     showSide === null
-            //         ? [OrderSide.LEND, OrderSide.BORROW]
-            //         : [showSide]
+            sides:
+                showSide === null
+                    ? [OrderSide.LEND, OrderSide.BORROW]
+                    : [showSide],
         },
         queries.TransactionHistoryDocument,
         'transactionHistory',
