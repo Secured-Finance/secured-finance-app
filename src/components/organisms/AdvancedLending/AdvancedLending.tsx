@@ -224,6 +224,7 @@ export const AdvancedLending = ({
             maturity: maturity,
             from: timestamp - 24 * 3600,
             to: timestamp,
+            sides: [OrderSide.LEND, OrderSide.BORROW],
         },
         queries.TransactionHistoryDocument,
         'transactionHistory',
