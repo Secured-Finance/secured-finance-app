@@ -35,6 +35,7 @@ import {
     trackButtonEvent,
     trackZCTokenEvent,
 } from 'src/utils/events';
+import { BaseError, ContractFunctionRevertedError } from 'viem';
 
 enum Step {
     depositZCToken = 1,
@@ -215,10 +216,22 @@ export const DepositZCToken = ({
                 dispatch({ type: 'next' });
             }
         } catch (e) {
+            if (e instanceof BaseError) {
+                const revertError = e.walk(
+                    e => e instanceof ContractFunctionRevertedError
+                );
+                if (revertError instanceof ContractFunctionRevertedError) {
+                    if (revertError.data?.errorName) {
+                        setErrorMessage(revertError.data?.errorName);
+                        dispatch({ type: 'error' });
+                        return;
+                    }
+                }
+            }
+
             if (e instanceof Error) {
                 setErrorMessage(e.message);
             }
-
             dispatch({ type: 'error' });
         }
     }, [
