@@ -1182,7 +1182,7 @@ export const volumePerMarket = {
 export const dailyMarketStats = {
     high: '98.99',
     low: '94.57',
-    volume: '520',
+    volume: '520 USDC',
     volumeInUSD: usdFormat(2152),
     rateHigh: '11.84%',
     rateLow: '18.46%',

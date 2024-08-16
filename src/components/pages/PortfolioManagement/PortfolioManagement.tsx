@@ -406,33 +406,29 @@ export const PortfolioManagement = () => {
                                     : []
                             }
                             delistedCurrencySet={delistedCurrencySet}
+                            variant='compact'
                         />
                         <OrderTable data={activeOrderList} />
-
-                        {userOrderHistory.loading ? (
-                            <TabSpinner />
-                        ) : (
-                            <OrderHistoryTable
-                                data={sortedOrderHistory}
-                                pagination={{
-                                    totalData: sortedOrderHistory.length,
-                                    getMoreData: () => {},
-                                    containerHeight: 300,
-                                }}
-                            />
-                        )}
-                        {userTransactionHistory.loading ? (
-                            <TabSpinner />
-                        ) : (
-                            <MyTransactionsTable
-                                data={myTransactions}
-                                pagination={{
-                                    totalData: myTransactions.length,
-                                    getMoreData: () => {},
-                                    containerHeight: 300,
-                                }}
-                            />
-                        )}
+                        <OrderHistoryTable
+                            data={sortedOrderHistory}
+                            pagination={{
+                                totalData: sortedOrderHistory.length,
+                                getMoreData: () => {},
+                                containerHeight: 300,
+                            }}
+                            variant='compact'
+                            isLoading={userOrderHistory.loading}
+                        />
+                        <MyTransactionsTable
+                            data={myTransactions}
+                            pagination={{
+                                totalData: myTransactions.length,
+                                getMoreData: () => {},
+                                containerHeight: 300,
+                            }}
+                            variant='compact'
+                            isLoading={userTransactionHistory.loading}
+                        />
                     </HorizontalTabTable>
                     <Disclaimer
                         showDelistedCurrencyDisclaimer={
