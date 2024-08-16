@@ -65,15 +65,16 @@ export const RecentTradesTable = ({
     const data = useMemo(() => {
         return transactionHistory
             ?.map(transaction => {
+                const sizeActual = currencyMap[currency].fromBaseUnit(
+                    BigInt(+transaction.amount)
+                );
                 const size = ordinaryFormat(
-                    currencyMap[currency].fromBaseUnit(
-                        BigInt(+transaction.amount)
-                    ),
+                    sizeActual,
                     currencyMap[currency].roundingDecimal,
                     currencyMap[currency].roundingDecimal
                 );
 
-                if (Math.abs(Number(size)) > 0) {
+                if (Math.abs(Number(sizeActual)) > 0) {
                     return {
                         ...transaction,
                         size,

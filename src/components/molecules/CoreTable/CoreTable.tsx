@@ -10,6 +10,7 @@ import {
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { Spinner } from 'src/components/atoms';
 
 export interface Pagination {
     getMoreData: () => void;
@@ -45,6 +46,34 @@ const DEFAULT_OPTIONS: CoreTableOptions = {
     stickyFirstColumn: false,
     stickyHeader: true,
 };
+
+const COMPACT_DEFAULT_OPTIONS: CoreTableOptions = {
+    border: true,
+    name: 'core-table',
+    onLineClick: undefined,
+    hoverRow: undefined,
+    hideColumnIds: undefined,
+    responsive: true,
+    showHeaders: true,
+    compact: true,
+    stickyFirstColumn: true,
+    stickyHeader: true,
+};
+
+export const COMPACT_TABLE_DEFAULT_HEIGHT = 300;
+
+const CompactCoreTableSpinner = ({
+    height,
+}: {
+    height: number | undefined;
+}) => (
+    <div
+        className='flex w-full items-center justify-center'
+        style={{ height: height || COMPACT_TABLE_DEFAULT_HEIGHT }}
+    >
+        <Spinner />
+    </div>
+);
 
 export const CoreTable = <T,>({
     data,
@@ -252,6 +281,171 @@ export const CoreTable = <T,>({
             >
                 {coreTable}
             </PaginatedScrolling>
+        </div>
+    );
+};
+
+export const CompactCoreTable = <T,>({
+    data,
+    columns,
+    options = COMPACT_DEFAULT_OPTIONS,
+    isLoading = false,
+}: {
+    data: Array<T>;
+    columns: ColumnDef<T, any>[];
+    options?: Partial<CoreTableOptions>;
+    isLoading?: boolean;
+}) => {
+    const [sorting, setSorting] = useState<SortingState>([]);
+    const coreTableOptions: CoreTableOptions = {
+        ...DEFAULT_OPTIONS,
+        ...options,
+    };
+    const [hasMoreData, setHasMoreData] = useState(
+        !!coreTableOptions.pagination?.totalData &&
+            coreTableOptions.pagination?.totalData > 0
+    );
+
+    useEffect(() => {
+        if (
+            !!coreTableOptions.pagination?.totalData &&
+            coreTableOptions.pagination?.totalData > 0
+        )
+            setHasMoreData(true);
+        else {
+            setHasMoreData(false);
+        }
+    }, [coreTableOptions.pagination?.totalData]);
+
+    useEffect(() => {
+        if (
+            coreTableOptions.pagination?.totalData &&
+            data.length >= coreTableOptions.pagination.totalData
+        ) {
+            setHasMoreData(false);
+        }
+    }, [coreTableOptions.pagination?.totalData, data]);
+
+    const filteredColumns = columns.filter(column => {
+        if (
+            coreTableOptions.hideColumnIds === undefined ||
+            column.id === undefined
+        ) {
+            return true;
+        }
+        return !coreTableOptions.hideColumnIds.includes(column.id);
+    });
+
+    const configuration = {
+        data: data,
+        columns: filteredColumns,
+        getCoreRowModel: getCoreRowModel(),
+        state: {
+            sorting,
+        },
+        onSortingChange: setSorting,
+        getSortedRowModel: getSortedRowModel(),
+    };
+
+    const table = useReactTable<T>(configuration);
+
+    const rows = table.getRowModel().rows;
+
+    const coreTable = (
+        <table
+            className={clsx('w-full', {
+                'table-fixed': !coreTableOptions.responsive,
+            })}
+            data-testid={coreTableOptions.name}
+        >
+            {coreTableOptions.showHeaders ? (
+                <thead
+                    className={clsx(
+                        'sticky inset-0 z-20 h-8 bg-neutral-900 py-1.5 text-2.5 leading-5 text-neutral-300 after:absolute after:bottom-0 after:z-20 after:w-full after:border-b after:border-neutral-600'
+                    )}
+                >
+                    {table.getHeaderGroups().map(headerGroup => (
+                        <tr
+                            key={headerGroup.id}
+                            data-testid={`${coreTableOptions.name}-header`}
+                        >
+                            {headerGroup.headers.map(header => (
+                                <th
+                                    data-testid={`${coreTableOptions.name}-header-cell`}
+                                    key={header.id}
+                                    className='whitespace-nowrap text-center font-normal tablet:px-2'
+                                >
+                                    {header.isPlaceholder
+                                        ? null
+                                        : flexRender(
+                                              header.column.columnDef.header,
+                                              header.getContext()
+                                          )}
+                                </th>
+                            ))}
+                        </tr>
+                    ))}
+                </thead>
+            ) : null}
+
+            <tbody>
+                {rows.map((row, index) => (
+                    <tr
+                        key={row.id}
+                        data-testid={`${coreTableOptions.name}-row`}
+                    >
+                        {row.getVisibleCells().map(cell => (
+                            <td
+                                key={cell.id}
+                                className={clsx(
+                                    'min-w-fit whitespace-nowrap px-4 pb-1 text-center font-medium',
+                                    {
+                                        'pt-2': index === 0,
+                                        'pt-0': index !== 0,
+                                    }
+                                )}
+                            >
+                                {flexRender(
+                                    cell.column.columnDef.cell,
+                                    cell.getContext()
+                                )}
+                            </td>
+                        ))}
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    );
+
+    const fetchMoreData = () => {
+        if (data.length > 0) {
+            coreTableOptions?.pagination?.getMoreData();
+        }
+    };
+
+    const containerHeight = coreTableOptions?.pagination?.containerHeight
+        ? coreTableOptions.pagination.containerHeight
+        : undefined;
+
+    return (
+        <div
+            className={clsx({
+                'overflow-x-auto overflow-y-visible text-white laptop:overflow-visible':
+                    coreTableOptions.responsive,
+            })}
+        >
+            {isLoading ? (
+                <CompactCoreTableSpinner height={containerHeight} />
+            ) : (
+                <PaginatedScrolling
+                    data={data}
+                    fetchMoreData={fetchMoreData}
+                    hasMoreData={hasMoreData}
+                    containerHeight={containerHeight}
+                >
+                    {coreTable}
+                </PaginatedScrolling>
+            )}
         </div>
     );
 };
