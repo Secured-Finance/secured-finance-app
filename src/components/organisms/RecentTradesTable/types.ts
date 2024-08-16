@@ -7,8 +7,11 @@ export type RecentTradesTableProps = {
 
 export type TradeMetadata = {
     side: number;
+    size: string;
     executionPrice: string;
     amount: string;
     createdAt: string;
     txHash: string;
+    currency: CurrencySymbol;
+    maturity: number;
 };

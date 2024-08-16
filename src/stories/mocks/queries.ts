@@ -874,6 +874,7 @@ export const mockRecentTrades = [
                 to: 1643713200,
                 first: 100,
                 awaitRefetchQueries: true,
+                sides: [OrderSide.LEND],
             },
         },
         result: {
