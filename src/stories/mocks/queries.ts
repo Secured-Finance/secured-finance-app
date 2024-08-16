@@ -894,6 +894,7 @@ export const mockRecentTrades = [
                 to: 1669852800,
                 first: 100,
                 awaitRefetchQueries: true,
+                sides: [OrderSide.LEND, OrderSide.BORROW],
             },
         },
         result: {
