@@ -1,4 +1,5 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
+import { WithGraphClient } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
 import { dec22Fixture } from 'src/stories/mocks/fixtures';
 import { mockRecentTrades } from 'src/stories/mocks/queries';
@@ -15,13 +16,14 @@ export default {
     parameters: {
         ...RESPONSIVE_PARAMETERS,
         apolloClient: {
-            mocks: [...mockRecentTrades],
+            mocks: mockRecentTrades,
         },
         chromatic: {
             viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
         },
         connected: true,
     },
+    decorators: [WithGraphClient],
 } as Meta<typeof RecentTradesTable>;
 
 const Template: StoryFn<typeof RecentTradesTable> = args => {
