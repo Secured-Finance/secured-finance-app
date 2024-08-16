@@ -11,7 +11,7 @@ import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import ArrowUpSquare from 'src/assets/icons/arrow-up-square.svg';
 import ShowFirstIcon from 'src/assets/icons/orderbook-first.svg';
 import ShowAllIcon from 'src/assets/icons/orderbook-full.svg';
@@ -27,33 +27,6 @@ import { currencyMap, formatLoanValue, ordinaryFormat } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import { columns } from './constants';
 import { RecentTradesTableProps, TradeMetadata } from './types';
-
-const OrderBookIcon = ({
-    Icon,
-    name,
-    active,
-    onClick,
-}: {
-    Icon: React.ReactNode;
-    name: string;
-    active: boolean;
-    onClick: () => void;
-}) => (
-    <button
-        key={name}
-        aria-label={name}
-        className={clsx(
-            'rounded border-0.5 border-neutral-500 px-1.5 py-[7px] hover:bg-neutral-700',
-            {
-                'bg-neutral-700': active,
-                'bg-neutral-800': !active,
-            }
-        )}
-        onClick={onClick}
-    >
-        {Icon}
-    </button>
-);
 
 export const RecentTradesTable = ({
     currency,
@@ -89,6 +62,28 @@ export const RecentTradesTable = ({
         !isSubgraphSupported
     );
 
+    const data = useMemo(() => {
+        return transactionHistory
+            ?.map(transaction => {
+                const size = ordinaryFormat(
+                    currencyMap[currency].fromBaseUnit(
+                        BigInt(+transaction.amount)
+                    ),
+                    currencyMap[currency].roundingDecimal,
+                    currencyMap[currency].roundingDecimal
+                );
+
+                if (Math.abs(Number(size)) > 0) {
+                    return {
+                        ...transaction,
+                        size,
+                    } as TradeMetadata;
+                }
+                return null;
+            })
+            .filter((item): item is TradeMetadata => item !== null);
+    }, [currency, transactionHistory]);
+
     const toggleShowSide = (side: OrderSide | null) => {
         if (!side) setShowSide(null);
 
@@ -121,7 +116,7 @@ export const RecentTradesTable = ({
             </div>
             <Table
                 classNames={{
-                    base: 'laptop:h-full overflow-auto',
+                    base: 'laptop:h-full overflow-auto laptop:max-h-[371px]',
                     wrapper:
                         'p-0 font-numerical text-xs leading-4 scrollbar-table',
                     table: 'laptop:border-separate laptop:border-spacing-y-0',
@@ -130,7 +125,7 @@ export const RecentTradesTable = ({
                 isHeaderSticky
                 bottomContent={
                     !loading &&
-                    !!transactionHistory?.length && (
+                    !!data?.length && (
                         <div className='relative -top-2.5 text-center text-neutral-50'>
                             Only the last 100 trades are shown.
                         </div>
@@ -154,7 +149,7 @@ export const RecentTradesTable = ({
                     ))}
                 </TableHeader>
                 <TableBody
-                    items={transactionHistory ?? []}
+                    items={data ?? []}
                     loadingContent={<Spinner />}
                     isLoading={loading}
                     emptyContent={
@@ -170,7 +165,7 @@ export const RecentTradesTable = ({
                         );
                         return (
                             <TableRow
-                                key={1}
+                                key={`${item.currency}-${item.maturity}-${item.createdAt}`}
                                 className='py-0 text-white laptop:h-6'
                             >
                                 <TableCell
@@ -186,13 +181,7 @@ export const RecentTradesTable = ({
                                     {formatLoanValue(loanValue, 'price')}
                                 </TableCell>
                                 <TableCell className='border-b border-neutral-600 py-0 laptop:h-6'>
-                                    {ordinaryFormat(
-                                        currencyMap[currency].fromBaseUnit(
-                                            BigInt(+item.amount)
-                                        ),
-                                        currencyMap[currency].roundingDecimal,
-                                        currencyMap[currency].roundingDecimal
-                                    )}
+                                    {item.size}
                                 </TableCell>
                                 <TableCell className='border-b border-neutral-600 py-0 pl-0 pr-3 laptop:h-6'>
                                     <a
@@ -220,3 +209,30 @@ export const RecentTradesTable = ({
         </div>
     );
 };
+
+const OrderBookIcon = ({
+    Icon,
+    name,
+    active,
+    onClick,
+}: {
+    Icon: React.ReactNode;
+    name: string;
+    active: boolean;
+    onClick: () => void;
+}) => (
+    <button
+        key={name}
+        aria-label={name}
+        className={clsx(
+            'rounded border-0.5 border-neutral-500 px-1.5 py-[7px] hover:bg-neutral-700',
+            {
+                'bg-neutral-700': active,
+                'bg-neutral-800': !active,
+            }
+        )}
+        onClick={onClick}
+    >
+        {Icon}
+    </button>
+);
