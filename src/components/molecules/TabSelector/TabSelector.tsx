@@ -37,7 +37,7 @@ export const TabSelector: React.FC<TabSelectorProps> = ({
             selectedIndex={selectedIndex}
             onChange={setSelectedIndex}
             as='div'
-            className='border-white-10 bg-gunMetal/40 shadow-tab laptop:rounded-b-2xl laptop:border'
+            className='border-white-10 bg-neutral-900 shadow-tab laptop:rounded-b-2xl laptop:border'
         >
             <div
                 className={clsx(
@@ -71,7 +71,7 @@ export const TabSelector: React.FC<TabSelectorProps> = ({
                 </HeadlessTab.List>
                 {util && <div className='h-full w-full'>{util}</div>}
             </div>
-            <HeadlessTab.Panels className='min-h-[25vh] overflow-hidden bg-cardBackground laptop:rounded-b-2xl'>
+            <HeadlessTab.Panels className='min-h-[25vh] overflow-hidden bg-neutral-900 laptop:rounded-b-2xl'>
                 {arrayChildren[selectedIndex]}
             </HeadlessTab.Panels>
         </HeadlessTab.Group>
