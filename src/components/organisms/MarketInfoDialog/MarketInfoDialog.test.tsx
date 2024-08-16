@@ -12,7 +12,7 @@ describe('MarketInfoDialog Component', () => {
 
     it('displays correct currency and maturity date', () => {
         render(<Default />);
-        expect(screen.getByText('FIL')).toBeInTheDocument();
+        expect(screen.getByText('USDC')).toBeInTheDocument();
         expect(screen.getByText('Dec 1, 2022')).toBeInTheDocument();
     });
 
