@@ -30,7 +30,7 @@ describe('MarketInfoDialog Component', () => {
 
     it('shows correct currency price with external link', () => {
         render(<Default />);
-        expect(screen.getByText('520 FIL')).toBeInTheDocument();
+        expect(screen.getByText('520 USDC')).toBeInTheDocument();
         expect(screen.getByRole('link')).toHaveAttribute('target', '_blank');
     });
 });

@@ -12,7 +12,6 @@ import {
     CurrencySymbol,
     formatLoanValue,
     formatRemainingTime,
-    formatWithCurrency,
     handlePriceSource,
 } from 'src/utils';
 import { MarketInfoDialogProps } from './types';
@@ -138,15 +137,7 @@ export const MarketInfoDialog = ({
                                 <span>24h Volume</span>
                                 <Tooltip
                                     iconElement={
-                                        <span>
-                                            {formatWithCurrency(
-                                                Number(marketInfo?.volume) || 0,
-                                                currency as CurrencySymbol,
-                                                currencyMap[
-                                                    currency as CurrencySymbol
-                                                ].roundingDecimal
-                                            )}
-                                        </span>
+                                        <span>{marketInfo?.volume}</span>
                                     }
                                 >
                                     <span>
@@ -172,7 +163,7 @@ export const MarketInfoDialog = ({
                             </li>
                             <li className='flex justify-between'>
                                 <span>Countdown</span>
-                                <span>
+                                <span className='tabular-nums'>
                                     {formatRemainingTime(remainingTime)}
                                 </span>
                             </li>

@@ -18,10 +18,10 @@ const TitleChip = ({
         <div
             data-testid={title}
             className={clsx(
-                'typography-caption-2 flex w-fit items-center justify-center gap-2 whitespace-nowrap px-5 py-3',
+                'flex w-fit items-center justify-center gap-2 whitespace-nowrap rounded-[100px] px-6 py-2 text-3 leading-4 text-neutral-50',
                 {
-                    'rounded-3xl bg-black-30 text-neutral-8': selected,
-                    'text-neutral-4': !selected,
+                    'bg-primary-700': selected,
+                    'bg-neutral-700 hover:bg-neutral-600': !selected,
                 }
             )}
         >
@@ -45,15 +45,13 @@ const TitleChip = ({
     );
 };
 
-export const HorizontalTab = ({
-    className,
+export const HorizontalTabTable = ({
     tabTitles,
     children,
     onTabChange,
     useCustomBreakpoint = false,
     tooltipMap,
 }: {
-    className?: string;
     tabTitles: string[];
     children?: React.ReactNode;
     onTabChange?: (v: number) => void;
@@ -76,11 +74,10 @@ export const HorizontalTab = ({
         >
             <div
                 className={clsx(
-                    'flex h-full flex-col border border-white-10 bg-gunMetal/40 shadow-tab tablet:rounded-b-2xl',
-                    className
+                    'flex h-full flex-col rounded-xl border border-neutral-600 bg-neutral-900 laptop:rounded-t-none'
                 )}
             >
-                <HeadlessTab.List className='h-16 justify-start border-b border-white-10 p-3'>
+                <HeadlessTab.List className='justify-start border-b border-neutral-600 px-4 py-3 laptop:h-fit laptop:py-3.5'>
                     <div
                         className={clsx('w-full', {
                             'horizontalTab:hidden': useCustomBreakpoint,
@@ -97,13 +94,13 @@ export const HorizontalTab = ({
                                 value: selectedIndex.toString(),
                             }}
                             onChange={option => onChange(parseInt(option) || 0)}
-                            variant='fullWidth'
+                            variant='tab'
                         />
                     </div>
                     <div
-                        className={clsx('hidden', {
-                            'horizontalTab:block': useCustomBreakpoint,
-                            'tablet:block': !useCustomBreakpoint,
+                        className={clsx('hidden gap-4', {
+                            'horizontalTab:flex': useCustomBreakpoint,
+                            'tablet:flex': !useCustomBreakpoint,
                         })}
                     >
                         {tabTitles.map((title, index) => {
@@ -124,7 +121,11 @@ export const HorizontalTab = ({
                         })}
                     </div>
                 </HeadlessTab.List>
-                <HeadlessTab.Panels className='h-full bg-cardBackground pb-2 tablet:min-h-[25vh] tablet:rounded-b-2xl'>
+                <HeadlessTab.Panels
+                    className={clsx(
+                        'h-full rounded-b-xl bg-neutral-900 tablet:min-h-[25vh] laptop:pb-2'
+                    )}
+                >
                     {arrayChildren[selectedIndex]}
                 </HeadlessTab.Panels>
             </div>

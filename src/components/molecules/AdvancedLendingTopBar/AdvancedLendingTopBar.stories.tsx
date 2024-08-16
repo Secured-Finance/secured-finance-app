@@ -7,7 +7,7 @@ import {
     dailyMarketStats,
     maturityOptions,
 } from 'src/stories/mocks/fixtures';
-import { mockDailyVolumes, mockTrades } from 'src/stories/mocks/queries';
+import { mockDailyVolumes, mockRecentTrades } from 'src/stories/mocks/queries';
 import { LoanValue } from 'src/utils/entities';
 import { AdvancedLendingTopBar } from '.';
 
@@ -21,10 +21,7 @@ export default {
         selectedAsset: currencyList[3],
         assetList: currencyList,
         options: maturityOptions,
-        selected: {
-            label: maturityOptions[0].label,
-            value: maturityOptions[0].value,
-        },
+        selected: maturityOptions[0],
         onAssetChange: () => {},
         onTermChange: () => {},
         currentMarket: {
@@ -40,7 +37,7 @@ export default {
     },
     parameters: {
         apolloClient: {
-            mocks: [...mockTrades, ...mockDailyVolumes],
+            mocks: [...mockRecentTrades, ...mockDailyVolumes],
         },
         ...RESPONSIVE_PARAMETERS,
         viewport: {

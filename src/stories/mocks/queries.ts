@@ -1089,3 +1089,34 @@ export const userPoints = [
         },
     },
 ];
+
+export const mockRecentTrades = [
+    {
+        request: {
+            query: queries.TransactionHistoryDocument,
+            variables: {
+                currency: usdcBytes32,
+                maturity: dec22Fixture.toNumber(),
+                from: -1,
+                to: 1643713200,
+                first: 100,
+                sides: [OrderSide.LEND, OrderSide.BORROW],
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                transactionHistory: tradesUSDC,
+                lastTransaction: tradesUSDC[0],
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    transactionHistory: tradesUSDC,
+                    lastTransaction: tradesUSDC[0],
+                },
+            };
+        },
+    },
+];
