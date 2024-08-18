@@ -1,4 +1,5 @@
 /* eslint-disable react/display-name */
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
 import { OrderSide } from '@secured-finance/sf-client';
 import {
     AccessorFn,
@@ -16,7 +17,7 @@ import {
 } from 'src/components/atoms';
 import { TableContractCell, TableHeader } from 'src/components/molecules';
 import { Alignment, AssetPriceMap, ColorFormat } from 'src/types';
-import { ZERO_BI, formatTimestamp } from 'src/utils';
+import { ZERO_BI, formatTimestampDDMMYY } from 'src/utils';
 import {
     CurrencySymbol,
     currencyMap,
@@ -33,7 +34,11 @@ export const tableHeaderDefinition =
                 title={title}
                 titleHint={titleHint}
                 sortingHandler={header.column.getToggleSortingHandler()}
-                isSorted={header.column.getIsSorted()}
+                isSorted={
+                    header.column.getCanSort()
+                        ? header.column.getIsSorted()
+                        : undefined
+                }
                 align={align}
             />
         );
@@ -156,6 +161,7 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
 
             return <>{Component}</>;
         },
+        enableSorting: false,
         header: tableHeaderDefinition(title, titleHint, align),
     });
 };
@@ -189,24 +195,23 @@ export const inputAmountColumnDefinition = <T extends InputAmountColumnType>(
                     : info.row.original.inputAmount;
 
             return (
-                <div className='flex w-full items-center justify-end whitespace-nowrap pr-[15%]'>
-                    <div className='flex justify-end'>
-                        <CurrencyItem
-                            amount={inputAmount}
-                            ccy={ccy}
-                            align='right'
-                            price={options.priceList?.[ccy]}
-                            color={options.color ? color : undefined}
-                            compact={options.compact}
-                            fontSize={options.fontSize}
-                            minDecimals={currencyMap[ccy].roundingDecimal}
-                            maxDecimals={currencyMap[ccy].roundingDecimal}
-                        />
-                    </div>
+                <div className='flex w-full items-center justify-end whitespace-nowrap'>
+                    <CurrencyItem
+                        amount={inputAmount}
+                        ccy={ccy}
+                        align='right'
+                        price={options.priceList?.[ccy]}
+                        color={options.color ? color : undefined}
+                        compact={options.compact}
+                        fontSize={options.fontSize}
+                        minDecimals={currencyMap[ccy].roundingDecimal}
+                        maxDecimals={currencyMap[ccy].roundingDecimal}
+                    />
                 </div>
             );
         },
-        header: tableHeaderDefinition(title, titleHint),
+        enableSorting: false,
+        header: tableHeaderDefinition(title, titleHint, 'right'),
     });
 };
 
@@ -220,7 +225,8 @@ export const futureValueColumnDefinition = <T extends AmountColumnType>(
         compact: boolean;
         priceList?: AssetPriceMap;
     },
-    titleHint?: string
+    titleHint?: string,
+    align: Alignment = 'center'
 ) => {
     return columnHelper.accessor(accessor, {
         id: id,
@@ -239,7 +245,7 @@ export const futureValueColumnDefinition = <T extends AmountColumnType>(
             }
 
             return (
-                <div className='flex w-full items-center justify-end whitespace-nowrap pr-[15%]'>
+                <div className='flex w-full items-center justify-end whitespace-nowrap'>
                     <div className='flex justify-end'>
                         <CurrencyItem
                             amount={info.getValue()}
@@ -250,12 +256,14 @@ export const futureValueColumnDefinition = <T extends AmountColumnType>(
                             compact={options.compact}
                             minDecimals={currencyMap[ccy].roundingDecimal}
                             maxDecimals={currencyMap[ccy].roundingDecimal}
+                            fontSize='typography-desktop-body-5 font-numerical'
                         />
                     </div>
                 </div>
             );
         },
-        header: tableHeaderDefinition(title, titleHint),
+        enableSorting: false,
+        header: tableHeaderDefinition(title, titleHint, align),
     });
 };
 
@@ -271,10 +279,10 @@ export const loanTypeColumnDefinition = <T extends SideProperty>(
         cell: info => {
             const value = info.getValue();
             return (
-                <div className='mx-auto flex w-[70px] justify-center'>
+                <div className='flex w-[45px] justify-start'>
                     <Chip
                         isFullWidth
-                        size={ChipSizes.lg}
+                        size={ChipSizes.md}
                         color={
                             value.toString() === '1'
                                 ? ChipColors.Red
@@ -285,14 +293,15 @@ export const loanTypeColumnDefinition = <T extends SideProperty>(
                 </div>
             );
         },
-        header: tableHeaderDefinition(title),
+        header: tableHeaderDefinition(title, '', 'left'),
     });
 };
 
 export const loanTypeFromFVColumnDefinition = <T extends FutureValueProperty>(
     columnHelper: ColumnHelper<T>,
     title: string,
-    id: string
+    id: string,
+    align: Alignment = 'center'
 ) => {
     const assessorFn: AccessorFn<T, bigint> = row => row.futureValue;
 
@@ -301,10 +310,16 @@ export const loanTypeFromFVColumnDefinition = <T extends FutureValueProperty>(
         cell: info => {
             if (info.getValue() === ZERO_BI) return null;
             return (
-                <div className='mx-auto flex w-[70px] justify-center'>
+                <div
+                    className={clsx('flex w-[45px]', {
+                        'justify-start': align === 'left',
+                        'mx-auto justify-center': align === 'center',
+                        'justify-end': align === 'right',
+                    })}
+                >
                     <Chip
                         isFullWidth
-                        size={ChipSizes.lg}
+                        size={ChipSizes.md}
                         color={
                             info.getValue() < 0
                                 ? ChipColors.Red
@@ -315,7 +330,7 @@ export const loanTypeFromFVColumnDefinition = <T extends FutureValueProperty>(
                 </div>
             );
         },
-        header: tableHeaderDefinition(title),
+        header: tableHeaderDefinition(title, '', align),
     });
 };
 
@@ -354,10 +369,11 @@ export const contractColumnDefinition = <
                     : OrderSide.LEND;
             return (
                 <div
-                    className={clsx('flex px-3', {
+                    className={clsx('flex', {
                         'justify-start': alignCell === 'left',
                         'justify-center': alignCell === 'center',
                         'justify-end': alignCell === 'right',
+                        'px-3': variant === 'currencyOnly',
                     })}
                 >
                     <TableContractCell
@@ -443,7 +459,7 @@ export const priceYieldColumnDefinition = <
         cell: info => {
             const calculationDate = info.row.original.calculationDate;
             return (
-                <div className='flex justify-center'>
+                <div className='flex'>
                     <PriceYieldItem
                         loanValue={LoanValue.fromPrice(
                             Number(info.getValue().toString()),
@@ -452,11 +468,12 @@ export const priceYieldColumnDefinition = <
                         )}
                         compact={variant === 'compact'}
                         firstLineType={type}
+                        align='left'
                     />
                 </div>
             );
         },
-        header: tableHeaderDefinition(title, titleHint),
+        header: tableHeaderDefinition(title, titleHint, 'left'),
     });
 };
 
@@ -464,28 +481,33 @@ export const inputPriceYieldColumnDefinition = <T extends { maturity: string }>(
     columnHelper: ColumnHelper<T>,
     title: string,
     id: string,
-    accessor: AccessorFn<T, bigint>
+    accessor: AccessorFn<T, bigint>,
+    type: Parameters<typeof PriceYieldItem>[0]['firstLineType'] = 'price'
 ) => {
     return columnHelper.accessor(accessor, {
         id: id,
         cell: info => {
             return (
-                <div className='flex justify-center'>
+                <div className='flex'>
                     {Number(info.getValue().toString()) === 0 ? (
-                        <div className='typography-caption'>Market Price</div>
+                        <div className='typography-caption-2 text-white'>
+                            {type === 'price' ? 'Market Price' : '--'}
+                        </div>
                     ) : (
                         <PriceYieldItem
                             loanValue={LoanValue.fromPrice(
                                 Number(info.getValue().toString()),
                                 Number(info.row.original.maturity.toString())
                             )}
-                            firstLineType='price'
+                            firstLineType={type}
+                            align='left'
+                            compact
                         />
                     )}
                 </div>
             );
         },
-        header: tableHeaderDefinition(title),
+        header: tableHeaderDefinition(title, '', 'left'),
     });
 };
 
@@ -494,27 +516,60 @@ export const dateAndTimeColumnDefinition = <T extends { createdAt: bigint }>(
     title: string,
     id: string,
     accessor: AccessorFn<T, bigint>,
-    fontSize?: string,
     titleHint?: string
 ) => {
     return columnHelper.accessor(accessor, {
         id: id,
         cell: info => {
             return (
-                <div className='flex justify-center'>
+                <div className='flex justify-end'>
                     <div className='flex flex-col text-right'>
-                        <span
-                            className={clsx(
-                                fontSize ? fontSize : 'typography-caption-2',
-                                'h-6 text-slateGray'
-                            )}
-                        >
-                            {formatTimestamp(+info.getValue().toString())}
+                        <span className='typography-desktop-body-5 font-numerical text-white'>
+                            {formatTimestampDDMMYY(+info.getValue().toString())}
                         </span>
                     </div>
                 </div>
             );
         },
-        header: tableHeaderDefinition(title, titleHint),
+        header: tableHeaderDefinition(title, titleHint, 'right'),
+    });
+};
+
+export const dateTimeViewColumnDefinition = <
+    T extends { createdAt: bigint; txHash: string }
+>(
+    columnHelper: ColumnHelper<T>,
+    title: string,
+    id: string,
+    accessor: AccessorFn<T, bigint>,
+    blockExplorerUrl?: string,
+    titleHint?: string
+) => {
+    return columnHelper.accessor(accessor, {
+        id: id,
+        cell: info => {
+            const txHash = info.row.original.txHash;
+            const blockExplorerLink = blockExplorerUrl
+                ? `${blockExplorerUrl}/tx/${txHash}`
+                : '';
+            return (
+                <div className='flex items-center justify-start gap-0.5'>
+                    <div className='flex flex-col text-right'>
+                        <span className='typography-desktop-body-5 text-white'>
+                            {formatTimestampDDMMYY(+info.getValue().toString())}
+                        </span>
+                    </div>
+                    {blockExplorerLink && (
+                        <ArrowTopRightOnSquareIcon
+                            className='h-4 w-4 cursor-pointer text-primary-300'
+                            onClick={() => {
+                                window.open(blockExplorerLink, '_blank');
+                            }}
+                        />
+                    )}
+                </div>
+            );
+        },
+        header: tableHeaderDefinition(title, titleHint, 'left'),
     });
 };
