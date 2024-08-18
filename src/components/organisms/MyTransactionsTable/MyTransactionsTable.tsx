@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { useMemo } from 'react';
 import { HorizontalListItemTable } from 'src/components/atoms';
 import {
-    CoreTable,
+    CompactCoreTable,
     Pagination,
     TableCardHeader,
 } from 'src/components/molecules';
@@ -34,7 +34,7 @@ const priceYieldColumnDef = (
         cell: info => {
             return (
                 <div className='flex justify-center'>
-                    <span className='typography-caption-2 h-6 text-neutral-6'>
+                    <span className='typography-caption-2 font-numerical text-white'>
                         {formatLoanValue(
                             LoanValue.fromPrice(
                                 Number(info.getValue().toString() * 10000), //TODO: remove this hack
@@ -127,33 +127,44 @@ export const MyTransactionsTable = ({
     data,
     pagination,
     variant = 'compact',
+    isLoading = false,
 }: {
     data: TransactionHistoryList;
     pagination?: Pagination;
     variant?: 'contractOnly' | 'compact';
+    isLoading?: boolean;
 }) => {
     const isTablet = useBreakpoint('laptop');
     const columns = useMemo(
         () => [
-            loanTypeColumnDefinition(columnHelper, 'Type', 'type'),
             contractColumnDefinition(
                 columnHelper,
-                'Contract',
+                'Symbol',
                 'contract',
-                variant
+                variant,
+                undefined,
+                'left',
+                'left'
             ),
-            amountColumnDefinition(
-                columnHelper,
-                'Amount',
-                'amount',
-                row => row.amount,
-                { compact: true, color: true, fontSize: 'typography-caption-2' }
-            ),
-            priceYieldColumnDef('Price/DF', 'price', 'price'),
+            loanTypeColumnDefinition(columnHelper, 'Type', 'type'),
+            priceYieldColumnDef('Price', 'price', 'price'),
             priceYieldColumnDef('APR%', 'apr', 'rate'),
             amountColumnDefinition(
                 columnHelper,
-                'FV',
+                'Executed Amount',
+                'amount',
+                row => row.amount,
+                {
+                    compact: true,
+                    color: false,
+                    fontSize: 'typography-caption-2 font-numerical',
+                },
+                '',
+                'right'
+            ),
+            amountColumnDefinition(
+                columnHelper,
+                'Future Value (FV)',
                 'futureValue',
                 row =>
                     getFVWithFee(
@@ -163,9 +174,11 @@ export const MyTransactionsTable = ({
                     ),
                 {
                     compact: true,
-                    color: true,
-                    fontSize: 'typography-caption-2',
-                }
+                    color: false,
+                    fontSize: 'typography-caption-2 font-numerical',
+                },
+                '',
+                'right'
             ),
         ],
         [variant]
@@ -174,14 +187,14 @@ export const MyTransactionsTable = ({
     return isTablet ? (
         <MyTransactionsTableMobile data={data} />
     ) : (
-        <CoreTable
+        <CompactCoreTable
             data={data}
             columns={columns}
             options={{
                 name: 'my-transactions-table',
-                stickyFirstColumn: true,
                 pagination: pagination,
             }}
+            isLoading={isLoading}
         />
     );
 };
