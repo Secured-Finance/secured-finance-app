@@ -3,26 +3,22 @@ import { RESPONSIVE_PARAMETERS } from 'src/../.storybook/constants';
 import {
     withAppLayout,
     withBalance,
-    WithGraphClient,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import {
     mockDailyVolumes,
     mockFilteredUserOrderHistory,
     mockFilteredUserTransactionHistory,
+    mockRecentTrades,
     mockTrades,
+    mockTransactionCandleStick,
 } from 'src/stories/mocks/queries';
 import { Landing } from './Landing';
 
 export default {
     title: 'Pages/Landing',
     component: Landing,
-    decorators: [
-        withAppLayout,
-        withBalance,
-        withWalletProvider,
-        WithGraphClient,
-    ],
+    decorators: [withAppLayout, withBalance, withWalletProvider],
     args: {
         view: 'Simple',
     },
@@ -30,7 +26,9 @@ export default {
         apolloClient: {
             mocks: [
                 ...mockTrades,
+                ...mockRecentTrades,
                 ...mockDailyVolumes,
+                ...mockTransactionCandleStick,
                 ...mockFilteredUserOrderHistory,
                 ...mockFilteredUserTransactionHistory,
             ],

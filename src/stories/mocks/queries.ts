@@ -1063,6 +1063,29 @@ export const mockTransactionCandleStick = [
             };
         },
     },
+    {
+        request: {
+            query: queries.TransactionCandleStickDocument,
+            variables: {
+                interval: '300',
+                currency: wfilBytes32,
+                maturity: 0,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                transactionCandleSticks: mockCandleStickData,
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    transactionCandleSticks: mockCandleStickData,
+                },
+            };
+        },
+    },
 ];
 
 export const userPoints = [
@@ -1098,7 +1121,7 @@ export const mockRecentTrades = [
                 currency: usdcBytes32,
                 maturity: dec22Fixture.toNumber(),
                 from: -1,
-                to: 1643713200,
+                to: today,
                 first: 100,
                 sides: [OrderSide.LEND, OrderSide.BORROW],
                 awaitRefetchQueries: true,
@@ -1107,14 +1130,68 @@ export const mockRecentTrades = [
         result: {
             data: {
                 transactionHistory: tradesUSDC,
-                lastTransaction: tradesUSDC[0],
+                lastTransaction: [tradesUSDC[0]],
             },
         },
         newData: () => {
             return {
                 data: {
                     transactionHistory: tradesUSDC,
-                    lastTransaction: tradesUSDC[0],
+                    lastTransaction: [tradesUSDC[0]],
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.TransactionHistoryDocument,
+            variables: {
+                currency: wfilBytes32,
+                maturity: 0,
+                from: -1,
+                to: today,
+                sides: [OrderSide.LEND, OrderSide.BORROW],
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                transactionHistory: tradesWFIL,
+                lastTransaction: [tradesWFIL[0]],
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    transactionHistory: tradesWFIL,
+                    lastTransaction: [tradesWFIL[0]],
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.TransactionHistoryDocument,
+            variables: {
+                currency: wfilBytes32,
+                maturity: 0,
+                from: -1,
+                to: today2,
+                sides: [OrderSide.LEND, OrderSide.BORROW],
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                transactionHistory: tradesWFIL,
+                lastTransaction: [tradesWFIL[0]],
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    transactionHistory: tradesWFIL,
+                    lastTransaction: [tradesWFIL[0]],
                 },
             };
         },
