@@ -14,7 +14,7 @@ export default {
     args: {
         isOpen: true,
         onClose: () => {},
-        currency: CurrencySymbol.USDC,
+        currency: CurrencySymbol.WFIL,
         currentMarket: {
             value: LoanValue.fromPrice(
                 9600,

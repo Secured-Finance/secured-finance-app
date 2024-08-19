@@ -12,7 +12,7 @@ describe('MarketInfoDialog Component', () => {
 
     it('displays correct currency and maturity date', () => {
         render(<Default />);
-        expect(screen.getByText('USDC')).toBeInTheDocument();
+        expect(screen.getByText('WFIL')).toBeInTheDocument();
         expect(screen.getByText('Dec 1, 2022')).toBeInTheDocument();
     });
 
@@ -30,7 +30,7 @@ describe('MarketInfoDialog Component', () => {
 
     it('shows correct currency price with external link', () => {
         render(<Default />);
-        expect(screen.getByText('520 USDC')).toBeInTheDocument();
+        expect(screen.getByText('520 WFIL')).toBeInTheDocument();
         expect(screen.getByRole('link')).toHaveAttribute('target', '_blank');
     });
 });
