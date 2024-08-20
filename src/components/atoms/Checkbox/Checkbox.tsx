@@ -18,11 +18,11 @@ export const Checkbox = ({
             <div className='relative flex cursor-pointer items-center'>
                 <input
                     className={clsx(
-                        'peer relative cursor-pointer appearance-none focus:outline-none',
+                        'peer relative cursor-pointer appearance-none focus:shadow-checkbox focus:outline-none',
                         {
-                            'border-primary-500 bg-neutral-50 hover:border-primary-500 hover:bg-neutral-200':
+                            'border-primary-500 bg-neutral-50 hover:bg-neutral-200':
                                 isChecked && !disabled,
-                            'border-neutral-400 bg-neutral-100 hover:border-primary-500 hover:bg-neutral-200':
+                            'border-neutral-400 bg-neutral-100 hover:border-primary-500 hover:bg-neutral-200 focus:border-primary-500':
                                 !isChecked,
                             'border-neutral-300 bg-neutral-200': disabled,
                         },
@@ -36,7 +36,7 @@ export const Checkbox = ({
                 />
                 <span
                     className={clsx(
-                        'pointer-events-none absolute left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 opacity-0 peer-checked:opacity-100',
+                        'pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 peer-checked:opacity-100',
                         {
                             'text-primary-500': isChecked && !disabled,
                             'text-neutral-300': isChecked && disabled,
