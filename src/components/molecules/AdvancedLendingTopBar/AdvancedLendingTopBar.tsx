@@ -80,7 +80,7 @@ export const AdvancedLendingTopBar = ({
     return (
         <div>
             <div className='h-1 bg-starBlue'></div>
-            <div className='border-white-10 laptop:border-x laptop:border-b laptop:bg-black-20'>
+            <div className='border-white-10 bg-neutral-900 laptop:border-x laptop:border-b'>
                 <div
                     className={clsx(
                         'grid grid-cols-12 gap-y-3 px-4 pb-[1.1875rem] pt-4 laptop:flex laptop:pb-3 laptop:pt-4',
