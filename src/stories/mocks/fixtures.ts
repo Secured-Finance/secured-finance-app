@@ -1066,6 +1066,8 @@ export const tradesWFIL: TransactionList = [
         createdAt: 1638356100,
         currency: wfilBytes32,
         averagePrice: 0.8,
+        executionPrice: 8000,
+        txHash: toBytes32('hash'),
     },
     {
         amount: 1000000000000,
@@ -1074,6 +1076,8 @@ export const tradesWFIL: TransactionList = [
         createdAt: 1638355100,
         currency: wfilBytes32,
         averagePrice: 0.9,
+        executionPrice: 9000,
+        txHash: toBytes32('hash'),
     },
 ];
 
@@ -1085,6 +1089,8 @@ export const tradesETH: TransactionList = [
         createdAt: 1638356100,
         currency: ethBytes32,
         averagePrice: 0.8,
+        executionPrice: 8000,
+        txHash: toBytes32('hash'),
     },
     {
         amount: 1000000000000,
@@ -1093,6 +1099,8 @@ export const tradesETH: TransactionList = [
         createdAt: 1638355100,
         currency: ethBytes32,
         averagePrice: 0.9,
+        executionPrice: 9000,
+        txHash: toBytes32('hash'),
     },
 ];
 
@@ -1104,6 +1112,8 @@ export const tradesUSDC: TransactionList = [
         createdAt: 1638356100,
         currency: usdcBytes32,
         averagePrice: 0.8,
+        executionPrice: 8000,
+        txHash: toBytes32('hash'),
     },
     {
         amount: 1000000000000,
@@ -1112,6 +1122,8 @@ export const tradesUSDC: TransactionList = [
         createdAt: 1638355100,
         currency: usdcBytes32,
         averagePrice: 0.9,
+        executionPrice: 9000,
+        txHash: toBytes32('hash'),
     },
 ];
 
@@ -1123,6 +1135,8 @@ export const tradesWBTC: TransactionList = [
         createdAt: 1638356100,
         currency: wbtcBytes32,
         averagePrice: 0.8,
+        executionPrice: 8000,
+        txHash: toBytes32('hash'),
     },
     {
         amount: 1000000000000,
@@ -1131,6 +1145,8 @@ export const tradesWBTC: TransactionList = [
         createdAt: 1638355100,
         currency: wbtcBytes32,
         averagePrice: 0.9,
+        executionPrice: 9000,
+        txHash: toBytes32('hash'),
     },
 ];
 

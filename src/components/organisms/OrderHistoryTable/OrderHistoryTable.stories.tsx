@@ -15,6 +15,7 @@ export default {
     component: OrderHistoryTable,
     args: {
         data: mappedOrderHistoryList,
+        variant: 'compact',
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,
