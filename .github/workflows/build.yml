@@ -8,6 +8,10 @@ on:
       environment_name:
         required: true
         type: string
+      skip_tests:
+        default: 'false'
+        required: false
+        type: string
       ref:
         description: 'The branch or tag ref to checkout. Default is the branch that triggered the workflow.'
         default: ''
@@ -77,9 +81,11 @@ jobs:
         run: npm run lint:check
 
       - name: Run Tests
+        if: ${{ inputs.skip_tests == 'false' }}
         run: npm run test:cov
 
       - name: Upload Code Coverage
+        if: ${{ inputs.skip_tests == 'false' }}
         uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
