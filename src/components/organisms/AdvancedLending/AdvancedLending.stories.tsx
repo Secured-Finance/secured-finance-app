@@ -12,6 +12,8 @@ import {
     mockDailyVolumes,
     mockFilteredUserOrderHistory,
     mockFilteredUserTransactionHistory,
+    mockFullUserOrderHistory,
+    mockFullUserTransactionHistory,
     mockTrades,
 } from 'src/stories/mocks/queries';
 import { CurrencySymbol } from 'src/utils';
@@ -34,6 +36,8 @@ export default {
                 ...mockFilteredUserTransactionHistory,
                 ...mockFilteredUserOrderHistory,
                 ...mockDailyVolumes,
+                ...mockFullUserTransactionHistory,
+                ...mockFullUserOrderHistory,
             ],
         },
         ...RESPONSIVE_PARAMETERS,
