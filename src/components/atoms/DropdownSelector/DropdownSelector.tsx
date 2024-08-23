@@ -76,19 +76,12 @@ const TabButton = ({
     open: boolean;
 }) => {
     return (
-        <div className='flex w-full flex-row items-center justify-between rounded-lg bg-neutral-700 py-1.5 pl-3 pr-1'>
-            <div className='flex space-x-2'>
-                {selectedOption?.iconSVG ? (
-                    <span>
-                        <selectedOption.iconSVG className='h-6 w-6' />
-                    </span>
-                ) : null}
-                <span className='typography-caption whitespace-nowrap text-neutral-7'>
-                    {selectedOption?.label}
-                </span>
-            </div>
+        <div className='flex w-fit flex-row items-center gap-1 rounded-lg bg-neutral-700 py-1.5 pl-3 pr-1'>
+            <span className='typography-mobile-body-4 whitespace-nowrap text-neutral-7'>
+                {selectedOption?.label}
+            </span>
             <span data-cy={`asset-expand-${selectedOption?.label}`}>
-                <ExpandIndicator expanded={open} variant='solid' />
+                <ExpandIndicator expanded={open} variant='tab' />
             </span>
         </div>
     );

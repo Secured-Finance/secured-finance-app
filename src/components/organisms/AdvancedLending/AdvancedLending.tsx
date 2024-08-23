@@ -116,6 +116,7 @@ export const AdvancedLending = ({
         selectLandingOrderForm(state.landingOrderForm)
     );
     const [timestamp, setTimestamp] = useState<number>(1643713200);
+    const [isChecked, setIsChecked] = useState(false);
     const [selectedTable, setSelectedTable] = useState(
         TableType.ACTIVE_POSITION
     );
@@ -448,6 +449,9 @@ export const AdvancedLending = ({
                             onTabChange={setSelectedTable}
                             useCustomBreakpoint={true}
                             tooltipMap={tooltipMap}
+                            showAllPositions={true}
+                            isChecked={isChecked}
+                            setIsChecked={setIsChecked}
                         >
                             <ActiveTradeTable
                                 data={
