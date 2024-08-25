@@ -63,6 +63,18 @@ ConnectedToWallet.args = {
     collateralBook: collateralBook37,
 };
 
+export const ShowAllActivePositions = Template.bind({});
+ShowAllActivePositions.parameters = {
+    connected: true,
+};
+ShowAllActivePositions.play = async () => {
+    const checkbox = await screen.findByRole('checkbox');
+    await userEvent.click(checkbox);
+};
+ShowAllActivePositions.args = {
+    collateralBook: collateralBook37,
+};
+
 export const OpenOrdersConnectedToWallet = Template.bind({});
 OpenOrdersConnectedToWallet.parameters = {
     connected: true,
