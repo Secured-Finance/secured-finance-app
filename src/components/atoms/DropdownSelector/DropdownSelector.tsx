@@ -68,7 +68,7 @@ const FillWidthButton = ({
     );
 };
 
-const TabButton = ({
+const TabWidthFitButton = ({
     selectedOption,
     open,
 }: {
@@ -77,6 +77,25 @@ const TabButton = ({
 }) => {
     return (
         <div className='flex w-fit flex-row items-center gap-1 rounded-lg bg-neutral-700 py-1.5 pl-3 pr-1'>
+            <span className='typography-mobile-body-4 whitespace-nowrap text-neutral-7'>
+                {selectedOption?.label}
+            </span>
+            <span data-cy={`asset-expand-${selectedOption?.label}`}>
+                <ExpandIndicator expanded={open} variant='tab' />
+            </span>
+        </div>
+    );
+};
+
+const TabWidthFullButton = ({
+    selectedOption,
+    open,
+}: {
+    selectedOption: Option<string> | undefined;
+    open: boolean;
+}) => {
+    return (
+        <div className='flex w-full flex-row items-center justify-between rounded-lg bg-neutral-700 py-1.5 pl-3 pr-1'>
             <span className='typography-mobile-body-4 whitespace-nowrap text-neutral-7'>
                 {selectedOption?.label}
             </span>
@@ -154,7 +173,8 @@ export const DropdownSelector = <T extends string = string>({
         | 'fullWidth'
         | 'fixedWidth'
         | 'orderBook'
-        | 'tab';
+        | 'tabWidthFit'
+        | 'tabWidthFull';
 }) => {
     const [selectedOptionValue, setSelectedOptionValue] = useState<T>(
         selected.value
@@ -194,7 +214,8 @@ export const DropdownSelector = <T extends string = string>({
                     <Menu.Button
                         className={clsx({
                             'w-full':
-                                variant === 'fullWidth' || variant === 'tab',
+                                variant === 'fullWidth' ||
+                                variant === 'tabWidthFull',
                             'flex w-full': variant === 'orderBook',
                         })}
                     >
@@ -224,9 +245,16 @@ export const DropdownSelector = <T extends string = string>({
                                             selectedOption={selectedOption}
                                         />
                                     );
-                                case 'tab':
+                                case 'tabWidthFit':
                                     return (
-                                        <TabButton
+                                        <TabWidthFitButton
+                                            open={open}
+                                            selectedOption={selectedOption}
+                                        />
+                                    );
+                                case 'tabWidthFull':
+                                    return (
+                                        <TabWidthFullButton
                                             open={open}
                                             selectedOption={selectedOption}
                                         />
@@ -248,10 +276,12 @@ export const DropdownSelector = <T extends string = string>({
                                 'right-0': variant === 'noLabel',
                                 'max-h-[196px] w-52 tablet:max-h-60':
                                     variant !== 'fullWidth' &&
-                                    variant !== 'tab',
+                                    variant !== 'tabWidthFit' &&
+                                    variant !== 'tabWidthFull',
                                 'w-full':
                                     variant === 'fullWidth' ||
-                                    variant === 'tab',
+                                    variant === 'tabWidthFit' ||
+                                    variant === 'tabWidthFull',
                                 'bottom-0 mb-7 w-full origin-top-right laptop:bottom-auto laptop:w-fit':
                                     variant === 'orderBook',
                                 'w-72': variant === 'fixedWidth',

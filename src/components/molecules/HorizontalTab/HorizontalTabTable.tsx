@@ -100,7 +100,11 @@ export const HorizontalTabTable = ({
                                 value: selectedIndex.toString(),
                             }}
                             onChange={option => onChange(parseInt(option) || 0)}
-                            variant='tab'
+                            variant={
+                                showAllPositions
+                                    ? 'tabWidthFit'
+                                    : 'tabWidthFull'
+                            }
                         />
                     </div>
                     <div
