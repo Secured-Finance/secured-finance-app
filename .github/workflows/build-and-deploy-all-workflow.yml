@@ -6,16 +6,6 @@ on:
       - opened
       - synchronize
       - reopened
-  workflow_dispatch:
-    inputs:
-      skip_tests:
-        description: 'Set to true to skip tests'
-        required: false
-        default: 'false'
-        type: choice
-        options:
-          - 'true'
-          - 'false'
 
 jobs:
   identify-env:
@@ -31,7 +21,6 @@ jobs:
     with:
       artifact_name: WebApp
       environment_name: ${{ needs.identify-env.outputs.environment_name }}
-      skip_tests: ${{ inputs.skip_tests }}
     secrets: inherit
 
   cypress-run:
