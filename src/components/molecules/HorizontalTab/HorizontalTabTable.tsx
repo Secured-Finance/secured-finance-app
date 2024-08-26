@@ -137,7 +137,7 @@ export const HorizontalTabTable = ({
                                 onChange={setIsChecked}
                             />
                             <span className='typography-desktop-body-5 whitespace-nowrap text-neutral-50'>
-                                Show all positions
+                                Show All Positions
                             </span>
                         </div>
                     )}
