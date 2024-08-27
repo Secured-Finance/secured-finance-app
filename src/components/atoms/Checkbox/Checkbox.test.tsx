@@ -34,7 +34,7 @@ describe('Checkbox Component', () => {
         expect(checkbox).toBeChecked();
     });
 
-    it('should call onChange when clicked correctly', async () => {
+    it('should call onChange when clicked on the label', async () => {
         const handleChange = jest.fn();
         render(
             <Default isChecked={false} onChange={handleChange} label='Label' />
