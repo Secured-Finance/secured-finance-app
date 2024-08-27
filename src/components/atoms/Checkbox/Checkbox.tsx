@@ -5,11 +5,13 @@ import { CheckboxSizes } from './types';
 export const Checkbox = ({
     isChecked = false,
     onChange,
+    label,
     size = CheckboxSizes.md,
     disabled = false,
 }: {
     isChecked: boolean;
     onChange: (v: boolean) => void;
+    label?: string;
     size?: CheckboxSizes;
     disabled?: boolean;
 }) => {
@@ -59,6 +61,14 @@ export const Checkbox = ({
                     </svg>
                 </span>
             </div>
+            {label && (
+                <label
+                    htmlFor='checkbox'
+                    className='typography-desktop-body-5 cursor-pointer whitespace-nowrap pl-2 capitalize text-neutral-50'
+                >
+                    {label}
+                </label>
+            )}
         </div>
     );
 };

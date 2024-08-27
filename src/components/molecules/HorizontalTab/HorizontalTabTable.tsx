@@ -131,15 +131,11 @@ export const HorizontalTabTable = ({
                         })}
                     </div>
                     {showAllPositions && setIsChecked && (
-                        <div className='flex items-center gap-2'>
-                            <Checkbox
-                                isChecked={isChecked}
-                                onChange={setIsChecked}
-                            />
-                            <span className='typography-desktop-body-5 whitespace-nowrap text-neutral-50'>
-                                Show All Positions
-                            </span>
-                        </div>
+                        <Checkbox
+                            isChecked={isChecked}
+                            onChange={setIsChecked}
+                            label='Show All Positions'
+                        />
                     )}
                 </HeadlessTab.List>
                 <HeadlessTab.Panels

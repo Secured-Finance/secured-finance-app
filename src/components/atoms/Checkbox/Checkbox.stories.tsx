@@ -36,6 +36,11 @@ const Template: StoryFn<typeof Checkbox> = args => {
 
 export const Default = Template.bind({});
 
+export const WithLabel = Template.bind({});
+WithLabel.args = {
+    label: 'Label',
+};
+
 export const Unchecked = Template.bind({});
 Unchecked.args = {
     isChecked: false,
