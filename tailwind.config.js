@@ -96,7 +96,7 @@ module.exports = {
             laptop: '1024px',
             desktop: '1440px',
             largeDesktop: '1920px',
-            horizontalTab: '1120px',
+            horizontalTab: '1200px',
         },
 
         fontSize: {
