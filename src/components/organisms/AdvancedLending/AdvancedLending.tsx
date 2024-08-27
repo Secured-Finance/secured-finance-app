@@ -28,12 +28,12 @@ import {
     emptyOrderList,
     useBreakpoint,
     useCurrencies,
+    useCurrenciesForOrders,
     useGraphClientHook,
     useIsSubgraphSupported,
     useIsUnderCollateralThreshold,
     useLastPrices,
     useMarket,
-    useMarketOrderList,
     useOrderList,
     usePositions,
     useYieldCurveMarketRates,
@@ -116,6 +116,7 @@ export const AdvancedLending = ({
         selectLandingOrderForm(state.landingOrderForm)
     );
     const [timestamp, setTimestamp] = useState<number>(1643713200);
+    const [isChecked, setIsChecked] = useState(false);
     const [selectedTable, setSelectedTable] = useState(
         TableType.ACTIVE_POSITION
     );
@@ -123,10 +124,28 @@ export const AdvancedLending = ({
     const dispatch = useDispatch();
     const { address } = useAccount();
     const { data: priceList } = useLastPrices();
-    const { data: orderList = emptyOrderList } = useOrderList(address, [
-        currency,
-    ]);
-    const { data: positions } = usePositions(address, [currency]);
+    const { data: usedCurrencies = [] } = useCurrenciesForOrders(address);
+    const { data: fullPositions } = usePositions(address, usedCurrencies);
+
+    const positions = isChecked
+        ? fullPositions?.positions
+        : fullPositions?.positions.filter(
+              position =>
+                  position.maturity === maturity.toString() &&
+                  hexToCurrencySymbol(position.currency) === currency
+          );
+
+    const { data: fullOrderList = emptyOrderList } = useOrderList(
+        address,
+        usedCurrencies
+    );
+    const orderList = isChecked
+        ? fullOrderList.activeOrderList
+        : fullOrderList.activeOrderList.filter(
+              o =>
+                  o.maturity === maturity.toString() &&
+                  hexToCurrencySymbol(o.currency) === currency
+          );
 
     const currencyPrice = priceList[currency];
     const { data: currencies } = useCurrencies();
@@ -141,16 +160,19 @@ export const AdvancedLending = ({
         setTimestamp(Math.round(new Date().getTime() / 1000));
     }, []);
 
-    const filteredInactiveOrderList = useMemo(
-        () =>
-            orderList.inactiveOrderList.filter(
-                order => order.maturity === maturity.toString()
-            ),
-        [maturity, orderList.inactiveOrderList]
-    );
+    const filteredInactiveOrderList = useMemo(() => {
+        return isChecked
+            ? fullOrderList.inactiveOrderList
+            : fullOrderList.inactiveOrderList.filter(
+                  o =>
+                      o.maturity === maturity.toString() &&
+                      hexToCurrencySymbol(o.currency) === currency
+              );
+    }, [isChecked, fullOrderList.inactiveOrderList, maturity, currency]);
+
     const isUnderCollateralThreshold = useIsUnderCollateralThreshold(address);
 
-    const userOrderHistory = useGraphClientHook(
+    const filteredUserOrderHistory = useGraphClientHook(
         {
             address: address?.toLowerCase() ?? '',
             currency: toBytes32(currency),
@@ -161,7 +183,20 @@ export const AdvancedLending = ({
         selectedTable !== TableType.ORDER_HISTORY
     );
 
-    const userTransactionHistory = useGraphClientHook(
+    const fullUserOrderHistory = useGraphClientHook(
+        {
+            address: address?.toLowerCase() ?? '',
+        },
+        queries.FullUserOrderHistoryDocument,
+        'user',
+        selectedTable !== TableType.ORDER_HISTORY
+    );
+
+    const userOrderHistory = isChecked
+        ? fullUserOrderHistory
+        : filteredUserOrderHistory;
+
+    const filteredUserTransactionHistory = useGraphClientHook(
         {
             address: address?.toLowerCase() ?? '',
             currency: toBytes32(currency),
@@ -171,6 +206,19 @@ export const AdvancedLending = ({
         'user',
         selectedTable !== TableType.MY_TRANSACTIONS
     );
+
+    const fullUserTransactionHistory = useGraphClientHook(
+        {
+            address: address?.toLowerCase() ?? '',
+        },
+        queries.FullUserTransactionHistoryDocument,
+        'user',
+        selectedTable !== TableType.MY_TRANSACTIONS
+    );
+
+    const userTransactionHistory = isChecked
+        ? fullUserTransactionHistory
+        : filteredUserTransactionHistory;
 
     const sortedOrderHistory = useMemo(() => {
         return (userOrderHistory.data?.orders || [])
@@ -215,8 +263,6 @@ export const AdvancedLending = ({
         currency,
         maturity
     );
-
-    const filteredOrderList = useMarketOrderList(address, currency, maturity);
 
     const transactionHistory = useGraphClientHook(
         {
@@ -304,7 +350,10 @@ export const AdvancedLending = ({
         [setIsShowingAll]
     );
 
-    const maximumOpenOrderLimit = orderList.activeOrderList.length >= 20;
+    const maximumOpenOrderLimit =
+        fullOrderList.activeOrderList.filter(
+            o => hexToCurrencySymbol(o.currency) === currency
+        ).length >= 20;
 
     const tooltipMap: Record<number, string> = {};
 
@@ -448,47 +497,43 @@ export const AdvancedLending = ({
                             onTabChange={setSelectedTable}
                             useCustomBreakpoint={true}
                             tooltipMap={tooltipMap}
+                            showAllPositions={true}
+                            isChecked={isChecked}
+                            setIsChecked={setIsChecked}
                         >
                             <ActiveTradeTable
                                 data={
                                     positions
-                                        ? positions.positions
-                                              .filter(
-                                                  position =>
-                                                      position.maturity ===
-                                                      maturity.toString()
-                                              )
-                                              .map(position => {
-                                                  const ccy =
-                                                      hexToCurrencySymbol(
-                                                          position.currency
-                                                      );
-                                                  if (!ccy) return position;
-                                                  return {
-                                                      ...position,
-                                                      underMinimalCollateralThreshold:
-                                                          isUnderCollateralThreshold(
-                                                              ccy,
-                                                              Number(
-                                                                  position.maturity
-                                                              ),
-                                                              Number(
-                                                                  position.marketPrice
-                                                              ),
-                                                              position.futureValue >
-                                                                  0
-                                                                  ? OrderSide.LEND
-                                                                  : OrderSide.BORROW
+                                        ? positions.map(position => {
+                                              const ccy = hexToCurrencySymbol(
+                                                  position.currency
+                                              );
+                                              if (!ccy) return position;
+                                              return {
+                                                  ...position,
+                                                  underMinimalCollateralThreshold:
+                                                      isUnderCollateralThreshold(
+                                                          ccy,
+                                                          Number(
+                                                              position.maturity
                                                           ),
-                                                  };
-                                              })
+                                                          Number(
+                                                              position.marketPrice
+                                                          ),
+                                                          position.futureValue >
+                                                              0
+                                                              ? OrderSide.LEND
+                                                              : OrderSide.BORROW
+                                                      ),
+                                              };
+                                          })
                                         : []
                                 }
                                 height={350}
                                 delistedCurrencySet={delistedCurrencySet}
                                 variant='compact'
                             />
-                            <OrderTable data={filteredOrderList} height={350} />
+                            <OrderTable data={orderList} height={350} />
                             <OrderHistoryTable
                                 data={sortedOrderHistory}
                                 pagination={{

@@ -34,6 +34,20 @@ describe('Checkbox Component', () => {
         expect(checkbox).toBeChecked();
     });
 
+    it('should call onChange when clicked on the label', async () => {
+        const handleChange = jest.fn();
+        render(
+            <Default isChecked={false} onChange={handleChange} label='Label' />
+        );
+        const checkbox = screen.getByRole('checkbox');
+        expect(checkbox).not.toBeChecked();
+
+        const label = screen.getByText('Label');
+        await userEvent.click(label);
+        expect(handleChange).toHaveBeenCalledWith(true);
+        expect(checkbox).toBeChecked();
+    });
+
     it('should disable interaction when disabled', async () => {
         const handleChange = jest.fn();
         render(
