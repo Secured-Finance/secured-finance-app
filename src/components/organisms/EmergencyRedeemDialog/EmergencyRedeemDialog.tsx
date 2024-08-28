@@ -14,10 +14,10 @@ import useSF from 'src/hooks/useSecuredFinance';
 import {
     AddressUtils,
     formatTimestamp,
+    handleContractError,
     percentFormat,
     usdFormat,
 } from 'src/utils';
-import { BaseError, ContractFunctionRevertedError } from 'viem';
 
 enum Step {
     settlement = 1,
@@ -152,24 +152,7 @@ export const EmergencyRedeemDialog = ({
                 dispatch({ type: 'next' });
             }
         } catch (e) {
-            if (e instanceof BaseError) {
-                const revertError = e.walk(
-                    e => e instanceof ContractFunctionRevertedError
-                );
-                if (revertError instanceof ContractFunctionRevertedError) {
-                    if (revertError.data?.errorName) {
-                        setErrorMessage(revertError.data?.errorName);
-                        dispatch({ type: 'error' });
-                        return;
-                    }
-                }
-            }
-
-            if (e instanceof Error) {
-                setErrorMessage(e.message);
-            }
-
-            dispatch({ type: 'error' });
+            handleContractError(e, setErrorMessage, dispatch);
         }
     }, [handleContractTransaction, securedFinance]);
 
