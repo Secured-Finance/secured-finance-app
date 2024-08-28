@@ -24,6 +24,7 @@ import {
     ButtonEvents,
     ButtonProperties,
     CurrencySymbol,
+    handleContractError,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 import { trackButtonEvent } from 'src/utils/events';
@@ -193,11 +194,13 @@ export const UnwindDialog = ({
                     dispatch({ type: 'next' });
                 }
             } catch (e) {
-                if (e instanceof Error) {
-                    setErrorMessage(e.message);
-                    globalDispatch(setLastMessage(e.message));
-                }
-                dispatch({ type: 'error' });
+                handleContractError(
+                    e,
+                    setErrorMessage,
+                    dispatch,
+                    globalDispatch,
+                    setLastMessage
+                );
             }
         },
         [stateMap, type, handleContractTransaction, globalDispatch]
