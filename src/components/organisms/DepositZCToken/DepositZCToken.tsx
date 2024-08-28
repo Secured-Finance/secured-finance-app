@@ -26,6 +26,7 @@ import {
     convertToZcTokenName,
     convertZCTokenFromBaseAmount,
     formatAmount,
+    handleContractError,
     ordinaryFormat,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
@@ -215,11 +216,7 @@ export const DepositZCToken = ({
                 dispatch({ type: 'next' });
             }
         } catch (e) {
-            if (e instanceof Error) {
-                setErrorMessage(e.message);
-            }
-
-            dispatch({ type: 'error' });
+            handleContractError(e, setErrorMessage, dispatch);
         }
     }, [
         collateral,
