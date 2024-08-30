@@ -75,7 +75,7 @@ export const Campaign = () => {
                 <div className='flex flex-col-reverse gap-4 tablet:gap-[28px] laptop:flex-row laptop:justify-between desktop:gap-11'>
                     <CampaignStatus
                         startTime={1719619200000}
-                        endTime={1724803200000}
+                        endTime={1727654400000}
                         collateralCurrencies={collateralCurrencies}
                         valueLocked={valueLockedByCurrency}
                         priceList={priceList}
