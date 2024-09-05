@@ -465,7 +465,7 @@ export const NewOrderBookWidget = ({
     };
 
     return (
-        <div className='flex h-full w-full flex-col justify-start gap-y-1 overflow-hidden border-white-10 laptop:flex-col-reverse laptop:gap-y-0'>
+        <div className='flex h-full w-full flex-col justify-start gap-y-1 overflow-hidden border-white-10 laptop:flex-col-reverse laptop:gap-y-0 laptop:rounded-b-xl laptop:border laptop:bg-neutral-900 laptop:shadow-tab'>
             <div className='h-full'>
                 {orderbook.isPending ? (
                     <div className='table h-full w-full'>

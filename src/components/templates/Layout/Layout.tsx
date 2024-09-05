@@ -21,9 +21,7 @@ export const Layout = ({
             data-testid='wrapper-div'
         >
             <div className='w-full'>
-                <header className='sticky top-0 z-30 w-full bg-neutral-900'>
-                    {navBar}
-                </header>
+                <header className='sticky top-0 z-30 w-full'>{navBar}</header>
                 <main className='w-full'>{children}</main>
             </div>
             <footer

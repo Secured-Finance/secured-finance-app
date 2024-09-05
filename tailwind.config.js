@@ -25,6 +25,7 @@ module.exports = {
                 selector: 'inset 0px 2px 4px rgba(0, 0, 0, 0.25)',
                 sliderthumb: '0px 4px 16px -8px rgba(15, 15, 15, 0.1)',
                 curvetooltip: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+                checkbox: '0px 0px 0px 4px rgba(27, 88, 245, 0.32)',
             },
             borderWidth: {
                 '0.5': '0.5px',
@@ -95,7 +96,7 @@ module.exports = {
             laptop: '1024px',
             desktop: '1440px',
             largeDesktop: '1920px',
-            horizontalTab: '1120px',
+            horizontalTab: '1200px',
         },
 
         fontSize: {
