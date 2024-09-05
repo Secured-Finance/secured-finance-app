@@ -22,6 +22,7 @@ import {
     convertToZcTokenName,
     convertZCTokenFromBaseAmount,
     formatAmount,
+    handleContractError,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import {
@@ -251,10 +252,7 @@ export const WithdrawZCToken = ({
                 dispatch({ type: 'next' });
             }
         } catch (e) {
-            if (e instanceof Error) {
-                setErrorMessage(e.message);
-            }
-            dispatch({ type: 'error' });
+            handleContractError(e, setErrorMessage, dispatch);
         }
     }, [
         onWithdrawZCToken,
