@@ -14,6 +14,7 @@ import useSF from 'src/hooks/useSecuredFinance';
 import {
     AddressUtils,
     formatTimestamp,
+    handleContractError,
     percentFormat,
     usdFormat,
 } from 'src/utils';
@@ -151,11 +152,7 @@ export const EmergencyRedeemDialog = ({
                 dispatch({ type: 'next' });
             }
         } catch (e) {
-            if (e instanceof Error) {
-                setErrorMessage(e.message);
-            }
-
-            dispatch({ type: 'error' });
+            handleContractError(e, setErrorMessage, dispatch);
         }
     }, [handleContractTransaction, securedFinance]);
 

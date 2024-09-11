@@ -9,6 +9,7 @@ export * from './env';
 export * from './events/interface';
 export * from './fee';
 export * from './formatNumbers';
+export * from './handleContractError';
 export * from './links';
 export * from './markets';
 export * from './mobileTableDefinitions';

@@ -2,7 +2,7 @@ import { Tab as HeadlessTab } from '@headlessui/react';
 import clsx from 'clsx';
 import { Children, useState } from 'react';
 import TooltipIcon from 'src/assets/icons/information-circle-block.svg';
-import { DropdownSelector } from 'src/components/atoms';
+import { Checkbox, DropdownSelector } from 'src/components/atoms';
 import { Tooltip, TooltipMode } from 'src/components/molecules';
 
 const TitleChip = ({
@@ -50,12 +50,18 @@ export const HorizontalTabTable = ({
     children,
     onTabChange,
     useCustomBreakpoint = false,
+    showAllPositions = false,
+    isChecked = false,
+    setIsChecked,
     tooltipMap,
 }: {
     tabTitles: string[];
     children?: React.ReactNode;
     onTabChange?: (v: number) => void;
     useCustomBreakpoint?: boolean;
+    showAllPositions?: boolean;
+    isChecked?: boolean;
+    setIsChecked?: (v: boolean) => void;
     tooltipMap?: Record<number, string>;
 }) => {
     const arrayChildren = Children.toArray(children);
@@ -77,7 +83,7 @@ export const HorizontalTabTable = ({
                     'flex h-full flex-col rounded-xl border border-neutral-600 bg-neutral-900 laptop:rounded-t-none'
                 )}
             >
-                <HeadlessTab.List className='justify-start border-b border-neutral-600 px-4 py-3 laptop:h-fit laptop:py-3.5'>
+                <HeadlessTab.List className='flex justify-between border-b border-neutral-600 px-4 py-3 laptop:h-fit laptop:py-3.5'>
                     <div
                         className={clsx('w-full', {
                             'horizontalTab:hidden': useCustomBreakpoint,
@@ -94,7 +100,11 @@ export const HorizontalTabTable = ({
                                 value: selectedIndex.toString(),
                             }}
                             onChange={option => onChange(parseInt(option) || 0)}
-                            variant='tab'
+                            variant={
+                                showAllPositions
+                                    ? 'tabWidthFit'
+                                    : 'tabWidthFull'
+                            }
                         />
                     </div>
                     <div
@@ -120,6 +130,13 @@ export const HorizontalTabTable = ({
                             );
                         })}
                     </div>
+                    {showAllPositions && setIsChecked && (
+                        <Checkbox
+                            isChecked={isChecked}
+                            onChange={setIsChecked}
+                            label='Show All Positions'
+                        />
+                    )}
                 </HeadlessTab.List>
                 <HeadlessTab.Panels
                     className={clsx(
