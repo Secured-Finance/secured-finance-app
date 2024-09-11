@@ -1,5 +1,6 @@
 export * from './AssetInformation';
 export * from './Button';
+export * from './Checkbox';
 export * from './Chip';
 export * from './CloseButton';
 export * from './CollateralInformation';

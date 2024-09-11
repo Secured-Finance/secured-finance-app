@@ -23,6 +23,7 @@ import {
     OrderEvents,
     OrderProperties,
     formatAmount,
+    handleContractError,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 import {
@@ -209,10 +210,7 @@ export const PlaceOrder = ({
                     dispatch({ type: 'next' });
                 }
             } catch (e) {
-                if (e instanceof Error) {
-                    setErrorMessage(e.message);
-                }
-                dispatch({ type: 'error' });
+                handleContractError(e, setErrorMessage, dispatch);
             }
         },
         [onPlaceOrder, handleContractTransaction, orderType, orderAmount.value]
