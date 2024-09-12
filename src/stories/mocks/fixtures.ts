@@ -1184,6 +1184,4 @@ export const dailyMarketStats = {
     low: '94.57',
     volume: '520 WFIL',
     volumeInUSD: usdFormat(1851),
-    rateHigh: '11.84%',
-    rateLow: '18.46%',
 };

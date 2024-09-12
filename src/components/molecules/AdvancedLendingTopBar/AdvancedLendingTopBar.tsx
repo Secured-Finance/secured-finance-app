@@ -220,44 +220,34 @@ export const AdvancedLendingTopBar = ({
                         </div>
 
                         <div className='hidden justify-around laptop:flex laptop:w-[75%] laptop:items-center laptop:px-7 laptop:py-4 desktop:gap-3.5'>
-                            <div className='flex w-[20%] flex-col desktop:w-[15%]'>
+                            <div className='flex w-[14%] flex-col desktop:w-[12%]'>
                                 <span className='typography-caption-2 text-neutral-400'>
-                                    Mark Price (APR)
+                                    Mark Price
                                 </span>
                                 <span className='typography-desktop-body-3 whitespace-nowrap font-semibold text-neutral-50'>
                                     {formatLoanValue(
                                         currentMarket?.value,
                                         'price'
-                                    )}{' '}
-                                    (
-                                    {formatLoanValue(
-                                        currentMarket?.value,
-                                        'rate'
                                     )}
-                                    )
                                 </span>
                             </div>
-                            <div className='flex w-[16%] flex-col desktop:w-[13%]'>
+                            <div className='flex w-[16%] flex-col desktop:w-[12%]'>
                                 <MarketTab
-                                    name='Last Price (APR)'
-                                    value={`${formatLoanValue(
+                                    name='Last Price'
+                                    value={formatLoanValue(
                                         lastLoanValue,
                                         'price'
-                                    )} (${formatLoanValue(
-                                        lastLoanValue,
-                                        'rate'
-                                    )})`}
+                                    )}
                                 />
                             </div>
-                            <div className='flex w-auto flex-col desktop:w-[15%]'>
+                            <div className='flex w-[19%] flex-col desktop:w-[15%]'>
                                 <MarketTab
-                                    name='24h Price Change (APR)'
+                                    name='24h Price Change'
                                     value={
                                         <PriceRateChange
                                             percentageChange={
                                                 dailyStats.percentageChange
                                             }
-                                            aprChange={dailyStats.aprChange}
                                         />
                                     }
                                 />
@@ -266,20 +256,20 @@ export const AdvancedLendingTopBar = ({
                                 <>
                                     <div className='hidden desktop:flex desktop:w-[11%]'>
                                         <MarketTab
-                                            name='24h High (APR)'
-                                            value={`${marketInfo.high} (${marketInfo.rateHigh})`}
+                                            name='24h High'
+                                            value={marketInfo.high}
                                         />
                                     </div>
                                     <div className='hidden desktop:flex desktop:w-[11%]'>
                                         <MarketTab
-                                            name='24h Low (APR)'
-                                            value={`${marketInfo.low} (${marketInfo.rateLow})`}
+                                            name='24h Low'
+                                            value={marketInfo.low}
                                         />
                                     </div>
-                                    <div className='w-[13%] desktop:w-[9%]'>
+                                    <div className='w-[13%] desktop:w-[12%]'>
                                         <section
                                             className='flex h-fit flex-grow flex-col'
-                                            aria-label={'24h Volume'}
+                                            aria-label='24h Volume'
                                         >
                                             <span className='laptop:typography-caption-2 whitespace-nowrap text-[11px] text-neutral-400'>
                                                 24h Volume
@@ -300,7 +290,7 @@ export const AdvancedLendingTopBar = ({
                                     </div>
                                 </>
                             )}
-                            <div className={clsx('w-[13%] desktop:w-[8%]')}>
+                            <div className={clsx('w-[15%] desktop:w-[11%]')}>
                                 <MarketTab
                                     name={`${selectedAsset?.value} Price`}
                                     value={currencyPrice || '0'}

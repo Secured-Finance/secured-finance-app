@@ -82,6 +82,7 @@ const useTradeHistoryDetails = (
             min = 0;
             max = 0;
         }
+
         for (const t of transactions) {
             const price = +t.executionPrice;
             if (price < min) {
@@ -98,8 +99,7 @@ const useTradeHistoryDetails = (
             max: LoanValue.fromPrice(max, maturity.toNumber()),
             sum: currencyMap[currency].fromBaseUnit(sum),
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currency, maturity.toNumber(), transactions.length]);
+    }, [currency, maturity, transactions]);
 };
 
 export const AdvancedLending = ({
@@ -295,11 +295,9 @@ export const AdvancedLending = ({
         volume: formatWithCurrency(
             tradeHistoryDetails.sum || 0,
             selectedAsset?.value as CurrencySymbol,
-            currencyMap[selectedAsset?.value as CurrencySymbol].roundingDecimal
+            currencyMap[selectedAsset?.value as CurrencySymbol]?.roundingDecimal
         ),
         volumeInUSD: usdFormat(currencyPrice * tradeHistoryDetails.sum),
-        rateHigh: formatLoanValue(tradeHistoryDetails.max, 'rate'),
-        rateLow: formatLoanValue(tradeHistoryDetails.min, 'rate'),
     };
 
     const {

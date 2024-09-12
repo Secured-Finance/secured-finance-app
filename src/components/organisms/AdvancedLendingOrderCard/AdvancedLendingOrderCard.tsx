@@ -421,7 +421,7 @@ export function AdvancedLendingOrderCard({
                         )}
                         <div className='mx-2 mb-1 laptop:mx-10px laptop:mb-0'>
                             <OrderDisplayBox
-                                field='Fixed Rate (APR)'
+                                field='Fixed Rate'
                                 value={formatLoanValue(loanValue, 'rate')}
                             />
                         </div>

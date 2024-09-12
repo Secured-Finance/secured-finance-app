@@ -58,7 +58,6 @@ export const CurrencyMaturityTable = ({
     const renderCell = useCallback(
         (option: (typeof options)[0], columnKey: ColumnKey) => {
             const { display, isFavourite, currency } = option;
-
             const CcyIcon = currencyMap[currency]?.icon;
 
             switch (columnKey) {
