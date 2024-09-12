@@ -29,7 +29,6 @@ export const MarketInfoDialog = ({
     percentageChange,
 }: MarketInfoDialogProps) => {
     const lastPrice = formatLoanValue(currentMarket?.value, 'price');
-    const rate = formatLoanValue(currentMarket?.value, 'rate');
     const maturity = currentMarket?.value.maturity ?? 0;
     const CurrencyIcon = currencyMap[currency as CurrencySymbol]?.icon;
     const [remainingTime, setRemainingTime] = useState<number>(0);
