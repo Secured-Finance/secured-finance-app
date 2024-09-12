@@ -19,13 +19,12 @@ describe('MarketInfoDialog Component', () => {
     it('shows correct last price and APR', () => {
         render(<Default />);
         expect(screen.getByText('80.00')).toBeInTheDocument();
-        expect(screen.getByText('25.03%')).toBeInTheDocument();
     });
 
     it('displays correct 24h stats', () => {
         render(<Default />);
-        expect(screen.getByText('98.99 (11.84%)')).toBeInTheDocument();
-        expect(screen.getByText('94.57 (18.46%)')).toBeInTheDocument();
+        expect(screen.getByText('98.99')).toBeInTheDocument();
+        expect(screen.getByText('94.57')).toBeInTheDocument();
     });
 
     it('shows correct currency price with external link', () => {

@@ -124,8 +124,6 @@ export type DailyMarketInfo = {
     low: string;
     volume: string;
     volumeInUSD: string;
-    rateHigh: string;
-    rateLow: string;
 };
 
 export type LastPricePerMarket = Record<

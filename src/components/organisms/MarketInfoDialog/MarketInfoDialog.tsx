@@ -27,12 +27,11 @@ export const MarketInfoDialog = ({
     marketInfo,
     lastLoanValue,
     percentageChange,
-    aprChange,
 }: MarketInfoDialogProps) => {
     const lastPrice = formatLoanValue(currentMarket?.value, 'price');
     const rate = formatLoanValue(currentMarket?.value, 'rate');
     const maturity = currentMarket?.value.maturity ?? 0;
-    const CurrencyIcon = currencyMap[currency as CurrencySymbol].icon;
+    const CurrencyIcon = currencyMap[currency as CurrencySymbol]?.icon;
     const [remainingTime, setRemainingTime] = useState<number>(0);
 
     const priceSource = handlePriceSource(currency as CurrencySymbol);
@@ -95,13 +94,10 @@ export const MarketInfoDialog = ({
                                     <span className='typography-body-2 font-semibold text-neutral-50'>
                                         {lastPrice}
                                     </span>
-                                    <span className='typography-mobile-body-5 text-white'>
-                                        {rate} APR
-                                    </span>
                                 </div>
                             </li>
                             <li className='flex justify-between'>
-                                <span>Last Price (APR)</span>
+                                <span>Last Price</span>
                                 <div className='flex flex-col items-end'>
                                     <span>
                                         {formatLoanValue(
@@ -109,29 +105,21 @@ export const MarketInfoDialog = ({
                                             'price'
                                         )}
                                     </span>
-                                    <span>
-                                        {formatLoanValue(lastLoanValue, 'rate')}
-                                    </span>
                                 </div>
                             </li>
                             <li className='flex justify-between'>
                                 <span>24h Change</span>
                                 <PriceRateChange
                                     percentageChange={percentageChange}
-                                    aprChange={aprChange}
                                 />
                             </li>
                             <li className='flex justify-between'>
                                 <span>24h High</span>
-                                <span>
-                                    {marketInfo?.high} ({marketInfo?.rateHigh})
-                                </span>
+                                <span>{marketInfo?.high}</span>
                             </li>
                             <li className='flex justify-between'>
                                 <span>24h Low</span>
-                                <span>
-                                    {marketInfo?.low} ({marketInfo?.rateLow})
-                                </span>
+                                <span>{marketInfo?.low}</span>
                             </li>
                             <li className='flex justify-between'>
                                 <span>24h Volume</span>

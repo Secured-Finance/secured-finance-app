@@ -15,11 +15,11 @@ describe('AdvancedLendingTopBar Component', () => {
         ).toBeInTheDocument();
         expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
 
-        expect(screen.getByText('Mark Price (APR)')).toBeInTheDocument();
-        expect(screen.getByText('80.00 (25.03%)')).toBeInTheDocument();
+        expect(screen.getByText('Mark Price')).toBeInTheDocument();
+        expect(screen.getByText('80.00')).toBeInTheDocument();
 
-        expect(screen.getByText('Last Price (APR)')).toBeInTheDocument();
-        expect(screen.getByText('--.-- (--.--%)')).toBeInTheDocument();
+        expect(screen.getByText('Last Price')).toBeInTheDocument();
+        expect(screen.getByText('--.--')).toBeInTheDocument();
 
         expect(screen.getByText('WFIL Price')).toBeInTheDocument();
         expect(screen.getByText('$3.56')).toBeInTheDocument();

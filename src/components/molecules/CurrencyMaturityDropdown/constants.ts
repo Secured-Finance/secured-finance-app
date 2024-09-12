@@ -6,7 +6,7 @@ export const mobileColumns = [
     },
     {
         key: 'mark-prices-mobile',
-        label: 'Mark Price (APR)',
+        label: 'Mark Price',
         width: '50%',
     },
 ];
