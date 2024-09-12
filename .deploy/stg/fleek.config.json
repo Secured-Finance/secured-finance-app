@@ -1,0 +1,9 @@
+{
+    "sites": [
+      {
+        "slug": "stg-secured-finance",
+        "distDir": ".deploy/stg/build",
+        "buildCommand": ""
+      }
+    ]
+  }
