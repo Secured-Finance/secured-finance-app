@@ -117,7 +117,7 @@ export const AdvancedLendingTopBar = ({
         }
 
         const percentageChange = ((todaysPrice - prevPrice) / prevPrice) * 100;
-        const absChange = todaysPrice - prevPrice;
+        const absChange = (todaysPrice - prevPrice) / 100;
 
         return { percentageChange, absChange };
     }, [historicalData?.transactionCandleSticks, maturity]);
