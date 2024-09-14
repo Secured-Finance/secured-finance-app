@@ -11,5 +11,5 @@ export interface MarketInfoDialogProps {
     marketInfo?: DailyMarketInfo;
     lastLoanValue?: LoanValue;
     percentageChange: number | null;
-    aprChange: number | null;
+    absChange: number | null;
 }

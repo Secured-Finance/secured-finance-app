@@ -73,7 +73,7 @@ export const AdvancedLendingTopBar = ({
     const dailyStats = useMemo(() => {
         const data = historicalData?.transactionCandleSticks;
         if (!data || data.length === 0)
-            return { percentageChange: null, aprChange: null };
+            return { percentageChange: null, absChange: null };
 
         const sortedData = [...data].sort(
             (a, b) => +b.timestamp - +a.timestamp
@@ -88,7 +88,6 @@ export const AdvancedLendingTopBar = ({
             todayMidnight.getTime() / 1000
         );
 
-        // Today's bond price
         let todaysLoanValue = null;
         for (const entry of sortedData) {
             if (+entry.timestamp >= todayMidnightTimestamp) {
@@ -98,7 +97,6 @@ export const AdvancedLendingTopBar = ({
             }
         }
 
-        // Get 24 hours ago timestamp
         const yesterdayTimestamp = latestTimestamp - 24 * 60 * 60;
 
         // Find the price from 24 hours ago
@@ -114,22 +112,14 @@ export const AdvancedLendingTopBar = ({
         const todaysPrice = todaysLoanValue?.price;
         const prevPrice = prevLoanValue?.price;
 
-        const todaysAPR = todaysLoanValue?.apr.toNormalizedNumber();
-        const prevAPR = prevLoanValue?.apr.toNormalizedNumber();
-
-        if (
-            todaysPrice === undefined ||
-            prevPrice === undefined ||
-            todaysAPR === undefined ||
-            prevAPR === undefined
-        ) {
-            return { percentageChange: null, aprChange: null };
+        if (todaysPrice === undefined || prevPrice === undefined) {
+            return { percentageChange: null, absChange: null };
         }
 
         const percentageChange = ((todaysPrice - prevPrice) / prevPrice) * 100;
-        const aprChange = todaysAPR - prevAPR;
+        const absChange = todaysPrice - prevPrice;
 
-        return { percentageChange, aprChange };
+        return { percentageChange, absChange };
     }, [historicalData?.transactionCandleSticks, maturity]);
 
     const lastLoanValue = useMemo(() => {
@@ -221,15 +211,13 @@ export const AdvancedLendingTopBar = ({
 
                         <div className='hidden justify-around laptop:flex laptop:w-[75%] laptop:items-center laptop:px-7 laptop:py-4 desktop:gap-3.5'>
                             <div className='flex w-[14%] flex-col desktop:w-[12%]'>
-                                <span className='typography-caption-2 text-neutral-400'>
-                                    Mark Price
-                                </span>
-                                <span className='typography-desktop-body-3 whitespace-nowrap font-semibold text-neutral-50'>
-                                    {formatLoanValue(
+                                <MarketTab
+                                    name='Mark Price'
+                                    value={formatLoanValue(
                                         currentMarket?.value,
                                         'price'
                                     )}
-                                </span>
+                                />
                             </div>
                             <div className='flex w-[16%] flex-col desktop:w-[12%]'>
                                 <MarketTab
@@ -248,6 +236,7 @@ export const AdvancedLendingTopBar = ({
                                             percentageChange={
                                                 dailyStats.percentageChange
                                             }
+                                            absChange={dailyStats.absChange}
                                         />
                                     }
                                 />
@@ -317,7 +306,7 @@ export const AdvancedLendingTopBar = ({
                 marketInfo={marketInfo}
                 lastLoanValue={lastLoanValue}
                 percentageChange={dailyStats.percentageChange}
-                aprChange={dailyStats.aprChange}
+                absChange={dailyStats.absChange}
             />
         </>
     );
