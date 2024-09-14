@@ -27,6 +27,7 @@ export const MarketInfoDialog = ({
     marketInfo,
     lastLoanValue,
     percentageChange,
+    absChange,
 }: MarketInfoDialogProps) => {
     const lastPrice = formatLoanValue(currentMarket?.value, 'price');
     const maturity = currentMarket?.value.maturity ?? 0;
@@ -110,6 +111,7 @@ export const MarketInfoDialog = ({
                                 <span>24h Change</span>
                                 <PriceRateChange
                                     percentageChange={percentageChange}
+                                    absChange={absChange}
                                 />
                             </li>
                             <li className='flex justify-between'>
