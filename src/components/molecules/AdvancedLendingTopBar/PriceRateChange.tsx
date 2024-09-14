@@ -35,14 +35,14 @@ export const PriceRateChange = ({
         absChangeDisplay = `+${absChange.toFixed(2)}`;
     }
 
-    if (percentageChange < 0) {
-        percentageChangeDisplay = `${absChange.toFixed(2)}%`;
+    if (absChange < 0) {
+        absChangeDisplay = `${absChange.toFixed(2)}`;
     }
 
     return (
         <div className='flex flex-col items-end gap-1 laptop:flex-row laptop:items-center'>
             <span className={classNameRule}>{absChangeDisplay}</span>
-            <span className={classNameRule}>{percentageChangeDisplay}</span>
+            <span className={classNameRule}>({percentageChangeDisplay})</span>
         </div>
     );
 };
