@@ -211,13 +211,15 @@ export const AdvancedLendingTopBar = ({
 
                         <div className='hidden justify-around laptop:flex laptop:w-[75%] laptop:items-center laptop:px-7 laptop:py-4 desktop:gap-3.5'>
                             <div className='flex w-[14%] flex-col desktop:w-[12%]'>
-                                <MarketTab
-                                    name='Mark Price'
-                                    value={formatLoanValue(
+                                <span className='typography-caption-2 text-neutral-400'>
+                                    Mark Price
+                                </span>
+                                <span className='typography-caption whitespace-nowrap font-semibold leading-4 text-neutral-50 desktop:leading-6'>
+                                    {formatLoanValue(
                                         currentMarket?.value,
                                         'price'
                                     )}
-                                />
+                                </span>
                             </div>
                             <div className='flex w-[16%] flex-col desktop:w-[12%]'>
                                 <MarketTab
