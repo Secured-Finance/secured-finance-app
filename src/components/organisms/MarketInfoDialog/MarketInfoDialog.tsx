@@ -6,7 +6,7 @@ import duration from 'dayjs/plugin/duration';
 import { useEffect, useState } from 'react';
 import ArrowUpSquare from 'src/assets/icons/arrow-up-square.svg';
 import DocumentTextIcon from 'src/assets/icons/document-text.svg';
-import { PriceRateChange, Tooltip } from 'src/components/molecules';
+import { Tooltip } from 'src/components/molecules';
 import {
     currencyMap,
     CurrencySymbol,
@@ -26,8 +26,6 @@ export const MarketInfoDialog = ({
     currencyPrice,
     marketInfo,
     lastLoanValue,
-    percentageChange,
-    absChange,
 }: MarketInfoDialogProps) => {
     const lastPrice = formatLoanValue(currentMarket?.value, 'price');
     const maturity = currentMarket?.value.maturity ?? 0;
@@ -106,13 +104,6 @@ export const MarketInfoDialog = ({
                                         )}
                                     </span>
                                 </div>
-                            </li>
-                            <li className='flex justify-between'>
-                                <span>24h Change</span>
-                                <PriceRateChange
-                                    percentageChange={percentageChange}
-                                    absChange={absChange}
-                                />
                             </li>
                             <li className='flex justify-between'>
                                 <span>24h High</span>
