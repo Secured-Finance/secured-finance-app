@@ -146,7 +146,7 @@ export const AdvancedLendingTopBar = ({
                             </div>
                         </div>
 
-                        <div className='hidden justify-around laptop:flex laptop:w-[75%] laptop:items-center laptop:px-7 laptop:py-4 desktop:gap-3.5'>
+                        <div className='hidden justify-evenly laptop:flex laptop:w-[75%] laptop:items-center laptop:px-7 laptop:py-4 desktop:gap-3.5'>
                             <div className='flex w-[14%] flex-col desktop:w-[12%]'>
                                 <span className='typography-caption-2 text-neutral-400'>
                                     Mark Price
@@ -158,7 +158,7 @@ export const AdvancedLendingTopBar = ({
                                     )}
                                 </span>
                             </div>
-                            <div className='flex w-[13%] flex-col desktop:w-[12%]'>
+                            <div className='flex w-[14%] flex-col desktop:w-[12%]'>
                                 <MarketTab
                                     name='Last Price'
                                     value={formatLoanValue(
@@ -169,13 +169,13 @@ export const AdvancedLendingTopBar = ({
                             </div>
                             {marketInfo && (
                                 <>
-                                    <div className='hidden desktop:flex desktop:w-[11%]'>
+                                    <div className='flex w-[14%] desktop:w-[11%]'>
                                         <MarketTab
                                             name='24h High'
                                             value={marketInfo.high}
                                         />
                                     </div>
-                                    <div className='hidden desktop:flex desktop:w-[11%]'>
+                                    <div className='flex w-[14%] desktop:w-[11%]'>
                                         <MarketTab
                                             name='24h Low'
                                             value={marketInfo.low}
@@ -205,7 +205,7 @@ export const AdvancedLendingTopBar = ({
                                     </div>
                                 </>
                             )}
-                            <div className={clsx('w-[15%] desktop:w-[11%]')}>
+                            <div className={clsx('w-[14%] desktop:w-[11%]')}>
                                 <MarketTab
                                     name={`${selectedAsset?.value} Price`}
                                     value={currencyPrice || '0'}
@@ -214,7 +214,7 @@ export const AdvancedLendingTopBar = ({
                                     )}
                                 />
                             </div>
-                            <div className='flex flex-col laptop:w-[13%] desktop:w-[10%]'>
+                            <div className='flex w-[14%] flex-col desktop:w-[10%]'>
                                 <CountdownTimer
                                     maturity={selected.value.toNumber()}
                                 />
