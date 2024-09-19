@@ -8,10 +8,11 @@ import ArrowUpSquare from 'src/assets/icons/arrow-up-square.svg';
 import DocumentTextIcon from 'src/assets/icons/document-text.svg';
 import { Tooltip } from 'src/components/molecules';
 import {
+    CountdownFormat,
     currencyMap,
     CurrencySymbol,
     formatLoanValue,
-    formatRemainingTime,
+    getCountdown,
     handlePriceSource,
 } from 'src/utils';
 import { MarketInfoDialogProps } from './types';
@@ -27,33 +28,25 @@ export const MarketInfoDialog = ({
     marketInfo,
     lastLoanValue,
 }: MarketInfoDialogProps) => {
-    const lastPrice = formatLoanValue(currentMarket?.value, 'price');
     const maturity = currentMarket?.value.maturity ?? 0;
+    const targetTime = maturity * 1000;
+    const [time, setTime] = useState<CountdownFormat | undefined>(
+        getCountdown(targetTime)
+    );
+    const lastPrice = formatLoanValue(currentMarket?.value, 'price');
     const CurrencyIcon = currencyMap[currency as CurrencySymbol]?.icon;
-    const [remainingTime, setRemainingTime] = useState<number>(0);
 
     const priceSource = handlePriceSource(currency as CurrencySymbol);
 
     useEffect(() => {
-        setRemainingTime(maturity - dayjs().unix());
-        const updateCountdown = () => {
-            const now = dayjs().unix();
-            const timeLeft = maturity - now;
+        const interval = setInterval(() => {
+            setTime(getCountdown(targetTime));
+        }, 1000);
 
-            if (timeLeft <= 0) {
-                setRemainingTime(0);
-                clearInterval(interval);
-                return;
-            }
-
-            setRemainingTime(timeLeft);
+        return () => {
+            clearInterval(interval);
         };
-
-        const interval = setInterval(updateCountdown, 1000);
-        updateCountdown();
-
-        return () => clearInterval(interval);
-    }, [maturity]);
+    }, [targetTime]);
 
     return (
         <Dialog open={isOpen} onClose={onClose} className='relative z-[31]'>
@@ -144,7 +137,7 @@ export const MarketInfoDialog = ({
                             <li className='flex justify-between'>
                                 <span>Countdown</span>
                                 <span className='tabular-nums'>
-                                    {formatRemainingTime(remainingTime)}
+                                    {`${time?.days}:${time?.hours}:${time?.minutes}:${time?.seconds}`}
                                 </span>
                             </li>
                         </ul>

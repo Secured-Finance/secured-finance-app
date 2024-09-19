@@ -124,23 +124,6 @@ export const formatTimeStampWithTimezone = (timestamp: number) => {
     }).format(date);
 };
 
-const padNumber = (num: number, length: number): string => {
-    return num.toString().padStart(length, '0');
-};
-
-export const formatRemainingTime = (seconds: number): string => {
-    const remainingDuration = dayjs.duration(seconds, 'seconds');
-    const days = Math.floor(remainingDuration.asDays());
-    const hours = remainingDuration.hours();
-    const minutes = remainingDuration.minutes();
-    const secs = remainingDuration.seconds();
-
-    return `${padNumber(days, 2)}:${padNumber(hours, 2)}:${padNumber(
-        minutes,
-        2
-    )}:${padNumber(secs, 2)}`;
-};
-
 export const formatDuration = (durationMs: number) => {
     const msPerDay = 24 * 60 * 60 * 1000; // Milliseconds in a day
     const daysInYear = 365.25; // Average number of days in a year accounting for leap years
