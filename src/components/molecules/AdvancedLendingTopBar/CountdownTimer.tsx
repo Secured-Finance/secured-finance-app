@@ -1,41 +1,28 @@
-import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { MarketTab } from 'src/components/atoms';
-
-import { formatRemainingTime } from 'src/utils';
+import { CountdownFormat, getCountdown } from 'src/utils';
 
 export const CountdownTimer = ({ maturity }: { maturity: number }) => {
-    const [remainingTime, setRemainingTime] = useState<number>(
-        maturity - dayjs().unix()
+    const targetTime = maturity * 1000;
+    const [time, setTime] = useState<CountdownFormat | undefined>(
+        getCountdown(targetTime)
     );
+
     useEffect(() => {
-        const updateCountdown = () => {
-            const now = dayjs().unix();
+        const interval = setInterval(() => {
+            setTime(getCountdown(targetTime));
+        }, 1000);
 
-            const timeLeft = maturity - now;
-
-            if (timeLeft <= 0) {
-                setRemainingTime(0);
-                clearInterval(interval);
-                return;
-            }
-
-            setRemainingTime(timeLeft);
+        return () => {
+            clearInterval(interval);
         };
-
-        const interval = setInterval(updateCountdown, 1000);
-        updateCountdown();
-
-        return () => clearInterval(interval);
-    }, [maturity]);
+    }, [targetTime]);
 
     return (
         <MarketTab
             name='Countdown'
             value={
-                <span className='tabular-nums'>
-                    {formatRemainingTime(remainingTime)}
-                </span>
+                <span className='tabular-nums'>{`${time?.days}:${time?.hours}:${time?.minutes}:${time?.seconds}`}</span>
             }
         />
     );
