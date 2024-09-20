@@ -52,7 +52,7 @@ export const CurrencyMaturityDropdown = ({
     });
 
     const router = useRouter();
-    // const { market } = router.query;
+    const { market } = router.query;
 
     const { data: currencies } = useCurrencies();
 
@@ -229,22 +229,22 @@ export const CurrencyMaturityDropdown = ({
         volumePerMarket,
     ]);
 
-    // useEffect(() => {
-    //     if (!isItayosePage) return;
+    useEffect(() => {
+        if (!isItayosePage) return;
 
-    //     let targetOption = filteredOptions.find(item => item?.isItayoseOption);
+        let targetOption = filteredOptions.find(item => item?.isItayoseOption);
 
-    //     if (market) {
-    //         targetOption =
-    //             filteredOptions.find(item => item?.key === market) ||
-    //             targetOption;
-    //     }
+        if (market) {
+            targetOption =
+                filteredOptions.find(item => item?.key === market) ||
+                targetOption;
+        }
 
-    //     if (targetOption) {
-    //         onChange(targetOption.currency, targetOption.maturity);
-    //     }
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, []);
+        if (targetOption) {
+            onChange(targetOption.currency, targetOption.maturity);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const handleOptionClick = (item: FilteredOption) => {
         if (item.currency !== asset.value || item.maturity !== maturity.value) {
