@@ -14,6 +14,7 @@ jest.mock('next/router', () => ({
     useRouter: jest.fn(() => ({
         pathname: '/',
         push: jest.fn(),
+        query: { market: 'WBTC-DEC2024' },
     })),
 }));
 
