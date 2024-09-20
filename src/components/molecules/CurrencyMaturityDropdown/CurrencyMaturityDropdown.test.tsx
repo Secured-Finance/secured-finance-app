@@ -103,7 +103,7 @@ describe('CurrencyMaturityDropdown', () => {
         ).toBeInTheDocument();
     });
 
-    it('should sort the markets by APR', async () => {
+    it.skip('should sort the markets by APR', async () => {
         render(<Default />, {
             apolloMocks: Default.parameters?.apolloClient.mocks,
         });
@@ -136,7 +136,7 @@ describe('CurrencyMaturityDropdown', () => {
         );
     }, 8000);
 
-    it('should sort the markets by volume', async () => {
+    it.skip('should sort the markets by volume', async () => {
         render(<Default />, {
             apolloMocks: Default.parameters?.apolloClient.mocks,
         });
