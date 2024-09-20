@@ -13,7 +13,7 @@ const openDropdown = () => {
     fireEvent.click(button);
 };
 
-describe.skip('CurrencyMaturityDropdown', () => {
+describe('CurrencyMaturityDropdown', () => {
     it('should render a selected market', () => {
         render(<Default />, {
             apolloMocks: Default.parameters?.apolloClient.mocks,
