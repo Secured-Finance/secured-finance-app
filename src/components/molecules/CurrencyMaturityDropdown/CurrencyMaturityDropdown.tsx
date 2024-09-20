@@ -40,6 +40,7 @@ export const CurrencyMaturityDropdown = ({
     maturityList,
     maturity = maturityList[0],
     onChange,
+    isItayosePage,
 }: CurrencyMaturityDropdownProps) => {
     const isTablet = useBreakpoint('laptop');
     const [searchValue, setSearchValue] = useState<string>('');
@@ -49,6 +50,8 @@ export const CurrencyMaturityDropdown = ({
     const [savedMarkets, setSavedMarkets] = useState(() => {
         return readMarketsFromStore();
     });
+
+    const router = useRouter();
     const { data: currencies } = useCurrencies();
 
     const { data: priceList } = useLastPrices();
@@ -133,7 +136,6 @@ export const CurrencyMaturityDropdown = ({
     );
 
     const { data: lendingMarkets = baseContracts } = useLendingMarkets();
-    const router = useRouter();
 
     const CcyIcon = currencyMap[asset.value]?.icon;
 
@@ -182,7 +184,7 @@ export const CurrencyMaturityDropdown = ({
                     if (
                         (currentCurrency &&
                             !currentCurrency.includes(currency.value)) ||
-                        (isItayose && !isItayoseOption) ||
+                        ((isItayose || isItayosePage) && !isItayoseOption) ||
                         (searchValue &&
                             !marketLabel
                                 .toLowerCase()
@@ -223,19 +225,24 @@ export const CurrencyMaturityDropdown = ({
         isFavorites,
         currentChainId,
         volumePerMarket,
+        isItayosePage,
     ]);
+
+    useEffect(() => {
+        const targetOption = filteredOptions[0];
+
+        if (targetOption) {
+            onChange(targetOption.currency, targetOption.maturity);
+        }
+        //  eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const handleOptionClick = (item: FilteredOption) => {
         if (item.currency !== asset.value || item.maturity !== maturity.value) {
             onChange(item.currency, item.maturity);
         }
 
-        if (router.pathname.includes('itayose') && !item.isItayoseOption) {
-            router.push('/');
-            return;
-        }
-
-        if (item.isItayoseOption && item.isItayoseOption) {
+        if (!isItayosePage && item.isItayoseOption) {
             router.push('/itayose');
             return;
         }
