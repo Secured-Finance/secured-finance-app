@@ -144,7 +144,7 @@ export const CurrencyMaturityDropdown = ({
                     const data =
                         lendingMarkets[currency.value]?.[+maturity.value];
 
-                    if (data?.isMatured || !data?.isActive) {
+                    if (data?.isMatured) {
                         return null;
                     }
 
