@@ -122,6 +122,7 @@ const Toolbar = ({
                                     maturity={selectedTerm}
                                     maturityList={options}
                                     onChange={onChange}
+                                    isItayosePage
                                 />
                                 <p className='whitespace-nowrap pl-1 text-[11px] leading-4 tablet:text-xs laptop:text-xs'>
                                     {`Maturity ${
@@ -164,6 +165,7 @@ export const Itayose = () => {
     const { currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
+
     const [selectedTable, setSelectedTable] = useState(TableType.OPEN_ORDERS);
 
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
