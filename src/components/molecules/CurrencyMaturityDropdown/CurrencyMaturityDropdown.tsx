@@ -52,6 +52,8 @@ export const CurrencyMaturityDropdown = ({
     });
 
     const router = useRouter();
+    const { market } = router.query;
+
     const { data: currencies } = useCurrencies();
 
     const { data: priceList } = useLastPrices();
@@ -184,7 +186,7 @@ export const CurrencyMaturityDropdown = ({
                     if (
                         (currentCurrency &&
                             !currentCurrency.includes(currency.value)) ||
-                        ((isItayose || isItayosePage) && !isItayoseOption) ||
+                        (isItayose && !isItayoseOption) ||
                         (searchValue &&
                             !marketLabel
                                 .toLowerCase()
@@ -225,26 +227,45 @@ export const CurrencyMaturityDropdown = ({
         isFavorites,
         currentChainId,
         volumePerMarket,
-        isItayosePage,
     ]);
 
     useEffect(() => {
-        const targetOption = filteredOptions[0];
+        if (!isItayosePage) return;
+
+        let targetOption = filteredOptions.find(item => item?.isItayoseOption);
+
+        if (market) {
+            targetOption =
+                filteredOptions.find(item => item?.key === market) ||
+                targetOption;
+        }
 
         if (targetOption) {
             onChange(targetOption.currency, targetOption.maturity);
         }
-        //  eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleOptionClick = (item: FilteredOption) => {
         if (item.currency !== asset.value || item.maturity !== maturity.value) {
             onChange(item.currency, item.maturity);
+
+            if (isItayosePage) {
+                router.replace({
+                    pathname: '/itayose',
+                    query: {
+                        market: item.key,
+                    },
+                });
+            }
         }
 
         if (!isItayosePage && item.isItayoseOption) {
-            router.push('/itayose');
-            return;
+            router.push(`/itayose?market=${item.key}`);
+        }
+
+        if (isItayosePage && !item.isItayoseOption) {
+            router.push('/');
         }
     };
 
