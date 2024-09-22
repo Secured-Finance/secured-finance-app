@@ -230,9 +230,9 @@ export const CurrencyMaturityDropdown = ({
     ]);
 
     useEffect(() => {
-        if (!isItayosePage) return;
-
-        let targetOption = filteredOptions.find(item => item?.isItayoseOption);
+        let targetOption = isItayosePage
+            ? filteredOptions.find(item => item?.isItayoseOption)
+            : filteredOptions[0];
 
         if (market) {
             targetOption =
@@ -243,29 +243,29 @@ export const CurrencyMaturityDropdown = ({
         if (targetOption) {
             onChange(targetOption.currency, targetOption.maturity);
         }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [market, isItayosePage, currencyList]);
 
     const handleOptionClick = (item: FilteredOption) => {
         if (item.currency !== asset.value || item.maturity !== maturity.value) {
-            onChange(item.currency, item.maturity);
+            // onChange(item.currency, item.maturity);
 
-            if (isItayosePage) {
-                router.replace({
+            if (item.isItayoseOption) {
+                router.push({
                     pathname: '/itayose',
                     query: {
                         market: item.key,
                     },
                 });
+            } else {
+                router.push({
+                    pathname: '/',
+                    query: {
+                        market: item.key,
+                    },
+                });
             }
-        }
-
-        if (!isItayosePage && item.isItayoseOption) {
-            router.push(`/itayose?market=${item.key}`);
-        }
-
-        if (isItayosePage && !item.isItayoseOption) {
-            router.push('/');
         }
     };
 
