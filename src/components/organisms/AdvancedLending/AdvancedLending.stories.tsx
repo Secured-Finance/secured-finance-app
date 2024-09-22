@@ -84,7 +84,7 @@ OpenOrdersConnectedToWallet.play = async () => {
     await userEvent.click(openOrdersTab);
 
     const dec22Btn = await screen.findByRole('button', {
-        name: 'WFIL-DEC2022',
+        name: 'USDC-DEC2022',
     });
     await userEvent.click(dec22Btn);
 
