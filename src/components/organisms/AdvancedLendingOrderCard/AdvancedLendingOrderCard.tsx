@@ -392,6 +392,7 @@ export function AdvancedLendingOrderCard({
                                 v !== undefined
                                     ? dispatch(setUnitPrice(v.toString()))
                                     : dispatch(setUnitPrice(''));
+
                                 track(InteractionEvents.BOND_PRICE, {
                                     [InteractionProperties.BOND_PRICE]:
                                         v?.toString(),
