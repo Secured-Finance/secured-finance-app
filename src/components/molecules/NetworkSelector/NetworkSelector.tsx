@@ -1,5 +1,6 @@
 import { Popover, Transition } from '@headlessui/react';
 import clsx from 'clsx';
+import { useRouter } from 'next/router';
 import { Fragment, useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import ExclamationCircleIcon from 'src/assets/icons/exclamation-circle.svg';
@@ -75,6 +76,7 @@ const generateChainList = () => {
 };
 
 export const NetworkSelector = ({ networkName }: { networkName: string }) => {
+    const router = useRouter();
     const testnetEnabled = useSelector(
         (state: RootState) => state.blockchain.testnetEnabled
     );
@@ -99,8 +101,12 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
                 return;
             }
             await connector.switchChain?.(id);
+            router.push({
+                pathname: router.pathname,
+                query: undefined,
+            });
         },
-        [chainList, connectors]
+        [chainList, connectors, router]
     );
 
     return (
