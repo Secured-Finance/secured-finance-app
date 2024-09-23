@@ -89,17 +89,6 @@ export const CurrencyMaturityDropdown = ({
         direction: 'ascending',
     });
 
-    const prevSelectedValue = useRef('');
-    useEffect(() => {
-        if (
-            !prevSelectedValue ||
-            prevSelectedValue.current !== maturity.value.toString()
-        ) {
-            onChange(asset.value, maturity.value);
-        }
-        prevSelectedValue.current = maturity.value.toString();
-    }, [onChange, maturity, asset]);
-
     const sortOptions = useCallback(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (options: any[]) => {
@@ -229,6 +218,20 @@ export const CurrencyMaturityDropdown = ({
         volumePerMarket,
     ]);
 
+    const prevSelectedValue = useRef('');
+    useEffect(() => {
+        if (
+            !prevSelectedValue ||
+            prevSelectedValue.current !== maturity.value.toString()
+        ) {
+            onChange(asset.value, maturity.value);
+        }
+        prevSelectedValue.current = maturity.value.toString();
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [maturity, asset]);
+
+    const prevSelectedKey = useRef('');
     useEffect(() => {
         let targetOption = isItayosePage
             ? filteredOptions.find(item => item?.isItayoseOption)
@@ -240,12 +243,18 @@ export const CurrencyMaturityDropdown = ({
                 targetOption;
         }
 
-        if (targetOption) {
+        if (
+            (!prevSelectedKey.current ||
+                prevSelectedKey.current !== targetOption?.key) &&
+            targetOption
+        ) {
             onChange(targetOption.currency, targetOption.maturity);
         }
 
+        prevSelectedKey.current = targetOption?.key as string;
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [market, isItayosePage, currencyList]);
+    }, [market, isItayosePage, currencyList, maturityList]);
 
     const handleOptionClick = (item: FilteredOption) => {
         if (item.currency !== asset.value || item.maturity !== maturity.value) {
