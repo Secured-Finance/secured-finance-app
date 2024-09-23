@@ -203,7 +203,7 @@ export const ActiveTradeTable = ({
                         dispatch(setMaturity(maturity));
                         handleCurrencyChange(ccy);
 
-                        const prettyMaturity = getUTCMonthYear(maturity);
+                        const prettyMaturity = getUTCMonthYear(maturity, true);
 
                         const market = `${ccy}-${prettyMaturity}`;
 
