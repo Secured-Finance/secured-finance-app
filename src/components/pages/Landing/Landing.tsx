@@ -219,7 +219,10 @@ const WithBanner = ({
                                 }).format(preOrderTimeLimit)} (UTC)`}
                                 <span className='pl-4'>
                                     <Link
-                                        href='itayose'
+                                        href={`/itayose?market=${ccy}-${getUTCMonthYear(
+                                            market.maturity,
+                                            true
+                                        )}`}
                                         className='text-planetaryPurple underline'
                                     >
                                         Place Order Now
