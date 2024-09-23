@@ -175,7 +175,6 @@ export const Itayose = () => {
         currency,
         maturity
     );
-
     const lendingContracts = lendingMarkets[currency];
 
     const securedFinance = useSF();
@@ -214,7 +213,6 @@ export const Itayose = () => {
             ),
         [currencies, currency, delistedCurrencySet]
     );
-
     const userOrderHistory = useGraphClientHook(
         {
             address: address?.toLowerCase() ?? '',
