@@ -1,5 +1,5 @@
 import { OrderSide } from '@secured-finance/sf-client';
-import { formatDate } from '@secured-finance/sf-core';
+import { formatDate, getUTCMonthYear } from '@secured-finance/sf-core';
 import { createColumnHelper } from '@tanstack/react-table';
 import clsx from 'clsx';
 import * as dayjs from 'dayjs';
@@ -202,7 +202,17 @@ export const ActiveTradeTable = ({
                     onClick: (): void => {
                         dispatch(setMaturity(maturity));
                         handleCurrencyChange(ccy);
-                        router.push('/');
+
+                        const prettyMaturity = getUTCMonthYear(maturity, true);
+
+                        const market = `${ccy}-${prettyMaturity}`;
+
+                        router.push({
+                            pathname: '/',
+                            query: {
+                                market,
+                            },
+                        });
                     },
                 },
                 {
