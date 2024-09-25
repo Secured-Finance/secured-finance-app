@@ -40,6 +40,7 @@ export const CurrencyMaturityDropdown = ({
     maturityList,
     maturity = maturityList[0],
     onChange,
+    isItayosePage,
 }: CurrencyMaturityDropdownProps) => {
     const isTablet = useBreakpoint('laptop');
     const [searchValue, setSearchValue] = useState<string>('');
@@ -49,6 +50,10 @@ export const CurrencyMaturityDropdown = ({
     const [savedMarkets, setSavedMarkets] = useState(() => {
         return readMarketsFromStore();
     });
+
+    const router = useRouter();
+    const { market } = router.query;
+
     const { data: currencies } = useCurrencies();
 
     const { data: priceList } = useLastPrices();
@@ -83,17 +88,6 @@ export const CurrencyMaturityDropdown = ({
         column: undefined,
         direction: 'ascending',
     });
-
-    const prevSelectedValue = useRef('');
-    useEffect(() => {
-        if (
-            !prevSelectedValue ||
-            prevSelectedValue.current !== maturity.value.toString()
-        ) {
-            onChange(asset.value, maturity.value);
-        }
-        prevSelectedValue.current = maturity.value.toString();
-    }, [onChange, maturity, asset]);
 
     const sortOptions = useCallback(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -133,7 +127,6 @@ export const CurrencyMaturityDropdown = ({
     );
 
     const { data: lendingMarkets = baseContracts } = useLendingMarkets();
-    const router = useRouter();
 
     const CcyIcon = currencyMap[asset.value]?.icon;
 
@@ -221,15 +214,61 @@ export const CurrencyMaturityDropdown = ({
         volumePerMarket,
     ]);
 
-    const handleOptionClick = (item: FilteredOption) => {
-        if (router.pathname.includes('itayose') && !item.isItayoseOption) {
-            router.push('/');
-            return;
+    const prevSelectedValue = useRef('');
+    useEffect(() => {
+        if (
+            !prevSelectedValue ||
+            prevSelectedValue.current !== maturity.value.toString()
+        ) {
+            onChange(asset.value, maturity.value);
+        }
+        prevSelectedValue.current = maturity.value.toString();
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [maturity, asset]);
+
+    const prevSelectedKey = useRef('');
+    useEffect(() => {
+        let targetOption = isItayosePage
+            ? filteredOptions.find(item => item?.isItayoseOption)
+            : filteredOptions[0];
+
+        if (market) {
+            targetOption =
+                filteredOptions.find(item => item?.key === market) ||
+                targetOption;
         }
 
-        if (item.isItayoseOption && item.isItayoseOption) {
-            router.push('/itayose');
-            return;
+        if (
+            (!prevSelectedKey.current ||
+                prevSelectedKey.current !== targetOption?.key) &&
+            targetOption
+        ) {
+            onChange(targetOption.currency, targetOption.maturity);
+        }
+
+        prevSelectedKey.current = targetOption?.key as string;
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [market, isItayosePage, currencyList, maturityList]);
+
+    const handleOptionClick = (item: FilteredOption) => {
+        if (item.currency !== asset.value || item.maturity !== maturity.value) {
+            if (item.isItayoseOption) {
+                router.push({
+                    pathname: '/itayose',
+                    query: {
+                        market: item.key,
+                    },
+                });
+            } else {
+                router.push({
+                    pathname: '/',
+                    query: {
+                        market: item.key,
+                    },
+                });
+            }
         }
 
         if (item.currency !== asset.value || item.maturity !== maturity.value) {
