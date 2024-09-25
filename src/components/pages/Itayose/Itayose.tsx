@@ -289,7 +289,7 @@ export const Itayose = () => {
     ).map(o => {
         return {
             ...o,
-            calculationDate: lendingContracts[maturity].utcOpeningDate,
+            calculationDate: lendingContracts[maturity]?.utcOpeningDate,
         };
     });
 
