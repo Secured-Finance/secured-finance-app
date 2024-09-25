@@ -113,6 +113,7 @@ export const AdvancedLendingTopBar = ({
                                             maturity={selectedTerm}
                                             maturityList={options}
                                             onChange={onChange}
+                                            isItayosePage={false}
                                         />
                                         <p className='whitespace-nowrap pl-1 text-[11px] leading-4 tablet:text-xs laptop:text-xs'>
                                             {`Maturity ${
