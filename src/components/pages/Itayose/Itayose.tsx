@@ -50,6 +50,7 @@ import {
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import {
+    resetAmount,
     selectLandingOrderForm,
     setCurrency,
     setMaturity,
@@ -122,6 +123,7 @@ const Toolbar = ({
                                     maturity={selectedTerm}
                                     maturityList={options}
                                     onChange={onChange}
+                                    isItayosePage
                                 />
                                 <p className='whitespace-nowrap pl-1 text-[11px] leading-4 tablet:text-xs laptop:text-xs'>
                                     {`Maturity ${
@@ -164,6 +166,7 @@ export const Itayose = () => {
     const { currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
+
     const [selectedTable, setSelectedTable] = useState(TableType.OPEN_ORDERS);
 
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
@@ -287,7 +290,7 @@ export const Itayose = () => {
     ).map(o => {
         return {
             ...o,
-            calculationDate: lendingContracts[maturity].utcOpeningDate,
+            calculationDate: lendingContracts[maturity]?.utcOpeningDate,
         };
     });
 
@@ -295,6 +298,7 @@ export const Itayose = () => {
 
     const handleAssetChange = useCallback(
         (v: CurrencySymbol) => {
+            dispatch(resetAmount());
             dispatch(setCurrency(v));
         },
         [dispatch]
@@ -407,12 +411,7 @@ export const Itayose = () => {
                         </div>
                     </div>
                     <div className='hidden laptop:block laptop:w-[272px] desktop:w-[300px]'>
-                        <TabSelector
-                            tabDataArray={[
-                                { text: 'Order Book' },
-                                { text: 'Recent Trades' },
-                            ]}
-                        >
+                        <TabSelector tabDataArray={[{ text: 'Order Book' }]}>
                             {!isTablet && (
                                 <NewOrderBookWidget
                                     orderbook={orderBook}

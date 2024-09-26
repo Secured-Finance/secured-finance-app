@@ -50,9 +50,13 @@ jobs:
     name: Deploy on Fleek
     if: github.event.inputs.environment != 'ci-build'
     environment: ${{ github.event.inputs.environment }}
+    env:
+      FLEEK_TOKEN: ${{ secrets.FLEEK_TOKEN }}
+      FLEEK_PROJECT_ID: ${{ secrets.FLEEK_PROJECT_ID }}
     needs: [build-and-test-all, cypress-run]
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
 
       - name: Retrieve artifact
         uses: actions/download-artifact@v3
@@ -60,11 +64,8 @@ jobs:
           name: WebApp
           path: .deploy/${{ vars.FLEEK_ENV }}/build
 
-      - name: Deploy the WebApp on IPFS
-        id: deploy
-        uses: fleekhq/action-deploy@v1.0.1
-        with:
-          apiKey: ${{ secrets.FLEEK_API_KEY }}
-          workDir: .deploy/${{ vars.FLEEK_ENV }}
-      - name: Get the output url
-        run: echo "Deploy url is ${{ steps.deploy.outputs.deployUrl }}"
+      - name: Install Fleek CLI
+        run: npm i -g @fleek-platform/cli
+
+      - name: Deploy Site
+        run: fleek sites deploy --config .deploy/${{ vars.FLEEK_ENV }}/fleek.config.json

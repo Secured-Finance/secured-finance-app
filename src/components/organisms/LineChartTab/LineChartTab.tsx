@@ -22,7 +22,6 @@ export const LineChartTab = ({
     rates,
     maturityList,
     itayoseMarketIndexSet,
-    followLinks = true,
     maximumRate,
     marketCloseToMaturityOriginalRate,
 }: {
@@ -111,11 +110,20 @@ export const LineChartTab = ({
                             label
                         );
 
+                        const market = `${currency}-${label}`;
+
+                        let pathname = '/';
+
                         if (isPreOrderPeriod) {
-                            router.push('/itayose');
-                        } else if (followLinks) {
-                            router.push('/');
+                            pathname = '/itayose';
                         }
+
+                        router.push({
+                            pathname,
+                            query: {
+                                market,
+                            },
+                        });
                     }}
                     maturity={new Maturity(maturity)}
                 ></LineChart>

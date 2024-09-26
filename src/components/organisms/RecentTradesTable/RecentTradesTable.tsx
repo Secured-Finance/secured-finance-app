@@ -82,7 +82,12 @@ export const RecentTradesTable = ({
                 }
                 return null;
             })
-            .filter((item): item is TradeMetadata => item !== null);
+            .filter((item): item is TradeMetadata => item !== null)
+            .sort(
+                (a, b) =>
+                    new Date(+b.createdAt).getTime() -
+                    new Date(+a.createdAt).getTime()
+            );
     }, [currency, transactionHistory]);
 
     const toggleShowSide = (side: OrderSide | null) => {
