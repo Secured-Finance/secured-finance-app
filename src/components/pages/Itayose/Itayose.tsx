@@ -50,6 +50,7 @@ import {
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import {
+    resetAmount,
     selectLandingOrderForm,
     setCurrency,
     setMaturity,
@@ -289,7 +290,7 @@ export const Itayose = () => {
     ).map(o => {
         return {
             ...o,
-            calculationDate: lendingContracts[maturity].utcOpeningDate,
+            calculationDate: lendingContracts[maturity]?.utcOpeningDate,
         };
     });
 
@@ -297,6 +298,7 @@ export const Itayose = () => {
 
     const handleAssetChange = useCallback(
         (v: CurrencySymbol) => {
+            dispatch(resetAmount());
             dispatch(setCurrency(v));
         },
         [dispatch]
