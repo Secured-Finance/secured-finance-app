@@ -6,6 +6,7 @@ import { XMarkIcon } from '@heroicons/react/24/solid';
 import { SortDescriptor } from '@nextui-org/table';
 import { Key } from '@react-types/shared';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
+import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { CurrencyMaturityTable, FilterButtons } from 'src/components/molecules';
@@ -137,15 +138,18 @@ export const CurrencyMaturityDropdown = ({
                     const data =
                         lendingMarkets[currency.value]?.[+maturity.value];
 
-                    if (data?.isMatured) {
+                    const isItayoseOption =
+                        data?.isItayosePeriod || data?.isPreOrderPeriod;
+                    const preOpeningDate = dayjs(data?.preOpeningDate * 1000);
+                    const now = dayjs();
+
+                    if (data?.isMatured || now.isBefore(preOpeningDate)) {
                         return null;
                     }
 
                     const marketLabel = `${currency.label}-${maturity.label}`;
                     const marketKey = `${currency.value}-${maturity.value}`;
 
-                    const isItayoseOption =
-                        data?.isItayosePeriod || data?.isPreOrderPeriod;
                     const volumeInUSD = volumePerMarket[marketKey];
 
                     const marketUnitPrice = data?.marketUnitPrice;
