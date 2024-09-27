@@ -50,6 +50,9 @@ const landingOrderFormSlice = createSlice({
         resetUnitPrice: state => {
             state.unitPrice = undefined;
         },
+        resetAmount: state => {
+            state.amount = '';
+        },
         setOrderType: (state, action: PayloadAction<OrderType>) => {
             state.orderType = action.payload;
         },
