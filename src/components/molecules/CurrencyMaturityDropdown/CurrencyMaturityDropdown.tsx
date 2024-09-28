@@ -157,14 +157,14 @@ export const CurrencyMaturityDropdown = ({
 
                     let lastPrice: LoanValue | undefined;
 
-                    if (openingUnitPrice) {
-                        lastPrice = LoanValue.fromPrice(
-                            openingUnitPrice,
-                            +maturity.value
-                        );
-                    } else if (marketUnitPrice) {
+                    if (marketUnitPrice) {
                         lastPrice = LoanValue.fromPrice(
                             marketUnitPrice,
+                            +maturity.value
+                        );
+                    } else if (openingUnitPrice) {
+                        lastPrice = LoanValue.fromPrice(
+                            openingUnitPrice,
                             +maturity.value
                         );
                     }
