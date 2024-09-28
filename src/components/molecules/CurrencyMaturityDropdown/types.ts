@@ -26,7 +26,7 @@ export type FilteredOption = {
     apr: string;
     isItayoseOption: boolean;
     isFavourite: boolean;
-    volume: bigint;
+    volume: number;
 };
 
 export type CurrencyMaturityDropdownProps = {

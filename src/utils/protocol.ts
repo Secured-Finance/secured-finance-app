@@ -11,14 +11,14 @@ export function computeTotalDailyVolumeInUSD(
     dailyVolumes: DailyVolumes,
     priceMap: AssetPriceMap
 ): {
-    totalVolumeUSD: bigint;
+    totalVolumeUSD: number;
     volumePerCurrency: Record<CurrencySymbol, bigint>;
-    volumePerMarket: Record<string, bigint>;
+    volumePerMarket: Record<string, number>;
 } {
     const volumePerCurrency = createCurrencyMap<bigint>(ZERO_BI);
-    const volumePerMarket: Record<string, bigint> = {};
+    const volumePerMarket: Record<string, number> = {};
 
-    let totalVolumeUSD = ZERO_BI;
+    let totalVolumeUSD = 0;
 
     dailyVolumes.forEach(dailyVolume => {
         const { currency, volume, maturity } = dailyVolume;
@@ -31,15 +31,14 @@ export function computeTotalDailyVolumeInUSD(
         const volumeInBaseUnit = currencyMap[ccy].fromBaseUnit(BigInt(volume));
 
         const valueInUSD = volumeInBaseUnit * priceMap[ccy];
-        const valueInUSDInteger = BigInt(Math.floor(valueInUSD));
 
         volumePerCurrency[ccy] += BigInt(Math.floor(volumeInBaseUnit));
-        totalVolumeUSD += valueInUSDInteger;
+        totalVolumeUSD += valueInUSD;
 
         if (volumePerMarket[marketKey]) {
-            volumePerMarket[marketKey] += valueInUSDInteger;
+            volumePerMarket[marketKey] += valueInUSD;
         } else {
-            volumePerMarket[marketKey] = valueInUSDInteger;
+            volumePerMarket[marketKey] = valueInUSD;
         }
     });
     return { totalVolumeUSD, volumePerCurrency, volumePerMarket };
