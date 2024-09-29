@@ -106,7 +106,9 @@ export const CurrencyMaturityTable = ({
                         </div>
                     );
                 case 'volume':
-                    return option.volume ? usdFormat(option.volume) : '-';
+                    return option.volume
+                        ? usdFormat(option.volume, 2, 'compact')
+                        : '-';
                 default:
                     return null;
             }

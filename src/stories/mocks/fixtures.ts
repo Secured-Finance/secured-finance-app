@@ -1174,6 +1174,6 @@ export const preOpenOrders = [
 ];
 
 export const volumePerMarket = {
-    'WFIL-1669852800': BigInt(3942000),
-    'USDC-1669852800': BigInt(30),
+    'WFIL-1669852800': 3942000,
+    'USDC-1669852800': 30,
 };
