@@ -18,6 +18,8 @@ import {
 } from './fixtures';
 import { mockCandleStickData } from './historicalchart';
 
+const MATURITY_ZERO = new Maturity(0);
+
 const generateMyTransactions = (
     amount: string,
     skip: number,
@@ -459,7 +461,7 @@ export const mockFilteredUserOrderHistory = [
             variables: {
                 address: '',
                 currency: wfilBytes32,
-                maturity: 0,
+                maturity: MATURITY_ZERO.toNumber(),
                 awaitRefetchQueries: true,
             },
         },
@@ -538,7 +540,7 @@ export const mockItayoseFilteredUserOrderHistory = [
             variables: {
                 address: '',
                 currency: wfilBytes32,
-                maturity: 0,
+                maturity: MATURITY_ZERO.toNumber(),
                 awaitRefetchQueries: true,
             },
         },
@@ -904,7 +906,7 @@ function getTransactionQuery(
         },
     };
 }
-const MATURITY_ZERO = new Maturity(0);
+
 export const emptyTransaction = [
     getTransactionQuery(wfilBytes32, dec22Fixture, yesterday, today, [], []),
     getTransactionQuery(wfilBytes32, dec22Fixture, yesterday2, today2, [], []),
@@ -1069,7 +1071,7 @@ export const mockTransactionCandleStick = [
             variables: {
                 interval: '300',
                 currency: wfilBytes32,
-                maturity: 0,
+                maturity: MATURITY_ZERO.toNumber(),
                 awaitRefetchQueries: true,
             },
         },
