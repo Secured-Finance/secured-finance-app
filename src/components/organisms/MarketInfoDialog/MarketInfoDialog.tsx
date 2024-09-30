@@ -3,18 +3,11 @@ import { XMarkIcon } from '@heroicons/react/20/solid';
 import { formatDate } from '@secured-finance/sf-core';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-import { useEffect, useState } from 'react';
 import ArrowUpSquare from 'src/assets/icons/arrow-up-square.svg';
 import DocumentTextIcon from 'src/assets/icons/document-text.svg';
 import { Tooltip } from 'src/components/molecules';
-import {
-    CountdownFormat,
-    currencyMap,
-    CurrencySymbol,
-    formatLoanValue,
-    getCountdown,
-    handlePriceSource,
-} from 'src/utils';
+import { useGetCountdown } from 'src/hooks';
+import { currencyMap, formatLoanValue, handlePriceSource } from 'src/utils';
 import { MarketInfoDialogProps } from './types';
 
 dayjs.extend(duration);
@@ -29,24 +22,12 @@ export const MarketInfoDialog = ({
     lastLoanValue,
 }: MarketInfoDialogProps) => {
     const maturity = currentMarket?.value.maturity ?? 0;
-    const targetTime = maturity * 1000;
-    const [time, setTime] = useState<CountdownFormat | undefined>(
-        getCountdown(targetTime)
-    );
     const lastPrice = formatLoanValue(currentMarket?.value, 'price');
-    const CurrencyIcon = currencyMap[currency as CurrencySymbol]?.icon;
+    const CurrencyIcon = currencyMap[currency]?.icon;
 
-    const priceSource = handlePriceSource(currency as CurrencySymbol);
+    const priceSource = handlePriceSource(currency);
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setTime(getCountdown(targetTime));
-        }, 1000);
-
-        return () => {
-            clearInterval(interval);
-        };
-    }, [targetTime]);
+    const time = useGetCountdown(maturity * 1000);
 
     return (
         <Dialog open={isOpen} onClose={onClose} className='relative z-[31]'>
@@ -134,12 +115,14 @@ export const MarketInfoDialog = ({
                                     )}
                                 </span>
                             </li>
-                            <li className='flex justify-between'>
-                                <span>Countdown</span>
-                                <span className='tabular-nums'>
-                                    {`${time?.days}:${time?.hours}:${time?.minutes}:${time?.seconds}`}
-                                </span>
-                            </li>
+                            {time && (
+                                <li className='flex justify-between'>
+                                    <span>Countdown</span>
+                                    <span className='tabular-nums'>
+                                        {`${time.days}:${time.hours}:${time.minutes}:${time.seconds}`}
+                                    </span>
+                                </li>
+                            )}
                         </ul>
                     </section>
                 </Dialog.Panel>

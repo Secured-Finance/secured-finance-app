@@ -48,6 +48,7 @@ export const preloadedBalance = {
 };
 
 const sep22Fixture = new Maturity(1661990400);
+export const zeroMaturity = new Maturity(0);
 export const dec22Fixture = new Maturity(1669852800);
 export const mar23Fixture = new Maturity(1677628800);
 export const jun23Fixture = new Maturity(1685577600);

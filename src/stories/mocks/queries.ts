@@ -15,6 +15,7 @@ import {
     transactions,
     usdcBytes32,
     wfilBytes32,
+    zeroMaturity,
 } from './fixtures';
 import { mockCandleStickData } from './historicalchart';
 
@@ -1075,13 +1076,13 @@ export const mockTransactionCandleStick = [
         },
         result: {
             data: {
-                transactionCandleSticks: mockCandleStickData,
+                transactionCandleSticks: [],
             },
         },
         newData: () => {
             return {
                 data: {
-                    transactionCandleSticks: mockCandleStickData,
+                    transactionCandleSticks: [],
                 },
             };
         },
@@ -1142,58 +1143,6 @@ export const mockRecentTrades = [
             };
         },
     },
-    {
-        request: {
-            query: queries.TransactionHistoryDocument,
-            variables: {
-                currency: wfilBytes32,
-                maturity: 0,
-                from: -1,
-                to: today,
-                sides: [OrderSide.LEND, OrderSide.BORROW],
-                awaitRefetchQueries: true,
-            },
-        },
-        result: {
-            data: {
-                transactionHistory: tradesWFIL,
-                lastTransaction: [tradesWFIL[0]],
-            },
-        },
-        newData: () => {
-            return {
-                data: {
-                    transactionHistory: tradesWFIL,
-                    lastTransaction: [tradesWFIL[0]],
-                },
-            };
-        },
-    },
-    {
-        request: {
-            query: queries.TransactionHistoryDocument,
-            variables: {
-                currency: wfilBytes32,
-                maturity: 0,
-                from: -1,
-                to: today2,
-                sides: [OrderSide.LEND, OrderSide.BORROW],
-                awaitRefetchQueries: true,
-            },
-        },
-        result: {
-            data: {
-                transactionHistory: tradesWFIL,
-                lastTransaction: [tradesWFIL[0]],
-            },
-        },
-        newData: () => {
-            return {
-                data: {
-                    transactionHistory: tradesWFIL,
-                    lastTransaction: [tradesWFIL[0]],
-                },
-            };
-        },
-    },
+    getTransactionQuery(wfilBytes32, zeroMaturity, -1, today, [], []),
+    getTransactionQuery(wfilBytes32, zeroMaturity, -1, today2, [], []),
 ];

@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
-import { MarketTab } from 'src/components/atoms';
 import { CountdownFormat, getCountdown } from 'src/utils';
 
-export const CountdownTimer = ({ maturity }: { maturity: number }) => {
-    const targetTime = maturity * 1000;
+export const useGetCountdown = (targetTime: number) => {
     const [time, setTime] = useState<CountdownFormat | undefined>(
         getCountdown(targetTime)
     );
@@ -18,12 +16,5 @@ export const CountdownTimer = ({ maturity }: { maturity: number }) => {
         };
     }, [targetTime]);
 
-    return (
-        <MarketTab
-            name='Countdown'
-            value={
-                <span className='tabular-nums'>{`${time?.days}:${time?.hours}:${time?.minutes}:${time?.seconds}`}</span>
-            }
-        />
-    );
+    return time;
 };

@@ -3,7 +3,7 @@ import { ordinaryFormat } from 'src/utils';
 
 export interface MarketTabProps {
     name: string;
-    value?: number | React.ReactNode;
+    value: number | React.ReactNode;
     source?: string;
     label?: string;
 }

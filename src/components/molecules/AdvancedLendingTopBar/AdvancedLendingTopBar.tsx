@@ -7,13 +7,13 @@ import duration from 'dayjs/plugin/duration';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import DocumentTextIcon from 'src/assets/icons/document-text.svg';
 import { MarketTab } from 'src/components/atoms';
-import {
-    CountdownTimer,
-    CurrencyMaturityDropdown,
-    Tooltip,
-} from 'src/components/molecules';
+import { CurrencyMaturityDropdown, Tooltip } from 'src/components/molecules';
 import { MarketInfoDialog } from 'src/components/organisms';
-import { useGraphClientHook, useIsSubgraphSupported } from 'src/hooks';
+import {
+    useGetCountdown,
+    useGraphClientHook,
+    useIsSubgraphSupported,
+} from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import {
     CurrencySymbol,
@@ -41,6 +41,7 @@ export const AdvancedLendingTopBar = ({
     const currentChainId = securedFinance?.config.chain.id;
     const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
     const maturity = currentMarket?.value.maturity ?? 0;
+    const time = useGetCountdown(maturity * 1000);
 
     const [timestamp, setTimestamp] = useState<number>(1643713200);
     const [isMarketInfoDialogOpen, setIsMarketInfoDialogOpen] =
@@ -216,8 +217,11 @@ export const AdvancedLendingTopBar = ({
                                 />
                             </div>
                             <div className='flex w-[14%] flex-col desktop:w-[10%]'>
-                                <CountdownTimer
-                                    maturity={selected.value.toNumber()}
+                                <MarketTab
+                                    name='Countdown'
+                                    value={
+                                        <span className='tabular-nums'>{`${time?.days}:${time?.hours}:${time?.minutes}:${time?.seconds}`}</span>
+                                    }
                                 />
                             </div>
                         </div>
@@ -227,7 +231,7 @@ export const AdvancedLendingTopBar = ({
             <MarketInfoDialog
                 isOpen={isMarketInfoDialogOpen}
                 onClose={() => setIsMarketInfoDialogOpen(false)}
-                currency={selectedAsset?.value}
+                currency={selectedAsset.value}
                 currentMarket={currentMarket}
                 currencyPrice={currencyPrice || '0'}
                 marketInfo={marketInfo}

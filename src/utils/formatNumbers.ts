@@ -1,10 +1,6 @@
-import dayjs from 'dayjs';
-import duration from 'dayjs/plugin/duration';
 import { MAX_COVERAGE } from './collateral';
 import { divide } from './currencyList';
 import { LoanValue } from './entities';
-
-dayjs.extend(duration);
 
 export const usdFormat = (
     number: number | bigint,

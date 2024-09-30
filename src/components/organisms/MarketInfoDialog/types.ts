@@ -5,7 +5,7 @@ import { LoanValue } from 'src/utils/entities';
 export interface MarketInfoDialogProps {
     isOpen: boolean;
     onClose: () => void;
-    currency?: CurrencySymbol;
+    currency: CurrencySymbol;
     currentMarket?: CurrentMarket;
     currencyPrice: string;
     marketInfo?: DailyMarketInfo;
