@@ -15,7 +15,6 @@ import {
     transactions,
     usdcBytes32,
     wfilBytes32,
-    zeroMaturity,
 } from './fixtures';
 import { mockCandleStickData } from './historicalchart';
 
@@ -1143,6 +1142,6 @@ export const mockRecentTrades = [
             };
         },
     },
-    getTransactionQuery(wfilBytes32, zeroMaturity, -1, today, [], []),
-    getTransactionQuery(wfilBytes32, zeroMaturity, -1, today2, [], []),
+    getTransactionQuery(wfilBytes32, MATURITY_ZERO, -1, today, [], []),
+    getTransactionQuery(wfilBytes32, MATURITY_ZERO, -1, today2, [], []),
 ];
