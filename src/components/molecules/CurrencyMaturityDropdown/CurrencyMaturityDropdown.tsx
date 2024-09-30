@@ -278,10 +278,6 @@ export const CurrencyMaturityDropdown = ({
                 });
             }
         }
-
-        if (item.currency !== asset.value || item.maturity !== maturity.value) {
-            onChange(item.currency, item.maturity);
-        }
     };
 
     const handleSortChange = (descriptor: SortDescriptor) => {

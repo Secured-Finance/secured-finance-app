@@ -48,7 +48,11 @@ import {
     setMaturity,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { MaturityOptionList, TransactionList } from 'src/types';
+import {
+    DailyMarketInfo,
+    MaturityOptionList,
+    TransactionList,
+} from 'src/types';
 import {
     ButtonEvents,
     ButtonProperties,
@@ -281,7 +285,9 @@ export const AdvancedLending = ({
     );
 
     const selectedAsset = useMemo(() => {
-        return assetList.find(option => option.value === currency);
+        return (
+            assetList.find(option => option.value === currency) || assetList[0]
+        );
     }, [currency, assetList]);
 
     const tradeHistoryDetails = useTradeHistoryDetails(
@@ -299,7 +305,7 @@ export const AdvancedLending = ({
             currencyMap[selectedAsset?.value as CurrencySymbol]?.roundingDecimal
         ),
         volumeInUSD: usdFormat(currencyPrice * tradeHistoryDetails.sum),
-    };
+    } as DailyMarketInfo;
 
     const {
         rates,

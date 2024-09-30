@@ -4,7 +4,7 @@ import { CurrencySymbol } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
 export type AdvancedLendingTopBarProp = {
-    selectedAsset: Option<CurrencySymbol> | undefined;
+    selectedAsset: Option<CurrencySymbol>;
     assetList: Array<Option<CurrencySymbol>>;
     options: Array<Option<Maturity>>;
     selected: Option<Maturity>;
