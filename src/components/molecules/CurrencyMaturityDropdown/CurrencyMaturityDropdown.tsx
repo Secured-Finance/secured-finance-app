@@ -155,19 +155,13 @@ export const CurrencyMaturityDropdown = ({
                     const marketUnitPrice = data?.marketUnitPrice;
                     const openingUnitPrice = data?.openingUnitPrice;
 
-                    let lastPrice: LoanValue | undefined;
-
-                    if (openingUnitPrice) {
-                        lastPrice = LoanValue.fromPrice(
-                            openingUnitPrice,
-                            +maturity.value
-                        );
-                    } else if (marketUnitPrice) {
-                        lastPrice = LoanValue.fromPrice(
-                            marketUnitPrice,
-                            +maturity.value
-                        );
-                    }
+                    const lastPrice =
+                        marketUnitPrice || openingUnitPrice
+                            ? LoanValue.fromPrice(
+                                  marketUnitPrice || openingUnitPrice,
+                                  +maturity.value
+                              )
+                            : undefined;
 
                     const isFavourite = savedMarkets.some(
                         (savedMarket: SavedMarket) =>
