@@ -101,14 +101,9 @@ export const CurrencyMaturityTable = ({
                 case 'apr':
                     return option.apr;
                 case 'maturity':
-                    return (
-                        <div className='flex justify-end whitespace-nowrap pr-3'>
-                            {formatDuration(Math.abs(timestampDifference))}
-                        </div>
-                    );
                 case 'maturity-mobile':
                     return (
-                        <div className='flex justify-end whitespace-nowrap'>
+                        <div className='flex justify-end whitespace-nowrap laptop:pr-3'>
                             {formatDuration(Math.abs(timestampDifference))}
                         </div>
                     );
