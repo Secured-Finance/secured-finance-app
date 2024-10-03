@@ -3,6 +3,7 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
 import { collateralBook37, dec22Fixture } from 'src/stories/mocks/fixtures';
+import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
 import { OrderDetails } from './OrderDetails';
@@ -35,6 +36,11 @@ Default.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const button = await canvas.findByTestId('disclaimer-button');
     await userEvent.click(button);
+};
+
+export const MarketOrder = Template.bind({});
+MarketOrder.args = {
+    orderType: OrderType.MARKET,
 };
 
 export const LendPosition = Template.bind({});
