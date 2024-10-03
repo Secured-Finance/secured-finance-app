@@ -6,8 +6,13 @@ import { CurrencySymbol } from 'src/utils';
 import { Amount } from 'src/utils/entities';
 import * as stories from './OrderDetails.stories';
 
-const { Default, Delisted, UnderMinimumCollateralThreshold, RemoveOrder } =
-    composeStories(stories);
+const {
+    Default,
+    Delisted,
+    UnderMinimumCollateralThreshold,
+    RemoveOrder,
+    MarketOrder,
+} = composeStories(stories);
 
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
@@ -107,5 +112,10 @@ describe('OrderDetails Component', () => {
             expect(screen.getByText('0%')).toBeInTheDocument();
             expect(screen.getByText('80%')).toBeInTheDocument();
         });
+    });
+
+    it('should display bond price as Market if orderType is Market', async () => {
+        render(<MarketOrder />);
+        expect(screen.getByText('Market')).toBeInTheDocument();
     });
 });
