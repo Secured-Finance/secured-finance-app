@@ -15,7 +15,7 @@ describe('computeTotalDailyVolumeInUSD', () => {
         const expectedVolumes = createCurrencyMap<bigint>(ZERO_BI);
 
         expect(computeTotalDailyVolumeInUSD([], assetPriceMap)).toEqual({
-            totalVolumeUSD: ZERO_BI,
+            totalVolumeUSD: 0,
             volumePerCurrency: expectedVolumes,
             volumePerMarket: {},
         });
@@ -37,7 +37,7 @@ describe('computeTotalDailyVolumeInUSD', () => {
         expect(
             computeTotalDailyVolumeInUSD(dailyVolumes, assetPriceMap)
         ).toEqual({
-            totalVolumeUSD: BigInt(3942030),
+            totalVolumeUSD: 3942030,
             volumePerCurrency: expectedVolumes,
             volumePerMarket,
         });

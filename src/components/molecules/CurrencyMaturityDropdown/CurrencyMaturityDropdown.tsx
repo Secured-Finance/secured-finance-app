@@ -102,7 +102,10 @@ export const CurrencyMaturityDropdown = ({
                     if (column === 'apr') {
                         aValue = parseFloat(a.apr?.replace('%', '')) || 0;
                         bValue = parseFloat(b.apr?.replace('%', '')) || 0;
-                    } else if (column === 'maturity') {
+                    } else if (
+                        column === 'maturity' ||
+                        column === 'maturity-mobile'
+                    ) {
                         aValue = a.maturity;
                         bValue = b.maturity;
                     } else if (column === 'volume') {
@@ -155,19 +158,13 @@ export const CurrencyMaturityDropdown = ({
                     const marketUnitPrice = data?.marketUnitPrice;
                     const openingUnitPrice = data?.openingUnitPrice;
 
-                    let lastPrice: LoanValue | undefined;
-
-                    if (openingUnitPrice) {
-                        lastPrice = LoanValue.fromPrice(
-                            openingUnitPrice,
-                            +maturity.value
-                        );
-                    } else if (marketUnitPrice) {
-                        lastPrice = LoanValue.fromPrice(
-                            marketUnitPrice,
-                            +maturity.value
-                        );
-                    }
+                    const lastPrice =
+                        marketUnitPrice || openingUnitPrice
+                            ? LoanValue.fromPrice(
+                                  marketUnitPrice || openingUnitPrice,
+                                  +maturity.value
+                              )
+                            : undefined;
 
                     const isFavourite = savedMarkets.some(
                         (savedMarket: SavedMarket) =>
@@ -355,7 +352,6 @@ export const CurrencyMaturityDropdown = ({
                                     value={searchValue}
                                     placeholder='Search products...'
                                 />
-
                                 <FilterButtons
                                     currencies={currencies}
                                     currentCurrency={currentCurrency}

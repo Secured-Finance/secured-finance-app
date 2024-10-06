@@ -290,6 +290,7 @@ export const PlaceOrder = ({
                                 loanValue={loanValue}
                                 isCurrencyDelisted={isCurrencyDelisted}
                                 showWarning={showWarning}
+                                orderType={orderType}
                             />
                         );
                     case Step.orderProcessing:
