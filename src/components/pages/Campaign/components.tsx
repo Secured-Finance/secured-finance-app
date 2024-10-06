@@ -134,7 +134,7 @@ export const CampaignStatus = ({
                         </span>
                     </div>
                     <span className='typography-mobile-body-5 tablet:typography-desktop-body-4 text-neutral-300 desktop:text-base desktop:leading-6'>
-                        Jun 29, 12:00 AM (UTC) - Sep 30, 12:00 AM (UTC)
+                        Jun 29, 12:00 AM (UTC) - Oct 31, 12:00 AM (UTC)
                     </span>
                 </div>
                 <div className='flex flex-col gap-3 tablet:flex-row tablet:justify-between tablet:gap-5'>
