@@ -16,5 +16,12 @@ export const useGetCountdown = (targetTime: number) => {
         };
     }, [targetTime]);
 
-    return time;
+    return (
+        time ?? {
+            days: '00',
+            hours: '00',
+            minutes: '00',
+            seconds: '00',
+        }
+    );
 };
