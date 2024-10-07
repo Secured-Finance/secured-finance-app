@@ -15,6 +15,7 @@ import {
     InfoToolTip,
 } from 'src/components/molecules';
 import { CollateralBook, useMarket, useOrderFee } from 'src/hooks';
+import { OrderType } from 'src/types';
 import {
     calculateFee,
     divide,
@@ -48,6 +49,7 @@ export const OrderDetails = ({
     isCurrencyDelisted,
     isRemoveOrder = false,
     showZCUsage = true,
+    orderType,
 }: {
     amount: Amount;
     maturity: Maturity;
@@ -59,6 +61,7 @@ export const OrderDetails = ({
     isCurrencyDelisted?: boolean;
     isRemoveOrder?: boolean;
     showZCUsage?: boolean;
+    orderType?: OrderType;
 }) => {
     const { data: orderFee = 0 } = useOrderFee(amount.currency);
 
@@ -125,12 +128,14 @@ export const OrderDetails = ({
                 itemList={[
                     [
                         'Bond Price',
-                        prefixTilde(
-                            formatLoanValue(
-                                loanValue ?? LoanValue.ZERO,
-                                'price'
-                            )
-                        ),
+                        orderType === OrderType.MARKET
+                            ? 'Market'
+                            : prefixTilde(
+                                  formatLoanValue(
+                                      loanValue ?? LoanValue.ZERO,
+                                      'price'
+                                  )
+                              ),
                     ],
                     [
                         'APR',

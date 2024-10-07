@@ -2,16 +2,11 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
 import { VisibilityState } from '@tanstack/table-core';
+import clsx from 'clsx';
 import * as dayjs from 'dayjs';
 import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-    GradientBox,
-    MarketTab,
-    Option,
-    TextLink,
-    Timer,
-} from 'src/components/atoms';
+import { MarketTab, Option, TextLink, Timer } from 'src/components/atoms';
 import {
     Alert,
     CurrencyMaturityDropdown,
@@ -111,51 +106,58 @@ const Toolbar = ({
     };
 
     return (
-        <GradientBox shape='rectangle'>
-            <div className='flex min-w-fit flex-row items-center justify-start gap-10 px-6 py-3 tablet:justify-between'>
-                <div className='w-full tablet:w-1/2'>
-                    <div className='grid grid-cols-1 gap-x-3 gap-y-1 text-neutral-4 desktop:gap-x-5'>
-                        <div className='flex flex-col items-start'>
-                            <div className='flex w-full flex-col gap-1'>
-                                <CurrencyMaturityDropdown
-                                    asset={selectedAsset}
-                                    currencyList={assetList}
-                                    maturity={selectedTerm}
-                                    maturityList={options}
-                                    onChange={onChange}
-                                    isItayosePage
-                                />
-                                <p className='whitespace-nowrap pl-1 text-[11px] leading-4 tablet:text-xs laptop:text-xs'>
-                                    {`Maturity ${
-                                        selectedTerm &&
-                                        getTransformMaturityOption(
-                                            options.map(o => ({
-                                                ...o,
-                                                value: o.value.toString(),
-                                            }))
-                                        )(selectedTerm.label)
-                                    }`}
-                                </p>
+        <div>
+            <div className='h-1 bg-starBlue'></div>
+            <div
+                className={clsx(
+                    'border-b border-l border-r border-white-10 bg-neutral-900'
+                )}
+            >
+                <div className='flex min-w-fit flex-row items-center justify-start gap-10 px-6 py-3 tablet:justify-between'>
+                    <div className='w-full tablet:w-1/2'>
+                        <div className='grid grid-cols-1 gap-x-3 gap-y-1 text-neutral-4 desktop:gap-x-5'>
+                            <div className='flex flex-col items-start'>
+                                <div className='flex w-full flex-col gap-1'>
+                                    <CurrencyMaturityDropdown
+                                        asset={selectedAsset}
+                                        currencyList={assetList}
+                                        maturity={selectedTerm}
+                                        maturityList={options}
+                                        onChange={onChange}
+                                        isItayosePage
+                                    />
+                                    <p className='whitespace-nowrap pl-1 text-[11px] leading-4 tablet:text-xs laptop:text-xs'>
+                                        {`Maturity ${
+                                            selectedTerm &&
+                                            getTransformMaturityOption(
+                                                options.map(o => ({
+                                                    ...o,
+                                                    value: o.value.toString(),
+                                                }))
+                                            )(selectedTerm.label)
+                                        }`}
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div className='hidden w-full flex-row items-center justify-start gap-40 tablet:flex'>
-                    <div className='typography-caption w-40 text-nebulaTeal'>
-                        <p className=' typography-caption-2 text-slateGray'>
-                            {nextMarketPhase}
-                        </p>
-                        <Timer targetTime={date * 1000} />
-                    </div>
-                    <div>
-                        <MarketTab
-                            name={`${currency} Price`}
-                            value={usdFormat(priceList[currency], 2)}
-                        />
+                    <div className='hidden w-full flex-row items-center justify-start gap-40 tablet:flex'>
+                        <div className='typography-caption w-40 text-nebulaTeal'>
+                            <p className=' typography-caption-2 text-slateGray'>
+                                {nextMarketPhase}
+                            </p>
+                            <Timer targetTime={date * 1000} />
+                        </div>
+                        <div>
+                            <MarketTab
+                                name={`${currency} Price`}
+                                value={usdFormat(priceList[currency], 2)}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
-        </GradientBox>
+        </div>
     );
 };
 
@@ -166,7 +168,6 @@ export const Itayose = () => {
     const { currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
-
     const [selectedTable, setSelectedTable] = useState(TableType.OPEN_ORDERS);
 
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
