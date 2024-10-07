@@ -33,7 +33,12 @@ describe('useGetCountdown', () => {
         const targetTime = Date.now() - 1000;
         const { result } = renderHook(() => useGetCountdown(targetTime));
 
-        expect(result.current).toBeUndefined();
+        expect(result.current).toStrictEqual({
+            days: '00',
+            hours: '00',
+            minutes: '00',
+            seconds: '00',
+        });
     });
 
     it('should clear interval on unmount', () => {
