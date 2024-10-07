@@ -58,8 +58,11 @@ export const CurrencyMaturityTable = ({
     const renderCell = useCallback(
         (option: (typeof options)[0], columnKey: ColumnKey) => {
             const { display, isFavourite, currency } = option;
-
             const CcyIcon = currencyMap[currency]?.icon;
+
+            const timestampDifference = calculateTimeDifference(
+                +option.maturity
+            );
 
             switch (columnKey) {
                 case 'symbol':
@@ -97,11 +100,9 @@ export const CurrencyMaturityTable = ({
                 case 'apr':
                     return option.apr;
                 case 'maturity':
-                    const timestampDifference = calculateTimeDifference(
-                        +option.maturity
-                    );
+                case 'maturity-mobile':
                     return (
-                        <div className='flex justify-end whitespace-nowrap pr-3'>
+                        <div className='flex justify-end whitespace-nowrap laptop:pr-3'>
                             {formatDuration(Math.abs(timestampDifference))}
                         </div>
                     );

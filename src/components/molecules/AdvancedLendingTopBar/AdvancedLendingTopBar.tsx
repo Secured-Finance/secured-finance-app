@@ -1,42 +1,30 @@
+import { OrderSide } from '@secured-finance/sf-client';
+import { toBytes32 } from '@secured-finance/sf-graph-client';
+import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import clsx from 'clsx';
-import { useCallback, useMemo } from 'react';
-import { MarketTab, Option } from 'src/components/atoms';
-import { CurrencyMaturityDropdown } from 'src/components/molecules';
-import { IndexOf } from 'src/types';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import DocumentTextIcon from 'src/assets/icons/document-text.svg';
+import { MarketTab } from 'src/components/atoms';
+import { CurrencyMaturityDropdown, Tooltip } from 'src/components/molecules';
+import { MarketInfoDialog } from 'src/components/organisms';
 import {
-    COIN_GECKO_SOURCE,
+    useGetCountdown,
+    useGraphClientHook,
+    useIsSubgraphSupported,
+} from 'src/hooks';
+import useSF from 'src/hooks/useSecuredFinance';
+import {
     CurrencySymbol,
-    currencyMap,
     formatLoanValue,
-    formatTimeStampWithTimezone,
     getTransformMaturityOption,
+    handlePriceSource,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
+import { AdvancedLendingTopBarProp } from './types';
 
-type AdvancedLendingTopBarProp = {
-    selectedAsset: Option<CurrencySymbol> | undefined;
-    assetList: Array<Option<CurrencySymbol>>;
-    options: Array<Option<Maturity>>;
-    selected: Option<Maturity>;
-    onAssetChange: (v: CurrencySymbol) => void;
-    onTermChange: (v: Maturity) => void;
-    currentMarket: CurrentMarket | undefined;
-    currencyPrice: string;
-    values?: [string, string, string, string];
-};
-
-type CurrentMarket = {
-    value: LoanValue;
-    time: number;
-    type: 'opening' | 'block';
-};
-
-const getValue = (
-    values: AdvancedLendingTopBarProp['values'],
-    index: IndexOf<NonNullable<AdvancedLendingTopBarProp['values']>>
-) => {
-    return values?.[index] || 0;
-};
+dayjs.extend(duration);
 
 export const AdvancedLendingTopBar = ({
     selectedAsset,
@@ -47,23 +35,47 @@ export const AdvancedLendingTopBar = ({
     onTermChange,
     currentMarket,
     currencyPrice,
-    values,
+    marketInfo,
 }: AdvancedLendingTopBarProp) => {
-    const getTime = () => {
-        if (currentMarket) {
-            if (currentMarket.type === 'opening') {
-                return 'Opening Price';
-            } else {
-                return formatTimeStampWithTimezone(currentMarket.time);
-            }
-        }
-        return '-';
-    };
+    const securedFinance = useSF();
+    const currentChainId = securedFinance?.config.chain.id;
+    const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
+    const maturity = currentMarket?.value.maturity ?? 0;
+    const time = useGetCountdown(maturity * 1000);
+
+    const [timestamp, setTimestamp] = useState<number>(1643713200);
+    const [isMarketInfoDialogOpen, setIsMarketInfoDialogOpen] =
+        useState<boolean>(false);
+
+    const { data: lastTransaction } = useGraphClientHook(
+        {
+            currency: toBytes32(selectedAsset?.value as CurrencySymbol),
+            maturity: maturity,
+            from: -1,
+            to: timestamp,
+            sides: [OrderSide.LEND, OrderSide.BORROW],
+        },
+        queries.TransactionHistoryDocument,
+        'lastTransaction',
+        !isSubgraphSupported
+    );
+
+    const lastLoanValue = useMemo(() => {
+        if (!lastTransaction || !lastTransaction.length) return undefined;
+
+        const lastPrice = Number(lastTransaction?.[0]?.executionPrice);
+
+        return LoanValue.fromPrice(lastPrice, maturity);
+    }, [lastTransaction, maturity]);
 
     const selectedTerm = useMemo(
         () => options.find(o => o.value === selected.value),
         [options, selected]
     );
+
+    useEffect(() => {
+        setTimestamp(Math.round(new Date().getTime() / 1000));
+    }, [selectedAsset, selectedTerm]);
 
     const handleTermChange = useCallback(
         (v: Maturity) => {
@@ -78,28 +90,22 @@ export const AdvancedLendingTopBar = ({
     };
 
     return (
-        <div>
-            <div className='h-1 bg-starBlue'></div>
-            <div className='border-white-10 bg-neutral-900 laptop:border-x laptop:border-b'>
-                <div
-                    className={clsx(
-                        'grid grid-cols-12 gap-y-3 px-4 pb-[1.1875rem] pt-4 laptop:flex laptop:pb-3 laptop:pt-4',
-                        values && 'tablet:px-5'
-                    )}
-                >
-                    <section
+        <>
+            <div>
+                <div className='h-1 bg-starBlue'></div>
+                <div className='border-white-10 laptop:border-x laptop:border-b laptop:bg-neutral-900'>
+                    <div
                         className={clsx(
-                            'col-span-12 grid grid-cols-12 gap-3 laptop:w-[43%] laptop:gap-y-0',
-                            values && 'tablet:col-span-6 tablet:gap-y-6'
+                            'grid grid-cols-12 gap-y-3 px-4 pb-[1.1875rem] pt-4 laptop:flex laptop:px-0 laptop:py-0'
                         )}
                     >
                         <div
                             className={clsx(
-                                'col-span-7 pr-[11px] laptop:col-span-8 laptop:pr-0',
-                                values && 'tablet:col-span-12 tablet:pr-9'
+                                'col-span-12 grid grid-cols-12 gap-3 border-neutral-600 laptop:w-[25%] laptop:gap-y-0 laptop:border-r laptop:px-6 laptop:py-4',
+                                marketInfo && 'tablet:gap-y-6'
                             )}
                         >
-                            <div className='grid grid-cols-1 gap-x-3 gap-y-1 text-neutral-4 desktop:gap-x-5'>
+                            <div className='col-span-8 grid gap-x-3 gap-y-1 text-neutral-4 laptop:col-span-12 desktop:gap-x-5'>
                                 <div className='flex flex-col items-start'>
                                     <div className='flex w-full flex-col gap-1'>
                                         <CurrencyMaturityDropdown
@@ -124,85 +130,113 @@ export const AdvancedLendingTopBar = ({
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div
-                            className={clsx(
-                                'col-span-4 pl-2 laptop:border-r laptop:border-white-10 laptop:px-2',
-                                values && 'tablet:pl-0'
-                            )}
-                        >
-                            <MarketTab
-                                name={formatLoanValue(
-                                    currentMarket?.value,
-                                    'price'
+                            <div
+                                className={clsx(
+                                    'col-span-4 flex justify-end pl-2 laptop:hidden',
+                                    marketInfo && 'tablet:pl-0'
                                 )}
-                                value={`${formatLoanValue(
-                                    currentMarket?.value,
-                                    'rate'
-                                )} APR`}
-                                variant={
-                                    currentMarket ? 'green-name' : 'gray-name'
-                                }
-                                label='Current Market'
-                            />
-                            <div className='laptop:typography-caption-2 whitespace-nowrap pt-[1px] text-[11px] leading-4 text-neutral-4'>
-                                {getTime()}
+                            >
+                                <button
+                                    data-testid='market-info-btn'
+                                    onClick={() =>
+                                        setIsMarketInfoDialogOpen(true)
+                                    }
+                                    className='flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg bg-neutral-700 px-1 py-2'
+                                >
+                                    <DocumentTextIcon className='h-4 w-4 text-neutral-300' />
+                                </button>
                             </div>
                         </div>
-                    </section>
 
-                    <div
-                        className={clsx(
-                            'col-span-12 grid grid-cols-12 gap-3 gap-y-3  laptop:w-[57%] laptop:grid-cols-10 laptop:items-start laptop:pl-4',
-                            values && 'tablet:col-span-6 tablet:gap-y-6'
-                        )}
-                    >
-                        {values && (
-                            <>
-                                <div className='col-span-4 border-white-10 tablet:col-span-4 tablet:border-r laptop:col-span-2'>
-                                    <MarketTab
-                                        name='24h High'
-                                        value={getValue(values, 0)}
-                                    />
-                                </div>
-                                <div className='col-span-4 border-white-10 tablet:col-span-4 tablet:border-r tablet:px-5 laptop:col-span-2 laptop:px-0'>
-                                    <MarketTab
-                                        name='24h Low'
-                                        value={getValue(values, 1)}
-                                    />
-                                </div>
-                                <div className='col-span-4 pl-2 tablet:col-span-4 tablet:px-5 laptop:col-span-2 laptop:border-r laptop:border-white-10 laptop:px-0'>
-                                    <MarketTab
-                                        name='24h Trades'
-                                        value={getValue(values, 2)}
-                                    />
-                                </div>
-                                <div className='col-span-4 border-white-10 tablet:border-r tablet:pr-5 laptop:col-span-2 laptop:pr-0'>
-                                    <MarketTab
-                                        name='24h Volume'
-                                        value={getValue(values, 3)}
-                                    />
-                                </div>
-                            </>
-                        )}
-                        <div
-                            className={clsx(
-                                'col-span-4 laptop:col-span-2 laptop:px-0',
-                                values && 'tablet:px-5'
+                        <div className='hidden justify-evenly laptop:flex laptop:w-[75%] laptop:items-center laptop:px-7 laptop:py-4 desktop:gap-3.5'>
+                            <div className='flex w-[14%] flex-col desktop:w-[12%]'>
+                                <span className='typography-caption-2 text-neutral-400'>
+                                    Mark Price
+                                </span>
+                                <span className='typography-caption whitespace-nowrap font-semibold leading-4 text-neutral-50 desktop:leading-6'>
+                                    {formatLoanValue(
+                                        currentMarket?.value,
+                                        'price'
+                                    )}
+                                </span>
+                            </div>
+                            <div className='flex w-[14%] flex-col desktop:w-[12%]'>
+                                <MarketTab
+                                    name='Last Price'
+                                    value={formatLoanValue(
+                                        lastLoanValue,
+                                        'price'
+                                    )}
+                                />
+                            </div>
+                            {marketInfo && (
+                                <>
+                                    <div className='flex w-[14%] desktop:w-[11%]'>
+                                        <MarketTab
+                                            name='24h High'
+                                            value={marketInfo.high}
+                                        />
+                                    </div>
+                                    <div className='flex w-[14%] desktop:w-[11%]'>
+                                        <MarketTab
+                                            name='24h Low'
+                                            value={marketInfo.low}
+                                        />
+                                    </div>
+                                    <div className='w-[14%] desktop:w-[12%]'>
+                                        <section
+                                            className='flex h-fit flex-grow flex-col'
+                                            aria-label='24h Volume'
+                                        >
+                                            <span className='laptop:typography-caption-2 whitespace-nowrap text-[11px] text-neutral-400'>
+                                                24h Volume
+                                            </span>
+                                            <Tooltip
+                                                iconElement={
+                                                    <span className='typography-caption flex items-center whitespace-nowrap leading-4 text-neutral-50 desktop:leading-6'>
+                                                        {marketInfo?.volume}
+                                                    </span>
+                                                }
+                                            >
+                                                <span>
+                                                    24h Vol:{' '}
+                                                    {marketInfo?.volumeInUSD}
+                                                </span>
+                                            </Tooltip>
+                                        </section>
+                                    </div>
+                                </>
                             )}
-                        >
-                            <MarketTab
-                                name={`${selectedAsset?.value} Price`}
-                                value={currencyPrice || '0'}
-                                source={handleSource(selectedAsset?.value)}
-                            />
+                            <div className={clsx('w-[14%] desktop:w-[11%]')}>
+                                <MarketTab
+                                    name={`${selectedAsset?.value} Price`}
+                                    value={currencyPrice || '0'}
+                                    source={handlePriceSource(
+                                        selectedAsset?.value
+                                    )}
+                                />
+                            </div>
+                            <div className='flex w-[14%] flex-col desktop:w-[10%]'>
+                                <MarketTab
+                                    name='Countdown'
+                                    value={
+                                        <span className='tabular-nums'>{`${time?.days}:${time?.hours}:${time?.minutes}:${time?.seconds}`}</span>
+                                    }
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <MarketInfoDialog
+                isOpen={isMarketInfoDialogOpen}
+                onClose={() => setIsMarketInfoDialogOpen(false)}
+                currency={selectedAsset.value}
+                currentMarket={currentMarket}
+                currencyPrice={currencyPrice || '0'}
+                marketInfo={marketInfo}
+                lastLoanValue={lastLoanValue}
+            />
+        </>
     );
 };
-
-const handleSource = (asset: CurrencySymbol | undefined) =>
-    asset && COIN_GECKO_SOURCE.concat(currencyMap[asset].coinGeckoId);
