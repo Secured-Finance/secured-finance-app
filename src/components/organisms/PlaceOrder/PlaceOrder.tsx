@@ -194,6 +194,7 @@ export const PlaceOrder = ({
                     dispatch({ type: 'error' });
                 } else {
                     setTxHash(tx);
+
                     track(OrderEvents.ORDER_PLACED, {
                         [OrderProperties.ORDER_SIDE]:
                             side === OrderSide.BORROW ? 'Borrow' : 'Lend',

@@ -1,55 +1,23 @@
-import clsx from 'clsx';
 import ArrowUpSquare from 'src/assets/icons/arrow-up-square.svg';
 import { ordinaryFormat } from 'src/utils';
 
 export interface MarketTabProps {
     name: string;
-    value: string | number;
+    value: number | React.ReactNode;
     source?: string;
-    variant?: 'default' | 'green-name' | 'gray-name';
     label?: string;
 }
 
-export const MarketTab = ({
-    name,
-    value,
-    source,
-    variant = 'default',
-    label,
-}: MarketTabProps) => {
+export const MarketTab = ({ name, value, source, label }: MarketTabProps) => {
     return (
         <section
-            className={clsx('flex h-fit flex-grow flex-col', {
-                'gap-1': variant === 'default',
-                'gap-[1.5px]': variant === 'green-name',
-            })}
+            className='flex h-fit flex-grow flex-col'
             aria-label={label ?? name}
         >
-            <span
-                className={clsx({
-                    'whitespace-nowrap text-base font-semibold leading-[1.57] text-nebulaTeal laptop:text-smd':
-                        variant === 'green-name',
-                    'typography-button-3 whitespace-nowrap leading-8 text-slateGray':
-                        variant === 'gray-name',
-                    'whitespace-nowrap text-[11px] leading-4 text-slateGray laptop:text-xs':
-                        variant === 'default',
-                })}
-            >
+            <span className='laptop:typography-caption-2 whitespace-nowrap text-[11px] text-neutral-400'>
                 {name}
             </span>
-            <span
-                className={clsx(
-                    {
-                        'laptop:typography-caption whitespace-nowrap text-[11px] text-white':
-                            variant === 'green-name',
-                        'typography-caption whitespace-nowrap text-slateGray':
-                            variant === 'gray-name',
-                        'text-sm font-semibold leading-5 text-neutral-8 laptop:font-normal':
-                            variant === 'default',
-                    },
-                    'flex items-center'
-                )}
-            >
+            <span className='typography-caption flex items-center whitespace-nowrap leading-4 text-neutral-50 desktop:leading-6'>
                 {typeof value === 'number'
                     ? ordinaryFormat(value, 0, 4)
                     : value}

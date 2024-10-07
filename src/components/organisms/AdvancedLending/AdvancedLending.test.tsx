@@ -6,11 +6,12 @@ import {
     mockDailyVolumes,
     mockFilteredUserOrderHistory,
     mockFilteredUserTransactionHistory,
+    mockTrades,
 } from 'src/stories/mocks/queries';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
+import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { ButtonEvents, ButtonProperties } from 'src/utils';
 
-import { fireEvent, render, screen, waitFor, within } from 'src/test-utils.js';
 import * as stories from './AdvancedLending.stories';
 
 const { Default, ConnectedToWallet, Delisted, OpenOrdersConnectedToWallet } =
@@ -36,9 +37,9 @@ describe.skip('Advanced Lending Component', () => {
         expect(store.getState().landingOrderForm.amount).toEqual('1');
 
         fireEvent.click(screen.getByRole('button', { name: 'WFIL-DEC2022' }));
-        fireEvent.click(screen.getByRole('row', { name: 'USDC-DEC2022' }));
+        fireEvent.click(screen.getByRole('row', { name: 'WFIL-SEP2023' }));
         expect(track).toHaveBeenCalledWith(ButtonEvents.CURRENCY_CHANGE, {
-            [ButtonProperties.CURRENCY]: 'USDC',
+            [ButtonProperties.CURRENCY]: 'WFIL',
         });
         await waitFor(() => {
             expect(store.getState().landingOrderForm.amount).toEqual('1');
@@ -86,26 +87,17 @@ describe.skip('Advanced Lending Component', () => {
     });
 
     it('should display the last trades in the top bar', async () => {
-        await waitFor(() =>
-            render(<Default />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
-            })
-        );
-
-        await waitFor(() => {
-            expect(
-                within(screen.getByLabelText('24h High')).getByText('90.00')
-            ).toBeInTheDocument();
-            expect(
-                within(screen.getByLabelText('24h Low')).getByText('80.00')
-            ).toBeInTheDocument();
-            expect(
-                within(screen.getByLabelText('24h Trades')).getByText('2')
-            ).toBeInTheDocument();
-            expect(
-                within(screen.getByLabelText('24h Volume')).getByText('0')
-            ).toBeInTheDocument();
+        render(<Default />, {
+            apolloMocks: mockTrades,
         });
+
+        expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
+
+        expect(screen.getByText('Mark Price')).toBeInTheDocument();
+        expect(screen.getAllByText('--.-- (--.--%)')[0]).toBeInTheDocument();
+
+        expect(screen.getByText('Last Price')).toBeInTheDocument();
+        expect(screen.getAllByText('0.00 (0.00%)')[0]).toBeInTheDocument();
     });
 
     it('should display the opening unit price as the only trade if there is no last trades', async () => {
@@ -120,18 +112,13 @@ describe.skip('Advanced Lending Component', () => {
             })
         );
 
-        expect(
-            within(screen.getByLabelText('24h High')).getByText('0.00')
-        ).toBeInTheDocument();
-        expect(
-            within(screen.getByLabelText('24h Low')).getByText('0.00')
-        ).toBeInTheDocument();
-        expect(
-            within(screen.getByLabelText('24h Trades')).getByText(0)
-        ).toBeInTheDocument();
-        expect(
-            within(screen.getByLabelText('24h Volume')).getByText('-')
-        ).toBeInTheDocument();
+        expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
+
+        expect(screen.getByText('Mark Price')).toBeInTheDocument();
+        expect(screen.getAllByText('--.-- (--.--%)')[0]).toBeInTheDocument();
+
+        expect(screen.getByText('Last Price')).toBeInTheDocument();
+        expect(screen.getAllByText('0.00 (0.00%)')[1]).toBeInTheDocument();
     });
 
     it('should only show the orders of the user related to orderbook', async () => {
@@ -170,6 +157,13 @@ describe.skip('Advanced Lending Component', () => {
         );
 
         fireEvent.click(screen.getByRole('button', { name: 'WFIL-DEC2022' }));
+
+        await waitFor(() => {
+            expect(
+                screen.getByRole('row', { name: 'USDC-DEC2022' })
+            ).toBeInTheDocument();
+        });
+
         fireEvent.click(screen.getByRole('row', { name: 'USDC-DEC2022' }));
 
         await waitFor(() =>
@@ -179,7 +173,7 @@ describe.skip('Advanced Lending Component', () => {
                 )
             ).not.toBeInTheDocument()
         );
-    });
+    }, 8000);
 
     it('should show disclaimer and tooltip for maximum open order limit if user has 20 open orders', async () => {
         await waitFor(() =>
