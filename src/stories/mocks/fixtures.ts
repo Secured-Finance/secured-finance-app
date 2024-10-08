@@ -22,6 +22,7 @@ import {
     Rate,
     createCurrencyMap,
     getMappedOrderStatus,
+    usdFormat,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
@@ -1174,6 +1175,13 @@ export const preOpenOrders = [
 ];
 
 export const volumePerMarket = {
-    'WFIL-1669852800': BigInt(3942000),
-    'USDC-1669852800': BigInt(30),
+    'WFIL-1669852800': 3942000,
+    'USDC-1669852800': 30,
+};
+
+export const dailyMarketStats = {
+    high: '98.99',
+    low: '94.57',
+    volume: '520 WFIL',
+    volumeInUSD: usdFormat(1851),
 };

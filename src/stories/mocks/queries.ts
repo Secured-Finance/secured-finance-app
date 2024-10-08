@@ -18,6 +18,8 @@ import {
 } from './fixtures';
 import { mockCandleStickData } from './historicalchart';
 
+const MATURITY_ZERO = new Maturity(0);
+
 const generateMyTransactions = (
     amount: string,
     skip: number,
@@ -459,7 +461,7 @@ export const mockFilteredUserOrderHistory = [
             variables: {
                 address: '',
                 currency: wfilBytes32,
-                maturity: 0,
+                maturity: MATURITY_ZERO.toNumber(),
                 awaitRefetchQueries: true,
             },
         },
@@ -538,7 +540,7 @@ export const mockItayoseFilteredUserOrderHistory = [
             variables: {
                 address: '',
                 currency: wfilBytes32,
-                maturity: 0,
+                maturity: MATURITY_ZERO.toNumber(),
                 awaitRefetchQueries: true,
             },
         },
@@ -863,49 +865,6 @@ export const mockDailyVolumes = [
     },
 ];
 
-export const mockRecentTrades = [
-    {
-        request: {
-            query: queries.TransactionHistoryDocument,
-            variables: {
-                currency: usdcBytes32,
-                maturity: dec22Fixture.toNumber(),
-                from: -1,
-                to: 1643713200,
-                first: 100,
-                awaitRefetchQueries: true,
-                sides: [OrderSide.LEND, OrderSide.BORROW],
-            },
-        },
-        result: {
-            data: {
-                transactionHistory: tradesUSDC,
-                lastTransaction: tradesUSDC[0],
-            },
-        },
-    },
-    {
-        request: {
-            query: queries.TransactionHistoryDocument,
-            variables: {
-                currency: usdcBytes32,
-                maturity: dec22Fixture.toNumber(),
-                from: -1,
-                to: 1669852800,
-                first: 100,
-                awaitRefetchQueries: true,
-                sides: [OrderSide.LEND, OrderSide.BORROW],
-            },
-        },
-        result: {
-            data: {
-                transactionHistory: tradesUSDC,
-                lastTransaction: tradesUSDC[0],
-            },
-        },
-    },
-];
-
 const today = 1643713200;
 const yesterday = today - 24 * 3600;
 const today2 = 1638356400;
@@ -947,7 +906,7 @@ function getTransactionQuery(
         },
     };
 }
-const MATURITY_ZERO = new Maturity(0);
+
 export const emptyTransaction = [
     getTransactionQuery(wfilBytes32, dec22Fixture, yesterday, today, [], []),
     getTransactionQuery(wfilBytes32, dec22Fixture, yesterday2, today2, [], []),
@@ -1106,6 +1065,29 @@ export const mockTransactionCandleStick = [
             };
         },
     },
+    {
+        request: {
+            query: queries.TransactionCandleStickDocument,
+            variables: {
+                interval: '300',
+                currency: wfilBytes32,
+                maturity: MATURITY_ZERO.toNumber(),
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                transactionCandleSticks: [],
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    transactionCandleSticks: [],
+                },
+            };
+        },
+    },
 ];
 
 export const userPoints = [
@@ -1131,4 +1113,37 @@ export const userPoints = [
             },
         },
     },
+];
+
+export const mockRecentTrades = [
+    {
+        request: {
+            query: queries.TransactionHistoryDocument,
+            variables: {
+                currency: usdcBytes32,
+                maturity: dec22Fixture.toNumber(),
+                from: -1,
+                to: today,
+                first: 100,
+                sides: [OrderSide.LEND, OrderSide.BORROW],
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                transactionHistory: tradesUSDC,
+                lastTransaction: [tradesUSDC[0]],
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    transactionHistory: tradesUSDC,
+                    lastTransaction: [tradesUSDC[0]],
+                },
+            };
+        },
+    },
+    getTransactionQuery(wfilBytes32, MATURITY_ZERO, -1, today, [], []),
+    getTransactionQuery(wfilBytes32, MATURITY_ZERO, -1, today2, [], []),
 ];
