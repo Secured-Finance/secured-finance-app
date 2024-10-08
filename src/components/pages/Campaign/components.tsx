@@ -2,19 +2,16 @@
 import { BuildingLibraryIcon } from '@heroicons/react/20/solid';
 import clsx from 'clsx';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import Badge from 'src/assets/icons/badge.svg';
 import LockClose from 'src/assets/icons/lock-close.svg';
 import LockOpen from 'src/assets/icons/lock-open.svg';
 import Coins from 'src/assets/img/2d coins.svg';
 import { CurrencyIcon } from 'src/components/atoms';
-import { useBreakpoint } from 'src/hooks';
+import { useBreakpoint, useGetCountdown } from 'src/hooks';
 import {
-    CountdownFormat,
     CurrencySymbol,
     ZERO_BI,
     amountFormatterFromBase,
-    getCountdown,
     ordinaryFormat,
     usdFormat,
 } from 'src/utils';
@@ -137,7 +134,7 @@ export const CampaignStatus = ({
                         </span>
                     </div>
                     <span className='typography-mobile-body-5 tablet:typography-desktop-body-4 text-neutral-300 desktop:text-base desktop:leading-6'>
-                        Jun 29, 12:00 AM (UTC) - Sep 30, 12:00 AM (UTC)
+                        Jun 29, 12:00 AM (UTC) - Oct 31, 12:00 AM (UTC)
                     </span>
                 </div>
                 <div className='flex flex-col gap-3 tablet:flex-row tablet:justify-between tablet:gap-5'>
@@ -285,19 +282,7 @@ export const DepositCard = () => {
 };
 
 const Timer = ({ targetTime }: { targetTime: number; text?: string }) => {
-    const [time, setTime] = useState<CountdownFormat | undefined>(
-        getCountdown(targetTime)
-    );
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setTime(getCountdown(targetTime));
-        }, 1000);
-
-        return () => {
-            clearInterval(interval);
-        };
-    }, [targetTime]);
+    const time = useGetCountdown(targetTime);
 
     return (
         time && (

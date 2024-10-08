@@ -2,12 +2,19 @@ export const mobileColumns = [
     {
         key: 'symbol',
         label: 'Symbol',
-        width: '50%',
+        width: '40%',
     },
     {
         key: 'mark-prices-mobile',
         label: 'Mark Price (APR)',
-        width: '50%',
+        width: '27%',
+    },
+    {
+        key: 'maturity-mobile',
+        label: 'Time to Maturity',
+        width: '27%',
+        allowsSorting: true,
+        className: 'justify-end text-right',
     },
 ];
 

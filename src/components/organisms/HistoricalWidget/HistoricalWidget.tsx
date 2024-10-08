@@ -44,6 +44,7 @@ export const HistoricalWidget = () => {
         },
         queries.TransactionCandleStickDocument
     );
+
     const data = useMemo(() => {
         return (historicalTradeData.data?.transactionCandleSticks || []).map(
             (item: Transaction) => {

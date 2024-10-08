@@ -6,6 +6,7 @@ import { XMarkIcon } from '@heroicons/react/24/solid';
 import { SortDescriptor } from '@nextui-org/table';
 import { Key } from '@react-types/shared';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
+import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { CurrencyMaturityTable, FilterButtons } from 'src/components/molecules';
@@ -101,7 +102,10 @@ export const CurrencyMaturityDropdown = ({
                     if (column === 'apr') {
                         aValue = parseFloat(a.apr?.replace('%', '')) || 0;
                         bValue = parseFloat(b.apr?.replace('%', '')) || 0;
-                    } else if (column === 'maturity') {
+                    } else if (
+                        column === 'maturity' ||
+                        column === 'maturity-mobile'
+                    ) {
                         aValue = a.maturity;
                         bValue = b.maturity;
                     } else if (column === 'volume') {
@@ -137,33 +141,30 @@ export const CurrencyMaturityDropdown = ({
                     const data =
                         lendingMarkets[currency.value]?.[+maturity.value];
 
-                    if (data?.isMatured) {
+                    const isItayoseOption =
+                        data?.isItayosePeriod || data?.isPreOrderPeriod;
+                    const preOpeningDate = dayjs(data?.preOpeningDate * 1000);
+                    const now = dayjs();
+
+                    if (data?.isMatured || now.isBefore(preOpeningDate)) {
                         return null;
                     }
 
                     const marketLabel = `${currency.label}-${maturity.label}`;
                     const marketKey = `${currency.value}-${maturity.value}`;
 
-                    const isItayoseOption =
-                        data?.isItayosePeriod || data?.isPreOrderPeriod;
                     const volumeInUSD = volumePerMarket[marketKey];
 
                     const marketUnitPrice = data?.marketUnitPrice;
                     const openingUnitPrice = data?.openingUnitPrice;
 
-                    let lastPrice: LoanValue | undefined;
-
-                    if (openingUnitPrice) {
-                        lastPrice = LoanValue.fromPrice(
-                            openingUnitPrice,
-                            +maturity.value
-                        );
-                    } else if (marketUnitPrice) {
-                        lastPrice = LoanValue.fromPrice(
-                            marketUnitPrice,
-                            +maturity.value
-                        );
-                    }
+                    const lastPrice =
+                        marketUnitPrice || openingUnitPrice
+                            ? LoanValue.fromPrice(
+                                  marketUnitPrice || openingUnitPrice,
+                                  +maturity.value
+                              )
+                            : undefined;
 
                     const isFavourite = savedMarkets.some(
                         (savedMarket: SavedMarket) =>
@@ -305,7 +306,7 @@ export const CurrencyMaturityDropdown = ({
             {({ open, close }) => (
                 <div>
                     <Menu.Button
-                        className='flex w-full max-w-[208px] items-center justify-between gap-2 rounded-lg bg-neutral-700 px-2 py-1.5 text-sm font-semibold normal-case leading-6 text-white laptop:w-[226px] laptop:max-w-none laptop:py-2.5 laptop:pl-3 laptop:pr-2 laptop:text-base laptop:leading-6 desktop:w-[302px] desktop:text-[22px]'
+                        className='flex w-full max-w-[208px] items-center justify-between gap-2 rounded-lg bg-neutral-700 px-2 py-1.5 text-sm font-semibold normal-case leading-6 text-white laptop:max-w-[302px] laptop:py-2.5 laptop:pl-3 laptop:pr-2 laptop:text-base laptop:leading-6 desktop:w-[302px] desktop:text-[22px]'
                         onClick={() => setIsDropdownOpen(!open)}
                     >
                         <div className='flex items-center gap-2 whitespace-nowrap laptop:gap-1'>
@@ -351,7 +352,6 @@ export const CurrencyMaturityDropdown = ({
                                     value={searchValue}
                                     placeholder='Search products...'
                                 />
-
                                 <FilterButtons
                                     currencies={currencies}
                                     currentCurrency={currentCurrency}
