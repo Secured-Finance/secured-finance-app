@@ -90,12 +90,6 @@ export const RecentTradesTable = ({
             );
     }, [currency, transactionHistory]);
 
-    const toggleShowSide = (side: OrderSide | null) => {
-        if (!side) setShowSide(null);
-
-        setShowSide(showSide === side ? null : side);
-    };
-
     return (
         <div>
             <div className='flex flex-row items-center justify-end gap-1 border-neutral-600 laptop:border-b laptop:px-3 laptop:py-1.5'>
@@ -103,19 +97,19 @@ export const RecentTradesTable = ({
                     <OrderBookIcon
                         name='Show All Orders'
                         Icon={<ShowAllIcon className='h-[10px] w-3' />}
-                        onClick={() => toggleShowSide(null)}
+                        onClick={() => setShowSide(null)}
                         active={showSide === null}
                     />
                     <OrderBookIcon
                         name='Show Only Lend Orders'
                         Icon={<ShowLastIcon className='h-[10px] w-3' />}
-                        onClick={() => toggleShowSide(OrderSide.LEND)}
+                        onClick={() => setShowSide(OrderSide.LEND)}
                         active={showSide === OrderSide.LEND}
                     />
                     <OrderBookIcon
                         name='Show Only Borrow Orders'
                         Icon={<ShowFirstIcon className='h-[10px] w-3' />}
-                        onClick={() => toggleShowSide(OrderSide.BORROW)}
+                        onClick={() => setShowSide(OrderSide.BORROW)}
                         active={showSide === OrderSide.BORROW}
                     />
                 </div>
@@ -179,8 +173,9 @@ export const RecentTradesTable = ({
                                         'border-b border-neutral-600 py-0 pl-4 laptop:h-6',
                                         {
                                             'text-secondary-300':
-                                                item.side === 0,
-                                            'text-error-300': item.side === 1,
+                                                item.side === OrderSide.LEND,
+                                            'text-error-300':
+                                                item.side === OrderSide.BORROW,
                                         }
                                     )}
                                 >
