@@ -75,12 +75,12 @@ describe('RecentTradesTable component', () => {
             'bg-neutral-700'
         );
 
-        fireEvent.click(getButton('Show Only Borrow Orders'));
-        expect(getButton('Show All Orders')).toHaveClass('bg-neutral-700');
-        expect(getButton('Show Only Lend Orders')).not.toHaveClass(
+        fireEvent.click(getButton('Show Only Lend Orders'));
+        expect(getButton('Show All Orders')).not.toHaveClass('bg-neutral-700');
+        expect(getButton('Show Only Borrow Orders')).not.toHaveClass(
             'bg-neutral-700'
         );
-        expect(getButton('Show Only Borrow Orders')).not.toHaveClass(
+        expect(getButton('Show Only Lend Orders')).toHaveClass(
             'bg-neutral-700'
         );
     });
