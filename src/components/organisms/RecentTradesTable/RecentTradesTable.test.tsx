@@ -46,14 +46,18 @@ describe('RecentTradesTable component', () => {
     });
 
     it('should render three toggle buttons', () => {
-        render(<Default />);
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
         expect(getButton('Show All Orders')).toBeInTheDocument();
         expect(getButton('Show Only Lend Orders')).toBeInTheDocument();
         expect(getButton('Show Only Borrow Orders')).toBeInTheDocument();
     });
 
     it('should render the Show All Orders button as active by default', () => {
-        render(<Default />);
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
         expect(getButton('Show All Orders')).toHaveClass('bg-neutral-700');
         expect(getButton('Show Only Lend Orders')).not.toHaveClass(
             'bg-neutral-700'
@@ -64,7 +68,9 @@ describe('RecentTradesTable component', () => {
     });
 
     it('should toggle side buttons when they are clicked on', () => {
-        render(<Default />);
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
 
         fireEvent.click(getButton('Show Only Borrow Orders'));
         expect(getButton('Show All Orders')).not.toHaveClass('bg-neutral-700');
