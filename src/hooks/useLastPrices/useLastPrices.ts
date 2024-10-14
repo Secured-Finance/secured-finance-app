@@ -7,21 +7,25 @@ import { useCurrencies } from '../useCurrencies';
 
 const DECIMALS = 8;
 
-export const useLastPrices = () => {
+export const useLastPrices = (chainId?: number) => {
     const securedFinance = useSF();
-    const { data: currencies, isSuccess: isCurrencySuccess } =
-        useCurrencies(true);
+    const { data: currencies, isSuccess: isCurrencySuccess } = useCurrencies(
+        true,
+        chainId
+    );
 
     return useQuery({
-        queryKey: [QueryKeys.LAST_PRICES, currencies],
+        queryKey: [QueryKeys.LAST_PRICES, currencies, chainId],
         queryFn: async () => {
             if (!currencies) return [];
             return await Promise.all(
                 currencies.map(async ccy => {
                     return [
                         ccy,
-                        (await securedFinance?.getLastPrice(toCurrency(ccy))) ??
-                            ZERO_BI,
+                        (await securedFinance?.getLastPrice(
+                            toCurrency(ccy),
+                            chainId
+                        )) ?? ZERO_BI,
                     ] as [CurrencySymbol, bigint];
                 })
             );
