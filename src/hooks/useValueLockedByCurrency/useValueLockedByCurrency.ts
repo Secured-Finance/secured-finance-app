@@ -8,13 +8,15 @@ type ValueLockedBook = Record<CurrencySymbol, bigint>;
 export const emptyValueLockedBook: ValueLockedBook =
     createCurrencyMap<bigint>(ZERO_BI);
 
-export const useValueLockedByCurrency = () => {
+export const useValueLockedByCurrency = (chainId?: number) => {
     const securedFinance = useSF();
 
     return useQuery({
-        queryKey: [QueryKeys.PROTOCOL_DEPOSIT_AMOUNT],
+        queryKey: [QueryKeys.PROTOCOL_DEPOSIT_AMOUNT, chainId],
         queryFn: async () => {
-            const value = await securedFinance?.getProtocolDepositAmount();
+            const value = await securedFinance?.getProtocolDepositAmount(
+                chainId
+            );
             return (value as ValueLockedBook) ?? emptyValueLockedBook;
         },
         enabled: !!securedFinance,
