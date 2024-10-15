@@ -16,6 +16,8 @@ import { Banner, CampaignStatus, DepositCard, StageBanner } from './components';
 import {
     DEV_COLLATERAL_CURRENCIES,
     PROD_COLLATERAL_CURRENCIES,
+    devQuestChainId,
+    prodQuestChainId,
 } from './constants';
 
 export const Campaign = () => {
@@ -26,16 +28,15 @@ export const Campaign = () => {
     // const connector = connectors.find(connect => connect.name === provider);
 
     const collateralBalances = useCollateralBalances();
-    const { data: priceList } = useLastPrices();
+    const questChainId = isProdEnv() ? prodQuestChainId : devQuestChainId;
 
+    const { data: priceList } = useLastPrices(questChainId);
     const { data: valueLockedByCurrency = emptyValueLockedBook } =
-        useValueLockedByCurrency();
+        useValueLockedByCurrency(questChainId);
 
     const collateralCurrencies = isProdEnv()
         ? PROD_COLLATERAL_CURRENCIES
         : DEV_COLLATERAL_CURRENCIES;
-
-    // const questChainId = isProdEnv() ? prodQuestChainId : devQuestChainId;
 
     const depositCollateralList = useMemo(
         () =>
