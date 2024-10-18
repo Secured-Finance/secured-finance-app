@@ -474,7 +474,7 @@ export const AdvancedLending = ({
                         </div>
                     </div>
 
-                    <div className='hidden laptop:block laptop:h-[473px] laptop:w-[272px] desktop:w-[300px]'>
+                    <div className='hidden laptop:block laptop:w-[272px] desktop:w-[300px]'>
                         <TabSelector
                             tabDataArray={[
                                 { text: 'Order Book' },

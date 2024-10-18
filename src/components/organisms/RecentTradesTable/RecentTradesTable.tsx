@@ -16,7 +16,7 @@ import ArrowUpSquare from 'src/assets/icons/arrow-up-square.svg';
 import ShowFirstIcon from 'src/assets/icons/orderbook-first.svg';
 import ShowAllIcon from 'src/assets/icons/orderbook-full.svg';
 import ShowLastIcon from 'src/assets/icons/orderbook-last.svg';
-import { Spinner } from 'src/components/atoms';
+import { OrderBookIcon, Spinner } from 'src/components/atoms';
 import {
     useBlockExplorerUrl,
     useGraphClientHook,
@@ -32,7 +32,7 @@ export const RecentTradesTable = ({
     currency,
     maturity,
 }: RecentTradesTableProps) => {
-    const [timestamp, setTimestamp] = useState<number>(1643713200);
+    const [timestamp, setTimestamp] = useState<number>(0);
     const { blockExplorerUrl } = useBlockExplorerUrl();
     const [showSide, setShowSide] = useState<OrderSide | null>(null);
 
@@ -210,30 +210,3 @@ export const RecentTradesTable = ({
         </div>
     );
 };
-
-const OrderBookIcon = ({
-    Icon,
-    name,
-    active,
-    onClick,
-}: {
-    Icon: React.ReactNode;
-    name: string;
-    active: boolean;
-    onClick: () => void;
-}) => (
-    <button
-        key={name}
-        aria-label={name}
-        className={clsx(
-            'rounded border-0.5 border-neutral-500 px-1.5 py-[7px] hover:bg-neutral-700',
-            {
-                'bg-neutral-700': active,
-                'bg-neutral-800': !active,
-            }
-        )}
-        onClick={onClick}
-    >
-        {Icon}
-    </button>
-);
