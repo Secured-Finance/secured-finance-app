@@ -47,7 +47,7 @@ export const TabSelector: React.FC<TabSelectorProps> = ({
             >
                 <HeadlessTab.List
                     className={clsx(
-                        'flex h-11 w-full tablet:h-[60px]',
+                        'flex h-11 w-full laptop:h-[60px]',
                         tabGroupClassName
                     )}
                 >
