@@ -195,16 +195,6 @@ export function AdvancedLendingOrderCard({
         openingUnitPrice,
     ]);
 
-    const slippage = useMemo(() => {
-        if (!market) {
-            return 0;
-        }
-
-        return side === OrderSide.BORROW
-            ? market.minBorrowUnitPrice
-            : market.maxLendUnitPrice;
-    }, [market, side]);
-
     const orderAmount = amount > 0 ? new Amount(amount, currency) : undefined;
 
     const { data: availableToBorrow } = useBorrowableAmount(address, currency);
@@ -490,15 +480,6 @@ export function AdvancedLendingOrderCard({
                                 !isConnected ? 'bg-neutral-700' : undefined
                             }
                         />
-                        {isMarketOrderType && (
-                            <div className='mx-2 laptop:mx-10px'>
-                                <OrderDisplayBox
-                                    field='Max Slippage'
-                                    value={divide(slippage, 100)}
-                                    informationText='A bond price limit, triggering a circuit breaker if exceeded within a single block due to price fluctuations.'
-                                />
-                            </div>
-                        )}
                         <div className='mx-10px'>
                             <Slider
                                 onChange={handleSliderChange}
