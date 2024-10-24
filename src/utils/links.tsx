@@ -1,16 +1,38 @@
 import SF from 'src/assets/icons/SF-KO.svg';
+import AwardIcon from 'src/assets/icons/award-fill.svg';
 import Discord from 'src/assets/icons/discord.svg';
+import GiftIcon from 'src/assets/icons/gift-fill.svg';
 import GitBook from 'src/assets/icons/gitbook.svg';
 import Medium from 'src/assets/icons/medium.svg';
+import TokenSwapIcon from 'src/assets/icons/token-swap-fill.svg';
 import Twitter from 'src/assets/icons/twitter.svg';
 
-type ExternalLink = {
+type MoreLink = {
     text: string;
     href: string;
     icon: React.ReactNode;
+    isInternal?: boolean;
 };
 
-export const LinkList: ExternalLink[] = [
+export const LinkList: MoreLink[] = [
+    {
+        text: 'Points',
+        href: '/points',
+        icon: <AwardIcon className='h-5 w-5' />,
+        isInternal: true,
+    },
+    {
+        text: 'Bridge',
+        href: '/bridge',
+        icon: <TokenSwapIcon className='h-5 w-5' />,
+        isInternal: true,
+    },
+    {
+        text: 'Campaign',
+        href: '/campaign',
+        icon: <GiftIcon className='h-5 w-5' />,
+        isInternal: true,
+    },
     {
         text: 'Official Site',
         href: 'https://secured.finance/',

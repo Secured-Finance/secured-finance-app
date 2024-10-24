@@ -1,15 +1,16 @@
 import { Popover, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { ArrowUpRightIcon } from '@heroicons/react/24/solid';
+import clsx from 'clsx';
 import { Fragment } from 'react';
 import { MenuItem, Separator } from 'src/components/atoms';
 import { LinkList } from 'src/utils';
 
-export const MenuPopover = ({}) => {
+export const MenuPopover = () => {
     return (
         <div className='flex h-full items-center justify-center px-[30px] laptop:w-[100px]'>
             <Popover className='relative'>
-                {({}) => (
+                {({ close }) => (
                     <>
                         <Popover.Button
                             as='button'
@@ -35,11 +36,20 @@ export const MenuPopover = ({}) => {
                                 <div className='relative flex flex-col overflow-hidden rounded-lg bg-gunMetal px-3 py-[14px] shadow-dropdown'>
                                     {LinkList.map((link, index) => {
                                         return (
-                                            <div key={index} role='menuitem'>
+                                            <button
+                                                key={index}
+                                                role='menuitem'
+                                                onClick={close}
+                                                className={clsx({
+                                                    'desktop:hidden':
+                                                        link.isInternal,
+                                                })}
+                                            >
                                                 <MenuItem
                                                     text={link.text}
                                                     icon={link.icon}
                                                     link={link.href}
+                                                    isInternal={link.isInternal}
                                                     badge={<ExternalIcon />}
                                                 />
                                                 {index !==
@@ -48,7 +58,7 @@ export const MenuPopover = ({}) => {
                                                         <Separator />
                                                     </div>
                                                 )}
-                                            </div>
+                                            </button>
                                         );
                                     })}
                                 </div>
