@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import { Fragment, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AlertTriangle from 'src/assets/icons/alert-triangle.svg';
-import MetamaskLogo from 'src/assets/img/metamask-fox.svg';
+import UserIcon from 'src/assets/icons/user-circle.svg';
 import { Separator, SupportedNetworks } from 'src/components/atoms';
 import { Tooltip } from 'src/components/molecules';
 import { RootState } from 'src/store/types';
@@ -105,7 +105,7 @@ export const WalletPopover = ({
                         )}
                     >
                         <span>
-                            <MetamaskLogo className='h-3.5 w-3.5 tablet:h-4 tablet:w-4' />
+                            <UserIcon className='h-4 w-4 tablet:h-5 tablet:w-5' />
                         </span>
                         <span
                             className='tablet:typography-desktop-body-5 hidden text-grayScale tablet:block'

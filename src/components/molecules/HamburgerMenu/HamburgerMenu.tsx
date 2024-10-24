@@ -152,7 +152,9 @@ export const HamburgerMenu = ({
 
                                 {showMore && (
                                     <div className='w-full px-4'>
-                                        {LinkList.map(link => (
+                                        {LinkList.filter(
+                                            link => !link.isInternal
+                                        ).map(link => (
                                             <MobileItemLink
                                                 key={link.text}
                                                 text={link.text}

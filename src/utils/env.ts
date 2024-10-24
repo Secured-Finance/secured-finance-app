@@ -82,3 +82,19 @@ export const getSubgraphUrl = (chainId: number): string | undefined => {
         return undefined;
     }
 };
+
+export const getStablecoinAppUrl = (): string => {
+    const stablecoinAppUrl = process.env.NEXT_PUBLIC_STABLECOIN_APP_URL;
+    assert(stablecoinAppUrl, 'NEXT_PUBLIC_STABLECOIN_APP_URL is not set');
+    return stablecoinAppUrl;
+};
+
+export const getStablecoinAppLaunchDate = (): string => {
+    const stablecoinAppLaunchDate =
+        process.env.NEXT_PUBLIC_STABLECOIN_LAUNCH_DATE;
+    assert(
+        stablecoinAppLaunchDate,
+        'NEXT_PUBLIC_STABLECOIN_LAUNCH_DATE is not set'
+    );
+    return stablecoinAppLaunchDate;
+};

@@ -1,12 +1,12 @@
 export const PRODUCTION_LINKS = [
     {
-        text: 'Trading',
+        text: 'Fixed Income',
         link: '/',
         alternateLinks: ['/global-itayose', '/itayose'],
         dataCy: 'trading',
     },
     {
-        text: 'Markets',
+        text: 'Stats',
         link: '/dashboard',
         dataCy: 'terminal',
     },
@@ -19,16 +19,19 @@ export const PRODUCTION_LINKS = [
         text: 'Bridge',
         link: '/bridge',
         dataCy: 'bridge',
+        laptopHide: true,
     },
     {
         text: 'Points',
         link: '/points',
         dataCy: 'points',
+        laptopHide: true,
     },
     {
         text: 'Campaign',
         link: '/campaign',
         dataCy: 'campaign',
+        laptopHide: true,
     },
 ];
 
