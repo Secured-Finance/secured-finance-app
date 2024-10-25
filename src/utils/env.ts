@@ -89,12 +89,11 @@ export const getStablecoinAppUrl = (): string => {
     return stablecoinAppUrl;
 };
 
-export const getStablecoinAppLaunchDate = (): string => {
-    const stablecoinAppLaunchDate =
-        process.env.NEXT_PUBLIC_STABLECOIN_LAUNCH_DATE;
-    assert(
-        stablecoinAppLaunchDate,
-        'NEXT_PUBLIC_STABLECOIN_LAUNCH_DATE is not set'
-    );
-    return stablecoinAppLaunchDate;
+export const getShowStablecoinAppUrl = () => {
+    const NEXT_PUBLIC_SHOW_STABLECOIN_APP_URL =
+        process.env.NEXT_PUBLIC_SHOW_STABLECOIN_APP_URL;
+    if (!NEXT_PUBLIC_SHOW_STABLECOIN_APP_URL) {
+        return false;
+    }
+    return NEXT_PUBLIC_SHOW_STABLECOIN_APP_URL === 'true';
 };

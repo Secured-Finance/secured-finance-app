@@ -5,7 +5,7 @@ import {
     getEnvironment,
     getGraphqlServerUrl,
     getNonSubgraphSupportedChainIds,
-    getStablecoinAppLaunchDate,
+    getShowStablecoinAppUrl,
     getStablecoinAppUrl,
     getSubgraphUrl,
     getSupportedChainIds,
@@ -190,18 +190,18 @@ describe('getStablecoinAppUrl', () => {
     });
 });
 
-describe('getStablecoinAppLaunchDate', () => {
+describe('getShowStablecoinAppUrl', () => {
     it('should return the value of the environment variable', () => {
-        process.env.NEXT_PUBLIC_STABLECOIN_LAUNCH_DATE = '1729599765';
-        const stablecoinAppLaunchDate = getStablecoinAppLaunchDate();
-        expect(stablecoinAppLaunchDate).toBe('1729599765');
-        expect(typeof stablecoinAppLaunchDate).toBe('string');
+        process.env.NEXT_PUBLIC_SHOW_STABLECOIN_APP_URL = 'true';
+        const showStablecoinAppUrl = getShowStablecoinAppUrl();
+        expect(showStablecoinAppUrl).toBe(true);
+        expect(typeof showStablecoinAppUrl).toBe('boolean');
     });
 
-    it('should throw error if variable is not set', () => {
-        process.env.NEXT_PUBLIC_STABLECOIN_LAUNCH_DATE = '';
-        expect(() => getStablecoinAppLaunchDate()).toThrowError(
-            'NEXT_PUBLIC_STABLECOIN_LAUNCH_DATE is not set'
-        );
+    it('should return false if variable is not set', () => {
+        process.env.NEXT_PUBLIC_SHOW_STABLECOIN_APP_URL = '';
+        const showStablecoinAppUrl = getShowStablecoinAppUrl();
+        expect(showStablecoinAppUrl).toBe(false);
+        expect(typeof showStablecoinAppUrl).toBe('boolean');
     });
 });
