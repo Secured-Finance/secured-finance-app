@@ -19,19 +19,19 @@ export const PRODUCTION_LINKS = [
         text: 'Bridge',
         link: '/bridge',
         dataCy: 'bridge',
-        laptopHide: true,
+        className: 'hidden desktop:flex',
     },
     {
         text: 'Points',
         link: '/points',
         dataCy: 'points',
-        laptopHide: true,
+        className: 'flex laptop:hidden',
     },
     {
         text: 'Campaign',
         link: '/campaign',
         dataCy: 'campaign',
-        laptopHide: true,
+        className: 'hidden desktop:flex',
     },
 ];
 

@@ -24,10 +24,9 @@ import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
 import {
-    getStablecoinAppLaunchDate,
+    getShowStablecoinAppUrl,
     getStablecoinAppUrl,
     getSupportedNetworks,
-    isPastDate,
 } from 'src/utils';
 import { AddressUtils } from 'src/utils/address';
 import { isProdEnv } from 'src/utils/displayUtils';
@@ -100,12 +99,8 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
 
     const btnSize = isMobile ? ButtonSizes.sm : undefined;
 
-    const stablecoinLaunchDate = getStablecoinAppLaunchDate();
-
-    const isPastLaunchDate = isPastDate(+stablecoinLaunchDate);
-
-    const isShowStablecoinLink =
-        !isProduction || (isProduction && isPastLaunchDate);
+    const isShowStablecoinLink = getShowStablecoinAppUrl();
+    const isShowPointsTag = (!isShowStablecoinLink && isMobile) || !isMobile;
 
     return (
         <>
@@ -129,10 +124,10 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                                 {LINKS.map(link => (
                                     <div
                                         key={link.text}
-                                        className={clsx('h-full w-full', {
-                                            'hidden desktop:flex':
-                                                link.laptopHide,
-                                        })}
+                                        className={clsx(
+                                            'h-full w-full',
+                                            link.className
+                                        )}
                                     >
                                         <ItemLink
                                             text={link.text}
@@ -150,10 +145,15 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                     </div>
                     <div className='col-span-2 flex flex-row items-center justify-end gap-2 laptop:col-span-1 laptop:gap-2.5'>
                         {isShowStablecoinLink && <StablecoinExternalLink />}
-                        <PointsTag
-                            isConnected={verifiedData && address && userData}
-                            points={userPoints}
-                        />
+                        {/* condition: only show Points tag in mobile if show stablecoin link is true  */}
+                        {isShowPointsTag && (
+                            <PointsTag
+                                isConnected={
+                                    verifiedData && address && userData
+                                }
+                                points={userPoints}
+                            />
+                        )}
                         {isConnected && address ? (
                             <>
                                 <NetworkSelector
@@ -260,7 +260,7 @@ const PointsTag = ({
                 }
             }}
             className={clsx(
-                'typography-mobile-body-5 tablet:typography-desktop-body-4 hidden h-8 flex-shrink-0 items-center justify-center gap-1 rounded-lg bg-neutral-800 px-2.5 py-[5px] font-semibold text-neutral-50 ring-1 ring-neutral-500 hover:bg-tertiary-700/10 hover:ring-tertiary-500 active:border-transparent tablet:h-10 tablet:rounded-xl tablet:pr-3 tablet:ring-[1.5px] laptop:flex',
+                'typography-mobile-body-5 tablet:typography-desktop-body-4 flex h-8 flex-shrink-0 items-center justify-center gap-1 rounded-lg bg-neutral-800 px-2.5 py-[5px] font-semibold text-neutral-50 ring-1 ring-neutral-500 hover:bg-tertiary-700/10 hover:ring-tertiary-500 active:border-transparent tablet:h-10 tablet:rounded-xl tablet:pr-3 tablet:ring-[1.5px]',
                 {
                     'tablet:pl-3': !showPoints,
                     'tablet:pl-2.5': showPoints,
