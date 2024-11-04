@@ -25,7 +25,7 @@ export const PRODUCTION_LINKS = [
         text: 'Points',
         link: '/points',
         dataCy: 'points',
-        className: 'flex laptop:hidden',
+        className: 'flex laptop:hidden desktop:flex',
     },
     {
         text: 'Campaign',
