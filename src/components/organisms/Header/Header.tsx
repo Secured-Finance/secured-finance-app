@@ -145,7 +145,6 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                     </div>
                     <div className='col-span-2 flex flex-row items-center justify-end gap-2 laptop:col-span-1 laptop:gap-2.5'>
                         {isShowStablecoinLink && <StablecoinExternalLink />}
-                        {/* condition: only show Points tag in mobile if show stablecoin link is true  */}
                         {isShowPointsTag && (
                             <PointsTag
                                 isConnected={
