@@ -5,6 +5,8 @@ import {
     getEnvironment,
     getGraphqlServerUrl,
     getNonSubgraphSupportedChainIds,
+    getShowStablecoinAppUrl,
+    getStablecoinAppUrl,
     getSubgraphUrl,
     getSupportedChainIds,
     getUsePackageVersion,
@@ -169,5 +171,37 @@ describe('getSubgraphUrl', () => {
     it('should return undefined if the input is not a supported chain', () => {
         const subgraphUrl = getSubgraphUrl(1);
         expect(subgraphUrl).toBe(undefined);
+    });
+});
+
+describe('getStablecoinAppUrl', () => {
+    it('should return the value of the environment variable', () => {
+        process.env.NEXT_PUBLIC_STABLECOIN_APP_URL = 'test';
+        const stablecoinAppUrl = getStablecoinAppUrl();
+        expect(stablecoinAppUrl).toBe('test');
+        expect(typeof stablecoinAppUrl).toBe('string');
+    });
+
+    it('should throw error if variable is not set', () => {
+        process.env.NEXT_PUBLIC_STABLECOIN_APP_URL = '';
+        expect(() => getStablecoinAppUrl()).toThrowError(
+            'NEXT_PUBLIC_STABLECOIN_APP_URL is not set'
+        );
+    });
+});
+
+describe('getShowStablecoinAppUrl', () => {
+    it('should return the value of the environment variable', () => {
+        process.env.NEXT_PUBLIC_SHOW_STABLECOIN_APP_URL = 'true';
+        const showStablecoinAppUrl = getShowStablecoinAppUrl();
+        expect(showStablecoinAppUrl).toBe(true);
+        expect(typeof showStablecoinAppUrl).toBe('boolean');
+    });
+
+    it('should return false if variable is not set', () => {
+        process.env.NEXT_PUBLIC_SHOW_STABLECOIN_APP_URL = '';
+        const showStablecoinAppUrl = getShowStablecoinAppUrl();
+        expect(showStablecoinAppUrl).toBe(false);
+        expect(typeof showStablecoinAppUrl).toBe('boolean');
     });
 });

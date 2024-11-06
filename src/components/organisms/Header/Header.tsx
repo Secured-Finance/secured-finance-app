@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
+import ArrowUpSquare from 'src/assets/icons/arrow-up-square.svg';
 import Badge from 'src/assets/icons/badge.svg';
 import SFLogo from 'src/assets/img/logo.svg';
 import SFLogoSmall from 'src/assets/img/small-logo.svg';
@@ -22,7 +23,11 @@ import { useBreakpoint, usePoints } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
-import { getSupportedNetworks } from 'src/utils';
+import {
+    getShowStablecoinAppUrl,
+    getStablecoinAppUrl,
+    getSupportedNetworks,
+} from 'src/utils';
 import { AddressUtils } from 'src/utils/address';
 import { isProdEnv } from 'src/utils/displayUtils';
 import { useAccount } from 'wagmi';
@@ -94,6 +99,9 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
 
     const btnSize = isMobile ? ButtonSizes.sm : undefined;
 
+    const isShowStablecoinLink = getShowStablecoinAppUrl();
+    const isShowPointsTag = (!isShowStablecoinLink && isMobile) || !isMobile;
+
     return (
         <>
             <div className='relative'>
@@ -116,7 +124,10 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                                 {LINKS.map(link => (
                                     <div
                                         key={link.text}
-                                        className='h-full w-full'
+                                        className={clsx(
+                                            'h-full w-full',
+                                            link.className
+                                        )}
                                     >
                                         <ItemLink
                                             text={link.text}
@@ -133,10 +144,15 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                         )}
                     </div>
                     <div className='col-span-2 flex flex-row items-center justify-end gap-2 laptop:col-span-1 laptop:gap-2.5'>
-                        <PointsTag
-                            isConnected={verifiedData && address && userData}
-                            points={userPoints}
-                        />
+                        {isShowStablecoinLink && <StablecoinExternalLink />}
+                        {isShowPointsTag && (
+                            <PointsTag
+                                isConnected={
+                                    verifiedData && address && userData
+                                }
+                                points={userPoints}
+                            />
+                        )}
                         {isConnected && address ? (
                             <>
                                 <NetworkSelector
@@ -207,7 +223,7 @@ const ItemLink = ({
                 text={text}
                 active={useCheckActive()}
                 isFullHeight
-                className='laptop:w-[100px]'
+                className='laptop:min-w-[100px]'
             />
         </Link>
     );
@@ -254,6 +270,22 @@ const PointsTag = ({
             <Badge className='flex h-[13px] w-[13px] flex-shrink-0 tablet:h-4 tablet:w-4' />
             {isConnected && points !== undefined ? pointsDisplay : 'Points'}
         </button>
+    );
+};
+
+const StablecoinExternalLink = () => {
+    return (
+        <Link
+            href={getStablecoinAppUrl()}
+            target='_blank'
+            className={clsx(
+                'typography-mobile-body-5 tablet:typography-desktop-body-4 flex h-8 flex-shrink-0 items-center justify-center gap-1.5 rounded-lg bg-neutral-800 px-2.5 py-2.5 font-semibold text-neutral-50 ring-1 ring-neutral-500 hover:bg-white-10 hover:ring-white-10 active:border-transparent tablet:h-10 tablet:rounded-xl tablet:pr-3 tablet:ring-[1.5px]'
+            )}
+            aria-label='Stablecoin external link'
+        >
+            Stablecoin
+            <ArrowUpSquare className='h-4 w-4 text-neutral-50' />
+        </Link>
     );
 };
 

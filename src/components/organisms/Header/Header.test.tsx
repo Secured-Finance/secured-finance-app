@@ -16,8 +16,8 @@ describe('Header component', () => {
     it('should render the header', () => {
         mockRouter.push('/');
         render(<Primary />);
-        expect(screen.getByText('Trading')).toBeInTheDocument();
-        expect(screen.getByText('Markets')).toBeInTheDocument();
+        expect(screen.getByText('Fixed Income')).toBeInTheDocument();
+        expect(screen.getByText('Stats')).toBeInTheDocument();
         expect(screen.getByText('Portfolio')).toBeInTheDocument();
         expect(screen.getByText('Connect Wallet')).toBeInTheDocument();
     });
@@ -25,7 +25,7 @@ describe('Header component', () => {
     it('should highlight the landing page by default page', () => {
         mockRouter.push('/');
         render(<Primary />);
-        const textElement = screen.getByText('Trading');
+        const textElement = screen.getByText('Fixed Income');
         expect(textElement.parentNode?.parentNode).toHaveClass(
             'from-tabGradient-blue-start to-tabGradient-blue-end'
         );
@@ -34,7 +34,7 @@ describe('Header component', () => {
     it('should highlight the landing page when on global-itayose', () => {
         mockRouter.push('/global-itayose');
         render(<Primary />);
-        const textElement = screen.getByText('Trading');
+        const textElement = screen.getByText('Fixed Income');
         expect(textElement.parentNode?.parentNode).toHaveClass(
             'from-tabGradient-blue-start to-tabGradient-blue-end'
         );
@@ -44,9 +44,9 @@ describe('Header component', () => {
         mockRouter.push('/dashboard');
 
         render(<Primary />);
-        fireEvent.click(screen.getByText('Markets'));
+        fireEvent.click(screen.getByText('Stats'));
 
-        const textElement = screen.getByText('Markets');
+        const textElement = screen.getByText('Stats');
         expect(textElement.parentNode?.parentNode).toHaveClass(
             'from-tabGradient-blue-start to-tabGradient-blue-end'
         );
@@ -56,7 +56,7 @@ describe('Header component', () => {
         mockRouter.push('/');
 
         render(<Primary />);
-        const textElement = screen.getByText('Trading');
+        const textElement = screen.getByText('Fixed Income');
         expect(textElement.parentNode?.parentNode).toHaveClass(
             'from-tabGradient-blue-start to-tabGradient-blue-end'
         );
