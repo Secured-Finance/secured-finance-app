@@ -1,5 +1,5 @@
 import { Token } from '@secured-finance/sf-core';
-import { isProdEnv } from 'src/utils/displayUtils';
+import { isProdEnv } from 'src/utils';
 
 export class USDC extends Token {
     private constructor() {
