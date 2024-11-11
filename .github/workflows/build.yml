@@ -60,7 +60,7 @@ jobs:
           cat <<EOF > .env.local
           NEXT_PUBLIC_ALCHEMY_API_KEY=${{ secrets.ALCHEMY_API_KEY }}
           NEXT_PUBLIC_AMPLITUDE_API_KEY=${{ secrets.AMPLITUDE_API_KEY }}
-          NEXT_PUBLIC_WALLET_CONNECT_ID=${{ secrets.NEXT_PUBLIC_WALLET_CONNECT_ID }}
+          NEXT_PUBLIC_WALLET_CONNECT_ID=${{ secrets.WALLET_CONNECT_ID }}
           SF_ENV=${{ vars.SF_ENV }}
           NEXT_PUBLIC_USE_PACKAGE_VERSION=${{ vars.USE_PACKAGE_VERSION }}
           NEXT_PUBLIC_SUPPORTED_CHAIN_IDS=${{ vars.SUPPORTED_CHAIN_IDS }}
