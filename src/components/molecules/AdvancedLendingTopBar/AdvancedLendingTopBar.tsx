@@ -17,11 +17,11 @@ import {
 import useSF from 'src/hooks/useSecuredFinance';
 import {
     CurrencySymbol,
+    LoanValue, Maturity,
     formatLoanValue,
     getTransformMaturityOption,
     handlePriceSource,
 } from 'src/utils';
-import { LoanValue, Maturity } from 'src/utils/entities';
 import { AdvancedLendingTopBarProp } from './types';
 
 dayjs.extend(duration);

@@ -12,6 +12,7 @@ import { useBreakpoint } from 'src/hooks';
 import { Transaction, TransactionHistoryList } from 'src/types';
 import {
     AmountCell,
+    LoanValue, Maturity,
     MobileTableWrapper,
     amountColumnDefinition,
     contractColumnDefinition,
@@ -20,7 +21,6 @@ import {
     loanTypeColumnDefinition,
     tableHeaderDefinition,
 } from 'src/utils';
-import { LoanValue, Maturity } from 'src/utils/entities';
 
 const columnHelper = createColumnHelper<Transaction>();
 

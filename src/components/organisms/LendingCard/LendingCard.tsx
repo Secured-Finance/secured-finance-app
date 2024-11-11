@@ -30,6 +30,7 @@ import {
     ButtonEvents,
     ButtonProperties,
     CurrencySymbol,
+    LoanValue, Maturity,
     ZERO_BI,
     amountFormatterFromBase,
     amountFormatterToBase,
@@ -39,7 +40,6 @@ import {
     getTransformMaturityOption,
     toOptions,
 } from 'src/utils';
-import { LoanValue, Maturity } from 'src/utils/entities';
 import { trackButtonEvent } from 'src/utils/events';
 import { useAccount } from 'wagmi';
 import { orderSideOptions } from './constants';
