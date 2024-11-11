@@ -12,7 +12,8 @@ import { useBreakpoint } from 'src/hooks';
 import { Transaction, TransactionHistoryList } from 'src/types';
 import {
     AmountCell,
-    LoanValue, Maturity,
+    LoanValue,
+    Maturity,
     MobileTableWrapper,
     amountColumnDefinition,
     contractColumnDefinition,

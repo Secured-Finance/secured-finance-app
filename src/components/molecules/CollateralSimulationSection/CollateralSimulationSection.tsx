@@ -7,7 +7,12 @@ import {
     useOrderEstimation,
     useZCUsage,
 } from 'src/hooks';
-import { Amount, Maturity, amountFormatterFromBase, usdFormat } from 'src/utils';
+import {
+    Amount,
+    Maturity,
+    amountFormatterFromBase,
+    usdFormat,
+} from 'src/utils';
 import { useAccount } from 'wagmi';
 
 const CollateralUsageItem = () => {

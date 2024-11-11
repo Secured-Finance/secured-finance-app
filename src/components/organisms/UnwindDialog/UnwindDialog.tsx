@@ -25,7 +25,8 @@ import {
     ButtonEvents,
     ButtonProperties,
     CurrencySymbol,
-    LoanValue, Maturity,
+    LoanValue,
+    Maturity,
     handleContractError,
 } from 'src/utils';
 import { trackButtonEvent } from 'src/utils/events';

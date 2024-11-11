@@ -17,7 +17,8 @@ import {
 import useSF from 'src/hooks/useSecuredFinance';
 import {
     CurrencySymbol,
-    LoanValue, Maturity,
+    LoanValue,
+    Maturity,
     formatLoanValue,
     getTransformMaturityOption,
     handlePriceSource,

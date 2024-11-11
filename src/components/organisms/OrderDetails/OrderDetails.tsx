@@ -17,7 +17,9 @@ import {
 import { CollateralBook, useMarket, useOrderFee } from 'src/hooks';
 import { OrderType } from 'src/types';
 import {
-    Amount, LoanValue, Maturity,
+    Amount,
+    LoanValue,
+    Maturity,
     calculateFee,
     divide,
     formatLoanValue,

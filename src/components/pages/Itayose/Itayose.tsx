@@ -53,7 +53,8 @@ import {
 import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
-    LoanValue, Maturity,
+    LoanValue,
+    Maturity,
     ZERO_BI,
     getMappedOrderStatus,
     getTransformMaturityOption,

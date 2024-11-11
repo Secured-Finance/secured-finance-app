@@ -1,5 +1,11 @@
 import clsx from 'clsx';
-import { Amount, currencyMap, formatAmount, prefixTilde, usdFormat } from 'src/utils';
+import {
+    Amount,
+    currencyMap,
+    formatAmount,
+    prefixTilde,
+    usdFormat,
+} from 'src/utils';
 
 export const AmountCard = ({
     amount,
