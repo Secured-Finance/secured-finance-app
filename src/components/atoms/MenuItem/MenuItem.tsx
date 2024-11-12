@@ -6,11 +6,13 @@ export const MenuItem = ({
     icon,
     link,
     badge,
+    isInternal,
 }: {
     text: string;
     icon: React.ReactNode;
     link: string;
     badge: React.ReactNode;
+    isInternal?: boolean;
 }) => {
     return (
         <div
@@ -20,7 +22,7 @@ export const MenuItem = ({
             <Link
                 href={link}
                 className='flex h-full w-full'
-                target='_blank'
+                target={isInternal ? '_self' : '_blank'}
                 rel='noopener noreferrer'
                 aria-label='Menu Item'
             >
@@ -31,7 +33,11 @@ export const MenuItem = ({
                             {text}
                         </p>
                     </div>
-                    <span className='hidden group-hover:block'>{badge}</span>
+                    {!isInternal && (
+                        <span className='hidden group-hover:block'>
+                            {badge}
+                        </span>
+                    )}
                 </div>
             </Link>
         </div>
