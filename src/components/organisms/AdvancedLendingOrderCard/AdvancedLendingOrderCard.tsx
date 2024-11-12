@@ -105,8 +105,6 @@ export function AdvancedLendingOrderCard({
 
     const { data: fullPositions } = usePositions(address, [currency]);
 
-    // console.log('fullPositions', fullPositions);
-
     const currentPosition = useMemo(() => {
         const position = fullPositions?.positions.filter(
             pos => +pos.maturity === maturity
@@ -264,6 +262,7 @@ export function AdvancedLendingOrderCard({
         dispatch(setAmount(v === '' ? '' : inputValue.toString()));
         const available =
             side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
+
         if (available > 0) {
             const percentage = (inputValue * BigInt(100)) / available;
             setSliderValue(
@@ -353,6 +352,9 @@ export function AdvancedLendingOrderCard({
 
     const calculateFutureValue = useCallback(
         (amount: bigint, unitPrice: number) => {
+            if (unitPrice === 0) {
+                return 0;
+            }
             return divide(
                 multiply(
                     amountFormatterFromBase[currency](amount),
@@ -550,8 +552,11 @@ export function AdvancedLendingOrderCard({
                                               amount,
                                               Number(unitPriceValue)
                                           );
+                                          const totalValue = price
+                                              ? fv * price
+                                              : 0;
                                           return `${fv} ${currency} (${usdFormat(
-                                              fv * price,
+                                              totalValue,
                                               2
                                           )})`;
                                       })()
