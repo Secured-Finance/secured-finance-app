@@ -68,6 +68,8 @@ jobs:
           NEXT_PUBLIC_REFERRAL_MESSAGE=${{ vars.REFERRAL_MESSAGE }}
           NEXT_PUBLIC_REFERRAL_HASHTAGS=${{ vars.REFERRAL_HASHTAGS }}
           NEXT_PUBLIC_SUBGRAPH_URL_314=${{ vars.SUBGRAPH_URL_314 }}
+          NEXT_PUBLIC_STABLECOIN_APP_URL=${{ vars.STABLECOIN_APP_URL }}
+          NEXT_PUBLIC_SHOW_STABLECOIN_APP_URL=${{ vars.SHOW_STABLECOIN_APP_URL }}
           EOF
 
       - name: Check Syntax with Prettier

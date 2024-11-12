@@ -80,7 +80,7 @@ const MobileItemLink = ({
 export const HamburgerMenu = ({
     links,
 }: {
-    links: { label: string; link: string }[];
+    links: { label: string; link: string; className?: string }[];
 }) => {
     const [showMore, setShowMore] = useState<boolean>(false);
 
@@ -113,11 +113,15 @@ export const HamburgerMenu = ({
                             </div>
                             <div className='w-full flex-col items-start text-primary-50'>
                                 {links.map(link => (
-                                    <MenuItemLink
+                                    <div
                                         key={link.label}
-                                        text={link.label}
-                                        link={link.link}
-                                    />
+                                        className={link.className}
+                                    >
+                                        <MenuItemLink
+                                            text={link.label}
+                                            link={link.link}
+                                        />
+                                    </div>
                                 ))}
 
                                 <Menu.Item
@@ -152,7 +156,9 @@ export const HamburgerMenu = ({
 
                                 {showMore && (
                                     <div className='w-full px-4'>
-                                        {LinkList.map(link => (
+                                        {LinkList.filter(
+                                            link => !link.isInternal
+                                        ).map(link => (
                                             <MobileItemLink
                                                 key={link.text}
                                                 text={link.text}
