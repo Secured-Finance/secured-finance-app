@@ -97,6 +97,8 @@ export const HistoricalWidget = () => {
                 <Link
                     href='https://www.tradingview.com/'
                     target='_blank'
+                    rel='noopener noreferrer'
+                    aria-label='Visit TradingView website'
                     className='leading-3.5 rounded-md border border-neutral-200 px-2.5 py-1 text-2.5 font-semibold text-neutral-50'
                 >
                     Powered by TradingView
