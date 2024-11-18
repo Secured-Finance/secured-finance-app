@@ -10,8 +10,10 @@ import {
     UTCTimestamp,
     WhitespaceData,
 } from 'lightweight-charts';
+import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
+import TradingViewLogo from 'src/assets/img/tradingview-black-logo.svg';
 import { useBreakpoint, useLastPrices } from 'src/hooks';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
@@ -269,7 +271,7 @@ export function HistoricalChart({
 
     return (
         <div
-            className='bg-neutral-900 pt-1 font-tertiary laptop:pt-2.5'
+            className='relative bg-neutral-900 pt-1 font-tertiary laptop:pt-2.5'
             data-chromatic='ignore'
         >
             <div className={clsx(titleOfChartClass)}>
@@ -345,6 +347,16 @@ export function HistoricalChart({
                 data-testid='volume-chart'
                 className='relative h-[92px] w-full laptop:h-[115px]'
             ></div>
+
+            <Link
+                href='https://www.tradingview.com/'
+                target='_blank'
+                rel='noopener noreferrer'
+                aria-label='Visit TradingView website'
+                className='absolute bottom-3 left-3 z-10 overflow-hidden rounded-full'
+            >
+                <TradingViewLogo className='h-8 w-8' />
+            </Link>
         </div>
     );
 }

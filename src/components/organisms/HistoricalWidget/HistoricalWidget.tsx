@@ -1,6 +1,5 @@
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
-import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { DropdownSelector, RadioButton } from 'src/components/atoms';
@@ -94,15 +93,6 @@ export const HistoricalWidget = () => {
                         onChange={(time: string) => onTimeScaleChange(time)}
                     />
                 </div>
-                <Link
-                    href='https://www.tradingview.com/'
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    aria-label='Visit TradingView website'
-                    className='leading-3.5 rounded-md border border-neutral-200 px-2.5 py-1 text-2.5 font-semibold text-neutral-50'
-                >
-                    Powered by TradingView
-                </Link>
             </div>
             <HistoricalChart data={data} timeScale={selectedTimeScale} />
         </>
