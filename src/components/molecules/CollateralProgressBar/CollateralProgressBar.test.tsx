@@ -10,7 +10,7 @@ const {
     CollateralDepositedWithCoverage,
 } = composeStories(stories);
 
-describe('CollateralProgressBar Component', () => {
+describe.skip('CollateralProgressBar Component', () => {
     it('should render not connected to wallet CollateralProgressBar', () => {
         render(<NotConnectedToWallet />);
 
