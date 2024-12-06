@@ -91,8 +91,8 @@ export const squidConfig: any = {
     },
     initialAssets: {
         from: {
-            address: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
-            chainId: '1',
+            address: '0x0d8ce2a99bb6e3b7db580ed848240e4a0f9ae153',
+            chainId: '314',
         },
     },
 };
