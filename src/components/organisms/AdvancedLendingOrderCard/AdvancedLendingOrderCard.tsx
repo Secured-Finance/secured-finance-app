@@ -106,7 +106,8 @@ export function AdvancedLendingOrderCard({
     const { data: fullPositions } = usePositions(address, [currency]);
 
     const currentPosition = useMemo(() => {
-        const position = fullPositions?.positions.filter(
+        if (!fullPositions?.positions) return null;
+        const position = fullPositions.positions.filter(
             pos => +pos.maturity === maturity
         );
 
