@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const squidConfig: any = {
-    integratorId: 'squid-swap-widget-v2',
+    integratorId: 'secured-finance-af24b32f-7330-4a00-a69d-fbe51038fc1c',
     theme: {
         borderRadius: {
             'button-lg-primary': '1rem',
