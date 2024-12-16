@@ -13,7 +13,10 @@ export const useMarketTerminationRatio = () => {
     const securedFinance = useSF();
 
     return useQuery({
-        queryKey: [QueryKeys.TERMINATION_RATIO],
+        queryKey: [
+            QueryKeys.TERMINATION_RATIO,
+            securedFinance?.config.chain.id,
+        ],
         queryFn: async () => {
             const currencies =
                 (await securedFinance?.getCollateralCurrencies()) ?? [];

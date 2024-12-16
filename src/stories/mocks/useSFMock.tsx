@@ -438,17 +438,17 @@ export const mockUseSF = () => {
                 case CurrencySymbol.ETH:
                     return Promise.resolve({
                         price: BigInt('157771480752'),
-                        decimals: 8,
+                        decimals: 18,
                     }); // 1577.71480752
                 case CurrencySymbol.WFIL:
                     return Promise.resolve({
                         price: BigInt('320452554902293372851000000'),
-                        decimals: 26,
+                        decimals: 36,
                     });
                 case CurrencySymbol.USDC:
                     return Promise.resolve({
                         price: BigInt('100000000'),
-                        decimals: 8,
+                        decimals: 6,
                     });
                 case CurrencySymbol.WBTC:
                     return Promise.resolve({
