@@ -75,7 +75,7 @@ export const squidConfig: any = {
             'button-md-tertiary-text': '#D1D6E0',
             'input-bg': '#1e293B',
             'input-placeholder': '#94a3b8',
-            'input-text': '#002133',
+            'input-text': '#E2E8F0',
             'input-selection': '#D1D6E0',
             'menu-bg': '#1e293B',
             'menu-text': '#F8FAFC',
