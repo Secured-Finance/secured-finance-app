@@ -6,7 +6,7 @@ export const useMarketTerminationDate = () => {
     const securedFinance = useSF();
 
     return useQuery({
-        queryKey: [QueryKeys.TERMINATION_DATE],
+        queryKey: [QueryKeys.TERMINATION_DATE, securedFinance?.config.chain.id],
         queryFn: async () => {
             return (
                 Number(await securedFinance?.getMarketTerminationDate()) ??
