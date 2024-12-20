@@ -358,22 +358,16 @@ const QuestList = ({ chainId }: { chainId: number }) => {
         questType: QuestType;
         isHighlight: boolean;
     }) => {
-        const prefix = [
-            QuestType.LimitOrder,
-            QuestType.ActivePosition,
-        ].includes(questType)
-            ? 'Up to '
-            : '';
         const suffix = [QuestType.DailyLogin, QuestType.Referral].includes(
             questType
         )
             ? 'pt'
-            : 'pt / $';
+            : 'pt / $ / day';
 
         return (
             <div className='whitespace-nowrap'>
                 <Chip
-                    label={prefix + point.toString() + suffix}
+                    label={point.toString() + suffix}
                     color={isHighlight ? ChipColors.Yellow : ChipColors.Blue}
                 />
             </div>
@@ -596,7 +590,7 @@ const QuestList = ({ chainId }: { chainId: number }) => {
 
 const Leaderboard = () => {
     const { data, loading } = useGetUsersQuery({
-        variables: { page: 1, limit: 20 },
+        variables: { page: 1, limit: 30 },
         pollInterval: POLL_INTERVAL,
         ...POINT_API_QUERY_OPTIONS,
     });

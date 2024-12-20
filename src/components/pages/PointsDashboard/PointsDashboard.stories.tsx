@@ -78,13 +78,13 @@ const users = [
             query: GetUsersDocument,
             variables: {
                 page: 1,
-                limit: 20,
+                limit: 30,
             },
         },
         result: {
             data: {
                 users: [
-                    ...Array.from({ length: 20 }).map((_, index) => ({
+                    ...Array.from({ length: 30 }).map((_, index) => ({
                         id: `${index}`,
                         walletAddress: utils.hexlify(
                             BigInt((index + 1).toString().padEnd(40, '0')) +
