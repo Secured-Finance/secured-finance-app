@@ -75,7 +75,7 @@ export const AdvancedLendingTopBar = ({
 
     useEffect(() => {
         setTimestamp(Math.round(new Date().getTime() / 1000));
-    }, [selectedAsset, selectedTerm]);
+    }, [selectedAsset.label, selectedTerm?.label]);
 
     const handleTermChange = useCallback(
         (v: Maturity) => {
