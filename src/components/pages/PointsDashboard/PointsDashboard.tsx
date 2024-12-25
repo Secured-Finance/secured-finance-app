@@ -66,7 +66,7 @@ const ReferralCode = ({ code }: { code: string }) => {
                 </div>
                 <InfoToolTip align='top-right'>
                     Share your referral link with friends and start earning. Get
-                    15% of their points and give them a 5% boost with your code!
+                    5% of their points and give them a 5% boost with your code!
                 </InfoToolTip>
             </div>
 
