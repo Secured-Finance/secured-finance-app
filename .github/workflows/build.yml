@@ -57,7 +57,7 @@ jobs:
           NPM_AUTH_TOKEN: ${{ secrets.PAT }}
 
       - run: |
-          cat <<EOF > .env.local
+          cat <<'EOF' > .env.local
           NEXT_PUBLIC_ALCHEMY_API_KEY=${{ secrets.ALCHEMY_API_KEY }}
           NEXT_PUBLIC_AMPLITUDE_API_KEY=${{ secrets.AMPLITUDE_API_KEY }}
           SF_ENV=${{ vars.SF_ENV }}

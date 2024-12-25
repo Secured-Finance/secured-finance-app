@@ -10,7 +10,7 @@ import {
     useGetUsersQuery,
     useNonceLazyQuery,
 } from '@secured-finance/sf-point-client';
-import { capitalCase, snakeCase } from 'change-case';
+import { snakeCase } from 'change-case';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
@@ -137,12 +137,19 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
     const searchParams = new URLSearchParams(document.location.search);
     const referralCode = searchParams.get('ref');
     const questTypes = [
-        QuestType.DailyLogin,
         QuestType.Deposit,
         QuestType.LimitOrder,
         QuestType.ActivePosition,
         QuestType.Referral,
+        QuestType.DailyLogin,
     ];
+    const questTypeLabels = {
+        [QuestType.DailyLogin]: 'Daily Login Points',
+        [QuestType.Deposit]: 'Deposit Points',
+        [QuestType.LimitOrder]: 'Open Order Points',
+        [QuestType.ActivePosition]: 'Active Position Points',
+        [QuestType.Referral]: 'Refer Friend Points',
+    };
     const [getNonce] = useNonceLazyQuery({
         fetchPolicy: 'no-cache',
         ...POINT_API_QUERY_OPTIONS,
@@ -190,7 +197,7 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
                             >
                                 <StatsBox
                                     key={questType}
-                                    name={`${capitalCase(questType)} Points`}
+                                    name={questTypeLabels[questType]}
                                     value={String(
                                         userData?.user.pointDetails?.[
                                             snakeCase(questType)
