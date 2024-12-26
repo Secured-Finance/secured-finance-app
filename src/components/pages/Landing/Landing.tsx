@@ -37,10 +37,12 @@ import {
     setOrderType,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { OrderType } from 'src/types';
-import { CurrencySymbol, ZERO_BI } from 'src/utils';
-import { Maturity } from 'src/utils/entities';
+import { currencyList } from 'src/stories/mocks/fixtures';
+import { MaturityOptionList, OrderType } from 'src/types';
+import { CurrencySymbol, formatLoanValue, ZERO_BI } from 'src/utils';
+import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
+import { useRouter } from 'next/router';
 
 export const emptyOptionList = [
     {
@@ -132,6 +134,9 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
                 )
             }
         >
+            <MovingTape
+                nonMaturedMarketOptionList={nonMaturedMarketOptionList}
+            ></MovingTape>
             <WithBanner
                 ccy={currency}
                 market={itayoseMarket}
@@ -235,6 +240,124 @@ const WithBanner = ({
                 </div>
             )}
             {children}
+        </div>
+    );
+};
+
+const MovingTape = ({
+    nonMaturedMarketOptionList,
+}: {
+    nonMaturedMarketOptionList: MaturityOptionList;
+}) => {
+    const router = useRouter();
+    const { data: lendingMarkets = baseContracts } = useLendingMarkets();
+
+    const handleClick = (item: string) => {
+        router.push({
+            pathname: '/',
+            query: {
+                market: item,
+            },
+        });
+    };
+
+    const result = currencyList.flatMap(asset =>
+        nonMaturedMarketOptionList.map(maturity => {
+            const data = lendingMarkets[asset.value]?.[+maturity.value];
+            const marketUnitPrice = data?.marketUnitPrice;
+            const openingUnitPrice = data?.openingUnitPrice;
+            const lastPrice =
+                marketUnitPrice || openingUnitPrice
+                    ? LoanValue.fromPrice(
+                          marketUnitPrice || openingUnitPrice,
+                          +maturity.value
+                      )
+                    : undefined;
+            return {
+                asset: `${asset.label}-${maturity.label}`,
+                apr: formatLoanValue(lastPrice, 'rate'),
+            };
+        })
+    );
+    return (
+        <div
+            style={{
+                overflow: 'hidden',
+                width: '100%',
+                color: 'white',
+                position: 'relative',
+                display: 'flex',
+                alignItems: 'center',
+            }}
+        >
+            <div
+                style={{
+                    display: 'inline-block',
+                    animation: 'scrollLeftToLeft 95s linear infinite',
+                    whiteSpace: 'nowrap',
+                    marginLeft: '100px',
+                }}
+                onMouseEnter={e => {
+                    (e.currentTarget as HTMLElement).style.animationPlayState =
+                        'paused';
+                }}
+                onMouseLeave={e => {
+                    (e.currentTarget as HTMLElement).style.animationPlayState =
+                        'running';
+                }}
+            >
+                {result.map((item, index) => (
+                    <button
+                        key={index}
+                        onClick={() => handleClick(item.asset)}
+                        style={{ marginRight: '3ch' }}
+                        onMouseEnter={e => {
+                            const element = e.currentTarget as HTMLElement;
+                            element.style.cursor = 'pointer';
+                            element.style.boxShadow =
+                                '0 4px 8px rgba(0, 0, 0, 0.2)';
+                            element.style.backgroundColor =
+                                'rgba(255, 255, 255, 0.1)';
+                            element.style.borderRadius = '5px';
+                            element.style.padding = '0 0.5ch';
+                        }}
+                        onMouseLeave={e => {
+                            const element = e.currentTarget as HTMLElement;
+                            element.style.boxShadow = 'none';
+                            element.style.backgroundColor = 'transparent';
+                            element.style.borderRadius = '0';
+                            element.style.padding = '0';
+                        }}
+                    >
+                        {item.asset}
+                        <span
+                            style={{
+                                color:
+                                    Number(item.apr) < 0 ||
+                                    item.apr === '--.--%'
+                                        ? 'red'
+                                        : 'green',
+                                marginLeft: '1ch',
+                            }}
+                        >
+                            {item.apr}APR
+                        </span>{' '}
+                    </button>
+                ))}
+            </div>
+
+            <style>
+                {`
+                @keyframes scrollLeftToLeft {
+                    0% {
+                        transform: translateX(0%);
+                    }
+                    100% {
+                        transform: translateX(-100%);
+                    }
+                }
+                `}
+            </style>
         </div>
     );
 };
