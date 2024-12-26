@@ -215,10 +215,10 @@ describe('getReferralMessage', () => {
         expect(typeof referralMessage).toBe('string');
     });
 
-    it('should throw error if variable is not set', () => {
+    it('should return empty string if variable is not set', () => {
         process.env.NEXT_PUBLIC_REFERRAL_MESSAGE = '';
-        expect(() => getReferralMessage()).toThrowError(
-            'NEXT_PUBLIC_REFERRAL_MESSAGE is not set'
-        );
+        const referralMessage = getReferralMessage();
+
+        expect(referralMessage).toBe('');
     });
 });

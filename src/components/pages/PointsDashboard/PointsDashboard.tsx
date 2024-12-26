@@ -58,6 +58,8 @@ const POLL_INTERVAL = 600000; // 10 minutes
 const POINT_API_QUERY_OPTIONS = { context: { type: 'point-dashboard' } };
 
 const ReferralCode = ({ code }: { code: string }) => {
+    const shareMessage = getShareMessage(code);
+
     return (
         <div className='flex h-28 w-full flex-col items-center justify-center'>
             <div className='flex h-7 flex-row items-center gap-2'>
@@ -99,27 +101,26 @@ const ReferralCode = ({ code }: { code: string }) => {
                                 >
                                     Copy your referral link
                                 </Tooltip>
-                                <Tooltip
-                                    iconElement={
-                                        <button
-                                            type='button'
-                                            className='flex h-8 w-8 items-center justify-center rounded-2xl bg-gunMetal'
-                                            onClick={() => {
-                                                const text =
-                                                    getShareMessage(code);
-
-                                                window.open(
-                                                    `https://x.com/intent/tweet?text=${text}&url=${quoteTweetUrl}`,
-                                                    '_blank'
-                                                );
-                                            }}
-                                        >
-                                            <ShareIcon className='h-5 w-5 text-slateGray hover:text-planetaryPurple' />
-                                        </button>
-                                    }
-                                >
-                                    Share on X
-                                </Tooltip>
+                                {shareMessage && (
+                                    <Tooltip
+                                        iconElement={
+                                            <button
+                                                type='button'
+                                                className='flex h-8 w-8 items-center justify-center rounded-2xl bg-gunMetal'
+                                                onClick={() => {
+                                                    window.open(
+                                                        `https://x.com/intent/tweet?text=${shareMessage}&url=${quoteTweetUrl}`,
+                                                        '_blank'
+                                                    );
+                                                }}
+                                            >
+                                                <ShareIcon className='h-5 w-5 text-slateGray hover:text-planetaryPurple' />
+                                            </button>
+                                        }
+                                    >
+                                        Share on X
+                                    </Tooltip>
+                                )}
                             </div>
                         </div>
                     </div>

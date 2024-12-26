@@ -99,8 +99,5 @@ export const getShowStablecoinAppUrl = () => {
 };
 
 export const getReferralMessage = (): string => {
-    const referralMessage = process.env.NEXT_PUBLIC_REFERRAL_MESSAGE;
-
-    assert(referralMessage, 'NEXT_PUBLIC_REFERRAL_MESSAGE is not set');
-    return referralMessage;
+    return process.env.NEXT_PUBLIC_REFERRAL_MESSAGE || '';
 };
