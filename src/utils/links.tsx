@@ -1,7 +1,6 @@
 import SF from 'src/assets/icons/SF-KO.svg';
 import AwardIcon from 'src/assets/icons/award-fill.svg';
 import Discord from 'src/assets/icons/discord.svg';
-import GiftIcon from 'src/assets/icons/gift-fill.svg';
 import GitBook from 'src/assets/icons/gitbook.svg';
 import Medium from 'src/assets/icons/medium.svg';
 import TokenSwapIcon from 'src/assets/icons/token-swap-fill.svg';
@@ -25,12 +24,6 @@ export const LinkList: MoreLink[] = [
         text: 'Bridge',
         href: '/bridge',
         icon: <TokenSwapIcon className='h-5 w-5' />,
-        isInternal: true,
-    },
-    {
-        text: 'Campaign',
-        href: '/campaign',
-        icon: <GiftIcon className='h-5 w-5' />,
         isInternal: true,
     },
     {
