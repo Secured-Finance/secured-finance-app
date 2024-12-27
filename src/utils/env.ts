@@ -97,3 +97,7 @@ export const getShowStablecoinAppUrl = () => {
     }
     return NEXT_PUBLIC_SHOW_STABLECOIN_APP_URL === 'true';
 };
+
+export const getReferralMessage = (): string => {
+    return process.env.NEXT_PUBLIC_REFERRAL_MESSAGE || '';
+};
