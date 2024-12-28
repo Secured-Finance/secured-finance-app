@@ -8,8 +8,6 @@ on:
     secrets:
       TENDERLY_KEY:
         required: true
-      PAT:
-        required: true
 
 jobs:
   cypress-run:
