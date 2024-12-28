@@ -14,8 +14,6 @@ on:
         required: false
         type: string
     secrets:
-      PAT:
-        required: true
       CODECOV_TOKEN:
         required: true
       CHROMATIC_PROJECT_TOKEN:
