@@ -56,6 +56,7 @@ export const useLastPrices = (chainId?: number) => {
                 [CurrencySymbol.WFIL, ZERO_BI],
                 [CurrencySymbol.axlFIL, ZERO_BI],
                 [CurrencySymbol.iFIL, ZERO_BI],
+                [CurrencySymbol.wpFIL, ZERO_BI],
             ] as [CurrencySymbol, bigint][],
         enabled: !!securedFinance && isCurrencySuccess,
     });
