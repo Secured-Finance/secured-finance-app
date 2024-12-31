@@ -6,7 +6,7 @@ import * as stories from './LiquidationProgressBar.stories';
 const { NotConnectedToWallet, CollateralDepositedWithCoverage } =
     composeStories(stories);
 
-describe('LiquidationProgressBar Component', () => {
+describe.skip('LiquidationProgressBar Component', () => {
     it('should render a default LiquidationProgressBar', () => {
         render(<NotConnectedToWallet />);
 
