@@ -14,7 +14,10 @@ export const useTerminationPrices = () => {
     const securedFinance = useSF();
 
     return useQuery({
-        queryKey: [QueryKeys.TERMINATION_PRICES],
+        queryKey: [
+            QueryKeys.TERMINATION_PRICES,
+            securedFinance?.config.chain.id,
+        ],
         queryFn: async () => {
             const currencies = (await securedFinance?.getCurrencies()) ?? [];
             const currencyList = currencies
@@ -35,14 +38,16 @@ export const useTerminationPrices = () => {
 
             const assetPriceMap: AssetPriceMap = currencyList.reduce(
                 (acc, ccy, index) => {
+                    const decimals =
+                        toCurrency(ccy).decimals -
+                        marketTerminationArray[index].decimals -
+                        8;
                     return {
                         ...acc,
                         [ccy]: new BigNumberJS(
                             marketTerminationArray[index].price.toString()
                         )
-                            .dividedBy(
-                                10 ** marketTerminationArray[index].decimals
-                            )
+                            .multipliedBy(10 ** decimals)
                             .toNumber(),
                     };
                 },
