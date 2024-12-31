@@ -101,3 +101,14 @@ export const getShowStablecoinAppUrl = () => {
 export const getReferralMessage = (): string => {
     return process.env.NEXT_PUBLIC_REFERRAL_MESSAGE || '';
 };
+
+export const getSquidWidgetIntegratorId = () => {
+    const SQUID_WIDGET_INTEGRATOR_ID =
+        process.env.NEXT_PUBLIC_SQUID_WIDGET_INTEGRATOR_ID;
+
+    if (!SQUID_WIDGET_INTEGRATOR_ID) {
+        return '';
+    }
+
+    return SQUID_WIDGET_INTEGRATOR_ID;
+};
