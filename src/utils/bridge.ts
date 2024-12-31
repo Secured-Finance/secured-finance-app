@@ -1,6 +1,8 @@
+import { getSquidWidgetIntegratorId } from './env';
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const squidConfig: any = {
-    integratorId: 'secured-finance-af24b32f-7330-4a00-a69d-fbe51038fc1c',
+    integratorId: getSquidWidgetIntegratorId(),
     theme: {
         borderRadius: {
             'button-lg-primary': '1rem',
