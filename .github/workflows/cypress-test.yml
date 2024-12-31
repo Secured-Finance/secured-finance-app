@@ -8,8 +8,6 @@ on:
     secrets:
       TENDERLY_KEY:
         required: true
-      PAT:
-        required: true
 
 jobs:
   cypress-run:
@@ -31,8 +29,6 @@ jobs:
 
       - name: Install Dependencies for serving the Web App to Cypress
         run: npm install serve
-        env:
-          NPM_AUTH_TOKEN: ${{ secrets.PAT }}
 
       - name: Cypress run
         uses: cypress-io/github-action@v3
