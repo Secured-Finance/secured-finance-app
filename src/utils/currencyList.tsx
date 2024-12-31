@@ -14,6 +14,7 @@ import IFilIcon from 'src/assets/coins/ifil.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
 import WBtcIcon from 'src/assets/coins/wbtc.svg';
 import WFilIcon from 'src/assets/coins/wfil.svg';
+import WPFilIcon from 'src/assets/coins/wpfil.svg';
 import ZcBtcIcon from 'src/assets/coins/zc-btc.svg';
 import ZcEthIcon from 'src/assets/coins/zc-eth.svg';
 import ZcFilIcon from 'src/assets/coins/zc-fil.svg';
@@ -31,6 +32,7 @@ import { TFIL } from './currencies/tfil';
 import { USDC } from './currencies/usdc';
 import { WBTC } from './currencies/wbtc';
 import { WETHE } from './currencies/wethe';
+import { WPFIL } from './currencies/wpfil';
 import { Maturity } from './entities';
 
 BigNumberJS.set({ EXPONENTIAL_AT: 30 }); // setting to a decent limit
@@ -47,6 +49,7 @@ export enum CurrencySymbol {
     aUSDC = 'aUSDC',
     axlFIL = 'axlFIL',
     iFIL = 'iFIL',
+    wpFIL = 'wpFIL',
 }
 
 export const currencyMap: Readonly<
@@ -263,6 +266,24 @@ export const currencyMap: Readonly<
         longName: 'Infinity Pool Staked FIL',
         hasOrderBook: false,
     },
+    [CurrencySymbol.wpFIL]: {
+        index: 11,
+        symbol: CurrencySymbol.wpFIL,
+        name: 'Wrapped PFIL Token',
+        icon: WPFilIcon,
+        coinGeckoId: 'filecoin',
+        isCollateral: true,
+        toBaseUnit: (amount: number) =>
+            convertToBlockchainUnit(amount, WPFIL.onChain()),
+        fromBaseUnit: (amount: bigint) =>
+            convertFromBlockchainUnit(amount, WPFIL.onChain()),
+        toCurrency: () => WPFIL.onChain(),
+        chartColor: tailwindConfig.theme.colors.chart.fil,
+        pillColor: tailwindConfig.theme.colors.pill.fil,
+        roundingDecimal: 0,
+        longName: 'Wrapped PFIL Token',
+        hasOrderBook: false,
+    },
 };
 
 const currencySymbolList = Object.keys(currencyMap) as CurrencySymbol[];
@@ -342,6 +363,8 @@ export function toCurrencySymbol(ccy: string) {
             return CurrencySymbol.axlFIL;
         case CurrencySymbol.iFIL:
             return CurrencySymbol.iFIL;
+        case CurrencySymbol.wpFIL:
+            return CurrencySymbol.wpFIL;
         default:
             return undefined;
     }

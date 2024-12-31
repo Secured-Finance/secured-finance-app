@@ -6,7 +6,7 @@ export const useIsMarketTerminated = () => {
     const securedFinance = useSF();
 
     return useQuery({
-        queryKey: [QueryKeys.TERMINATED],
+        queryKey: [QueryKeys.TERMINATED, securedFinance?.config.chain.id],
         queryFn: async () => {
             return securedFinance?.isTerminated() ?? false;
         },

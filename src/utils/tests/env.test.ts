@@ -5,6 +5,7 @@ import {
     getEnvironment,
     getGraphqlServerUrl,
     getNonSubgraphSupportedChainIds,
+    getReferralMessage,
     getShowStablecoinAppUrl,
     getSquidWidgetIntegratorId,
     getStablecoinAppUrl,
@@ -204,6 +205,22 @@ describe('getShowStablecoinAppUrl', () => {
         const showStablecoinAppUrl = getShowStablecoinAppUrl();
         expect(showStablecoinAppUrl).toBe(false);
         expect(typeof showStablecoinAppUrl).toBe('boolean');
+    });
+});
+
+describe('getReferralMessage', () => {
+    it('should return the value of the environment variable', () => {
+        process.env.NEXT_PUBLIC_REFERRAL_MESSAGE = 'test';
+        const referralMessage = getReferralMessage();
+        expect(referralMessage).toBe('test');
+        expect(typeof referralMessage).toBe('string');
+    });
+
+    it('should return empty string if variable is not set', () => {
+        process.env.NEXT_PUBLIC_REFERRAL_MESSAGE = '';
+        const referralMessage = getReferralMessage();
+
+        expect(referralMessage).toBe('');
     });
 });
 
