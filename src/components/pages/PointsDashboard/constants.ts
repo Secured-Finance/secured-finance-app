@@ -1,6 +1,15 @@
+import { getReferralMessage } from 'src/utils';
+
 export const getShareMessage = (code: string) => {
-    const message = `Join the @Secured_Fi Points Program! ✨\n\nSign up through the link below and receive 500 points as a welcome gift! Plus, enjoy a 5% boost on points earned. 🎁\n\n${window.location.origin}${window.location.pathname}?ref=${code}\n\nComplete various quests and earn chances for future $SFT airdrops! 🪂\n`;
-    return encodeURIComponent(message);
+    const replacements: Record<string, string> = {
+        '%URL%': window.location.origin + window.location.pathname,
+        '%REF%': code,
+    };
+    const shareMessage = getReferralMessage().replace(
+        /%\w+%/g,
+        all => replacements[all] || all
+    );
+    return encodeURIComponent(shareMessage);
 };
 
 export const quoteTweetUrl =
