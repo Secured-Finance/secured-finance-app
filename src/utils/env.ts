@@ -97,3 +97,14 @@ export const getShowStablecoinAppUrl = () => {
     }
     return NEXT_PUBLIC_SHOW_STABLECOIN_APP_URL === 'true';
 };
+
+export const getSquidWidgetIntegratorId = () => {
+    const SQUID_WIDGET_INTEGRATOR_ID =
+        process.env.NEXT_PUBLIC_SQUID_WIDGET_INTEGRATOR_ID;
+
+    if (!SQUID_WIDGET_INTEGRATOR_ID) {
+        return '';
+    }
+
+    return SQUID_WIDGET_INTEGRATOR_ID;
+};
