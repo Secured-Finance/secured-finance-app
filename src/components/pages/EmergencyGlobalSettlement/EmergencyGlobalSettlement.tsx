@@ -147,7 +147,7 @@ export const EmergencyGlobalSettlement = () => {
                                 encourage you to explore the{' '}
                                 <TextLink
                                     href='https://docs.secured.finance/fixed-income-protocol-guide/security-and-safety-measures/emergency-global-settlement'
-                                    text='official docs.'
+                                    text='official docs'
                                 />
                                 .
                             </p>
