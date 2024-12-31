@@ -1,17 +1,21 @@
-import dynamic from 'next/dynamic';
 import { Page } from 'src/components/templates';
+import { useBreakpoint } from 'src/hooks';
 import { squidConfig } from 'src/utils';
 
-const SquidWidget = dynamic(() =>
-    import('@0xsquid/widget').then(mod => mod.SquidWidget)
-);
-
 export const Bridge = () => {
+    const isMobile = useBreakpoint('tablet');
+    const configQueryParam = encodeURIComponent(JSON.stringify(squidConfig));
+
     return (
         <Page title='Bridging Service'>
             <div className='flex items-center justify-center'>
-                <div className='flex rounded-[1rem] bg-neutral-900 p-3 shadow-deep tablet:min-w-[444px]'>
-                    <SquidWidget config={squidConfig} />
+                <div className='overflow-hidden rounded-xl'>
+                    <iframe
+                        title='squid_widget'
+                        width={isMobile ? '370' : '480'}
+                        height='684'
+                        src={`https://studio.squidrouter.com/iframe?config=${configQueryParam}`}
+                    />
                 </div>
             </div>
         </Page>
