@@ -186,7 +186,7 @@ export const AdvancedLending = ({
         },
         queries.FilteredUserOrderHistoryDocument,
         'user',
-        selectedTable !== TableType.ORDER_HISTORY
+        selectedTable !== TableType.ORDER_HISTORY || isChecked
     );
 
     const fullUserOrderHistory = useGraphClientHook(
@@ -195,7 +195,7 @@ export const AdvancedLending = ({
         },
         queries.FullUserOrderHistoryDocument,
         'user',
-        selectedTable !== TableType.ORDER_HISTORY
+        selectedTable !== TableType.ORDER_HISTORY || !isChecked
     );
 
     const userOrderHistory = isChecked
@@ -210,7 +210,7 @@ export const AdvancedLending = ({
         },
         queries.FilteredUserTransactionHistoryDocument,
         'user',
-        selectedTable !== TableType.MY_TRANSACTIONS
+        selectedTable !== TableType.MY_TRANSACTIONS || isChecked
     );
 
     const fullUserTransactionHistory = useGraphClientHook(
@@ -219,7 +219,7 @@ export const AdvancedLending = ({
         },
         queries.FullUserTransactionHistoryDocument,
         'user',
-        selectedTable !== TableType.MY_TRANSACTIONS
+        selectedTable !== TableType.MY_TRANSACTIONS || !isChecked
     );
 
     const userTransactionHistory = isChecked
