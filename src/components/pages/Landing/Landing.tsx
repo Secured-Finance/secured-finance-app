@@ -279,24 +279,11 @@ const MovingTape = ({
             };
         })
     );
+
     return (
-        <div
-            style={{
-                overflow: 'hidden',
-                width: '100%',
-                color: 'white',
-                position: 'relative',
-                display: 'flex',
-                alignItems: 'center',
-            }}
-        >
+        <div className='relative ml-3 mr-3 flex items-center overflow-hidden text-white'>
             <div
-                style={{
-                    display: 'inline-block',
-                    animation: 'scrollLeftToLeft 95s linear infinite',
-                    whiteSpace: 'nowrap',
-                    marginLeft: '100px',
-                }}
+                className='ml-[100px] inline-block animate-scroll-left whitespace-nowrap'
                 onMouseEnter={e => {
                     (e.currentTarget as HTMLElement).style.animationPlayState =
                         'paused';
@@ -310,54 +297,21 @@ const MovingTape = ({
                     <button
                         key={index}
                         onClick={() => handleClick(item.asset)}
-                        style={{ marginRight: '3ch' }}
-                        onMouseEnter={e => {
-                            const element = e.currentTarget as HTMLElement;
-                            element.style.cursor = 'pointer';
-                            element.style.boxShadow =
-                                '0 4px 8px rgba(0, 0, 0, 0.2)';
-                            element.style.backgroundColor =
-                                'rgba(255, 255, 255, 0.1)';
-                            element.style.borderRadius = '5px';
-                            element.style.padding = '0 0.5ch';
-                        }}
-                        onMouseLeave={e => {
-                            const element = e.currentTarget as HTMLElement;
-                            element.style.boxShadow = 'none';
-                            element.style.backgroundColor = 'transparent';
-                            element.style.borderRadius = '0';
-                            element.style.padding = '0';
-                        }}
+                        className='rounded-sm px-2 py-1 hover:cursor-pointer hover:bg-white/10 hover:shadow-md laptop:mr-3'
                     >
                         {item.asset}
                         <span
-                            style={{
-                                color:
-                                    Number(item.apr) < 0 ||
-                                    item.apr === '--.--%'
-                                        ? 'red'
-                                        : 'green',
-                                marginLeft: '1ch',
-                            }}
+                            className={`ml-2 ${
+                                Number(item.apr) < 0 || item.apr === '--.--%'
+                                    ? 'text-red'
+                                    : 'text-green'
+                            }`}
                         >
                             {item.apr}APR
-                        </span>{' '}
+                        </span>
                     </button>
                 ))}
             </div>
-
-            <style>
-                {`
-                @keyframes scrollLeftToLeft {
-                    0% {
-                        transform: translateX(0%);
-                    }
-                    100% {
-                        transform: translateX(-100%);
-                    }
-                }
-                `}
-            </style>
         </div>
     );
 };
