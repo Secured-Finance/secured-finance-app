@@ -112,3 +112,18 @@ export const getSquidWidgetIntegratorId = () => {
 
     return SQUID_WIDGET_INTEGRATOR_ID;
 };
+
+export const getGoogleAnalyticsTag = () => {
+    const NEXT_PUBLIC_GOOGLE_ANALYTICS_TAG =
+        process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_TAG;
+
+    if (!NEXT_PUBLIC_GOOGLE_ANALYTICS_TAG) {
+        // eslint-disable-next-line no-console
+        console.warn(
+            'Google Analytics Tag is not set: No analytics will be sent'
+        );
+        return '';
+    }
+
+    return NEXT_PUBLIC_GOOGLE_ANALYTICS_TAG;
+};
