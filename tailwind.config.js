@@ -13,6 +13,15 @@ module.exports = {
     ],
     theme: {
         extend: {
+            keyframes: {
+                'scroll-left': {
+                    '0%': { transform: 'translateX(0%)' },
+                    '100%': { transform: 'translateX(-100%)' },
+                },
+            },
+            animation: {
+                'scroll-left': 'scroll-left 95s linear infinite',
+            },
             gridTemplateColumns: {
                 '1-actions': 'repeat(1, minmax(95px, 1fr))',
                 '2-actions': 'repeat(2, minmax(95px, 1fr))',
@@ -194,6 +203,10 @@ module.exports = {
                 success: '#0C474C',
                 warning: '#422F09',
                 error: '#4A1220',
+            },
+            movingTape: {
+                green: '#aae8b0',
+                pink: '#ef97a6',
             },
             teal: '#11CABE',
             green: '#5CD167',
