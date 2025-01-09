@@ -3,10 +3,12 @@ import {
     getAmplitudeApiKey,
     getCommitHash,
     getEnvironment,
+    getGoogleAnalyticsTag,
     getGraphqlServerUrl,
     getNonSubgraphSupportedChainIds,
     getReferralMessage,
     getShowStablecoinAppUrl,
+    getSquidWidgetIntegratorId,
     getStablecoinAppUrl,
     getSubgraphUrl,
     getSupportedChainIds,
@@ -220,5 +222,40 @@ describe('getReferralMessage', () => {
         const referralMessage = getReferralMessage();
 
         expect(referralMessage).toBe('');
+    });
+});
+
+describe('getSquidWidgetIntegratorId ', () => {
+    it('should return the value of the environment variable', () => {
+        process.env.NEXT_PUBLIC_SQUID_WIDGET_INTEGRATOR_ID = 'test';
+        const useCommitHash = getSquidWidgetIntegratorId();
+        expect(useCommitHash).toBe('test');
+        expect(typeof useCommitHash).toBe('string');
+    });
+
+    it('should return empty string if variable is not set', () => {
+        process.env.NEXT_PUBLIC_SQUID_WIDGET_INTEGRATOR_ID = '';
+        const useCommitHash = getSquidWidgetIntegratorId();
+        expect(useCommitHash).toBe('');
+        expect(typeof useCommitHash).toBe('string');
+    });
+});
+
+describe('getGoogleAnalyticsTag', () => {
+    it('should return the value of the environment variable', () => {
+        process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_TAG = 'test';
+        const apiKey = getGoogleAnalyticsTag();
+        expect(apiKey).toBe('test');
+        expect(typeof apiKey).toBe('string');
+    });
+
+    it('should return empty string if variable is not set', () => {
+        process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_TAG = '';
+        const spy = jest.spyOn(console, 'warn').mockImplementation();
+
+        const apiKey = getGoogleAnalyticsTag();
+        expect(apiKey).toBe('');
+        expect(typeof apiKey).toBe('string');
+        expect(spy).toHaveBeenCalled();
     });
 });
