@@ -282,29 +282,20 @@ const MovingTape = ({
 
     return (
         <div className='relative ml-3 mr-3 flex items-center overflow-hidden text-white'>
-            <div
-                className='ml-[100px] inline-block animate-scroll-left whitespace-nowrap'
-                onMouseEnter={e => {
-                    (e.currentTarget as HTMLElement).style.animationPlayState =
-                        'paused';
-                }}
-                onMouseLeave={e => {
-                    (e.currentTarget as HTMLElement).style.animationPlayState =
-                        'running';
-                }}
-            >
+            <div className='ml-[100px] inline-block animate-scroll-left whitespace-nowrap text-xs hover:[animation-play-state:paused]'>
                 {result.map((item, index) => (
                     <button
                         key={index}
                         onClick={() => handleClick(item.asset)}
+                        aria-label={`Select ${item.asset} market. APR is ${item.apr}`}
                         className='rounded-sm px-2 py-1 hover:cursor-pointer hover:bg-white/10 hover:shadow-md laptop:mr-3'
                     >
                         {item.asset}
                         <span
                             className={`ml-2 ${
                                 Number(item.apr) < 0 || item.apr === '--.--%'
-                                    ? 'text-red'
-                                    : 'text-green'
+                                    ? 'text-movingTape-pink'
+                                    : 'text-movingTape-green'
                             }`}
                         >
                             {item.apr}APR

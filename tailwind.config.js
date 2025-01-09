@@ -204,6 +204,10 @@ module.exports = {
                 warning: '#422F09',
                 error: '#4A1220',
             },
+            movingTape: {
+                green: '#aae8b0',
+                pink: '#ef97a6',
+            },
             teal: '#11CABE',
             green: '#5CD167',
             orange: '#F9AA4B',
