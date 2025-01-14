@@ -17,7 +17,7 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Cookies, CookiesProvider } from 'react-cookie';
 import { Provider, useSelector } from 'react-redux';
 import 'src/bigIntPatch';
@@ -36,6 +36,7 @@ import {
     getSupportedNetworks,
     getWalletConnectId,
 } from 'src/utils';
+import * as gtag from 'src/utils/gtag';
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
@@ -47,6 +48,8 @@ import '../assets/css/index.css';
 const Header = dynamic(() => import('src/components/organisms/Header/Header'), {
     ssr: false,
 });
+
+const gaTag = getGoogleAnalyticsTag();
 
 const projectId = getWalletConnectId();
 
@@ -145,7 +148,17 @@ const authLink = setContext((_, { headers }) => {
 
 function App({ Component, pageProps }: AppProps) {
     const router = useRouter();
-    const gaTag = getGoogleAnalyticsTag();
+
+    useEffect(() => {
+        const handleRouteChange = (url: string) => {
+            gtag.pageView(url, gaTag);
+        };
+
+        router.events.on('routeChangeComplete', handleRouteChange);
+        return () => {
+            router.events.off('routeChangeComplete', handleRouteChange);
+        };
+    }, [router.events]);
 
     return (
         <>
