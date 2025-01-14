@@ -1,9 +1,7 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { getUTCMonthYear } from '@secured-finance/sf-core';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
-import dayjs from 'dayjs';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ViewType } from 'src/components/atoms';
@@ -25,7 +23,6 @@ import {
     emptyCollateralBook,
     useBalances,
     useCollateralBook,
-    useCurrencies,
     useCurrencyDelistedStatus,
     useGraphClientHook,
     useIsSubgraphSupported,
@@ -40,9 +37,9 @@ import {
     setOrderType,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { MaturityOptionList, OrderType } from 'src/types';
-import { CurrencySymbol, ZERO_BI, formatLoanValue } from 'src/utils';
-import { LoanValue, Maturity } from 'src/utils/entities';
+import { OrderType } from 'src/types';
+import { CurrencySymbol, ZERO_BI } from 'src/utils';
+import { Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
 export const emptyOptionList = [
@@ -135,9 +132,6 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
                 )
             }
         >
-            <MovingTape
-                nonMaturedMarketOptionList={nonMaturedMarketOptionList}
-            ></MovingTape>
             <WithBanner
                 ccy={currency}
                 market={itayoseMarket}
@@ -241,88 +235,6 @@ const WithBanner = ({
                 </div>
             )}
             {children}
-        </div>
-    );
-};
-
-const MovingTape = ({
-    nonMaturedMarketOptionList,
-}: {
-    nonMaturedMarketOptionList: MaturityOptionList;
-}) => {
-    const router = useRouter();
-    const { data: lendingMarkets = baseContracts } = useLendingMarkets();
-    const { data: currencies = [] } = useCurrencies();
-
-    const handleClick = (item: string) => {
-        router.push({
-            pathname: '/',
-            query: {
-                market: item,
-            },
-        });
-    };
-
-    const result = useMemo(() => {
-        return currencies.flatMap(asset =>
-            nonMaturedMarketOptionList.map(maturity => {
-                const data = lendingMarkets[asset]?.[+maturity.value];
-                const preOpeningDate = dayjs(data?.preOpeningDate * 1000);
-                const now = dayjs();
-                const isNotReady =
-                    data?.isMatured || now.isBefore(preOpeningDate);
-
-                const marketUnitPrice = data?.marketUnitPrice;
-                const openingUnitPrice = data?.openingUnitPrice;
-                const lastPrice =
-                    marketUnitPrice || openingUnitPrice
-                        ? LoanValue.fromPrice(
-                              marketUnitPrice || openingUnitPrice,
-                              +maturity.value
-                          )
-                        : undefined;
-
-                return {
-                    asset: `${asset}-${maturity.label}`,
-                    apr: formatLoanValue(lastPrice, 'rate'),
-                    isNotReady,
-                };
-            })
-        );
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        JSON.stringify(lendingMarkets),
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        JSON.stringify(nonMaturedMarketOptionList),
-    ]);
-
-    return (
-        <div className='relative ml-3 mr-3 flex items-center overflow-hidden text-neutral-50'>
-            <div className='inline-block animate-scroll-left whitespace-nowrap text-xs leading-5 hover:[animation-play-state:paused]'>
-                {result
-                    .filter(res => !res.isNotReady)
-                    .map((item, index) => (
-                        <button
-                            key={index}
-                            onClick={() => handleClick(item.asset)}
-                            aria-label={`Select ${item.asset} market. APR is ${item.apr}`}
-                            className='rounded-sm px-2 py-1 hover:cursor-pointer hover:bg-white/10 hover:shadow-md'
-                        >
-                            {item.asset}
-                            <span
-                                className={`ml-1 ${
-                                    Number(item.apr) < 0 ||
-                                    item.apr === '--.--%'
-                                        ? 'text-error-300'
-                                        : 'text-success-300'
-                                }`}
-                            >
-                                {item.apr} APR
-                            </span>
-                        </button>
-                    ))}
-            </div>
         </div>
     );
 };
