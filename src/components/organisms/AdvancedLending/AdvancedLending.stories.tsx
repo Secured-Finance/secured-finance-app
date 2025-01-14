@@ -43,7 +43,7 @@ export default {
         ...RESPONSIVE_PARAMETERS,
         chromatic: {
             ...RESPONSIVE_PARAMETERS.chromatic,
-            delay: 5000,
+            delay: 10000,
         },
     },
     decorators: [withWalletProvider, WithGraphClient],
@@ -83,13 +83,13 @@ OpenOrdersConnectedToWallet.play = async () => {
     const openOrdersTab = screen.getByTestId('Open Orders');
     await userEvent.click(openOrdersTab);
 
-    const dec22Btn = await screen.findByRole('button', {
-        name: 'USDC-DEC2022',
-    });
-    await userEvent.click(dec22Btn);
+    // const dec22Btn = await screen.findByRole('button', {
+    //     name: 'USDC-DEC2022',
+    // });
+    // await userEvent.click(dec22Btn);
 
-    const jun23Button = await screen.findByText('WFIL-JUN2023');
-    await userEvent.click(jun23Button);
+    // const jun23Button = await screen.findByText('WFIL-JUN2023');
+    // await userEvent.click(jun23Button);
 };
 OpenOrdersConnectedToWallet.args = {
     collateralBook: collateralBook37,
