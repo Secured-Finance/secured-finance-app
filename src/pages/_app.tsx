@@ -12,7 +12,6 @@ import { NextUIProvider } from '@nextui-org/system';
 import { GraphApolloClient } from '@secured-finance/sf-graph-client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import 'global.d.ts';
 import { AppProps } from 'next/app';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';

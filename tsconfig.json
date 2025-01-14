@@ -19,6 +19,6 @@
     "noFallthroughCasesInSwitch": true,
     "incremental": true
   },
-  "include": ["src", "next-env.d.ts"],
+  "include": ["src", "next-env.d.ts", "global.d.ts"],
   "exclude": ["node_modules", "build", "cypress"]
 }
