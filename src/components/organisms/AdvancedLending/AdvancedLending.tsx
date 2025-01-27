@@ -3,7 +3,7 @@ import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
 import { VisibilityState } from '@tanstack/react-table';
 import dayjs from 'dayjs';
-import { useRouter } from 'next-router-mock';
+import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
