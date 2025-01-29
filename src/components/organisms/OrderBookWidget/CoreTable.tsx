@@ -44,7 +44,7 @@ export const CoreTable = ({
     options?: Partial<CoreTableOptions>;
 }) => {
     const [changedRows, setChangedRows] = useState<Set<number>>(new Set());
-    const prevDataRef = useRef<Row<OrderBookEntry>[] | null>(null);
+    const prevDataRef = useRef<Row<OrderBookEntry>[]>([]);
     const [sorting, setSorting] = useState<SortingState>([]);
     const [activeRow, setActiveRow] = useState<string>();
     const coreTableOptions: CoreTableOptions = {
@@ -94,10 +94,12 @@ export const CoreTable = ({
 
         if (prevDataRef.current) {
             rows.forEach(row => {
-                const prevRow = prevDataRef.current?.find(
+                const prevRow = prevDataRef.current.find(
                     r => r.original.value.price === row.original.value.price
                 );
-                if (
+                if (!prevRow && row.original.value.price !== 0) {
+                    updatedRows.add(Number(row.id));
+                } else if (
                     prevRow &&
                     prevRow.original.amount !== row.original.amount
                 ) {
@@ -109,7 +111,7 @@ export const CoreTable = ({
         setChangedRows(updatedRows);
 
         prevDataRef.current = rows;
-        const timer = setTimeout(() => setChangedRows(new Set()), 1000);
+        const timer = setTimeout(() => setChangedRows(new Set()), 2000);
         return () => clearTimeout(timer);
     }, [rows]);
 
