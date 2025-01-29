@@ -198,7 +198,7 @@ const reducer = (
     }
 };
 
-export const NewOrderBookWidget = ({
+export const OrderBookWidget = ({
     orderbook,
     currency,
     maxLendUnitPrice,
