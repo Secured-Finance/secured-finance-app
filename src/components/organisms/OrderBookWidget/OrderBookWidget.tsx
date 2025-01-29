@@ -496,6 +496,7 @@ export const OrderBookWidget = ({
                                             : false,
                                     hideColumnIds: isTablet ? ['apr'] : [],
                                     hoverDirection: 'up',
+                                    flashRowClass: 'bg-error-300/25',
                                 }}
                             />
                         </div>
@@ -548,6 +549,7 @@ export const OrderBookWidget = ({
                                             : false,
                                     hideColumnIds: isTablet ? ['apr'] : [],
                                     hoverDirection: 'down',
+                                    flashRowClass: 'bg-secondary-300/25',
                                 }}
                             />
                         </div>

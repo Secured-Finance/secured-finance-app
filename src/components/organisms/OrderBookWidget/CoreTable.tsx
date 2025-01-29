@@ -4,11 +4,13 @@ import {
     flexRender,
     getCoreRowModel,
     getSortedRowModel,
+    Row,
     SortingState,
     useReactTable,
 } from '@tanstack/react-table';
 import clsx from 'clsx';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { OrderBookEntry } from 'src/hooks';
 
 type CoreTableOptions = {
     name: string;
@@ -19,6 +21,7 @@ type CoreTableOptions = {
     showHeaders?: boolean;
     isFirstRowLoading?: boolean;
     isLastRowLoading?: boolean;
+    flashRowClass?: string;
 };
 
 const DEFAULT_OPTIONS: CoreTableOptions = {
@@ -28,17 +31,20 @@ const DEFAULT_OPTIONS: CoreTableOptions = {
     hoverRow: undefined,
     hideColumnIds: undefined,
     showHeaders: true,
+    flashRowClass: '',
 };
 
-export const CoreTable = <T,>({
+export const CoreTable = ({
     data,
     columns,
     options = DEFAULT_OPTIONS,
 }: {
-    data: Array<T>;
-    columns: ColumnDef<T, any>[];
+    data: OrderBookEntry[];
+    columns: ColumnDef<OrderBookEntry, any>[];
     options?: Partial<CoreTableOptions>;
 }) => {
+    const [changedRows, setChangedRows] = useState<Set<number>>(new Set());
+    const prevDataRef = useRef<Row<OrderBookEntry>[] | null>(null);
     const [sorting, setSorting] = useState<SortingState>([]);
     const [activeRow, setActiveRow] = useState<string>();
     const coreTableOptions: CoreTableOptions = {
@@ -78,8 +84,34 @@ export const CoreTable = <T,>({
         getSortedRowModel: getSortedRowModel(),
     };
 
-    const table = useReactTable<T>(configuration);
+    const table = useReactTable<OrderBookEntry>(configuration);
     const rows = table.getRowModel().rows;
+
+    useEffect(() => {
+        if (!rows) return;
+
+        const updatedRows = new Set<number>();
+
+        if (prevDataRef.current) {
+            rows.forEach(row => {
+                const prevRow = prevDataRef.current?.find(
+                    r => r.original.value.price === row.original.value.price
+                );
+                if (
+                    prevRow &&
+                    prevRow.original.amount !== row.original.amount
+                ) {
+                    updatedRows.add(Number(row.id));
+                }
+            });
+        }
+
+        setChangedRows(updatedRows);
+
+        prevDataRef.current = rows;
+        const timer = setTimeout(() => setChangedRows(new Set()), 1000);
+        return () => clearTimeout(timer);
+    }, [rows]);
 
     const isLoading = (rowIndex: number, dataRows: number) =>
         (options.isFirstRowLoading && rowIndex === 0) ||
@@ -150,6 +182,8 @@ export const CoreTable = <T,>({
                                             activeRow
                                         ) &&
                                         Number(row.id) === Number(activeRow),
+                                    [`${coreTableOptions.flashRowClass} animate-pulse`]:
+                                        changedRows.has(Number(row.id)),
                                 }
                             )}
                             onClick={() =>
