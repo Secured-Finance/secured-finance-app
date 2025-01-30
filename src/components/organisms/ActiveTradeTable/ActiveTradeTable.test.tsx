@@ -102,15 +102,6 @@ describe('ActiveTradeTable Component', () => {
         });
     });
 
-    it('should display 1 day when maturity is less than 48 hours and greater than 24 hours', async () => {
-        render(<Default />);
-        const closeToMaturityRow = screen.getAllByRole('row')[6];
-        expect(closeToMaturityRow).toHaveTextContent('Feb 2, 2022');
-        waitFor(() => {
-            expect(closeToMaturityRow).toHaveTextContent('1 Day');
-        });
-    });
-
     it('should show table hints', async () => {
         render(<Default />);
         const maturity = screen.getByText('Time to Maturity');
@@ -119,15 +110,22 @@ describe('ActiveTradeTable Component', () => {
                 'Maturity of a loan contract is the date on which the contract is set to expire.'
             )
         ).not.toBeInTheDocument();
-        await waitFor(async () => {
-            await userEvent.hover(maturity);
-        });
+        await userEvent.hover(maturity);
         waitFor(() => {
             expect(
                 screen.queryByText(
                     'Maturity of a loan contract is the date on which the contract is set to expire.'
                 )
             ).toBeInTheDocument();
+        });
+    });
+
+    it('should display 1 day when maturity is less than 48 hours and greater than 24 hours', async () => {
+        render(<Default />);
+        const closeToMaturityRow = screen.getAllByRole('row')[6];
+        expect(closeToMaturityRow).toHaveTextContent('Feb 2, 2022');
+        await waitFor(() => {
+            expect(closeToMaturityRow).toHaveTextContent('1 day');
         });
     });
 
