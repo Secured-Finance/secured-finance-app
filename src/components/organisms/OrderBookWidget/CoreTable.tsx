@@ -43,8 +43,10 @@ export const CoreTable = ({
     columns: ColumnDef<OrderBookEntry, any>[];
     options?: Partial<CoreTableOptions>;
 }) => {
-    const [changedRows, setChangedRows] = useState<Set<number>>(new Set());
+    const [changedPrices, setChangedPrices] = useState<Set<number>>(new Set());
     const prevDataRef = useRef<Row<OrderBookEntry>[]>([]);
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
     const [sorting, setSorting] = useState<SortingState>([]);
     const [activeRow, setActiveRow] = useState<string>();
     const coreTableOptions: CoreTableOptions = {
@@ -90,29 +92,38 @@ export const CoreTable = ({
     useEffect(() => {
         if (!rows) return;
 
-        const updatedRows = new Set<number>();
+        const updatedPrices = new Set<number>();
 
         if (prevDataRef.current) {
+            const prevRowsMap = new Map(
+                prevDataRef.current.map(row => [row.original.value.price, row])
+            );
+
             rows.forEach(row => {
-                const prevRow = prevDataRef.current.find(
-                    r => r.original.value.price === row.original.value.price
-                );
-                if (!prevRow && row.original.value.price !== 0) {
-                    updatedRows.add(Number(row.id));
+                const currentPrice = row.original.value.price;
+                if (currentPrice === undefined) return;
+
+                const prevRow = prevRowsMap.get(currentPrice);
+
+                if (!prevRow && currentPrice !== 0) {
+                    updatedPrices.add(currentPrice);
                 } else if (
                     prevRow &&
                     prevRow.original.amount !== row.original.amount
                 ) {
-                    updatedRows.add(Number(row.id));
+                    updatedPrices.add(currentPrice);
                 }
             });
         }
 
-        setChangedRows(updatedRows);
-
         prevDataRef.current = rows;
-        const timer = setTimeout(() => setChangedRows(new Set()), 5000);
-        return () => clearTimeout(timer);
+
+        setChangedPrices(updatedPrices);
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        timeoutRef.current = setTimeout(
+            () => setChangedPrices(new Set()),
+            5000
+        );
     }, [rows]);
 
     const isLoading = (rowIndex: number, dataRows: number) =>
@@ -185,7 +196,9 @@ export const CoreTable = ({
                                         ) &&
                                         Number(row.id) === Number(activeRow),
                                     [`${coreTableOptions.flashRowClass} animate-pulse`]:
-                                        changedRows.has(Number(row.id)),
+                                        changedPrices.has(
+                                            row.original.value.price
+                                        ),
                                 }
                             )}
                             onClick={() =>
