@@ -111,7 +111,7 @@ export const CoreTable = ({
         setChangedRows(updatedRows);
 
         prevDataRef.current = rows;
-        const timer = setTimeout(() => setChangedRows(new Set()), 2000);
+        const timer = setTimeout(() => setChangedRows(new Set()), 5000);
         return () => clearTimeout(timer);
     }, [rows]);
 
