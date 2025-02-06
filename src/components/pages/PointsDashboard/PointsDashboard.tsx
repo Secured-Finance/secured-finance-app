@@ -10,7 +10,7 @@ import {
     useGetUsersQuery,
     useNonceLazyQuery,
 } from '@secured-finance/sf-point-client';
-import { capitalCase, snakeCase } from 'change-case';
+import { snakeCase } from 'change-case';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
@@ -58,6 +58,8 @@ const POLL_INTERVAL = 600000; // 10 minutes
 const POINT_API_QUERY_OPTIONS = { context: { type: 'point-dashboard' } };
 
 const ReferralCode = ({ code }: { code: string }) => {
+    const shareMessage = getShareMessage(code);
+
     return (
         <div className='flex h-28 w-full flex-col items-center justify-center'>
             <div className='flex h-7 flex-row items-center gap-2'>
@@ -66,7 +68,7 @@ const ReferralCode = ({ code }: { code: string }) => {
                 </div>
                 <InfoToolTip align='top-right'>
                     Share your referral link with friends and start earning. Get
-                    15% of their points and give them a 5% boost with your code!
+                    5% of their points and give them a 5% boost with your code!
                 </InfoToolTip>
             </div>
 
@@ -99,27 +101,26 @@ const ReferralCode = ({ code }: { code: string }) => {
                                 >
                                     Copy your referral link
                                 </Tooltip>
-                                <Tooltip
-                                    iconElement={
-                                        <button
-                                            type='button'
-                                            className='flex h-8 w-8 items-center justify-center rounded-2xl bg-gunMetal'
-                                            onClick={() => {
-                                                const text =
-                                                    getShareMessage(code);
-
-                                                window.open(
-                                                    `https://x.com/intent/tweet?text=${text}&url=${quoteTweetUrl}`,
-                                                    '_blank'
-                                                );
-                                            }}
-                                        >
-                                            <ShareIcon className='h-5 w-5 text-slateGray hover:text-planetaryPurple' />
-                                        </button>
-                                    }
-                                >
-                                    Share on X
-                                </Tooltip>
+                                {shareMessage && (
+                                    <Tooltip
+                                        iconElement={
+                                            <button
+                                                type='button'
+                                                className='flex h-8 w-8 items-center justify-center rounded-2xl bg-gunMetal'
+                                                onClick={() => {
+                                                    window.open(
+                                                        `https://x.com/intent/tweet?text=${shareMessage}&url=${quoteTweetUrl}`,
+                                                        '_blank'
+                                                    );
+                                                }}
+                                            >
+                                                <ShareIcon className='h-5 w-5 text-slateGray hover:text-planetaryPurple' />
+                                            </button>
+                                        }
+                                    >
+                                        Share on X
+                                    </Tooltip>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -137,12 +138,19 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
     const searchParams = new URLSearchParams(document.location.search);
     const referralCode = searchParams.get('ref');
     const questTypes = [
-        QuestType.DailyLogin,
         QuestType.Deposit,
         QuestType.LimitOrder,
         QuestType.ActivePosition,
         QuestType.Referral,
+        QuestType.DailyLogin,
     ];
+    const questTypeLabels = {
+        [QuestType.DailyLogin]: 'Daily Login Points',
+        [QuestType.Deposit]: 'Deposit Points',
+        [QuestType.LimitOrder]: 'Open Order Points',
+        [QuestType.ActivePosition]: 'Active Position Points',
+        [QuestType.Referral]: 'Refer Friend Points',
+    };
     const [getNonce] = useNonceLazyQuery({
         fetchPolicy: 'no-cache',
         ...POINT_API_QUERY_OPTIONS,
@@ -190,7 +198,7 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
                             >
                                 <StatsBox
                                     key={questType}
-                                    name={`${capitalCase(questType)} Points`}
+                                    name={questTypeLabels[questType]}
                                     value={String(
                                         userData?.user.pointDetails?.[
                                             snakeCase(questType)
@@ -358,22 +366,16 @@ const QuestList = ({ chainId }: { chainId: number }) => {
         questType: QuestType;
         isHighlight: boolean;
     }) => {
-        const prefix = [
-            QuestType.LimitOrder,
-            QuestType.ActivePosition,
-        ].includes(questType)
-            ? 'Up to '
-            : '';
         const suffix = [QuestType.DailyLogin, QuestType.Referral].includes(
             questType
         )
             ? 'pt'
-            : 'pt / $';
+            : 'pt / $ / day';
 
         return (
             <div className='whitespace-nowrap'>
                 <Chip
-                    label={prefix + point.toString() + suffix}
+                    label={point.toString() + suffix}
                     color={isHighlight ? ChipColors.Yellow : ChipColors.Blue}
                 />
             </div>
@@ -596,7 +598,7 @@ const QuestList = ({ chainId }: { chainId: number }) => {
 
 const Leaderboard = () => {
     const { data, loading } = useGetUsersQuery({
-        variables: { page: 1, limit: 20 },
+        variables: { page: 1, limit: 30 },
         pollInterval: POLL_INTERVAL,
         ...POINT_API_QUERY_OPTIONS,
     });

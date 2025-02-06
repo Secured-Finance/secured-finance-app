@@ -16,7 +16,8 @@ import { AppProps } from 'next/app';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useMemo } from 'react';
+import Script from 'next/script';
+import { useEffect, useMemo } from 'react';
 import { Cookies, CookiesProvider } from 'react-cookie';
 import { Provider, useSelector } from 'react-redux';
 import 'src/bigIntPatch';
@@ -28,12 +29,14 @@ import { selectNetworkName } from 'src/store/blockchain';
 import { RootState } from 'src/store/types';
 import {
     getAmplitudeApiKey,
+    getGoogleAnalyticsTag,
     getGraphqlServerUrl,
     getSubgraphUrl,
     getSupportedChainIds,
     getSupportedNetworks,
     getWalletConnectId,
 } from 'src/utils';
+import * as gtag from 'src/utils/gtag';
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
@@ -46,9 +49,34 @@ const Header = dynamic(() => import('src/components/organisms/Header/Header'), {
     ssr: false,
 });
 
+const gaTag = getGoogleAnalyticsTag();
+
 const projectId = getWalletConnectId();
 
 const queryClient = new QueryClient();
+
+const TrackingCode = ({ gaTag }: { gaTag: string }) => {
+    return (
+        <>
+            <Script
+                src={`https://www.googletagmanager.com/gtag/js?id=${gaTag}`}
+            />
+            <Script id='google-analytics' strategy='afterInteractive'>
+                {`
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+                    gtag('config', '${gaTag}');
+                    window.addEventListener('hashchange', () => {
+                        gtag('config', '${gaTag}', {
+                            page_path: window.location.pathname + window.location.hash,
+                        });
+                    });
+                    `}
+            </Script>
+        </>
+    );
+};
 
 if (typeof window !== 'undefined') {
     const pageViewTracking = pageViewTrackingPlugin({
@@ -120,6 +148,18 @@ const authLink = setContext((_, { headers }) => {
 
 function App({ Component, pageProps }: AppProps) {
     const router = useRouter();
+
+    useEffect(() => {
+        const handleRouteChange = (url: string) => {
+            gtag.pageView(url, gaTag);
+        };
+
+        router.events.on('routeChangeComplete', handleRouteChange);
+        return () => {
+            router.events.off('routeChangeComplete', handleRouteChange);
+        };
+    }, [router.events]);
+
     return (
         <>
             <Head>
@@ -129,7 +169,7 @@ function App({ Component, pageProps }: AppProps) {
                     content='width=device-width, initial-scale=1.0'
                 />
             </Head>
-
+            {gaTag && <TrackingCode gaTag={gaTag} />}
             <Provider store={store}>
                 <Providers>
                     <Layout

@@ -6,7 +6,7 @@ exports[`HistoricalChart component should match snapshot 1`] = `
     class="w-[600px]"
   >
     <div
-      class="bg-neutral-900 pt-1 font-tertiary laptop:pt-2.5"
+      class="relative bg-neutral-900 pt-1 font-tertiary laptop:pt-2.5"
       data-chromatic="ignore"
     >
       <div
@@ -248,6 +248,17 @@ exports[`HistoricalChart component should match snapshot 1`] = `
           </table>
         </div>
       </div>
+      <a
+        aria-label="Visit TradingView website"
+        class="absolute bottom-3 left-3 z-10 overflow-hidden rounded-full"
+        href="https://www.tradingview.com/"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        <svg
+          class="h-8 w-8"
+        />
+      </a>
     </div>
   </div>
 </div>
