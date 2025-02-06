@@ -27,12 +27,6 @@ export const PRODUCTION_LINKS = [
         dataCy: 'points',
         className: 'flex laptop:hidden desktop:flex',
     },
-    {
-        text: 'Campaign',
-        link: '/campaign',
-        dataCy: 'campaign',
-        className: 'hidden desktop:flex',
-    },
 ];
 
 export const DEV_LINKS = [

@@ -1,10 +1,9 @@
 {
   "name": "secured-finance-web",
-  "version": "1.5.25",
+  "version": "1.5.35",
   "private": true,
   "homepage": ".",
   "dependencies": {
-    "@0xsquid/widget": "^1.6.20",
     "@amplitude/analytics-browser": "^2.4.0",
     "@amplitude/plugin-page-view-tracking-browser": "^2.1.0",
     "@apollo/client": "^3.10.4",

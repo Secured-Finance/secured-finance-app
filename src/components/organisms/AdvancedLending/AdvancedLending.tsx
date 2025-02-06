@@ -2,6 +2,8 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
 import { VisibilityState } from '@tanstack/react-table';
+import dayjs from 'dayjs';
+import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -26,6 +28,7 @@ import { TableType } from 'src/components/pages';
 import { ThreeColumnsWithTopBar } from 'src/components/templates';
 import {
     CollateralBook,
+    baseContracts,
     emptyOrderList,
     useBreakpoint,
     useCurrencies,
@@ -34,6 +37,7 @@ import {
     useIsSubgraphSupported,
     useIsUnderCollateralThreshold,
     useLastPrices,
+    useLendingMarkets,
     useMarket,
     useOrderList,
     usePositions,
@@ -187,7 +191,7 @@ export const AdvancedLending = ({
         },
         queries.FilteredUserOrderHistoryDocument,
         'user',
-        selectedTable !== TableType.ORDER_HISTORY
+        selectedTable !== TableType.ORDER_HISTORY || isChecked
     );
 
     const fullUserOrderHistory = useGraphClientHook(
@@ -196,7 +200,7 @@ export const AdvancedLending = ({
         },
         queries.FullUserOrderHistoryDocument,
         'user',
-        selectedTable !== TableType.ORDER_HISTORY
+        selectedTable !== TableType.ORDER_HISTORY || !isChecked
     );
 
     const userOrderHistory = isChecked
@@ -211,7 +215,7 @@ export const AdvancedLending = ({
         },
         queries.FilteredUserTransactionHistoryDocument,
         'user',
-        selectedTable !== TableType.MY_TRANSACTIONS
+        selectedTable !== TableType.MY_TRANSACTIONS || isChecked
     );
 
     const fullUserTransactionHistory = useGraphClientHook(
@@ -220,7 +224,7 @@ export const AdvancedLending = ({
         },
         queries.FullUserTransactionHistoryDocument,
         'user',
-        selectedTable !== TableType.MY_TRANSACTIONS
+        selectedTable !== TableType.MY_TRANSACTIONS || !isChecked
     );
 
     const userTransactionHistory = isChecked
@@ -396,6 +400,9 @@ export const AdvancedLending = ({
                     />
                 </div>
             )}
+            <MovingTape
+                nonMaturedMarketOptionList={maturitiesOptionList}
+            ></MovingTape>
             <ThreeColumnsWithTopBar
                 topBar={
                     <AdvancedLendingTopBar
@@ -581,6 +588,88 @@ export const AdvancedLending = ({
                     delistedCurrencySet={delistedCurrencySet}
                 />
             </ThreeColumnsWithTopBar>
+        </div>
+    );
+};
+
+const MovingTape = ({
+    nonMaturedMarketOptionList,
+}: {
+    nonMaturedMarketOptionList: MaturityOptionList;
+}) => {
+    const router = useRouter();
+    const { data: lendingMarkets = baseContracts } = useLendingMarkets();
+    const { data: currencies = [] } = useCurrencies();
+
+    const handleClick = (item: string) => {
+        router.push({
+            pathname: '/',
+            query: {
+                market: item,
+            },
+        });
+    };
+
+    const result = useMemo(() => {
+        return currencies.flatMap(asset =>
+            nonMaturedMarketOptionList.map(maturity => {
+                const data = lendingMarkets[asset]?.[+maturity.value];
+                const preOpeningDate = dayjs(data?.preOpeningDate * 1000);
+                const now = dayjs();
+                const isNotReady =
+                    data?.isMatured || now.isBefore(preOpeningDate);
+
+                const marketUnitPrice = data?.marketUnitPrice;
+                const openingUnitPrice = data?.openingUnitPrice;
+                const lastPrice =
+                    marketUnitPrice || openingUnitPrice
+                        ? LoanValue.fromPrice(
+                              marketUnitPrice || openingUnitPrice,
+                              +maturity.value
+                          )
+                        : undefined;
+
+                return {
+                    asset: `${asset}-${maturity.label}`,
+                    apr: formatLoanValue(lastPrice, 'rate'),
+                    isNotReady,
+                };
+            })
+        );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        JSON.stringify(lendingMarkets),
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        JSON.stringify(nonMaturedMarketOptionList),
+    ]);
+
+    return (
+        <div className='relative ml-3 mr-3 flex items-center overflow-hidden text-neutral-50'>
+            <div className='inline-block animate-scroll-left whitespace-nowrap text-xs leading-5 hover:[animation-play-state:paused]'>
+                {result
+                    .filter(res => !res.isNotReady)
+                    .map((item, index) => (
+                        <button
+                            key={index}
+                            onClick={() => handleClick(item.asset)}
+                            aria-label={`Select ${item.asset} market. APR is ${item.apr}`}
+                            className='rounded-sm px-2 py-1 hover:cursor-pointer hover:bg-white/10 hover:shadow-md'
+                        >
+                            {item.asset}
+                            <span
+                                className={`ml-1 ${
+                                    Number(item.apr) < 0 ||
+                                    item.apr === '--.--%'
+                                        ? 'text-error-300'
+                                        : 'text-success-300'
+                                }`}
+                            >
+                                {item.apr} APR
+                            </span>
+                        </button>
+                    ))}
+            </div>
         </div>
     );
 };

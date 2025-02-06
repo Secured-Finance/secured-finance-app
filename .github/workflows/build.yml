@@ -24,6 +24,8 @@ on:
         required: true
       AMPLITUDE_API_KEY:
         required: true
+      SQUID_WIDGET_INTEGRATOR_ID:
+        required: true
 
 jobs:
   build-and-test-all:
@@ -57,19 +59,20 @@ jobs:
           NPM_AUTH_TOKEN: ${{ secrets.PAT }}
 
       - run: |
-          cat <<EOF > .env.local
+          cat <<'EOF' > .env.local
           NEXT_PUBLIC_ALCHEMY_API_KEY=${{ secrets.ALCHEMY_API_KEY }}
           NEXT_PUBLIC_AMPLITUDE_API_KEY=${{ secrets.AMPLITUDE_API_KEY }}
+          NEXT_PUBLIC_SQUID_WIDGET_INTEGRATOR_ID=${{ secrets.SQUID_WIDGET_INTEGRATOR_ID }}
           SF_ENV=${{ vars.SF_ENV }}
           NEXT_PUBLIC_USE_PACKAGE_VERSION=${{ vars.USE_PACKAGE_VERSION }}
           NEXT_PUBLIC_SUPPORTED_CHAIN_IDS=${{ vars.SUPPORTED_CHAIN_IDS }}
           NEXT_PUBLIC_NON_SUBGRAPH_SUPPORTED_CHAIN_IDS=${{ vars.NON_SUBGRAPH_SUPPORTED_CHAIN_IDS }}
           NEXT_PUBLIC_GRAPHQL_SERVER_URL=${{ vars.GRAPHQL_SERVER_URL }}
-          NEXT_PUBLIC_REFERRAL_MESSAGE=${{ vars.REFERRAL_MESSAGE }}
-          NEXT_PUBLIC_REFERRAL_HASHTAGS=${{ vars.REFERRAL_HASHTAGS }}
+          NEXT_PUBLIC_REFERRAL_MESSAGE="${{ vars.REFERRAL_MESSAGE }}"
           NEXT_PUBLIC_SUBGRAPH_URL_314=${{ vars.SUBGRAPH_URL_314 }}
           NEXT_PUBLIC_STABLECOIN_APP_URL=${{ vars.STABLECOIN_APP_URL }}
           NEXT_PUBLIC_SHOW_STABLECOIN_APP_URL=${{ vars.SHOW_STABLECOIN_APP_URL }}
+          NEXT_PUBLIC_GOOGLE_ANALYTICS_TAG=${{ vars.GOOGLE_ANALYTICS_TAG }}
           EOF
 
       - name: Check Syntax with Prettier
@@ -99,7 +102,7 @@ jobs:
           skip: "main"
 
       - name: Publish Web App
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.artifact_name }}
           path: build
