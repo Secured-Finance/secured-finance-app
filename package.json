@@ -1,10 +1,9 @@
 {
   "name": "secured-finance-web",
-  "version": "1.5.24",
+  "version": "1.5.35",
   "private": true,
   "homepage": ".",
   "dependencies": {
-    "@0xsquid/widget": "^1.6.20",
     "@amplitude/analytics-browser": "^2.4.0",
     "@amplitude/plugin-page-view-tracking-browser": "^2.1.0",
     "@apollo/client": "^3.10.4",
@@ -18,7 +17,7 @@
     "@nextui-org/theme": "^2.2.4",
     "@nextui-org/tooltip": "^2.0.34",
     "@reduxjs/toolkit": "^1.8.1",
-    "@secured-finance/sf-client": "0.2.0-beta.185",
+    "@secured-finance/sf-client": "0.2.0-beta.186",
     "@secured-finance/sf-core": "0.2.0-beta.182",
     "@secured-finance/sf-graph-client": "0.2.0-beta.183",
     "@secured-finance/sf-point-client": "0.2.0-beta.173",
@@ -72,7 +71,11 @@
     "cypress:run": "cypress run"
   },
   "browserslist": {
-    "production": [">0.2%", "not dead", "not op_mini all"],
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",

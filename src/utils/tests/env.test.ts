@@ -3,8 +3,13 @@ import {
     getAmplitudeApiKey,
     getCommitHash,
     getEnvironment,
+    getGoogleAnalyticsTag,
     getGraphqlServerUrl,
     getNonSubgraphSupportedChainIds,
+    getReferralMessage,
+    getShowStablecoinAppUrl,
+    getSquidWidgetIntegratorId,
+    getStablecoinAppUrl,
     getSubgraphUrl,
     getSupportedChainIds,
     getUsePackageVersion,
@@ -169,5 +174,88 @@ describe('getSubgraphUrl', () => {
     it('should return undefined if the input is not a supported chain', () => {
         const subgraphUrl = getSubgraphUrl(1);
         expect(subgraphUrl).toBe(undefined);
+    });
+});
+
+describe('getStablecoinAppUrl', () => {
+    it('should return the value of the environment variable', () => {
+        process.env.NEXT_PUBLIC_STABLECOIN_APP_URL = 'test';
+        const stablecoinAppUrl = getStablecoinAppUrl();
+        expect(stablecoinAppUrl).toBe('test');
+        expect(typeof stablecoinAppUrl).toBe('string');
+    });
+
+    it('should throw error if variable is not set', () => {
+        process.env.NEXT_PUBLIC_STABLECOIN_APP_URL = '';
+        expect(() => getStablecoinAppUrl()).toThrowError(
+            'NEXT_PUBLIC_STABLECOIN_APP_URL is not set'
+        );
+    });
+});
+
+describe('getShowStablecoinAppUrl', () => {
+    it('should return the value of the environment variable', () => {
+        process.env.NEXT_PUBLIC_SHOW_STABLECOIN_APP_URL = 'true';
+        const showStablecoinAppUrl = getShowStablecoinAppUrl();
+        expect(showStablecoinAppUrl).toBe(true);
+        expect(typeof showStablecoinAppUrl).toBe('boolean');
+    });
+
+    it('should return false if variable is not set', () => {
+        process.env.NEXT_PUBLIC_SHOW_STABLECOIN_APP_URL = '';
+        const showStablecoinAppUrl = getShowStablecoinAppUrl();
+        expect(showStablecoinAppUrl).toBe(false);
+        expect(typeof showStablecoinAppUrl).toBe('boolean');
+    });
+});
+
+describe('getReferralMessage', () => {
+    it('should return the value of the environment variable', () => {
+        process.env.NEXT_PUBLIC_REFERRAL_MESSAGE = 'test';
+        const referralMessage = getReferralMessage();
+        expect(referralMessage).toBe('test');
+        expect(typeof referralMessage).toBe('string');
+    });
+
+    it('should return empty string if variable is not set', () => {
+        process.env.NEXT_PUBLIC_REFERRAL_MESSAGE = '';
+        const referralMessage = getReferralMessage();
+
+        expect(referralMessage).toBe('');
+    });
+});
+
+describe('getSquidWidgetIntegratorId ', () => {
+    it('should return the value of the environment variable', () => {
+        process.env.NEXT_PUBLIC_SQUID_WIDGET_INTEGRATOR_ID = 'test';
+        const useCommitHash = getSquidWidgetIntegratorId();
+        expect(useCommitHash).toBe('test');
+        expect(typeof useCommitHash).toBe('string');
+    });
+
+    it('should return empty string if variable is not set', () => {
+        process.env.NEXT_PUBLIC_SQUID_WIDGET_INTEGRATOR_ID = '';
+        const useCommitHash = getSquidWidgetIntegratorId();
+        expect(useCommitHash).toBe('');
+        expect(typeof useCommitHash).toBe('string');
+    });
+});
+
+describe('getGoogleAnalyticsTag', () => {
+    it('should return the value of the environment variable', () => {
+        process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_TAG = 'test';
+        const apiKey = getGoogleAnalyticsTag();
+        expect(apiKey).toBe('test');
+        expect(typeof apiKey).toBe('string');
+    });
+
+    it('should return empty string if variable is not set', () => {
+        process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_TAG = '';
+        const spy = jest.spyOn(console, 'warn').mockImplementation();
+
+        const apiKey = getGoogleAnalyticsTag();
+        expect(apiKey).toBe('');
+        expect(typeof apiKey).toBe('string');
+        expect(spy).toHaveBeenCalled();
     });
 });

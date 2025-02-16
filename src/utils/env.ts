@@ -82,3 +82,48 @@ export const getSubgraphUrl = (chainId: number): string | undefined => {
         return undefined;
     }
 };
+
+export const getStablecoinAppUrl = (): string => {
+    const stablecoinAppUrl = process.env.NEXT_PUBLIC_STABLECOIN_APP_URL;
+    assert(stablecoinAppUrl, 'NEXT_PUBLIC_STABLECOIN_APP_URL is not set');
+    return stablecoinAppUrl;
+};
+
+export const getShowStablecoinAppUrl = () => {
+    const NEXT_PUBLIC_SHOW_STABLECOIN_APP_URL =
+        process.env.NEXT_PUBLIC_SHOW_STABLECOIN_APP_URL;
+    if (!NEXT_PUBLIC_SHOW_STABLECOIN_APP_URL) {
+        return false;
+    }
+    return NEXT_PUBLIC_SHOW_STABLECOIN_APP_URL === 'true';
+};
+
+export const getReferralMessage = (): string => {
+    return process.env.NEXT_PUBLIC_REFERRAL_MESSAGE || '';
+};
+
+export const getSquidWidgetIntegratorId = () => {
+    const SQUID_WIDGET_INTEGRATOR_ID =
+        process.env.NEXT_PUBLIC_SQUID_WIDGET_INTEGRATOR_ID;
+
+    if (!SQUID_WIDGET_INTEGRATOR_ID) {
+        return '';
+    }
+
+    return SQUID_WIDGET_INTEGRATOR_ID;
+};
+
+export const getGoogleAnalyticsTag = () => {
+    const NEXT_PUBLIC_GOOGLE_ANALYTICS_TAG =
+        process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_TAG;
+
+    if (!NEXT_PUBLIC_GOOGLE_ANALYTICS_TAG) {
+        // eslint-disable-next-line no-console
+        console.warn(
+            'Google Analytics Tag is not set: No analytics will be sent'
+        );
+        return '';
+    }
+
+    return NEXT_PUBLIC_GOOGLE_ANALYTICS_TAG;
+};

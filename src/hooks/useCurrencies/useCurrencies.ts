@@ -3,12 +3,16 @@ import { CurrencySymbol, currencyMap, hexToCurrencySymbol } from 'src/utils';
 import { QueryKeys } from '../queries';
 import useSF from '../useSecuredFinance';
 
-export const useCurrencies = (showAll = false) => {
+export const useCurrencies = (showAll = false, chainId?: number) => {
     const securedFinance = useSF();
     return useQuery({
-        queryKey: [QueryKeys.CURRENCIES, securedFinance?.config.chain.id],
+        queryKey: [
+            QueryKeys.CURRENCIES,
+            securedFinance?.config.chain.id,
+            chainId,
+        ],
         queryFn: async () => {
-            const currencies = await securedFinance?.getCurrencies();
+            const currencies = await securedFinance?.getCurrencies(chainId);
             return currencies ?? [];
         },
         select: currencies =>
