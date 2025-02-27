@@ -114,6 +114,8 @@ export const WalletDialog = () => {
             if (!account) {
                 const supportedChainId = getSupportedChainIds();
                 const selectedChainId = Number(searchParams.get('chain_id'));
+                connect({ connector: connector });
+
                 if (provider === 'MetaMask' && hasMetaMask()) {
                     if (supportedChainId.includes(selectedChainId)) {
                         await connector.switchChain?.(selectedChainId);
@@ -123,7 +125,7 @@ export const WalletDialog = () => {
                         await connector.switchChain?.(supportedChainId[0]);
                     }
                 }
-                connect({ connector: connector });
+
                 writeWalletInStore(provider);
             }
         },
