@@ -240,6 +240,8 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
     useEffect(() => {
         const selectedChainId = Number(searchParams.get('chain_id'));
 
+        if (isNaN(selectedChainId)) return;
+
         if (selectedChainId === chainId) {
             const newSearchParams = new URLSearchParams(
                 searchParams.toString()
@@ -247,7 +249,7 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
             newSearchParams.delete('chain_id');
 
             router.push(
-                newSearchParams.keys.length === 0
+                Array.from(newSearchParams.keys()).length === 0
                     ? ''
                     : `?${newSearchParams.toString()}`
             );
@@ -256,9 +258,10 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
             const connector = connectors.find(
                 connect => connect.name === provider
             );
-            connector?.switchChain?.(selectedChainId);
 
-            if (!connector) {
+            if (connector) {
+                connector.switchChain?.(selectedChainId);
+            } else {
                 dispatch(setWalletDialogOpen(true));
             }
         }
