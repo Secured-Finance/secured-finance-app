@@ -7,7 +7,7 @@ export const Bridge = () => {
     const configQueryParam = encodeURIComponent(JSON.stringify(squidConfig));
 
     return (
-        <Page title='Bridging Service'>
+        <Page title='Bridge'>
             <div className='flex items-center justify-center'>
                 <div className='overflow-hidden rounded-xl'>
                     <iframe
