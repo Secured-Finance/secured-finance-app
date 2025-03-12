@@ -51,7 +51,7 @@ const computeTotalUsers = (users: string) => {
     return ordinaryFormat(totalUsers ?? 0, 0, 2, 'compact');
 };
 
-export const MarketDashboard = () => {
+export const Stats = () => {
     const { address, isConnected } = useAccount();
     const { data: collateralBook = emptyCollateralBook } =
         useCollateralBook(address);
@@ -111,7 +111,7 @@ export const MarketDashboard = () => {
     const currencyArray = Array.from(delistedCurrencySet);
 
     return (
-        <Page title='Market Dashboard' name='dashboard-page'>
+        <Page title='Stats' name='stats-page'>
             {currencyArray.length > 0 && (
                 <div className='px-3 laptop:px-0'>
                     <DelistedCurrencyDisclaimer

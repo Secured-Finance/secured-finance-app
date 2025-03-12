@@ -7,7 +7,7 @@ export const PRODUCTION_LINKS = [
     },
     {
         text: 'Stats',
-        link: '/dashboard',
+        link: '/stats',
         dataCy: 'terminal',
     },
     {

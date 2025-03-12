@@ -5,6 +5,6 @@ export * from './Faucet';
 export * from './GlobalItayose';
 export * from './Itayose';
 export * from './Landing';
-export * from './MarketDashboard';
 export * from './PointsDashboard';
 export * from './PortfolioManagement';
+export * from './Stats';
