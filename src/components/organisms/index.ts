@@ -16,6 +16,7 @@ export * from './LineChartTab';
 export * from './MarketInfoDialog';
 export * from './MarketLoanWidget';
 export * from './MultiCurveChart';
+export * from './MultiLineChartTab';
 export * from './MyTransactionsTable';
 export * from './MyWalletWidget';
 export * from './NewOrderBookWidget';

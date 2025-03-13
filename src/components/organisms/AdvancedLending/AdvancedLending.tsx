@@ -17,7 +17,7 @@ import {
     ActiveTradeTable,
     AdvancedLendingOrderCard,
     HistoricalWidget,
-    LineChartTab,
+    MultiLineChartTab,
     MyTransactionsTable,
     NewOrderBookWidget,
     OrderHistoryTable,
@@ -432,8 +432,8 @@ export const AdvancedLending = ({
                             : [{ text: 'Yield Curve' }]
                     }
                 >
-                    <div className='h-[410px] w-full px-2 py-4'>
-                        <LineChartTab
+                    <div className='h-[410px] w-full px-2 py-2'>
+                        <MultiLineChartTab
                             rates={rates}
                             maturityList={maturityList}
                             itayoseMarketIndexSet={itayoseMarketIndexSet}
@@ -461,8 +461,8 @@ export const AdvancedLending = ({
                                 }
                                 tabGroupClassName='laptop:w-full laptop:max-w-[400px] desktop:max-w-[450px]'
                             >
-                                <div className='h-[410px] w-full px-2 py-4'>
-                                    <LineChartTab
+                                <div className='h-[410px] w-full px-2 py-2'>
+                                    <MultiLineChartTab
                                         rates={rates}
                                         maturityList={maturityList}
                                         itayoseMarketIndexSet={

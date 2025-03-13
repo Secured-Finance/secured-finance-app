@@ -3,6 +3,7 @@ export * from './Alert';
 export * from './AmountCard';
 export * from './AssetDisclosure';
 export * from './AssetSelector';
+export * from './BarChart';
 export * from './CollateralProgressBar';
 export * from './CollateralSimulationSection';
 export * from './CollateralSnapshot';
