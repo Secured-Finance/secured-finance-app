@@ -1,6 +1,12 @@
 import { useRouter } from 'next/router';
 import { Landing } from 'src/components/pages';
-import { useIsGlobalItayose, useIsMarketTerminated } from 'src/hooks';
+import {
+    useCurrencies,
+    useIsGlobalItayose,
+    useIsMarketTerminated,
+    useLendingMarkets,
+} from 'src/hooks';
+import { CurrencySymbol } from 'src/utils';
 
 function EntryPoint() {
     const { data: isTerminated, isPending: isPendingMarketTerminated } =
@@ -9,7 +15,20 @@ function EntryPoint() {
     const { data: isGlobalItayose, isPending: isPendingGlobalItayose } =
         useIsGlobalItayose();
 
+    const { data: currencies = [] } = useCurrencies();
+    const { data: lendingMarkets } = useLendingMarkets();
+
     const router = useRouter();
+    const { market } = router.query;
+
+    const [currencyLabel, maturityLabel] = (
+        typeof market === 'string' ? market.split('-') : [currencies[0], null]
+    ) as [CurrencySymbol, string];
+    const lendingMarket = lendingMarkets?.[currencyLabel] || {};
+    const data =
+        Object.values(lendingMarket).find(
+            ({ name }) => name === maturityLabel
+        ) || Object.values(lendingMarket)[0];
 
     if (isPendingGlobalItayose || isPendingMarketTerminated) {
         return null;
@@ -24,6 +43,16 @@ function EntryPoint() {
         router.push('/global-itayose');
         return null;
     }
+
+    if (data?.isItayosePeriod || data?.isPreOrderPeriod) {
+        router.push({
+            pathname: '/itayose',
+            query: {
+                market: `${currencyLabel}-${data.name}`,
+            },
+        });
+    }
+
     return <Landing />;
 }
 
