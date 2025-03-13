@@ -8,25 +8,37 @@ export const Checkbox = ({
     label,
     size = CheckboxSizes.md,
     disabled = false,
+    isGrayScale = false,
 }: {
     isChecked: boolean;
     onChange: (v: boolean) => void;
     label?: string;
     size?: CheckboxSizes;
     disabled?: boolean;
+    isGrayScale?: boolean;
 }) => {
     return (
         <div className='inline-flex items-center'>
             <div className='relative flex cursor-pointer items-center'>
                 <input
                     className={clsx(
-                        'peer relative cursor-pointer appearance-none focus:shadow-checkbox focus:outline-none',
+                        'peer relative cursor-pointer appearance-none focus:outline-none',
+                        isGrayScale
+                            ? 'border-gray-500 h-2.5 w-2.5 rounded-[2.2] border bg-transparent p-2'
+                            : 'focus:shadow-checkbox',
                         {
                             'border-primary-500 bg-neutral-50 hover:bg-neutral-200':
-                                isChecked && !disabled,
+                                isChecked && !disabled && !isGrayScale,
                             'border-neutral-400 bg-neutral-100 hover:border-primary-500 hover:bg-neutral-200 focus:border-primary-500':
-                                !isChecked,
-                            'border-neutral-300 bg-neutral-200': disabled,
+                                !isChecked && !isGrayScale,
+                            'border-neutral-300 bg-neutral-200':
+                                disabled && !isGrayScale,
+                            'bg-neutral-700 text-primary-300':
+                                isChecked && !disabled && isGrayScale,
+                            'hover:border-blue-500 bg-neutral-700':
+                                !isChecked && !disabled && isGrayScale,
+                            'bg-gray-300 text-gray-500 cursor-not-allowed':
+                                disabled && isGrayScale,
                         },
                         sizeStyle[size]
                     )}
@@ -42,12 +54,16 @@ export const Checkbox = ({
                         {
                             'text-primary-500': isChecked && !disabled,
                             'text-neutral-300': isChecked && disabled,
+                            'text-primary-300':
+                                isChecked && !disabled && isGrayScale,
                         }
                     )}
                 >
                     <svg
                         xmlns='http://www.w3.org/2000/svg'
-                        className='h-2 w-2'
+                        className={clsx(
+                            isGrayScale ? 'h-4 w-3 text-primary-300' : 'h-2 w-2'
+                        )}
                         viewBox='0 0 20 20'
                         fill='currentColor'
                         stroke='currentColor'
@@ -64,7 +80,12 @@ export const Checkbox = ({
             {label && (
                 <label
                     htmlFor='checkbox'
-                    className='typography-desktop-body-5 cursor-pointer whitespace-nowrap pl-2 capitalize text-neutral-50'
+                    className={clsx(
+                        'cursor-pointer whitespace-nowrap capitalize',
+                        isGrayScale
+                            ? 'ml-2 font-secondary text-sm text-neutral-400'
+                            : 'typography-desktop-body-5 text-neutral-50'
+                    )}
                 >
                     {label}
                 </label>
