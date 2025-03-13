@@ -76,7 +76,10 @@ export const MarketDashboard = () => {
             RateType.Market,
             market => market.isReady && !market.isMatured
         );
-        curves[ccy] = Array.from(unitPrices.values()).map(r => r.apr);
+
+        if (unitPrices.size !== 0) {
+            curves[ccy] = Array.from(unitPrices.values()).map(r => r.apr);
+        }
     });
 
     const totalUser = useGraphClientHook(
@@ -104,8 +107,8 @@ export const MarketDashboard = () => {
     }, [priceList, dailyVolumes.data]);
 
     const defaultCurrency =
-        currencies && currencies.length > 0
-            ? currencies[0]
+        Object.keys(curves).length > 0
+            ? (Object.keys(curves)[0] as CurrencySymbol)
             : CurrencySymbol.USDC;
 
     const currencyArray = Array.from(delistedCurrencySet);
