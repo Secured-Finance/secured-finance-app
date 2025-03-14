@@ -639,7 +639,7 @@ export const PointsDashboard = () => {
     const chainId = useSelector((state: RootState) => state.blockchain.chainId);
     return (
         <>
-            <Page title='Point Dashboard' name='point-dashboard'>
+            <Page title='Points' name='point-dashboard'>
                 <div className='px-3 laptop:px-0'>
                     <Alert
                         title={
