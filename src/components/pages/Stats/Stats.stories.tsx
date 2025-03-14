@@ -7,7 +7,7 @@ import {
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import { mockDailyVolumes } from 'src/stories/mocks/queries';
-import { MarketDashboard } from './MarketDashboard';
+import { Stats } from './Stats';
 
 const totalUser = [
     {
@@ -37,8 +37,8 @@ const totalUser = [
 ];
 
 export default {
-    title: 'Pages/MarketDashboard',
-    component: MarketDashboard,
+    title: 'Pages/Stats',
+    component: Stats,
     chromatic: { pauseAnimationAtEnd: true, viewports: [1024, 1440] },
     args: {},
     parameters: {
@@ -58,10 +58,10 @@ export default {
         layout: 'fullscreen',
     },
     decorators: [withAppLayout, withWalletProvider, withBalance],
-} as Meta<typeof MarketDashboard>;
+} as Meta<typeof Stats>;
 
-const Template: StoryFn<typeof MarketDashboard> = () => {
-    return <MarketDashboard />;
+const Template: StoryFn<typeof Stats> = () => {
+    return <Stats />;
 };
 
 export const Default = Template.bind({});
