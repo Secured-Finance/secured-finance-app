@@ -298,7 +298,7 @@ export const PortfolioManagement = () => {
     const isUnderCollateralThreshold = useIsUnderCollateralThreshold(address);
 
     return (
-        <Page title='Portfolio Management' name='portfolio-management'>
+        <Page title='Portfolio' name='portfolio-management'>
             {userDelistedCurrenciesArray.length > 0 && (
                 <div className='px-3 laptop:px-0'>
                     <Alert

@@ -42,6 +42,7 @@ import { InjectedConnector } from 'wagmi/connectors/injected';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { publicProvider } from 'wagmi/providers/public';
 import '../assets/css/index.css';
 
@@ -96,12 +97,36 @@ const networks = getSupportedNetworks().filter(chain =>
     chainIds.includes(chain.id)
 );
 
-const { chains, publicClient } = configureChains(networks, [
-    alchemyProvider({
-        apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ?? '',
-    }),
-    publicProvider(),
-]);
+const ankrNetworkKeys: Record<string, string> = {
+    '314159': 'filecoin_testnet',
+    '314': 'filecoin',
+};
+
+const { chains, publicClient } = configureChains(
+    networks,
+    [
+        alchemyProvider({
+            apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ?? '',
+        }),
+        jsonRpcProvider({
+            rpc: chain => {
+                const chainId = chain.id.toString();
+                if (
+                    process.env.NEXT_PUBLIC_ANKR_API_KEY &&
+                    Object.keys(ankrNetworkKeys).includes(chainId)
+                ) {
+                    return {
+                        http: `https://rpc.ankr.com/${ankrNetworkKeys[chainId]}/${process.env.NEXT_PUBLIC_ANKR_API_KEY}`,
+                    };
+                } else {
+                    return null;
+                }
+            },
+        }),
+        publicProvider(),
+    ],
+    { pollingInterval: 12_000 }
+);
 
 const config = createConfig({
     autoConnect: false,
@@ -163,7 +188,7 @@ function App({ Component, pageProps }: AppProps) {
     return (
         <>
             <Head>
-                <title>Secured Finance</title>
+                <title>DeFi Lending Platform | Secured Finance</title>
                 <meta
                     name='viewport'
                     content='width=device-width, initial-scale=1.0'
