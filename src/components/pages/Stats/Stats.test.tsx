@@ -2,7 +2,7 @@ import { composeStories } from '@storybook/react';
 import { preloadedBalance } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { render, screen, waitFor } from 'src/test-utils.js';
-import * as stories from './MarketDashboard.stories';
+import * as stories from './Stats.stories';
 
 const { Default, ConnectedToWallet } = composeStories(stories);
 

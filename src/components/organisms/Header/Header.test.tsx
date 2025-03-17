@@ -40,8 +40,8 @@ describe('Header component', () => {
         );
     });
 
-    it('should highlight the dashboard page when on dashboard page', () => {
-        mockRouter.push('/dashboard');
+    it('should highlight the stats page when on stats page', () => {
+        mockRouter.push('/stats');
 
         render(<Primary />);
         fireEvent.click(screen.getByText('Stats'));
