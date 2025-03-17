@@ -102,27 +102,31 @@ const ankrNetworkKeys: Record<string, string> = {
     '314': 'filecoin',
 };
 
-const { chains, publicClient } = configureChains(networks, [
-    alchemyProvider({
-        apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ?? '',
-    }),
-    jsonRpcProvider({
-        rpc: chain => {
-            const chainId = chain.id.toString();
-            if (
-                process.env.NEXT_PUBLIC_ANKR_API_KEY &&
-                Object.keys(ankrNetworkKeys).includes(chainId)
-            ) {
-                return {
-                    http: `https://rpc.ankr.com/${ankrNetworkKeys[chainId]}/${process.env.NEXT_PUBLIC_ANKR_API_KEY}`,
-                };
-            } else {
-                return null;
-            }
-        },
-    }),
-    publicProvider(),
-]);
+const { chains, publicClient } = configureChains(
+    networks,
+    [
+        alchemyProvider({
+            apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ?? '',
+        }),
+        jsonRpcProvider({
+            rpc: chain => {
+                const chainId = chain.id.toString();
+                if (
+                    process.env.NEXT_PUBLIC_ANKR_API_KEY &&
+                    Object.keys(ankrNetworkKeys).includes(chainId)
+                ) {
+                    return {
+                        http: `https://rpc.ankr.com/${ankrNetworkKeys[chainId]}/${process.env.NEXT_PUBLIC_ANKR_API_KEY}`,
+                    };
+                } else {
+                    return null;
+                }
+            },
+        }),
+        publicProvider(),
+    ],
+    { pollingInterval: 12_000 }
+);
 
 const config = createConfig({
     autoConnect: false,
