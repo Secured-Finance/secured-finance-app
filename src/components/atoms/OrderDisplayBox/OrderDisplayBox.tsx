@@ -20,7 +20,7 @@ export const OrderDisplayBox = ({
                 className
             )}
         >
-            <div className='flex flex-row items-center gap-2'>
+            <div className='flex flex-row items-center gap-1'>
                 <span className='text-neutral-400'>{field}</span>
                 {informationText && (
                     <InfoToolTip iconSize='small' placement='bottom-start'>
@@ -28,7 +28,7 @@ export const OrderDisplayBox = ({
                     </InfoToolTip>
                 )}
             </div>
-            <div className='text-right text-planetaryPurple'>{value}</div>
+            <div className='text-right text-primary-300'>{value}</div>
         </div>
     );
 };

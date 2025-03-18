@@ -10,7 +10,6 @@ import {
     OrderInputBox,
     Slider,
     TabVariant,
-    WalletSourceSelector,
 } from 'src/components/atoms';
 import { SubtabGroup, TabGroup } from 'src/components/molecules';
 import { NewOrderBookWidget, OrderAction } from 'src/components/organisms';
@@ -21,7 +20,7 @@ import {
     useBreakpoint,
     useLastPrices,
     useMarket,
-    usePositions,
+    useOrderFee,
 } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import {
@@ -30,7 +29,6 @@ import {
     setAmount,
     setOrderType,
     setSide,
-    setSourceAccount,
     setUnitPrice,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
@@ -42,6 +40,7 @@ import {
     ZERO_BI,
     amountFormatterFromBase,
     amountFormatterToBase,
+    calculateFee,
     currencyMap,
     divide,
     formatLoanValue,
@@ -49,7 +48,6 @@ import {
     getAmountValidation,
     multiply,
     ordinaryFormat,
-    prefixTilde,
     usdFormat,
 } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
@@ -101,31 +99,9 @@ export function AdvancedLendingOrderCard({
         maturity
     );
 
+    const { data: orderFee = 0 } = useOrderFee(currency);
+
     const { address, isConnected } = useAccount();
-
-    const { data: fullPositions } = usePositions(address, [currency]);
-
-    const currentPosition = useMemo(() => {
-        if (!fullPositions?.positions) return null;
-        const position = fullPositions.positions.filter(
-            pos => +pos.maturity === maturity
-        );
-
-        if (!position?.length) return null;
-
-        const orderSide =
-            position[0].futureValue > 0 ? OrderSide.LEND : OrderSide.BORROW;
-
-        if (orderSide !== side) return null;
-
-        // console.log('position', position);
-
-        return ordinaryFormat(
-            amountFormatterFromBase[currency](position[0].amount),
-            currencyMap[currency].roundingDecimal,
-            currencyMap[currency].roundingDecimal
-        );
-    }, [fullPositions, maturity, side, currency]);
 
     const [sliderValue, setSliderValue] = useState(0.0);
 
@@ -193,16 +169,6 @@ export function AdvancedLendingOrderCard({
         maturity,
         openingUnitPrice,
     ]);
-
-    const slippage = useMemo(() => {
-        if (!market) {
-            return 0;
-        }
-
-        return side === OrderSide.BORROW
-            ? market.minBorrowUnitPrice
-            : market.maxLendUnitPrice;
-    }, [market, side]);
 
     const orderAmount = amount > 0 ? new Amount(amount, currency) : undefined;
 
@@ -280,29 +246,6 @@ export function AdvancedLendingOrderCard({
         }
     }, [dispatch, isItayose]);
 
-    const handleWalletSourceChange = (source: WalletSource) => {
-        dispatch(setSourceAccount(source));
-        const available =
-            source === WalletSource.METAMASK
-                ? balanceRecord[currency]
-                : collateralBook.nonCollateral[currency] ||
-                  collateralBook.withdrawableCollateral[currency] ||
-                  ZERO_BI;
-
-        const inputAmount = amount > available ? available : amount;
-
-        dispatch(setAmount(inputAmount.toString()));
-
-        if (available) {
-            const percentage = (inputAmount * BigInt(100)) / available;
-            setSliderValue(
-                Number(percentage > BigInt(100) ? BigInt(100) : percentage)
-            );
-        } else {
-            setSliderValue(0);
-        }
-    };
-
     const isInvalidBondPrice = unitPrice === 0 && orderType === OrderType.LIMIT;
     const isLendingSide = side === OrderSide.LEND;
 
@@ -370,7 +313,7 @@ export function AdvancedLendingOrderCard({
     );
 
     return (
-        <div className='h-full rounded-b-xl border-white-10 bg-neutral-900 pb-7 laptop:border'>
+        <div className='h-full rounded-b-xl border-neutral-600 bg-neutral-900 pb-7 laptop:border'>
             <div className='border-b border-neutral-600'>
                 <div className='h-11 laptop:h-[60px]'>
                     <TabGroup
@@ -379,12 +322,11 @@ export function AdvancedLendingOrderCard({
                         handleClick={option => {
                             dispatch(
                                 setSide(
-                                    option === 'Sell / Borrow'
+                                    option === 'Borrow/Sell'
                                         ? OrderSide.BORROW
                                         : OrderSide.LEND
                                 )
                             );
-                            dispatch(setSourceAccount(WalletSource.METAMASK));
                             trackButtonEvent(
                                 ButtonEvents.ORDER_SIDE,
                                 ButtonProperties.ORDER_SIDE,
@@ -413,44 +355,25 @@ export function AdvancedLendingOrderCard({
                             }}
                         />
                     )}
-                    <div className='flex flex-col gap-1'>
-                        {isLendingSide && (
-                            <div className='laptop:typography-desktop-body-4 flex justify-between px-2 text-xs leading-4 text-neutral-400 laptop:order-1'>
-                                <span>
-                                    {isTablet
-                                        ? 'Available to Trade'
-                                        : 'Lending Source'}
-                                </span>
-                                <span>Available</span>
+                    <div className='flex flex-col gap-3 laptop:gap-2'>
+                        <div className='typography-desktop-body-4 mx-2 flex flex-row justify-between laptop:mx-10px'>
+                            <div className='text-slateGray'>{`Available to ${
+                                side === OrderSide.BORROW ? 'Borrow' : 'Lend'
+                            }`}</div>
+                            <div className='text-right text-primary-300'>
+                                {`${ordinaryFormat(
+                                    amountFormatterFromBase[currency](
+                                        side === OrderSide.BORROW
+                                            ? availableToBorrow
+                                            : balanceToLend
+                                    ),
+                                    0,
+                                    2
+                                )} ${currency}`}
                             </div>
-                        )}
-                        <OrderDisplayBox
-                            field='Current Position'
-                            value={`${currentPosition ?? '0'} ${currency}`}
-                            className='laptop:order-3'
-                        />
-                        {isLendingSide && (
-                            <div className='mt-1.5 space-y-1 laptop:order-2 laptop:mt-0'>
-                                <WalletSourceSelector
-                                    optionList={walletSourceList}
-                                    selected={selectedWalletSource}
-                                    account={address ?? ''}
-                                    onChange={handleWalletSourceChange}
-                                />
-                                <ErrorInfo
-                                    showError={getAmountValidation(
-                                        amount,
-                                        balanceToLend,
-                                        side
-                                    )}
-                                    errorMessage='Insufficient amount in source'
-                                />
-                            </div>
-                        )}
-                    </div>
-                    <div className='flex flex-col gap-3 laptop:gap-2.5'>
+                        </div>
                         <OrderInputBox
-                            field='Bond Price'
+                            field='Price'
                             disabled={isBondPriceFieldDisabled}
                             initialValue={
                                 isMarketOrderType ? 'Market' : unitPriceValue
@@ -495,46 +418,19 @@ export function AdvancedLendingOrderCard({
                                 !isConnected ? 'bg-neutral-700' : undefined
                             }
                         />
-                        {isMarketOrderType && (
-                            <div className='mx-2 laptop:mx-10px'>
-                                <OrderDisplayBox
-                                    field='Max Slippage'
-                                    value={divide(slippage, 100)}
-                                    informationText='A bond price limit, triggering a circuit breaker if exceeded within a single block due to price fluctuations.'
-                                />
-                            </div>
-                        )}
-                        <div className='mx-10px'>
-                            <Slider
-                                onChange={handleSliderChange}
-                                value={sliderValue}
-                                disabled={!isConnected}
-                            />
-                        </div>
+                        <Slider
+                            onChange={handleSliderChange}
+                            value={sliderValue}
+                            disabled={!isConnected}
+                        />
                     </div>
-                    {side === OrderSide.BORROW && (
-                        <div className='laptop:typography-caption mx-2 flex flex-row justify-between text-[11px] laptop:mx-10px'>
-                            <div className='text-slateGray'>{`Available To Borrow (${currency.toString()})`}</div>
-                            <div className='text-right text-planetaryPurple'>
-                                {prefixTilde(
-                                    ordinaryFormat(
-                                        amountFormatterFromBase[currency](
-                                            availableToBorrow
-                                        ),
-                                        0,
-                                        6
-                                    )
-                                )}
-                            </div>
-                        </div>
-                    )}
                     <div className='mb-2.5 flex flex-col gap-1 laptop:mb-0'>
                         <OrderDisplayBox
-                            field='Fixed Rate (APR)'
+                            field='Est. APR'
                             value={formatLoanValue(loanValue, 'rate')}
                         />
                         <OrderDisplayBox
-                            field='Present Value (PV)'
+                            field='Present Value'
                             value={`${ordinaryFormat(
                                 orderAmount?.value ?? 0,
                                 0,
@@ -545,7 +441,7 @@ export function AdvancedLendingOrderCard({
                             )})`}
                         />
                         <OrderDisplayBox
-                            field='Future Value (FV)'
+                            field='Future Value'
                             value={
                                 unitPriceValue &&
                                 unitPriceValue !== '' &&
@@ -578,6 +474,18 @@ export function AdvancedLendingOrderCard({
                         align='left'
                         showError={showPreOrderError}
                     />
+                    <div className='flex flex-col gap-1 py-1'>
+                        <OrderDisplayBox
+                            field='Required Collateral'
+                            value={formatLoanValue(loanValue, 'rate')}
+                        />
+                        <OrderDisplayBox
+                            field='Fees'
+                            value={calculateFee(maturity, orderFee)}
+                            informationText='A duration-based transaction fee only for market takers,
+                                    factored into the bond price, and deducted from its future value'
+                        />
+                    </div>
                 </div>
                 <div className='col-span-5 laptop:hidden'>
                     {isTablet && (
