@@ -24,7 +24,7 @@ const initialStore: LandingOrderFormStore = {
     unitPrice: undefined,
     orderType: OrderType.MARKET,
     lastView: 'Advanced',
-    sourceAccount: WalletSource.METAMASK,
+    sourceAccount: WalletSource.SF_VAULT,
     isBorrowedCollateral: false,
 };
 
