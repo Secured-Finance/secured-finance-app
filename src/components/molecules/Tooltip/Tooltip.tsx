@@ -7,7 +7,7 @@ import { Alignment } from 'src/types';
 import { modeStyles } from './constants';
 import { TooltipMode } from './types';
 
-type TooltipProps = Pick<TippyProps, 'placement'> &
+type TooltipProps = Partial<Pick<TippyProps, 'placement'>> &
     React.PropsWithChildren<{
         iconElement: React.ReactNode;
         align?: Alignment;

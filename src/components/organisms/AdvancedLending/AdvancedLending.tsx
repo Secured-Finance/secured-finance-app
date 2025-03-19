@@ -19,7 +19,7 @@ import {
     HistoricalWidget,
     LineChartTab,
     MyTransactionsTable,
-    NewOrderBookWidget,
+    OrderBookWidget,
     OrderHistoryTable,
     OrderTable,
     RecentTradesTable,
@@ -489,7 +489,7 @@ export const AdvancedLending = ({
                             ]}
                         >
                             {!isTablet && (
-                                <NewOrderBookWidget
+                                <OrderBookWidget
                                     orderbook={orderBook}
                                     currency={currency}
                                     marketPrice={currentMarket?.value}
