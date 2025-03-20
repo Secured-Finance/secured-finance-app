@@ -27,6 +27,7 @@ export * from './InputBase';
 export * from './MarketTab';
 export * from './MenuItem';
 export * from './OrderBookIcon';
+export * from './OrderBookInfo';
 export * from './OrderDisplayBox';
 export * from './OrderInputBox';
 export * from './PercentageTab';
