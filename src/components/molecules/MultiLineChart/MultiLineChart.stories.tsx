@@ -31,7 +31,7 @@ export default {
                     },
                 },
                 {
-                    label: 'Borrow',
+                    label: 'Lend',
                     data: [3, 0, 0, 0, 10, 0, 10, 0],
                     segment: {
                         borderColor: '#09a8b7',

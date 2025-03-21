@@ -154,16 +154,16 @@ export function createTooltipElement(
         document.body.appendChild(tooltipEl);
     }
 
-    tooltipEl.classList.remove('p-1.5', 'p-3', 'text-xs', 'text-base');
+    tooltipEl.classList.remove('p-2', 'p-3', 'text-xs', 'text-sm');
     tooltipEl.classList.add(
         'border',
         'border-neutral-400',
         'bg-neutral-900',
         'bg-opacity-60',
-        `${isMaximised ? 'p-3' : 'p-1.5'}`,
-        'rounded-md',
+        `${isMaximised ? 'p-3' : 'p-2'}`,
+        'rounded-[10px]',
         'text-neutral-300',
-        `${isMaximised ? 'text-base' : 'text-xs'}`,
+        `${isMaximised ? 'text-sm' : 'text-xs'}`,
         'absolute',
         'laptop:ml-[-40px]',
         'ml-0',
@@ -180,8 +180,8 @@ export const generateTooltipContent = (
     tooltip: TooltipModel<'line'>,
     selectedTimeScales: { label: string; value: string }[]
 ) => {
-    let lineContent = '';
-    let barContent = '';
+    const lineContentEl = document.createElement('div');
+    const barContentEl = document.createElement('div');
 
     tooltip.dataPoints.forEach((dataPoint: TooltipItem<'line'>, i: number) => {
         const scale = selectedTimeScales[dataPoint.datasetIndex];
@@ -190,36 +190,50 @@ export const generateTooltipContent = (
             dataPoint.formattedValue.replace(/,/g, '')
         );
 
-        lineContent += `
-        <div class="flex justify-between gap-8">
-          <span class="text-neutral-300 text-[11] font-numerical">${
-              scale.label === 'Current Yield'
-                  ? 'Current APR'
-                  : `${timeScaleMapping[scale.label]} Ago`
-          }:</span>
-          <span class="text-neutral-50 font-numerical text-[11]">${formattedValue.toFixed(
-              2
-          )}%</span>
-        </div>`;
+        const lineRow = document.createElement('div');
+        lineRow.classList.add('flex', 'justify-between', 'gap-8');
+
+        const lineLabel = document.createElement('span');
+        lineLabel.classList.add('text-neutral-300', 'font-numerical');
+        lineLabel.textContent =
+            scale.label === 'Current Yield'
+                ? 'Current APR:'
+                : `${timeScaleMapping[scale.label]} Ago:`;
+
+        const lineValue = document.createElement('span');
+        lineValue.classList.add('text-neutral-50', 'font-numerical');
+        lineValue.textContent = `${formattedValue.toFixed(2)}%`;
+
+        lineRow.appendChild(lineLabel);
+        lineRow.appendChild(lineValue);
+        lineContentEl.appendChild(lineRow);
 
         if (i !== 0) {
             const value =
                 Number(tooltip.dataPoints[0].formattedValue.replace(/,/g, '')) -
                 formattedValue;
 
-            barContent += `
-          <div class="flex justify-between gap-4">
-            <span class="text-neutral-300 text-[11] font-numerical">vs ${
-                scale.label === 'Current Yield'
-                    ? 'Current APR'
-                    : `${timeScaleMapping[scale.label]}`
-            }:</span>
-            <span class="font-numerical text-[11] ${
+            const barRow = document.createElement('div');
+            barRow.classList.add('flex', 'justify-between', 'gap-4');
+
+            const barLabel = document.createElement('span');
+            barLabel.classList.add('text-neutral-300', 'font-numerical');
+            barLabel.textContent = `vs ${timeScaleMapping[scale.label]}:`;
+
+            const barValue = document.createElement('span');
+            barValue.classList.add('font-numerical');
+            barValue.classList.add(
                 value < 0 ? 'text-[#FF9FAE]' : 'text-[#AAE8B0]'
-            }">${value >= 0 ? '+' : ''}${value.toFixed(2)}%</span>
-          </div>`;
+            );
+            barValue.textContent = `${value >= 0 ? '+' : '-'}${value.toFixed(
+                2
+            )}%`;
+
+            barRow.appendChild(barLabel);
+            barRow.appendChild(barValue);
+            barContentEl.appendChild(barRow);
         }
     });
 
-    return { lineContent, barContent };
+    return { lineContent: lineContentEl, barContent: barContentEl };
 };

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Checkbox, CheckboxSizes, ExpandIndicator } from 'src/components/atoms';
+import { ExpandIndicator, TimeScaleCheckBox } from 'src/components/atoms';
+import { TimeScaleCheckBoxSizes } from 'src/components/atoms/TimeScaleCheckbox/constant';
 import { formatTimeLabel, getColor, yieldTimeScales } from './constants';
 export default function TimeScaleSelector({
     length,
@@ -54,7 +55,7 @@ export default function TimeScaleSelector({
                                     key={index}
                                     className='bg-gray-100 flex items-center gap-2 p-2'
                                 >
-                                    <Checkbox
+                                    <TimeScaleCheckBox
                                         label={timePeriod.label}
                                         isChecked={selected.some(
                                             item =>
@@ -63,7 +64,6 @@ export default function TimeScaleSelector({
                                         onChange={() =>
                                             handleCheckboxChange(timePeriod)
                                         }
-                                        isGrayScale={true}
                                     />
                                 </div>
                             ))}
@@ -89,8 +89,8 @@ export default function TimeScaleSelector({
                                 className='text-sm'
                                 style={{ color: '#94a3b8' }}
                             >
-                                <Checkbox
-                                    size={CheckboxSizes.sm}
+                                <TimeScaleCheckBox
+                                    size={TimeScaleCheckBoxSizes.sm}
                                     label={timePeriod.label}
                                     isChecked={selected.some(
                                         item => item.value === timePeriod.value
@@ -98,14 +98,13 @@ export default function TimeScaleSelector({
                                     onChange={() =>
                                         handleCheckboxChange(timePeriod)
                                     }
-                                    isGrayScale={true}
                                 />
                             </div>
                         ))}
                 </div>
             </div>
 
-            <div className='flex flex-col gap-2'>
+            <div className='flex flex-col gap-1.5'>
                 {selected.length > 0 && (
                     <ul className='flex gap-4'>
                         {selected.map((scale, index) => (

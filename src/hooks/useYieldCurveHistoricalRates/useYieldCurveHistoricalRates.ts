@@ -22,56 +22,46 @@ export const useYieldCurveMarketRatesHistorical = () => {
         [HistoricalYieldIntervals['1W']]: [],
         [HistoricalYieldIntervals['1MTH']]: [],
     };
-    const itayoseMarketIndexSet = new Set<number>();
-    let currentIndex = 0;
+
     let maximumRate = 0;
     let isFirstMarketCloseToMaturity = true;
 
     const sortedLendingContracts = Object.values(lendingContracts)
-        .filter(
-            obj => obj.isOpened || obj.isItayosePeriod || obj.isPreOrderPeriod
-        )
+        .filter(obj => obj.isOpened || obj.isPreOrderPeriod)
         .sort((a, b) => a.maturity - b.maturity);
 
-    Object.keys(historicalRates).forEach(interval => {
-        const rates: Rate[] = [];
-        if (isMaturityPastDays(sortedLendingContracts[0]?.maturity, 7, true)) {
-            isFirstMarketCloseToMaturity = false;
-            maximumRate = Number.MAX_VALUE;
-        }
+    if (sortedLendingContracts.length > 0) {
+        Object.keys(historicalRates).forEach(interval => {
+            const rates: Rate[] = [];
+            if (
+                isMaturityPastDays(sortedLendingContracts[0]?.maturity, 7, true)
+            ) {
+                isFirstMarketCloseToMaturity = false;
+                maximumRate = Number.MAX_VALUE;
+            }
 
-        sortedLendingContracts.forEach(obj => {
-            let rate: Rate;
-            if (obj.isItayosePeriod || obj.isPreOrderPeriod) {
-                rate = LoanValue.fromPrice(
-                    obj.openingUnitPrice,
-                    obj.maturity,
-                    obj.utcOpeningDate
-                ).apr;
-                itayoseMarketIndexSet.add(currentIndex);
-            } else {
-                rate = LoanValue.fromPrice(
+            sortedLendingContracts.forEach(obj => {
+                const rate = LoanValue.fromPrice(
                     obj.marketUnitPrice,
                     obj.maturity,
-                    Date.now() / Number(interval) - 86400
+                    Date.now() / 1000 - Number(interval)
                 ).apr;
-            }
-            rates.push(rate);
 
-            if (isFirstMarketCloseToMaturity) {
-                if (isMaturityPastDays(obj.maturity, 7, true)) {
-                    maximumRate = Math.max(maximumRate, rate.toNumber());
+                rates.push(rate);
+
+                if (isFirstMarketCloseToMaturity) {
+                    if (isMaturityPastDays(obj.maturity, 7, true)) {
+                        maximumRate = Math.max(maximumRate, rate.toNumber());
+                    }
                 }
+            });
+
+            if (rates[0]?.toNumber() > maximumRate && maximumRate > 0) {
+                rates[0] = new Rate(maximumRate * 1.25);
             }
-
-            currentIndex += 1;
+            historicalRates[interval as HistoricalYieldIntervals] = rates;
         });
-
-        if (rates[0]?.toNumber() > maximumRate && maximumRate > 0) {
-            rates[0] = new Rate(maximumRate * 1.25);
-        }
-        historicalRates[interval as HistoricalYieldIntervals] = rates;
-    });
+    }
 
     /*
     In case, the first market is going to mature within a week, we don't want to show the original price on the chart

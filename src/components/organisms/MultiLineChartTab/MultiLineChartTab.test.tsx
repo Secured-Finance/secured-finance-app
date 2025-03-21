@@ -61,4 +61,7 @@ describe('MultiLineChartTab Component', () => {
 
         jest.restoreAllMocks();
     });
+    afterAll(() => {
+        global.URL.createObjectURL = jest.fn();
+    });
 });
