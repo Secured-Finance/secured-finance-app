@@ -1,18 +1,17 @@
 import clsx from 'clsx';
-import { sizeStyle } from './constants';
-import { CheckboxSizes } from './types';
+import { TimeScaleCheckBoxSizes, TimeScaleCheckBoxSizeStyle } from './constant';
 
-export const Checkbox = ({
+export const TimeScaleCheckBox = ({
     isChecked = false,
     onChange,
     label,
-    size = CheckboxSizes.md,
+    size = TimeScaleCheckBoxSizes.md,
     disabled = false,
 }: {
     isChecked: boolean;
     onChange: (v: boolean) => void;
     label?: string;
-    size?: CheckboxSizes;
+    size?: TimeScaleCheckBoxSizes;
     disabled?: boolean;
 }) => {
     return (
@@ -20,15 +19,16 @@ export const Checkbox = ({
             <div className='relative flex cursor-pointer items-center'>
                 <input
                     className={clsx(
-                        'peer relative cursor-pointer appearance-none focus:shadow-checkbox focus:outline-none',
+                        'border-gray-500 peer relative h-2.5 w-2.5 cursor-pointer appearance-none rounded-[2.2] border bg-transparent p-2 focus:outline-none',
                         {
-                            'border-primary-500 bg-neutral-50 hover:bg-neutral-200':
+                            'bg-neutral-700 text-primary-300':
                                 isChecked && !disabled,
-                            'border-neutral-400 bg-neutral-100 hover:border-primary-500 hover:bg-neutral-200 focus:border-primary-500':
-                                !isChecked,
-                            'border-neutral-300 bg-neutral-200': disabled,
+                            'hover:border-blue-500 bg-neutral-700':
+                                !isChecked && !disabled,
+                            'bg-gray-300 text-gray-500 cursor-not-allowed':
+                                disabled,
                         },
-                        sizeStyle[size]
+                        TimeScaleCheckBoxSizeStyle[size]
                     )}
                     id='checkbox'
                     type='checkbox'
@@ -38,16 +38,12 @@ export const Checkbox = ({
                 />
                 <span
                     className={clsx(
-                        'pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 peer-checked:opacity-100',
-                        {
-                            'text-primary-500': isChecked && !disabled,
-                            'text-neutral-300': isChecked && disabled,
-                        }
+                        'pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-primary-300 opacity-0 peer-checked:opacity-100'
                     )}
                 >
                     <svg
                         xmlns='http://www.w3.org/2000/svg'
-                        className='h-2 w-2'
+                        className={'h-4 w-3 text-primary-300'}
                         viewBox='0 0 20 20'
                         fill='currentColor'
                         stroke='currentColor'
@@ -64,7 +60,9 @@ export const Checkbox = ({
             {label && (
                 <label
                     htmlFor='checkbox'
-                    className='typography-desktop-body-5 cursor-pointer whitespace-nowrap pl-2 capitalize text-neutral-50'
+                    className={clsx(
+                        'ml-2 cursor-pointer whitespace-nowrap font-secondary text-sm/5 capitalize text-neutral-400'
+                    )}
                 >
                     {label}
                 </label>

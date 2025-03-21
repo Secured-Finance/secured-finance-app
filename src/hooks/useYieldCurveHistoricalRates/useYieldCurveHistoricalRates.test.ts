@@ -1,6 +1,7 @@
 import { renderHook } from '@testing-library/react';
 import { HistoricalYieldIntervals } from 'src/types';
 import { Rate } from 'src/utils';
+import { useLendingMarkets } from '../useLendingMarkets';
 import { useYieldCurveMarketRatesHistorical } from './index';
 
 jest.mock('src/utils/entities', () => ({
@@ -20,40 +21,18 @@ jest.mock('react-redux', () => ({
 }));
 
 jest.mock('../useLendingMarkets', () => ({
-    useLendingMarkets: jest.fn().mockImplementation(() => ({
-        data: {
-            ETH: [
-                {
-                    name: 'Market 1',
-                    maturity: Date.now() + 86400 * 10,
-                    isOpened: true,
-                    isItayosePeriod: false,
-                    isPreOrderPeriod: false,
-                    marketUnitPrice: 1000,
-                    openingUnitPrice: 1200,
-                    utcOpeningDate: Date.now() - 86400,
-                },
-                {
-                    name: 'Market 2',
-                    maturity: Date.now() + 86400 * 5,
-                    isOpened: true,
-                    isItayosePeriod: true,
-                    isPreOrderPeriod: false,
-                    marketUnitPrice: 900,
-                    openingUnitPrice: 1100,
-                    utcOpeningDate: Date.now() - 86400,
-                },
-            ],
-        },
-    })),
+    useLendingMarkets: jest.fn(),
 }));
 
 describe('useYieldCurveMarketRatesHistorical', () => {
+    beforeEach(() => {
+        jest.resetModules();
+        jest.clearAllMocks();
+    });
+
     it('should return empty rates when no lending markets are available', () => {
-        jest.mock('../useLendingMarkets', () => ({
-            useLendingMarkets: jest.fn().mockImplementation(() => ({
-                data: { ETH: [] },
-            })),
+        (useLendingMarkets as jest.Mock).mockImplementation(() => ({
+            data: { ETH: [] },
         }));
 
         const { result } = renderHook(() =>
@@ -88,11 +67,9 @@ describe('useYieldCurveMarketRatesHistorical', () => {
             },
         };
 
-        jest.mock('../useLendingMarkets', () => ({
-            useLendingMarkets: jest
-                .fn()
-                .mockImplementation(() => mockLendingMarkets),
-        }));
+        (useLendingMarkets as jest.Mock).mockImplementation(
+            () => mockLendingMarkets
+        );
 
         const { result } = renderHook(() =>
             useYieldCurveMarketRatesHistorical()

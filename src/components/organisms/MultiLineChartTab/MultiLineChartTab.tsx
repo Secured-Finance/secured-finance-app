@@ -1,12 +1,14 @@
+import {
+    ArrowDownTrayIcon,
+    ArrowsPointingInIcon,
+    ArrowsPointingOutIcon,
+} from '@heroicons/react/24/outline';
 import { ChartOptions } from 'chart.js';
 import clsx from 'clsx';
 import domtoimage from 'dom-to-image';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Download from 'src/assets/icons/download.svg';
-import Expand from 'src/assets/icons/expand.svg';
-import Shrink from 'src/assets/icons/shrink.svg';
 import BarChart from 'src/components/molecules/BarChart/BarChart';
 import {
     createTooltipElement,
@@ -130,14 +132,16 @@ export const MultiLineChartTab = ({
                         isMaximized
                     );
 
+                    lineTooltipEl.innerHTML = '';
+                    barTooltipEl.innerHTML = '';
                     const { lineContent, barContent } = generateTooltipContent(
                         tooltip,
                         selectedTimeScales
                     );
                     lineTooltipEl.style.zIndex = `${isMaximized ? '51' : '24'}`;
                     barTooltipEl.style.zIndex = `${isMaximized ? '51' : '24'}`;
-                    lineTooltipEl.innerHTML = lineContent;
-                    barTooltipEl.innerHTML = barContent;
+                    lineTooltipEl.appendChild(lineContent);
+                    barTooltipEl.appendChild(barContent);
 
                     const canvasRect = chart.canvas.getBoundingClientRect();
                     const lastPoint = tooltip.dataPoints.at(-1)?.element;
@@ -273,10 +277,10 @@ export const MultiLineChartTab = ({
         selectedTimeScales.length > 1
             ? isMaximized
                 ? 'h-[50%]'
-                : 'h-[200px]'
+                : 'h-[12rem]'
             : isMaximized
             ? 'h-[70%]'
-            : 'h-[310px]';
+            : 'h-[20rem]';
     return (
         <div className={containerClasses} ref={componentRef}>
             <div className='flex justify-between px-2 py-1'>
@@ -291,14 +295,18 @@ export const MultiLineChartTab = ({
                         data-testid='toggleMaximize'
                         className='flex h-8 w-8 items-center justify-center rounded-lg bg-neutral-700'
                     >
-                        {isMaximized ? <Shrink /> : <Expand />}
+                        {isMaximized ? (
+                            <ArrowsPointingInIcon className='h-5 w-5 text-[#B9BDEA]' />
+                        ) : (
+                            <ArrowsPointingOutIcon className='h-5 w-5 text-[#B9BDEA]' />
+                        )}
                     </button>
                     <button
                         onClick={() => handleDownload(componentRef)}
                         data-testid='handleDownloadBtn'
                         className='flex h-8 w-8 items-center justify-center rounded-lg bg-neutral-700'
                     >
-                        <Download />
+                        <ArrowDownTrayIcon className='h-5 w-5 text-[#B9BDEA]' />
                     </button>
                 </div>
             </div>

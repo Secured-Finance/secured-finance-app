@@ -68,8 +68,8 @@ ShowAllActivePositions.parameters = {
     connected: true,
 };
 ShowAllActivePositions.play = async () => {
-    const checkbox = await screen.findByRole('checkbox');
-    await userEvent.click(checkbox);
+    const checkbox = await screen.findAllByRole('checkbox');
+    await userEvent.click(checkbox[0]);
 };
 ShowAllActivePositions.args = {
     collateralBook: collateralBook37,
