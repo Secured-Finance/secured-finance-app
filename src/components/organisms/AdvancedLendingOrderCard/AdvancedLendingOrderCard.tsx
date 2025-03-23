@@ -108,6 +108,19 @@ export function AdvancedLendingOrderCard({
     const balanceRecord = useBalances();
     const isTablet = useBreakpoint('laptop');
 
+    const midPrice = useMemo(() => {
+        if (
+            orderBook.data &&
+            orderBook.data.borrowOrderbook &&
+            orderBook.data.lendOrderbook
+        ) {
+            const borrowPrice = orderBook.data.borrowOrderbook[0].value.price;
+            const lendPrice = orderBook.data.lendOrderbook[0].value.price;
+            return divide(borrowPrice + lendPrice, 200.0, 2);
+        }
+        return undefined;
+    }, [orderBook.data]);
+
     const loanValue = useMemo(() => {
         if (!maturity) return LoanValue.ZERO;
         if (unitPrice !== undefined && unitPriceExists) {
@@ -263,25 +276,6 @@ export function AdvancedLendingOrderCard({
 
     const isBondPriceFieldDisabled = isMarketOrderType || !isConnected;
 
-    const rowsToRenderMobile = useMemo(() => {
-        switch (side) {
-            case OrderSide.LEND:
-                switch (isMarketOrderType) {
-                    case true:
-                        return 18;
-                    case false:
-                        return 18;
-                }
-            case OrderSide.BORROW:
-                switch (isMarketOrderType) {
-                    case true:
-                        return 16;
-                    case false:
-                        return 14;
-                }
-        }
-    }, [side, isMarketOrderType]);
-
     const handleFilterChange = useCallback(
         (state: VisibilityState) => {
             setIsShowingAll(state.showBorrow && state.showLend);
@@ -393,7 +387,21 @@ export function AdvancedLendingOrderCard({
                                     ? 'bg-neutral-700'
                                     : undefined
                             }
-                        />
+                        >
+                            {
+                                <button
+                                    className='typography-desktop-body-4 font-semibold text-primary-500'
+                                    disabled={!midPrice}
+                                    onClick={() =>
+                                        dispatch(
+                                            setUnitPrice(midPrice?.toString())
+                                        )
+                                    }
+                                >
+                                    Mid
+                                </button>
+                            }
+                        </OrderInputBox>
                         <ErrorInfo
                             errorMessage='Invalid bond price'
                             showError={isInvalidBondPrice}
@@ -495,7 +503,7 @@ export function AdvancedLendingOrderCard({
                             minBorrowUnitPrice={market?.minBorrowUnitPrice}
                             onFilterChange={handleFilterChange}
                             onAggregationChange={setMultiplier}
-                            rowsToRenderMobile={rowsToRenderMobile}
+                            rowsToRenderMobile={18}
                             isItayose
                         />
                     )}
