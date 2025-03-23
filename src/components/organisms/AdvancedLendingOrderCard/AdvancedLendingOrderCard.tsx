@@ -388,7 +388,7 @@ export function AdvancedLendingOrderCard({
                                     : undefined
                             }
                         >
-                            {
+                            {!isMarketOrderType && (
                                 <button
                                     className='typography-desktop-body-4 font-semibold text-primary-500'
                                     disabled={!midPrice}
@@ -400,7 +400,7 @@ export function AdvancedLendingOrderCard({
                                 >
                                     Mid
                                 </button>
-                            }
+                            )}
                         </OrderInputBox>
                         <ErrorInfo
                             errorMessage='Invalid bond price'
