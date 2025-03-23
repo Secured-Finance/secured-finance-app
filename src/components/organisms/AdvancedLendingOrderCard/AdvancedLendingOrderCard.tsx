@@ -195,7 +195,7 @@ export function AdvancedLendingOrderCard({
         );
     }, [sourceAccount, walletSourceList]);
 
-    const balanceToLend = useMemo(() => {
+    const availableToLend = useMemo(() => {
         return selectedWalletSource.source === WalletSource.METAMASK
             ? balanceRecord[currency]
             : collateralBook.nonCollateral[currency] ||
@@ -211,7 +211,7 @@ export function AdvancedLendingOrderCard({
 
     const handleSliderChange = (percentage: number) => {
         const available =
-            side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
+            side === OrderSide.BORROW ? availableToBorrow : availableToLend;
         track(InteractionEvents.SLIDER, {
             [InteractionProperties.SLIDER_VALUE]: percentage,
         });
@@ -228,7 +228,7 @@ export function AdvancedLendingOrderCard({
 
         dispatch(setAmount(v === '' ? '' : inputValue.toString()));
         const available =
-            side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
+            side === OrderSide.BORROW ? availableToBorrow : availableToLend;
 
         if (available > 0) {
             const percentage = (inputValue * BigInt(100)) / available;
@@ -255,7 +255,7 @@ export function AdvancedLendingOrderCard({
             (preOrderPosition === 'lend' && !isLendingSide));
 
     const shouldDisableActionButton =
-        getAmountValidation(amount, balanceToLend, side) ||
+        getAmountValidation(amount, availableToLend, side) ||
         isInvalidBondPrice ||
         showPreOrderError;
 
@@ -314,31 +314,29 @@ export function AdvancedLendingOrderCard({
 
     return (
         <div className='h-full rounded-b-xl border-neutral-600 bg-neutral-900 pb-7 laptop:border'>
-            <div className='border-b border-neutral-600'>
-                <div className='h-11 laptop:h-[60px]'>
-                    <TabGroup
-                        options={orderSideOptions}
-                        selectedOption={getOrderSideText(OrderSideMap[side])}
-                        handleClick={option => {
-                            dispatch(
-                                setSide(
-                                    option === 'Borrow/Sell'
-                                        ? OrderSide.BORROW
-                                        : OrderSide.LEND
-                                )
-                            );
-                            trackButtonEvent(
-                                ButtonEvents.ORDER_SIDE,
-                                ButtonProperties.ORDER_SIDE,
-                                option
-                            );
-                        }}
-                        isFullHeight
-                    />
-                </div>
+            <div className='h-11 border-b border-neutral-600 laptop:h-[60px]'>
+                <TabGroup
+                    options={orderSideOptions}
+                    selectedOption={getOrderSideText(OrderSideMap[side])}
+                    handleClick={option => {
+                        dispatch(
+                            setSide(
+                                option === 'Borrow/Sell'
+                                    ? OrderSide.BORROW
+                                    : OrderSide.LEND
+                            )
+                        );
+                        trackButtonEvent(
+                            ButtonEvents.ORDER_SIDE,
+                            ButtonProperties.ORDER_SIDE,
+                            option
+                        );
+                    }}
+                    isFullHeight
+                />
             </div>
 
-            <div className='grid w-full grid-cols-12 gap-5 px-4 pb-8 pt-2.5 laptop:gap-0 laptop:pb-4 laptop:pt-2'>
+            <div className='grid w-full grid-cols-12 gap-5 px-4 pb-8 pt-2.5 laptop:gap-0 laptop:pb-2 laptop:pt-2'>
                 <div className='col-span-7 flex flex-col justify-start gap-2.5 laptop:col-span-12 laptop:gap-2'>
                     {!isItayose && (
                         <SubtabGroup
@@ -356,21 +354,21 @@ export function AdvancedLendingOrderCard({
                         />
                     )}
                     <div className='flex flex-col gap-3 laptop:gap-2'>
-                        <div className='typography-desktop-body-4 mx-2 flex flex-row justify-between laptop:mx-10px'>
-                            <div className='text-slateGray'>{`Available to ${
+                        <div className='typography-desktop-body-4 mx-2 flex flex-row justify-between'>
+                            <span className='text-neutral-400'>{`Available to ${
                                 side === OrderSide.BORROW ? 'Borrow' : 'Lend'
-                            }`}</div>
-                            <div className='text-right text-primary-300'>
+                            }`}</span>
+                            <span className='text-right text-primary-300'>
                                 {`${ordinaryFormat(
                                     amountFormatterFromBase[currency](
                                         side === OrderSide.BORROW
                                             ? availableToBorrow
-                                            : balanceToLend
+                                            : availableToLend
                                     ),
                                     0,
                                     2
                                 )} ${currency}`}
-                            </div>
+                            </span>
                         </div>
                         <OrderInputBox
                             field='Price'
