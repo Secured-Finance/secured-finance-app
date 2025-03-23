@@ -13,6 +13,7 @@ interface OrderInputBoxProps {
     maxLimit?: number;
     onValueChange?: (v: string | undefined) => void;
     bgClassName?: string;
+    children?: React.ReactNode;
 }
 
 export const OrderInputBox = ({
@@ -25,6 +26,7 @@ export const OrderInputBox = ({
     maxLimit,
     onValueChange,
     bgClassName,
+    children,
 }: OrderInputBoxProps) => {
     const handleAmountChange = useCallback(
         (amount: string | undefined) => {
@@ -75,6 +77,7 @@ export const OrderInputBox = ({
                         {unit}
                     </div>
                 )}
+                {children}
             </div>
         </div>
     );
