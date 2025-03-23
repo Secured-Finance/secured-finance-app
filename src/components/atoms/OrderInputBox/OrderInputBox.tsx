@@ -24,7 +24,7 @@ export const OrderInputBox = ({
     decimalPlacesAllowed,
     maxLimit,
     onValueChange,
-    bgClassName = 'bg-black-20',
+    bgClassName,
 }: OrderInputBoxProps) => {
     const handleAmountChange = useCallback(
         (amount: string | undefined) => {
@@ -38,7 +38,7 @@ export const OrderInputBox = ({
     return (
         <div
             className={clsx(
-                'typography-caption grid h-10 grid-cols-2 place-content-between items-center rounded-lg border border-neutral-500 bg-neutral-900 px-3 py-2 ring-inset',
+                'grid h-fit grid-cols-2 place-content-between items-center rounded-lg border border-neutral-500 bg-neutral-900 px-3 py-2 ring-inset',
                 bgClassName
             )}
         >
@@ -70,7 +70,11 @@ export const OrderInputBox = ({
                         maxLimit={maxLimit}
                     />
                 )}
-                {unit && <div className='text-neutral-400'>{unit}</div>}
+                {unit && (
+                    <div className='typography-caption text-neutral-400'>
+                        {unit}
+                    </div>
+                )}
             </div>
         </div>
     );
