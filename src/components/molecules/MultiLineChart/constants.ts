@@ -10,18 +10,18 @@ import {
 import { Rate, percentFormat } from 'src/utils';
 import { getColor, timeScaleMapping } from '../TimeScaleSelector/constants';
 
-export const defaultDatasets = {
+export const refineArray = (array: Array<Rate>) => {
+    return array.map(r => r.toNormalizedNumber());
+};
+
+export const defaultMultiLineChartDatasets = {
     borderWidth: 3,
     radius: 0,
     lineTension: 0.4,
     pointRadius: 0.01,
 };
 
-export const refineArray = (array: Array<Rate>) => {
-    return array.map(r => r.toNormalizedNumber());
-};
-
-export const getData = (
+export const getMultiLineChartData = (
     rates: Rate[][],
     label: string,
     labels: string[],
@@ -70,7 +70,7 @@ export const getData = (
     };
 };
 
-export const options: ChartOptions<'line'> = {
+export const multiLineChartOptions: ChartOptions<'line'> = {
     responsive: true,
     maintainAspectRatio: false,
     interaction: {
