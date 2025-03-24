@@ -17,8 +17,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { ChartProps, Line } from 'react-chartjs-2';
 import { Spinner } from 'src/components/atoms';
 import {
-    options as customOptions,
-    defaultDatasets,
+    multiLineChartOptions as customOptions,
+    defaultMultiLineChartDatasets,
 } from 'src/components/molecules/MultiLineChart/constants';
 import { MaturityListItem } from 'src/components/organisms';
 import { Maturity } from 'src/utils/entities';
@@ -40,6 +40,10 @@ type MultiLineChartProps = {
     maturityList: MaturityListItem[];
     maturity: Maturity;
     handleChartClick: (index: number) => void;
+    selectedTimeScales: {
+        label: string;
+        value: string;
+    }[];
 } & ChartProps;
 
 export const MultiLineChart = ({
@@ -49,6 +53,7 @@ export const MultiLineChart = ({
     maturityList,
     maturity,
     handleChartClick,
+    selectedTimeScales,
 }: MultiLineChartProps) => {
     const chartRef = useRef<ChartJS<'line'>>(null);
 
@@ -103,13 +108,13 @@ export const MultiLineChart = ({
     }
 
     const refinedDatasets = data.datasets.map(set => {
-        if (defaultDatasets) {
+        if (defaultMultiLineChartDatasets) {
             return {
                 borderCapStyle: 'round' as Scriptable<
                     CanvasLineCap,
                     ScriptableContext<'line'>
                 >,
-                ...defaultDatasets,
+                ...defaultMultiLineChartDatasets,
                 ...set,
             };
         }
@@ -132,6 +137,10 @@ export const MultiLineChart = ({
             return () => clearTimeout(timeout);
         }
     }, [lastActiveTooltip]);
+
+    useEffect(() => {
+        setLastActiveTooltip(null);
+    }, [selectedTimeScales]);
 
     const handleClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
         if (!chartRef.current) return;

@@ -1,5 +1,5 @@
 import type { Meta, StoryFn } from '@storybook/react';
-import { options } from 'src/components/molecules/MultiLineChart/constants';
+import { multiLineChartOptions } from 'src/components/molecules/MultiLineChart';
 import { MaturityListItem } from 'src/components/organisms';
 import { maturityOptions } from 'src/stories/mocks/fixtures';
 import { MultiLineChart } from '.';
@@ -39,7 +39,7 @@ export default {
                 },
             ],
         },
-        options,
+        multiLineChartOptions,
         maturityList: maturityList,
         maturity: maturityOptions[0].value,
         handleChartClick: () => {},

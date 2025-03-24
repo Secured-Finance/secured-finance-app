@@ -13,9 +13,9 @@ import BarChart from 'src/components/molecules/BarChart/BarChart';
 import {
     createTooltipElement,
     generateTooltipContent,
-    getData,
+    getMultiLineChartData,
     MultiLineChart,
-    options,
+    multiLineChartOptions,
 } from 'src/components/molecules/MultiLineChart';
 import TimeScaleSelector from 'src/components/molecules/TimeScaleSelector/TimeScaleSelector';
 import { useIsGlobalItayose } from 'src/hooks';
@@ -94,7 +94,7 @@ export const MultiLineChartTab = ({
         ? '#B9BDEA'
         : currencyMap[currency].chartColor;
 
-    const data = getData(
+    const data = getMultiLineChartData(
         historicalRates,
         'Market price',
         maturityList.map(item => item.label),
@@ -103,11 +103,11 @@ export const MultiLineChartTab = ({
     );
 
     const chartOptions: ChartOptions<'line'> = {
-        ...options,
+        ...multiLineChartOptions,
         scales: {
-            ...options.scales,
+            ...multiLineChartOptions.scales,
             y: {
-                ...options.scales?.y,
+                ...multiLineChartOptions.scales?.y,
                 position: 'left',
                 max:
                     marketCloseToMaturityOriginalRate > maximumRate &&
@@ -317,6 +317,7 @@ export const MultiLineChartTab = ({
                         data={data}
                         maturityList={maturityList}
                         options={chartOptions}
+                        selectedTimeScales={selectedTimeScales}
                         handleChartClick={maturityIndex => {
                             const { maturity, label, isPreOrderPeriod } =
                                 maturityList[maturityIndex];
