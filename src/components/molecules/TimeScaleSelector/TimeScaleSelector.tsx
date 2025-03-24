@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { ExpandIndicator, TimeScaleCheckBox } from 'src/components/atoms';
-import { TimeScaleCheckBoxSizes } from 'src/components/atoms/TimeScaleCheckbox/constant';
 import { formatTimeLabel, getColor, yieldTimeScales } from './constants';
 export default function TimeScaleSelector({
     length,
@@ -90,7 +89,6 @@ export default function TimeScaleSelector({
                                 style={{ color: '#94a3b8' }}
                             >
                                 <TimeScaleCheckBox
-                                    size={TimeScaleCheckBoxSizes.sm}
                                     label={timePeriod.label}
                                     isChecked={selected.some(
                                         item => item.value === timePeriod.value
