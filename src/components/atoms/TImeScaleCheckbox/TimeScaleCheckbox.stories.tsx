@@ -1,7 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { useState } from 'react';
-import { TimeScaleCheckBoxSizes } from './constant';
 import { TimeScaleCheckBox } from './TimeScaleCheckbox';
+import { TimeScaleCheckBoxSizes } from './types';
 
 export default {
     title: 'Atoms/TimeScaleCheckBox',

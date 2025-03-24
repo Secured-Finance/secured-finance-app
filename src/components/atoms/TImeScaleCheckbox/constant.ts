@@ -1,8 +1,4 @@
-export enum TimeScaleCheckBoxSizes {
-    sm = 'sm',
-    md = 'md',
-    lg = 'lg',
-}
+import { TimeScaleCheckBoxSizes } from './types';
 
 export const TimeScaleCheckBoxSizeStyle: {
     [key in TimeScaleCheckBoxSizes]: string;

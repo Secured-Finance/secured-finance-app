@@ -1,11 +1,12 @@
 import clsx from 'clsx';
-import { TimeScaleCheckBoxSizes, TimeScaleCheckBoxSizeStyle } from './constant';
+import { TimeScaleCheckBoxSizeStyle } from './constant';
+import { TimeScaleCheckBoxSizes } from './types';
 
 export const TimeScaleCheckBox = ({
     isChecked = false,
     onChange,
     label,
-    size = TimeScaleCheckBoxSizes.md,
+    size = TimeScaleCheckBoxSizes.sm,
     disabled = false,
 }: {
     isChecked: boolean;
