@@ -248,10 +248,17 @@ export const MultiLineChartTab = ({
         }
 
         try {
+            const now = new Date();
+            const timestamp = now
+                .toISOString()
+                .replace(/[:T]/g, '-')
+                .split('.')[0];
+
+            const filename = `${currency}_YieldCurve_${timestamp}.png`;
             const dataUrl = await domtoimage.toPng(refToUse.current);
             const link = document.createElement('a');
             link.href = dataUrl;
-            link.download = 'Yield-Curve.png';
+            link.download = filename;
             link.click();
         } finally {
             clonedElements.forEach(el => el.remove());
