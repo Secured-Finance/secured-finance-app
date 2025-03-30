@@ -44,6 +44,7 @@ import {
 } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import useSF from 'src/hooks/useSecuredFinance';
+import { useYieldCurveMarketRatesHistorical } from 'src/hooks/useYieldCurveHistoricalRates';
 import {
     resetAmount,
     resetUnitPrice,
@@ -341,6 +342,8 @@ export const AdvancedLending = ({
         openingUnitPrice,
     ]);
 
+    const historicalRates = useYieldCurveMarketRatesHistorical();
+
     const handleCurrencyChange = useCallback(
         (v: CurrencySymbol) => {
             dispatch(setCurrency(v));
@@ -442,6 +445,7 @@ export const AdvancedLending = ({
                             marketCloseToMaturityOriginalRate={
                                 marketCloseToMaturityOriginalRate
                             }
+                            fetchedRates={historicalRates}
                         />
                     </div>
                     {isSubgraphSupported && <HistoricalWidget />}
@@ -473,6 +477,7 @@ export const AdvancedLending = ({
                                         marketCloseToMaturityOriginalRate={
                                             marketCloseToMaturityOriginalRate
                                         }
+                                        fetchedRates={historicalRates}
                                     />
                                 </div>
                                 {isSubgraphSupported && <HistoricalWidget />}
