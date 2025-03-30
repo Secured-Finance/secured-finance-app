@@ -12,8 +12,7 @@ import {
     Title,
     Tooltip,
 } from 'chart.js';
-import ChartTooltip from 'chart.js/auto';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ChartProps, Line } from 'react-chartjs-2';
 import { Spinner } from 'src/components/atoms';
 import {
@@ -44,6 +43,7 @@ type MultiLineChartProps = {
         label: string;
         value: string;
     }[];
+    isMaximised: boolean;
 } & ChartProps;
 
 export const MultiLineChart = ({
@@ -54,39 +54,33 @@ export const MultiLineChart = ({
     maturity,
     handleChartClick,
     selectedTimeScales,
+    isMaximised,
 }: MultiLineChartProps) => {
     const chartRef = useRef<ChartJS<'line'>>(null);
-
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const [lastActiveTooltip, setLastActiveTooltip] = useState<{
         datasetIndex: number;
         index: number;
     } | null>(null);
+    const [hasRunOnce, setHasRunOnce] = useState(false);
+    const defaultIndex = useMemo(
+        () =>
+            maturityList.findIndex(
+                element => element.maturity === maturity.toNumber()
+            ),
+        [maturityList, maturity]
+    );
 
-    const triggerHover = (chart: ChartJS<'line'>, index: number) => {
+    const updateTooltip = (chart: ChartJS<'line'>, index: number) => {
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
         setLastActiveTooltip({ datasetIndex: 0, index });
 
-        chart.setActiveElements([
-            {
-                datasetIndex: 0,
-                index: index,
-            },
-        ]);
-        chart.update();
-    };
-
-    const triggerTooltip = (chart: ChartJS<'line'>, index: number) => {
-        const tooltip = chart.tooltip as unknown as ChartTooltip<'line'>;
-        setLastActiveTooltip({ datasetIndex: 0, index });
-
-        if (tooltip) {
-            tooltip.setActiveElements([
-                {
-                    datasetIndex: 0,
-                    index: index,
-                },
-            ]);
-            tooltip.update();
-        }
+        chart.setActiveElements([{ datasetIndex: 0, index }]);
+        chart.tooltip?.setActiveElements([{ datasetIndex: 0, index }], {
+            x: 0,
+            y: 0,
+        });
         chart.update();
     };
 
@@ -107,40 +101,21 @@ export const MultiLineChart = ({
         }
     }
 
-    const refinedDatasets = data.datasets.map(set => {
-        if (defaultMultiLineChartDatasets) {
-            return {
-                borderCapStyle: 'round' as Scriptable<
-                    CanvasLineCap,
-                    ScriptableContext<'line'>
-                >,
-                ...defaultMultiLineChartDatasets,
-                ...set,
-            };
-        }
-        return {
+    const refinedData = useMemo(() => {
+        const refinedDatasets = data.datasets.map(set => ({
+            borderCapStyle: 'round' as Scriptable<
+                CanvasLineCap,
+                ScriptableContext<'line'>
+            >,
+            ...defaultMultiLineChartDatasets,
             ...set,
+        }));
+
+        return {
+            ...data,
+            datasets: refinedDatasets,
         };
-    });
-
-    const refinedData = {
-        ...data,
-        datasets: refinedDatasets,
-    };
-
-    useEffect(() => {
-        if (lastActiveTooltip) {
-            const timeout = setTimeout(() => {
-                setLastActiveTooltip(null);
-            }, 5000);
-
-            return () => clearTimeout(timeout);
-        }
-    }, [lastActiveTooltip]);
-
-    useEffect(() => {
-        setLastActiveTooltip(null);
-    }, [selectedTimeScales]);
+    }, [data]);
 
     const handleClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
         if (!chartRef.current) return;
@@ -159,8 +134,7 @@ export const MultiLineChart = ({
             );
             if (selectedMaturityIndex >= 0) {
                 if (lastActiveTooltip) {
-                    triggerHover(chartRef.current, lastActiveTooltip.index);
-                    triggerTooltip(chartRef.current, lastActiveTooltip.index);
+                    updateTooltip(chartRef.current, lastActiveTooltip.index);
                 }
                 handleChartClick(selectedMaturityIndex);
             }
@@ -170,24 +144,48 @@ export const MultiLineChart = ({
     const onMouseOut = useCallback(() => {
         if (!chartRef.current) return;
 
-        if (!lastActiveTooltip) {
-            const numberOfElements =
-                chartRef.current.data.datasets[0].data.length;
-            let index = maturityList.findIndex(
-                element => element.maturity === maturity.toNumber()
-            );
-
-            if (numberOfElements) {
-                index = index > 0 ? index : 0;
-                triggerHover(chartRef.current, index);
-                triggerTooltip(chartRef.current, index);
-            }
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
         }
-    }, [maturityList, maturity, lastActiveTooltip]);
+
+        timeoutRef.current = setTimeout(
+            () => {
+                if (chartRef.current) {
+                    updateTooltip(chartRef.current, defaultIndex);
+                    setLastActiveTooltip(null);
+                }
+            },
+            hasRunOnce ? 3000 : 0
+        );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [maturityList, maturity]);
+
+    // Reset tooltip when dependencies change (like resizing or time scale changes)
+    useEffect(() => {
+        setTimeout(() => {
+            if (!chartRef.current) return;
+            setLastActiveTooltip(null);
+            if (defaultIndex >= 0) {
+                updateTooltip(chartRef.current, defaultIndex);
+            }
+        }, 50);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isMaximised, selectedTimeScales]);
+
+    // Update chart data without animations
+    useEffect(() => {
+        if (chartRef.current) {
+            chartRef.current.data = refinedData;
+            chartRef.current.update('none');
+        }
+    }, [refinedData]);
 
     useEffect(() => {
-        onMouseOut();
-    }, [onMouseOut]);
+        if (!hasRunOnce) {
+            onMouseOut();
+            setHasRunOnce(true);
+        }
+    }, [onMouseOut, hasRunOnce]);
 
     return (
         <>

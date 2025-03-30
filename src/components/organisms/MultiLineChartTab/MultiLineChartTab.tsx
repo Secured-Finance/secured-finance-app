@@ -11,37 +11,34 @@ import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import BarChart from 'src/components/molecules/BarChart/BarChart';
 import {
-    createTooltipElement,
-    generateTooltipContent,
     getMultiLineChartData,
     MultiLineChart,
     multiLineChartOptions,
 } from 'src/components/molecules/MultiLineChart';
 import TimeScaleSelector from 'src/components/molecules/TimeScaleSelector/TimeScaleSelector';
 import { useIsGlobalItayose } from 'src/hooks';
-import { useYieldCurveMarketRatesHistorical } from 'src/hooks/useYieldCurveHistoricalRates';
 import {
     selectLandingOrderForm,
     setMaturity,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { HistoricalYieldIntervals } from 'src/types';
-import {
-    ButtonEvents,
-    ButtonProperties,
-    currencyMap,
-    ONE_PERCENT,
-    Rate,
-} from 'src/utils';
+import { ButtonEvents, ButtonProperties, currencyMap, Rate } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import { trackButtonEvent } from 'src/utils/events';
+import {
+    cloneAndAppend,
+    createTooltipElement,
+    generateTooltipContent,
+    positionElement,
+    useTooltipVisibility,
+} from './constant';
 
 export const MultiLineChartTab = ({
     rates,
     maturityList,
     itayoseMarketIndexSet,
-    maximumRate,
-    marketCloseToMaturityOriginalRate,
+    fetchedRates,
 }: {
     rates: Rate[];
     maturityList: MaturityListItem[];
@@ -49,6 +46,7 @@ export const MultiLineChartTab = ({
     followLinks?: boolean;
     maximumRate: number;
     marketCloseToMaturityOriginalRate: number;
+    fetchedRates: Record<HistoricalYieldIntervals, Rate[]> | undefined;
 }) => {
     const [selectedTimeScales, setSelectedTimeScales] = useState([
         { label: 'Current Yield', value: '0' },
@@ -63,7 +61,6 @@ export const MultiLineChartTab = ({
         selectLandingOrderForm(state.landingOrderForm)
     );
 
-    const fetchedRates = useYieldCurveMarketRatesHistorical();
     useEffect(() => {
         return () => {
             ['chart-tooltip-line', 'chart-tooltip-bar'].forEach(id => {
@@ -109,11 +106,6 @@ export const MultiLineChartTab = ({
             y: {
                 ...multiLineChartOptions.scales?.y,
                 position: 'left',
-                max:
-                    marketCloseToMaturityOriginalRate > maximumRate &&
-                    maximumRate > 0
-                        ? Math.floor((maximumRate * 1.2) / ONE_PERCENT)
-                        : undefined,
             },
         },
         plugins: {
@@ -138,62 +130,57 @@ export const MultiLineChartTab = ({
                         tooltip,
                         selectedTimeScales
                     );
-                    lineTooltipEl.style.zIndex = `${isMaximized ? '51' : '24'}`;
-                    barTooltipEl.style.zIndex = `${isMaximized ? '51' : '24'}`;
                     lineTooltipEl.appendChild(lineContent);
                     barTooltipEl.appendChild(barContent);
+
+                    const zIndex = isMaximized ? '51' : '24';
+                    lineTooltipEl.style.zIndex = zIndex;
+                    barTooltipEl.style.zIndex = zIndex;
 
                     const canvasRect = chart.canvas.getBoundingClientRect();
                     const lastPoint = tooltip.dataPoints.at(-1)?.element;
 
-                    if (!lastPoint) {
-                        return;
-                    }
+                    if (!lastPoint) return;
 
                     const hoveredDataPoint = tooltip.dataPoints[0];
-                    const datasetIndex = hoveredDataPoint.datasetIndex;
-                    const dataIndex = hoveredDataPoint.dataIndex;
-                    const isLastDataPoint =
-                        dataIndex ===
-                        chart.data.datasets[datasetIndex].data.length - 1;
+                    const { datasetIndex, dataIndex } = hoveredDataPoint;
+                    const dataset = chart.data.datasets[datasetIndex] as {
+                        data: number[];
+                    };
 
-                    // Line tooltip positioning
-                    lineTooltipEl.style.opacity = '1';
-                    lineTooltipEl.style.left = `${
+                    const isLastDataPoint =
+                        dataIndex === dataset.data.length - 1;
+                    // Position Line Tooltip
+                    positionElement(
+                        lineTooltipEl,
                         canvasRect.left +
-                        window.scrollX +
-                        lastPoint.x +
-                        (isLastDataPoint ? -160 : 50)
-                    }px`;
-                    lineTooltipEl.style.top = `${
-                        canvasRect.top + window.scrollY + lastPoint.y - 30
-                    }px`;
+                            lastPoint.x +
+                            window.scrollX +
+                            (isLastDataPoint ? -160 : 50),
+                        window.scrollY + canvasRect.top + lastPoint.y - 30
+                    );
 
                     if (selectedTimeScales.length < 1) {
-                        lineTooltipEl.style.left = `${tooltip.caretX}px`;
-                        lineTooltipEl.style.top = `${tooltip.caretY}px`;
+                        positionElement(
+                            lineTooltipEl,
+                            tooltip.caretX,
+                            tooltip.caretY
+                        );
                         barTooltipEl.remove();
                         return;
                     }
 
-                    // Bar tooltip positioning
+                    // Position Bar Tooltip
                     if (tooltip.dataPoints.length > 1) {
                         const lineChartHeight = chart.canvas.clientHeight;
-
-                        barTooltipEl.style.opacity = '1';
-                        barTooltipEl.style.left = `${
-                            canvasRect.left +
-                            window.scrollX +
-                            lastPoint.x +
-                            (isLastDataPoint ? -160 : 60)
-                        }px`;
-
-                        barTooltipEl.style.top = `${
-                            canvasRect.top +
+                        positionElement(
+                            barTooltipEl,
+                            window.scrollX + canvasRect.left + lastPoint.x + 50,
                             window.scrollY +
-                            lineChartHeight +
-                            60
-                        }px`;
+                                canvasRect.top +
+                                lineChartHeight +
+                                30
+                        );
                     } else {
                         barTooltipEl.style.opacity = '0';
                     }
@@ -207,53 +194,23 @@ export const MultiLineChartTab = ({
     ) => {
         if (!refToUse.current) return;
 
-        const lineTooltipElement =
-            document.getElementById('chart-tooltip-line');
-        const barTooltipElement = document.getElementById('chart-tooltip-bar');
-
+        const tooltips = [
+            document.getElementById('chart-tooltip-line'),
+            selectedTimeScales.length === 1
+                ? null
+                : document.getElementById('chart-tooltip-bar'),
+        ];
         const clonedElements: HTMLElement[] = [];
 
-        const cloneAndAppend = (element: HTMLElement | null) => {
-            if (element) {
-                const clonedTooltip = element.cloneNode(true) as HTMLElement;
-                refToUse.current?.appendChild(clonedTooltip);
-                clonedElements.push(clonedTooltip);
-
-                const originalTop =
-                    element.getBoundingClientRect().top + window.scrollY;
-                const originalLeft =
-                    element.getBoundingClientRect().left + window.scrollX;
-
-                const parentTop =
-                    (refToUse.current?.getBoundingClientRect()?.top ?? 0) +
-                    window.scrollY;
-                const parentLeft =
-                    (refToUse.current?.getBoundingClientRect()?.left ?? 0) -
-                    40 +
-                    window.scrollX;
-
-                const newTop = originalTop - parentTop;
-                const newLeft = originalLeft - parentLeft;
-
-                clonedTooltip.style.position = 'absolute';
-                clonedTooltip.style.top = `${newTop}px`;
-                clonedTooltip.style.left = `${newLeft}px`;
-                clonedTooltip.style.opacity = '1';
-            }
-        };
-
-        cloneAndAppend(lineTooltipElement);
-        if (barTooltipElement?.style.opacity !== '0') {
-            cloneAndAppend(barTooltipElement);
-        }
+        tooltips.forEach(el => el && (el.style.opacity = '0'));
+        tooltips.forEach(el => cloneAndAppend(el, refToUse, clonedElements));
 
         try {
-            const now = new Date();
-            const timestamp = now
+            clonedElements.forEach(el => (el.style.opacity = '1'));
+            const timestamp = new Date()
                 .toISOString()
                 .replace(/[:T]/g, '-')
                 .split('.')[0];
-
             const filename = `${currency}_YieldCurve_${timestamp}.png`;
             const dataUrl = await domtoimage.toPng(refToUse.current);
             const link = document.createElement('a');
@@ -261,24 +218,16 @@ export const MultiLineChartTab = ({
             link.download = filename;
             link.click();
         } finally {
+            tooltips.forEach(el => el && (el.style.opacity = '1'));
             clonedElements.forEach(el => el.remove());
         }
     };
 
-    useTooltipVisibility(isMaximized);
+    useTooltipVisibility(isMaximized, true);
 
     const toggleMaximize = () => {
         setIsMaximized(prev => !prev);
     };
-
-    const containerClasses = `
-    ${
-        isMaximized
-            ? 'fixed inset-0 z-50 h-full w-full p-3'
-            : 'relative h-[410px] w-full'
-    }
-    bg-neutral-900 overflow-hidden
-`;
 
     const lineChartHeight =
         selectedTimeScales.length > 1
@@ -289,7 +238,13 @@ export const MultiLineChartTab = ({
             ? 'h-[70%]'
             : 'h-[20rem]';
     return (
-        <div className={containerClasses} ref={componentRef}>
+        <div
+            className={clsx('w-full overflow-hidden bg-neutral-900', {
+                'fixed inset-0 z-50 h-full p-3': isMaximized,
+                'relative h-[410px]': !isMaximized,
+            })}
+            ref={componentRef}
+        >
             <div className='flex justify-between px-2 py-1'>
                 <TimeScaleSelector
                     selected={selectedTimeScales}
@@ -347,6 +302,7 @@ export const MultiLineChartTab = ({
                             });
                         }}
                         maturity={new Maturity(maturity)}
+                        isMaximised={isMaximized}
                     />
                 )}
             </div>
@@ -375,20 +331,4 @@ type MaturityListItem = {
     label: string;
     maturity: number;
     isPreOrderPeriod: boolean;
-};
-
-const useTooltipVisibility = (isMaximized: boolean) => {
-    useEffect(() => {
-        const tooltips = [
-            document.getElementById('chart-tooltip-line'),
-            document.getElementById('chart-tooltip-bar'),
-        ];
-
-        tooltips.forEach(tooltip => {
-            if (tooltip) {
-                tooltip.style.opacity = '0';
-            }
-        });
-        document.body.style.overflow = isMaximized ? 'hidden' : 'scroll';
-    }, [isMaximized]);
 };

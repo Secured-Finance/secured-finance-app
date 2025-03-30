@@ -43,6 +43,7 @@ export default {
         maturityList: maturityList,
         maturity: maturityOptions[0].value,
         handleChartClick: () => {},
+        isMaximised: false,
     },
 } as Meta<typeof MultiLineChart>;
 

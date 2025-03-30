@@ -35,20 +35,20 @@ export const options: ChartOptions<'bar'> = {
         },
         x: {
             beginAtZero: true,
-            offset: false,
+            offset: true,
             grid: {
                 color: context => {
                     if (context.index === 0) {
                         return '#5b7280';
                     }
                 },
-                offset: false,
+
+                offset: true,
             },
             ticks: {
-                align: 'start',
+                align: 'center',
                 color: '#94A3B8',
-                stepSize: 100,
-                padding: 10,
+                stepSize: 50,
             },
         },
     },

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { ExpandIndicator, TimeScaleCheckBox } from 'src/components/atoms';
 import { formatTimeLabel, getColor, yieldTimeScales } from './constants';
 export default function TimeScaleSelector({
@@ -29,6 +29,15 @@ export default function TimeScaleSelector({
         });
         setIsOpen(!isOpen);
     };
+
+    const sortedSelected = useMemo(() => {
+        return [
+            selected[0],
+            ...selected
+                .slice(1)
+                .sort((a, b) => Number(a.value) - Number(b.value)),
+        ];
+    }, [selected]);
 
     const CustomDropdown = () => {
         return (
@@ -105,22 +114,33 @@ export default function TimeScaleSelector({
             <div className='flex flex-col gap-1.5'>
                 {selected.length > 0 && (
                     <ul className='flex gap-4'>
-                        {selected.map((scale, index) => (
-                            <li key={index} className='flex items-center gap-1'>
-                                <span
-                                    className='h-3 w-3 rounded-full'
-                                    style={{
-                                        backgroundColor: getColor(index, 1),
-                                    }}
-                                ></span>
-                                <span className='font-secondary text-xs text-neutral-300 tablet:text-sm laptop:text-xs desktop:text-sm'>
-                                    {formatTimeLabel(scale.label)}{' '}
-                                    {scale.label !== 'Current Yield'
-                                        ? 'Ago'
-                                        : ''}
-                                </span>
-                            </li>
-                        ))}
+                        {sortedSelected.map((scale, index) => {
+                            const originalIndex = selected.findIndex(
+                                item => item.value === scale.value
+                            );
+                            return (
+                                <li
+                                    key={index}
+                                    className='flex items-center gap-1'
+                                >
+                                    <span
+                                        className='h-3 w-3 rounded-full'
+                                        style={{
+                                            backgroundColor: getColor(
+                                                originalIndex,
+                                                1
+                                            ),
+                                        }}
+                                    />
+                                    <span className='font-secondary text-xs text-neutral-300 tablet:text-sm laptop:text-xs desktop:text-sm'>
+                                        {formatTimeLabel(scale.label)}{' '}
+                                        {scale.label !== 'Current Yield'
+                                            ? 'Ago'
+                                            : ''}
+                                    </span>
+                                </li>
+                            );
+                        })}
                     </ul>
                 )}
             </div>
