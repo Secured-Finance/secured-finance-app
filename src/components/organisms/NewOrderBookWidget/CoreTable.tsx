@@ -10,8 +10,17 @@ import {
 } from '@tanstack/react-table';
 import clsx from 'clsx';
 import { MouseEvent, useCallback, useEffect, useState } from 'react';
-import { OrderBookInfo } from 'src/components/atoms';
-import { calculateAveragePrice, calculateFutureValue } from 'src/utils';
+import { useSelector } from 'react-redux';
+import { OrderBookInfoTooltip } from 'src/components/atoms/OrderBookInfoTooltip';
+import { useLastPrices } from 'src/hooks';
+import { selectLandingOrderForm } from 'src/store/landingOrderForm';
+import { RootState } from 'src/store/types';
+import {
+    amountFormatterFromBase,
+    calculateFutureValue,
+    usdFormat,
+} from 'src/utils';
+import { Amount } from 'src/utils/entities';
 
 type CoreTableOptions = {
     name: string;
@@ -45,13 +54,18 @@ export const CoreTable = <T,>({
     const [sorting, setSorting] = useState<SortingState>([]);
     const [activeRow, setActiveRow] = useState<string>();
     const [orderBookInfoData, setOrderBookInfoData] = useState<{
-        avgPrice: number;
-        avgApr: number;
+        avgPrice: string;
+        avgApr: string;
         totalAmount: number;
-        totalUsd: number;
+        totalUsd: string;
         position: { top: number; left: number };
     } | null>(null);
 
+    const { currency } = useSelector((state: RootState) =>
+        selectLandingOrderForm(state.landingOrderForm)
+    );
+    const { data: priceList } = useLastPrices();
+    const price = priceList[currency];
     const coreTableOptions: CoreTableOptions = {
         ...DEFAULT_OPTIONS,
         ...options,
@@ -108,7 +122,7 @@ export const CoreTable = <T,>({
     }, []);
 
     const handleMouseEnter = (
-        event: MouseEvent<HTMLTableRowElement, globalThis.MouseEvent>,
+        event: MouseEvent<HTMLTableRowElement>,
         row: Row<T>
     ) => {
         setActiveRow(row.id);
@@ -117,77 +131,58 @@ export const CoreTable = <T,>({
         if (!firstCell) return;
 
         const rect = firstCell.getBoundingClientRect();
-        const top = rect.top + rect.height / 2;
-        const left = rect.left;
+        const position = { top: rect.top + rect.height / 2, left: rect.left };
+        const currentUnix = Math.floor(Date.now() / 1000);
+        const daysToMaturity = Math.max(
+            (rowData.value._maturity - currentUnix) / (60 * 60 * 24),
+            0
+        );
 
-        const currentDate = new Date();
-        const currentUnix = Math.floor(currentDate.getTime() / 1000);
+        if (rowData.amount <= 0) return;
 
-        const maturityUnix = rowData.value._maturity;
-        const secondsToMaturity = maturityUnix - currentUnix;
-        const daysToMaturity =
-            secondsToMaturity > 0 ? secondsToMaturity / (60 * 60 * 24) : 0;
+        const hoveredRowIndex = table
+            .getRowModel()
+            .rows.findIndex(r => r.id === row.id);
+        const relevantRows = (
+            options.name === 'sellOrders'
+                ? table.getRowModel().rows.slice(0, hoveredRowIndex + 1)
+                : table.getRowModel().rows.slice(hoveredRowIndex)
+        )
+            .map(r => r.original as any)
+            .filter(r => r.amount > 0);
 
-        let orderBookInfo = {
-            avgPrice: calculateAveragePrice(BigInt(rowData?.value?._price)),
-            avgApr: rowData?.value?._apr?.rate / 10000,
-            totalUsd: Number(rowData?.amount) / rowData?.value?.PAR_VALUE_RATE,
-            totalAmount: Number(rowData?.cumulativeAmount) / 1000000,
-            position: { top, left },
-        };
+        if (relevantRows.length === 0) return;
 
-        if (rowData.amount > 0) {
-            const hoveredRowIndex = rows.findIndex(r => r.id === row.id);
-            let relevantRows: any[];
+        const totalFVAmount = relevantRows.reduce(
+            (sum, order) =>
+                sum +
+                calculateFutureValue(
+                    BigInt(order.amount),
+                    BigInt(order.value._price)
+                ),
+            BigInt(0)
+        );
+        const totalPVAmount = relevantRows.reduce(
+            (sum, order) => sum + BigInt(order.amount),
+            BigInt(0)
+        );
 
-            const isBuyTable = options.name === 'sellOrders';
-            if (isBuyTable) {
-                relevantRows = rows
-                    .slice(0, hoveredRowIndex + 1)
-                    .map(r => r.original as any)
-                    .filter(r => r.amount > 0);
-            } else {
-                relevantRows = rows
-                    .slice(hoveredRowIndex, rows.length)
-                    .map(r => r.original as any)
-                    .filter(r => r.amount > 0);
-            }
+        const avgPrice = Number(totalPVAmount) / Number(totalFVAmount);
+        const vwap = avgPrice * 100;
+        const avgApr =
+            daysToMaturity > 0 ? (100 / vwap - 1) * (365 / daysToMaturity) : 0;
+        const totalAmount = amountFormatterFromBase[currency](totalPVAmount);
+        const totalUsd = new Amount(totalPVAmount, currency)?.toUSD(price);
 
-            if (relevantRows.length > 0) {
-                let totalFVAmount = BigInt(0);
-                let totalPVAmount = BigInt(0);
+        const formatToTwoDecimals = (num: number) => (num * 100).toFixed(2);
 
-                relevantRows.forEach(order => {
-                    const amount = BigInt(order.amount);
-                    const unitPrice = BigInt(order.value._price);
-                    const fvAmount = calculateFutureValue(amount, unitPrice);
-
-                    totalFVAmount += fvAmount;
-                    totalPVAmount += amount;
-                });
-
-                const avgPrice = Number(totalPVAmount) / Number(totalFVAmount);
-                const vwap = avgPrice * 100;
-                const avgApr =
-                    daysToMaturity > 0
-                        ? (100 / vwap - 1) * (365 / daysToMaturity)
-                        : 0;
-
-                const totalUsd =
-                    Number(totalPVAmount) / rowData.value.PAR_VALUE_RATE;
-                const totalAmount =
-                    Number(totalPVAmount) / rowData.value.PAR_VALUE_RATE;
-
-                orderBookInfo = {
-                    avgPrice: avgPrice * 100,
-                    avgApr: avgApr * 100,
-                    totalUsd,
-                    totalAmount,
-                    position: { top, left },
-                };
-            }
-        }
-        setOrderBookInfoData(orderBookInfo);
+        setOrderBookInfoData({
+            avgPrice: formatToTwoDecimals(avgPrice),
+            avgApr: formatToTwoDecimals(Math.min(avgApr, 10)),
+            totalUsd: usdFormat(Number(totalUsd), 2, 'compact'),
+            totalAmount,
+            position,
+        });
     };
 
     return (
@@ -293,8 +288,8 @@ export const CoreTable = <T,>({
                     )}
                 </tbody>
             </table>
-            {orderBookInfoData && orderBookInfoData.avgPrice > 0 && (
-                <OrderBookInfo OrderBookInfoData={orderBookInfoData} />
+            {orderBookInfoData && Number(orderBookInfoData.avgPrice) > 0 && (
+                <OrderBookInfoTooltip orderBookInfoData={orderBookInfoData} />
             )}
         </>
     );
