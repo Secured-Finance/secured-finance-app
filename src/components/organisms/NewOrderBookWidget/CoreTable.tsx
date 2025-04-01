@@ -289,7 +289,10 @@ export const CoreTable = <T,>({
                 </tbody>
             </table>
             {orderBookInfoData && Number(orderBookInfoData.avgPrice) > 0 && (
-                <OrderBookInfoTooltip orderBookInfoData={orderBookInfoData} />
+                <OrderBookInfoTooltip
+                    orderBookInfoData={orderBookInfoData}
+                    currency={currency}
+                />
             )}
         </>
     );
