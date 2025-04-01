@@ -15,6 +15,7 @@ export default {
             totalAmount: 1089890.89,
             totalUsd: '56.7K',
         },
+        currency: 'USDC',
     },
 } as Meta<typeof OrderBookInfoTooltip>;
 
