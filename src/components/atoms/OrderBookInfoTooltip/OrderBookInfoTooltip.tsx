@@ -26,6 +26,7 @@ export const OrderBookInfoTooltip = ({
                 pointerEvents: 'none',
             }}
             role='tooltip'
+            data-testid='orderBookTooltip'
         >
             <div className='flex justify-between gap-1'>
                 <span className='text-neutral-400'>Avg. Price (VWAP)</span>
