@@ -380,3 +380,36 @@ describe.skip('NewOrderBookWidget Component', () => {
         });
     });
 });
+
+describe('Orderbook tooltip on CoreTable', () => {
+    it('shows tooltip on hover', async () => {
+        render(<Default />);
+        const buyOrdersRows = await screen.findAllByTestId('buyOrders-row');
+        fireEvent.mouseEnter(buyOrdersRows[1]);
+        expect(screen.getByTestId('orderBookTooltip')).toBeInTheDocument();
+    });
+
+    it('hides tooltip on scroll', async () => {
+        render(<Default />);
+        const buyOrdersRows = await screen.findAllByTestId('buyOrders-row');
+        fireEvent.mouseEnter(buyOrdersRows[2]);
+        expect(screen.getByTestId('orderBookTooltip')).toBeInTheDocument();
+
+        fireEvent.scroll(window);
+        expect(
+            screen.queryByTestId('orderBookTooltip')
+        ).not.toBeInTheDocument();
+    });
+
+    it('hides tooltip on mouse leave', async () => {
+        render(<Default />);
+        const sellOrdersRows = await screen.findAllByTestId('sellOrders-row');
+        fireEvent.mouseEnter(sellOrdersRows[0]);
+        expect(screen.getByTestId('orderBookTooltip')).toBeInTheDocument();
+
+        fireEvent.mouseLeave(sellOrdersRows[0]);
+        expect(
+            screen.queryByTestId('orderBookTooltip')
+        ).not.toBeInTheDocument();
+    });
+});
