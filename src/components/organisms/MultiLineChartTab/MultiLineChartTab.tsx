@@ -9,6 +9,7 @@ import domtoimage from 'dom-to-image';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Spinner } from 'src/components/atoms';
 import BarChart from 'src/components/molecules/BarChart/BarChart';
 import {
     getMultiLineChartData,
@@ -39,6 +40,7 @@ export const MultiLineChartTab = ({
     maturityList,
     itayoseMarketIndexSet,
     fetchedRates,
+    loading,
 }: {
     rates: Rate[];
     maturityList: MaturityListItem[];
@@ -47,6 +49,7 @@ export const MultiLineChartTab = ({
     maximumRate: number;
     marketCloseToMaturityOriginalRate: number;
     fetchedRates: Record<HistoricalYieldIntervals, Rate[]> | undefined;
+    loading: boolean;
 }) => {
     const [selectedTimeScales, setSelectedTimeScales] = useState([
         { label: 'Current Yield', value: '0' },
@@ -237,7 +240,11 @@ export const MultiLineChartTab = ({
             : isMaximized
             ? 'h-[70%]'
             : 'h-[20rem]';
-    return (
+    return loading ? (
+        <div className='flex h-full w-full items-center justify-center'>
+            <Spinner />
+        </div>
+    ) : (
         <div
             className={clsx('w-full overflow-hidden bg-neutral-900', {
                 'fixed inset-0 z-50 h-full p-3': isMaximized,
@@ -273,7 +280,7 @@ export const MultiLineChartTab = ({
                 </div>
             </div>
             <div className={`${lineChartHeight} w-full`}>
-                {rates && (
+                {rates && historicalRates && (
                     <MultiLineChart
                         type='line'
                         data={data}
