@@ -63,6 +63,7 @@ export const MultiLineChart = ({
         index: number;
     } | null>(null);
     const [hasRunOnce, setHasRunOnce] = useState(false);
+    const isHovering = useRef(false);
     const defaultIndex = useMemo(
         () =>
             maturityList.findIndex(
@@ -147,10 +148,10 @@ export const MultiLineChart = ({
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
         }
-
+        isHovering.current = false;
         timeoutRef.current = setTimeout(
             () => {
-                if (chartRef.current) {
+                if (chartRef.current && !isHovering.current) {
                     updateTooltip(chartRef.current, defaultIndex);
                     setLastActiveTooltip(null);
                 }
@@ -159,6 +160,28 @@ export const MultiLineChart = ({
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [maturityList, maturity]);
+
+    const onMouseMove = useCallback(
+        (event: React.MouseEvent<HTMLCanvasElement>) => {
+            if (!chartRef.current) return;
+
+            isHovering.current = true;
+            const elements = chartRef.current.getElementsAtEventForMode(
+                event as unknown as Event,
+                'nearest',
+                { axis: 'x', intersect: false, includeInvisible: true },
+                false
+            );
+
+            if (elements.length > 0) {
+                const { index } = elements[0];
+                if (lastActiveTooltip?.index !== index) {
+                    updateTooltip(chartRef.current, index);
+                }
+            }
+        },
+        [lastActiveTooltip]
+    );
 
     // Reset tooltip when dependencies change (like resizing or time scale changes)
     useEffect(() => {
@@ -200,6 +223,7 @@ export const MultiLineChart = ({
                     data-chromatic='ignore'
                     plugins={[crossHairPlugin]}
                     onMouseOut={onMouseOut}
+                    onMouseMove={onMouseMove}
                 />
             ) : (
                 <div className='flex h-full w-full items-center justify-center'>

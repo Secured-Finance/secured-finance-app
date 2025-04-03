@@ -117,7 +117,7 @@ export const generateTooltipContent = (
             barValue.classList.add(
                 value < 0 ? 'text-[#FF9FAE]' : 'text-[#AAE8B0]'
             );
-            barValue.textContent = `${value >= 0 ? '+' : '-'}${value.toFixed(
+            barValue.textContent = `${value >= 0 ? '+' : ''}${value.toFixed(
                 2
             )}%`;
 

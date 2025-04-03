@@ -1,77 +1,92 @@
-import { useSelector } from 'react-redux';
-import { selectLandingOrderForm } from 'src/store/landingOrderForm';
-import { RootState } from 'src/store/types';
+import { useQuery } from '@apollo/client';
+import { toBytes32 } from '@secured-finance/sf-graph-client';
+import { useEffect, useMemo, useState } from 'react';
+import { MaturityListItem } from 'src/components/organisms';
 import { HistoricalYieldIntervals } from 'src/types';
-import { Rate, isMaturityPastDays } from 'src/utils';
+import { Rate } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
-import { baseContracts, useLendingMarkets } from '../useLendingMarkets';
+import { TRANSACTIONS_QUERY } from './constant';
 
-export const useYieldCurveMarketRatesHistorical = () => {
-    const { currency } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
-    );
-
-    const { data: lendingMarkets = baseContracts } = useLendingMarkets();
-    const lendingContracts = lendingMarkets[currency];
-
-    const historicalRates: Record<HistoricalYieldIntervals, Rate[]> = {
+export const useYieldCurveMarketRatesHistorical = (
+    maturityList: MaturityListItem[],
+    currency: string
+) => {
+    const [historicalRates, setHistoricalRates] = useState<
+        Record<HistoricalYieldIntervals, Rate[]>
+    >({
         [HistoricalYieldIntervals['30M']]: [],
         [HistoricalYieldIntervals['1H']]: [],
         [HistoricalYieldIntervals['4H']]: [],
         [HistoricalYieldIntervals['1D']]: [],
         [HistoricalYieldIntervals['1W']]: [],
         [HistoricalYieldIntervals['1MTH']]: [],
-    };
+    });
 
-    let maximumRate = 0;
-    let isFirstMarketCloseToMaturity = true;
+    const intervals = useMemo(() => {
+        const currentTime = Math.floor(Date.now() / 1000);
+        return Object.keys(historicalRates).map(
+            interval => currentTime - Number(interval)
+        );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-    const sortedLendingContracts = Object.values(lendingContracts)
-        .filter(obj => obj.isOpened || obj.isPreOrderPeriod)
-        .sort((a, b) => a.maturity - b.maturity);
+    const queryVariables = useMemo(
+        () => ({
+            intervals,
+            maturityList: maturityList.slice(0, maturityList.length - 1),
+            currency: toBytes32(currency),
+        }),
+        [maturityList, currency, intervals]
+    );
 
-    if (sortedLendingContracts.length > 0) {
-        Object.keys(historicalRates).forEach(interval => {
+    const { data, loading } = useQuery(
+        TRANSACTIONS_QUERY(
+            queryVariables.intervals,
+            queryVariables.maturityList,
+            queryVariables.currency
+        )
+    );
+
+    useEffect(() => {
+        if (!data || !maturityList.length) return;
+
+        const newRates = { ...historicalRates };
+        let hasChanges = false;
+
+        Object.keys(historicalRates).forEach((intervalKey, i) => {
             const rates: Rate[] = [];
-            if (
-                isMaturityPastDays(sortedLendingContracts[0]?.maturity, 7, true)
-            ) {
-                isFirstMarketCloseToMaturity = false;
-                maximumRate = Number.MAX_VALUE;
-            }
+            const list = maturityList.slice(0, maturityList.length - 1);
 
-            sortedLendingContracts.forEach(obj => {
+            list.forEach((item, j) => {
+                const transactionKey = `tx${i}_${j}`;
+                const transaction = data[transactionKey]?.[0];
+                const executionPrice = transaction?.executionPrice || 0;
+
                 const rate = LoanValue.fromPrice(
-                    obj.marketUnitPrice,
-                    obj.maturity,
-                    Date.now() / 1000 - Number(interval)
+                    executionPrice,
+                    item.maturity,
+                    intervals[i]
                 ).apr;
 
                 rates.push(rate);
-
-                if (isFirstMarketCloseToMaturity) {
-                    if (isMaturityPastDays(obj.maturity, 7, true)) {
-                        maximumRate = Math.max(maximumRate, rate.toNumber());
-                    }
-                }
             });
 
-            if (rates[0]?.toNumber() > maximumRate && maximumRate > 0) {
-                rates[0] = new Rate(maximumRate * 1.25);
+            if (
+                JSON.stringify(rates) !==
+                JSON.stringify(
+                    newRates[intervalKey as HistoricalYieldIntervals]
+                )
+            ) {
+                newRates[intervalKey as HistoricalYieldIntervals] = rates;
+                hasChanges = true;
             }
-            historicalRates[interval as HistoricalYieldIntervals] = rates;
         });
-    }
 
-    /*
-    In case, the first market is going to mature within a week, we don't want to show the original price on the chart
-    since the curve won't look good. We replace the first market's price with a price higher than the highest market
-    price on the chart to create a more consistent curve.
+        if (hasChanges) {
+            setHistoricalRates(newRates);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [data, maturityList, intervals]);
 
-    The maximum value of y-scale and the first market's price are calculated relative to the maximum rate to achieve
-    a decent looking curve. 1.25(for market rate) and 1.2(for scale) are magic numbers chosen to create the most
-    pleasing curve.
-    */
-
-    return historicalRates;
+    return { historicalRates, loading };
 };
