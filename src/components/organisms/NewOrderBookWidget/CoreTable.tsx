@@ -11,7 +11,7 @@ import {
 import clsx from 'clsx';
 import { MouseEvent, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { OrderBookInfoTooltip } from 'src/components/atoms/OrderBookInfoTooltip';
+import { OrderBookInfoTooltip } from 'src/components/atoms';
 import { useLastPrices } from 'src/hooks';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
@@ -56,7 +56,7 @@ export const CoreTable = <T,>({
     const [orderBookInfoData, setOrderBookInfoData] = useState<{
         avgPrice: string;
         avgApr: string;
-        totalAmount: number;
+        totalAmount: string;
         totalUsd: string;
         position: { top: number; left: number };
     } | null>(null);
@@ -171,7 +171,9 @@ export const CoreTable = <T,>({
         const vwap = avgPrice * 100;
         const avgApr =
             daysToMaturity > 0 ? (100 / vwap - 1) * (365 / daysToMaturity) : 0;
-        const totalAmount = amountFormatterFromBase[currency](totalPVAmount);
+        const totalAmount = new Intl.NumberFormat('en-US').format(
+            amountFormatterFromBase[currency](totalPVAmount)
+        );
         const totalUsd = new Amount(totalPVAmount, currency)?.toUSD(price);
 
         const formatToTwoDecimals = (num: number) => (num * 100).toFixed(2);
