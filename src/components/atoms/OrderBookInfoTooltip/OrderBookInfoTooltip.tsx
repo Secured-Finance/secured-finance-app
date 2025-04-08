@@ -8,7 +8,7 @@ export const OrderBookInfoTooltip = ({
         position: { top: number; left: number };
         avgPrice: string;
         avgApr: string;
-        totalAmount: number;
+        totalAmount: string;
         totalUsd: string;
     };
     currency: CurrencySymbol;

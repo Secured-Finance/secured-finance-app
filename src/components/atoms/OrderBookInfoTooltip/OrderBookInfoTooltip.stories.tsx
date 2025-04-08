@@ -12,7 +12,7 @@ export default {
             },
             avgPrice: '1234.57',
             avgApr: '1000.00',
-            totalAmount: 1089890.89,
+            totalAmount: '1,089,890.89',
             totalUsd: '56.7K',
         },
         currency: 'USDC',
