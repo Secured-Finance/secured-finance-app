@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router';
-import { MarketDashboard } from 'src/components/pages';
+import { Stats } from 'src/components/pages';
 import { useIsMarketTerminated } from 'src/hooks';
 
-const Dashboard = () => {
+const StatsDashboard = () => {
     const router = useRouter();
     const { data: isTerminated, isPending: isPendingMarketTerminated } =
         useIsMarketTerminated();
@@ -16,7 +16,7 @@ const Dashboard = () => {
         return null;
     }
 
-    return <MarketDashboard />;
+    return <Stats />;
 };
 
-export default Dashboard;
+export default StatsDashboard;
