@@ -4,7 +4,7 @@ module.exports = {
     content: [
         './src/**/*.{ts,tsx,js,jsx}',
         './public/index.html',
-        './node_modules/@nextui-org/theme/dist/components/(tooltip|table).js',
+        './node_modules/@nextui-org/theme/dist/components/table.js',
     ],
     safelist: [
         {
@@ -294,12 +294,14 @@ module.exports = {
                 btc: '#F9A137',
                 eth: '#B9BDEA',
                 usdc: '#2775CA',
+                usdfc: '#EAAC00',
             },
             pill: {
                 fil: 'rgba(0, 144, 255, 0.7)',
                 btc: 'rgba(249, 159, 50, 0.7)',
                 eth: 'rgba(131, 131, 133, 0.7)',
                 usdc: '#2775CA',
+                usdfc: '#EAAC00',
             },
         },
     },
