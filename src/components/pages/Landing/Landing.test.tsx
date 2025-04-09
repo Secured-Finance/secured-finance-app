@@ -1,5 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
+import { mockRates } from 'src/hooks/useYieldCurveHistoricalRates/constant';
 import { initialStore } from 'src/stories/mocks/mockStore';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor, within } from 'src/test-utils.js';
@@ -27,6 +28,12 @@ jest.mock(
 
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
+jest.mock('src/hooks/useYieldCurveHistoricalRates', () => ({
+    useYieldCurveMarketRatesHistorical: jest.fn(() => ({
+        historicalRates: mockRates,
+        loading: false,
+    })),
+}));
 
 const preloadedState = {
     ...initialStore,
@@ -40,7 +47,7 @@ beforeAll(() => {
     });
 });
 
-describe.skip('Landing Component', () => {
+describe('Landing Component', () => {
     const changeInputValue = (label: string, value: string) => {
         const input = screen.getByLabelText(label);
         fireEvent.change(input, { target: { value } });
@@ -286,7 +293,7 @@ describe.skip('Landing Component', () => {
         });
     }, 8000);
 
-    it.skip('should render the welcome message alert', () => {
+    it('should render the welcome message alert', () => {
         render(<Default />, {
             apolloMocks: Default.parameters?.apolloClient.mocks,
             preloadedState,

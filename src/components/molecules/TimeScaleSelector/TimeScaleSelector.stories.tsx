@@ -10,6 +10,7 @@ const meta: Meta<typeof TimeScaleSelector> = {
         length: 5,
         selected: [],
         setSelected: () => {},
+        disabledIntervals: new Set<string>(),
     },
 };
 
@@ -40,6 +41,7 @@ export const Interactive = () => {
             length={5}
             selected={selectedTimeScales}
             setSelected={setSelectedTimeScales}
+            disabledIntervals={new Set(['1H'])}
         />
     );
 };

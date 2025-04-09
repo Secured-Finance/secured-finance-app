@@ -137,4 +137,9 @@ export const multiLineChartOptions: ChartOptions<'line'> = {
         chart.canvas.style.cursor = 'pointer';
     },
     events: ['click', 'mousemove'],
+    plugins: {
+        tooltip: {
+            enabled: false,
+        },
+    },
 };

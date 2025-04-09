@@ -20,13 +20,13 @@ export const TimeScaleCheckBox = ({
             <div className='relative flex cursor-pointer items-center'>
                 <input
                     className={clsx(
-                        'border-gray-500 peer relative h-2.5 w-2.5 cursor-pointer appearance-none rounded-[2.2] border bg-transparent p-2 focus:outline-none',
+                        'peer relative h-2.5 w-2.5 cursor-pointer appearance-none rounded-[2.2] border bg-transparent p-2 focus:outline-none',
                         {
-                            'bg-neutral-700 text-primary-300':
+                            'bg-neutral-700 text-neutral-500':
                                 isChecked && !disabled,
                             'hover:border-blue-500 bg-neutral-700':
                                 !isChecked && !disabled,
-                            'bg-gray-300 text-gray-500 cursor-not-allowed':
+                            'cursor-not-allowed bg-neutral-3 text-slateGray':
                                 disabled,
                         },
                         TimeScaleCheckBoxSizeStyle[size]
@@ -62,7 +62,11 @@ export const TimeScaleCheckBox = ({
                 <label
                     htmlFor='checkbox'
                     className={clsx(
-                        'ml-2 cursor-pointer whitespace-nowrap font-secondary text-sm/5 capitalize text-neutral-400'
+                        'ml-2 whitespace-nowrap font-secondary text-sm/5 capitalize',
+                        {
+                            'cursor-pointer text-neutral-400': !disabled,
+                            'cursor-not-allowed text-slateGray': disabled,
+                        }
                     )}
                 >
                     {label}
