@@ -7,7 +7,7 @@ import { ChartOptions } from 'chart.js';
 import clsx from 'clsx';
 import domtoimage from 'dom-to-image';
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Spinner } from 'src/components/atoms';
 import BarChart from 'src/components/molecules/BarChart/BarChart';
@@ -72,6 +72,17 @@ export const MultiLineChartTab = ({
             });
         };
     }, []);
+
+    const disabledIntervals = useMemo(() => {
+        if (!fetchedRates) return new Set<string>();
+        const disabled = new Set<string>();
+
+        Object.entries(fetchedRates).forEach(([interval, rates]) => {
+            const allZero = rates.every(rate => rate.rate === 0);
+            if (allZero) disabled.add(interval);
+        });
+        return disabled;
+    }, [fetchedRates]);
 
     useEffect(() => {
         if (fetchedRates) {
@@ -257,6 +268,7 @@ export const MultiLineChartTab = ({
                     selected={selectedTimeScales}
                     setSelected={setSelectedTimeScales}
                     length={Object.keys(HistoricalYieldIntervals).length}
+                    disabledIntervals={disabledIntervals}
                 />
                 <div className='flex flex-row gap-2'>
                     <button

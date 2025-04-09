@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react';
 import { MaturityListItem } from 'src/components/organisms';
 import { HistoricalYieldIntervals } from 'src/types';
-import { Rate } from 'src/utils';
+import { CurrencySymbol, Rate } from 'src/utils';
 import { useLendingMarkets } from '../useLendingMarkets';
 import { useYieldCurveMarketRatesHistorical } from './index';
 
@@ -61,27 +61,6 @@ describe('useYieldCurveMarketRatesHistorical', () => {
         jest.clearAllMocks();
     });
 
-    it.skip('should return empty rates when no lending markets are available', () => {
-        (useLendingMarkets as jest.Mock).mockImplementation(() => ({
-            data: { ETH: [] },
-        }));
-
-        const { result } = renderHook(() =>
-            useYieldCurveMarketRatesHistorical(maturityList, 'USDC')
-        );
-
-        const emptyRates = {
-            [HistoricalYieldIntervals['30M']]: [0],
-            [HistoricalYieldIntervals['1H']]: [0],
-            [HistoricalYieldIntervals['4H']]: [0],
-            [HistoricalYieldIntervals['1D']]: [0],
-            [HistoricalYieldIntervals['1W']]: [0],
-            [HistoricalYieldIntervals['1MTH']]: [0],
-        };
-
-        expect(result.current).toEqual(emptyRates);
-    });
-
     it('should correctly handle maturities past 7 days for maximumRate logic', () => {
         const mockLendingMarkets = {
             data: {
@@ -103,7 +82,10 @@ describe('useYieldCurveMarketRatesHistorical', () => {
         );
 
         const { result } = renderHook(() =>
-            useYieldCurveMarketRatesHistorical(maturityList, 'USDC')
+            useYieldCurveMarketRatesHistorical(
+                maturityList,
+                CurrencySymbol['USDC']
+            )
         );
 
         expect(

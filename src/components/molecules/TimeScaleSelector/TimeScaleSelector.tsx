@@ -5,12 +5,14 @@ export default function TimeScaleSelector({
     length,
     selected,
     setSelected,
+    disabledIntervals,
 }: {
     length: number;
     selected: { label: string; value: string }[];
     setSelected: React.Dispatch<
         React.SetStateAction<{ label: string; value: string }[]>
     >;
+    disabledIntervals: Set<string>;
 }) {
     const [isOpen, setIsOpen] = useState(false);
     const handleCheckboxChange = (timePeriod: {
@@ -55,7 +57,7 @@ export default function TimeScaleSelector({
                 </button>
 
                 {isOpen && (
-                    <div className='w-30 absolute z-10 mt-2 rounded-md bg-gunMetal  shadow-lg'>
+                    <div className='w-30 absolute z-10 mt-2 rounded-md bg-gunMetal shadow-lg'>
                         {yieldTimeScales
                             .slice(0, length)
                             .map((timePeriod, index) => (
@@ -72,6 +74,9 @@ export default function TimeScaleSelector({
                                         onChange={() =>
                                             handleCheckboxChange(timePeriod)
                                         }
+                                        disabled={disabledIntervals.has(
+                                            timePeriod.value
+                                        )}
                                     />
                                 </div>
                             ))}
@@ -105,6 +110,9 @@ export default function TimeScaleSelector({
                                     onChange={() =>
                                         handleCheckboxChange(timePeriod)
                                     }
+                                    disabled={disabledIntervals.has(
+                                        timePeriod.value
+                                    )}
                                 />
                             </div>
                         ))}

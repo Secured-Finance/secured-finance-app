@@ -41,10 +41,10 @@ import {
     useOrderList,
     usePositions,
     useYieldCurveMarketRates,
+    useYieldCurveMarketRatesHistorical,
 } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import useSF from 'src/hooks/useSecuredFinance';
-import { useYieldCurveMarketRatesHistorical } from 'src/hooks/useYieldCurveHistoricalRates';
 import {
     resetAmount,
     resetUnitPrice,
