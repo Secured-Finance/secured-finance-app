@@ -63,15 +63,19 @@ export const MultiLineChartTab = ({
     const { currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
+    const currentChainId = useSelector(
+        (state: RootState) => state.blockchain.chainId
+    );
 
     useEffect(() => {
+        setSelectedTimeScales([{ label: 'Current Yield', value: '0' }]);
         return () => {
             ['chart-tooltip-line', 'chart-tooltip-bar'].forEach(id => {
                 const tooltipEl = document.getElementById(id);
                 tooltipEl?.remove();
             });
         };
-    }, []);
+    }, [currency, currentChainId]);
 
     const disabledIntervals = useMemo(() => {
         if (!fetchedRates) return new Set<string>();
@@ -86,20 +90,18 @@ export const MultiLineChartTab = ({
 
     useEffect(() => {
         if (fetchedRates) {
-            setHistoricalRates([
-                rates,
-                ...selectedTimeScales
-                    .map(
-                        interval =>
-                            fetchedRates[
-                                interval.value as HistoricalYieldIntervals
-                            ]
-                    )
-                    .filter(data => data && data.length > 0),
-            ]);
+            const historicalDatasets = selectedTimeScales
+                .map(
+                    interval =>
+                        fetchedRates[interval.value as HistoricalYieldIntervals]
+                )
+                .filter(data => data && data.length > 0);
+            if (rates && rates.length > 0) {
+                setHistoricalRates([rates, ...historicalDatasets]);
+            }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedTimeScales]);
+    }, [selectedTimeScales, fetchedRates]);
 
     const itayoseBorderColor = !isGlobalItayose
         ? '#B9BDEA'
@@ -189,7 +191,10 @@ export const MultiLineChartTab = ({
                         const lineChartHeight = chart.canvas.clientHeight;
                         positionElement(
                             barTooltipEl,
-                            window.scrollX + canvasRect.left + lastPoint.x + 50,
+                            window.scrollX +
+                                canvasRect.left +
+                                lastPoint.x +
+                                (isLastDataPoint ? -160 : 50),
                             window.scrollY +
                                 canvasRect.top +
                                 lineChartHeight +

@@ -1,6 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
-import { mockRates } from 'src/hooks/useYieldCurveHistoricalRates/constant';
+import { zeroRates } from 'src/hooks/useYieldCurveHistoricalRates/constant';
 import { initialStore } from 'src/stories/mocks/mockStore';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor, within } from 'src/test-utils.js';
@@ -30,7 +30,7 @@ const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 jest.mock('src/hooks/useYieldCurveHistoricalRates', () => ({
     useYieldCurveMarketRatesHistorical: jest.fn(() => ({
-        historicalRates: mockRates,
+        historicalRates: zeroRates,
         loading: false,
     })),
 }));

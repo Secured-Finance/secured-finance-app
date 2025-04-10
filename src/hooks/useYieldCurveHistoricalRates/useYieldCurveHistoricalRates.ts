@@ -2,16 +2,17 @@ import { useQuery } from '@apollo/client';
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import { TRANSACTIONS_BY_TIMESTAMP_AND_MATURITY_QUERY } from '@secured-finance/sf-graph-client/dist/queries';
 import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import { MaturityListItem } from 'src/components/organisms';
+import { selectLandingOrderForm } from 'src/store/landingOrderForm';
+import { RootState } from 'src/store/types';
 import { HistoricalYieldIntervals } from 'src/types';
-import { CurrencySymbol, Rate } from 'src/utils';
+import { Rate } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
-import { mockRates } from './constant';
+import { baseContracts, useLendingMarkets } from '../useLendingMarkets';
+import { zeroRates } from './constant';
 
-const useHistoricalRates = (
-    maturityList: MaturityListItem[],
-    currency: string
-) => {
+const useHistoricalRates = (maturityList: number[], currency: string) => {
     const intervals = useMemo(() => {
         const now = Math.floor(Date.now() / 1000);
         return Object.values(HistoricalYieldIntervals).map(
@@ -22,60 +23,83 @@ const useHistoricalRates = (
     const variables = useMemo(
         () => ({
             intervals,
-            maturityList: maturityList
-                .slice(0, maturityList.length - 1)
-                .map(i => i.maturity),
+            maturityList: maturityList,
             currency: toBytes32(currency),
         }),
         [intervals, maturityList, currency]
     );
 
-    const query = TRANSACTIONS_BY_TIMESTAMP_AND_MATURITY_QUERY(
-        variables.intervals,
-        variables.maturityList,
-        variables.currency
+    const { data, loading } = useQuery(
+        TRANSACTIONS_BY_TIMESTAMP_AND_MATURITY_QUERY(
+            variables.intervals,
+            variables.maturityList,
+            variables.currency
+        )
     );
-
-    const { data, loading } = useQuery(query);
-
     return { data, loading, intervals };
 };
 
-export const useYieldCurveMarketRatesHistorical = (
-    maturityList: MaturityListItem[],
-    currency: CurrencySymbol
-) => {
+export const useYieldCurveMarketRatesHistorical = () => {
+    const { currency, maturity } = useSelector((state: RootState) =>
+        selectLandingOrderForm(state.landingOrderForm)
+    );
+    const { data: lendingMarkets = baseContracts } = useLendingMarkets();
+    const lendingContracts = lendingMarkets[currency];
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const maturityList: MaturityListItem[] = [];
+    let maturities = [maturity];
+
+    const sortedLendingContracts = Object.values(lendingContracts)
+        .filter(
+            obj => obj.isOpened || obj.isItayosePeriod || obj.isPreOrderPeriod
+        )
+        .sort((a, b) => a.maturity - b.maturity);
+
+    if (sortedLendingContracts.length) {
+        sortedLendingContracts.forEach(obj => {
+            maturityList.push({
+                label: obj.name,
+                maturity: obj.maturity,
+                isPreOrderPeriod: obj.isPreOrderPeriod || obj.isItayosePeriod,
+            });
+        });
+        maturities = maturityList
+            .filter(i => i.isPreOrderPeriod !== true)
+            .map(i => i.maturity);
+    }
+
     const { data, loading, intervals } = useHistoricalRates(
-        maturityList,
+        maturities,
         currency
     );
 
     const historicalRates = useMemo(() => {
-        if (!data || !maturityList.length || !intervals.length) {
-            return mockRates;
-        }
-
         const newRates: Record<HistoricalYieldIntervals, Rate[]> = {
-            ...mockRates,
+            ...zeroRates,
         };
-        const list = maturityList.slice(0, maturityList.length - 1);
 
         Object.keys(HistoricalYieldIntervals).forEach((intervalKey, i) => {
             const rates: Rate[] = [];
 
-            list.forEach((item, j) => {
-                const key = `tx${i}_${j}`;
-                const tx = data?.[key]?.[0];
-                const executionPrice = tx?.executionPrice || 0;
+            maturityList
+                .filter(i => i.isPreOrderPeriod !== true)
+                .forEach((item, j) => {
+                    const key = `tx${i}_${j}`;
+                    const tx = data?.[key]?.[0];
 
-                const rate = LoanValue.fromPrice(
-                    executionPrice,
-                    item.maturity,
-                    intervals[i]
-                ).apr;
+                    const executionPrice = tx?.executionPrice;
 
-                rates.push(rate);
-            });
+                    const rate = executionPrice
+                        ? LoanValue.fromPrice(
+                              executionPrice,
+                              item.maturity,
+                              intervals[i]
+                          ).apr
+                        : new Rate(0);
+
+                    rates.push(rate);
+                });
 
             const enumKey =
                 HistoricalYieldIntervals[

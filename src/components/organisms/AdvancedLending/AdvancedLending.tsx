@@ -343,10 +343,8 @@ export const AdvancedLending = ({
         openingUnitPrice,
     ]);
 
-    const { historicalRates, loading } = useYieldCurveMarketRatesHistorical(
-        maturityList,
-        currency
-    );
+    const { historicalRates, loading: ratesLoading } =
+        useYieldCurveMarketRatesHistorical();
 
     const handleCurrencyChange = useCallback(
         (v: CurrencySymbol) => {
@@ -450,7 +448,7 @@ export const AdvancedLending = ({
                                 marketCloseToMaturityOriginalRate
                             }
                             fetchedRates={historicalRates}
-                            loading={loading}
+                            loading={ratesLoading}
                         />
                     </div>
                     {isSubgraphSupported && <HistoricalWidget />}
@@ -483,7 +481,7 @@ export const AdvancedLending = ({
                                             marketCloseToMaturityOriginalRate
                                         }
                                         fetchedRates={historicalRates}
-                                        loading={loading}
+                                        loading={ratesLoading}
                                     />
                                 </div>
                                 {isSubgraphSupported && <HistoricalWidget />}
