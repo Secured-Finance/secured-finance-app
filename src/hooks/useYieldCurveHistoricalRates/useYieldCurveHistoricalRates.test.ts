@@ -1,7 +1,6 @@
 import { renderHook } from '@testing-library/react';
-import { MaturityListItem } from 'src/components/organisms';
 import { HistoricalYieldIntervals } from 'src/types';
-import { CurrencySymbol, Rate } from 'src/utils';
+import { Rate } from 'src/utils';
 import { useLendingMarkets } from '../useLendingMarkets';
 import { useYieldCurveMarketRatesHistorical } from './index';
 
@@ -37,24 +36,6 @@ jest.mock('@apollo/client', () => ({
     })),
 }));
 
-const maturityList: MaturityListItem[] = [
-    {
-        label: 'APR2025',
-        maturity: 1743724800,
-        isPreOrderPeriod: false,
-    },
-    {
-        label: 'MAY2025',
-        maturity: 1746144000,
-        isPreOrderPeriod: false,
-    },
-    {
-        label: 'JUN2025',
-        maturity: 1748563200,
-        isPreOrderPeriod: true,
-    },
-];
-
 describe('useYieldCurveMarketRatesHistorical', () => {
     beforeEach(() => {
         jest.resetModules();
@@ -82,10 +63,7 @@ describe('useYieldCurveMarketRatesHistorical', () => {
         );
 
         const { result } = renderHook(() =>
-            useYieldCurveMarketRatesHistorical(
-                maturityList,
-                CurrencySymbol['USDC']
-            )
+            useYieldCurveMarketRatesHistorical()
         );
 
         expect(

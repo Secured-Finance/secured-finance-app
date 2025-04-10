@@ -67,6 +67,7 @@ export default {
         maximumRate: Number.MAX_VALUE,
         marketCloseToMaturityOriginalRate: 0,
         fetchedRates: mockFetchedRates,
+        loading: false,
     },
     chromatic: { pauseAnimationAtEnd: true },
     decorators: [withWalletProvider],

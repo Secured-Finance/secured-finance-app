@@ -212,8 +212,7 @@ export const MultiLineChart = ({
 
     return (
         <>
-            {refinedData.datasets.length > 0 &&
-            refinedData.datasets[0].data.length > 0 ? (
+            {data && data.datasets && data.datasets[0].data.length > 0 ? (
                 <Line
                     style={style}
                     data={refinedData}

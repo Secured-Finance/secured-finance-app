@@ -1,7 +1,7 @@
 import { HistoricalYieldIntervals } from 'src/types';
 import { Rate } from 'src/utils';
 
-export const mockRates: Record<HistoricalYieldIntervals, Rate[]> = {
+export const zeroRates: Record<HistoricalYieldIntervals, Rate[]> = {
     [HistoricalYieldIntervals['30M']]: [],
     [HistoricalYieldIntervals['1H']]: [],
     [HistoricalYieldIntervals['4H']]: [],
