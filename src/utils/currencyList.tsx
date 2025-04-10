@@ -102,15 +102,15 @@ export const currencyMap: Readonly<
         name: USDFC.onChain().name,
         icon: UsdfcIcon,
         zcIcon: ZcUsdcIcon,
-        coinGeckoId: 'usd-coin',
+        coinGeckoId: 'usdfc',
         isCollateral: true,
         toBaseUnit: (amount: number) =>
             convertToBlockchainUnit(amount, USDFC.onChain()),
         fromBaseUnit: (amount: bigint) =>
             convertFromBlockchainUnit(amount, USDFC.onChain()),
         toCurrency: () => USDFC.onChain(),
-        chartColor: tailwindConfig.theme.colors.chart.usdc,
-        pillColor: tailwindConfig.theme.colors.pill.usdc,
+        chartColor: tailwindConfig.theme.colors.chart.usdfc,
+        pillColor: tailwindConfig.theme.colors.pill.usdfc,
         roundingDecimal: 0,
         longName: 'USD for Filecoin Community',
         hasOrderBook: true,
