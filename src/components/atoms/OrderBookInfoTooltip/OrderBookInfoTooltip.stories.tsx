@@ -8,11 +8,11 @@ export default {
         orderBookInfoData: {
             position: {
                 top: 100,
-                left: 300,
+                left: 200,
             },
-            avgPrice: '1234.57',
-            avgApr: '1000.00',
-            totalAmount: '1,089,890.89',
+            avgPrice: '99.57',
+            avgApr: '1000.00%',
+            totalAmount: '56.17K',
             totalUsd: '56.7K',
         },
         currency: 'USDC',
