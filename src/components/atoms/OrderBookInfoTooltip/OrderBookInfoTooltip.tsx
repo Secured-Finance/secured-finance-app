@@ -18,7 +18,7 @@ export const OrderBookInfoTooltip = ({
 
     return (
         <div
-            className='fixed hidden min-w-44 flex-col gap-1 rounded-lg border-2 border-[#64748B] bg-neutral-900 px-2 py-2 font-secondary text-xs/4 text-neutral-50 opacity-90 shadow-md transition-opacity duration-200 desktop:flex'
+            className='fixed hidden min-w-44 flex-col gap-1 rounded-lg border border-neutral-500 bg-neutral-900 px-2 py-2 font-secondary opacity-90 shadow-md transition-opacity duration-200 laptop:flex'
             style={{
                 top: position.top,
                 left: position.left,
@@ -28,23 +28,18 @@ export const OrderBookInfoTooltip = ({
             role='tooltip'
             data-testid='orderBookTooltip'
         >
-            <div className='flex justify-between gap-1'>
-                <span className='text-neutral-400'>Avg. Price (VWAP)</span>
-                <span>{avgPrice}</span>
-            </div>
-            <div className='flex justify-between'>
-                <span className='text-neutral-400'>Avg. APR</span>
-                <span>{avgApr}%</span>
-            </div>
-            <div className='flex justify-between'>
-                <span className='text-neutral-400'>Total {currency}</span>
-                <span>{totalAmount}</span>
-            </div>
-            <div className='flex justify-between'>
-                <span className='text-neutral-400'>Total USD</span>
-                <span>{totalUsd}</span>
-            </div>
-            <div className='absolute left-full top-1/2 -translate-y-1/2 rounded-md border-y-[10px] border-l-[10px] border-y-transparent border-l-[#64748B]' />
+            <TooltipRow label='Avg. Price (VWAP)' value={avgPrice} />
+            <TooltipRow label='Avg. APR' value={avgApr} />
+            <TooltipRow label={`Total ${currency}`} value={totalAmount} />
+            <TooltipRow label='Total USD' value={totalUsd} />
+            <div className='absolute left-full top-1/2 -translate-y-1/2 border-y-[10px] border-l-[10px] border-y-transparent border-l-neutral-500' />
         </div>
     );
 };
+
+const TooltipRow = ({ label, value }: { label: string; value: string }) => (
+    <div className='flex justify-between text-xs/4'>
+        <span className='text-neutral-400'>{label}</span>
+        <span className='text-neutral-50'>{value}</span>
+    </div>
+);

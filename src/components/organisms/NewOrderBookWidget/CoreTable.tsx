@@ -18,9 +18,11 @@ import { RootState } from 'src/store/types';
 import {
     amountFormatterFromBase,
     calculateFutureValue,
+    ordinaryFormat,
+    percentFormat,
     usdFormat,
 } from 'src/utils';
-import { Amount } from 'src/utils/entities';
+import { Amount, LoanValue } from 'src/utils/entities';
 
 type CoreTableOptions = {
     name: string;
@@ -127,26 +129,22 @@ export const CoreTable = <T,>({
     ) => {
         setActiveRow(row.id);
         const rowData = row.original as any;
+        if (rowData.amount <= 0) return;
         const firstCell = event.currentTarget.querySelector('td');
         if (!firstCell) return;
 
         const rect = firstCell.getBoundingClientRect();
         const position = { top: rect.top + rect.height / 2, left: rect.left };
         const currentUnix = Math.floor(Date.now() / 1000);
-        const daysToMaturity = Math.max(
-            (rowData.value._maturity - currentUnix) / (60 * 60 * 24),
-            0
-        );
+        const maturity = rowData.value._maturity;
 
-        if (rowData.amount <= 0) return;
+        const allRows = table.getRowModel().rows;
+        const hoveredRowIndex = allRows.findIndex(r => r.id === row.id);
 
-        const hoveredRowIndex = table
-            .getRowModel()
-            .rows.findIndex(r => r.id === row.id);
         const relevantRows = (
             options.name === 'sellOrders'
-                ? table.getRowModel().rows.slice(0, hoveredRowIndex + 1)
-                : table.getRowModel().rows.slice(hoveredRowIndex)
+                ? allRows.slice(0, hoveredRowIndex + 1)
+                : allRows.slice(hoveredRowIndex)
         )
             .map(r => r.original as any)
             .filter(r => r.amount > 0);
@@ -162,27 +160,31 @@ export const CoreTable = <T,>({
                 ),
             BigInt(0)
         );
+
         const totalPVAmount = relevantRows.reduce(
             (sum, order) => sum + BigInt(order.amount),
             BigInt(0)
         );
 
-        const avgPrice = Number(totalPVAmount) / Number(totalFVAmount);
-        const vwap = avgPrice * 100;
-        const avgApr =
-            daysToMaturity > 0 ? (100 / vwap - 1) * (365 / daysToMaturity) : 0;
-        const totalAmount = new Intl.NumberFormat('en-US').format(
-            amountFormatterFromBase[currency](totalPVAmount)
-        );
+        const avgPrice =
+            Number(totalFVAmount) !== 0
+                ? Number(totalPVAmount) / Number(totalFVAmount)
+                : 0;
+
+        const avgApr = LoanValue.fromPrice(
+            avgPrice * 10000,
+            maturity,
+            currentUnix
+        ).apr.toNormalizedNumber();
+
+        const totalAmount = amountFormatterFromBase[currency](totalPVAmount);
         const totalUsd = new Amount(totalPVAmount, currency)?.toUSD(price);
 
-        const formatToTwoDecimals = (num: number) => (num * 100).toFixed(2);
-
         setOrderBookInfoData({
-            avgPrice: formatToTwoDecimals(avgPrice),
-            avgApr: formatToTwoDecimals(Math.min(avgApr, 10)),
+            avgPrice: (avgPrice * 100).toFixed(2),
+            avgApr: percentFormat(Math.min(avgApr, 1000), 100, 2, 2),
             totalUsd: usdFormat(Number(totalUsd), 2, 'compact'),
-            totalAmount,
+            totalAmount: ordinaryFormat(totalAmount, 0, 2, 'compact'),
             position,
         });
     };
