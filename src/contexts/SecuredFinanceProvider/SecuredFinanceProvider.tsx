@@ -217,6 +217,9 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
                     );
                 }
             },
+            pollingInterval: chainId.toString().startsWith('314')
+                ? 12_000
+                : 4_000,
         });
 
         window.ethereum?.on('accountsChanged', handleAccountChanged);
@@ -229,6 +232,7 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
             );
         };
     }, [
+        chainId,
         dispatch,
         handleAccountChanged,
         handleChainChanged,
