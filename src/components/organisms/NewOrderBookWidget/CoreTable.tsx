@@ -135,7 +135,6 @@ export const CoreTable = <T,>({
 
         const rect = firstCell.getBoundingClientRect();
         const position = { top: rect.top + rect.height / 2, left: rect.left };
-        const currentUnix = Math.floor(Date.now() / 1000);
         const maturity = rowData.value._maturity;
 
         const allRows = table.getRowModel().rows;
@@ -173,8 +172,7 @@ export const CoreTable = <T,>({
 
         const avgApr = LoanValue.fromPrice(
             avgPrice * 10000,
-            maturity,
-            currentUnix
+            maturity
         ).apr.toNormalizedNumber();
 
         const totalAmount = amountFormatterFromBase[currency](totalPVAmount);
