@@ -67,7 +67,7 @@ beforeEach(() => {
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-describe.skip('AdvancedLendingOrderCard Component', () => {
+describe('AdvancedLendingOrderCard Component', () => {
     const changeInputValue = (label: string, value: string) => {
         const input = screen.getByLabelText(label);
         fireEvent.change(input, { target: { value } });
@@ -116,7 +116,7 @@ describe.skip('AdvancedLendingOrderCard Component', () => {
         render(<Default />, { preloadedState });
         await waitFor(() => {
             const inputs = screen.getAllByRole('textbox');
-            expect(screen.getByText('Bond Price')).toBeInTheDocument();
+            expect(screen.getByText('Price')).toBeInTheDocument();
             expect(inputs[0].getAttribute('value')).toBe('95');
 
             expect(screen.getByText('Size')).toBeInTheDocument();
@@ -124,11 +124,11 @@ describe.skip('AdvancedLendingOrderCard Component', () => {
             expect(screen.getByText('USDC')).toBeInTheDocument();
         });
 
-        expect(screen.getByText('Present Value (PV)')).toBeInTheDocument();
+        expect(screen.getByText('Present Value')).toBeInTheDocument();
         expect(
             await screen.findByText('500 USDC ($500.00)')
         ).toBeInTheDocument();
-        expect(screen.getByText('Future Value (FV)')).toBeInTheDocument();
+        expect(screen.getByText('Future Value')).toBeInTheDocument();
         expect(
             await screen.findByText('526 USDC ($526.00)')
         ).toBeInTheDocument();
@@ -176,7 +176,8 @@ describe.skip('AdvancedLendingOrderCard Component', () => {
         });
     });
 
-    it('should render wallet source when side is lend', async () => {
+    // skipped because walletSelector is removed
+    it.skip('should render wallet source when side is lend', async () => {
         render(<Default />, { preloadedState });
         const lendTab = screen.getByText('Lend/Buy');
         fireEvent.click(lendTab);
@@ -224,7 +225,8 @@ describe.skip('AdvancedLendingOrderCard Component', () => {
         });
     });
 
-    it('should not reset amount and slider to 0 when wallet source is changed', async () => {
+    // skipped because walletSelector is removed
+    it.skip('should not reset amount and slider to 0 when wallet source is changed', async () => {
         await waitFor(() => {
             render(<Default />, {
                 preloadedState: {
@@ -273,31 +275,31 @@ describe.skip('AdvancedLendingOrderCard Component', () => {
             })
         );
 
-        expect(await screen.findByText('10,000')).toBeInTheDocument();
+        expect(await screen.findByText('10,000 WFIL')).toBeInTheDocument();
         const slider = screen.getByRole('slider');
         const input = screen.getByRole('textbox', { name: 'Size' });
 
-        expect(await screen.findByText('0xB98b...Fd6D')).toBeInTheDocument();
         expect(input).toHaveValue('500');
         fireEvent.change(slider, { target: { value: 100 } });
         await waitFor(() => expect(input).toHaveValue('10,000'));
         fireEvent.change(slider, { target: { value: 1 } });
         expect(input).toHaveValue('100');
 
-        const walletSourceButton = screen.getByTestId(
-            'wallet-source-selector-button'
-        );
-        fireEvent.click(walletSourceButton);
+        // skipped because walletSelector is removed
+        // const walletSourceButton = screen.getByTestId(
+        //     'wallet-source-selector-button'
+        // );
+        // fireEvent.click(walletSourceButton);
 
-        expect(screen.getByText('SF Vault')).toBeInTheDocument();
-        const option = screen.getByTestId('option-1');
-        fireEvent.click(option);
-        expect(input).toHaveValue('100');
-        expect(slider).toHaveValue('100');
-        fireEvent.change(slider, { target: { value: 10 } });
-        expect(input).toHaveValue('10');
-        fireEvent.change(slider, { target: { value: 50 } });
-        expect(input).toHaveValue('50');
+        // expect(screen.getByText('SF Vault')).toBeInTheDocument();
+        // const option = screen.getByTestId('option-1');
+        // fireEvent.click(option);
+        // expect(input).toHaveValue('100');
+        // expect(slider).toHaveValue('100');
+        // fireEvent.change(slider, { target: { value: 10 } });
+        // expect(input).toHaveValue('10');
+        // fireEvent.change(slider, { target: { value: 50 } });
+        // expect(input).toHaveValue('50');
     });
 
     it('amount should be set to max wallet amount if input amount is greater than wallet amount and wallet source is changed', async () => {
@@ -315,29 +317,29 @@ describe.skip('AdvancedLendingOrderCard Component', () => {
             })
         );
 
-        expect(await screen.findByText('10,000')).toBeInTheDocument();
+        expect(await screen.findByText('10,000 WFIL')).toBeInTheDocument();
         const slider = screen.getByRole('slider');
         const input = screen.getByRole('textbox', { name: 'Size' });
 
-        expect(await screen.findByText('0xB98b...Fd6D')).toBeInTheDocument();
         expect(input).toHaveValue('500');
         fireEvent.change(slider, { target: { value: 100 } });
         expect(input).toHaveValue('10,000');
 
-        const walletSourceButton = screen.getByTestId(
-            'wallet-source-selector-button'
-        );
-        fireEvent.click(walletSourceButton);
+        // skipped because walletSelector is removed
+        // const walletSourceButton = screen.getByTestId(
+        //     'wallet-source-selector-button'
+        // );
+        // fireEvent.click(walletSourceButton);
 
-        expect(screen.getByText('SF Vault')).toBeInTheDocument();
-        const option = screen.getByTestId('option-1');
-        fireEvent.click(option);
-        expect(input).toHaveValue('100');
+        // expect(screen.getByText('SF Vault')).toBeInTheDocument();
+        // const option = screen.getByTestId('option-1');
+        // fireEvent.click(option);
+        // expect(input).toHaveValue('100');
         expect(slider).toHaveValue('100');
     });
 
     it('it should disable the action button and show error hint if amount is greater than available amount', async () => {
-        render(<Default />, {
+        render(<Default collateralBook={collateralBook0} />, {
             preloadedState: {
                 ...preloadedState,
                 landingOrderForm: {
@@ -351,19 +353,15 @@ describe.skip('AdvancedLendingOrderCard Component', () => {
         await waitFor(() => {
             const input = screen.getByRole('textbox', { name: 'Size' });
             fireEvent.change(input, { target: { value: '200' } });
-
             const button = screen.getByTestId('place-order-button');
             expect(button).not.toBeDisabled();
-            expect(
-                screen.queryByText('Insufficient amount in source')
-            ).not.toBeInTheDocument();
+        });
 
+        await waitFor(() => {
+            const input = screen.getByRole('textbox', { name: 'Size' });
             fireEvent.change(input, { target: { value: '20000' } });
-
+            const button = screen.getByTestId('place-order-button');
             expect(button).toBeDisabled();
-            expect(
-                screen.queryByText('Insufficient amount in source')
-            ).toBeInTheDocument();
         });
     });
 
@@ -386,7 +384,7 @@ describe.skip('AdvancedLendingOrderCard Component', () => {
             fireEvent.change(input, { target: { value: '100' } });
         });
         await waitFor(() => {
-            expect(screen.getByText('~ 867.19')).toBeInTheDocument();
+            expect(screen.getByText('867.19 WFIL')).toBeInTheDocument();
         });
 
         await waitFor(() =>
@@ -406,11 +404,9 @@ describe.skip('AdvancedLendingOrderCard Component', () => {
                 },
             },
         });
-        expect(
-            screen.getByText('Available To Borrow (WFIL)')
-        ).toBeInTheDocument();
+        expect(screen.getByText('Available to Borrow')).toBeInTheDocument();
         await waitFor(() => {
-            expect(screen.getByText('~ 867.19')).toBeInTheDocument();
+            expect(screen.getByText('867.19 WFIL')).toBeInTheDocument();
         });
     });
 
@@ -427,8 +423,9 @@ describe.skip('AdvancedLendingOrderCard Component', () => {
             },
         });
         expect(
-            screen.queryByText('Available To Borrow (WFIL)')
+            screen.queryByText('Available to Borrow')
         ).not.toBeInTheDocument();
+        expect(screen.queryByText('Available to Lend')).toBeInTheDocument();
     });
 
     it('should disable elements and hide order inputs when wallet is not connected', async () => {
@@ -437,10 +434,7 @@ describe.skip('AdvancedLendingOrderCard Component', () => {
         // lending side
         fireEvent.click(screen.getByRole('radio', { name: 'Lend/Buy' }));
         expect(
-            screen.getByTestId('wallet-source-selector-button')
-        ).toBeDisabled();
-        expect(
-            screen.queryByRole('input', { name: 'Bond Price' })
+            screen.queryByRole('input', { name: 'Price' })
         ).not.toBeInTheDocument();
 
         // borrow side
@@ -543,12 +537,12 @@ describe.skip('AdvancedLendingOrderCard Component', () => {
                     await screen.findByText('Place Order')
                 ).toBeInTheDocument();
 
-                changeInputValue('Bond Price', '0');
+                changeInputValue('Price', '0');
                 changeInputValue('Size', '10');
                 await assertPlaceOrderButtonIsDisabled();
                 assertInvalidBondPriceErrorIsShown();
 
-                changeInputValue('Bond Price', '10');
+                changeInputValue('Price', '10');
                 await assertPlaceOrderButtonIsEnabled();
                 assertInvalidBondPriceErrorIsNotShown();
             });
@@ -564,13 +558,15 @@ describe.skip('AdvancedLendingOrderCard Component', () => {
                         },
                     },
                 });
-                expect(await screen.findByText('4,000')).toBeInTheDocument();
-                changeInputValue('Bond Price', '0');
+                expect(
+                    await screen.findByText('4,000 USDC')
+                ).toBeInTheDocument();
+                changeInputValue('Price', '0');
                 changeInputValue('Size', '10');
                 await assertPlaceOrderButtonIsDisabled();
                 assertInvalidBondPriceErrorIsShown();
 
-                changeInputValue('Bond Price', '10');
+                changeInputValue('Price', '10');
                 await assertPlaceOrderButtonIsEnabled();
                 assertInvalidBondPriceErrorIsNotShown();
             });
@@ -612,7 +608,7 @@ describe.skip('AdvancedLendingOrderCard Component', () => {
                 await assertPlaceOrderButtonIsDisabled();
                 assertInvalidBondPriceErrorIsNotShown();
 
-                changeInputValue('Bond Price', '0');
+                changeInputValue('Price', '0');
                 await assertPlaceOrderButtonIsDisabled();
                 assertInvalidBondPriceErrorIsShown();
             });
@@ -649,7 +645,9 @@ describe.skip('AdvancedLendingOrderCard Component', () => {
                         },
                     },
                 });
-                expect(await screen.findByText('4,000')).toBeInTheDocument();
+                expect(
+                    await screen.findByText('4,000 USDC')
+                ).toBeInTheDocument();
                 changeInputValue('Size', '10');
                 await assertPlaceOrderButtonIsEnabled();
                 assertInvalidBondPriceErrorIsNotShown();
@@ -678,7 +676,7 @@ describe.skip('AdvancedLendingOrderCard Component', () => {
 
     describe('bond price input', () => {
         const assertBondPriceInputValue = (expectedValue: string) => {
-            const input = screen.getByLabelText('Bond Price');
+            const input = screen.getByLabelText('Price');
             expect(input).toHaveAttribute('value', expectedValue);
         };
 
@@ -746,7 +744,7 @@ describe.skip('AdvancedLendingOrderCard Component', () => {
 
             fireEvent.click(marketButton);
 
-            const spanInput = screen.getByTestId('disabled-input');
+            const spanInput = screen.getByTestId('disabled-input-price');
             expect(spanInput).toBeInTheDocument();
             expect(spanInput).toHaveTextContent('Market');
         });
@@ -763,13 +761,13 @@ describe.skip('AdvancedLendingOrderCard Component', () => {
             });
 
             expect(await screen.findByText('6.35%')).toBeInTheDocument();
-            changeInputValue('Bond Price', '94');
+            changeInputValue('Price', '94');
             expect(screen.getByText('7.70%')).toBeInTheDocument();
         });
 
         it('should not reset user input value of bond price when switching order side', async () => {
             render(<Default marketPrice={9600} />, { preloadedState });
-            changeInputValue('Bond Price', '20');
+            changeInputValue('Price', '20');
             assertBondPriceInputValue('20');
             await waitFor(() => {
                 fireEvent.click(screen.getByText('Lend/Buy'));
@@ -795,7 +793,7 @@ describe.skip('AdvancedLendingOrderCard Component', () => {
         it('should emit BOND_PRICE event when bond price is changed', () => {
             const track = jest.spyOn(analytics, 'track');
             render(<Default marketPrice={9600} />, { preloadedState });
-            changeInputValue('Bond Price', '20');
+            changeInputValue('Price', '20');
             expect(track).toHaveBeenCalledWith(InteractionEvents.BOND_PRICE, {
                 [InteractionProperties.BOND_PRICE]: '20',
             });

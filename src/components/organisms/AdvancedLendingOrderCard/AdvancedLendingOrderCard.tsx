@@ -483,7 +483,7 @@ export function AdvancedLendingOrderCard({
                     <div className='flex flex-col gap-1 py-1'>
                         <OrderDisplayBox
                             field='Required Collateral'
-                            value={formatLoanValue(loanValue, 'rate')}
+                            value={'--'}
                         />
                         <OrderDisplayBox
                             field='Fees'

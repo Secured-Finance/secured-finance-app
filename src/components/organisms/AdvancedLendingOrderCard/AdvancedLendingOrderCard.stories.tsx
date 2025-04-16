@@ -61,7 +61,7 @@ BondPriceFailedValidation.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const limitTab = await canvas.findByRole('radio', { name: 'Limit' });
     await userEvent.click(limitTab);
-    const input = await canvas.findByRole('textbox', { name: 'Bond Price' });
+    const input = await canvas.findByRole('textbox', { name: 'Price' });
     await userEvent.clear(input);
     await userEvent.type(input, '0', {
         delay: 100,

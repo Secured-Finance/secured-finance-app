@@ -58,7 +58,7 @@ export const OrderInputBox = ({
                 {disabled ? (
                     <span
                         className='text-right text-base font-semibold leading-6 text-neutral-500 laptop:text-[1.125rem]'
-                        data-testid='disabled-input'
+                        data-testid={`disabled-input-${field.toLowerCase()}`}
                     >
                         {initialValue ?? 0}
                     </span>
