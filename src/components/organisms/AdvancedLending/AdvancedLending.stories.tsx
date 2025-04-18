@@ -15,6 +15,7 @@ import {
     mockFullUserOrderHistory,
     mockFullUserTransactionHistory,
     mockTrades,
+    mockTransactionsQuery,
 } from 'src/stories/mocks/queries';
 import { CurrencySymbol } from 'src/utils';
 import { AdvancedLending } from './AdvancedLending';
@@ -38,6 +39,7 @@ export default {
                 ...mockDailyVolumes,
                 ...mockFullUserTransactionHistory,
                 ...mockFullUserOrderHistory,
+                ...mockTransactionsQuery,
             ],
         },
         ...RESPONSIVE_PARAMETERS,
@@ -68,8 +70,8 @@ ShowAllActivePositions.parameters = {
     connected: true,
 };
 ShowAllActivePositions.play = async () => {
-    const checkbox = await screen.findByRole('checkbox');
-    await userEvent.click(checkbox);
+    const checkbox = await screen.findAllByRole('checkbox');
+    await userEvent.click(checkbox[0]);
 };
 ShowAllActivePositions.args = {
     collateralBook: collateralBook37,

@@ -108,6 +108,15 @@ export enum HistoricalDataIntervals {
     '1MTH' = '2592000',
 }
 
+export enum HistoricalYieldIntervals {
+    '30M' = '1800',
+    '1H' = '3600',
+    '4H' = '14400',
+    '1D' = '86400',
+    '1W' = '604800',
+    '1MTH' = '2592000',
+}
+
 export type CurrentMarket = {
     value: LoanValue;
     time: number;
