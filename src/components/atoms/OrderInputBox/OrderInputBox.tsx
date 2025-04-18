@@ -13,6 +13,7 @@ interface OrderInputBoxProps {
     maxLimit?: number;
     onValueChange?: (v: string | undefined) => void;
     bgClassName?: string;
+    children?: React.ReactNode;
 }
 
 export const OrderInputBox = ({
@@ -24,7 +25,8 @@ export const OrderInputBox = ({
     decimalPlacesAllowed,
     maxLimit,
     onValueChange,
-    bgClassName = 'bg-black-20',
+    bgClassName,
+    children,
 }: OrderInputBoxProps) => {
     const handleAmountChange = useCallback(
         (amount: string | undefined) => {
@@ -38,12 +40,12 @@ export const OrderInputBox = ({
     return (
         <div
             className={clsx(
-                'typography-caption grid h-10 grid-cols-2 place-content-between rounded-lg py-2 pl-3 pr-4 ring-inset ring-starBlue focus-within:ring-2',
+                'grid h-fit grid-cols-2 place-content-between items-center rounded-lg border border-neutral-500 bg-neutral-900 px-3 py-2 ring-inset',
                 bgClassName
             )}
         >
             <div className='flex flex-row items-center gap-2'>
-                <div className='laptop:typography-caption whitespace-nowrap text-xs text-planetaryPurple'>
+                <div className='laptop:typography-desktop-body-4 whitespace-nowrap text-xs text-neutral-400'>
                     {field}
                 </div>
                 {informationText && !disabled && (
@@ -55,22 +57,27 @@ export const OrderInputBox = ({
             <div className='grid grid-flow-col place-content-end gap-10px'>
                 {disabled ? (
                     <span
-                        className='text-right text-base font-semibold leading-6 text-neutral-300'
-                        data-testid='disabled-input'
+                        className='text-right text-base font-semibold leading-6 text-neutral-500 laptop:text-[1.125rem]'
+                        data-testid={`disabled-input-${field.toLowerCase()}`}
                     >
                         {initialValue ?? 0}
                     </span>
                 ) : (
                     <InputBase
                         value={initialValue}
-                        className='col col-span-2 flex text-right text-base font-semibold leading-6 text-neutral-8 laptop:text-[1.125rem]'
+                        className='col col-span-2 flex text-right text-base font-semibold leading-6 text-neutral-50 laptop:text-[1.125rem]'
                         label={field}
                         onValueChange={handleAmountChange}
                         decimalPlacesAllowed={decimalPlacesAllowed}
                         maxLimit={maxLimit}
                     />
                 )}
-                {unit && <div className='text-neutral-4'>{unit}</div>}
+                {unit && (
+                    <div className='typography-caption text-neutral-400'>
+                        {unit}
+                    </div>
+                )}
+                {children}
             </div>
         </div>
     );
