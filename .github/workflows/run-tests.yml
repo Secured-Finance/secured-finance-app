@@ -1,0 +1,43 @@
+name: Run Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'The branch or tag ref to checkout.'
+        default: ''
+        required: false
+        type: string
+      test_file:
+        description: 'Comma-separated list of test files to run (e.g., Button.test.tsx,Input.test.tsx).'
+        default: ''
+        required: false
+        type: string
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+          ref: ${{ inputs.ref }}
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.PAT }}
+
+      - name: Run Tests
+        run: |
+          if [ -z "${{ inputs.test_file }}" ]; then
+            npm run test:cov
+          else
+            npm run test:cov -- -t "${{ inputs.test_file//,/| }}"
+          fi
