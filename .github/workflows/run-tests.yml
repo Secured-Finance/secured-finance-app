@@ -5,7 +5,7 @@ on:
     inputs:
       ref:
         description: 'The branch or tag ref to checkout.'
-        default: ''
+        default: 'develop'
         required: false
         type: string
       test_file:
@@ -40,5 +40,5 @@ jobs:
           if [ -z "$TEST_FILE" ]; then
             npm run test:cov
           else
-            npm run test:cov -t "^(${TEST_FILE//,/|})$"
+            npm run test:cov -- -t "(${TEST_FILE//,/|})"
           fi
