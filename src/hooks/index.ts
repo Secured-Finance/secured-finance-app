@@ -39,6 +39,7 @@ export * from './usePreventPageScroll';
 export * from './useTotalValueLockedAndCurrencies';
 export * from './useValueLockedByCurrency';
 export * from './useWithdrawableZCTokenAmounts';
+export * from './useYieldCurveHistoricalRates';
 export * from './useYieldCurveMarketRates';
 export * from './useZCToken';
 export * from './useZCUsage';

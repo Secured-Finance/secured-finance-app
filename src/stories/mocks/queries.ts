@@ -1,6 +1,7 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
+import { TRANSACTIONS_BY_TIMESTAMP_AND_MATURITY_QUERY } from '@secured-finance/sf-graph-client/dist/queries';
 import { GetUserDocument } from '@secured-finance/sf-point-client';
 import { OrderType, TransactionList } from 'src/types';
 import { Maturity } from 'src/utils/entities';
@@ -1146,4 +1147,58 @@ export const mockRecentTrades = [
     },
     getTransactionQuery(wfilBytes32, MATURITY_ZERO, -1, today, [], []),
     getTransactionQuery(wfilBytes32, MATURITY_ZERO, -1, today2, [], []),
+];
+
+const createMockTx = (createdAt: number, maturity: number) => ({
+    amount: '1000000',
+    averagePrice: '2000',
+    executionPrice: '1995',
+    createdAt,
+    currency: wfilBytes32,
+    maturity,
+});
+
+const timestamps = [
+    1744027663, 1744025863, 1744015063, 1743943063, 1743424663, 1741437463,
+];
+
+const maturityList = [
+    1744329600, 1744934400, 1745539200, 1746144000, 1746748800, 1747353600,
+    1747958400,
+];
+
+type Tx = {
+    amount: string;
+    averagePrice: string;
+    executionPrice: string;
+    createdAt: number;
+    currency: string;
+    maturity: number;
+};
+
+const generateMockData = () => {
+    const data: Record<string, Tx[]> = {};
+    timestamps.forEach((timestamp, i) => {
+        maturityList.forEach((maturity, j) => {
+            const key = `tx${i}_${j}`;
+            data[key] = [createMockTx(timestamp, maturity)];
+        });
+    });
+
+    return data;
+};
+
+export const mockTransactionsQuery = [
+    {
+        request: {
+            query: TRANSACTIONS_BY_TIMESTAMP_AND_MATURITY_QUERY(
+                timestamps,
+                maturityList,
+                usdcBytes32
+            ),
+        },
+        result: {
+            data: generateMockData(),
+        },
+    },
 ];
