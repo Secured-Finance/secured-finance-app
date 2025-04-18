@@ -36,8 +36,9 @@ jobs:
 
       - name: Run Tests
         run: |
-          if [ -z "${{ inputs.test_file }}" ]; then
+          TEST_FILE="${{ inputs.test_file }}"
+          if [ -z "$TEST_FILE" ]; then
             npm run test:cov
           else
-            npm run test:cov -- -t "${{ inputs.test_file//,/| }}"
+            npm run test:cov -- -t "${TEST_FILE//,/|}"
           fi
