@@ -107,6 +107,7 @@ export function AdvancedLendingOrderCard({
 
     const balanceRecord = useBalances();
     const isTablet = useBreakpoint('laptop');
+    const isMobile = useBreakpoint('tablet');
 
     const midPrice = useMemo(() => {
         if (
@@ -348,8 +349,10 @@ export function AdvancedLendingOrderCard({
                         />
                     )}
                     <div className='flex flex-col gap-3 laptop:gap-2'>
-                        <div className='typography-desktop-body-4 mx-2 flex flex-row justify-between'>
-                            <span className='text-neutral-400'>{`Available to ${
+                        <div className='tablet:typography-desktop-body-4 typography-mobile-body-5 mx-2 flex flex-row justify-between'>
+                            <span className='text-neutral-400'>{`${
+                                isMobile ? 'Avl.' : 'Available'
+                            } to ${
                                 side === OrderSide.BORROW ? 'Borrow' : 'Lend'
                             }`}</span>
                             <span className='text-right text-primary-300'>
@@ -361,7 +364,7 @@ export function AdvancedLendingOrderCard({
                                     ),
                                     0,
                                     2
-                                )} ${currency}`}
+                                )} ${isMobile ? '' : currency}`}
                             </span>
                         </div>
                         <OrderInputBox
@@ -436,18 +439,26 @@ export function AdvancedLendingOrderCard({
                             value={formatLoanValue(loanValue, 'rate')}
                         />
                         <OrderDisplayBox
-                            field='Present Value'
-                            value={`${ordinaryFormat(
-                                orderAmount?.value ?? 0,
-                                0,
-                                currencyMap[currency].roundingDecimal
-                            )} ${currency} (${usdFormat(
-                                orderAmount?.toUSD(price) ?? 0,
-                                2
-                            )})`}
+                            field={isMobile ? 'PV' : 'Present Value'}
+                            value={
+                                isMobile
+                                    ? `${ordinaryFormat(
+                                          orderAmount?.value ?? 0,
+                                          0,
+                                          currencyMap[currency].roundingDecimal
+                                      )} ${currency}`
+                                    : `${ordinaryFormat(
+                                          orderAmount?.value ?? 0,
+                                          0,
+                                          currencyMap[currency].roundingDecimal
+                                      )} ${currency} (${usdFormat(
+                                          orderAmount?.toUSD(price) ?? 0,
+                                          2
+                                      )})`
+                            }
                         />
                         <OrderDisplayBox
-                            field='Future Value'
+                            field={isMobile ? 'FV' : 'Future Value'}
                             value={
                                 unitPriceValue &&
                                 unitPriceValue !== '' &&
@@ -460,11 +471,15 @@ export function AdvancedLendingOrderCard({
                                           const totalValue = price
                                               ? fv * price
                                               : 0;
-                                          return `${fv} ${currency} (${usdFormat(
-                                              totalValue,
-                                              2
-                                          )})`;
+                                          return isMobile
+                                              ? `${fv} ${currency}`
+                                              : `${fv} ${currency} (${usdFormat(
+                                                    totalValue,
+                                                    2
+                                                )})`;
                                       })()
+                                    : isMobile
+                                    ? `0 ${currency}`
                                     : `0 ${currency} ($0.00)`
                             }
                         />
