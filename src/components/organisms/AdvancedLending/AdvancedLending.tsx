@@ -17,7 +17,7 @@ import {
     ActiveTradeTable,
     AdvancedLendingOrderCard,
     HistoricalWidget,
-    LineChartTab,
+    MultiLineChartTab,
     MyTransactionsTable,
     NewOrderBookWidget,
     OrderHistoryTable,
@@ -42,6 +42,7 @@ import {
     useOrderList,
     usePositions,
     useYieldCurveMarketRates,
+    useYieldCurveMarketRatesHistorical,
 } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import useSF from 'src/hooks/useSecuredFinance';
@@ -342,6 +343,9 @@ export const AdvancedLending = ({
         openingUnitPrice,
     ]);
 
+    const { historicalRates, loading: ratesLoading } =
+        useYieldCurveMarketRatesHistorical();
+
     const handleCurrencyChange = useCallback(
         (v: CurrencySymbol) => {
             dispatch(setCurrency(v));
@@ -433,8 +437,8 @@ export const AdvancedLending = ({
                             : [{ text: 'Yield Curve' }]
                     }
                 >
-                    <div className='h-[410px] w-full px-2 py-4'>
-                        <LineChartTab
+                    <div className='h-[410px] w-full px-2 py-2'>
+                        <MultiLineChartTab
                             rates={rates}
                             maturityList={maturityList}
                             itayoseMarketIndexSet={itayoseMarketIndexSet}
@@ -443,6 +447,8 @@ export const AdvancedLending = ({
                             marketCloseToMaturityOriginalRate={
                                 marketCloseToMaturityOriginalRate
                             }
+                            fetchedRates={historicalRates}
+                            loading={ratesLoading}
                         />
                     </div>
                     {isSubgraphSupported && <HistoricalWidget />}
@@ -462,8 +468,8 @@ export const AdvancedLending = ({
                                 }
                                 tabGroupClassName='laptop:w-full laptop:max-w-[400px] desktop:max-w-[450px]'
                             >
-                                <div className='h-[410px] w-full px-2 py-4'>
-                                    <LineChartTab
+                                <div className='h-[410px] w-full px-2 py-2'>
+                                    <MultiLineChartTab
                                         rates={rates}
                                         maturityList={maturityList}
                                         itayoseMarketIndexSet={
@@ -474,6 +480,8 @@ export const AdvancedLending = ({
                                         marketCloseToMaturityOriginalRate={
                                             marketCloseToMaturityOriginalRate
                                         }
+                                        fetchedRates={historicalRates}
+                                        loading={ratesLoading}
                                     />
                                 </div>
                                 {isSubgraphSupported && <HistoricalWidget />}

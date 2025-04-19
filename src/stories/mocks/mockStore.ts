@@ -22,7 +22,7 @@ export const initialStore = {
         unitPrice: undefined,
         orderType: OrderType.MARKET,
         lastView: 'Simple' as const,
-        sourceAccount: WalletSource.METAMASK,
+        sourceAccount: WalletSource.SF_VAULT,
         isBorrowedCollateral: false,
     },
 };

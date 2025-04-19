@@ -1,5 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
+import { zeroRates } from 'src/hooks/useYieldCurveHistoricalRates/constant';
 import { initialStore } from 'src/stories/mocks/mockStore';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor, within } from 'src/test-utils.js';
@@ -27,6 +28,12 @@ jest.mock(
 
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
+jest.mock('src/hooks/useYieldCurveHistoricalRates', () => ({
+    useYieldCurveMarketRatesHistorical: jest.fn(() => ({
+        historicalRates: zeroRates,
+        loading: false,
+    })),
+}));
 
 const preloadedState = {
     ...initialStore,
@@ -200,13 +207,13 @@ describe('Landing Component', () => {
         expect(screen.getByRole('slider')).toHaveValue('0');
         fireEvent.click(screen.getByRole('radio', { name: 'Lend' }));
         await waitFor(() =>
-            fireEvent.input(screen.getByRole('textbox', { name: 'Amount' }), {
+            fireEvent.input(screen.getByRole('textbox', { name: 'Size' }), {
                 target: { value: '1000' },
             })
         );
         expect(screen.getByRole('slider')).toHaveValue('10');
         await waitFor(() =>
-            fireEvent.input(screen.getByRole('textbox', { name: 'Amount' }), {
+            fireEvent.input(screen.getByRole('textbox', { name: 'Size' }), {
                 target: { value: '5000' },
             })
         );
@@ -225,7 +232,7 @@ describe('Landing Component', () => {
         expect(await screen.findByText('DEC2022')).toBeInTheDocument();
         expect(screen.getByRole('slider')).toHaveValue('0');
         waitFor(() => {
-            fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
+            fireEvent.change(screen.getByRole('textbox', { name: 'Size' }), {
                 target: { value: '100' },
             });
         });
