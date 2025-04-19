@@ -9,7 +9,7 @@ on:
         required: false
         type: string
       test_file:
-        description: 'Comma-separated list of test files to run (e.g., Button.test.tsx,Input.test.tsx).'
+        description: 'Comma-separated list of test files to run (e.g., Button.test.tsx,Chip.test.tsx).'
         default: ''
         required: false
         type: string
@@ -40,5 +40,5 @@ jobs:
           if [ -z "$TEST_FILE" ]; then
             npm run test:cov
           else
-            npm run test:cov -- -t "${TEST_FILE//,/|}"
+            npm run test:cov -t "${TEST_FILE//,/|}"
           fi
