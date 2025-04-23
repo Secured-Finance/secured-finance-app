@@ -18,7 +18,7 @@ export const OrderBookInfoTooltip = ({
 
     return (
         <div
-            className='fixed hidden min-w-44 flex-col gap-1 rounded-lg border border-neutral-500 bg-neutral-900 px-2 py-2 font-secondary opacity-90 shadow-md transition-opacity duration-200 laptop:flex'
+            className='fixed z-30 hidden min-w-44 flex-col gap-1 rounded-lg border border-neutral-500 bg-neutral-900 px-2 py-2 font-secondary opacity-90 shadow-md transition-opacity duration-200 laptop:flex'
             style={{
                 top: position.top,
                 left: position.left,
