@@ -131,7 +131,7 @@ export const OrderAction = ({
                         data-testid='deposit-collateral-button'
                         size={buttonSize}
                     >
-                        Deposit collateral
+                        Deposit
                     </Button>
                 ))}
             {!isConnected && (
