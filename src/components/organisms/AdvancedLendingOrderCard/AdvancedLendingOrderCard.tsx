@@ -472,8 +472,18 @@ export function AdvancedLendingOrderCard({
                                               ? fv * price
                                               : 0;
                                           return isMobile
-                                              ? `${fv} ${currency}`
-                                              : `${fv} ${currency} (${usdFormat(
+                                              ? `${ordinaryFormat(
+                                                    fv,
+                                                    0,
+                                                    currencyMap[currency]
+                                                        .roundingDecimal
+                                                )} ${currency}`
+                                              : `${ordinaryFormat(
+                                                    fv,
+                                                    0,
+                                                    currencyMap[currency]
+                                                        .roundingDecimal
+                                                )} ${currency} (${usdFormat(
                                                     totalValue,
                                                     2
                                                 )})`;
