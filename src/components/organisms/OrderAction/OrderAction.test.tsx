@@ -56,14 +56,14 @@ describe('OrderAction component', () => {
         expect(
             await screen.findByTestId('deposit-collateral-button')
         ).toBeInTheDocument();
-        expect(screen.getByText('Deposit collateral')).toBeInTheDocument();
+        expect(screen.getByText('Deposit')).toBeInTheDocument();
         const button = screen.getByTestId('deposit-collateral-button');
         fireEvent.click(button);
         expect(track).toHaveBeenCalledWith(
             ButtonEvents.DEPOSIT_COLLATERAL_BUTTON
         );
         expect(
-            screen.getByRole('dialog', { name: 'Deposit Collateral' })
+            screen.getByRole('dialog', { name: 'Deposit' })
         ).toBeInTheDocument();
     });
 
@@ -85,7 +85,7 @@ describe('OrderAction component', () => {
         expect(
             await screen.findByTestId('deposit-collateral-button')
         ).toBeInTheDocument();
-        expect(screen.getByText('Deposit collateral')).toBeInTheDocument();
+        expect(screen.getByText('Deposit')).toBeInTheDocument();
         expect(screen.getByTestId('deposit-collateral-button')).toBeDisabled();
     });
 
