@@ -89,7 +89,7 @@ const EtherScanTooltip = ({
         }
     >
         <div className='typography flex items-center justify-between gap-1 text-white'>
-            <p>View on Etherscan</p>
+            <p>View on Explorer</p>
             <ArrowUpRightIcon className='h-3 w-3' />
         </div>
     </Tooltip>
