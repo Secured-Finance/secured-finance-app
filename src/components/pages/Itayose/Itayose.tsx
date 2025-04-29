@@ -15,7 +15,7 @@ import {
 } from 'src/components/molecules';
 import {
     AdvancedLendingOrderCard,
-    LineChartTab,
+    MultiLineChartTab,
     NewOrderBookWidget,
     OrderHistoryTable,
     OrderTable,
@@ -42,6 +42,7 @@ import {
     useMaturityOptions,
     useOrderbook,
     useYieldCurveMarketRates,
+    useYieldCurveMarketRatesHistorical,
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import {
@@ -199,6 +200,8 @@ export const Itayose = () => {
         marketCloseToMaturityOriginalRate,
     } = useYieldCurveMarketRates();
 
+    const { historicalRates, loading: ratesLoading } =
+        useYieldCurveMarketRatesHistorical();
     const selectedTerm = useMemo(() => {
         return (
             maturityOptionList.find(option =>
@@ -377,7 +380,7 @@ export const Itayose = () => {
             >
                 <TabSelector tabDataArray={[{ text: 'Yield Curve' }]}>
                     <div className='h-[410px] w-full px-6 py-4'>
-                        <LineChartTab
+                        <MultiLineChartTab
                             rates={rates}
                             maturityList={maturityList}
                             itayoseMarketIndexSet={itayoseMarketIndexSet}
@@ -385,6 +388,8 @@ export const Itayose = () => {
                             marketCloseToMaturityOriginalRate={
                                 marketCloseToMaturityOriginalRate
                             }
+                            fetchedRates={historicalRates}
+                            loading={ratesLoading}
                         />
                     </div>
                 </TabSelector>
@@ -396,7 +401,7 @@ export const Itayose = () => {
                                 tabDataArray={[{ text: 'Yield Curve' }]}
                             >
                                 <div className='h-[410px] w-full px-6 py-4'>
-                                    <LineChartTab
+                                    <MultiLineChartTab
                                         rates={rates}
                                         maturityList={maturityList}
                                         itayoseMarketIndexSet={
@@ -406,6 +411,8 @@ export const Itayose = () => {
                                         marketCloseToMaturityOriginalRate={
                                             marketCloseToMaturityOriginalRate
                                         }
+                                        fetchedRates={historicalRates}
+                                        loading={ratesLoading}
                                     />
                                 </div>
                             </TabSelector>
