@@ -18,9 +18,10 @@ import {
     useIsSubgraphSupported,
     useLastPrices,
     useLendingMarkets,
+    useMultiCurrencyTransactions,
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
-import { SavedMarket } from 'src/types';
+import { QueryTransaction, SavedMarket } from 'src/types';
 import {
     CurrencySymbol,
     computeTotalDailyVolumeInUSD,
@@ -54,6 +55,11 @@ export const CurrencyMaturityDropdown = ({
 
     const router = useRouter();
     const { market } = router.query;
+
+    const { data: historicalData, timestamp } = useMultiCurrencyTransactions(
+        currencyList,
+        maturityList
+    );
 
     const { data: currencies } = useCurrencies();
 
@@ -134,6 +140,38 @@ export const CurrencyMaturityDropdown = ({
 
     const CcyIcon = currencyMap[asset.value]?.icon;
 
+    const calculateDelta = (
+        historical: QueryTransaction[] | undefined,
+        current: LoanValue | undefined
+    ) => {
+        if (!historical?.[0] || !current) {
+            return {
+                aprChange: undefined,
+                priceChange: undefined,
+            };
+        }
+
+        const historicalTx = historical[0];
+        const historicalApr = LoanValue.fromPrice(
+            Number(historicalTx.executionPrice),
+            historicalTx.maturity,
+            timestamp
+        ).apr;
+        const historicalPrice = parseFloat(historicalTx.executionPrice) / 100;
+        const currentApr = current.apr;
+        const currentPrice = current.price / 100;
+
+        const aprChange =
+            currentApr.toNormalizedNumber() -
+            historicalApr.toNormalizedNumber();
+        const priceChange = currentPrice - historicalPrice;
+
+        return {
+            aprChange,
+            priceChange,
+        };
+    };
+
     const filteredOptions = useMemo(() => {
         let options = currencyList.flatMap(currency => {
             return Object.values(lendingMarkets[currency.value])
@@ -156,7 +194,6 @@ export const CurrencyMaturityDropdown = ({
 
                     const marketLabel = `${currency.label}-${maturity.label}`;
                     const marketKey = `${currency.value}-${maturity.value}`;
-
                     const volumeInUSD = volumePerMarket[marketKey];
 
                     const marketUnitPrice = data?.marketUnitPrice;
@@ -190,6 +227,15 @@ export const CurrencyMaturityDropdown = ({
                         return null;
                     }
 
+                    const maturityKey = lendingMarket.maturity;
+                    const historical =
+                        historicalData?.[currency.value]?.[maturityKey];
+
+                    const { aprChange, priceChange } = calculateDelta(
+                        historical,
+                        lastPrice
+                    );
+
                     return {
                         key: marketLabel,
                         display: marketLabel,
@@ -198,6 +244,8 @@ export const CurrencyMaturityDropdown = ({
                         lastPrice: formatLoanValue(lastPrice, 'price'),
                         apr: formatLoanValue(lastPrice, 'rate'),
                         volume: volumeInUSD,
+                        aprChange,
+                        priceChange,
                         isItayoseOption,
                         isFavourite,
                     };
@@ -208,6 +256,7 @@ export const CurrencyMaturityDropdown = ({
         options = sortOptions(options);
 
         return options;
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         currencyList,
         sortOptions,
@@ -220,6 +269,7 @@ export const CurrencyMaturityDropdown = ({
         isFavorites,
         currentChainId,
         volumePerMarket,
+        historicalData,
     ]);
 
     const prevSelectedValue = useRef('');

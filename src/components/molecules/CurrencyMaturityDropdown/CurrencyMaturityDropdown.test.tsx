@@ -13,6 +13,10 @@ const openDropdown = () => {
     fireEvent.click(button);
 };
 
+beforeEach(() => {
+    jest.spyOn(console, 'warn').mockImplementation(() => {});
+});
+
 describe('CurrencyMaturityDropdown', () => {
     it('should render a selected market', () => {
         render(<Default />, {

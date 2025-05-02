@@ -23,6 +23,8 @@ export type FilteredOption = {
     currency: CurrencySymbol;
     maturity: Maturity;
     lastPrice: string;
+    aprChange: number;
+    priceChange: number;
     apr: string;
     isItayoseOption: boolean;
     isFavourite: boolean;

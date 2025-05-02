@@ -30,6 +30,11 @@ export const desktopColumns = [
         width: '20%',
     },
     {
+        key: 'change',
+        label: '24H Change',
+        width: '20%',
+    },
+    {
         key: 'apr',
         label: 'APR',
         width: '20%',

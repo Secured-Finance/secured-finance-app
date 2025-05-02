@@ -26,6 +26,7 @@ export * from './useMarketLists';
 export * from './useMarketOrderList';
 export * from './useMaturities';
 export * from './useMaturityOptions';
+export * from './useMultiCurrencyTransactions';
 export * from './useOrderbook';
 export * from './useOrderEstimation';
 export * from './useOrderFee';

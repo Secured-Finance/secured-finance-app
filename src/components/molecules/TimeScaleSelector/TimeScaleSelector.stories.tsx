@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
-import TimeScaleSelector from './TimeScaleSelector';
 import { yieldTimeScales } from './constants';
+import { TimeScaleSelector } from './TimeScaleSelector';
 
 const meta: Meta<typeof TimeScaleSelector> = {
     title: 'Molecules/TimeScaleSelector',
