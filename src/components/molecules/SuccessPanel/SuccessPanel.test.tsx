@@ -37,7 +37,7 @@ describe('SuccessPanel Component', () => {
 
         await userEvent.unhover(address);
         await userEvent.hover(address);
-        const tooltip = await screen.findByText('View on Etherscan');
+        const tooltip = await screen.findByText('View on Explorer');
         expect(tooltip).toBeInTheDocument();
     });
 });

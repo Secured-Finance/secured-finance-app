@@ -49,7 +49,7 @@ const stateRecord: Record<Step, State> = {
     [Step.depositCollateral]: {
         currentStep: Step.depositCollateral,
         nextStep: Step.depositing,
-        title: 'Deposit Collateral',
+        title: 'Deposit',
         description: '',
         buttonText: 'OK',
     },

@@ -21,7 +21,7 @@ describe('DepositCollateral component', () => {
         render(<Default />);
 
         expect(screen.getByRole('dialog')).toBeInTheDocument();
-        expect(screen.getByText('Deposit Collateral')).toBeInTheDocument();
+        expect(screen.getByText('Deposit')).toBeInTheDocument();
 
         const button = screen.getByTestId('dialog-action-button');
         expect(button).toHaveTextContent('OK');
