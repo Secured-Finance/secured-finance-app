@@ -11,14 +11,13 @@ import {
 import {
     CollateralBook,
     MarketPhase,
-    useBorrowableAmount,
     useBreakpoint,
-    useCollateralCurrencies,
+    useCurrencies,
     useLastPrices,
     useMarketPhase,
     useOrders,
 } from 'src/hooks';
-import { useCollateralBalances } from 'src/hooks/useBalances';
+import { useBalances } from 'src/hooks/useBalances';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
@@ -32,6 +31,7 @@ interface OrderActionProps {
     renderSide?: boolean;
     validation: boolean; // true to disable button
     isCurrencyDelisted: boolean;
+    canPlaceOrder: boolean;
 }
 
 export const OrderAction = ({
@@ -40,9 +40,10 @@ export const OrderAction = ({
     renderSide = false,
     validation,
     isCurrencyDelisted,
+    canPlaceOrder,
 }: OrderActionProps) => {
     const isTablet = useBreakpoint('laptop');
-    const { address, isConnected } = useAccount();
+    const { isConnected } = useAccount();
     const dispatch = useDispatch();
     const { placeOrder, placePreOrder } = useOrders();
     const chainError = useSelector(
@@ -60,27 +61,20 @@ export const OrderAction = ({
 
     const marketPhase = useMarketPhase(currency, maturity);
 
-    const collateralBalances = useCollateralBalances();
+    const balances = useBalances();
 
     const { data: priceList } = useLastPrices();
-    const { data: collateralCurrencies = [] } = useCollateralCurrencies();
+    const { data: currencies = [] } = useCurrencies(true);
     const price = priceList[currency];
 
     const depositCollateralList = useMemo(
         () =>
             generateCollateralList(
-                collateralBalances,
-                false,
-                collateralCurrencies
+                balances,
+                true,
+                side === OrderSide.BORROW ? currencies : [currency]
             ),
-        [collateralBalances, collateralCurrencies]
-    );
-
-    const { data: availableToBorrow } = useBorrowableAmount(address, currency);
-
-    const canBorrow = useMemo(
-        () => availableToBorrow >= amount,
-        [amount, availableToBorrow]
+        [balances, currencies, currency, side]
     );
 
     const getButtonText = () => {
@@ -106,7 +100,7 @@ export const OrderAction = ({
     return (
         <>
             {isConnected &&
-                (canBorrow || side === OrderSide.LEND ? (
+                (canPlaceOrder ? (
                     <Button
                         disabled={isPlaceOrderDisabled || chainError}
                         fullWidth

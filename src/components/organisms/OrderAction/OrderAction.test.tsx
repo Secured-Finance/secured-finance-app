@@ -144,7 +144,7 @@ describe('OrderAction component', () => {
         expect(screen.getByText('Place Order')).toBeInTheDocument();
     });
 
-    it('should render place order button if order side is lend', async () => {
+    it('should render deposit collateral button if order side is lend and not enough collateral', async () => {
         await waitFor(() => {
             render(<NotEnoughCollateral />, {
                 preloadedState: {
@@ -157,13 +157,13 @@ describe('OrderAction component', () => {
             });
         });
         expect(
-            await screen.findByTestId('place-order-button')
-        ).toBeInTheDocument();
-        const button = screen.getByTestId('place-order-button');
+            screen.queryByTestId('place-order-button')
+        ).not.toBeInTheDocument();
+        const button = screen.getByTestId('deposit-collateral-button');
         await waitFor(() => expect(button).toBeEnabled());
         fireEvent.click(button);
         expect(
-            screen.getByRole('dialog', { name: 'Confirm Lend' })
+            screen.getByRole('dialog', { name: 'Deposit' })
         ).toBeInTheDocument();
     });
 
