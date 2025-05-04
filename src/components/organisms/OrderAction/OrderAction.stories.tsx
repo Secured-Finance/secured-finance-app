@@ -82,11 +82,13 @@ EnoughCollateral.parameters = {
 };
 EnoughCollateral.args = {
     collateralBook: collateralBook37,
+    canPlaceOrder: true,
 };
 
 export const NotEnoughCollateral = NotEnoughCollateralTemplate.bind({});
 NotEnoughCollateral.args = {
     collateralBook: collateralBook37,
+    canPlaceOrder: false,
 };
 NotEnoughCollateral.parameters = {
     connected: true,
@@ -95,6 +97,7 @@ NotEnoughCollateral.parameters = {
 export const RenderOrderSideButton = Template.bind({});
 RenderOrderSideButton.args = {
     collateralBook: collateralBook37,
+    canPlaceOrder: true,
     renderSide: true,
 };
 RenderOrderSideButton.parameters = {

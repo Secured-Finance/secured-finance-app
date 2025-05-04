@@ -218,7 +218,7 @@ describe('LendingCard Component', () => {
         expect(screen.queryByText('Collateral Usage')).not.toBeInTheDocument();
     });
 
-    it('it should disable the action button and show error hint if amount is greater than available amount', async () => {
+    it('it should show the deposit collateral button if amount is greater than available amount on lend orders', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
 
         const lendTab = screen.getByText('Lend');
@@ -227,7 +227,7 @@ describe('LendingCard Component', () => {
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '200' } });
 
-        const button = screen.getByTestId('place-order-button');
+        const button = await screen.findByTestId('place-order-button');
         await waitFor(() => {
             expect(button).not.toBeDisabled();
         });
@@ -237,9 +237,11 @@ describe('LendingCard Component', () => {
 
         fireEvent.change(input, { target: { value: '20000' } });
 
-        expect(button).toBeDisabled();
+        const depositButton = screen.getByTestId('deposit-collateral-button');
+        expect(depositButton).toBeInTheDocument();
+        fireEvent.click(depositButton);
         expect(
-            screen.queryByText('Insufficient amount in source')
+            screen.getByRole('dialog', { name: 'Deposit' })
         ).toBeInTheDocument();
     });
 

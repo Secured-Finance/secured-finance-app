@@ -142,6 +142,28 @@ export const LendingCard = ({
 
     const { data: availableToBorrow } = useBorrowableAmount(address, currency);
 
+    const availableToLend = useMemo(() => {
+        return selectedWalletSource.source === WalletSource.METAMASK
+            ? balanceRecord[currency]
+            : collateralBook.nonCollateral[currency] ||
+                  collateralBook.withdrawableCollateral[currency] ||
+                  ZERO_BI;
+    }, [
+        balanceRecord,
+        collateralBook.nonCollateral,
+        collateralBook.withdrawableCollateral,
+        currency,
+        selectedWalletSource.source,
+    ]);
+
+    const canPlaceOrder = useMemo(() => {
+        if (side === OrderSide.BORROW) {
+            return availableToBorrow > 0 && availableToBorrow >= amount;
+        } else {
+            return availableToLend > 0 && availableToLend >= amount;
+        }
+    }, [amount, availableToBorrow, availableToLend, side]);
+
     return (
         <div className='w-[345px] flex-shrink-0 space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-7 shadow-deep'>
             <TabGroup
@@ -270,12 +292,9 @@ export const LendingCard = ({
                     collateralBook={collateralBook}
                     loanValue={marketValue}
                     renderSide
-                    validation={getAmountValidation(
-                        amount,
-                        balanceToLend,
-                        side
-                    )}
+                    validation={false}
                     isCurrencyDelisted={delistedCurrencySet.has(currency)}
+                    canPlaceOrder={canPlaceOrder}
                 />
             </div>
         </div>
