@@ -102,7 +102,7 @@ export const LendingCard = ({
         return assetList.find(option => option.value === currency);
     }, [currency, assetList]);
 
-    const balanceToLend = useMemo(() => {
+    const availableToLend = useMemo(() => {
         return selectedWalletSource.source === WalletSource.METAMASK
             ? balanceRecord[currency]
             : collateralBook.nonCollateral[currency] ||
@@ -141,20 +141,6 @@ export const LendingCard = ({
     };
 
     const { data: availableToBorrow } = useBorrowableAmount(address, currency);
-
-    const availableToLend = useMemo(() => {
-        return selectedWalletSource.source === WalletSource.METAMASK
-            ? balanceRecord[currency]
-            : collateralBook.nonCollateral[currency] ||
-                  collateralBook.withdrawableCollateral[currency] ||
-                  ZERO_BI;
-    }, [
-        balanceRecord,
-        collateralBook.nonCollateral,
-        collateralBook.withdrawableCollateral,
-        currency,
-        selectedWalletSource.source,
-    ]);
 
     const canPlaceOrder = useMemo(() => {
         if (side === OrderSide.BORROW) {
@@ -236,7 +222,7 @@ export const LendingCard = ({
                             <ErrorInfo
                                 showError={getAmountValidation(
                                     amount,
-                                    balanceToLend,
+                                    availableToLend,
                                     side
                                 )}
                                 errorMessage='Insufficient amount in source'
