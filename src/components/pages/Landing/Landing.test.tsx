@@ -47,6 +47,27 @@ beforeAll(() => {
     });
 });
 
+jest.mock('src/hooks/useMultiCurrencyTransactions', () => ({
+    useMultiCurrencyTransactions: jest.fn(() => ({
+        data: {
+            WFIL: {
+                '0': [
+                    {
+                        amount: '1000',
+                        averagePrice: '1.2',
+                        executionPrice: '1.25',
+                        createdAt: 1638269000,
+                        currency: '0x5746494c...',
+                        maturity: 0,
+                    },
+                ],
+            },
+        },
+        timestamp: 1638270000,
+        loading: false,
+    })),
+}));
+
 describe('Landing Component', () => {
     const changeInputValue = (label: string, value: string) => {
         const input = screen.getByLabelText(label);

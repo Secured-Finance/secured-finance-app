@@ -23,6 +23,7 @@ import {
     calculateTimeDifference,
     currencyMap,
     formatDuration,
+    percentFormat,
     usdFormat,
 } from 'src/utils';
 import { useAccount } from 'wagmi';
@@ -96,7 +97,55 @@ export const CurrencyMaturityTable = ({
                 case 'mark-prices':
                     return option.lastPrice;
                 case 'mark-prices-mobile':
-                    return `${option.lastPrice} (${option.apr})`;
+                    return (
+                        <div className='ml-2 flex flex-col'>
+                            <span>{option.lastPrice}</span>
+                            <span>({option.apr})</span>
+                        </div>
+                    );
+                case 'change': {
+                    const getColorAndSign = (value?: number | null) => {
+                        if (typeof value !== 'number' || isNaN(value)) {
+                            return { color: 'text-grey-300' };
+                        }
+                        return {
+                            color:
+                                value > 0
+                                    ? 'text-success-300'
+                                    : value < 0
+                                    ? 'text-error-300'
+                                    : 'text-muted',
+                            sign: value > 0 ? '+' : '',
+                        };
+                    };
+
+                    const price = Number(option.priceChange);
+                    const apr = Number(option.aprChange);
+
+                    const isPriceValid = !isNaN(price);
+                    const isAprValid = !isNaN(apr);
+
+                    const { color: priceColor, sign: priceSign } =
+                        getColorAndSign(price);
+                    const { color: aprColor, sign: aprSign } =
+                        getColorAndSign(apr);
+
+                    return (
+                        <div className='flex gap-1'>
+                            <span className={priceColor}>
+                                {isPriceValid
+                                    ? `${priceSign}${price.toFixed(2)}`
+                                    : '--.--'}
+                            </span>
+                            <span>/</span>
+                            <span className={aprColor}>
+                                {isAprValid
+                                    ? `${aprSign}${percentFormat(apr)}`
+                                    : '--.--%'}
+                            </span>
+                        </div>
+                    );
+                }
                 case 'apr':
                     return option.apr;
                 case 'maturity':

@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { ExpandIndicator, TimeScaleCheckBox } from 'src/components/atoms';
 import { formatTimeLabel, getColor, yieldTimeScales } from './constants';
-export default function TimeScaleSelector({
+export const TimeScaleSelector = ({
     length,
     selected,
     setSelected,
@@ -13,7 +13,7 @@ export default function TimeScaleSelector({
         React.SetStateAction<{ label: string; value: string }[]>
     >;
     disabledIntervals: Set<string>;
-}) {
+}) => {
     const [isOpen, setIsOpen] = useState(false);
     const handleCheckboxChange = (timePeriod: {
         label: string;
@@ -154,4 +154,4 @@ export default function TimeScaleSelector({
             </div>
         </div>
     );
-}
+};

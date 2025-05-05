@@ -35,6 +35,9 @@ const preloadedState = {
 
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
+beforeEach(() => {
+    jest.spyOn(console, 'warn').mockImplementation(() => {});
+});
 
 describe('Itayose Component', () => {
     it('should render a Itayose', async () => {
