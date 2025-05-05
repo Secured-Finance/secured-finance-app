@@ -117,6 +117,9 @@ export const CurrencyMaturityDropdown = ({
                     } else if (column === 'volume') {
                         aValue = a.volume || BigInt(0);
                         bValue = b.volume || BigInt(0);
+                    } else if (column === 'change') {
+                        aValue = Number(a.aprChange ?? 0);
+                        bValue = Number(b.aprChange ?? 0);
                     } else {
                         aValue = a[column];
                         bValue = b[column];
@@ -140,7 +143,7 @@ export const CurrencyMaturityDropdown = ({
 
     const CcyIcon = currencyMap[asset.value]?.icon;
 
-    const calculateDelta = (
+    const calculate24HChange = (
         historical: QueryTransaction[] | undefined,
         current: LoanValue | undefined
     ) => {
@@ -231,7 +234,7 @@ export const CurrencyMaturityDropdown = ({
                     const historical =
                         historicalData?.[currency.value]?.[maturityKey];
 
-                    const { aprChange, priceChange } = calculateDelta(
+                    const { aprChange, priceChange } = calculate24HChange(
                         historical,
                         lastPrice
                     );

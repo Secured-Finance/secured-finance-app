@@ -2,19 +2,27 @@ export const mobileColumns = [
     {
         key: 'symbol',
         label: 'Symbol',
-        width: '40%',
+        width: '20%',
     },
     {
         key: 'mark-prices-mobile',
         label: 'Mark Price (APR)',
-        width: '27%',
+        width: '20%',
+        className: 'ml-2 text-wrap',
+    },
+    {
+        key: 'change',
+        label: '24h Price / APR Change',
+        width: '20%',
+        allowsSorting: true,
+        className: 'text-wrap',
     },
     {
         key: 'maturity-mobile',
         label: 'Time to Maturity',
-        width: '27%',
+        width: '15%',
         allowsSorting: true,
-        className: 'justify-end text-right',
+        className: 'justify-end text-right text-wrap',
     },
 ];
 
@@ -30,15 +38,17 @@ export const desktopColumns = [
         width: '20%',
     },
     {
-        key: 'change',
-        label: '24H Change',
-        width: '20%',
-    },
-    {
         key: 'apr',
         label: 'APR',
         width: '20%',
         allowsSorting: true,
+    },
+    {
+        key: 'change',
+        label: '24h Price / APR Change',
+        width: '20%',
+        allowsSorting: true,
+        className: 'laptop:mr-5 mr-0',
     },
     {
         key: 'volume',

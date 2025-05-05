@@ -97,7 +97,12 @@ export const CurrencyMaturityTable = ({
                 case 'mark-prices':
                     return option.lastPrice;
                 case 'mark-prices-mobile':
-                    return `${option.lastPrice} (${option.apr})`;
+                    return (
+                        <div className='ml-2 flex flex-col'>
+                            <span>{option.lastPrice}</span>
+                            <span>({option.apr})</span>
+                        </div>
+                    );
                 case 'change': {
                     const getColorAndSign = (value?: number | null) => {
                         if (typeof value !== 'number' || isNaN(value)) {
@@ -141,7 +146,6 @@ export const CurrencyMaturityTable = ({
                         </div>
                     );
                 }
-
                 case 'apr':
                     return option.apr;
                 case 'maturity':
