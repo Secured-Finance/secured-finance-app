@@ -149,7 +149,7 @@ export const MultiLineChartTab = ({
                     lineTooltipEl.appendChild(lineContent);
                     barTooltipEl.appendChild(barContent);
 
-                    const zIndex = isMaximized ? '51' : '24';
+                    const zIndex = isMaximized ? '51' : '40';
                     lineTooltipEl.style.zIndex = zIndex;
                     barTooltipEl.style.zIndex = zIndex;
 
