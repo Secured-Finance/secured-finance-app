@@ -69,7 +69,7 @@ enum TableType {
     ORDER_HISTORY,
 }
 
-const Toolbar = ({
+export const Toolbar = ({
     selectedAsset,
     assetList,
     options,
