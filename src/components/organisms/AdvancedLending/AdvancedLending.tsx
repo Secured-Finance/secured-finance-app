@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { TextLink } from 'src/components/atoms';
 import {
     AdvancedLendingTopBar,
     Alert,
@@ -124,11 +125,13 @@ export const AdvancedLending = ({
     maturitiesOptionList,
     marketPrice,
     delistedCurrencySet,
+    setIsItayose,
 }: {
     collateralBook: CollateralBook;
     maturitiesOptionList: MaturityOptionList;
     marketPrice: number | undefined;
     delistedCurrencySet: Set<CurrencySymbol>;
+    setIsItayose: (value: boolean) => void;
 }) => {
     const isTablet = useBreakpoint('laptop');
     const { currency, maturity } = useSelector((state: RootState) =>
@@ -153,6 +156,11 @@ export const AdvancedLending = ({
     const [selectedTable, setSelectedTable] = useState(
         isItayosePeriod ? TableType.OPEN_ORDERS : TableType.ACTIVE_POSITION
     );
+
+    useEffect(() => {
+        setIsItayose(isItayosePeriod);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isItayosePeriod]);
 
     const selectedTerm = useMemo(() => {
         return (
@@ -360,8 +368,17 @@ export const AdvancedLending = ({
             itayoseEstimation?.lastLendUnitPrice,
             lendAmount,
         ];
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isItayosePeriod]);
+    }, [
+        borrowAmount,
+        currency,
+        isItayosePeriod,
+        itayoseEstimation?.lastBorrowUnitPrice,
+        itayoseEstimation?.lastLendUnitPrice,
+        lendAmount,
+        lendingContracts,
+        maturity,
+        selectedTerm.value,
+    ]);
 
     const [orderBook, setMultiplier, setIsShowingAll] = useOrderbook(
         ...orderbookArgs
@@ -502,10 +519,19 @@ export const AdvancedLending = ({
           ]
         : ['Active Positions', 'Open Orders'];
 
+    const preOrderDays = useMemo(() => {
+        const contract = lendingContracts[selectedTerm.value.toNumber()];
+        const openingDate = contract?.utcOpeningDate;
+        const preOpeningDate = contract?.preOpeningDate;
+        return openingDate && preOpeningDate
+            ? dayjs.unix(openingDate).diff(preOpeningDate * 1000, 'days')
+            : undefined;
+    }, [lendingContracts, selectedTerm.value]);
+
     return (
         <div className='grid gap-2'>
-            {maximumOpenOrderLimit && (
-                <div className='px-3 laptop:px-0'>
+            <div className='px-3 laptop:px-0'>
+                {maximumOpenOrderLimit && !isItayosePeriod && (
                     <Alert
                         severity={AlertSeverity.Warning}
                         title='You will not be able to place additional orders as
@@ -513,8 +539,26 @@ export const AdvancedLending = ({
                             Please wait for your order to be filled or cancel
                             existing orders before adding more.'
                     />
-                </div>
-            )}
+                )}
+                {preOrderDays && isItayosePeriod && (
+                    <Alert
+                        title={
+                            <>
+                                Secure your market position by placing limit
+                                orders up to {preOrderDays} days before trading
+                                begins with no fees. Opt for either a lend or
+                                borrow during pre-open, not both. No new
+                                pre-orders will be accepted within 1 hour prior
+                                to the start of trading. Learn more at&nbsp;
+                                <TextLink
+                                    href='https://docs.secured.finance/platform-guide/unique-features/fair-price-discovery/'
+                                    text='Secured Finance Docs'
+                                />
+                            </>
+                        }
+                    />
+                )}
+            </div>
             <MovingTape nonMaturedMarketOptionList={maturitiesOptionList} />
             <ThreeColumnsWithTopBar
                 topBar={

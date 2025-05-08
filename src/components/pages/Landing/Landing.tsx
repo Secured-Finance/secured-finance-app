@@ -2,7 +2,7 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { getUTCMonthYear } from '@secured-finance/sf-core';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import Link from 'next/link';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ViewType } from 'src/components/atoms';
 import {
@@ -79,6 +79,7 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
     const currentChainId = securedFinance?.config.chain.id;
 
     const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
+    const [isItayosePeriod, setIsItayosePeriod] = useState(false);
 
     const itayoseMarket = Object.entries(lendingContracts).find(
         ([, market]) => market.isPreOrderPeriod || market.isItayosePeriod
@@ -136,6 +137,7 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
                 ccy={currency}
                 market={itayoseMarket}
                 delistedCurrencySet={delistedCurrencySet}
+                isItayose={isItayosePeriod}
             >
                 {view === 'Simple' ? (
                     <div className='mt-6 flex flex-row items-center justify-center px-3 tablet:px-5 laptop:px-0'>
@@ -161,6 +163,7 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
                         maturitiesOptionList={nonMaturedMarketOptionList}
                         marketPrice={marketPrice}
                         delistedCurrencySet={delistedCurrencySet}
+                        setIsItayose={setIsItayosePeriod}
                     />
                 )}
             </WithBanner>
@@ -173,11 +176,13 @@ const WithBanner = ({
     market,
     delistedCurrencySet,
     children,
+    isItayose,
 }: {
     ccy: CurrencySymbol;
     market: LendingMarket | undefined;
     delistedCurrencySet: Set<CurrencySymbol>;
     children: React.ReactNode;
+    isItayose: boolean;
 }) => {
     const preOrderTimeLimit = market
         ? market.utcOpeningDate * 1000 - ITAYOSE_PERIOD
@@ -194,7 +199,7 @@ const WithBanner = ({
                     />
                 </div>
             )}
-            {market && (
+            {market && !isItayose && (
                 <div className='px-3 laptop:px-0'>
                     <Alert
                         title={
@@ -219,7 +224,7 @@ const WithBanner = ({
                                 }).format(preOrderTimeLimit)} (UTC)`}
                                 <span className='pl-4'>
                                     <Link
-                                        href={`/itayose?market=${ccy}-${getUTCMonthYear(
+                                        href={`/?market=${ccy}-${getUTCMonthYear(
                                             market.maturity,
                                             true
                                         )}`}

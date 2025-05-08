@@ -260,3 +260,59 @@ describe.skip('Advanced Lending Component', () => {
         });
     });
 });
+
+describe('Advance Lending with Itayose', () => {
+    it('should show the maturity as a date for the selected maturity', async () => {
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
+        expect(
+            await screen.findByRole('button', { name: 'WFIL-DEC2022' })
+        ).toBeInTheDocument();
+        expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
+    });
+    it('should show the maturity as a date for the selected maturity', async () => {
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
+        expect(
+            await screen.findByRole('button', { name: 'WFIL-DEC2022' })
+        ).toBeInTheDocument();
+        expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
+    });
+
+    it('should not display disclaimer if no currency is being delisted', () => {
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
+        expect(
+            screen.queryByText('WFIL will be delisted')
+        ).not.toBeInTheDocument();
+    });
+
+    it('should not show disclaimer for maximum open order limit if user has less than 20 open orders', async () => {
+        await waitFor(() =>
+            render(<OpenOrdersConnectedToWallet />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+            })
+        );
+
+        fireEvent.click(screen.getByRole('button', { name: 'WFIL-DEC2022' }));
+
+        await waitFor(() => {
+            expect(
+                screen.getByRole('row', { name: 'USDC-DEC2022' })
+            ).toBeInTheDocument();
+        });
+
+        fireEvent.click(screen.getByRole('row', { name: 'USDC-DEC2022' }));
+
+        await waitFor(() =>
+            expect(
+                screen.queryByText(
+                    'You will not be able to place additional orders as you currently have the maximum number of 20 orders. Please wait for your order to be filled or cancel existing orders before adding more.'
+                )
+            ).not.toBeInTheDocument()
+        );
+    }, 8000);
+});
