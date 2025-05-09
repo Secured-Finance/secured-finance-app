@@ -29,6 +29,7 @@ export default {
         rates: yieldCurveRates,
         marketPrice: 9917,
         delistedCurrencySet: defaultDelistedStatusSet,
+        setIsItayose: () => {},
     },
     parameters: {
         apolloClient: {
