@@ -114,7 +114,7 @@ export const Toolbar = ({
                     'border-b border-l border-r border-white-10 bg-neutral-900'
                 )}
             >
-                <div className='flex min-w-fit flex-row items-center justify-start gap-10 px-6 py-3 tablet:justify-between'>
+                <div className='flex min-w-fit flex-row items-center justify-start gap-10 px-6 py-4 tablet:justify-between'>
                     <div className='w-full tablet:w-1/2'>
                         <div className='grid grid-cols-1 gap-x-3 gap-y-1 text-neutral-4 desktop:gap-x-5'>
                             <div className='flex flex-col items-start'>
