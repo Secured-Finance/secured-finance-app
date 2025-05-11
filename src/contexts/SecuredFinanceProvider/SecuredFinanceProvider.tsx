@@ -218,8 +218,8 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
                 }
             },
             pollingInterval: chainId.toString().startsWith('314')
-                ? 12_000
-                : 4_000,
+                ? 30_000 // Increased from 12_000 to reduce RPC calls on Filecoin
+                : 12_000, // Increased from 4_000 to reduce RPC calls on other networks
         });
 
         window.ethereum?.on('accountsChanged', handleAccountChanged);
