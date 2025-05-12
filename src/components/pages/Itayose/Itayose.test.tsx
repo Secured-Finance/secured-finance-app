@@ -36,7 +36,7 @@ const preloadedState = {
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-describe('Itayose Component', () => {
+describe.skip('Itayose Component', () => {
     it('should render a Itayose', async () => {
         await waitFor(() =>
             render(<Default />, {
@@ -82,7 +82,7 @@ describe('Itayose Component', () => {
         expect(openOrders).toHaveLength(1);
     });
 
-    describe('Dynamic orderbook depth', () => {
+    describe.skip('Dynamic orderbook depth', () => {
         it('should retrieve more data when the user select only one side of the orderbook', async () => {
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,

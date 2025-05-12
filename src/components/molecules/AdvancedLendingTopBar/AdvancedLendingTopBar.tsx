@@ -36,6 +36,8 @@ export const AdvancedLendingTopBar = ({
     currentMarket,
     currencyPrice,
     marketInfo,
+    savedMarkets,
+    handleFavouriteToggle,
 }: AdvancedLendingTopBarProp) => {
     const securedFinance = useSF();
     const currentChainId = securedFinance?.config.chain.id;
@@ -115,6 +117,10 @@ export const AdvancedLendingTopBar = ({
                                             maturityList={options}
                                             onChange={onChange}
                                             isItayosePage={false}
+                                            savedMarkets={savedMarkets}
+                                            handleFavouriteToggle={
+                                                handleFavouriteToggle
+                                            }
                                         />
                                         <p className='whitespace-nowrap pl-1 text-[11px] leading-4 tablet:text-xs laptop:text-xs'>
                                             {`Maturity ${
