@@ -50,7 +50,7 @@ const stateRecord: Record<Step, State> = {
     [Step.withdrawCollateral]: {
         currentStep: Step.withdrawCollateral,
         nextStep: Step.withdrawing,
-        title: 'Withdraw Collateral',
+        title: 'Withdraw',
         description: '',
         buttonText: 'OK',
     },
