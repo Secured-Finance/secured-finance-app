@@ -1,3 +1,5 @@
+import { StarIcon } from '@heroicons/react/24/outline';
+import { StarIcon as FilledStarIcon } from '@heroicons/react/24/solid';
 import { OrderSide } from '@secured-finance/sf-client';
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
@@ -57,6 +59,7 @@ import { RootState } from 'src/store/types';
 import {
     DailyMarketInfo,
     MaturityOptionList,
+    SavedMarket,
     TransactionList,
 } from 'src/types';
 import {
@@ -71,9 +74,13 @@ import {
     formatWithCurrency,
     getMappedOrderStatus,
     hexToCurrencySymbol,
+    isMarketInStore,
+    readMarketsFromStore,
+    removeMarketFromStore,
     sortOrders,
     toOptions,
     usdFormat,
+    writeMarketInStore,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { trackButtonEvent } from 'src/utils/events';
@@ -147,6 +154,25 @@ export const AdvancedLending = ({
                   position.maturity === maturity.toString() &&
                   hexToCurrencySymbol(position.currency) === currency
           );
+
+    const [savedMarkets, setSavedMarkets] = useState(() => {
+        return readMarketsFromStore();
+    });
+
+    const handleFavouriteToggle = (market: string) => {
+        const targetFavourite: SavedMarket = {
+            market,
+            address,
+            chainId: currentChainId,
+        };
+
+        if (isMarketInStore(targetFavourite)) {
+            removeMarketFromStore(targetFavourite);
+        } else {
+            writeMarketInStore(targetFavourite);
+        }
+        setSavedMarkets(readMarketsFromStore());
+    };
 
     const { data: fullOrderList = emptyOrderList } = useOrderList(
         address,
@@ -406,6 +432,7 @@ export const AdvancedLending = ({
             )}
             <MovingTape
                 nonMaturedMarketOptionList={maturitiesOptionList}
+                favourites={savedMarkets}
             ></MovingTape>
             <ThreeColumnsWithTopBar
                 topBar={
@@ -424,6 +451,8 @@ export const AdvancedLending = ({
                         marketInfo={
                             isSubgraphSupported ? dailyMarketInfo : undefined
                         }
+                        savedMarkets={savedMarkets}
+                        handleFavouriteToggle={handleFavouriteToggle}
                     />
                 }
             >
@@ -602,9 +631,13 @@ export const AdvancedLending = ({
 
 const MovingTape = ({
     nonMaturedMarketOptionList,
+    favourites,
 }: {
     nonMaturedMarketOptionList: MaturityOptionList;
+    favourites: SavedMarket[];
 }) => {
+    const [showFavouritesOnly, setShowFavouritesOnly] = useState(false);
+    const [resetKey, setResetKey] = useState(0);
     const router = useRouter();
     const { data: lendingMarkets = baseContracts } = useLendingMarkets();
     const { data: currencies = [] } = useCurrencies();
@@ -652,10 +685,41 @@ const MovingTape = ({
         JSON.stringify(nonMaturedMarketOptionList),
     ]);
 
+    const filteredResult = useMemo(() => {
+        return result.filter(res => {
+            if (res.isNotReady) return false;
+            if (showFavouritesOnly) {
+                return favourites.some(
+                    (fav: SavedMarket) => fav.market === res.asset
+                );
+            }
+            return true;
+        });
+    }, [result, favourites, showFavouritesOnly]);
+
+    const handleToggle = () => {
+        setShowFavouritesOnly(prev => !prev);
+        setResetKey(prev => prev + 1);
+    };
+
     return (
-        <div className='relative ml-3 mr-3 flex items-center overflow-hidden text-neutral-50'>
-            <div className='inline-block animate-scroll-left whitespace-nowrap text-xs leading-5 hover:[animation-play-state:paused]'>
-                {result
+        <div className='relative mx-3 flex items-center overflow-hidden text-neutral-50'>
+            <button
+                onClick={handleToggle}
+                className='z-10 bg-neutral-900 py-1.5 pr-2'
+                aria-label='Toggle favorites view'
+            >
+                {showFavouritesOnly ? (
+                    <FilledStarIcon className='h-4 w-4 text-warning-300' />
+                ) : (
+                    <StarIcon className='h-4 w-4 text-white' />
+                )}
+            </button>
+            <div
+                key={resetKey}
+                className='inline-block animate-scroll-left whitespace-nowrap text-xs leading-5 hover:[animation-play-state:paused]'
+            >
+                {filteredResult
                     .filter(res => !res.isNotReady)
                     .map((item, index) => (
                         <button
