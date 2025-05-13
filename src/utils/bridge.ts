@@ -92,6 +92,10 @@ export const squidConfig: any = {
         critical: 5,
     },
     initialAssets: {
+        from: {
+            address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', // Native ETH on Ethereum
+            chainId: '1',
+        },
         to: {
             address: '0x80B98d3aa09ffff255c3ba4A241111Ff1262F045', // USDFC on chain 314
             chainId: '314',
@@ -102,10 +106,4 @@ export const squidConfig: any = {
     slippage: 1,
     infiniteApproval: false,
     enableGetGasOnDestination: false,
-    defaultSourceToken: null,
-    defaultSourceChainId: null,
-    fromChain: null,
-    fromToken: null,
-    sourceChainSelector: null,
-    destinationChainSelector: '314',
 };
