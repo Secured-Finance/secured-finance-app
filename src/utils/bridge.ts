@@ -97,4 +97,5 @@ export const squidConfig: any = {
             chainId: '314',
         },
     },
+    defaultSourceChainId: null,
 };
