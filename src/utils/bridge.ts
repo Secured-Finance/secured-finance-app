@@ -101,9 +101,4 @@ export const squidConfig: any = {
             chainId: '314',
         },
     },
-    enableExpress: true,
-    collectFees: true,
-    slippage: 1,
-    infiniteApproval: false,
-    enableGetGasOnDestination: false,
 };
