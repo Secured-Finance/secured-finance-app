@@ -102,6 +102,10 @@ export const squidConfig: any = {
     slippage: 1,
     infiniteApproval: false,
     enableGetGasOnDestination: false,
-    defaultSourceToken: '',
-    fromToken: '',
+    defaultSourceToken: null,
+    defaultSourceChainId: null,
+    fromChain: null,
+    fromToken: null,
+    sourceChainSelector: null,
+    destinationChainSelector: '314',
 };
