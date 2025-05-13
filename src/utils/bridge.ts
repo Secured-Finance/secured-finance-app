@@ -98,4 +98,7 @@ export const squidConfig: any = {
         },
     },
     defaultSourceChainId: null,
+    defaultSourceToken: null,
+    fromChain: null,
+    fromToken: null,
 };
