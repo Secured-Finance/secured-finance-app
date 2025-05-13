@@ -92,13 +92,9 @@ export const squidConfig: any = {
         critical: 5,
     },
     initialAssets: {
-        from: {
-            address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // USDC on Ethereum
-            chainId: '1',
-        },
         to: {
-            address: '0x04068DA6C83AFCFA0e13ba15A6696662335D5B75', // USDC on Fantom
-            chainId: '250',
+            address: '0x80B98d3aa09ffff255c3ba4A241111Ff1262F045', // USDFC on chain 314
+            chainId: '314',
         },
     },
 };
