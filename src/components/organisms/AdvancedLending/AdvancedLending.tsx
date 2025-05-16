@@ -568,52 +568,76 @@ export const AdvancedLending = ({
                 <MovingTape nonMaturedMarketOptionList={maturitiesOptionList} />
                 <ThreeColumnsWithTopBar
                     topBar={
-                        isItayosePeriod ? (
-                            <Toolbar
-                                date={
-                                    lendingContracts[
-                                        selectedTerm.value.toNumber()
-                                    ]?.utcOpeningDate
-                                }
-                                nextMarketPhase={
-                                    marketPhase === MarketPhase.PRE_ORDER
-                                        ? 'Pre-Open'
-                                        : 'Open in'
-                                }
-                                assetList={assetList}
-                                selectedAsset={selectedAsset}
-                                options={maturitiesOptionList}
-                                selected={{
-                                    label: selectedTerm.label,
-                                    value: selectedTerm.value,
-                                }}
-                                currency={currency}
-                                handleAssetChange={handleAssetChange}
-                                handleTermChange={v => {
-                                    dispatch(setMaturity(Number(v)));
-                                }}
-                            />
-                        ) : (
-                            <AdvancedLendingTopBar
-                                selectedAsset={selectedAsset}
-                                assetList={assetList}
-                                options={maturitiesOptionList}
-                                selected={{
-                                    label: selectedTerm.label,
-                                    value: selectedTerm.value,
-                                }}
-                                onAssetChange={handleCurrencyChange}
-                                onTermChange={handleTermChange}
-                                currencyPrice={usdFormat(currencyPrice, 2)}
-                                currentMarket={currentMarket}
-                                marketInfo={
-                                    isSubgraphSupported
-                                        ? dailyMarketInfo
-                                        : undefined
-                                }
-                                isItayosePeriod={isItayosePeriod}
-                            />
-                        )
+                        <div className='relative mb-5 h-20 transition-all duration-300'>
+                            <div className='relative'>
+                                <div
+                                    className={clsx(
+                                        'absolute inset-0 transition-opacity duration-300',
+                                        isItayosePeriod
+                                            ? 'pointer-events-auto z-10 opacity-100'
+                                            : 'pointer-events-none z-0 opacity-0'
+                                    )}
+                                >
+                                    <Toolbar
+                                        date={
+                                            lendingContracts[
+                                                selectedTerm.value.toNumber()
+                                            ]?.utcOpeningDate
+                                        }
+                                        nextMarketPhase={
+                                            marketPhase ===
+                                            MarketPhase.PRE_ORDER
+                                                ? 'Pre-Open'
+                                                : 'Open in'
+                                        }
+                                        assetList={assetList}
+                                        selectedAsset={selectedAsset}
+                                        options={maturitiesOptionList}
+                                        selected={{
+                                            label: selectedTerm.label,
+                                            value: selectedTerm.value,
+                                        }}
+                                        currency={currency}
+                                        handleAssetChange={handleAssetChange}
+                                        handleTermChange={v => {
+                                            dispatch(setMaturity(Number(v)));
+                                        }}
+                                    />
+                                </div>
+
+                                <div
+                                    className={clsx(
+                                        'absolute inset-0 transition-opacity duration-300',
+                                        !isItayosePeriod
+                                            ? 'pointer-events-auto z-10 opacity-100'
+                                            : 'pointer-events-none z-0 opacity-0'
+                                    )}
+                                >
+                                    <AdvancedLendingTopBar
+                                        selectedAsset={selectedAsset}
+                                        assetList={assetList}
+                                        options={maturitiesOptionList}
+                                        selected={{
+                                            label: selectedTerm.label,
+                                            value: selectedTerm.value,
+                                        }}
+                                        onAssetChange={handleCurrencyChange}
+                                        onTermChange={handleTermChange}
+                                        currencyPrice={usdFormat(
+                                            currencyPrice,
+                                            2
+                                        )}
+                                        currentMarket={currentMarket}
+                                        marketInfo={
+                                            isSubgraphSupported
+                                                ? dailyMarketInfo
+                                                : undefined
+                                        }
+                                        isItayosePeriod={isItayosePeriod}
+                                    />
+                                </div>
+                            </div>
+                        </div>
                     }
                 >
                     <TabSelector

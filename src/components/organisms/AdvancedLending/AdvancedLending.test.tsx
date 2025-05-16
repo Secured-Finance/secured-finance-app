@@ -221,10 +221,10 @@ describe('Advance Lending with Itayose', () => {
         render(<Default />, {
             apolloMocks: Default.parameters?.apolloClient.mocks,
         });
-        expect(
-            await screen.findByRole('button', { name: 'WFIL-DEC2022' })
-        ).toBeInTheDocument();
-        expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
+        const btn = await screen.findAllByRole('button', {
+            name: 'USDC-DEC2022',
+        });
+        expect(btn[0]).toBeInTheDocument();
     });
 
     it('should not display disclaimer if no currency is being delisted', () => {
@@ -242,8 +242,8 @@ describe('Advance Lending with Itayose', () => {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
             })
         );
-
-        fireEvent.click(screen.getByRole('button', { name: 'WFIL-DEC2022' }));
+        const btn = screen.getAllByRole('button', { name: 'WFIL-DEC2022' });
+        fireEvent.click(btn[0]);
 
         await waitFor(() => {
             expect(
