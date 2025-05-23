@@ -1,4 +1,4 @@
-import { AssetPriceMap, DailyVolumes } from 'src/types';
+import { AssetPriceMap, DailyVolumes, ProtocolVolume } from 'src/types';
 import { ZERO_BI } from './collateral';
 import {
     CurrencySymbol,
@@ -42,4 +42,31 @@ export function computeTotalDailyVolumeInUSD(
         }
     });
     return { totalVolumeUSD, volumePerCurrency, volumePerMarket };
+}
+
+export function computeTotalProtocolVolumeInUSD(
+    protocolVolume: ProtocolVolume,
+    priceMap: AssetPriceMap
+): {
+    totalVolumeUSD: number;
+} {
+    let totalVolumeUSD = 0;
+
+    protocolVolume.forEach(vol => {
+        const { currency, totalVolume } = vol;
+        const ccy = hexToCurrencySymbol(currency);
+
+        if (!ccy || !priceMap[ccy]) {
+            return;
+        }
+
+        const volumeInBaseUnit = currencyMap[ccy].fromBaseUnit(
+            BigInt(totalVolume)
+        );
+
+        const valueInUSD = volumeInBaseUnit * priceMap[ccy];
+        totalVolumeUSD += valueInUSD;
+    });
+
+    return { totalVolumeUSD };
 }
