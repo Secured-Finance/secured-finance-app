@@ -12,6 +12,7 @@ export default {
         collateralBook: collateralBook37,
         marketPrice: 9917,
         delistedCurrencySet: defaultDelistedStatusSet,
+        isItayose: false,
     },
     parameters: {
         connected: true,

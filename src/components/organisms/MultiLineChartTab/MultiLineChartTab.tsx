@@ -7,7 +7,7 @@ import { ChartOptions } from 'chart.js';
 import clsx from 'clsx';
 import domtoimage from 'dom-to-image';
 import { useRouter } from 'next/router';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Spinner } from 'src/components/atoms';
 import BarChart from 'src/components/molecules/BarChart/BarChart';
@@ -256,6 +256,27 @@ export const MultiLineChartTab = ({
             : isMaximized
             ? 'h-[70%]'
             : 'h-[20rem]';
+
+    const handleChartClick = useCallback(
+        (maturityIndex: number) => {
+            const { maturity, label } = maturityList[maturityIndex];
+            dispatch(setMaturity(maturity));
+            trackButtonEvent(
+                ButtonEvents.TERM_CHANGE,
+                ButtonProperties.TERM,
+                label
+            );
+            const market = `${currency}-${label}`;
+            router.push({
+                pathname: '/',
+                query: {
+                    market,
+                },
+            });
+        },
+        [currency, dispatch, maturityList, router]
+    );
+
     return loading ? (
         <div className='flex h-full w-full items-center justify-center'>
             <Spinner />
@@ -304,27 +325,7 @@ export const MultiLineChartTab = ({
                         maturityList={maturityList}
                         options={chartOptions}
                         selectedTimeScales={selectedTimeScales}
-                        handleChartClick={maturityIndex => {
-                            const { maturity, label, isPreOrderPeriod } =
-                                maturityList[maturityIndex];
-                            dispatch(setMaturity(maturity));
-                            trackButtonEvent(
-                                ButtonEvents.TERM_CHANGE,
-                                ButtonProperties.TERM,
-                                label
-                            );
-                            const market = `${currency}-${label}`;
-                            let pathname = '/';
-                            if (isPreOrderPeriod) {
-                                pathname = '/itayose';
-                            }
-                            router.push({
-                                pathname,
-                                query: {
-                                    market,
-                                },
-                            });
-                        }}
+                        handleChartClick={handleChartClick}
                         maturity={new Maturity(maturity)}
                         isMaximised={isMaximized}
                     />
