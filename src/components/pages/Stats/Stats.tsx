@@ -33,7 +33,7 @@ import {
     Environment,
     PREVIOUS_TOTAL_USERS,
     Rate,
-    computeTotalDailyVolumeInUSD,
+    computeTotalProtocolVolumeInUSD,
     getEnvironment,
     ordinaryFormat,
     usdFormat,
@@ -82,16 +82,10 @@ export const Stats = () => {
         }
     });
 
-    const totalUser = useGraphClientHook(
+    const userCountAndVolume = useGraphClientHook(
         {}, // no variables
-        queries.UserCountDocument,
+        queries.UserCountAndVolumeDocument,
         'protocol',
-        !isSubgraphSupported
-    );
-    const dailyVolumes = useGraphClientHook(
-        {}, // no variables
-        queries.DailyVolumesDocument,
-        'dailyVolumes',
         !isSubgraphSupported
     );
 
@@ -99,12 +93,14 @@ export const Stats = () => {
 
     const totalVolume = useMemo(() => {
         return usdFormat(
-            computeTotalDailyVolumeInUSD(dailyVolumes.data ?? [], priceList)
-                .totalVolumeUSD,
+            computeTotalProtocolVolumeInUSD(
+                userCountAndVolume.data?.volumesByCurrency ?? [],
+                priceList
+            ).totalVolumeUSD,
             2,
             'compact'
         );
-    }, [priceList, dailyVolumes.data]);
+    }, [userCountAndVolume.data?.volumesByCurrency, priceList]);
 
     const defaultCurrency =
         Object.keys(curves).length > 0
@@ -148,7 +144,8 @@ export const Stats = () => {
                                       {
                                           name: 'Total Users',
                                           value: computeTotalUsers(
-                                              totalUser.data?.totalUsers
+                                              userCountAndVolume.data
+                                                  ?.totalUsers
                                           ),
                                       },
                                   ]
