@@ -102,7 +102,7 @@ export const LendingCard = ({
         return assetList.find(option => option.value === currency);
     }, [currency, assetList]);
 
-    const balanceToLend = useMemo(() => {
+    const availableToLend = useMemo(() => {
         return selectedWalletSource.source === WalletSource.METAMASK
             ? balanceRecord[currency]
             : collateralBook.nonCollateral[currency] ||
@@ -141,6 +141,14 @@ export const LendingCard = ({
     };
 
     const { data: availableToBorrow } = useBorrowableAmount(address, currency);
+
+    const canPlaceOrder = useMemo(() => {
+        if (side === OrderSide.BORROW) {
+            return availableToBorrow > 0 && availableToBorrow >= amount;
+        } else {
+            return availableToLend > 0 && availableToLend >= amount;
+        }
+    }, [amount, availableToBorrow, availableToLend, side]);
 
     return (
         <div className='w-[345px] flex-shrink-0 space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-7 shadow-deep'>
@@ -214,7 +222,7 @@ export const LendingCard = ({
                             <ErrorInfo
                                 showError={getAmountValidation(
                                     amount,
-                                    balanceToLend,
+                                    availableToLend,
                                     side
                                 )}
                                 errorMessage='Insufficient amount in source'
@@ -270,12 +278,9 @@ export const LendingCard = ({
                     collateralBook={collateralBook}
                     loanValue={marketValue}
                     renderSide
-                    validation={getAmountValidation(
-                        amount,
-                        balanceToLend,
-                        side
-                    )}
+                    validation={false}
                     isCurrencyDelisted={delistedCurrencySet.has(currency)}
+                    canPlaceOrder={canPlaceOrder}
                 />
             </div>
         </div>
