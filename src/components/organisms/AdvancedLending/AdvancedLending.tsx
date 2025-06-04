@@ -532,68 +532,57 @@ export const AdvancedLending = ({
 
     return (
         <>
-            <div
-                className={clsx('px-3 laptop:px-0', {
-                    'pb-2': isItayosePeriod,
-                })}
-            >
+            <div className={clsx('px-3 laptop:px-0')}>
                 <AnimatePresence mode='wait'>
-                    {!isItayosePeriod && maximumOpenOrderLimit && (
-                        <motion.div
-                            key='normal-alert'
-                            initial={{ opacity: 0, y: -6 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -6 }}
-                            transition={{
-                                duration: 0.25,
-                                ease: [0.22, 1, 0.36, 1],
-                            }}
-                        >
+                    <motion.div
+                        initial={{ opacity: 0, y: -6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -6 }}
+                        transition={{
+                            duration: 0.25,
+                            ease: [0.22, 1, 0.36, 1],
+                        }}
+                    >
+                        {(isItayosePeriod || maximumOpenOrderLimit) && (
                             <Alert
-                                severity={AlertSeverity.Warning}
+                                severity={
+                                    !isItayosePeriod
+                                        ? AlertSeverity.Warning
+                                        : AlertSeverity.Info
+                                }
                                 title={
-                                    <>
-                                        You will not be able to place additional
-                                        orders as you currently have the maximum
-                                        number of 20 orders. Please wait for
-                                        your order to be filled or cancel
-                                        existing orders before adding more.
-                                    </>
+                                    isItayosePeriod && preOrderDays ? (
+                                        <>
+                                            Secure your market position by
+                                            placing limit orders up to{' '}
+                                            {preOrderDays} days before trading
+                                            begins with no fees. Opt for either
+                                            a lend or borrow during pre-open,
+                                            not both. No new pre-orders will be
+                                            accepted within 1 hour prior to the
+                                            start of trading. Learn more at{' '}
+                                            <TextLink
+                                                href='https://docs.secured.finance/platform-guide/unique-features/fair-price-discovery/'
+                                                text='Secured Finance Docs'
+                                            />
+                                        </>
+                                    ) : (
+                                        maximumOpenOrderLimit && (
+                                            <>
+                                                You will not be able to place
+                                                additional orders as you
+                                                currently have the maximum
+                                                number of 20 orders. Please wait
+                                                for your order to be filled or
+                                                cancel existing orders before
+                                                adding more.
+                                            </>
+                                        )
+                                    )
                                 }
                             />
-                        </motion.div>
-                    )}
-                    {isItayosePeriod && preOrderDays && (
-                        <motion.div
-                            key='itayose-alert'
-                            initial={{ opacity: 0, y: 6 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: 6 }}
-                            transition={{
-                                duration: 0.25,
-                                ease: [0.22, 1, 0.36, 1],
-                            }}
-                        >
-                            <Alert
-                                title={
-                                    <>
-                                        Secure your market position by placing
-                                        limit orders up to {preOrderDays} days
-                                        before trading begins with no fees. Opt
-                                        for either a lend or borrow during
-                                        pre-open, not both. No new pre-orders
-                                        will be accepted within 1 hour prior to
-                                        the start of trading. Learn more
-                                        at&nbsp;
-                                        <TextLink
-                                            href='https://docs.secured.finance/platform-guide/unique-features/fair-price-discovery/'
-                                            text='Secured Finance Docs'
-                                        />
-                                    </>
-                                }
-                            />
-                        </motion.div>
-                    )}
+                        )}
+                    </motion.div>
                 </AnimatePresence>
             </div>
             <div className='grid gap-2'>
