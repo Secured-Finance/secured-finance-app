@@ -222,7 +222,7 @@ describe('Advance Lending with Itayose', () => {
             apolloMocks: Default.parameters?.apolloClient.mocks,
         });
         const btn = await screen.findAllByRole('button', {
-            name: 'USDC-DEC2022',
+            name: 'WFIL-DEC2022',
         });
         expect(btn[0]).toBeInTheDocument();
     });
