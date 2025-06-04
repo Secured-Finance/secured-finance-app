@@ -47,7 +47,6 @@ export const HistoricalWidget = () => {
 
     const data = useMemo(() => {
         let previousItem: Transaction | null = null;
-        const candleLimit = 1000;
         const result: Array<{
             time: string;
             open: number;
@@ -57,14 +56,26 @@ export const HistoricalWidget = () => {
             vol: number;
         }> = [];
 
-        // Get the last 100 transactions and iterate in reverse order
-        const transactions = (
-            historicalTradeData.data?.transactionCandleSticks || []
-        ).slice(-candleLimit);
+        const transactions =
+            historicalTradeData.data?.transactionCandleSticks || [];
 
-        for (const item of transactions) {
-            if (result.length > candleLimit) break;
-
+        const editableTransactions = [...transactions];
+        const timestamp = Math.floor(Date.now() / 1000);
+        const intervalTimestamp =
+            timestamp - (timestamp % Number(selectedTimeScale));
+        if (
+            transactions.length > 0 &&
+            intervalTimestamp > transactions[0].timestamp
+        ) {
+            const latestTransaction = {
+                ...transactions[0],
+                // Use the latest transaction's data but update the timestamp to current time
+                timestamp: intervalTimestamp,
+                volume: 0,
+            };
+            editableTransactions.unshift(latestTransaction);
+        }
+        for (const item of editableTransactions) {
             const ccy = hexToCurrencySymbol(item.currency);
             const volAdjusted = amountFormatterFromBase[ccy as CurrencySymbol](
                 BigInt(item.volume)
@@ -75,10 +86,7 @@ export const HistoricalWidget = () => {
                 let newTimestamp =
                     Number(previousItem.timestamp) - Number(selectedTimeScale);
 
-                while (
-                    newTimestamp > Number(item.timestamp) &&
-                    result.length < candleLimit
-                ) {
+                while (newTimestamp > Number(item.timestamp)) {
                     result.push({
                         time: newTimestamp.toString(),
                         open: Number(previousItem.open) / 100,
@@ -92,7 +100,6 @@ export const HistoricalWidget = () => {
                 }
             }
 
-            if (result.length > candleLimit - 1) break;
             // Add the actual item
             result.push({
                 time: item.timestamp,
@@ -106,7 +113,7 @@ export const HistoricalWidget = () => {
             previousItem = item;
         }
 
-        return result.reverse();
+        return result.reverse(); // Reverse to have the oldest data first
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [historicalTradeData]);
 
