@@ -20,6 +20,7 @@ import {
     useBreakpoint,
     useLastPrices,
     useMarket,
+    useOrderEstimation,
     useOrderFee,
 } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
@@ -49,7 +50,7 @@ import {
     ordinaryFormat,
     usdFormat,
 } from 'src/utils';
-import { Amount, LoanValue } from 'src/utils/entities';
+import { LoanValue } from 'src/utils/entities';
 import {
     InteractionEvents,
     InteractionProperties,
@@ -148,6 +149,47 @@ export function AdvancedLendingOrderCard({
 
     const dispatch = useDispatch();
 
+    const { data: orderEstimationInfo, isLoading } =
+        useOrderEstimation(address);
+
+    const orderEstimationAmount = useMemo(() => {
+        if (!orderEstimationInfo || !orderEstimationInfo.filledAmount) return 0;
+        return amountFormatterFromBase[currency](
+            orderEstimationInfo.filledAmount
+        );
+    }, [currency, orderEstimationInfo]);
+
+    const orderEstimationAmountInFV = useMemo(() => {
+        if (!orderEstimationInfo || !orderEstimationInfo.filledAmountInFV)
+            return 0;
+        return amountFormatterFromBase[currency](
+            orderEstimationInfo.filledAmountInFV
+        );
+    }, [currency, orderEstimationInfo]);
+
+    const orderLoanValue = useMemo(() => {
+        if (
+            !orderEstimationInfo ||
+            !maturity ||
+            !orderEstimationInfo.filledAmount ||
+            !orderEstimationInfo.filledAmountInFV
+        )
+            return LoanValue.ZERO;
+        return LoanValue.fromPrice(
+            divide(
+                multiply(
+                    orderEstimationInfo.filledAmount,
+                    10000.0,
+                    currencyMap[currency].roundingDecimal
+                ),
+                orderEstimationInfo.filledAmountInFV,
+                currencyMap[currency].roundingDecimal
+            ),
+            maturity,
+            calculationDate
+        );
+    }, [orderEstimationInfo, currency, maturity, calculationDate]);
+
     const collateralUsagePercent = useMemo(() => {
         return collateralBook.coverage / 100.0;
     }, [collateralBook]);
@@ -182,8 +224,6 @@ export function AdvancedLendingOrderCard({
         maturity,
         openingUnitPrice,
     ]);
-
-    const orderAmount = amount > 0 ? new Amount(amount, currency) : undefined;
 
     const { data: availableToBorrow } = useBorrowableAmount(address, currency);
 
@@ -292,24 +332,6 @@ export function AdvancedLendingOrderCard({
         text: getOrderSideText(option),
         variant: TabVariant[option],
     }));
-
-    const calculateFutureValue = useCallback(
-        (amount: bigint, unitPrice: number) => {
-            if (unitPrice === 0) {
-                return 0;
-            }
-            return divide(
-                multiply(
-                    amountFormatterFromBase[currency](amount),
-                    100,
-                    currencyMap[currency].roundingDecimal
-                ),
-                unitPrice,
-                currencyMap[currency].roundingDecimal
-            );
-        },
-        [currency]
-    );
 
     return (
         <div className='h-full rounded-b-xl border-neutral-600 bg-neutral-900 pb-7 laptop:border'>
@@ -440,26 +462,33 @@ export function AdvancedLendingOrderCard({
                     <div className='mb-2.5 flex flex-col gap-1 laptop:mb-0'>
                         <OrderDisplayBox
                             field='Est. APR'
-                            value={formatLoanValue(loanValue, 'rate')}
+                            value={formatLoanValue(orderLoanValue, 'rate')}
+                            isLoading={isLoading}
+                        />
+                        <OrderDisplayBox
+                            field='Est. Price'
+                            value={formatLoanValue(orderLoanValue, 'price')}
+                            isLoading={isLoading}
                         />
                         <OrderDisplayBox
                             field={isMobile ? 'PV' : 'Present Value'}
                             value={
                                 isMobile
                                     ? `${ordinaryFormat(
-                                          orderAmount?.value ?? 0,
+                                          orderEstimationAmount,
                                           0,
                                           currencyMap[currency].roundingDecimal
                                       )} ${currency}`
                                     : `${ordinaryFormat(
-                                          orderAmount?.value ?? 0,
+                                          orderEstimationAmount,
                                           0,
                                           currencyMap[currency].roundingDecimal
                                       )} ${currency} (${usdFormat(
-                                          orderAmount?.toUSD(price) ?? 0,
+                                          orderEstimationAmount * price ?? 0,
                                           2
                                       )})`
                             }
+                            isLoading={isLoading}
                         />
                         <OrderDisplayBox
                             field={isMobile ? 'FV' : 'Future Value'}
@@ -468,10 +497,7 @@ export function AdvancedLendingOrderCard({
                                 unitPriceValue !== '' &&
                                 unitPriceValue !== '0'
                                     ? (() => {
-                                          const fv = calculateFutureValue(
-                                              amount,
-                                              Number(unitPriceValue)
-                                          );
+                                          const fv = orderEstimationAmountInFV;
                                           const totalValue = price
                                               ? fv * price
                                               : 0;
@@ -496,6 +522,7 @@ export function AdvancedLendingOrderCard({
                                     ? `0 ${currency}`
                                     : `0 ${currency} ($0.00)`
                             }
+                            isLoading={isLoading}
                         />
                     </div>
                     <OrderAction

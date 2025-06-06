@@ -1,6 +1,6 @@
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { useQuery } from '@tanstack/react-query';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
@@ -10,6 +10,7 @@ import { ZERO_BI, toCurrency } from 'src/utils';
 
 export const useOrderEstimation = (account: string | undefined) => {
     const securedFinance = useSF();
+    const [isMinLoading, setIsMinLoading] = useState(false);
 
     const {
         currency,
@@ -33,7 +34,7 @@ export const useOrderEstimation = (account: string | undefined) => {
             ? amount
             : ZERO_BI;
 
-    return useQuery({
+    const query = useQuery({
         queryKey: [
             QueryKeys.ORDER_ESTIMATE,
             currency,
@@ -46,18 +47,30 @@ export const useOrderEstimation = (account: string | undefined) => {
             ignoreBorrowedAmount,
         ],
         queryFn: async () => {
-            const orderEstimation = await securedFinance?.getOrderEstimation(
-                toCurrency(currency),
-                maturity,
-                account ?? '',
-                side,
-                amount,
-                (unitPrice ?? 0) * 100.0,
-                additionalDepositAmount,
-                ignoreBorrowedAmount
-            );
+            setIsMinLoading(true);
+
+            const [orderEstimation] = await Promise.all([
+                securedFinance?.getOrderEstimation(
+                    toCurrency(currency),
+                    maturity,
+                    account ?? '',
+                    side,
+                    amount,
+                    (unitPrice ?? 0) * 100.0,
+                    additionalDepositAmount,
+                    ignoreBorrowedAmount
+                ),
+                new Promise(resolve => setTimeout(resolve, 500)), // Minimum 500ms
+            ]);
+
+            setIsMinLoading(false);
             return orderEstimation;
         },
         enabled: !!securedFinance && !!account,
     });
+
+    return {
+        ...query,
+        isLoading: query.isLoading || isMinLoading,
+    };
 };
