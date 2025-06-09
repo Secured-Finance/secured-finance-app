@@ -1,6 +1,6 @@
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { DropdownSelector, RadioButton } from 'src/components/atoms';
 import { HistoricalChart } from 'src/components/molecules/HistoricalChart';
@@ -8,12 +8,8 @@ import { useGraphClientHook } from 'src/hooks';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { HistoricalDataIntervals } from 'src/types';
-import {
-    CurrencySymbol,
-    amountFormatterFromBase,
-    hexToCurrencySymbol,
-} from 'src/utils';
 import { timeScales } from './constants';
+import { useTransactionCandleStickData } from 'src/hooks';
 
 export type Transaction = {
     average: string;
@@ -45,77 +41,10 @@ export const HistoricalWidget = () => {
         queries.TransactionCandleStickDocument
     );
 
-    const data = useMemo(() => {
-        let previousItem: Transaction | null = null;
-        const result: Array<{
-            time: string;
-            open: number;
-            high: number;
-            low: number;
-            close: number;
-            vol: number;
-        }> = [];
-
-        const transactions =
-            historicalTradeData.data?.transactionCandleSticks || [];
-
-        const editableTransactions = [...transactions];
-        const timestamp = Math.floor(Date.now() / 1000);
-        const intervalTimestamp =
-            timestamp - (timestamp % Number(selectedTimeScale));
-        if (
-            transactions.length > 0 &&
-            intervalTimestamp > transactions[0].timestamp
-        ) {
-            const latestTransaction = {
-                ...transactions[0],
-                // Use the latest transaction's data but update the timestamp to current time
-                timestamp: intervalTimestamp,
-                volume: 0,
-            };
-            editableTransactions.unshift(latestTransaction);
-        }
-        for (const item of editableTransactions) {
-            const ccy = hexToCurrencySymbol(item.currency);
-            const volAdjusted = amountFormatterFromBase[ccy as CurrencySymbol](
-                BigInt(item.volume)
-            );
-
-            // Fill missing timestamps data
-            if (previousItem) {
-                let newTimestamp =
-                    Number(previousItem.timestamp) - Number(selectedTimeScale);
-
-                while (newTimestamp > Number(item.timestamp)) {
-                    result.push({
-                        time: newTimestamp.toString(),
-                        open: Number(previousItem.open) / 100,
-                        high: Number(previousItem.high) / 100,
-                        low: Number(previousItem.low) / 100,
-                        close: Number(previousItem.close) / 100,
-                        vol: 0, // No volume for generated entries
-                    });
-
-                    newTimestamp -= Number(selectedTimeScale);
-                }
-            }
-
-            // Add the actual item
-            result.push({
-                time: item.timestamp,
-                open: Number(item.open) / 100,
-                high: Number(item.high) / 100,
-                low: Number(item.low) / 100,
-                close: Number(item.close) / 100,
-                vol: volAdjusted,
-            });
-
-            previousItem = item;
-        }
-
-        return result.reverse(); // Reverse to have the oldest data first
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [historicalTradeData]);
+    const data = useTransactionCandleStickData(
+        historicalTradeData,
+        selectedTimeScale
+    );
 
     const onTimeScaleChange = (time: string) => {
         setSelectedTimeScale(time as HistoricalDataIntervals);
