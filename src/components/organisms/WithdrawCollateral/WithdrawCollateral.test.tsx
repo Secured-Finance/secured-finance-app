@@ -24,7 +24,7 @@ describe('WithdrawCollateral component', () => {
         render(<Default onClose={onClose} />);
 
         expect(screen.getByRole('dialog')).toBeInTheDocument();
-        expect(screen.getByText('Withdraw Collateral')).toBeInTheDocument();
+        expect(screen.getByText('Withdraw')).toBeInTheDocument();
 
         const button = screen.getByTestId('dialog-action-button');
         expect(button).toHaveTextContent('OK');

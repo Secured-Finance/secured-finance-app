@@ -45,7 +45,6 @@ import {
     divide,
     formatLoanValue,
     generateWalletSourceInformation,
-    getAmountValidation,
     multiply,
     ordinaryFormat,
     usdFormat,
@@ -237,6 +236,14 @@ export function AdvancedLendingOrderCard({
         setSliderValue(percentage);
     };
 
+    const canPlaceOrder = useMemo(() => {
+        if (side === OrderSide.BORROW) {
+            return availableToBorrow > 0 && availableToBorrow >= amount;
+        } else {
+            return availableToLend > 0 && availableToLend >= amount;
+        }
+    }, [amount, availableToBorrow, availableToLend, side]);
+
     const handleInputChange = (v: string) => {
         const inputValue = amountFormatterToBase[currency](Number(v));
 
@@ -268,10 +275,7 @@ export function AdvancedLendingOrderCard({
         ((preOrderPosition === 'borrow' && isLendingSide) ||
             (preOrderPosition === 'lend' && !isLendingSide));
 
-    const shouldDisableActionButton =
-        getAmountValidation(amount, availableToLend, side) ||
-        isInvalidBondPrice ||
-        showPreOrderError;
+    const shouldDisableActionButton = isInvalidBondPrice || showPreOrderError;
 
     const isMarketOrderType = orderType === OrderType.MARKET;
 
@@ -472,8 +476,18 @@ export function AdvancedLendingOrderCard({
                                               ? fv * price
                                               : 0;
                                           return isMobile
-                                              ? `${fv} ${currency}`
-                                              : `${fv} ${currency} (${usdFormat(
+                                              ? `${ordinaryFormat(
+                                                    fv,
+                                                    0,
+                                                    currencyMap[currency]
+                                                        .roundingDecimal
+                                                )} ${currency}`
+                                              : `${ordinaryFormat(
+                                                    fv,
+                                                    0,
+                                                    currencyMap[currency]
+                                                        .roundingDecimal
+                                                )} ${currency} (${usdFormat(
                                                     totalValue,
                                                     2
                                                 )})`;
@@ -489,6 +503,7 @@ export function AdvancedLendingOrderCard({
                         collateralBook={collateralBook}
                         validation={shouldDisableActionButton}
                         isCurrencyDelisted={delistedCurrencySet.has(currency)}
+                        canPlaceOrder={canPlaceOrder}
                     />
                     <ErrorInfo
                         errorMessage='Simultaneous borrow and lend orders are not allowed during the pre-open market period.'

@@ -53,6 +53,14 @@ type TransactionsQuery = Awaited<
     >
 >;
 
+type UserCountAndVolumeQuery = Awaited<
+    ReturnType<
+        Awaited<
+            ReturnType<typeof queries.getBuiltGraphSDK>['UserCountAndVolume']
+        >
+    >
+>;
+
 export type OrderHistoryList = NonNullable<
     UserOrderHistoryQuery['user']
 >['orders'];
@@ -62,6 +70,9 @@ export type TransactionHistoryList = NonNullable<
 >['transactions'];
 export type Transaction = TransactionHistoryList[0];
 export type DailyVolumes = DailyVolumesQuery['dailyVolumes'];
+export type ProtocolVolume = NonNullable<
+    UserCountAndVolumeQuery['protocol']
+>['volumesByCurrency'];
 export type TransactionList = TransactionsQuery['transactionHistory'];
 
 export interface ColorFormat {

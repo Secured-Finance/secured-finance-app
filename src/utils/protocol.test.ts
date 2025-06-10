@@ -5,10 +5,15 @@ import {
     dec22Fixture,
     usdcBytes32,
     volumePerMarket,
+    wfilBytes32,
 } from 'src/stories/mocks/fixtures';
+import { ProtocolVolume } from 'src/types';
 import { ZERO_BI } from './collateral';
 import { createCurrencyMap } from './currencyList';
-import { computeTotalDailyVolumeInUSD } from './protocol';
+import {
+    computeTotalDailyVolumeInUSD,
+    computeTotalProtocolVolumeInUSD,
+} from './protocol';
 
 describe('computeTotalDailyVolumeInUSD', () => {
     it('should return 0 if no daily volumes', () => {
@@ -40,6 +45,32 @@ describe('computeTotalDailyVolumeInUSD', () => {
             totalVolumeUSD: 3942030,
             volumePerCurrency: expectedVolumes,
             volumePerMarket,
+        });
+    });
+});
+
+describe('computeTotalProtocolVolumeInUSD', () => {
+    it('should return 0 if no protocol volumes', () => {
+        expect(computeTotalProtocolVolumeInUSD([], assetPriceMap)).toEqual({
+            totalVolumeUSD: 0,
+        });
+    });
+
+    it('should compute total daily volume in USD', () => {
+        const volumesByCurrency: ProtocolVolume = [
+            {
+                currency: usdcBytes32,
+                totalVolume: '30000000',
+            },
+            {
+                currency: wfilBytes32,
+                totalVolume: '657000000000000000000000',
+            },
+        ];
+        expect(
+            computeTotalProtocolVolumeInUSD(volumesByCurrency, assetPriceMap)
+        ).toEqual({
+            totalVolumeUSD: 3942030,
         });
     });
 });

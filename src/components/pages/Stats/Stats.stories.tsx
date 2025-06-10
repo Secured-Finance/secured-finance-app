@@ -6,13 +6,13 @@ import {
     withBalance,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
-import { mockDailyVolumes } from 'src/stories/mocks/queries';
+import { usdcBytes32, wfilBytes32 } from 'src/stories/mocks/fixtures';
 import { Stats } from './Stats';
 
-const totalUser = [
+const totalUserAndVolumes = [
     {
         request: {
-            query: queries.UserCountDocument,
+            query: queries.UserCountAndVolumeDocument,
             variables: {
                 awaitRefetchQueries: true,
             },
@@ -21,6 +21,16 @@ const totalUser = [
             data: {
                 protocol: {
                     totalUsers: '900000',
+                    volumesByCurrency: [
+                        {
+                            currency: usdcBytes32,
+                            totalVolume: '30000000',
+                        },
+                        {
+                            currency: wfilBytes32,
+                            totalVolume: '657000000000000000000000',
+                        },
+                    ],
                 },
             },
         },
@@ -29,6 +39,16 @@ const totalUser = [
                 data: {
                     protocol: {
                         totalUsers: '12145',
+                        volumesByCurrency: [
+                            {
+                                currency: usdcBytes32,
+                                totalVolume: '30000000',
+                            },
+                            {
+                                currency: wfilBytes32,
+                                totalVolume: '657000000000000000000000',
+                            },
+                        ],
                     },
                 },
             };
@@ -43,7 +63,7 @@ export default {
     args: {},
     parameters: {
         apolloClient: {
-            mocks: [...totalUser, ...mockDailyVolumes],
+            mocks: [...totalUserAndVolumes],
         },
         ...RESPONSIVE_PARAMETERS,
         chromatic: {
