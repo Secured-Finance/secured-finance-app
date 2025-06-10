@@ -12,7 +12,6 @@ import {
     mockRecentTrades,
     mockTrades,
     mockTransactionCandleStick,
-    mockTransactionsQuery,
 } from 'src/stories/mocks/queries';
 import { Landing } from './Landing';
 
@@ -32,7 +31,6 @@ export default {
                 ...mockTransactionCandleStick,
                 ...mockFilteredUserOrderHistory,
                 ...mockFilteredUserTransactionHistory,
-                ...mockTransactionsQuery,
             ],
         },
         ...RESPONSIVE_PARAMETERS,
