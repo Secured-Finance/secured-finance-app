@@ -91,10 +91,17 @@ export const useOrderList = (
 
                         const currency = hexToCurrencySymbol(ccy);
 
-                        if (currency && side === OrderSide.LEND) {
-                            result.totalPVOfOpenOrdersInUSD +=
-                                assetPriceMap[currency] *
-                                amountFormatterFromBase[currency](amount);
+                        if (!currency || !assetPriceMap) {
+                            return result;
+                        }
+
+                        const assetPrice = assetPriceMap[currency];
+                        const amt = amountFormatterFromBase[currency](amount);
+
+                        if (side === OrderSide.LEND) {
+                            result.totalPVOfOpenOrdersInUSD += assetPrice * amt;
+                        } else if (side === OrderSide.BORROW) {
+                            result.totalPVOfOpenOrdersInUSD -= assetPrice * amt;
                         }
 
                         return result;
