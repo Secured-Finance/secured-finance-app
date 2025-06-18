@@ -877,9 +877,7 @@ function getTransactionQuery(
     from: number,
     to: number,
     transactions: TransactionList,
-    lastTransaction: [TransactionList[0]] | [],
-    first = 1000,
-    skip = 0
+    lastTransaction: [TransactionList[0]] | []
 ) {
     return {
         request: {
@@ -891,8 +889,6 @@ function getTransactionQuery(
                 to: to,
                 sides: [OrderSide.LEND, OrderSide.BORROW],
                 awaitRefetchQueries: true,
-                skip,
-                first,
             },
         },
         result: {
