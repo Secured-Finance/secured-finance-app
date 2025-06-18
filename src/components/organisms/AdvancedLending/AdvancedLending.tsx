@@ -79,6 +79,8 @@ import { LoanValue, Maturity } from 'src/utils/entities';
 import { trackButtonEvent } from 'src/utils/events';
 import { useAccount } from 'wagmi';
 
+const TRANSACTIONS_LIMIT = 1000;
+
 const useTradeHistoryDetails = (
     transactions: TransactionList,
     currency: CurrencySymbol,
@@ -133,6 +135,8 @@ export const AdvancedLending = ({
     const [selectedTable, setSelectedTable] = useState(
         TableType.ACTIVE_POSITION
     );
+    const [transactionSkip, setTransactionSkip] = useState(0);
+    const [allTransactions, setAllTransactions] = useState<TransactionList>([]);
 
     const dispatch = useDispatch();
     const { address } = useAccount();
@@ -171,6 +175,12 @@ export const AdvancedLending = ({
     useEffect(() => {
         setTimestamp(Math.round(new Date().getTime() / 1000));
     }, []);
+
+    // Reset transactions when currency or maturity changes
+    useEffect(() => {
+        setAllTransactions([]);
+        setTransactionSkip(0);
+    }, [currency, maturity]);
 
     const filteredInactiveOrderList = useMemo(() => {
         return isChecked
@@ -284,11 +294,21 @@ export const AdvancedLending = ({
             from: timestamp - 24 * 3600,
             to: timestamp,
             sides: [OrderSide.LEND, OrderSide.BORROW],
+            skip: transactionSkip,
         },
         queries.TransactionHistoryDocument,
         'transactionHistory',
         !isSubgraphSupported
     );
+
+    useEffect(() => {
+        if (transactionHistory) {
+            setAllTransactions(prev => [...prev, ...transactionHistory]);
+            if (transactionHistory.length === TRANSACTIONS_LIMIT) {
+                setTransactionSkip(prev => prev + TRANSACTIONS_LIMIT);
+            }
+        }
+    }, [transactionHistory]);
 
     const selectedAsset = useMemo(() => {
         return (
@@ -297,7 +317,7 @@ export const AdvancedLending = ({
     }, [currency, assetList]);
 
     const tradeHistoryDetails = useTradeHistoryDetails(
-        transactionHistory ?? [],
+        allTransactions,
         currency,
         selectedTerm.value
     );
