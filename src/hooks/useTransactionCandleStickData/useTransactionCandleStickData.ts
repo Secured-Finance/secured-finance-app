@@ -7,6 +7,12 @@ import {
     hexToCurrencySymbol,
 } from 'src/utils';
 
+const safeDivide = (value: string | number, divisor: number): number => {
+    const num = Number(value);
+    if (isNaN(num) || divisor === 0) return NaN;
+    return num / divisor;
+};
+
 export const useTransactionCandleStickData = (
     historicalTradeData: { data?: { transactionCandleSticks?: Transaction[] } },
     selectedTimeScale: HistoricalDataIntervals
@@ -65,14 +71,17 @@ export const useTransactionCandleStickData = (
                     newTimestamp -= Number(selectedTimeScale);
                 }
             }
-
+            const open = safeDivide(item.open, 100);
+            const high = safeDivide(item.high, 100);
+            const low = safeDivide(item.low, 100);
+            const close = safeDivide(item.close, 100);
             // Add the actual item
             result.push({
                 time: item.timestamp,
-                open: Number(item.open) / 100,
-                high: Number(item.high) / 100,
-                low: Number(item.low) / 100,
-                close: Number(item.close) / 100,
+                open,
+                high,
+                low,
+                close,
                 vol: volAdjusted,
             });
 

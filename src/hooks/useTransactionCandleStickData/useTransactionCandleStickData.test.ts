@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react';
+import { renderHook } from 'src/test-utils';
 import { useTransactionCandleStickData } from './useTransactionCandleStickData';
 import { HistoricalDataIntervals } from 'src/types';
 import { amountFormatterFromBase, hexToCurrencySymbol } from 'src/utils';
