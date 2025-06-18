@@ -9,7 +9,7 @@ import {
 
 const safeDivide = (value: string | number, divisor: number): number => {
     const num = Number(value);
-    if (isNaN(num) || divisor === 0) return NaN;
+    if (isNaN(num) || divisor === 0) return 0;
     return num / divisor;
 };
 
