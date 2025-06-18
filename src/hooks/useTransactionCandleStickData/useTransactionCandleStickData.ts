@@ -57,15 +57,16 @@ export const useTransactionCandleStickData = (
             if (previousItem) {
                 let newTimestamp =
                     Number(previousItem.timestamp) - Number(selectedTimeScale);
+                const previousClose = safeDivide(previousItem.close, 100);
 
                 while (newTimestamp > Number(item.timestamp)) {
                     result.push({
                         time: newTimestamp.toString(),
-                        open: Number(previousItem.open) / 100,
-                        high: Number(previousItem.high) / 100,
-                        low: Number(previousItem.low) / 100,
-                        close: Number(previousItem.close) / 100,
-                        vol: 0, // No volume for generated entries
+                        open: previousClose,
+                        high: previousClose,
+                        low: previousClose,
+                        close: previousClose,
+                        vol: 0,
                     });
 
                     newTimestamp -= Number(selectedTimeScale);
