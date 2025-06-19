@@ -180,7 +180,7 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
     );
 };
 
-const WithBanner = ({
+export const WithBanner = ({
     ccy,
     market,
     delistedCurrencySet,
