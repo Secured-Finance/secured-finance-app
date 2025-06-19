@@ -2,17 +2,12 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
 import { VisibilityState } from '@tanstack/react-table';
-import clsx from 'clsx';
 import dayjs from 'dayjs';
-import { AnimatePresence, motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { TextLink } from 'src/components/atoms';
 import {
     AdvancedLendingTopBar,
-    Alert,
-    AlertSeverity,
     HorizontalTabTable,
     TabSelector,
 } from 'src/components/molecules';
@@ -128,12 +123,16 @@ export const AdvancedLending = ({
     marketPrice,
     delistedCurrencySet,
     setIsItayose,
+    setMaximumOpenOrderLimit,
+    setPreOrderDays,
 }: {
     collateralBook: CollateralBook;
     maturitiesOptionList: MaturityOptionList;
     marketPrice: number | undefined;
     delistedCurrencySet: Set<CurrencySymbol>;
     setIsItayose: (value: boolean) => void;
+    setMaximumOpenOrderLimit: (value: boolean) => void;
+    setPreOrderDays: (value: number | undefined) => void;
 }) => {
     const isTablet = useBreakpoint('laptop');
     const { currency, maturity } = useSelector((state: RootState) =>
@@ -158,11 +157,6 @@ export const AdvancedLending = ({
     const [selectedTable, setSelectedTable] = useState(
         isItayosePeriod ? TableType.OPEN_ORDERS : TableType.ACTIVE_POSITION
     );
-
-    useEffect(() => {
-        setIsItayose(isItayosePeriod);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isItayosePeriod]);
 
     const selectedTerm = useMemo(() => {
         return (
@@ -530,135 +524,66 @@ export const AdvancedLending = ({
             : undefined;
     }, [lendingContracts, selectedTerm.value]);
 
+    useEffect(() => {
+        setIsItayose(isItayosePeriod);
+        setPreOrderDays(preOrderDays);
+        setMaximumOpenOrderLimit(maximumOpenOrderLimit);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isItayosePeriod, preOrderDays, maximumOpenOrderLimit]);
+
     return (
         <>
-            <div className={clsx('px-3 laptop:px-0')}>
-                <AnimatePresence mode='wait'>
-                    <motion.div
-                        initial={{ opacity: 0, y: -6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -6 }}
-                        transition={{
-                            duration: 0.25,
-                            ease: [0.22, 1, 0.36, 1],
-                        }}
-                    >
-                        {(isItayosePeriod || maximumOpenOrderLimit) && (
-                            <Alert
-                                severity={
-                                    !isItayosePeriod
-                                        ? AlertSeverity.Warning
-                                        : AlertSeverity.Info
-                                }
-                                title={
-                                    isItayosePeriod && preOrderDays ? (
-                                        <>
-                                            Secure your market position by
-                                            placing limit orders up to{' '}
-                                            {preOrderDays} days before trading
-                                            begins with no fees. Opt for either
-                                            a lend or borrow during pre-open,
-                                            not both. No new pre-orders will be
-                                            accepted within 1 hour prior to the
-                                            start of trading. Learn more at{' '}
-                                            <TextLink
-                                                href='https://docs.secured.finance/platform-guide/unique-features/fair-price-discovery/'
-                                                text='Secured Finance Docs'
-                                            />
-                                        </>
-                                    ) : (
-                                        maximumOpenOrderLimit && (
-                                            <>
-                                                You will not be able to place
-                                                additional orders as you
-                                                currently have the maximum
-                                                number of 20 orders. Please wait
-                                                for your order to be filled or
-                                                cancel existing orders before
-                                                adding more.
-                                            </>
-                                        )
-                                    )
-                                }
-                            />
-                        )}
-                    </motion.div>
-                </AnimatePresence>
-            </div>
             <div className='grid gap-2'>
                 <MovingTape nonMaturedMarketOptionList={maturitiesOptionList} />
                 <ThreeColumnsWithTopBar
                     topBar={
                         <div className='relative mb-5 h-20 transition-all duration-300'>
-                            <AnimatePresence mode='wait'>
-                                <motion.div
-                                    key={isItayosePeriod ? 'toolbar' : 'topbar'}
-                                    initial={{
-                                        opacity: 0,
-                                        y: isItayosePeriod ? 8 : -8,
+                            {isItayosePeriod ? (
+                                <Toolbar
+                                    date={
+                                        lendingContracts[
+                                            selectedTerm.value.toNumber()
+                                        ]?.utcOpeningDate
+                                    }
+                                    nextMarketPhase={
+                                        marketPhase === MarketPhase.PRE_ORDER
+                                            ? 'Pre-Open'
+                                            : 'Open in'
+                                    }
+                                    assetList={assetList}
+                                    selectedAsset={selectedAsset}
+                                    options={maturitiesOptionList}
+                                    selected={{
+                                        label: selectedTerm.label,
+                                        value: selectedTerm.value,
                                     }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{
-                                        opacity: 0,
-                                        y: isItayosePeriod ? -8 : 8,
+                                    currency={currency}
+                                    handleAssetChange={handleAssetChange}
+                                    handleTermChange={v =>
+                                        dispatch(setMaturity(Number(v)))
+                                    }
+                                />
+                            ) : (
+                                <AdvancedLendingTopBar
+                                    selectedAsset={selectedAsset}
+                                    assetList={assetList}
+                                    options={maturitiesOptionList}
+                                    selected={{
+                                        label: selectedTerm.label,
+                                        value: selectedTerm.value,
                                     }}
-                                    transition={{ duration: 0.3 }}
-                                    className='absolute inset-0 z-10'
-                                >
-                                    {isItayosePeriod ? (
-                                        <Toolbar
-                                            date={
-                                                lendingContracts[
-                                                    selectedTerm.value.toNumber()
-                                                ]?.utcOpeningDate
-                                            }
-                                            nextMarketPhase={
-                                                marketPhase ===
-                                                MarketPhase.PRE_ORDER
-                                                    ? 'Pre-Open'
-                                                    : 'Open in'
-                                            }
-                                            assetList={assetList}
-                                            selectedAsset={selectedAsset}
-                                            options={maturitiesOptionList}
-                                            selected={{
-                                                label: selectedTerm.label,
-                                                value: selectedTerm.value,
-                                            }}
-                                            currency={currency}
-                                            handleAssetChange={
-                                                handleAssetChange
-                                            }
-                                            handleTermChange={v =>
-                                                dispatch(setMaturity(Number(v)))
-                                            }
-                                        />
-                                    ) : (
-                                        <AdvancedLendingTopBar
-                                            selectedAsset={selectedAsset}
-                                            assetList={assetList}
-                                            options={maturitiesOptionList}
-                                            selected={{
-                                                label: selectedTerm.label,
-                                                value: selectedTerm.value,
-                                            }}
-                                            onAssetChange={handleCurrencyChange}
-                                            onTermChange={handleTermChange}
-                                            currencyPrice={usdFormat(
-                                                currencyPrice,
-                                                2
-                                            )}
-                                            currentMarket={currentMarket}
-                                            marketInfo={
-                                                isSubgraphSupported
-                                                    ? dailyMarketInfo
-                                                    : undefined
-                                            }
-                                            isItayosePeriod={isItayosePeriod}
-                                        />
-                                    )}
-                                </motion.div>
-                            </AnimatePresence>
+                                    onAssetChange={handleCurrencyChange}
+                                    onTermChange={handleTermChange}
+                                    currencyPrice={usdFormat(currencyPrice, 2)}
+                                    currentMarket={currentMarket}
+                                    marketInfo={
+                                        isSubgraphSupported
+                                            ? dailyMarketInfo
+                                            : undefined
+                                    }
+                                    isItayosePeriod={isItayosePeriod}
+                                />
+                            )}
                         </div>
                     }
                 >

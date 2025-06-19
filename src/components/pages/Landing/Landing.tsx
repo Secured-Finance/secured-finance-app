@@ -4,7 +4,7 @@ import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ViewType } from 'src/components/atoms';
+import { TextLink, ViewType } from 'src/components/atoms';
 import {
     Alert,
     AlertSeverity,
@@ -81,6 +81,11 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
     const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
     const [isItayosePeriod, setIsItayosePeriod] = useState(false);
 
+    const [maximumOpenOrderLimit, setMaximumOpenOrderLimit] =
+        useState<boolean>();
+
+    const [preOrderDays, setPreOrderDays] = useState<number | undefined>();
+
     const itayoseMarket = Object.entries(lendingContracts).find(
         ([, market]) => market.isPreOrderPeriod || market.isItayosePeriod
     )?.[1];
@@ -138,6 +143,8 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
                 market={itayoseMarket}
                 delistedCurrencySet={delistedCurrencySet}
                 isItayose={isItayosePeriod}
+                maximumOpenOrderLimit={maximumOpenOrderLimit}
+                preOrderDays={preOrderDays}
             >
                 {view === 'Simple' ? (
                     <div className='mt-6 flex flex-row items-center justify-center px-3 tablet:px-5 laptop:px-0'>
@@ -164,6 +171,8 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
                         marketPrice={marketPrice}
                         delistedCurrencySet={delistedCurrencySet}
                         setIsItayose={setIsItayosePeriod}
+                        setMaximumOpenOrderLimit={setMaximumOpenOrderLimit}
+                        setPreOrderDays={setPreOrderDays}
                     />
                 )}
             </WithBanner>
@@ -177,18 +186,100 @@ const WithBanner = ({
     delistedCurrencySet,
     children,
     isItayose,
+    maximumOpenOrderLimit,
+    preOrderDays,
 }: {
     ccy: CurrencySymbol;
     market: LendingMarket | undefined;
     delistedCurrencySet: Set<CurrencySymbol>;
     children: React.ReactNode;
     isItayose: boolean;
+    maximumOpenOrderLimit: boolean | undefined;
+    preOrderDays: number | undefined;
 }) => {
     const preOrderTimeLimit = market
         ? market.utcOpeningDate * 1000 - ITAYOSE_PERIOD
         : 0;
 
     const currencyArray = Array.from(delistedCurrencySet);
+
+    const alertContent = (() => {
+        if (maximumOpenOrderLimit) {
+            return {
+                severity: AlertSeverity.Warning,
+                title: (
+                    <>
+                        You will not be able to place additional orders as you
+                        currently have the maximum number of 20 orders. Please
+                        wait for your order to be filled or cancel existing
+                        orders before adding more.
+                    </>
+                ),
+            };
+        }
+
+        if (isItayose && preOrderDays) {
+            return {
+                severity: AlertSeverity.Info,
+                title: (
+                    <>
+                        Secure your market position by placing limit orders up
+                        to {preOrderDays} days before trading begins with no
+                        fees. Opt for either a lend or borrow during pre-open,
+                        not both. No new pre-orders will be accepted within 1
+                        hour prior to the start of trading. Learn more at{' '}
+                        <TextLink
+                            href='https://docs.secured.finance/platform-guide/unique-features/fair-price-discovery/'
+                            text='Secured Finance Docs'
+                        />
+                    </>
+                ),
+            };
+        }
+
+        if (market && !isItayose) {
+            return {
+                severity: AlertSeverity.Info,
+                title: (
+                    <>
+                        {`Market ${ccy}-${getUTCMonthYear(
+                            market.maturity,
+                            true
+                        )} is open for pre-orders now until ${Intl.DateTimeFormat(
+                            'en-US',
+                            {
+                                timeZone: 'UTC',
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                            }
+                        ).format(preOrderTimeLimit)} ${Intl.DateTimeFormat(
+                            'en-GB',
+                            {
+                                timeZone: 'UTC',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                            }
+                        ).format(preOrderTimeLimit)} (UTC)`}
+
+                        <span className='pl-4'>
+                            <Link
+                                href={`/?market=${ccy}-${getUTCMonthYear(
+                                    market.maturity,
+                                    true
+                                )}`}
+                                className='text-planetaryPurple underline'
+                            >
+                                Place Order Now
+                            </Link>
+                        </span>
+                    </>
+                ),
+            };
+        }
+
+        return null;
+    })();
 
     return (
         <div className='flex flex-col justify-center gap-3'>
@@ -199,43 +290,11 @@ const WithBanner = ({
                     />
                 </div>
             )}
-            {market && !isItayose && (
+            {alertContent && (
                 <div className='px-3 laptop:px-0'>
                     <Alert
-                        title={
-                            <>
-                                {`Market ${ccy}-${getUTCMonthYear(
-                                    market.maturity,
-                                    true
-                                )} is open for pre-orders now until ${Intl.DateTimeFormat(
-                                    'en-US',
-                                    {
-                                        timeZone: 'UTC',
-                                        year: 'numeric',
-                                        month: 'long',
-                                        day: 'numeric',
-                                    }
-                                ).format(
-                                    preOrderTimeLimit
-                                )} ${Intl.DateTimeFormat('en-GB', {
-                                    timeZone: 'UTC',
-                                    hour: '2-digit',
-                                    minute: '2-digit',
-                                }).format(preOrderTimeLimit)} (UTC)`}
-                                <span className='pl-4'>
-                                    <Link
-                                        href={`/?market=${ccy}-${getUTCMonthYear(
-                                            market.maturity,
-                                            true
-                                        )}`}
-                                        className='text-planetaryPurple underline'
-                                    >
-                                        Place Order Now
-                                    </Link>
-                                </span>
-                            </>
-                        }
-                        severity={AlertSeverity.Info}
+                        severity={alertContent.severity}
+                        title={alertContent.title}
                     />
                 </div>
             )}
