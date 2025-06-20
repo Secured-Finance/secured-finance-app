@@ -1,6 +1,6 @@
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { DropdownSelector, RadioButton } from 'src/components/atoms';
 import { HistoricalChart } from 'src/components/molecules/HistoricalChart';
@@ -8,14 +8,10 @@ import { useGraphClientHook } from 'src/hooks';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { HistoricalDataIntervals } from 'src/types';
-import {
-    CurrencySymbol,
-    amountFormatterFromBase,
-    hexToCurrencySymbol,
-} from 'src/utils';
 import { timeScales } from './constants';
+import { useTransactionCandleStickData } from 'src/hooks';
 
-type Transaction = {
+export type Transaction = {
     average: string;
     close: string;
     currency: string;
@@ -45,25 +41,10 @@ export const HistoricalWidget = () => {
         queries.TransactionCandleStickDocument
     );
 
-    const data = useMemo(() => {
-        return (historicalTradeData.data?.transactionCandleSticks || []).map(
-            (item: Transaction) => {
-                const ccy = hexToCurrencySymbol(item.currency);
-                const volAdjusted = amountFormatterFromBase[
-                    ccy as CurrencySymbol
-                ](BigInt(item.volume));
-
-                return {
-                    time: item.timestamp,
-                    open: +item.open / 100,
-                    high: +item.high / 100,
-                    low: +item.low / 100,
-                    close: +item.close / 100,
-                    vol: volAdjusted,
-                };
-            }
-        );
-    }, [historicalTradeData]);
+    const data = useTransactionCandleStickData(
+        historicalTradeData,
+        selectedTimeScale
+    );
 
     const onTimeScaleChange = (time: string) => {
         setSelectedTimeScale(time as HistoricalDataIntervals);
