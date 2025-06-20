@@ -13,7 +13,6 @@ import {
     mockRecentTrades,
     mockTrades,
     mockTransactionCandleStick,
-    mockTransactionsQuery,
 } from 'src/stories/mocks/queries';
 import { CurrencySymbol } from 'src/utils';
 import { Landing, WithBanner } from './Landing';
@@ -34,7 +33,6 @@ export default {
                 ...mockTransactionCandleStick,
                 ...mockFilteredUserOrderHistory,
                 ...mockFilteredUserTransactionHistory,
-                ...mockTransactionsQuery,
             ],
         },
         ...RESPONSIVE_PARAMETERS,

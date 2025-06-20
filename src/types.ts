@@ -153,3 +153,12 @@ export type LastPricePerMarket = Record<
         timestamp: number;
     }
 >;
+
+export type QueryTransaction = {
+    amount: string;
+    averagePrice: string;
+    executionPrice: string;
+    createdAt: string;
+    currency: string;
+    maturity: number;
+};
