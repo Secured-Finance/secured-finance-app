@@ -6,8 +6,7 @@ function EntryPoint() {
     const { data: isTerminated, isPending: isPendingMarketTerminated } =
         useIsMarketTerminated();
 
-    const { data: isGlobalItayose, isPending: isPendingGlobalItayose } =
-        useIsGlobalItayose();
+    const { isPending: isPendingGlobalItayose } = useIsGlobalItayose();
 
     const router = useRouter();
 
@@ -17,11 +16,6 @@ function EntryPoint() {
 
     if (isTerminated) {
         router.push('/emergency');
-        return null;
-    }
-
-    if (isGlobalItayose) {
-        router.push('/global-itayose');
         return null;
     }
 
