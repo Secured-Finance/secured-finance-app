@@ -236,6 +236,14 @@ describe('Advance Lending with Itayose', () => {
         ).not.toBeInTheDocument();
     });
 
+    it('should render the moving tape', async () => {
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
+        const movingTape = screen.getByText('WFIL-DEC2022');
+        expect(movingTape).toBeInTheDocument();
+    });
+
     it('should not show disclaimer for maximum open order limit if user has less than 20 open orders', async () => {
         await waitFor(() =>
             render(<OpenOrdersConnectedToWallet />, {
