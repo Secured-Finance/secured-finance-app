@@ -11,7 +11,11 @@ import {
     Slider,
     TabVariant,
 } from 'src/components/atoms';
-import { SubtabGroup, TabGroup } from 'src/components/molecules';
+import {
+    AdvancedLendingEstimationFields,
+    SubtabGroup,
+    TabGroup,
+} from 'src/components/molecules';
 import { NewOrderBookWidget, OrderAction } from 'src/components/organisms';
 import {
     CollateralBook,
@@ -20,7 +24,6 @@ import {
     useBreakpoint,
     useLastPrices,
     useMarket,
-    useOrderEstimation,
     useOrderFee,
 } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
@@ -42,13 +45,9 @@ import {
     amountFormatterFromBase,
     amountFormatterToBase,
     calculateFee,
-    currencyMap,
     divide,
-    formatLoanValue,
     generateWalletSourceInformation,
-    multiply,
     ordinaryFormat,
-    usdFormat,
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import {
@@ -148,47 +147,6 @@ export function AdvancedLendingOrderCard({
     }, [maturity, marketPrice, unitPrice, isConnected, unitPriceExists]);
 
     const dispatch = useDispatch();
-
-    const { data: orderEstimationInfo, isLoading } =
-        useOrderEstimation(address);
-
-    const orderEstimationAmount = useMemo(() => {
-        if (!orderEstimationInfo || !orderEstimationInfo.filledAmount) return 0;
-        return amountFormatterFromBase[currency](
-            orderEstimationInfo.filledAmount
-        );
-    }, [currency, orderEstimationInfo]);
-
-    const orderEstimationAmountInFV = useMemo(() => {
-        if (!orderEstimationInfo || !orderEstimationInfo.filledAmountInFV)
-            return 0;
-        return amountFormatterFromBase[currency](
-            orderEstimationInfo.filledAmountInFV
-        );
-    }, [currency, orderEstimationInfo]);
-
-    const orderLoanValue = useMemo(() => {
-        if (
-            !orderEstimationInfo ||
-            !maturity ||
-            !orderEstimationInfo.filledAmount ||
-            !orderEstimationInfo.filledAmountInFV
-        )
-            return LoanValue.ZERO;
-        return LoanValue.fromPrice(
-            divide(
-                multiply(
-                    orderEstimationInfo.filledAmount,
-                    10000.0,
-                    currencyMap[currency].roundingDecimal
-                ),
-                orderEstimationInfo.filledAmountInFV,
-                currencyMap[currency].roundingDecimal
-            ),
-            maturity,
-            calculationDate
-        );
-    }, [orderEstimationInfo, currency, maturity, calculationDate]);
 
     const collateralUsagePercent = useMemo(() => {
         return collateralBook.coverage / 100.0;
@@ -460,69 +418,20 @@ export function AdvancedLendingOrderCard({
                         />
                     </div>
                     <div className='mb-2.5 flex flex-col gap-1 laptop:mb-0'>
-                        <OrderDisplayBox
-                            field='Est. APR'
-                            value={formatLoanValue(orderLoanValue, 'rate')}
-                            isLoading={isLoading}
-                        />
-                        <OrderDisplayBox
-                            field='Est. Price'
-                            value={formatLoanValue(orderLoanValue, 'price')}
-                            isLoading={isLoading}
-                        />
-                        <OrderDisplayBox
-                            field={isMobile ? 'PV' : 'Present Value'}
-                            value={
-                                isMobile
-                                    ? `${ordinaryFormat(
-                                          orderEstimationAmount,
-                                          0,
-                                          currencyMap[currency].roundingDecimal
-                                      )} ${currency}`
-                                    : `${ordinaryFormat(
-                                          orderEstimationAmount,
-                                          0,
-                                          currencyMap[currency].roundingDecimal
-                                      )} ${currency} (${usdFormat(
-                                          orderEstimationAmount * price ?? 0,
-                                          2
-                                      )})`
+                        <AdvancedLendingEstimationFields
+                            marketPrice={marketPrice}
+                            calculationDate={calculationDate}
+                            assetPrice={price}
+                            hasLendOpenOrders={
+                                orderBook.data &&
+                                orderBook.data.lendOrderbook[0].amount !==
+                                    ZERO_BI
                             }
-                            isLoading={isLoading}
-                        />
-                        <OrderDisplayBox
-                            field={isMobile ? 'FV' : 'Future Value'}
-                            value={
-                                unitPriceValue &&
-                                unitPriceValue !== '' &&
-                                unitPriceValue !== '0'
-                                    ? (() => {
-                                          const fv = orderEstimationAmountInFV;
-                                          const totalValue = price
-                                              ? fv * price
-                                              : 0;
-                                          return isMobile
-                                              ? `${ordinaryFormat(
-                                                    fv,
-                                                    0,
-                                                    currencyMap[currency]
-                                                        .roundingDecimal
-                                                )} ${currency}`
-                                              : `${ordinaryFormat(
-                                                    fv,
-                                                    0,
-                                                    currencyMap[currency]
-                                                        .roundingDecimal
-                                                )} ${currency} (${usdFormat(
-                                                    totalValue,
-                                                    2
-                                                )})`;
-                                      })()
-                                    : isMobile
-                                    ? `0 ${currency}`
-                                    : `0 ${currency} ($0.00)`
+                            hasBorrowOpenOrders={
+                                orderBook.data &&
+                                orderBook.data.borrowOrderbook[0].amount !==
+                                    ZERO_BI
                             }
-                            isLoading={isLoading}
                         />
                     </div>
                     <OrderAction

@@ -100,8 +100,6 @@ export const useOrderList = (
 
                         if (side === OrderSide.LEND) {
                             result.totalPVOfOpenOrdersInUSD += assetPrice * amt;
-                        } else if (side === OrderSide.BORROW) {
-                            result.totalPVOfOpenOrdersInUSD -= assetPrice * amt;
                         }
 
                         return result;
