@@ -16,7 +16,7 @@
     "@nextui-org/table": "^2.0.33",
     "@nextui-org/theme": "^2.2.4",
     "@reduxjs/toolkit": "^1.8.1",
-    "@secured-finance/sf-client": "0.2.0-beta.190",
+    "@secured-finance/sf-client": "0.2.0-beta.199",
     "@secured-finance/sf-core": "0.2.0-beta.187",
     "@secured-finance/sf-graph-client": "0.2.0-beta.195",
     "@secured-finance/sf-point-client": "0.2.0-beta.187",
