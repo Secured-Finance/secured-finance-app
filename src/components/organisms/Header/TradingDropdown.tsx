@@ -82,7 +82,7 @@ export const TradingDropdown = () => {
                                         <Link
                                             href={
                                                 isGlobalItayose
-                                                    ? '/itayose'
+                                                    ? '/'
                                                     : tradingLink.link
                                             }
                                             className={clsx(
