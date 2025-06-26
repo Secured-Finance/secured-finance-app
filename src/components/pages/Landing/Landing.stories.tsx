@@ -5,6 +5,7 @@ import {
     withBalance,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
+import { dec22Fixture, maturities } from 'src/stories/mocks/fixtures';
 import {
     mockDailyVolumes,
     mockFilteredUserOrderHistory,
@@ -13,7 +14,8 @@ import {
     mockTrades,
     mockTransactionCandleStick,
 } from 'src/stories/mocks/queries';
-import { Landing } from './Landing';
+import { CurrencySymbol } from 'src/utils';
+import { Landing, WithBanner } from './Landing';
 
 export default {
     title: 'Pages/Landing',
@@ -56,3 +58,20 @@ AdvancedViewConnected.parameters = {
 AdvancedViewConnected.args = {
     view: 'Advanced',
 };
+
+export const WithBannerExample = () => {
+    const mockMarket = maturities[dec22Fixture.toNumber()];
+    return (
+        <WithBanner
+            ccy={CurrencySymbol.aUSDC}
+            market={mockMarket}
+            delistedCurrencySet={new Set()}
+            isItayose={false}
+            maximumOpenOrderLimit={undefined}
+            preOrderDays={undefined}
+        >
+            <div>Banner Child Example</div>
+        </WithBanner>
+    );
+};
+WithBannerExample.storyName = 'WithBanner';

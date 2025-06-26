@@ -1,12 +1,14 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
 import { zeroRates } from 'src/hooks/useYieldCurveHistoricalRates/constant';
+import { dec22Fixture, maturities } from 'src/stories/mocks/fixtures';
 import { initialStore } from 'src/stories/mocks/mockStore';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor, within } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
 import timemachine from 'timemachine';
+import { WithBanner } from './Landing';
 import * as stories from './Landing.stories';
 
 const { Default, AdvancedViewConnected } = composeStories(stories);
@@ -38,6 +40,16 @@ jest.mock('src/hooks/useYieldCurveHistoricalRates', () => ({
 const preloadedState = {
     ...initialStore,
     wallet: { address: '0x1' },
+};
+
+const baseWithBannerProps = {
+    ccy: CurrencySymbol.aUSDC,
+    market: maturities[dec22Fixture.toNumber()],
+    delistedCurrencySet: new Set<CurrencySymbol>(),
+    children: <div>Banner Child Example</div>,
+    isItayose: false,
+    maximumOpenOrderLimit: undefined,
+    preOrderDays: undefined,
 };
 
 beforeAll(() => {
@@ -323,5 +335,40 @@ describe('Landing Component', () => {
         expect(
             screen.getByText('Welcome! Please deposit funds to enable trading.')
         ).toBeInTheDocument();
+    });
+
+    it('shows warning when maximumOpenOrderLimit is true', () => {
+        render(
+            <WithBanner {...baseWithBannerProps} maximumOpenOrderLimit={true} />
+        );
+        expect(
+            screen.getByText(
+                /you currently have the maximum number of 20 orders/i
+            )
+        ).toBeInTheDocument();
+    });
+
+    it('shows info when isItayose and preOrderDays are set', () => {
+        render(
+            <WithBanner
+                {...baseWithBannerProps}
+                isItayose={true}
+                preOrderDays={5}
+            />
+        );
+        expect(
+            screen.getByText(
+                /secure your market position by placing limit orders up to 5 days before trading begins/i
+            )
+        ).toBeInTheDocument();
+        expect(screen.getByText(/Secured Finance Docs/)).toBeInTheDocument();
+    });
+
+    it('shows info when market is open for pre-orders and not itayose', () => {
+        render(<WithBanner {...baseWithBannerProps} isItayose={false} />);
+        expect(
+            screen.getByText(/Market aUSDC-.*is open for pre-orders now until/i)
+        ).toBeInTheDocument();
+        expect(screen.getByText(/Place Order Now/)).toBeInTheDocument();
     });
 });

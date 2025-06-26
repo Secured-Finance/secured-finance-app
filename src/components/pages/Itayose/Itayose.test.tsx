@@ -1,5 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
+import { zeroRates } from 'src/hooks/useYieldCurveHistoricalRates/constant';
 import { dec22Fixture } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
@@ -22,6 +23,13 @@ jest.mock(
         ({ children }: { children: React.ReactNode }) =>
             children
 );
+
+jest.mock('src/hooks/useYieldCurveHistoricalRates', () => ({
+    useYieldCurveMarketRatesHistorical: jest.fn(() => ({
+        historicalRates: zeroRates,
+        loading: false,
+    })),
+}));
 
 const preloadedState = {
     landingOrderForm: {

@@ -13,4 +13,5 @@ export type AdvancedLendingTopBarProp = {
     currentMarket: CurrentMarket | undefined;
     currencyPrice: string;
     marketInfo?: DailyMarketInfo;
+    isItayosePeriod: boolean;
 };
