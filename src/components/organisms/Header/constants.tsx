@@ -2,7 +2,7 @@ export const PRODUCTION_LINKS = [
     {
         text: 'Fixed Income',
         link: '/',
-        alternateLinks: ['/global-itayose', '/itayose'],
+        alternateLinks: ['/global-itayose'],
         dataCy: 'trading',
     },
     {
@@ -41,7 +41,7 @@ export const DEV_LINKS = [
 export const TRADING_LINKS = {
     text: 'Trading',
     dataCy: 'lending',
-    alternateLinks: ['/', '/global-itayose', '/itayose'],
+    alternateLinks: ['/', '/global-itayose'],
     links: [
         {
             text: 'Simple',

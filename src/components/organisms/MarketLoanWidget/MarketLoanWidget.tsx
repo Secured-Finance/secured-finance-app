@@ -86,7 +86,7 @@ export const MarketLoanWidget = ({
             dispatch(setMaturity(Number(info.row.original.maturity)));
             dispatch(setCurrency(ccy));
 
-            const pathname = info.row.original.isOpened ? '/' : '/itayose';
+            const pathname = '/';
             const market = `${ccy}-${info.row.original.name}`;
 
             router.push({
