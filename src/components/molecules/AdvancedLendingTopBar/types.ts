@@ -15,4 +15,5 @@ export type AdvancedLendingTopBarProp = {
     marketInfo?: DailyMarketInfo;
     savedMarkets: SavedMarket[];
     handleFavouriteToggle: (market: string) => void;
+    isItayosePeriod: boolean;
 };

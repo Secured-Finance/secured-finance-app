@@ -258,21 +258,12 @@ export const CurrencyMaturityDropdown = ({
 
     const handleOptionClick = (item: FilteredOption) => {
         if (item.currency !== asset.value || item.maturity !== maturity.value) {
-            if (item.isItayoseOption) {
-                router.push({
-                    pathname: '/itayose',
-                    query: {
-                        market: item.key,
-                    },
-                });
-            } else {
-                router.push({
-                    pathname: '/',
-                    query: {
-                        market: item.key,
-                    },
-                });
-            }
+            router.push({
+                pathname: '/',
+                query: {
+                    market: item.key,
+                },
+            });
         }
     };
 

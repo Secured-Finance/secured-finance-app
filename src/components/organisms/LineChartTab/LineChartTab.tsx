@@ -101,8 +101,7 @@ export const LineChartTab = ({
                     maturityList={maturityList}
                     options={chartOptions}
                     handleChartClick={maturityIndex => {
-                        const { maturity, label, isPreOrderPeriod } =
-                            maturityList[maturityIndex];
+                        const { maturity, label } = maturityList[maturityIndex];
                         dispatch(setMaturity(maturity));
                         trackButtonEvent(
                             ButtonEvents.TERM_CHANGE,
@@ -112,11 +111,7 @@ export const LineChartTab = ({
 
                         const market = `${currency}-${label}`;
 
-                        let pathname = '/';
-
-                        if (isPreOrderPeriod) {
-                            pathname = '/itayose';
-                        }
+                        const pathname = '/';
 
                         router.push({
                             pathname,
