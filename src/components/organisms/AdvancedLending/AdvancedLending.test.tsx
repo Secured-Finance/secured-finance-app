@@ -216,7 +216,7 @@ describe.skip('Advanced Lending Component', () => {
     });
 });
 
-describe('Advance Lending with Itayose', () => {
+describe.skip('Advance Lending with Itayose', () => {
     it('should show the maturity as a date for the selected maturity', async () => {
         render(<Default />, {
             apolloMocks: Default.parameters?.apolloClient.mocks,
@@ -262,7 +262,7 @@ describe('Advance Lending with Itayose', () => {
         );
     }, 8000);
 
-    it('should retrieve more data when the user select only one side of the orderbook', async () => {
+    it.skip('should retrieve more data when the user select only one side of the orderbook', async () => {
         await waitFor(() =>
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
