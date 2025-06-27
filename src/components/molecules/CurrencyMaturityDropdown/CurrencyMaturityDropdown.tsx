@@ -20,7 +20,7 @@ import {
     useLendingMarkets,
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
-import { SavedMarket } from 'src/types';
+import { DailyVolumes, SavedMarket } from 'src/types';
 import {
     CurrencySymbol,
     computeTotalDailyVolumeInUSD,
@@ -34,6 +34,8 @@ import {
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 import { CurrencyMaturityDropdownProps, FilteredOption } from './types';
+
+const DAILYVOLUMES_LIMIT = 1000;
 
 export const CurrencyMaturityDropdown = ({
     currencyList,
@@ -64,15 +66,32 @@ export const CurrencyMaturityDropdown = ({
 
     const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
 
+    const [volumeSkip, setVolumeSkip] = useState(0);
+    const [allDailyVolumes, setAllDailyVolumes] = useState<
+        NonNullable<DailyVolumes>
+    >([]);
+
     const dailyVolumes = useGraphClientHook(
-        {}, // no variables
+        {
+            first: DAILYVOLUMES_LIMIT,
+            skip: volumeSkip,
+        },
         queries.DailyVolumesDocument,
         'dailyVolumes',
         !isSubgraphSupported
     );
 
+    useEffect(() => {
+        if (dailyVolumes.data) {
+            setAllDailyVolumes(prev => [...prev, ...(dailyVolumes.data ?? [])]);
+            if (dailyVolumes.data.length === DAILYVOLUMES_LIMIT) {
+                setVolumeSkip(prev => prev + DAILYVOLUMES_LIMIT);
+            }
+        }
+    }, [dailyVolumes.data]);
+
     const { volumePerMarket } = computeTotalDailyVolumeInUSD(
-        dailyVolumes.data ?? [],
+        allDailyVolumes,
         priceList
     );
 

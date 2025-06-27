@@ -849,6 +849,8 @@ export const mockDailyVolumes = [
             query: queries.DailyVolumesDocument,
             variables: {
                 awaitRefetchQueries: true,
+                first: 1000,
+                skip: 0,
             },
         },
         result: {
@@ -877,7 +879,9 @@ function getTransactionQuery(
     from: number,
     to: number,
     transactions: TransactionList,
-    lastTransaction: [TransactionList[0]] | []
+    lastTransaction: [TransactionList[0]] | [],
+    skip = 0,
+    first = 1000
 ) {
     return {
         request: {
@@ -889,6 +893,8 @@ function getTransactionQuery(
                 to: to,
                 sides: [OrderSide.LEND, OrderSide.BORROW],
                 awaitRefetchQueries: true,
+                skip: skip,
+                first: first,
             },
         },
         result: {
