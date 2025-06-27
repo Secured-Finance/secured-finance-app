@@ -44,7 +44,7 @@ const preloadedState = {
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-describe.skip('Itayose Component', () => {
+describe('Itayose Component', () => {
     it('should render a Itayose', async () => {
         await waitFor(() =>
             render(<Default />, {
