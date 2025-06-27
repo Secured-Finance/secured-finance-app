@@ -165,7 +165,7 @@ export const RecentTradesTable = ({
                         );
                         return (
                             <TableRow
-                                key={`${item.currency}-${item.maturity}-${item.createdAt}`}
+                                key={`${item.currency}-${item.maturity}-${item.createdAt}-${item.txHash}`}
                                 className='py-0 text-white laptop:h-6'
                             >
                                 <TableCell
