@@ -782,8 +782,11 @@ export const AdvancedLending = ({
                         delistedCurrencySet={delistedCurrencySet}
                         isItayose={isItayosePeriod}
                         calculationDate={
-                            lendingContracts[selectedTerm.value.toNumber()]
-                                ?.utcOpeningDate
+                            isItayosePeriod
+                                ? lendingContracts[
+                                      selectedTerm.value.toNumber()
+                                  ]?.utcOpeningDate
+                                : undefined
                         }
                         preOrderPosition={
                             filteredOrderList.length > 0
