@@ -93,7 +93,7 @@ export const GlobalItayose = () => {
 
                                 <Button
                                     onClick={() => {
-                                        router.push('/itayose/');
+                                        router.push('/');
                                     }}
                                 >
                                     GO
