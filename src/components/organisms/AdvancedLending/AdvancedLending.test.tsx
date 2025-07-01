@@ -150,92 +150,9 @@ describe.skip('Advanced Lending Component', () => {
         );
         expect(tooltip).toBeInTheDocument();
     });
-
-    describe('Dynamic orderbook depth', () => {
-        it('should retrieve more data when the user select only one side of the orderbook', async () => {
-            await waitFor(() =>
-                render(<Default />, {
-                    apolloMocks: Default.parameters?.apolloClient.mocks,
-                })
-            );
-            expect(
-                mockSecuredFinance.getBorrowOrderBook
-            ).toHaveBeenLastCalledWith(
-                expect.anything(),
-                expect.anything(),
-                expect.anything(),
-                15
-            );
-
-            await waitFor(() =>
-                fireEvent.click(
-                    screen.getByRole('button', {
-                        name: 'Show Only Lend Orders',
-                    })
-                )
-            );
-            expect(
-                mockSecuredFinance.getBorrowOrderBook
-            ).toHaveBeenLastCalledWith(
-                expect.anything(),
-                expect.anything(),
-                expect.anything(),
-                30
-            );
-        });
-
-        it.skip('should retrieve more data when the user select a aggregation factor', async () => {
-            await waitFor(() =>
-                render(<Default />, {
-                    apolloMocks: Default.parameters?.apolloClient.mocks,
-                })
-            );
-            expect(
-                mockSecuredFinance.getLendOrderBook
-            ).toHaveBeenLastCalledWith(
-                expect.anything(),
-                expect.anything(),
-                expect.anything(),
-                15
-            );
-            await waitFor(() => {
-                fireEvent.click(screen.getByRole('button', { name: '0.01' }));
-                fireEvent.click(screen.getByRole('menuitem', { name: '1' }));
-            });
-            await waitFor(() =>
-                expect(
-                    mockSecuredFinance.getLendOrderBook
-                ).toHaveBeenLastCalledWith(
-                    expect.anything(),
-                    expect.anything(),
-                    expect.anything(),
-                    1500
-                )
-            );
-        });
-    });
 });
 
 describe.skip('Advance Lending with Itayose', () => {
-    it('should show the maturity as a date for the selected maturity', async () => {
-        render(<Default />, {
-            apolloMocks: Default.parameters?.apolloClient.mocks,
-        });
-        const btn = await screen.findAllByRole('button', {
-            name: 'WFIL-DEC2022',
-        });
-        expect(btn[0]).toBeInTheDocument();
-    });
-
-    it('should not display disclaimer if no currency is being delisted', () => {
-        render(<Default />, {
-            apolloMocks: Default.parameters?.apolloClient.mocks,
-        });
-        expect(
-            screen.queryByText('WFIL will be delisted')
-        ).not.toBeInTheDocument();
-    });
-
     it('should not show disclaimer for maximum open order limit if user has less than 20 open orders', async () => {
         await waitFor(() =>
             render(<OpenOrdersConnectedToWallet />, {
@@ -288,5 +205,96 @@ describe.skip('Advance Lending with Itayose', () => {
             expect.anything(),
             30
         );
+    });
+});
+
+describe('Dynamic orderbook depth and Top Bar', () => {
+    it('should retrieve more data when the user select only one side of the orderbook', async () => {
+        await waitFor(() =>
+            render(<Default />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+            })
+        );
+        expect(mockSecuredFinance.getBorrowOrderBook).toHaveBeenLastCalledWith(
+            expect.anything(),
+            expect.anything(),
+            expect.anything(),
+            15
+        );
+
+        await waitFor(() =>
+            fireEvent.click(
+                screen.getByRole('button', {
+                    name: 'Show Only Lend Orders',
+                })
+            )
+        );
+        expect(mockSecuredFinance.getBorrowOrderBook).toHaveBeenLastCalledWith(
+            expect.anything(),
+            expect.anything(),
+            expect.anything(),
+            30
+        );
+    });
+
+    it('should retrieve more data when the user select a aggregation factor', async () => {
+        await waitFor(() =>
+            render(<Default />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+            })
+        );
+        expect(mockSecuredFinance.getLendOrderBook).toHaveBeenLastCalledWith(
+            expect.anything(),
+            expect.anything(),
+            expect.anything(),
+            15
+        );
+        await waitFor(() => {
+            fireEvent.click(screen.getByRole('button', { name: '0.01' }));
+            fireEvent.click(screen.getByRole('menuitem', { name: '1' }));
+        });
+        await waitFor(() =>
+            expect(
+                mockSecuredFinance.getLendOrderBook
+            ).toHaveBeenLastCalledWith(
+                expect.anything(),
+                expect.anything(),
+                expect.anything(),
+                1500
+            )
+        );
+    });
+
+    it('should display the last trades in the top bar', async () => {
+        render(<Default />, {
+            apolloMocks: mockTrades,
+        });
+
+        expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
+
+        expect(screen.getAllByText('Mark Price')[0]).toBeInTheDocument();
+        expect(screen.getAllByText('--.--')[0]).toBeInTheDocument();
+
+        expect(screen.getAllByText('Last Price')[0]).toBeInTheDocument();
+        expect(screen.getAllByText('0.00')[0]).toBeInTheDocument();
+    });
+
+    it('should show the maturity as a date for the selected maturity', async () => {
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
+        const btn = await screen.findAllByRole('button', {
+            name: 'WFIL-DEC2022',
+        });
+        expect(btn[0]).toBeInTheDocument();
+    });
+
+    it('should not display disclaimer if no currency is being delisted', () => {
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
+        expect(
+            screen.queryByText('WFIL will be delisted')
+        ).not.toBeInTheDocument();
     });
 });
