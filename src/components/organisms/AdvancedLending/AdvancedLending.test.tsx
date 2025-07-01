@@ -210,11 +210,7 @@ describe.skip('Advance Lending with Itayose', () => {
 
 describe('Dynamic orderbook depth and Top Bar', () => {
     it('should retrieve more data when the user select only one side of the orderbook', async () => {
-        await waitFor(() =>
-            render(<Default />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
-            })
-        );
+        await waitFor(() => render(<Default />));
         expect(mockSecuredFinance.getBorrowOrderBook).toHaveBeenLastCalledWith(
             expect.anything(),
             expect.anything(),
@@ -238,11 +234,7 @@ describe('Dynamic orderbook depth and Top Bar', () => {
     });
 
     it('should retrieve more data when the user select a aggregation factor', async () => {
-        await waitFor(() =>
-            render(<Default />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
-            })
-        );
+        await waitFor(() => render(<Default />));
         expect(mockSecuredFinance.getLendOrderBook).toHaveBeenLastCalledWith(
             expect.anything(),
             expect.anything(),
@@ -266,9 +258,7 @@ describe('Dynamic orderbook depth and Top Bar', () => {
     });
 
     it('should display the last trades in the top bar', async () => {
-        render(<Default />, {
-            apolloMocks: mockTrades,
-        });
+        render(<Default />);
 
         expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
 
@@ -280,9 +270,7 @@ describe('Dynamic orderbook depth and Top Bar', () => {
     });
 
     it('should show the maturity as a date for the selected maturity', async () => {
-        render(<Default />, {
-            apolloMocks: Default.parameters?.apolloClient.mocks,
-        });
+        render(<Default />);
         const btn = await screen.findAllByRole('button', {
             name: 'WFIL-DEC2022',
         });
@@ -290,9 +278,7 @@ describe('Dynamic orderbook depth and Top Bar', () => {
     });
 
     it('should not display disclaimer if no currency is being delisted', () => {
-        render(<Default />, {
-            apolloMocks: Default.parameters?.apolloClient.mocks,
-        });
+        render(<Default />);
         expect(
             screen.queryByText('WFIL will be delisted')
         ).not.toBeInTheDocument();
