@@ -877,7 +877,9 @@ function getTransactionQuery(
     from: number,
     to: number,
     transactions: TransactionList,
-    lastTransaction: [TransactionList[0]] | []
+    lastTransaction: [TransactionList[0]] | [],
+    skip = 0,
+    first = 1000
 ) {
     return {
         request: {
@@ -889,6 +891,8 @@ function getTransactionQuery(
                 to: to,
                 sides: [OrderSide.LEND, OrderSide.BORROW],
                 awaitRefetchQueries: true,
+                skip: skip,
+                first: first,
             },
         },
         result: {
@@ -1147,6 +1151,38 @@ export const mockRecentTrades = [
     },
     getTransactionQuery(wfilBytes32, MATURITY_ZERO, -1, today, [], []),
     getTransactionQuery(wfilBytes32, MATURITY_ZERO, -1, today2, [], []),
+];
+
+export const mockRecentTradesTable = [
+    {
+        request: {
+            query: queries.TransactionHistoryDocument,
+            variables: {
+                first: 100,
+                skip: 0,
+                currency: usdcBytes32,
+                maturity: dec22Fixture.toNumber(),
+                from: -1,
+                to: today,
+                sides: [OrderSide.LEND, OrderSide.BORROW],
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                transactionHistory: tradesUSDC,
+                lastTransaction: [tradesUSDC[0]],
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    transactionHistory: tradesUSDC,
+                    lastTransaction: [tradesUSDC[0]],
+                },
+            };
+        },
+    },
 ];
 
 const createMockTx = (createdAt: number, maturity: number) => ({
