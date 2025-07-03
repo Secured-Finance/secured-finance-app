@@ -16,7 +16,7 @@ import {
     MultiLineChart,
     multiLineChartOptions,
 } from 'src/components/molecules/MultiLineChart';
-import TimeScaleSelector from 'src/components/molecules/TimeScaleSelector/TimeScaleSelector';
+import { TimeScaleSelector } from 'src/components/molecules/TimeScaleSelector';
 import { useIsGlobalItayose } from 'src/hooks';
 import {
     selectLandingOrderForm,
