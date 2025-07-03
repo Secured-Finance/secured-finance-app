@@ -272,9 +272,10 @@ export const DropdownSelector = <T extends string = string>({
                     <Menu.Items
                         className={clsx(
                             'scrollbar-dropdown absolute z-40 mt-2 flex flex-col overflow-y-auto rounded-lg bg-gunMetal p-2 shadow-sm',
+                            'max-h-52 min-w-20',
                             {
                                 'right-0': variant === 'noLabel',
-                                'max-h-[196px] w-52 tablet:max-h-60':
+                                'min-h-48 w-52 tablet:max-h-60':
                                     variant !== 'fullWidth' &&
                                     variant !== 'tabWidthFit' &&
                                     variant !== 'tabWidthFull',
