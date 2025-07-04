@@ -4,6 +4,7 @@ import { userEvent, within } from '@storybook/testing-library';
 import {
     mockDailyVolumes,
     mockItayoseFilteredUserOrderHistory,
+    mockTransaction24HQuery,
     mockTransactionsQuery,
 } from 'src/stories/mocks/queries';
 import { Itayose } from './Itayose';
@@ -18,6 +19,7 @@ export default {
                 ...mockItayoseFilteredUserOrderHistory,
                 ...mockDailyVolumes,
                 ...mockTransactionsQuery,
+                ...[mockTransaction24HQuery],
             ],
         },
         chromatic: { delay: 5000 },

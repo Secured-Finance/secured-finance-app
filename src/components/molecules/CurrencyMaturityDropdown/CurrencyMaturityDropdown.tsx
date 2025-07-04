@@ -5,25 +5,21 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import { SortDescriptor } from '@nextui-org/table';
 import { Key } from '@react-types/shared';
-import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { CurrencyMaturityTable, FilterButtons } from 'src/components/molecules';
 import {
     baseContracts,
+    use24HVolume,
     useBreakpoint,
     useCurrencies,
-    useGraphClientHook,
-    useIsSubgraphSupported,
-    useLastPrices,
     useLendingMarkets,
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
-import { DailyVolumes, SavedMarket } from 'src/types';
+import { SavedMarket } from 'src/types';
 import {
     CurrencySymbol,
-    computeTotalDailyVolumeInUSD,
     currencyMap,
     formatLoanValue,
     isMarketInStore,
@@ -34,8 +30,6 @@ import {
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 import { CurrencyMaturityDropdownProps, FilteredOption } from './types';
-
-const DAILYVOLUMES_LIMIT = 1000;
 
 export const CurrencyMaturityDropdown = ({
     currencyList,
@@ -59,41 +53,10 @@ export const CurrencyMaturityDropdown = ({
 
     const { data: currencies } = useCurrencies();
 
-    const { data: priceList } = useLastPrices();
-
     const securedFinance = useSF();
     const currentChainId = securedFinance?.config.chain.id;
 
-    const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
-
-    const [volumeSkip, setVolumeSkip] = useState(0);
-    const [allDailyVolumes, setAllDailyVolumes] = useState<
-        NonNullable<DailyVolumes>
-    >([]);
-
-    const dailyVolumes = useGraphClientHook(
-        {
-            first: DAILYVOLUMES_LIMIT,
-            skip: volumeSkip,
-        },
-        queries.DailyVolumesDocument,
-        'dailyVolumes',
-        !isSubgraphSupported
-    );
-
-    useEffect(() => {
-        if (dailyVolumes.data) {
-            setAllDailyVolumes(prev => [...prev, ...(dailyVolumes.data ?? [])]);
-            if (dailyVolumes.data.length === DAILYVOLUMES_LIMIT) {
-                setVolumeSkip(prev => prev + DAILYVOLUMES_LIMIT);
-            }
-        }
-    }, [dailyVolumes.data]);
-
-    const { volumePerMarket } = computeTotalDailyVolumeInUSD(
-        allDailyVolumes,
-        priceList
-    );
+    const { data: volumePerMarket } = use24HVolume();
 
     useLockBodyScroll(isTablet && isDropdownOpen);
 

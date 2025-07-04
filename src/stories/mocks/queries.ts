@@ -849,8 +849,6 @@ export const mockDailyVolumes = [
             query: queries.DailyVolumesDocument,
             variables: {
                 awaitRefetchQueries: true,
-                first: 1000,
-                skip: 0,
             },
         },
         result: {
@@ -1208,3 +1206,37 @@ export const mockTransactionsQuery = [
         },
     },
 ];
+
+export const mockTransactions24H = [
+    {
+        amount: '5000000',
+        maturity: '1751587200',
+        createdAt: '1751271564',
+        currency: wfilBytes32,
+        averagePrice: '0.9900000099000000990000009900000099',
+        executionPrice: '9900',
+        __typename: 'Transaction',
+    },
+];
+export const mockTransaction24HQuery = {
+    request: {
+        query: queries.TransactionsHistory24HDocument,
+        variables: {
+            from: 1638356313600,
+            to: 1638356400000,
+            first: 1000,
+            skip: 0,
+            awaitRefetchQueries: true,
+        },
+    },
+    result: {
+        data: {
+            transactions: mockTransactions24H,
+        },
+    },
+    newData: () => ({
+        data: {
+            transactions: mockTransactions24H,
+        },
+    }),
+};
