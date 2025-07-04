@@ -19,9 +19,9 @@ describe('CollateralSimulationSection Component', () => {
         await waitFor(() => {
             expect(screen.getByText('Borrow Remaining')).toBeInTheDocument();
             expect(screen.getByText('$4,903.14')).toBeInTheDocument();
+            expect(screen.getByText('Collateral Usage')).toBeInTheDocument();
+            expect(screen.getByText('55%')).toBeInTheDocument();
         });
-        expect(screen.getByText('Collateral Usage')).toBeInTheDocument();
-        expect(screen.getByText('55%')).toBeInTheDocument();
     });
 
     it('should increase the collateral usage when the tradePosition is BORROW', async () => {
