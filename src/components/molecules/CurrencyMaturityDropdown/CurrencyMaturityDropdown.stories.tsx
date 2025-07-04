@@ -2,7 +2,10 @@ import { withWalletProvider } from '.storybook/decorators';
 import { Meta, StoryFn } from '@storybook/react';
 import { within } from '@storybook/testing-library';
 import { currencyList, maturityOptions } from 'src/stories/mocks/fixtures';
-import { mockDailyVolumes } from 'src/stories/mocks/queries';
+import {
+    mockDailyVolumes,
+    mockTransaction24HQuery,
+} from 'src/stories/mocks/queries';
 import { CurrencyMaturityDropdown } from './CurrencyMaturityDropdown';
 
 export default {
@@ -20,7 +23,7 @@ export default {
     parameters: {
         connected: true,
         apolloClient: {
-            mocks: mockDailyVolumes,
+            mocks: [...[mockTransaction24HQuery], ...mockDailyVolumes],
         },
     },
 } as Meta<typeof CurrencyMaturityDropdown>;

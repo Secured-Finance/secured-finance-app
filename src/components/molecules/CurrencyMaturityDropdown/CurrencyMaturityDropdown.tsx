@@ -5,25 +5,21 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import { SortDescriptor } from '@nextui-org/table';
 import { Key } from '@react-types/shared';
-import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { CurrencyMaturityTable, FilterButtons } from 'src/components/molecules';
 import {
     baseContracts,
+    use24HVolume,
     useBreakpoint,
     useCurrencies,
-    useGraphClientHook,
-    useIsSubgraphSupported,
-    useLastPrices,
     useLendingMarkets,
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { SavedMarket } from 'src/types';
 import {
     CurrencySymbol,
-    computeTotalDailyVolumeInUSD,
     currencyMap,
     formatLoanValue,
     isMarketInStore,
@@ -57,24 +53,10 @@ export const CurrencyMaturityDropdown = ({
 
     const { data: currencies } = useCurrencies();
 
-    const { data: priceList } = useLastPrices();
-
     const securedFinance = useSF();
     const currentChainId = securedFinance?.config.chain.id;
 
-    const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
-
-    const dailyVolumes = useGraphClientHook(
-        {}, // no variables
-        queries.DailyVolumesDocument,
-        'dailyVolumes',
-        !isSubgraphSupported
-    );
-
-    const { volumePerMarket } = computeTotalDailyVolumeInUSD(
-        dailyVolumes.data ?? [],
-        priceList
-    );
+    const { data: volumePerMarket } = use24HVolume();
 
     useLockBodyScroll(isTablet && isDropdownOpen);
 
