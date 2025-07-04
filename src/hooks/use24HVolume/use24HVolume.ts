@@ -1,12 +1,11 @@
 import { fromBytes32 } from '@secured-finance/sf-graph-client';
 import { currencyMap, CurrencySymbol } from 'src/utils';
 import { useGraphClientHook } from '../useGraphClientHook';
-import { useState } from 'react';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 
 export const use24HVolume = (): { data: Record<string, number> } => {
     const grouped: Record<string, bigint> = {};
-    const [timestamp] = useState<number>(Date.now());
+    const timestamp = Math.round(new Date().getTime() / 1000);
 
     const { data: transactionData } = useGraphClientHook(
         {
@@ -32,10 +31,7 @@ export const use24HVolume = (): { data: Record<string, number> } => {
     for (const key in grouped) {
         const [currencySymbol] = key.split('-');
         const symbol = currencySymbol as CurrencySymbol;
-
-        if (!(symbol in currencyMap)) continue;
-
-        result[key] = currencyMap[symbol]?.fromBaseUnit(grouped[key]) || 0;
+        result[key] = currencyMap[symbol].fromBaseUnit(grouped[key]) || 0;
     }
 
     return { data: result };

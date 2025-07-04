@@ -1218,12 +1218,13 @@ export const mockTransactions24H = [
         __typename: 'Transaction',
     },
 ];
+const timestamp = 1638356400;
 export const mockTransaction24HQuery = {
     request: {
         query: queries.TransactionsHistory24HDocument,
         variables: {
-            from: 1638356313600,
-            to: 1638356400000,
+            from: timestamp - 86400,
+            to: timestamp,
             first: 1000,
             skip: 0,
             awaitRefetchQueries: true,
