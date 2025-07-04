@@ -14,7 +14,6 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 beforeEach(() => {
     jest.clearAllMocks();
-    jest.spyOn(console, 'error').mockImplementation(() => {});
     jest.resetModules();
 });
 
