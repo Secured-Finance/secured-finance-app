@@ -22,7 +22,7 @@ import {
     OrderTable,
     RecentTradesTable,
 } from 'src/components/organisms';
-import { TableType, Toolbar } from 'src/components/pages';
+import { TableType } from 'src/components/pages';
 import { ThreeColumnsWithTopBar } from 'src/components/templates';
 import {
     CollateralBook,
@@ -476,14 +476,6 @@ export const AdvancedLending = ({
         [dispatch, selectedTerm.label]
     );
 
-    const handleAssetChange = useCallback(
-        (v: CurrencySymbol) => {
-            dispatch(resetAmount());
-            dispatch(setCurrency(v));
-        },
-        [dispatch]
-    );
-
     const handleFilterChange = useCallback(
         (state: VisibilityState) => {
             setIsShowingAll(state.showBorrow && state.showLend);
@@ -538,52 +530,32 @@ export const AdvancedLending = ({
                 <ThreeColumnsWithTopBar
                     topBar={
                         <div className='relative mb-5 h-20 transition-all duration-300'>
-                            {isItayosePeriod ? (
-                                <Toolbar
-                                    date={
-                                        lendingContracts[
-                                            selectedTerm.value.toNumber()
-                                        ]?.utcOpeningDate
-                                    }
-                                    nextMarketPhase={
-                                        marketPhase === MarketPhase.PRE_ORDER
-                                            ? 'Pre-Open'
-                                            : 'Open in'
-                                    }
-                                    assetList={assetList}
-                                    selectedAsset={selectedAsset}
-                                    options={maturitiesOptionList}
-                                    selected={{
-                                        label: selectedTerm.label,
-                                        value: selectedTerm.value,
-                                    }}
-                                    currency={currency}
-                                    handleAssetChange={handleAssetChange}
-                                    handleTermChange={v =>
-                                        dispatch(setMaturity(Number(v)))
-                                    }
-                                />
-                            ) : (
-                                <AdvancedLendingTopBar
-                                    selectedAsset={selectedAsset}
-                                    assetList={assetList}
-                                    options={maturitiesOptionList}
-                                    selected={{
-                                        label: selectedTerm.label,
-                                        value: selectedTerm.value,
-                                    }}
-                                    onAssetChange={handleCurrencyChange}
-                                    onTermChange={handleTermChange}
-                                    currencyPrice={usdFormat(currencyPrice, 2)}
-                                    currentMarket={currentMarket}
-                                    marketInfo={
-                                        isSubgraphSupported
-                                            ? dailyMarketInfo
-                                            : undefined
-                                    }
-                                    isItayosePeriod={isItayosePeriod}
-                                />
-                            )}
+                            <AdvancedLendingTopBar
+                                selectedAsset={selectedAsset}
+                                assetList={assetList}
+                                options={maturitiesOptionList}
+                                selected={{
+                                    label: selectedTerm.label,
+                                    value: selectedTerm.value,
+                                }}
+                                onAssetChange={handleCurrencyChange}
+                                onTermChange={handleTermChange}
+                                currencyPrice={usdFormat(currencyPrice, 2)}
+                                currentMarket={currentMarket}
+                                marketInfo={
+                                    isSubgraphSupported
+                                        ? dailyMarketInfo
+                                        : undefined
+                                }
+                                isItayosePeriod={isItayosePeriod}
+                                date={
+                                    lendingContracts[
+                                        selectedTerm.value.toNumber()
+                                    ]?.utcOpeningDate
+                                }
+                                nextMarketPhase={marketPhase}
+                                currency={currency}
+                            />
                         </div>
                     }
                 >
