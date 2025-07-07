@@ -49,7 +49,11 @@ describe('Advance Lending with Itayose', () => {
     }, 8000);
 
     it('should retrieve more data when the user select only one side of the orderbook', async () => {
-        await waitFor(() => render(<Default />));
+        await waitFor(() =>
+            render(<Default />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+            })
+        );
         expect(mockSecuredFinance.getBorrowOrderBook).toHaveBeenLastCalledWith(
             expect.anything(),
             expect.anything(),
@@ -73,7 +77,11 @@ describe('Advance Lending with Itayose', () => {
     });
 
     it('should retrieve more data when the user select a aggregation factor', async () => {
-        await waitFor(() => render(<Default />));
+        await waitFor(() =>
+            render(<Default />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+            })
+        );
         expect(mockSecuredFinance.getLendOrderBook).toHaveBeenLastCalledWith(
             expect.anything(),
             expect.anything(),
@@ -97,7 +105,11 @@ describe('Advance Lending with Itayose', () => {
     });
 
     it('should display the last trades in the top bar', async () => {
-        render(<Default />);
+        await waitFor(() =>
+            render(<Default />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+            })
+        );
 
         expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
 
@@ -109,29 +121,45 @@ describe('Advance Lending with Itayose', () => {
     });
 
     it('should show the maturity as a date for the selected maturity', async () => {
-        render(<Default />);
+        await waitFor(() =>
+            render(<Default />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+            })
+        );
         const btn = await screen.findAllByRole('button', {
             name: 'WFIL-DEC2022',
         });
         expect(btn[0]).toBeInTheDocument();
     });
 
-    it('should not display disclaimer if no currency is being delisted', () => {
-        render(<Default />);
+    it('should not display disclaimer if no currency is being delisted', async () => {
+        await waitFor(() =>
+            render(<Default />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+            })
+        );
         expect(
             screen.queryByText('WFIL will be delisted')
         ).not.toBeInTheDocument();
     });
 
     it('should only show the orders of the user related to orderbook', async () => {
-        await waitFor(() => render(<ConnectedToWallet />));
+        await waitFor(() =>
+            render(<ConnectedToWallet />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+            })
+        );
         fireEvent.click(screen.getByRole('tab', { name: 'Open Orders' }));
 
         expect(await screen.findAllByTestId('Open Orders')).toHaveLength(1);
     });
 
     it('should display the opening unit price as the only trade if there is no last trades', async () => {
-        await waitFor(() => render(<Default />));
+        await waitFor(() =>
+            render(<Default />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+            })
+        );
         expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
 
         expect(screen.getAllByText('Mark Price')[1]).toBeInTheDocument();
@@ -142,7 +170,11 @@ describe('Advance Lending with Itayose', () => {
 
     it('should not reset the amount and emit TERM_CHANGE and CURRENCY_CHANGE event when the user change the maturity', async () => {
         const track = jest.spyOn(analytics, 'track');
-        const { store } = await waitFor(() => render(<ConnectedToWallet />));
+        const { store } = await waitFor(() =>
+            render(<ConnectedToWallet />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+            })
+        );
         expect(store.getState().landingOrderForm.amount).toEqual('');
 
         await waitFor(() =>

@@ -14,7 +14,9 @@ import {
     mockFilteredUserTransactionHistory,
     mockFullUserOrderHistory,
     mockFullUserTransactionHistory,
+    mockRecentTrades,
     mockTrades,
+    mockTransactionCandleStick,
     mockTransactionsQuery,
 } from 'src/stories/mocks/queries';
 import { CurrencySymbol } from 'src/utils';
@@ -37,12 +39,14 @@ export default {
         apolloClient: {
             mocks: [
                 ...mockTrades,
-                ...mockFilteredUserTransactionHistory,
-                ...mockFilteredUserOrderHistory,
+                ...mockFilteredUserTransactionHistory, // checked
+                ...mockFilteredUserOrderHistory, // checked
                 ...mockDailyVolumes,
-                ...mockFullUserTransactionHistory,
-                ...mockFullUserOrderHistory,
+                ...mockFullUserTransactionHistory, // checked
+                ...mockFullUserOrderHistory, // checked
+                ...mockTransactionCandleStick,
                 ...mockTransactionsQuery,
+                ...mockRecentTrades,
             ],
         },
         ...RESPONSIVE_PARAMETERS,
