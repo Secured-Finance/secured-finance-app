@@ -37,7 +37,12 @@ export const OrderDisplayBox = ({
                             </InfoToolTip>
                         )}
                     </div>
-                    <div className='text-right text-primary-300'>{value}</div>
+                    <div
+                        className='text-right text-primary-300'
+                        data-testid={field}
+                    >
+                        {value}
+                    </div>
                 </>
             )}
         </div>

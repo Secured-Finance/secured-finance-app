@@ -1,4 +1,3 @@
-import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
 import { withWalletProvider } from '.storybook/decorators';
 import { OrderSide } from '@secured-finance/sf-client';
 import type { Meta } from '@storybook/react';
@@ -30,8 +29,8 @@ export default {
         hasLendOpenOrders: true,
         hasBorrowOpenOrders: true,
     },
+    chromatic: { delay: 1000 },
     parameters: {
-        ...RESPONSIVE_PARAMETERS,
         viewport: {
             disable: true,
         },
@@ -57,7 +56,7 @@ const LimitOrderTemplate: StoryFn<
     return <AdvancedLendingEstimationFields {...args} />;
 };
 
-export const Default = LimitOrderTemplate.bind({});
+export const LimitOrder = LimitOrderTemplate.bind({});
 
 const MarketOrderTemplate: StoryFn<
     typeof AdvancedLendingEstimationFields
