@@ -17,6 +17,13 @@ const {
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
+const preloadedState = {
+    landingOrderForm: {
+        currency: CurrencySymbol.WFIL,
+        amount: '50000000000000000000',
+    },
+};
+
 describe('OrderDetails Component', () => {
     it('should display the borrow remaining and the collateral usage', async () => {
         render(<Default />);
@@ -34,7 +41,9 @@ describe('OrderDetails Component', () => {
     });
 
     it('should render collateral utilization', async () => {
-        render(<Default />);
+        render(<Default />, {
+            preloadedState,
+        });
 
         expect(screen.getByText('Collateral Usage')).toBeInTheDocument();
         expect(screen.getByText('37%')).toBeInTheDocument();
@@ -105,7 +114,10 @@ describe('OrderDetails Component', () => {
             <Default
                 amount={new Amount('50000000000000000000', CurrencySymbol.WFIL)}
                 maturity={mar23Fixture}
-            />
+            />,
+            {
+                preloadedState,
+            }
         );
         expect(screen.getByText('ZC Usage')).toBeInTheDocument();
         await waitFor(() => {
