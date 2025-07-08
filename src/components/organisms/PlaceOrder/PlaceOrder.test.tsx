@@ -52,9 +52,7 @@ describe('PlaceOrder component', () => {
     });
 
     it('should render collateral utilization', async () => {
-        render(<Default />, {
-            preloadedState,
-        });
+        render(<Default />);
 
         expect(screen.getByText('Collateral Usage')).toBeInTheDocument();
         expect(screen.getByText('37%')).toBeInTheDocument();
