@@ -6,7 +6,14 @@ import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
 import { VisibilityState } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+    useCallback,
+    useEffect,
+    useLayoutEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     AdvancedLendingTopBar,
@@ -211,21 +218,6 @@ export const AdvancedLending = ({
         return readMarketsFromStore();
     });
 
-    const handleFavouriteToggle = (market: string) => {
-        const targetFavourite: SavedMarket = {
-            market,
-            address,
-            chainId: currentChainId,
-        };
-
-        if (isMarketInStore(targetFavourite)) {
-            removeMarketFromStore(targetFavourite);
-        } else {
-            writeMarketInStore(targetFavourite);
-        }
-        setSavedMarkets(readMarketsFromStore());
-    };
-
     const { data: fullOrderList = emptyOrderList } = useOrderList(
         address,
         usedCurrencies
@@ -249,6 +241,25 @@ export const AdvancedLending = ({
     useEffect(() => {
         setTimestamp(Math.round(new Date().getTime() / 1000));
     }, []);
+
+    const handleFavouriteToggle = useCallback(
+        (market: string) => {
+            const targetFavourite: SavedMarket = {
+                market,
+                address,
+                chainId: currentChainId,
+            };
+
+            if (isMarketInStore(targetFavourite)) {
+                removeMarketFromStore(targetFavourite);
+            } else {
+                writeMarketInStore(targetFavourite);
+            }
+
+            setSavedMarkets(readMarketsFromStore());
+        },
+        [address, currentChainId]
+    );
 
     const filteredInactiveOrderList = useMemo(() => {
         return isChecked
@@ -880,6 +891,10 @@ const MovingTape = ({
                     asset: `${asset}-${maturity.label}`,
                     apr: formatLoanValue(lastPrice, 'rate'),
                     isNotReady,
+                    isFavourite: favourites.some(
+                        (fav: SavedMarket) =>
+                            fav.market === `${asset}-${maturity.label}`
+                    ),
                 };
             })
         );
@@ -889,24 +904,35 @@ const MovingTape = ({
         JSON.stringify(lendingMarkets),
         // eslint-disable-next-line react-hooks/exhaustive-deps
         JSON.stringify(nonMaturedMarketOptionList),
+        favourites,
     ]);
 
     const filteredResult = useMemo(() => {
-        return result.filter(res => {
-            if (res.isNotReady) return false;
-            if (showFavouritesOnly) {
-                return favourites.some(
-                    (fav: SavedMarket) => fav.market === res.asset
-                );
-            }
-            return true;
-        });
-    }, [result, favourites, showFavouritesOnly]);
+        if (!showFavouritesOnly) return result;
+        return result.filter(res => res.isFavourite);
+    }, [result, showFavouritesOnly]);
+
+    const readyResults = useMemo(() => {
+        return filteredResult.filter(res => !res.isNotReady);
+    }, [filteredResult]);
 
     const handleToggle = () => {
         setShowFavouritesOnly(prev => !prev);
         setResetKey(prev => prev + 1);
     };
+
+    const SCROLL_SPEED = 80;
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const [scrollDuration, setScrollDuration] = useState(10);
+
+    useLayoutEffect(() => {
+        const node = scrollRef.current;
+        if (!node) return;
+
+        const width = node.scrollWidth || 1;
+        const duration = width / SCROLL_SPEED;
+        setScrollDuration(duration);
+    }, [filteredResult, resetKey]);
 
     return (
         <div className='relative mx-3 flex items-center overflow-hidden text-neutral-50'>
@@ -923,30 +949,29 @@ const MovingTape = ({
             </button>
             <div
                 key={resetKey}
+                ref={scrollRef}
+                style={{ animationDuration: `${scrollDuration}s` }}
                 className='inline-block animate-scroll-left whitespace-nowrap text-xs leading-5 hover:[animation-play-state:paused]'
             >
-                {filteredResult
-                    .filter(res => !res.isNotReady)
-                    .map((item, index) => (
-                        <button
-                            key={index}
-                            onClick={() => handleClick(item.asset)}
-                            aria-label={`Select ${item.asset} market. APR is ${item.apr}`}
-                            className='rounded-sm px-2 py-1 hover:cursor-pointer hover:bg-white/10 hover:shadow-md'
+                {readyResults.map((item, index) => (
+                    <button
+                        key={index}
+                        onClick={() => handleClick(item.asset)}
+                        aria-label={`Select ${item.asset} market. APR is ${item.apr}`}
+                        className='rounded-sm px-2 py-1 hover:cursor-pointer hover:bg-white/10 hover:shadow-md'
+                    >
+                        {item.asset}
+                        <span
+                            className={`ml-1 ${
+                                Number(item.apr) < 0 || item.apr === '--.--%'
+                                    ? 'text-error-300'
+                                    : 'text-success-300'
+                            }`}
                         >
-                            {item.asset}
-                            <span
-                                className={`ml-1 ${
-                                    Number(item.apr) < 0 ||
-                                    item.apr === '--.--%'
-                                        ? 'text-error-300'
-                                        : 'text-success-300'
-                                }`}
-                            >
-                                {item.apr} APR
-                            </span>
-                        </button>
-                    ))}
+                            {item.apr} APR
+                        </span>
+                    </button>
+                ))}
             </div>
         </div>
     );
