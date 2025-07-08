@@ -52,22 +52,24 @@ export const useOrderEstimation = (
         queryFn: async () => {
             setIsMinLoading(true);
 
-            const [orderEstimation] = await Promise.all([
-                securedFinance?.getOrderEstimation(
-                    toCurrency(currency),
-                    maturity,
-                    account ?? '',
-                    side,
-                    amount,
-                    (unitPrice ?? 0) * 100.0,
-                    additionalDepositAmount,
-                    ignoreBorrowedAmount
-                ),
-                new Promise(resolve => setTimeout(resolve, 500)), // Minimum 500ms
-            ]);
-
-            setIsMinLoading(false);
-            return orderEstimation;
+            try {
+                const [orderEstimation] = await Promise.all([
+                    securedFinance?.getOrderEstimation(
+                        toCurrency(currency),
+                        maturity,
+                        account ?? '',
+                        side,
+                        amount,
+                        (unitPrice ?? 0) * 100.0,
+                        additionalDepositAmount,
+                        ignoreBorrowedAmount
+                    ),
+                    new Promise(resolve => setTimeout(resolve, 500)), // Minimum 500ms
+                ]);
+                return orderEstimation;
+            } finally {
+                setIsMinLoading(false);
+            }
         },
         enabled: !!securedFinance && !!account && !skip,
     });

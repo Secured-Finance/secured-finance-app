@@ -84,7 +84,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(screen.getAllByRole('radiogroup')).toHaveLength(2);
     });
 
-    it.skip('should show the rate computed from the bond price', async () => {
+    it('should show the rate computed from the bond price', async () => {
         render(<Default />, { preloadedState });
         expect(await screen.findByText('6.35%')).toBeInTheDocument();
     });
@@ -112,7 +112,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         );
     });
 
-    it.skip('should render order form', async () => {
+    it('should render order form', async () => {
         render(<Default />, { preloadedState });
         await waitFor(() => {
             const inputs = screen.getAllByRole('textbox');
@@ -759,7 +759,7 @@ describe('AdvancedLendingOrderCard Component', () => {
             expect(spanInput).toHaveTextContent('Market');
         });
 
-        it.skip('should calculate the APR from the user input bond price', async () => {
+        it('should calculate the APR from the user input bond price', async () => {
             render(<Default marketPrice={9600} />, {
                 preloadedState: {
                     ...preloadedState,
