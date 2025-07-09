@@ -316,7 +316,7 @@ export const CurrencyMaturityDropdown = ({
                         />
                     </Menu.Button>
                     {isDropdownOpen && (
-                        <Menu.Items className='relative -top-3 left-0 z-[30] flex h-full w-full flex-col gap-3 overflow-hidden border-t-4 border-primary-500 bg-neutral-800 px-4 pt-3 tablet:absolute laptop:left-auto laptop:top-auto laptop:mt-1.5 laptop:h-auto laptop:w-[779px] laptop:rounded-xl laptop:border laptop:border-neutral-600 laptop:bg-neutral-900 laptop:px-0'>
+                        <Menu.Items className='relative z-[30] mt-2 flex max-h-[70vh] flex-col gap-3 overflow-hidden overflow-y-auto border-t-4 border-primary-500 bg-neutral-800 px-4 pt-3 tablet:absolute laptop:left-auto laptop:top-auto laptop:mt-1.5 laptop:h-auto laptop:w-[779px] laptop:rounded-xl laptop:border laptop:border-neutral-600 laptop:bg-neutral-900 laptop:px-0'>
                             <header className='flex items-center justify-between text-neutral-50 laptop:hidden'>
                                 <div className='flex items-center gap-1'>
                                     <MagnifyingGlassIcon className='h-5 w-5' />
