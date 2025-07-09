@@ -1153,7 +1153,7 @@ export const mockRecentTrades = [
     getTransactionQuery(wfilBytes32, MATURITY_ZERO, -1, today2, [], []),
 ];
 
-export const mockRecentTradesTable = [
+export const mockRecentTransactions = [
     {
         request: {
             query: queries.TransactionHistoryDocument,
