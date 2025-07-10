@@ -49,7 +49,7 @@ export const AdvancedLendingEstimationFields = ({
 
     const isMobile = useBreakpoint('tablet');
 
-    const { data: orderEstimationInfo, isLoading } = useOrderEstimation(
+    const { data: orderEstimationInfo } = useOrderEstimation(
         address,
         orderType === OrderType.LIMIT
     );
@@ -68,12 +68,6 @@ export const AdvancedLendingEstimationFields = ({
             orderEstimationInfo.filledAmountInFV
         );
     }, [currency, orderEstimationInfo]);
-
-    const showEstimationLoader = isLoading && orderType === OrderType.MARKET;
-
-    const showDashes =
-        orderType === OrderType.MARKET &&
-        (side === OrderSide.BORROW ? !hasLendOpenOrders : !hasBorrowOpenOrders);
 
     const orderAmount = amount > 0 ? new Amount(amount, currency) : undefined;
 
@@ -143,8 +137,40 @@ export const AdvancedLendingEstimationFields = ({
         return (marketPrice / 100.0).toString();
     }, [maturity, marketPrice, unitPrice, isConnected, unitPriceExists]);
 
+    const showDashes = useMemo(() => {
+        const isEmptyAmount = amount <= 0;
+
+        if (orderType === OrderType.MARKET) {
+            const shouldShowDashes =
+                (side === OrderSide.BORROW
+                    ? !hasLendOpenOrders
+                    : !hasBorrowOpenOrders) || isEmptyAmount;
+            return {
+                price: shouldShowDashes,
+                apr: shouldShowDashes,
+                pv: shouldShowDashes,
+                fv: shouldShowDashes,
+            };
+        }
+        const isEmptyUnitPrice =
+            !unitPriceValue || unitPriceValue === '' || unitPriceValue === '0';
+        return {
+            price: isEmptyUnitPrice,
+            apr: isEmptyUnitPrice,
+            pv: isEmptyUnitPrice || isEmptyAmount,
+            fv: isEmptyUnitPrice || isEmptyAmount,
+        };
+    }, [
+        amount,
+        hasBorrowOpenOrders,
+        hasLendOpenOrders,
+        orderType,
+        side,
+        unitPriceValue,
+    ]);
+
     const orderPrice = useMemo(() => {
-        if (showDashes) return '--';
+        if (showDashes.price) return '--';
 
         return formatLoanValue(
             orderType === OrderType.LIMIT ? loanValue : estimatedLoanValue,
@@ -153,7 +179,7 @@ export const AdvancedLendingEstimationFields = ({
     }, [showDashes, orderType, loanValue, estimatedLoanValue]);
 
     const orderApr = useMemo(() => {
-        if (showDashes) return '--';
+        if (showDashes.apr) return '--';
 
         return formatLoanValue(
             orderType === OrderType.LIMIT ? loanValue : estimatedLoanValue,
@@ -162,7 +188,7 @@ export const AdvancedLendingEstimationFields = ({
     }, [showDashes, orderType, loanValue, estimatedLoanValue]);
 
     const orderPV = useMemo(() => {
-        if (showDashes) return '--';
+        if (showDashes.pv) return '--';
 
         const amount =
             orderType === OrderType.LIMIT
@@ -193,14 +219,7 @@ export const AdvancedLendingEstimationFields = ({
     ]);
 
     const orderFV = useMemo(() => {
-        if (showDashes) return '--';
-
-        if (
-            orderType === OrderType.LIMIT &&
-            (!unitPriceValue || unitPriceValue === '' || unitPriceValue === '0')
-        ) {
-            return isMobile ? `0 ${currency}` : `0 ${currency} ($0.00)`;
-        }
+        if (showDashes.fv) return '--';
 
         const fv =
             orderType === OrderType.LIMIT
@@ -236,25 +255,15 @@ export const AdvancedLendingEstimationFields = ({
 
     return (
         <>
-            <OrderDisplayBox
-                field='Est. Price'
-                value={orderPrice}
-                isLoading={showEstimationLoader}
-            />
-            <OrderDisplayBox
-                field='Est. APR'
-                value={orderApr}
-                isLoading={showEstimationLoader}
-            />
+            <OrderDisplayBox field='Est. Price' value={orderPrice} />
+            <OrderDisplayBox field='Est. APR' value={orderApr} />
             <OrderDisplayBox
                 field={isMobile ? 'PV' : 'Present Value'}
                 value={orderPV}
-                isLoading={showEstimationLoader}
             />
             <OrderDisplayBox
                 field={isMobile ? 'FV' : 'Future Value'}
                 value={orderFV}
-                isLoading={showEstimationLoader}
             />
         </>
     );
