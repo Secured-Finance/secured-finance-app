@@ -2,10 +2,17 @@ import { fromBytes32 } from '@secured-finance/sf-graph-client';
 import { currencyMap, CurrencySymbol } from 'src/utils';
 import { useGraphClientHook } from '../useGraphClientHook';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
+import { useEffect, useState } from 'react';
 
 export const use24HVolume = (): { data: Record<string, number> } => {
     const grouped: Record<string, bigint> = {};
-    const timestamp = Math.round(new Date().getTime() / 1000);
+    const [timestamp, setTimestamp] = useState(
+        Math.round(new Date().getTime() / 1000)
+    );
+
+    useEffect(() => {
+        setTimestamp(Math.round(new Date().getTime() / 1000));
+    }, []);
 
     const { data: transactionData } = useGraphClientHook(
         {

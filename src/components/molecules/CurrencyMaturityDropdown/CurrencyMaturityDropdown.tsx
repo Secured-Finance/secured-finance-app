@@ -11,9 +11,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { CurrencyMaturityTable, FilterButtons } from 'src/components/molecules';
 import {
     baseContracts,
-    use24HVolume,
     useBreakpoint,
     useCurrencies,
+    useLastPrices,
     useLendingMarkets,
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
@@ -38,6 +38,7 @@ export const CurrencyMaturityDropdown = ({
     maturity = maturityList[0],
     onChange,
     isItayosePage,
+    volumePerMarket,
 }: CurrencyMaturityDropdownProps) => {
     const isTablet = useBreakpoint('laptop');
     const [searchValue, setSearchValue] = useState<string>('');
@@ -53,10 +54,10 @@ export const CurrencyMaturityDropdown = ({
 
     const { data: currencies } = useCurrencies();
 
+    const { data: priceList } = useLastPrices();
+
     const securedFinance = useSF();
     const currentChainId = securedFinance?.config.chain.id;
-
-    const { data: volumePerMarket } = use24HVolume();
 
     useLockBodyScroll(isTablet && isDropdownOpen);
 
@@ -139,7 +140,9 @@ export const CurrencyMaturityDropdown = ({
                     const marketLabel = `${currency.label}-${maturity.label}`;
                     const marketKey = `${currency.value}-${maturity.value}`;
 
-                    const volumeInUSD = volumePerMarket[marketKey];
+                    const rawVolume = volumePerMarket?.[marketKey];
+
+                    const volumeInUSD = rawVolume * priceList[currency.value];
 
                     const marketUnitPrice = data?.marketUnitPrice;
                     const openingUnitPrice = data?.openingUnitPrice;
@@ -202,6 +205,7 @@ export const CurrencyMaturityDropdown = ({
         isFavorites,
         currentChainId,
         volumePerMarket,
+        priceList,
     ]);
 
     const prevSelectedValue = useRef('');
