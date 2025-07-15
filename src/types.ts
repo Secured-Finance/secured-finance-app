@@ -153,3 +153,13 @@ export type LastPricePerMarket = Record<
         timestamp: number;
     }
 >;
+
+export type Transaction24HVolume = Pick<
+    Transaction,
+    | 'currency'
+    | 'maturity'
+    | 'executionPrice'
+    | 'amount'
+    | 'averagePrice'
+    | 'createdAt'
+>;
