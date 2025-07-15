@@ -1,6 +1,6 @@
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { useQuery } from '@tanstack/react-query';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
@@ -13,7 +13,6 @@ export const useOrderEstimation = (
     skip = false
 ) => {
     const securedFinance = useSF();
-    const [isMinLoading, setIsMinLoading] = useState(false);
 
     const {
         currency,
@@ -37,7 +36,7 @@ export const useOrderEstimation = (
             ? amount
             : ZERO_BI;
 
-    const query = useQuery({
+    return useQuery({
         queryKey: [
             QueryKeys.ORDER_ESTIMATE,
             currency,
@@ -50,32 +49,19 @@ export const useOrderEstimation = (
             ignoreBorrowedAmount,
         ],
         queryFn: async () => {
-            setIsMinLoading(true);
-
-            try {
-                const [orderEstimation] = await Promise.all([
-                    securedFinance?.getOrderEstimation(
-                        toCurrency(currency),
-                        maturity,
-                        account ?? '',
-                        side,
-                        amount,
-                        (unitPrice ?? 0) * 100.0,
-                        additionalDepositAmount,
-                        ignoreBorrowedAmount
-                    ),
-                    new Promise(resolve => setTimeout(resolve, 500)), // Minimum 500ms
-                ]);
-                return orderEstimation;
-            } finally {
-                setIsMinLoading(false);
-            }
+            const orderEstimation = await securedFinance?.getOrderEstimation(
+                toCurrency(currency),
+                maturity,
+                account ?? '',
+                side,
+                amount,
+                (unitPrice ?? 0) * 100.0,
+                additionalDepositAmount,
+                ignoreBorrowedAmount
+            );
+            return orderEstimation;
         },
+        placeholderData: prev => prev,
         enabled: !!securedFinance && !!account && !skip,
     });
-
-    return {
-        ...query,
-        isLoading: query.isLoading || isMinLoading,
-    };
 };
