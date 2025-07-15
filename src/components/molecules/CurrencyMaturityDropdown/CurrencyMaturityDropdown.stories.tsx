@@ -19,6 +19,9 @@ export default {
         maturity: maturityOptions[0],
         onChange: () => {},
         isItayosePage: false,
+        volumePerMarket: {
+            'WBTC-1669852800': 1,
+        },
     },
     parameters: {
         connected: true,
