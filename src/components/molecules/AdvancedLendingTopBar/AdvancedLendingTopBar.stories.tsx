@@ -32,7 +32,7 @@ export default {
             time: 1646920200,
             type: 'block',
         },
-        currencyPrice: '$3.56',
+        currencyPrice: 3.56,
         marketInfo: dailyMarketStats,
     },
     parameters: {
