@@ -8,7 +8,10 @@ import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { ZERO_BI, toCurrency } from 'src/utils';
 
-export const useOrderEstimation = (account: string | undefined) => {
+export const useOrderEstimation = (
+    account: string | undefined,
+    skip = false
+) => {
     const securedFinance = useSF();
 
     const {
@@ -58,6 +61,7 @@ export const useOrderEstimation = (account: string | undefined) => {
             );
             return orderEstimation;
         },
-        enabled: !!securedFinance && !!account,
+        placeholderData: prev => prev,
+        enabled: !!securedFinance && !!account && !skip,
     });
 };
