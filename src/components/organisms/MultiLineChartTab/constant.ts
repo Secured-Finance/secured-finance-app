@@ -30,7 +30,9 @@ export function createTooltipElement(
     if (!tooltipEl) {
         tooltipEl = document.createElement('div');
         tooltipEl.id = id;
-        document.body.appendChild(tooltipEl);
+        (document.getElementById('chart-area') ?? document.body).appendChild(
+            tooltipEl
+        );
     }
 
     tooltipEl.classList.remove('p-2', 'p-3', 'text-xs', 'text-sm');

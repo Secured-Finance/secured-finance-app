@@ -34,6 +34,8 @@ export default {
         },
         currencyPrice: '$3.56',
         marketInfo: dailyMarketStats,
+        handleFavouriteToggle: () => {},
+        savedMarkets: [],
     },
     parameters: {
         apolloClient: {
