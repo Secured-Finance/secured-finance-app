@@ -32,7 +32,10 @@ export const RecentTradesTable = ({
     currency,
     maturity,
 }: RecentTradesTableProps) => {
-    const [timestamp, setTimestamp] = useState<number>(0);
+    const [timestamp, setTimestamp] = useState(() =>
+        Math.round(Date.now() / 1000)
+    );
+
     const { blockExplorerUrl } = useBlockExplorerUrl();
     const [showSide, setShowSide] = useState<OrderSide | null>(null);
 
