@@ -1,4 +1,3 @@
-import useLockBodyScroll from '@custom-react-hooks/use-lock-body-scroll';
 import { Menu } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
@@ -12,7 +11,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { CurrencyMaturityTable, FilterButtons } from 'src/components/molecules';
 import {
     baseContracts,
-    useBreakpoint,
     useCurrencies,
     useGraphClientHook,
     useIsSubgraphSupported,
@@ -43,7 +41,6 @@ export const CurrencyMaturityDropdown = ({
     onChange,
     isItayosePage,
 }: CurrencyMaturityDropdownProps) => {
-    const isTablet = useBreakpoint('laptop');
     const [searchValue, setSearchValue] = useState<string>('');
     const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
     const [isFavorites, setIsFavorites] = useState<boolean>(false);
@@ -75,8 +72,6 @@ export const CurrencyMaturityDropdown = ({
         dailyVolumes.data ?? [],
         priceList
     );
-
-    useLockBodyScroll(isTablet && isDropdownOpen);
 
     const [currentCurrency, setCurrentCurrency] = useState<
         CurrencySymbol | undefined
@@ -316,7 +311,7 @@ export const CurrencyMaturityDropdown = ({
                         />
                     </Menu.Button>
                     {isDropdownOpen && (
-                        <Menu.Items className='relative z-[30] mt-2 flex max-h-[70vh] flex-col gap-3 overflow-hidden overflow-y-auto border-t-4 border-primary-500 bg-neutral-800 px-4 pt-3 tablet:absolute laptop:left-auto laptop:top-auto laptop:mt-1.5 laptop:h-auto laptop:w-[779px] laptop:rounded-xl laptop:border laptop:border-neutral-600 laptop:bg-neutral-900 laptop:px-0'>
+                        <Menu.Items className='relative z-[30] mt-2 flex max-h-[60vh] max-w-full flex-col gap-3 overflow-hidden overflow-y-auto border-t-4 border-primary-500 bg-neutral-800 px-4 pt-3 tablet:absolute laptop:left-auto laptop:top-auto laptop:mt-1.5 laptop:h-auto laptop:w-[779px] laptop:rounded-xl laptop:border laptop:border-neutral-600 laptop:bg-neutral-900 laptop:px-0'>
                             <header className='flex items-center justify-between text-neutral-50 laptop:hidden'>
                                 <div className='flex items-center gap-1'>
                                     <MagnifyingGlassIcon className='h-5 w-5' />
