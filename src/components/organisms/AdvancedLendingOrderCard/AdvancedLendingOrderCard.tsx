@@ -11,7 +11,11 @@ import {
     Slider,
     TabVariant,
 } from 'src/components/atoms';
-import { SubtabGroup, TabGroup } from 'src/components/molecules';
+import {
+    AdvancedLendingEstimationFields,
+    SubtabGroup,
+    TabGroup,
+} from 'src/components/molecules';
 import { NewOrderBookWidget, OrderAction } from 'src/components/organisms';
 import {
     CollateralBook,
@@ -41,15 +45,11 @@ import {
     amountFormatterFromBase,
     amountFormatterToBase,
     calculateFee,
-    currencyMap,
     divide,
-    formatLoanValue,
     generateWalletSourceInformation,
-    multiply,
     ordinaryFormat,
-    usdFormat,
 } from 'src/utils';
-import { Amount, LoanValue } from 'src/utils/entities';
+import { LoanValue } from 'src/utils/entities';
 import {
     InteractionEvents,
     InteractionProperties,
@@ -183,8 +183,6 @@ export function AdvancedLendingOrderCard({
         openingUnitPrice,
     ]);
 
-    const orderAmount = amount > 0 ? new Amount(amount, currency) : undefined;
-
     const { data: availableToBorrow } = useBorrowableAmount(address, currency);
 
     const walletSourceList = useMemo(() => {
@@ -292,24 +290,6 @@ export function AdvancedLendingOrderCard({
         text: getOrderSideText(option),
         variant: TabVariant[option],
     }));
-
-    const calculateFutureValue = useCallback(
-        (amount: bigint, unitPrice: number) => {
-            if (unitPrice === 0) {
-                return 0;
-            }
-            return divide(
-                multiply(
-                    amountFormatterFromBase[currency](amount),
-                    100,
-                    currencyMap[currency].roundingDecimal
-                ),
-                unitPrice,
-                currencyMap[currency].roundingDecimal
-            );
-        },
-        [currency]
-    );
 
     return (
         <div className='h-full rounded-b-xl border-neutral-600 bg-neutral-900 pb-7 laptop:border'>
@@ -438,63 +418,19 @@ export function AdvancedLendingOrderCard({
                         />
                     </div>
                     <div className='mb-2.5 flex flex-col gap-1 laptop:mb-0'>
-                        <OrderDisplayBox
-                            field='Est. APR'
-                            value={formatLoanValue(loanValue, 'rate')}
-                        />
-                        <OrderDisplayBox
-                            field={isMobile ? 'PV' : 'Present Value'}
-                            value={
-                                isMobile
-                                    ? `${ordinaryFormat(
-                                          orderAmount?.value ?? 0,
-                                          0,
-                                          currencyMap[currency].roundingDecimal
-                                      )} ${currency}`
-                                    : `${ordinaryFormat(
-                                          orderAmount?.value ?? 0,
-                                          0,
-                                          currencyMap[currency].roundingDecimal
-                                      )} ${currency} (${usdFormat(
-                                          orderAmount?.toUSD(price) ?? 0,
-                                          2
-                                      )})`
+                        <AdvancedLendingEstimationFields
+                            marketPrice={marketPrice}
+                            calculationDate={calculationDate}
+                            assetPrice={price}
+                            hasLendOpenOrders={
+                                orderBook.data &&
+                                orderBook.data.lendOrderbook[0].amount !==
+                                    ZERO_BI
                             }
-                        />
-                        <OrderDisplayBox
-                            field={isMobile ? 'FV' : 'Future Value'}
-                            value={
-                                unitPriceValue &&
-                                unitPriceValue !== '' &&
-                                unitPriceValue !== '0'
-                                    ? (() => {
-                                          const fv = calculateFutureValue(
-                                              amount,
-                                              Number(unitPriceValue)
-                                          );
-                                          const totalValue = price
-                                              ? fv * price
-                                              : 0;
-                                          return isMobile
-                                              ? `${ordinaryFormat(
-                                                    fv,
-                                                    0,
-                                                    currencyMap[currency]
-                                                        .roundingDecimal
-                                                )} ${currency}`
-                                              : `${ordinaryFormat(
-                                                    fv,
-                                                    0,
-                                                    currencyMap[currency]
-                                                        .roundingDecimal
-                                                )} ${currency} (${usdFormat(
-                                                    totalValue,
-                                                    2
-                                                )})`;
-                                      })()
-                                    : isMobile
-                                    ? `0 ${currency}`
-                                    : `0 ${currency} ($0.00)`
+                            hasBorrowOpenOrders={
+                                orderBook.data &&
+                                orderBook.data.borrowOrderbook[0].amount !==
+                                    ZERO_BI
                             }
                         />
                     </div>

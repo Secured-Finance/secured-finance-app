@@ -2,6 +2,9 @@ import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import { withWalletProvider } from '.storybook/decorators';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import type { Meta, StoryFn } from '@storybook/react';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { setAmount, setCurrency } from 'src/store/landingOrderForm';
 import {
     collateralBook37,
     dec22Fixture,
@@ -28,6 +31,7 @@ export default {
         walletSource: WalletSource.METAMASK,
         maturitiesOptionList: maturityOptions,
     },
+    chromatic: { delay: 1000 },
     decorators: [withWalletProvider],
     parameters: {
         ...RESPONSIVE_PARAMETERS,
@@ -39,6 +43,16 @@ export default {
 } as Meta<typeof PlaceOrder>;
 
 const Template: StoryFn<typeof PlaceOrder> = args => {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        const timerId = setTimeout(() => {
+            dispatch(setCurrency(CurrencySymbol.USDC));
+            dispatch(setAmount('100000000'));
+        }, 200);
+
+        return () => clearTimeout(timerId);
+    }, [dispatch]);
+
     return <PlaceOrder {...args} />;
 };
 
