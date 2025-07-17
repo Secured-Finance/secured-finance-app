@@ -877,7 +877,9 @@ function getTransactionQuery(
     from: number,
     to: number,
     transactions: TransactionList,
-    lastTransaction: [TransactionList[0]] | []
+    lastTransaction: [TransactionList[0]] | [],
+    skip = 0,
+    first = 1000
 ) {
     return {
         request: {
@@ -889,6 +891,8 @@ function getTransactionQuery(
                 to: to,
                 sides: [OrderSide.LEND, OrderSide.BORROW],
                 awaitRefetchQueries: true,
+                skip: skip,
+                first: first,
             },
         },
         result: {
@@ -1202,3 +1206,38 @@ export const mockTransactionsQuery = [
         },
     },
 ];
+
+export const mockTransactions24H = [
+    {
+        amount: '5000000',
+        maturity: '1751587200',
+        createdAt: '1751271564',
+        currency: wfilBytes32,
+        averagePrice: '0.9900000099000000990000009900000099',
+        executionPrice: '9900',
+        __typename: 'Transaction',
+    },
+];
+const timestamp = 1638356400;
+export const mockTransaction24HQuery = {
+    request: {
+        query: queries.TransactionsHistory24HDocument,
+        variables: {
+            from: timestamp - 86400,
+            to: timestamp,
+            first: 1000,
+            skip: 0,
+            awaitRefetchQueries: true,
+        },
+    },
+    result: {
+        data: {
+            transactions: mockTransactions24H,
+        },
+    },
+    newData: () => ({
+        data: {
+            transactions: mockTransactions24H,
+        },
+    }),
+};

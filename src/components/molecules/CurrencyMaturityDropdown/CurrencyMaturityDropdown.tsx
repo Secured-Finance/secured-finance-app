@@ -5,7 +5,6 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import { SortDescriptor } from '@nextui-org/table';
 import { Key } from '@react-types/shared';
-import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -14,8 +13,6 @@ import {
     baseContracts,
     useBreakpoint,
     useCurrencies,
-    useGraphClientHook,
-    useIsSubgraphSupported,
     useLastPrices,
     useLendingMarkets,
 } from 'src/hooks';
@@ -23,7 +20,6 @@ import useSF from 'src/hooks/useSecuredFinance';
 import { SavedMarket } from 'src/types';
 import {
     CurrencySymbol,
-    computeTotalDailyVolumeInUSD,
     currencyMap,
     formatLoanValue,
     isMarketInStore,
@@ -42,6 +38,7 @@ export const CurrencyMaturityDropdown = ({
     maturity = maturityList[0],
     onChange,
     isItayosePage,
+    volumePerMarket,
 }: CurrencyMaturityDropdownProps) => {
     const isTablet = useBreakpoint('laptop');
     const [searchValue, setSearchValue] = useState<string>('');
@@ -61,20 +58,6 @@ export const CurrencyMaturityDropdown = ({
 
     const securedFinance = useSF();
     const currentChainId = securedFinance?.config.chain.id;
-
-    const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
-
-    const dailyVolumes = useGraphClientHook(
-        {}, // no variables
-        queries.DailyVolumesDocument,
-        'dailyVolumes',
-        !isSubgraphSupported
-    );
-
-    const { volumePerMarket } = computeTotalDailyVolumeInUSD(
-        dailyVolumes.data ?? [],
-        priceList
-    );
 
     useLockBodyScroll(isTablet && isDropdownOpen);
 
@@ -157,7 +140,9 @@ export const CurrencyMaturityDropdown = ({
                     const marketLabel = `${currency.label}-${maturity.label}`;
                     const marketKey = `${currency.value}-${maturity.value}`;
 
-                    const volumeInUSD = volumePerMarket[marketKey];
+                    const rawVolume = volumePerMarket?.[marketKey];
+
+                    const volumeInUSD = rawVolume * priceList[currency.value];
 
                     const marketUnitPrice = data?.marketUnitPrice;
                     const openingUnitPrice = data?.openingUnitPrice;
@@ -220,6 +205,7 @@ export const CurrencyMaturityDropdown = ({
         isFavorites,
         currentChainId,
         volumePerMarket,
+        priceList,
     ]);
 
     const prevSelectedValue = useRef('');
