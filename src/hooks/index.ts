@@ -37,6 +37,7 @@ export * from './usePositions';
 export * from './usePrepareOrderbookData';
 export * from './usePreventPageScroll';
 export * from './useTotalValueLockedAndCurrencies';
+export * from './useTransactionCandleStickData';
 export * from './useValueLockedByCurrency';
 export * from './useWithdrawableZCTokenAmounts';
 export * from './useYieldCurveHistoricalRates';

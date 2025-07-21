@@ -110,7 +110,7 @@ export const AdvancedLendingTopBar = ({
                     >
                         <div
                             className={clsx(
-                                'col-span-12 grid w-[25%] grid-cols-12 gap-3 border-neutral-600 laptop:gap-y-0 laptop:border-r laptop:px-6 laptop:py-4',
+                                'col-span-12 flex min-w-56 grid-cols-12 gap-3 border-neutral-600 laptop:grid laptop:gap-y-0 laptop:border-r laptop:px-6 laptop:py-4',
                                 marketInfo && 'tablet:gap-y-6'
                             )}
                         >

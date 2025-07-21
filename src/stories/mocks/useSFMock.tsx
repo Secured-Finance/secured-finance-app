@@ -396,11 +396,30 @@ export const mockUseSF = () => {
 
         getOrderFeeRate: jest.fn(() => Promise.resolve(BigInt('100'))),
 
-        getOrderEstimation: jest.fn(() =>
-            Promise.resolve({
-                coverage: BigInt(5500),
-                filledAmount: BigInt('90000000000000000000'),
-            })
+        getOrderEstimation: jest.fn(
+            (
+                _currency,
+                _maturity,
+                _account,
+                _side,
+                amount,
+                _unitPrice,
+                _additionalDepositAmount,
+                _ignoreBorrowedAmount
+            ) => {
+                if (amount === ZERO_BI) {
+                    return Promise.resolve({
+                        coverage: ZERO_BI,
+                        filledAmount: ZERO_BI,
+                        filledAmountInFV: ZERO_BI,
+                    });
+                }
+                return Promise.resolve({
+                    coverage: BigInt(5500),
+                    filledAmount: BigInt('90000000000000000000'),
+                    filledAmountInFV: BigInt('98000000000000000000'),
+                });
+            }
         ),
 
         currencyExists: jest.fn((currency: Currency) => {
