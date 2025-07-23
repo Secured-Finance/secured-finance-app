@@ -24,10 +24,6 @@ import {
     computeTotalDailyVolumeInUSD,
     currencyMap,
     formatLoanValue,
-    isMarketInStore,
-    readMarketsFromStore,
-    removeMarketFromStore,
-    writeMarketInStore,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
@@ -40,14 +36,13 @@ export const CurrencyMaturityDropdown = ({
     maturity = maturityList[0],
     onChange,
     isItayosePage,
+    savedMarkets = [],
+    handleFavouriteToggle,
 }: CurrencyMaturityDropdownProps) => {
     const [searchValue, setSearchValue] = useState<string>('');
     const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
     const [isFavorites, setIsFavorites] = useState<boolean>(false);
     const { address } = useAccount();
-    const [savedMarkets, setSavedMarkets] = useState(() => {
-        return readMarketsFromStore();
-    });
 
     const router = useRouter();
     const { market } = router.query;
@@ -165,12 +160,13 @@ export const CurrencyMaturityDropdown = ({
                               )
                             : undefined;
 
-                    const isFavourite = savedMarkets.some(
-                        (savedMarket: SavedMarket) =>
-                            savedMarket.market === marketLabel &&
-                            savedMarket.address === address &&
-                            savedMarket.chainId === currentChainId
-                    );
+                    const isFavourite =
+                        savedMarkets.some(
+                            (savedMarket: SavedMarket) =>
+                                savedMarket.market === marketLabel &&
+                                savedMarket.address === address &&
+                                savedMarket.chainId === currentChainId
+                        ) ?? false;
 
                     if (
                         (currentCurrency &&
@@ -275,21 +271,6 @@ export const CurrencyMaturityDropdown = ({
         });
     };
 
-    const handleFavouriteToggle = (market: string) => {
-        const targetFavourite: SavedMarket = {
-            market,
-            address,
-            chainId: currentChainId,
-        };
-
-        if (isMarketInStore(targetFavourite)) {
-            removeMarketFromStore(targetFavourite);
-        } else {
-            writeMarketInStore(targetFavourite);
-        }
-        setSavedMarkets(readMarketsFromStore());
-    };
-
     return (
         <Menu>
             {({ open, close }) => (
@@ -361,7 +342,9 @@ export const CurrencyMaturityDropdown = ({
                                 }}
                                 onSortChange={handleSortChange}
                                 sortState={sortState}
-                                onFavouriteToggle={handleFavouriteToggle}
+                                onFavouriteToggle={
+                                    handleFavouriteToggle ?? (() => {})
+                                }
                             />
                         </Menu.Items>
                     )}
