@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { fromBytes32 } from '@secured-finance/sf-graph-client';
 import { currencyMap, CurrencySymbol } from 'src/utils';
-import { useGraphClientHook } from '../useGraphClientHook';
+import { useGraphClientHook } from 'src/hooks';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { Transaction24HVolume } from 'src/types';
 

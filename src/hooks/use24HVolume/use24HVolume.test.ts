@@ -1,8 +1,8 @@
-import { renderHook } from 'src/test-utils';
-import { use24HVolume } from './use24HVolume';
-import { useGraphClientHook } from '../useGraphClientHook';
 import { mockTransactions24H } from 'src/stories/mocks/queries';
+import { renderHook, waitFor } from 'src/test-utils';
 import { currencyMap } from 'src/utils';
+import { useGraphClientHook } from '../useGraphClientHook';
+import { use24HVolume } from './use24HVolume';
 
 jest.mock('../useGraphClientHook', () => ({
     useGraphClientHook: jest.fn(),
@@ -15,7 +15,7 @@ describe('use24HVolume', () => {
         jest.clearAllMocks();
     });
 
-    it('should return empty data when no transactions and log a warning', () => {
+    it('should return empty data when no transactions', () => {
         mockedUseGraphClientHook.mockReturnValue({ data: null });
 
         const { result } = renderHook(() => use24HVolume());
@@ -23,16 +23,18 @@ describe('use24HVolume', () => {
         expect(result.current.data).toEqual({});
     });
 
-    it('should correctly process mock transaction data', () => {
+    it('should correctly process mock transaction data', async () => {
         mockedUseGraphClientHook.mockReturnValue({
             data: { transactions: mockTransactions24H },
         });
 
         const { result } = renderHook(() => use24HVolume());
 
-        const expectedKey = 'WFIL-1751587200';
+        const expectedKey = `WFIL-${mockTransactions24H[0].maturity}`;
         const expectedValue = currencyMap.WFIL.fromBaseUnit(BigInt('5000000'));
 
-        expect(result.current.data[expectedKey]).toBe(expectedValue);
+        await waitFor(() => {
+            expect(result.current.data[expectedKey]).toBe(expectedValue);
+        });
     });
 });
