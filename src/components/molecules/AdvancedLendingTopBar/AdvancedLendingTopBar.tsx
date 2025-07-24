@@ -15,7 +15,6 @@ import {
     useGetCountdown,
     useGraphClientHook,
     useIsSubgraphSupported,
-    useLastPrices,
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import {
@@ -23,7 +22,6 @@ import {
     formatLoanValue,
     getTransformMaturityOption,
     handlePriceSource,
-    usdFormat,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { AdvancedLendingTopBarProp } from './types';
@@ -41,7 +39,7 @@ export const AdvancedLendingTopBar = ({
     currencyPrice,
     marketInfo,
     isItayosePeriod,
-    date,
+    utcOpeningDate,
     nextMarketPhase,
     currency,
 }: AdvancedLendingTopBarProp) => {
@@ -50,7 +48,6 @@ export const AdvancedLendingTopBar = ({
     const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
     const maturity = currentMarket?.value.maturity ?? 0;
     const time = useGetCountdown(maturity * 1000);
-    const { data: priceList } = useLastPrices();
 
     const [timestamp, setTimestamp] = useState<number>(1643713200);
     const [isMarketInfoDialogOpen, setIsMarketInfoDialogOpen] =
@@ -110,7 +107,7 @@ export const AdvancedLendingTopBar = ({
                     >
                         <div
                             className={clsx(
-                                'col-span-12 flex min-w-56 grid-cols-12 gap-3 border-neutral-600 laptop:grid laptop:gap-y-0 laptop:border-r laptop:px-6 laptop:py-4',
+                                'col-span-12 flex grid-cols-12  justify-between gap-3 border-neutral-600 pr-2 laptop:grid laptop:gap-y-0 laptop:border-r laptop:px-6 laptop:py-4',
                                 marketInfo && 'tablet:gap-y-6'
                             )}
                         >
@@ -160,7 +157,7 @@ export const AdvancedLendingTopBar = ({
                         </div>
 
                         {isItayosePeriod ? (
-                            <div className='hidden items-center justify-evenly gap-40 laptop:flex laptop:w-[75%] laptop:flex-row laptop:px-7 laptop:py-4'>
+                            <div className='hidden justify-evenly gap-40 laptop:flex laptop:w-[75%] laptop:flex-row laptop:items-center laptop:px-7 laptop:py-4'>
                                 <div className='typography-caption w-40 text-nebulaTeal'>
                                     <p className=' typography-caption-2 text-slateGray'>
                                         {nextMarketPhase ===
@@ -168,15 +165,12 @@ export const AdvancedLendingTopBar = ({
                                             ? 'Pre-Open'
                                             : 'Open in'}
                                     </p>
-                                    <Timer targetTime={date * 1000} />
+                                    <Timer targetTime={utcOpeningDate * 1000} />
                                 </div>
                                 <div>
                                     <MarketTab
                                         name={`${currency} Price`}
-                                        value={usdFormat(
-                                            priceList[currency],
-                                            2
-                                        )}
+                                        value={currencyPrice}
                                     />
                                 </div>
                             </div>

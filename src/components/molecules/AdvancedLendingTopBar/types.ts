@@ -14,7 +14,7 @@ export type AdvancedLendingTopBarProp = {
     currencyPrice: string;
     marketInfo?: DailyMarketInfo;
     isItayosePeriod: boolean;
-    date: number;
+    utcOpeningDate: number;
     nextMarketPhase: string;
     currency: CurrencySymbol;
 };

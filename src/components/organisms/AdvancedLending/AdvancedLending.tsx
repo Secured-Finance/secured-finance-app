@@ -548,7 +548,7 @@ export const AdvancedLending = ({
                                         : undefined
                                 }
                                 isItayosePeriod={isItayosePeriod}
-                                date={
+                                utcOpeningDate={
                                     lendingContracts[
                                         selectedTerm.value.toNumber()
                                     ]?.utcOpeningDate
