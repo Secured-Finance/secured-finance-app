@@ -44,4 +44,5 @@ export const QUERIES_TO_INVALIDATE = [
     QueryKeys.ITAYOSE_ESTIMATION,
     QueryKeys.BORROW_ORDER_BOOK,
     QueryKeys.LEND_ORDER_BOOK,
+    QueryKeys.ORDER_ESTIMATE,
 ];

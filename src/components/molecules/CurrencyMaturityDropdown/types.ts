@@ -1,4 +1,5 @@
 import type { Option } from 'src/components/atoms';
+import { SavedMarket } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import { desktopColumns, mobileColumns } from './constants';
@@ -37,4 +38,6 @@ export type CurrencyMaturityDropdownProps = {
     onChange: (currency: CurrencySymbol, maturity: Maturity) => void;
     isItayosePage?: boolean;
     volumePerMarket: Record<string, number>;
+    savedMarkets?: SavedMarket[];
+    handleFavouriteToggle?: (market: string) => void;
 };

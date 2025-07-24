@@ -38,6 +38,8 @@ export const AdvancedLendingTopBar = ({
     currentMarket,
     currencyPrice,
     marketInfo,
+    savedMarkets,
+    handleFavouriteToggle,
     isItayosePeriod,
 }: AdvancedLendingTopBarProp) => {
     const securedFinance = useSF();
@@ -124,6 +126,10 @@ export const AdvancedLendingTopBar = ({
                                             maturity={selectedTerm}
                                             maturityList={options}
                                             onChange={onChange}
+                                            savedMarkets={savedMarkets}
+                                            handleFavouriteToggle={
+                                                handleFavouriteToggle
+                                            }
                                             isItayosePage={isItayosePeriod}
                                             volumePerMarket={volumePerMarket}
                                         />
