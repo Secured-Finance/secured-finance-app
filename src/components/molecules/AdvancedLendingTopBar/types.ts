@@ -16,4 +16,7 @@ export type AdvancedLendingTopBarProp = {
     savedMarkets: SavedMarket[];
     handleFavouriteToggle: (market: string) => void;
     isItayosePeriod: boolean;
+    utcOpeningDate: number;
+    nextMarketPhase: string;
+    currency: CurrencySymbol;
 };
