@@ -38,6 +38,8 @@ export const AdvancedLendingTopBar = ({
     currentMarket,
     currencyPrice,
     marketInfo,
+    savedMarkets,
+    handleFavouriteToggle,
     isItayosePeriod,
     utcOpeningDate,
     nextMarketPhase,
@@ -120,6 +122,10 @@ export const AdvancedLendingTopBar = ({
                                             maturity={selectedTerm}
                                             maturityList={options}
                                             onChange={onChange}
+                                            savedMarkets={savedMarkets}
+                                            handleFavouriteToggle={
+                                                handleFavouriteToggle
+                                            }
                                             isItayosePage={isItayosePeriod}
                                         />
                                         <p className='whitespace-nowrap pl-1 text-[11px] leading-4 tablet:text-xs laptop:text-xs'>
