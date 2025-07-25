@@ -10,16 +10,20 @@ import { MarketTab } from 'src/components/atoms';
 import { CurrencyMaturityDropdown, Tooltip } from 'src/components/molecules';
 import { MarketInfoDialog } from 'src/components/organisms';
 import {
+    use24HVolume,
     useGetCountdown,
     useGraphClientHook,
     useIsSubgraphSupported,
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import {
+    currencyMap,
     CurrencySymbol,
     formatLoanValue,
+    formatWithCurrency,
     getTransformMaturityOption,
     handlePriceSource,
+    usdFormat,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { AdvancedLendingTopBarProp } from './types';
@@ -61,6 +65,18 @@ export const AdvancedLendingTopBar = ({
         queries.TransactionHistoryDocument,
         'lastTransaction',
         !isSubgraphSupported
+    );
+
+    const { data: volumePerMarket } = use24HVolume();
+
+    const marketKey = `${selectedAsset?.value}-${maturity}`;
+    const rawVolume = volumePerMarket?.[marketKey] ?? 0;
+
+    const volumeInUSD = usdFormat(rawVolume * currencyPrice, 2);
+    const volume24H = formatWithCurrency(
+        volumePerMarket[marketKey] ?? 0,
+        selectedAsset?.value as CurrencySymbol,
+        currencyMap[selectedAsset?.value as CurrencySymbol]?.roundingDecimal
     );
 
     const lastLoanValue = useMemo(() => {
@@ -122,6 +138,7 @@ export const AdvancedLendingTopBar = ({
                                                 handleFavouriteToggle
                                             }
                                             isItayosePage={isItayosePeriod}
+                                            volumePerMarket={volumePerMarket}
                                         />
                                         <p className='whitespace-nowrap pl-1 text-[11px] leading-4 tablet:text-xs laptop:text-xs'>
                                             {`Maturity ${
@@ -201,13 +218,12 @@ export const AdvancedLendingTopBar = ({
                                             <Tooltip
                                                 iconElement={
                                                     <span className='typography-caption flex items-center whitespace-nowrap leading-4 text-neutral-50 desktop:leading-6'>
-                                                        {marketInfo?.volume}
+                                                        {volume24H}
                                                     </span>
                                                 }
                                             >
                                                 <span>
-                                                    24h Vol:{' '}
-                                                    {marketInfo?.volumeInUSD}
+                                                    24h Vol: {volumeInUSD}
                                                 </span>
                                             </Tooltip>
                                         </section>
@@ -217,7 +233,7 @@ export const AdvancedLendingTopBar = ({
                             <div className={clsx('w-[14%] desktop:w-[11%]')}>
                                 <MarketTab
                                     name={`${selectedAsset?.value} Price`}
-                                    value={currencyPrice || '0'}
+                                    value={usdFormat(currencyPrice, 2) || '$0'}
                                     source={handlePriceSource(
                                         selectedAsset?.value
                                     )}
@@ -240,7 +256,7 @@ export const AdvancedLendingTopBar = ({
                 onClose={() => setIsMarketInfoDialogOpen(false)}
                 currency={selectedAsset.value}
                 currentMarket={currentMarket}
-                currencyPrice={currencyPrice || '0'}
+                currencyPrice={usdFormat(currencyPrice, 2) || '$0'}
                 marketInfo={marketInfo}
                 lastLoanValue={lastLoanValue}
             />

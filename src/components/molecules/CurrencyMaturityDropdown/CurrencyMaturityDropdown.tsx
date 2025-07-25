@@ -4,7 +4,6 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import { SortDescriptor } from '@nextui-org/table';
 import { Key } from '@react-types/shared';
-import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -12,19 +11,12 @@ import { CurrencyMaturityTable, FilterButtons } from 'src/components/molecules';
 import {
     baseContracts,
     useCurrencies,
-    useGraphClientHook,
-    useIsSubgraphSupported,
     useLastPrices,
     useLendingMarkets,
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { SavedMarket } from 'src/types';
-import {
-    CurrencySymbol,
-    computeTotalDailyVolumeInUSD,
-    currencyMap,
-    formatLoanValue,
-} from 'src/utils';
+import { CurrencySymbol, currencyMap, formatLoanValue } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 import { CurrencyMaturityDropdownProps, FilteredOption } from './types';
@@ -36,6 +28,7 @@ export const CurrencyMaturityDropdown = ({
     maturity = maturityList[0],
     onChange,
     isItayosePage,
+    volumePerMarket,
     savedMarkets = [],
     handleFavouriteToggle,
 }: CurrencyMaturityDropdownProps) => {
@@ -53,20 +46,6 @@ export const CurrencyMaturityDropdown = ({
 
     const securedFinance = useSF();
     const currentChainId = securedFinance?.config.chain.id;
-
-    const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
-
-    const dailyVolumes = useGraphClientHook(
-        {}, // no variables
-        queries.DailyVolumesDocument,
-        'dailyVolumes',
-        !isSubgraphSupported
-    );
-
-    const { volumePerMarket } = computeTotalDailyVolumeInUSD(
-        dailyVolumes.data ?? [],
-        priceList
-    );
 
     const [currentCurrency, setCurrentCurrency] = useState<
         CurrencySymbol | undefined
@@ -147,7 +126,9 @@ export const CurrencyMaturityDropdown = ({
                     const marketLabel = `${currency.label}-${maturity.label}`;
                     const marketKey = `${currency.value}-${maturity.value}`;
 
-                    const volumeInUSD = volumePerMarket[marketKey];
+                    const rawVolume = volumePerMarket?.[marketKey];
+
+                    const volumeInUSD = rawVolume * priceList[currency.value];
 
                     const marketUnitPrice = data?.marketUnitPrice;
                     const openingUnitPrice = data?.openingUnitPrice;
@@ -211,6 +192,7 @@ export const CurrencyMaturityDropdown = ({
         isFavorites,
         currentChainId,
         volumePerMarket,
+        priceList,
     ]);
 
     const prevSelectedValue = useRef('');

@@ -37,6 +37,7 @@ export type CurrencyMaturityDropdownProps = {
     maturity?: Option<Maturity>;
     onChange: (currency: CurrencySymbol, maturity: Maturity) => void;
     isItayosePage?: boolean;
+    volumePerMarket: Record<string, number>;
     savedMarkets?: SavedMarket[];
     handleFavouriteToggle?: (market: string) => void;
 };

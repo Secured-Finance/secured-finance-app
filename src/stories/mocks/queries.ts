@@ -877,7 +877,9 @@ function getTransactionQuery(
     from: number,
     to: number,
     transactions: TransactionList,
-    lastTransaction: [TransactionList[0]] | []
+    lastTransaction: [TransactionList[0]] | [],
+    skip = 0,
+    first = 1000
 ) {
     return {
         request: {
@@ -889,6 +891,8 @@ function getTransactionQuery(
                 to: to,
                 sides: [OrderSide.LEND, OrderSide.BORROW],
                 awaitRefetchQueries: true,
+                skip: skip,
+                first: first,
             },
         },
         result: {
@@ -1149,6 +1153,38 @@ export const mockRecentTrades = [
     getTransactionQuery(wfilBytes32, MATURITY_ZERO, -1, today2, [], []),
 ];
 
+export const mockRecentTradesTable = [
+    {
+        request: {
+            query: queries.TransactionHistoryDocument,
+            variables: {
+                first: 100,
+                skip: 0,
+                currency: usdcBytes32,
+                maturity: dec22Fixture.toNumber(),
+                from: -1,
+                to: today,
+                sides: [OrderSide.LEND, OrderSide.BORROW],
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                transactionHistory: tradesUSDC,
+                lastTransaction: [tradesUSDC[0]],
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    transactionHistory: tradesUSDC,
+                    lastTransaction: [tradesUSDC[0]],
+                },
+            };
+        },
+    },
+];
+
 const createMockTx = (createdAt: number, maturity: number) => ({
     amount: '1000000',
     averagePrice: '2000',
@@ -1200,5 +1236,41 @@ export const mockTransactionsQuery = [
         result: {
             data: generateMockData(),
         },
+    },
+];
+
+export const mockTransactions24H = [
+    {
+        amount: '5000000',
+        maturity: today2 + 86400,
+        createdAt: today2 - 3600,
+        currency: wfilBytes32,
+        averagePrice: '0.9900000099000000990000009900000099',
+        executionPrice: '9900',
+        __typename: 'Transaction',
+    },
+];
+export const mockTransaction24HQuery = [
+    {
+        request: {
+            query: queries.TransactionsHistory24HDocument,
+            variables: {
+                from: today2 - 86400,
+                to: today2,
+                first: 1000,
+                skip: 0,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                transactions: mockTransactions24H,
+            },
+        },
+        newData: () => ({
+            data: {
+                transactions: mockTransactions24H,
+            },
+        }),
     },
 ];
