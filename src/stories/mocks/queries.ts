@@ -1153,6 +1153,38 @@ export const mockRecentTrades = [
     getTransactionQuery(wfilBytes32, MATURITY_ZERO, -1, today2, [], []),
 ];
 
+export const mockRecentTradesTable = [
+    {
+        request: {
+            query: queries.TransactionHistoryDocument,
+            variables: {
+                first: 100,
+                skip: 0,
+                currency: usdcBytes32,
+                maturity: dec22Fixture.toNumber(),
+                from: -1,
+                to: today,
+                sides: [OrderSide.LEND, OrderSide.BORROW],
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                transactionHistory: tradesUSDC,
+                lastTransaction: [tradesUSDC[0]],
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    transactionHistory: tradesUSDC,
+                    lastTransaction: [tradesUSDC[0]],
+                },
+            };
+        },
+    },
+];
+
 const createMockTx = (createdAt: number, maturity: number) => ({
     amount: '1000000',
     averagePrice: '2000',
