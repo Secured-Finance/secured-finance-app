@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
 import { fromBytes32 } from '@secured-finance/sf-graph-client';
-import { currencyMap, CurrencySymbol } from 'src/utils';
-import { useGraphClientHook } from 'src/hooks';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
+import { useEffect, useState } from 'react';
+import { useGraphClientHook } from 'src/hooks';
 import { Transaction24HVolume } from 'src/types';
+import { currencyMap, CurrencySymbol } from 'src/utils';
 
 const TRANSACTIONS_LIMIT = 1000;
 
@@ -39,20 +39,14 @@ export const use24HVolume = (): { data: Record<string, number> } => {
     }, [transactionData]);
 
     const result: Record<string, number> = {};
-    const grouped: Record<string, bigint> = {};
 
     if (!hasMore && allTransactions.length > 0) {
         for (const tx of allTransactions) {
             const symbol = fromBytes32(tx.currency) as CurrencySymbol;
             const key = `${symbol}-${tx.maturity}`;
-            const amount = BigInt(tx.amount);
-            grouped[key] = (grouped[key] || BigInt(0)) + amount;
-        }
-
-        for (const key in grouped) {
-            const [currencySymbol] = key.split('-');
-            const symbol = currencySymbol as CurrencySymbol;
-            result[key] = currencyMap[symbol].fromBaseUnit(grouped[key]) || 0;
+            result[key] =
+                (result[key] || 0) +
+                currencyMap[symbol].fromBaseUnit(tx.amount);
         }
     }
 
