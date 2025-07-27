@@ -10,7 +10,6 @@ import { MarketTab } from 'src/components/atoms';
 import { CurrencyMaturityDropdown, Tooltip } from 'src/components/molecules';
 import { MarketInfoDialog } from 'src/components/organisms';
 import {
-    use24HVolume,
     useGetCountdown,
     useGraphClientHook,
     useIsSubgraphSupported,
@@ -43,6 +42,7 @@ export const AdvancedLendingTopBar = ({
     savedMarkets,
     handleFavouriteToggle,
     isItayosePeriod,
+    volumePerMarket,
 }: AdvancedLendingTopBarProp) => {
     const securedFinance = useSF();
     const currentChainId = securedFinance?.config.chain.id;
@@ -66,8 +66,6 @@ export const AdvancedLendingTopBar = ({
         'lastTransaction',
         !isSubgraphSupported
     );
-
-    const { data: volumePerMarket } = use24HVolume();
 
     const marketKey = `${selectedAsset?.value}-${maturity}`;
     const rawVolume = volumePerMarket?.[marketKey] ?? 0;

@@ -16,4 +16,5 @@ export type AdvancedLendingTopBarProp = {
     savedMarkets: SavedMarket[];
     handleFavouriteToggle: (market: string) => void;
     isItayosePeriod: boolean;
+    volumePerMarket: Record<string, number>;
 };

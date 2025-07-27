@@ -36,6 +36,11 @@ export default {
         marketInfo: dailyMarketStats,
         handleFavouriteToggle: () => {},
         savedMarkets: [],
+        isItayosePeriod: false,
+        volumePerMarket: {
+            'WFIL-1669852800': 520,
+            'USDC-1669852800': 11000000,
+        },
     },
     parameters: {
         apolloClient: {

@@ -38,6 +38,7 @@ import {
     MarketPhase,
     baseContracts,
     emptyOrderList,
+    use24HVolume,
     useBorrowOrderBook,
     useBreakpoint,
     useCurrencies,
@@ -82,7 +83,6 @@ import {
     currencyMap,
     formatLoanValue,
     formatOrders,
-    formatWithCurrency,
     getMappedOrderStatus,
     hexToCurrencySymbol,
     isMarketInStore,
@@ -90,7 +90,6 @@ import {
     removeMarketFromStore,
     sortOrders,
     toOptions,
-    usdFormat,
     writeMarketInStore,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
@@ -171,6 +170,8 @@ export const AdvancedLending = ({
     const [selectedTable, setSelectedTable] = useState(
         isItayosePeriod ? TableType.OPEN_ORDERS : TableType.ACTIVE_POSITION
     );
+
+    const { data: volumePerMarket } = use24HVolume();
 
     const selectedTerm = useMemo(() => {
         return (
@@ -445,12 +446,6 @@ export const AdvancedLending = ({
     const dailyMarketInfo = {
         high: formatLoanValue(tradeHistoryDetails.max, 'price'),
         low: formatLoanValue(tradeHistoryDetails.min, 'price'),
-        volume: formatWithCurrency(
-            tradeHistoryDetails.sum || 0,
-            selectedAsset?.value as CurrencySymbol,
-            currencyMap[selectedAsset?.value as CurrencySymbol]?.roundingDecimal
-        ),
-        volumeInUSD: usdFormat(currencyPrice * tradeHistoryDetails.sum),
     } as DailyMarketInfo;
 
     const {
@@ -626,6 +621,7 @@ export const AdvancedLending = ({
                                         handleFavouriteToggle
                                     }
                                     savedMarkets={savedMarkets}
+                                    volumePerMarket={volumePerMarket}
                                 />
                             )}
                         </div>
