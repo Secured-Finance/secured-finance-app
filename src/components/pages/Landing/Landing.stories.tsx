@@ -12,6 +12,7 @@ import {
     mockFilteredUserTransactionHistory,
     mockRecentTrades,
     mockTrades,
+    mockTransaction24HQuery,
     mockTransactionCandleStick,
     mockTransactionsQuery,
 } from 'src/stories/mocks/queries';
@@ -35,6 +36,7 @@ export default {
                 ...mockFilteredUserOrderHistory,
                 ...mockFilteredUserTransactionHistory,
                 ...mockTransactionsQuery,
+                ...mockTransaction24HQuery,
             ],
         },
         ...RESPONSIVE_PARAMETERS,

@@ -19,6 +19,7 @@ export const MarketInfoDialog = ({
     currentMarket,
     currencyPrice,
     marketInfo,
+    volumeInfo,
     lastLoanValue,
 }: MarketInfoDialogProps) => {
     const maturity = currentMarket?.value.maturity ?? 0;
@@ -91,11 +92,11 @@ export const MarketInfoDialog = ({
                                 <span>24h Volume</span>
                                 <Tooltip
                                     iconElement={
-                                        <span>{marketInfo?.volume}</span>
+                                        <span>{volumeInfo?.volume24H}</span>
                                     }
                                 >
                                     <span>
-                                        24h Vol: {marketInfo?.volumeInUSD}
+                                        24h Vol: {volumeInfo?.volumeInUSD}
                                     </span>
                                 </Tooltip>
                             </li>
