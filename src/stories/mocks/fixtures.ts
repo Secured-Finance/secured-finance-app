@@ -10,6 +10,7 @@ import { Option, WalletSourceOption } from 'src/components/atoms';
 import { CurrencyOption, ZCBond } from 'src/components/molecules';
 import { CollateralBook, Order, Position } from 'src/hooks';
 import {
+    DailyMarketInfo,
     DailyVolumes,
     MaturityOptionList,
     OrderHistoryList,
@@ -22,7 +23,6 @@ import {
     Rate,
     createCurrencyMap,
     getMappedOrderStatus,
-    usdFormat,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
@@ -1179,9 +1179,7 @@ export const volumePerMarket = {
     'USDC-1669852800': 30,
 };
 
-export const dailyMarketStats = {
+export const dailyMarketStats: DailyMarketInfo = {
     high: '98.99',
     low: '94.57',
-    volume: '520 WFIL',
-    volumeInUSD: usdFormat(1851),
 };
