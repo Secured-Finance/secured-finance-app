@@ -16,8 +16,8 @@ import {
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import {
-    currencyMap,
     CurrencySymbol,
+    currencyMap,
     formatLoanValue,
     formatWithCurrency,
     getTransformMaturityOption,
@@ -256,6 +256,10 @@ export const AdvancedLendingTopBar = ({
                 currentMarket={currentMarket}
                 currencyPrice={usdFormat(currencyPrice, 2) || '$0'}
                 marketInfo={marketInfo}
+                volumeInfo={{
+                    volume24H,
+                    volumeInUSD,
+                }}
                 lastLoanValue={lastLoanValue}
             />
         </>

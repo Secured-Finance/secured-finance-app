@@ -443,10 +443,10 @@ export const AdvancedLending = ({
         selectedTerm.value
     );
 
-    const dailyMarketInfo = {
+    const dailyMarketInfo: DailyMarketInfo = {
         high: formatLoanValue(tradeHistoryDetails.max, 'price'),
         low: formatLoanValue(tradeHistoryDetails.min, 'price'),
-    } as DailyMarketInfo;
+    };
 
     const {
         rates,
