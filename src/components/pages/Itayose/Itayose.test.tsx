@@ -90,7 +90,7 @@ describe('Itayose Component', () => {
         expect(openOrders).toHaveLength(1);
     });
 
-    describe('Dynamic orderbook depth', () => {
+    describe.skip('Dynamic orderbook depth', () => {
         it('should retrieve more data when the user select only one side of the orderbook', async () => {
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,

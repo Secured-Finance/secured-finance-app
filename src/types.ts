@@ -142,7 +142,10 @@ export interface SavedMarket {
 export type DailyMarketInfo = {
     high: string;
     low: string;
-    volume: string;
+};
+
+export type Volume24Hour = {
+    volume24H: string;
     volumeInUSD: string;
 };
 

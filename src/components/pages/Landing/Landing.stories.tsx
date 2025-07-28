@@ -36,7 +36,7 @@ export default {
                 ...mockFilteredUserOrderHistory,
                 ...mockFilteredUserTransactionHistory,
                 ...mockTransactionsQuery,
-                ...[mockTransaction24HQuery],
+                ...mockTransaction24HQuery,
             ],
         },
         ...RESPONSIVE_PARAMETERS,

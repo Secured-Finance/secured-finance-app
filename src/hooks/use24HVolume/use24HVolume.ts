@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { fromBytes32 } from '@secured-finance/sf-graph-client';
-import { currencyMap, CurrencySymbol } from 'src/utils';
-import { useGraphClientHook } from '../useGraphClientHook';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
+import { useGraphClientHook } from 'src/hooks';
 import { Transaction24HVolume } from 'src/types';
+import { currencyMap, CurrencySymbol } from 'src/utils';
 
 const TRANSACTIONS_LIMIT = 1000;
 const POLL_INTERVAL_MS = 10000;
@@ -90,20 +90,13 @@ export const use24HVolume = (): { data: Record<string, number> } => {
     }, [hasMore, latestTimestamp]);
 
     const result = useMemo(() => {
-        const grouped: Record<string, bigint> = {};
         const final: Record<string, number> = {};
 
         for (const tx of allTransactions) {
             const symbol = fromBytes32(tx.currency) as CurrencySymbol;
             const key = `${symbol}-${tx.maturity}`;
-            const amount = BigInt(tx.amount);
-            grouped[key] = (grouped[key] || BigInt(0)) + amount;
-        }
-
-        for (const key in grouped) {
-            const [currencySymbol] = key.split('-');
-            const symbol = currencySymbol as CurrencySymbol;
-            final[key] = currencyMap[symbol].fromBaseUnit(grouped[key]) || 0;
+            const amount = currencyMap[symbol].fromBaseUnit(tx.amount);
+            final[key] = (final[key] || 0) + amount;
         }
 
         return final;

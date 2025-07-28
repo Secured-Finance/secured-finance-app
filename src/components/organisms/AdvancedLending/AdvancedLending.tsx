@@ -1,10 +1,19 @@
+import { StarIcon } from '@heroicons/react/24/outline';
+import { StarIcon as FilledStarIcon } from '@heroicons/react/24/solid';
 import { OrderSide } from '@secured-finance/sf-client';
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
 import { VisibilityState } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+    useCallback,
+    useEffect,
+    useLayoutEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     AdvancedLendingTopBar,
@@ -29,6 +38,7 @@ import {
     MarketPhase,
     baseContracts,
     emptyOrderList,
+    use24HVolume,
     useBorrowOrderBook,
     useBreakpoint,
     useCurrencies,
@@ -61,6 +71,7 @@ import { RootState } from 'src/store/types';
 import {
     DailyMarketInfo,
     MaturityOptionList,
+    SavedMarket,
     TransactionList,
 } from 'src/types';
 import {
@@ -72,12 +83,14 @@ import {
     currencyMap,
     formatLoanValue,
     formatOrders,
-    formatWithCurrency,
     getMappedOrderStatus,
     hexToCurrencySymbol,
+    isMarketInStore,
+    readMarketsFromStore,
+    removeMarketFromStore,
     sortOrders,
     toOptions,
-    usdFormat,
+    writeMarketInStore,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { trackButtonEvent } from 'src/utils/events';
@@ -158,6 +171,8 @@ export const AdvancedLending = ({
         isItayosePeriod ? TableType.OPEN_ORDERS : TableType.ACTIVE_POSITION
     );
 
+    const { data: volumePerMarket } = use24HVolume();
+
     const selectedTerm = useMemo(() => {
         return (
             maturitiesOptionList.find(option =>
@@ -200,6 +215,10 @@ export const AdvancedLending = ({
                   hexToCurrencySymbol(position.currency) === currency
           );
 
+    const [savedMarkets, setSavedMarkets] = useState(() => {
+        return readMarketsFromStore();
+    });
+
     const { data: fullOrderList = emptyOrderList } = useOrderList(
         address,
         usedCurrencies
@@ -223,6 +242,25 @@ export const AdvancedLending = ({
     useEffect(() => {
         setTimestamp(Math.round(new Date().getTime() / 1000));
     }, []);
+
+    const handleFavouriteToggle = useCallback(
+        (market: string) => {
+            const targetFavourite: SavedMarket = {
+                market,
+                address,
+                chainId: currentChainId,
+            };
+
+            if (isMarketInStore(targetFavourite)) {
+                removeMarketFromStore(targetFavourite);
+            } else {
+                writeMarketInStore(targetFavourite);
+            }
+
+            setSavedMarkets(readMarketsFromStore());
+        },
+        [address, currentChainId]
+    );
 
     const filteredInactiveOrderList = useMemo(() => {
         return isChecked
@@ -405,16 +443,10 @@ export const AdvancedLending = ({
         selectedTerm.value
     );
 
-    const dailyMarketInfo = {
+    const dailyMarketInfo: DailyMarketInfo = {
         high: formatLoanValue(tradeHistoryDetails.max, 'price'),
         low: formatLoanValue(tradeHistoryDetails.min, 'price'),
-        volume: formatWithCurrency(
-            tradeHistoryDetails.sum || 0,
-            selectedAsset?.value as CurrencySymbol,
-            currencyMap[selectedAsset?.value as CurrencySymbol]?.roundingDecimal
-        ),
-        volumeInUSD: usdFormat(currencyPrice * tradeHistoryDetails.sum),
-    } as DailyMarketInfo;
+    };
 
     const {
         rates,
@@ -534,7 +566,10 @@ export const AdvancedLending = ({
     return (
         <>
             <div className='grid gap-2'>
-                <MovingTape nonMaturedMarketOptionList={maturitiesOptionList} />
+                <MovingTape
+                    nonMaturedMarketOptionList={maturitiesOptionList}
+                    favourites={savedMarkets}
+                />
                 <ThreeColumnsWithTopBar
                     topBar={
                         <div className='relative mb-5 h-20 transition-all duration-300'>
@@ -582,6 +617,11 @@ export const AdvancedLending = ({
                                             : undefined
                                     }
                                     isItayosePeriod={isItayosePeriod}
+                                    handleFavouriteToggle={
+                                        handleFavouriteToggle
+                                    }
+                                    savedMarkets={savedMarkets}
+                                    volumePerMarket={volumePerMarket}
                                 />
                             )}
                         </div>
@@ -804,9 +844,13 @@ export const AdvancedLending = ({
 
 const MovingTape = ({
     nonMaturedMarketOptionList,
+    favourites,
 }: {
     nonMaturedMarketOptionList: MaturityOptionList;
+    favourites: SavedMarket[];
 }) => {
+    const [showFavouritesOnly, setShowFavouritesOnly] = useState(false);
+    const [resetKey, setResetKey] = useState(0);
     const router = useRouter();
     const { data: lendingMarkets = baseContracts } = useLendingMarkets();
     const { data: currencies = [] } = useCurrencies();
@@ -843,6 +887,10 @@ const MovingTape = ({
                     asset: `${asset}-${maturity.label}`,
                     apr: formatLoanValue(lastPrice, 'rate'),
                     isNotReady,
+                    isFavourite: favourites.some(
+                        (fav: SavedMarket) =>
+                            fav.market === `${asset}-${maturity.label}`
+                    ),
                 };
             })
         );
@@ -852,33 +900,74 @@ const MovingTape = ({
         JSON.stringify(lendingMarkets),
         // eslint-disable-next-line react-hooks/exhaustive-deps
         JSON.stringify(nonMaturedMarketOptionList),
+        favourites,
     ]);
 
+    const filteredResult = useMemo(() => {
+        if (!showFavouritesOnly) return result;
+        return result.filter(res => res.isFavourite);
+    }, [result, showFavouritesOnly]);
+
+    const readyResults = useMemo(() => {
+        return filteredResult.filter(res => !res.isNotReady);
+    }, [filteredResult]);
+
+    const handleToggle = () => {
+        setShowFavouritesOnly(prev => !prev);
+        setResetKey(prev => prev + 1);
+    };
+
+    const SCROLL_SPEED = 80;
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const [scrollDuration, setScrollDuration] = useState(10);
+
+    useLayoutEffect(() => {
+        const node = scrollRef.current;
+        if (!node) return;
+
+        const width = node.scrollWidth || 1;
+        const duration = width / SCROLL_SPEED;
+        setScrollDuration(duration);
+    }, [filteredResult, resetKey]);
+
     return (
-        <div className='relative ml-3 mr-3 flex items-center overflow-hidden text-neutral-50'>
-            <div className='inline-block animate-scroll-left whitespace-nowrap text-xs leading-5 hover:[animation-play-state:paused]'>
-                {result
-                    .filter(res => !res.isNotReady)
-                    .map((item, index) => (
-                        <button
-                            key={index}
-                            onClick={() => handleClick(item.asset)}
-                            aria-label={`Select ${item.asset} market. APR is ${item.apr}`}
-                            className='rounded-sm px-2 py-1 hover:cursor-pointer hover:bg-white/10 hover:shadow-md'
+        <div className='relative mx-3 flex items-center overflow-hidden text-neutral-50'>
+            <button
+                onClick={handleToggle}
+                className='z-10 bg-neutral-900 py-1.5 pr-2'
+                aria-label='Toggle favorites view'
+            >
+                {showFavouritesOnly ? (
+                    <FilledStarIcon className='h-4 w-4 text-warning-300' />
+                ) : (
+                    <StarIcon className='h-4 w-4 text-white' />
+                )}
+            </button>
+            <div
+                key={resetKey}
+                ref={scrollRef}
+                style={{ animationDuration: `${scrollDuration}s` }}
+                className='inline-block animate-scroll-left whitespace-nowrap text-xs leading-5 hover:[animation-play-state:paused]'
+            >
+                {readyResults.map((item, index) => (
+                    <button
+                        key={index}
+                        onClick={() => handleClick(item.asset)}
+                        aria-label={`Select ${item.asset} market. APR is ${item.apr}`}
+                        className='rounded-sm px-2 py-1 hover:cursor-pointer hover:bg-white/10 hover:shadow-md'
+                    >
+                        {item.asset}
+                        <span
+                            className={`ml-1 ${
+                                Number(item.apr) < 0 || item.apr === '--.--%'
+                                    ? 'text-error-300'
+                                    : 'text-success-300'
+                            }`}
                         >
-                            {item.asset}
-                            <span
-                                className={`ml-1 ${
-                                    Number(item.apr) < 0 ||
-                                    item.apr === '--.--%'
-                                        ? 'text-error-300'
-                                        : 'text-success-300'
-                                }`}
-                            >
-                                {item.apr} APR
-                            </span>
-                        </button>
-                    ))}
+                            {item.apr} APR
+                        </span>
+                    </button>
+                ))}
             </div>
         </div>
     );

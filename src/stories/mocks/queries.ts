@@ -1153,6 +1153,38 @@ export const mockRecentTrades = [
     getTransactionQuery(wfilBytes32, MATURITY_ZERO, -1, today2, [], []),
 ];
 
+export const mockRecentTradesTable = [
+    {
+        request: {
+            query: queries.TransactionHistoryDocument,
+            variables: {
+                first: 100,
+                skip: 0,
+                currency: usdcBytes32,
+                maturity: dec22Fixture.toNumber(),
+                from: -1,
+                to: today,
+                sides: [OrderSide.LEND, OrderSide.BORROW],
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                transactionHistory: tradesUSDC,
+                lastTransaction: [tradesUSDC[0]],
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    transactionHistory: tradesUSDC,
+                    lastTransaction: [tradesUSDC[0]],
+                },
+            };
+        },
+    },
+];
+
 const createMockTx = (createdAt: number, maturity: number) => ({
     amount: '1000000',
     averagePrice: '2000',
@@ -1210,34 +1242,35 @@ export const mockTransactionsQuery = [
 export const mockTransactions24H = [
     {
         amount: '5000000',
-        maturity: '1751587200',
-        createdAt: '1751271564',
+        maturity: today2 + 86400,
+        createdAt: today2 - 3600,
         currency: wfilBytes32,
         averagePrice: '0.9900000099000000990000009900000099',
         executionPrice: '9900',
         __typename: 'Transaction',
     },
 ];
-const timestamp = 1638356400;
-export const mockTransaction24HQuery = {
-    request: {
-        query: queries.TransactionsHistory24HDocument,
-        variables: {
-            from: timestamp - 86400,
-            to: timestamp,
-            first: 1000,
-            skip: 0,
-            awaitRefetchQueries: true,
+export const mockTransaction24HQuery = [
+    {
+        request: {
+            query: queries.TransactionsHistory24HDocument,
+            variables: {
+                from: today2 - 86400,
+                to: today2,
+                first: 1000,
+                skip: 0,
+                awaitRefetchQueries: true,
+            },
         },
+        result: {
+            data: {
+                transactions: mockTransactions24H,
+            },
+        },
+        newData: () => ({
+            data: {
+                transactions: mockTransactions24H,
+            },
+        }),
     },
-    result: {
-        data: {
-            transactions: mockTransactions24H,
-        },
-    },
-    newData: () => ({
-        data: {
-            transactions: mockTransactions24H,
-        },
-    }),
-};
+];

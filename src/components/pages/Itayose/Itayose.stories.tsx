@@ -19,7 +19,7 @@ export default {
                 ...mockItayoseFilteredUserOrderHistory,
                 ...mockDailyVolumes,
                 ...mockTransactionsQuery,
-                ...[mockTransaction24HQuery],
+                ...mockTransaction24HQuery,
             ],
         },
         chromatic: { delay: 5000 },

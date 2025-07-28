@@ -10,7 +10,6 @@ import { MarketTab } from 'src/components/atoms';
 import { CurrencyMaturityDropdown, Tooltip } from 'src/components/molecules';
 import { MarketInfoDialog } from 'src/components/organisms';
 import {
-    use24HVolume,
     useGetCountdown,
     useGraphClientHook,
     useIsSubgraphSupported,
@@ -18,7 +17,9 @@ import {
 import useSF from 'src/hooks/useSecuredFinance';
 import {
     CurrencySymbol,
+    currencyMap,
     formatLoanValue,
+    formatWithCurrency,
     getTransformMaturityOption,
     handlePriceSource,
     usdFormat,
@@ -38,7 +39,10 @@ export const AdvancedLendingTopBar = ({
     currentMarket,
     currencyPrice,
     marketInfo,
+    savedMarkets,
+    handleFavouriteToggle,
     isItayosePeriod,
+    volumePerMarket,
 }: AdvancedLendingTopBarProp) => {
     const securedFinance = useSF();
     const currentChainId = securedFinance?.config.chain.id;
@@ -63,12 +67,15 @@ export const AdvancedLendingTopBar = ({
         !isSubgraphSupported
     );
 
-    const { data: volumePerMarket } = use24HVolume();
-
     const marketKey = `${selectedAsset?.value}-${maturity}`;
     const rawVolume = volumePerMarket?.[marketKey] ?? 0;
 
     const volumeInUSD = usdFormat(rawVolume * currencyPrice, 2);
+    const volume24H = formatWithCurrency(
+        volumePerMarket[marketKey] ?? 0,
+        selectedAsset?.value as CurrencySymbol,
+        currencyMap[selectedAsset?.value as CurrencySymbol]?.roundingDecimal
+    );
 
     const lastLoanValue = useMemo(() => {
         if (!lastTransaction || !lastTransaction.length) return undefined;
@@ -124,6 +131,10 @@ export const AdvancedLendingTopBar = ({
                                             maturity={selectedTerm}
                                             maturityList={options}
                                             onChange={onChange}
+                                            savedMarkets={savedMarkets}
+                                            handleFavouriteToggle={
+                                                handleFavouriteToggle
+                                            }
                                             isItayosePage={isItayosePeriod}
                                             volumePerMarket={volumePerMarket}
                                         />
@@ -205,10 +216,7 @@ export const AdvancedLendingTopBar = ({
                                             <Tooltip
                                                 iconElement={
                                                     <span className='typography-caption flex items-center whitespace-nowrap leading-4 text-neutral-50 desktop:leading-6'>
-                                                        {volumePerMarket[
-                                                            marketKey
-                                                        ] ?? 0}{' '}
-                                                        {selectedAsset?.value}
+                                                        {volume24H}
                                                     </span>
                                                 }
                                             >
@@ -223,7 +231,7 @@ export const AdvancedLendingTopBar = ({
                             <div className={clsx('w-[14%] desktop:w-[11%]')}>
                                 <MarketTab
                                     name={`${selectedAsset?.value} Price`}
-                                    value={usdFormat(currencyPrice, 2) || '0'}
+                                    value={usdFormat(currencyPrice, 2) || '$0'}
                                     source={handlePriceSource(
                                         selectedAsset?.value
                                     )}
@@ -246,8 +254,12 @@ export const AdvancedLendingTopBar = ({
                 onClose={() => setIsMarketInfoDialogOpen(false)}
                 currency={selectedAsset.value}
                 currentMarket={currentMarket}
-                currencyPrice={usdFormat(currencyPrice, 2) || '0'}
+                currencyPrice={usdFormat(currencyPrice, 2) || '$0'}
                 marketInfo={marketInfo}
+                volumeInfo={{
+                    volume24H,
+                    volumeInUSD,
+                }}
                 lastLoanValue={lastLoanValue}
             />
         </>

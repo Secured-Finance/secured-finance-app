@@ -5,6 +5,7 @@ interface OrderDisplayBoxProps {
     value: number | string;
     className?: string;
     informationText?: React.ReactNode;
+    isLoading?: boolean;
 }
 
 export const OrderDisplayBox = ({
@@ -12,6 +13,7 @@ export const OrderDisplayBox = ({
     value,
     className,
     informationText,
+    isLoading,
 }: OrderDisplayBoxProps) => {
     return (
         <div
@@ -20,15 +22,29 @@ export const OrderDisplayBox = ({
                 className
             )}
         >
-            <div className='flex flex-row items-center gap-1'>
-                <span className='text-neutral-400'>{field}</span>
-                {informationText && (
-                    <InfoToolTip iconSize='small' placement='bottom-start'>
-                        {informationText}
-                    </InfoToolTip>
-                )}
-            </div>
-            <div className='text-right text-primary-300'>{value}</div>
+            {isLoading ? (
+                <div className='flex h-4 w-full animate-pulse rounded bg-neutral-700 laptop:h-[22px]' />
+            ) : (
+                <>
+                    <div className='flex flex-row items-center gap-1'>
+                        <span className='text-neutral-400'>{field}</span>
+                        {informationText && (
+                            <InfoToolTip
+                                iconSize='small'
+                                placement='bottom-start'
+                            >
+                                {informationText}
+                            </InfoToolTip>
+                        )}
+                    </div>
+                    <div
+                        className='text-right text-primary-300'
+                        data-testid={field}
+                    >
+                        {value}
+                    </div>
+                </>
+            )}
         </div>
     );
 };

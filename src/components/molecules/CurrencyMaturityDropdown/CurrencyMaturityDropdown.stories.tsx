@@ -1,7 +1,11 @@
 import { withWalletProvider } from '.storybook/decorators';
 import { Meta, StoryFn } from '@storybook/react';
 import { within } from '@storybook/testing-library';
-import { currencyList, maturityOptions } from 'src/stories/mocks/fixtures';
+import {
+    currencyList,
+    dec22Fixture,
+    maturityOptions,
+} from 'src/stories/mocks/fixtures';
 import {
     mockDailyVolumes,
     mockTransaction24HQuery,
@@ -20,13 +24,13 @@ export default {
         onChange: () => {},
         isItayosePage: false,
         volumePerMarket: {
-            'WBTC-1669852800': 1,
+            [`${currencyList[0].value}-${dec22Fixture}`]: 1,
         },
     },
     parameters: {
         connected: true,
         apolloClient: {
-            mocks: [...[mockTransaction24HQuery], ...mockDailyVolumes],
+            mocks: [...mockTransaction24HQuery, ...mockDailyVolumes],
         },
     },
 } as Meta<typeof CurrencyMaturityDropdown>;

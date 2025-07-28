@@ -32,7 +32,9 @@ export const RecentTradesTable = ({
     currency,
     maturity,
 }: RecentTradesTableProps) => {
-    const [timestamp, setTimestamp] = useState<number>(0);
+    const [timestamp, setTimestamp] = useState<number>(() =>
+        Math.round(Date.now() / 1000)
+    );
     const { blockExplorerUrl } = useBlockExplorerUrl();
     const [showSide, setShowSide] = useState<OrderSide | null>(null);
 
@@ -165,7 +167,7 @@ export const RecentTradesTable = ({
                         );
                         return (
                             <TableRow
-                                key={`${item.currency}-${item.maturity}-${item.createdAt}`}
+                                key={`${item.currency}-${item.maturity}-${item.createdAt}-${item.txHash}`}
                                 className='py-0 text-white laptop:h-6'
                             >
                                 <TableCell
