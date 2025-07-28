@@ -77,14 +77,16 @@ export const useTransactionCandleStickData = (
             const low = safeDivide(item.low, 100);
             const close = safeDivide(item.close, 100);
             // Add the actual item
-            result.push({
-                time: item.timestamp,
-                open,
-                high,
-                low,
-                close,
-                vol: volAdjusted,
-            });
+            if (volAdjusted > 0) {
+                result.push({
+                    time: item.timestamp,
+                    open,
+                    high,
+                    low,
+                    close,
+                    vol: volAdjusted,
+                });
+            }
 
             previousItem = item;
         }
