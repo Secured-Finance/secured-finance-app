@@ -1,20 +1,12 @@
-import { OrderSide } from '@secured-finance/sf-client';
-import { toBytes32 } from '@secured-finance/sf-graph-client';
-import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import DocumentTextIcon from 'src/assets/icons/document-text.svg';
 import { MarketTab } from 'src/components/atoms';
 import { CurrencyMaturityDropdown, Tooltip } from 'src/components/molecules';
 import { MarketInfoDialog } from 'src/components/organisms';
-import {
-    useGetCountdown,
-    useGraphClientHook,
-    useIsSubgraphSupported,
-} from 'src/hooks';
-import useSF from 'src/hooks/useSecuredFinance';
+import { useGetCountdown } from 'src/hooks';
 import {
     CurrencySymbol,
     currencyMap,
@@ -26,6 +18,7 @@ import {
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { AdvancedLendingTopBarProp } from './types';
+import { DailyMarketInfo } from 'src/types';
 
 dayjs.extend(duration);
 
@@ -38,61 +31,45 @@ export const AdvancedLendingTopBar = ({
     onTermChange,
     currentMarket,
     currencyPrice,
-    marketInfo,
+    marketStats,
     savedMarkets,
     handleFavouriteToggle,
     isItayosePeriod,
-    volumePerMarket,
 }: AdvancedLendingTopBarProp) => {
-    const securedFinance = useSF();
-    const currentChainId = securedFinance?.config.chain.id;
-    const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
     const maturity = currentMarket?.value.maturity ?? 0;
     const time = useGetCountdown(maturity * 1000);
 
-    const [timestamp, setTimestamp] = useState<number>(1643713200);
     const [isMarketInfoDialogOpen, setIsMarketInfoDialogOpen] =
         useState<boolean>(false);
 
-    const { data: lastTransaction } = useGraphClientHook(
-        {
-            currency: toBytes32(selectedAsset?.value as CurrencySymbol),
-            maturity: maturity,
-            from: -1,
-            to: timestamp,
-            sides: [OrderSide.LEND, OrderSide.BORROW],
-        },
-        queries.TransactionHistoryDocument,
-        'lastTransaction',
-        !isSubgraphSupported
-    );
-
     const marketKey = `${selectedAsset?.value}-${maturity}`;
-    const rawVolume = volumePerMarket?.[marketKey] ?? 0;
+    const rawVolume = marketStats?.[marketKey]?.volume ?? 0;
+    const currency = currencyMap[selectedAsset?.value as CurrencySymbol];
 
     const volumeInUSD = usdFormat(rawVolume * currencyPrice, 2);
     const volume24H = formatWithCurrency(
-        volumePerMarket[marketKey] ?? 0,
+        rawVolume ?? 0,
         selectedAsset?.value as CurrencySymbol,
-        currencyMap[selectedAsset?.value as CurrencySymbol]?.roundingDecimal
+        currency?.roundingDecimal
     );
 
     const lastLoanValue = useMemo(() => {
-        if (!lastTransaction || !lastTransaction.length) return undefined;
-
-        const lastPrice = Number(lastTransaction?.[0]?.executionPrice);
-
+        const lastPrice = marketStats?.[marketKey]?.lastPrice ?? 0;
         return LoanValue.fromPrice(lastPrice, maturity);
-    }, [lastTransaction, maturity]);
+    }, [marketStats, marketKey, maturity]);
+
+    const dailyMarketInfo: DailyMarketInfo = useMemo(() => {
+        return {
+            high:
+                formatLoanValue(marketStats?.[marketKey]?.high, 'price') ?? '0',
+            low: formatLoanValue(marketStats?.[marketKey]?.low, 'price') ?? '0',
+        };
+    }, [marketKey, marketStats]);
 
     const selectedTerm = useMemo(
         () => options.find(o => o.value === selected.value),
         [options, selected]
     );
-
-    useEffect(() => {
-        setTimestamp(Math.round(new Date().getTime() / 1000));
-    }, [selectedAsset.label, selectedTerm?.label]);
 
     const handleTermChange = useCallback(
         (v: Maturity) => {
@@ -119,7 +96,7 @@ export const AdvancedLendingTopBar = ({
                         <div
                             className={clsx(
                                 'col-span-12 grid grid-cols-12 gap-3 border-neutral-600 laptop:w-[25%] laptop:gap-y-0 laptop:border-r laptop:px-6 laptop:py-4',
-                                marketInfo && 'tablet:gap-y-6'
+                                marketStats && 'tablet:gap-y-6'
                             )}
                         >
                             <div className='col-span-8 grid gap-x-3 gap-y-1 text-neutral-4 laptop:col-span-12 desktop:gap-x-5'>
@@ -136,7 +113,7 @@ export const AdvancedLendingTopBar = ({
                                                 handleFavouriteToggle
                                             }
                                             isItayosePage={isItayosePeriod}
-                                            volumePerMarket={volumePerMarket}
+                                            marketStats={marketStats}
                                         />
                                         <p className='whitespace-nowrap pl-1 text-[11px] leading-4 tablet:text-xs laptop:text-xs'>
                                             {`Maturity ${
@@ -155,7 +132,7 @@ export const AdvancedLendingTopBar = ({
                             <div
                                 className={clsx(
                                     'col-span-4 flex justify-end pl-2 laptop:hidden',
-                                    marketInfo && 'tablet:pl-0'
+                                    marketStats && 'tablet:pl-0'
                                 )}
                             >
                                 <button
@@ -191,18 +168,18 @@ export const AdvancedLendingTopBar = ({
                                     )}
                                 />
                             </div>
-                            {marketInfo && (
+                            {marketStats && (
                                 <>
                                     <div className='flex w-[14%] desktop:w-[11%]'>
                                         <MarketTab
                                             name='24h High'
-                                            value={marketInfo.high}
+                                            value={dailyMarketInfo.high}
                                         />
                                     </div>
                                     <div className='flex w-[14%] desktop:w-[11%]'>
                                         <MarketTab
                                             name='24h Low'
-                                            value={marketInfo.low}
+                                            value={dailyMarketInfo.low}
                                         />
                                     </div>
                                     <div className='w-[14%] desktop:w-[12%]'>
@@ -255,7 +232,7 @@ export const AdvancedLendingTopBar = ({
                 currency={selectedAsset.value}
                 currentMarket={currentMarket}
                 currencyPrice={usdFormat(currencyPrice, 2) || '$0'}
-                marketInfo={marketInfo}
+                marketInfo={dailyMarketInfo}
                 volumeInfo={{
                     volume24H,
                     volumeInUSD,

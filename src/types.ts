@@ -166,3 +166,10 @@ export type Transaction24HVolume = Pick<
     | 'averagePrice'
     | 'createdAt'
 >;
+
+export type MarketStats = {
+    volume: number;
+    lastPrice: number;
+    high: LoanValue;
+    low: LoanValue;
+};

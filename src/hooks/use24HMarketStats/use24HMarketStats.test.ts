@@ -1,13 +1,13 @@
-import { mockTransactions24H } from 'src/stories/mocks/queries';
-import { act, renderHook, waitFor } from 'src/test-utils';
-import { currencyMap } from 'src/utils';
-import { useGraphClientHook } from '../useGraphClientHook';
-import { use24HVolume } from './use24HVolume';
 import {
     currencyList,
     usdcBytes32,
     wfilBytes32,
 } from 'src/stories/mocks/fixtures';
+import { mockTransactions24H } from 'src/stories/mocks/queries';
+import { act, renderHook, waitFor } from 'src/test-utils';
+import { currencyMap } from 'src/utils';
+import { useGraphClientHook } from '../useGraphClientHook';
+import { use24HMarketStats } from './use24HMarketStats';
 
 jest.mock('../useGraphClientHook', () => ({
     useGraphClientHook: jest.fn(),
@@ -23,7 +23,7 @@ describe('use24HVolume', () => {
     it('should return empty data when no transactions', () => {
         mockedUseGraphClientHook.mockReturnValue({ data: null });
 
-        const { result } = renderHook(() => use24HVolume());
+        const { result } = renderHook(() => use24HMarketStats());
 
         expect(result.current.data).toEqual({});
     });
@@ -38,7 +38,7 @@ describe('use24HVolume', () => {
             data: { transactions: bulkMockTxs },
         });
 
-        const { result } = renderHook(() => use24HVolume());
+        const { result } = renderHook(() => use24HMarketStats());
         const expectedKey = `${currencyList[0].value}-${mockTransactions24H[0].maturity}`;
 
         await waitFor(() => {
@@ -73,7 +73,7 @@ describe('use24HVolume', () => {
             data: { transactions: allTransactions },
         });
 
-        const { result } = renderHook(() => use24HVolume());
+        const { result } = renderHook(() => use24HMarketStats());
 
         await waitFor(() => {
             expect(Object.keys(result.current.data).length).toBe(2);
@@ -88,11 +88,11 @@ describe('use24HVolume', () => {
         const expectedUSDCAmount =
             currencyMap.USDC.fromBaseUnit(BigInt(2000000)) * 50;
 
-        expect(result.current.data[expectedWFILKey]).toBeCloseTo(
+        expect(result.current.data[expectedWFILKey].volume).toBeCloseTo(
             expectedWFILAmount,
             12
         );
-        expect(result.current.data[expectedUSDCKey]).toBeCloseTo(
+        expect(result.current.data[expectedUSDCKey].volume).toBeCloseTo(
             expectedUSDCAmount,
             12
         );
@@ -146,11 +146,11 @@ describe('use24HVolume', () => {
             return { data: batchCalls[callCount++] || { transactions: [] } };
         });
 
-        const { result, rerender } = renderHook(() => use24HVolume());
+        const { result, rerender } = renderHook(() => use24HMarketStats());
 
         await waitFor(() => {
             const key = `${currencyList[2].value}-${mockTransactions24H[0].maturity}`;
-            expect(result.current.data[key]).toBeCloseTo(
+            expect(result.current.data[key].volume).toBeCloseTo(
                 currencyMap.WFIL.fromBaseUnit(BigInt(1000000)) * 4,
                 10
             );
@@ -164,7 +164,7 @@ describe('use24HVolume', () => {
 
         await waitFor(() => {
             const key = `${currencyList[2].value}-${mockTransactions24H[0].maturity}`;
-            expect(result.current.data[key]).toBeCloseTo(
+            expect(result.current.data[key].volume).toBeCloseTo(
                 currencyMap.WFIL.fromBaseUnit(BigInt(1000000)) * 5,
                 10
             );

@@ -2,13 +2,14 @@ import { useEffect, useMemo, useState } from 'react';
 import { fromBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useGraphClientHook } from 'src/hooks';
-import { Transaction24HVolume } from 'src/types';
+import { MarketStats, Transaction24HVolume } from 'src/types';
 import { currencyMap, CurrencySymbol } from 'src/utils';
+import { LoanValue } from 'src/utils/entities';
 
 const TRANSACTIONS_LIMIT = 1000;
 const POLL_INTERVAL_MS = 10000;
 
-export const use24HVolume = (): { data: Record<string, number> } => {
+export const use24HMarketStats = (): { data: Record<string, MarketStats> } => {
     const [timestamp] = useState(() => Math.round(Date.now() / 1000));
     const [allTransactions, setAllTransactions] = useState<
         Transaction24HVolume[]
@@ -45,26 +46,22 @@ export const use24HVolume = (): { data: Record<string, number> } => {
                 }));
             } else {
                 setHasMore(false);
-
                 const maxCreatedAt = Math.max(
                     ...currentBatch.map(tx => Number(tx.createdAt))
                 );
                 setLatestTimestamp(maxCreatedAt);
             }
         } else {
-            // Incremental polling
             if (currentBatch.length === 0) return;
 
             const now = Math.floor(Date.now() / 1000);
             const combined = [...allTransactions, ...currentBatch];
-
             const cutoff = now - 24 * 3600;
             const pruned = combined.filter(
                 tx => Number(tx.createdAt) >= cutoff
             );
 
             setAllTransactions(pruned);
-
             const maxCreatedAt = Math.max(
                 ...currentBatch.map(tx => Number(tx.createdAt))
             );
@@ -90,13 +87,35 @@ export const use24HVolume = (): { data: Record<string, number> } => {
     }, [hasMore, latestTimestamp]);
 
     const result = useMemo(() => {
-        const final: Record<string, number> = {};
+        const final: Record<string, MarketStats> = {};
 
         for (const tx of allTransactions) {
             const symbol = fromBytes32(tx.currency) as CurrencySymbol;
             const key = `${symbol}-${tx.maturity}`;
-            const amount = currencyMap[symbol].fromBaseUnit(tx.amount);
-            final[key] = (final[key] || 0) + amount;
+            const price = Number(tx.executionPrice);
+            const volume = currencyMap[symbol].fromBaseUnit(tx.amount);
+
+            if (!final[key]) {
+                final[key] = {
+                    volume,
+                    lastPrice: price,
+                    high: LoanValue.fromPrice(price, tx.maturity),
+                    low: LoanValue.fromPrice(price, tx.maturity),
+                };
+                continue;
+            }
+
+            const entry = final[key];
+            entry.volume += volume;
+            entry.lastPrice = price;
+
+            if (price > entry.high.price) {
+                entry.high = LoanValue.fromPrice(price, tx.maturity);
+            }
+
+            if (price < entry.low.price) {
+                entry.low = LoanValue.fromPrice(price, tx.maturity);
+            }
         }
 
         return final;

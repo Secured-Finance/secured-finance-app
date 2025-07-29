@@ -19,7 +19,7 @@ describe('AdvancedLendingTopBar Component', () => {
         expect(screen.getByText('80.00')).toBeInTheDocument();
 
         expect(screen.getByText('Last Price')).toBeInTheDocument();
-        expect(screen.getByText('--.--')).toBeInTheDocument();
+        expect(screen.getByText('0.00')).toBeInTheDocument();
 
         expect(screen.getByText('WFIL Price')).toBeInTheDocument();
         expect(screen.getByText('$3.56')).toBeInTheDocument();
