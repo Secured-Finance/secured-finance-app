@@ -1,5 +1,5 @@
 import { Option } from 'src/components/atoms';
-import { CurrentMarket, DailyMarketInfo, SavedMarket } from 'src/types';
+import { CurrentMarket, MarketStats, SavedMarket } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
@@ -12,9 +12,8 @@ export type AdvancedLendingTopBarProp = {
     onTermChange: (v: Maturity) => void;
     currentMarket: CurrentMarket | undefined;
     currencyPrice: number;
-    marketInfo?: DailyMarketInfo;
+    marketStats?: Record<string, MarketStats>;
     savedMarkets: SavedMarket[];
     handleFavouriteToggle: (market: string) => void;
     isItayosePeriod: boolean;
-    volumePerMarket: Record<string, number>;
 };

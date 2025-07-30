@@ -28,7 +28,7 @@ export const CurrencyMaturityDropdown = ({
     maturity = maturityList[0],
     onChange,
     isItayosePage,
-    volumePerMarket,
+    marketStats,
     savedMarkets = [],
     handleFavouriteToggle,
 }: CurrencyMaturityDropdownProps) => {
@@ -126,7 +126,7 @@ export const CurrencyMaturityDropdown = ({
                     const marketLabel = `${currency.label}-${maturity.label}`;
                     const marketKey = `${currency.value}-${maturity.value}`;
 
-                    const rawVolume = volumePerMarket?.[marketKey];
+                    const rawVolume = marketStats?.[marketKey]?.volume ?? 0;
 
                     const volumeInUSD = rawVolume * priceList[currency.value];
 
@@ -191,7 +191,7 @@ export const CurrencyMaturityDropdown = ({
         address,
         isFavorites,
         currentChainId,
-        volumePerMarket,
+        marketStats,
         priceList,
     ]);
 
