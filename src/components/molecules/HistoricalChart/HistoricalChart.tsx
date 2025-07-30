@@ -203,6 +203,17 @@ export function HistoricalChart({
             isMobile
         );
 
+        volumeChart.applyOptions({
+            timeScale: {
+                timeVisible: false,
+                tickMarkFormatter: (time: number) =>
+                    new Date(time * 1000).toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                    }),
+            },
+        });
+
         setupCharts(candlestickSeries, volumeSeries);
 
         subscribeToChartEvents(
