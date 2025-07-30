@@ -36,12 +36,12 @@ export default {
         handleFavouriteToggle: () => {},
         savedMarkets: [],
         isItayosePeriod: false,
-        marketInfo: {
+        marketStats: {
             'WFIL-1669852800': {
-                high: LoanValue.fromPrice(9900, dec22Fixture.toNumber()),
+                high: LoanValue.fromPrice(9899, dec22Fixture.toNumber()),
                 lastPrice: 9900,
-                low: LoanValue.fromPrice(9700, dec22Fixture.toNumber()),
-                volume: 1,
+                low: LoanValue.fromPrice(9457, dec22Fixture.toNumber()),
+                volume: 520,
             },
             'USDC-1669852800': {
                 high: LoanValue.fromPrice(9800, dec22Fixture.toNumber()),

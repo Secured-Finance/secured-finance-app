@@ -54,15 +54,15 @@ export const AdvancedLendingTopBar = ({
     );
 
     const lastLoanValue = useMemo(() => {
-        const lastPrice = marketStats?.[marketKey]?.lastPrice ?? 0;
+        const lastPrice = marketStats?.[marketKey]?.lastPrice;
+        if (!lastPrice) return undefined;
         return LoanValue.fromPrice(lastPrice, maturity);
     }, [marketStats, marketKey, maturity]);
 
     const dailyMarketInfo: DailyMarketInfo = useMemo(() => {
         return {
-            high:
-                formatLoanValue(marketStats?.[marketKey]?.high, 'price') ?? '0',
-            low: formatLoanValue(marketStats?.[marketKey]?.low, 'price') ?? '0',
+            high: formatLoanValue(marketStats?.[marketKey]?.high, 'price') ?? 0,
+            low: formatLoanValue(marketStats?.[marketKey]?.low, 'price') ?? 0,
         };
     }, [marketKey, marketStats]);
 

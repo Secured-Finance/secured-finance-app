@@ -15,7 +15,7 @@ jest.mock('../useGraphClientHook', () => ({
 
 const mockedUseGraphClientHook = useGraphClientHook as jest.Mock;
 
-describe('use24HVolume', () => {
+describe('use24HMarketStats', () => {
     beforeEach(() => {
         jest.clearAllMocks();
     });

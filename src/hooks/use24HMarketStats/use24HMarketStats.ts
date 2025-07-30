@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { fromBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useGraphClientHook } from 'src/hooks';
@@ -14,7 +14,7 @@ export const use24HMarketStats = (): { data: Record<string, MarketStats> } => {
     const [allTransactions, setAllTransactions] = useState<
         Transaction24HVolume[]
     >([]);
-    const [transactionSkip, setTransactionSkip] = useState(0);
+    const transactionSkipRef = useRef(0);
     const [hasMore, setHasMore] = useState(true);
     const [latestTimestamp, setLatestTimestamp] = useState(0);
 
@@ -39,10 +39,10 @@ export const use24HMarketStats = (): { data: Record<string, MarketStats> } => {
             setAllTransactions(prev => [...prev, ...currentBatch]);
 
             if (currentBatch.length === TRANSACTIONS_LIMIT) {
-                setTransactionSkip(prev => prev + TRANSACTIONS_LIMIT);
-                setQueryArgs(prev => ({
-                    ...prev,
-                    skip: transactionSkip + TRANSACTIONS_LIMIT,
+                transactionSkipRef.current += TRANSACTIONS_LIMIT;
+                setQueryArgs(prevArgs => ({
+                    ...prevArgs,
+                    skip: transactionSkipRef.current,
                 }));
             } else {
                 setHasMore(false);
