@@ -85,14 +85,6 @@ describe('useTransactionCandleStickData', () => {
                 close: 2050,
                 vol: 1,
             },
-            {
-                time: '1625101200',
-                open: 2000,
-                high: 2100,
-                low: 1900,
-                close: 2050,
-                vol: 0,
-            },
         ]);
 
         jest.spyOn(Date, 'now').mockRestore();

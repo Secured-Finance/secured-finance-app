@@ -3,13 +3,12 @@ import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { DropdownSelector, RadioButton } from 'src/components/atoms';
-import { HistoricalChart } from 'src/components/molecules/HistoricalChart';
-import { useGraphClientHook } from 'src/hooks';
+import { HistoricalChart } from 'src/components/molecules';
+import { useGraphClientHook, useTransactionCandleStickData } from 'src/hooks';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { HistoricalDataIntervals } from 'src/types';
 import { timeScales } from './constants';
-import { useTransactionCandleStickData } from 'src/hooks';
 
 export type Transaction = {
     average: string;
