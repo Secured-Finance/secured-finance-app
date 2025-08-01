@@ -1,7 +1,7 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import type { Meta, StoryFn } from '@storybook/react';
 import { dec22Fixture } from 'src/stories/mocks/fixtures';
-import { mockRecentTrades } from 'src/stories/mocks/queries';
+import { mockRecentTradesTable } from 'src/stories/mocks/queries';
 import { CurrencySymbol } from 'src/utils';
 import { RecentTradesTable } from './RecentTradesTable';
 
@@ -15,7 +15,7 @@ export default {
     parameters: {
         ...RESPONSIVE_PARAMETERS,
         apolloClient: {
-            mocks: mockRecentTrades,
+            mocks: mockRecentTradesTable,
         },
         chromatic: {
             viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],

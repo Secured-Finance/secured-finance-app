@@ -11,7 +11,7 @@ export type AdvancedLendingTopBarProp = {
     onAssetChange: (v: CurrencySymbol) => void;
     onTermChange: (v: Maturity) => void;
     currentMarket: CurrentMarket | undefined;
-    currencyPrice: string;
+    currencyPrice: number;
     marketInfo?: DailyMarketInfo;
     savedMarkets: SavedMarket[];
     handleFavouriteToggle: (market: string) => void;
@@ -19,4 +19,5 @@ export type AdvancedLendingTopBarProp = {
     utcOpeningDate: number;
     nextMarketPhase: string;
     currency: CurrencySymbol;
+    volumePerMarket: Record<string, number>;
 };
