@@ -34,9 +34,8 @@ export const useTransactionCandleStickData = (
         const editableTransactions = [...transactions];
         const timestamp = Math.floor(Date.now() / 1000);
         const intervalTimestamp =
-            Math.floor(timestamp / Number(selectedTimeScale)) *
-                Number(selectedTimeScale) +
-            Number(selectedTimeScale) * 2;
+            Math.ceil(timestamp / Number(selectedTimeScale)) *
+            Number(selectedTimeScale);
 
         if (
             transactions.length > 0 &&
