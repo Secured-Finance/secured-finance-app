@@ -204,14 +204,58 @@ export function HistoricalChart({
         );
 
         volumeChart.applyOptions({
-            timeScale: {
-                timeVisible: false,
-                tickMarkFormatter: (time: number) =>
+            // timeScale: {
+            //     timeVisible: false,
+            //     tickMarkFormatter: (time: number) =>
+            //         new Date(time * 1000).toLocaleTimeString([], {
+            //             hour: '2-digit',
+            //             minute: '2-digit',
+            //         }),
+            // },
+            localization: {
+                timeFormatter: (time: number) =>
+                    new Date(time * 1000).toLocaleTimeString([], {
+                        day: '2-digit',
+                        month: 'short',
+                        year: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false,
+                    }),
+            },
+        });
+
+        volumeChart.timeScale().subscribeVisibleLogicalRangeChange(range => {
+            if (!range) return;
+
+            const rangeSize = range.to - range.from;
+            let formatter;
+
+            if (rangeSize < 50) {
+                formatter = (time: number) =>
                     new Date(time * 1000).toLocaleTimeString([], {
                         hour: '2-digit',
                         minute: '2-digit',
-                    }),
-            },
+                    });
+            } else if (rangeSize < 200) {
+                formatter = (time: number) =>
+                    new Date(time * 1000).toLocaleDateString([], {
+                        month: 'short',
+                        day: 'numeric',
+                    });
+            } else {
+                formatter = (time: number) =>
+                    new Date(time * 1000).toLocaleDateString([], {
+                        month: 'short',
+                        year: '2-digit',
+                    });
+            }
+
+            volumeChart.applyOptions({
+                timeScale: {
+                    tickMarkFormatter: formatter,
+                },
+            });
         });
 
         setupCharts(candlestickSeries, volumeSeries);
