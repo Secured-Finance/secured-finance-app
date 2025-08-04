@@ -204,6 +204,17 @@ export function HistoricalChart({
         );
 
         setupCharts(candlestickSeries, volumeSeries);
+        candleStickChart.timeScale().fitContent();
+
+        requestAnimationFrame(() => {
+            const candleDataLength = data.length;
+            if (candleDataLength > 30) {
+                candleStickChart.timeScale().setVisibleLogicalRange({
+                    from: candleDataLength - 30,
+                    to: candleDataLength - 1,
+                });
+            }
+        });
 
         subscribeToChartEvents(
             candleStickChart,
