@@ -3,10 +3,10 @@ import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import { useCallback, useMemo, useState } from 'react';
 import DocumentTextIcon from 'src/assets/icons/document-text.svg';
-import { MarketTab } from 'src/components/atoms';
+import { MarketTab, Timer } from 'src/components/atoms';
 import { CurrencyMaturityDropdown, Tooltip } from 'src/components/molecules';
 import { MarketInfoDialog } from 'src/components/organisms';
-import { useGetCountdown } from 'src/hooks';
+import { MarketPhase, useGetCountdown } from 'src/hooks';
 import {
     CurrencySymbol,
     currencyMap,
@@ -35,6 +35,8 @@ export const AdvancedLendingTopBar = ({
     savedMarkets,
     handleFavouriteToggle,
     isItayosePeriod,
+    utcOpeningDate,
+    nextMarketPhase,
 }: AdvancedLendingTopBarProp) => {
     const maturity = currentMarket?.value.maturity ?? 0;
     const time = useGetCountdown(maturity * 1000);
@@ -95,7 +97,7 @@ export const AdvancedLendingTopBar = ({
                     >
                         <div
                             className={clsx(
-                                'col-span-12 grid grid-cols-12 gap-3 border-neutral-600 laptop:w-[25%] laptop:gap-y-0 laptop:border-r laptop:px-6 laptop:py-4',
+                                'col-span-12 flex grid-cols-12 justify-between gap-3 border-neutral-600 pr-2 laptop:grid laptop:w-[25%] laptop:gap-y-0 laptop:border-r laptop:px-6 laptop:py-4',
                                 marketStats && 'tablet:gap-y-6'
                             )}
                         >
@@ -129,100 +131,126 @@ export const AdvancedLendingTopBar = ({
                                     </div>
                                 </div>
                             </div>
-                            <div
-                                className={clsx(
-                                    'col-span-4 flex justify-end pl-2 laptop:hidden',
-                                    marketStats && 'tablet:pl-0'
-                                )}
-                            >
-                                <button
-                                    data-testid='market-info-btn'
-                                    onClick={() =>
-                                        setIsMarketInfoDialogOpen(true)
-                                    }
-                                    className='flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg bg-neutral-700 px-1 py-2'
+                            {!isItayosePeriod && (
+                                <div
+                                    className={clsx(
+                                        'col-span-4 flex justify-end pl-2 laptop:hidden',
+                                        marketStats && 'tablet:pl-0'
+                                    )}
                                 >
-                                    <DocumentTextIcon className='h-4 w-4 text-neutral-300' />
-                                </button>
-                            </div>
+                                    <button
+                                        data-testid='market-info-btn'
+                                        onClick={() =>
+                                            setIsMarketInfoDialogOpen(true)
+                                        }
+                                        className='flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg bg-neutral-700 px-1 py-2'
+                                    >
+                                        <DocumentTextIcon className='h-4 w-4 text-neutral-300' />
+                                    </button>
+                                </div>
+                            )}
                         </div>
 
-                        <div className='hidden justify-evenly laptop:flex laptop:w-[75%] laptop:items-center laptop:px-7 laptop:py-4 desktop:gap-3.5'>
-                            <div className='flex w-[14%] flex-col desktop:w-[12%]'>
-                                <span className='typography-caption-2 text-neutral-400'>
-                                    Mark Price
-                                </span>
-                                <span className='typography-caption whitespace-nowrap font-semibold leading-4 text-neutral-50 desktop:leading-6'>
-                                    {formatLoanValue(
-                                        currentMarket?.value,
-                                        'price'
-                                    )}
-                                </span>
+                        {isItayosePeriod ? (
+                            <div className='hidden justify-evenly gap-40 laptop:flex laptop:w-[75%] laptop:flex-row laptop:items-center laptop:px-7 laptop:py-4'>
+                                <div className='typography-caption w-40 text-nebulaTeal'>
+                                    <p className=' typography-caption-2 text-slateGray'>
+                                        {nextMarketPhase ===
+                                        MarketPhase.PRE_ORDER
+                                            ? 'Pre-Open'
+                                            : 'Open in'}
+                                    </p>
+                                    <Timer targetTime={utcOpeningDate * 1000} />
+                                </div>
+                                <div>
+                                    <MarketTab
+                                        name={`${selectedAsset?.value} Price`}
+                                        value={usdFormat(currencyPrice, 2)}
+                                    />
+                                </div>
                             </div>
-                            <div className='flex w-[14%] flex-col desktop:w-[12%]'>
-                                <MarketTab
-                                    name='Last Price'
-                                    value={formatLoanValue(
-                                        lastLoanValue,
-                                        'price'
-                                    )}
-                                />
-                            </div>
-                            {marketStats && (
-                                <>
-                                    <div className='flex w-[14%] desktop:w-[11%]'>
-                                        <MarketTab
-                                            name='24h High'
-                                            value={dailyMarketInfo.high}
-                                        />
-                                    </div>
-                                    <div className='flex w-[14%] desktop:w-[11%]'>
-                                        <MarketTab
-                                            name='24h Low'
-                                            value={dailyMarketInfo.low}
-                                        />
-                                    </div>
-                                    <div className='w-[14%] desktop:w-[12%]'>
-                                        <section
-                                            className='flex h-fit flex-grow flex-col'
-                                            aria-label='24h Volume'
-                                        >
-                                            <span className='laptop:typography-caption-2 whitespace-nowrap text-[11px] text-neutral-400'>
-                                                24h Volume
-                                            </span>
-                                            <Tooltip
-                                                iconElement={
-                                                    <span className='typography-caption flex items-center whitespace-nowrap leading-4 text-neutral-50 desktop:leading-6'>
-                                                        {volume24H}
-                                                    </span>
-                                                }
+                        ) : (
+                            <div className='hidden justify-evenly laptop:flex laptop:w-[75%] laptop:items-center laptop:px-7 laptop:py-4 desktop:gap-3.5'>
+                                <div className='flex w-[14%] flex-col desktop:w-[12%]'>
+                                    <span className='typography-caption-2 text-neutral-400'>
+                                        Mark Price
+                                    </span>
+                                    <span className='typography-caption whitespace-nowrap font-semibold leading-4 text-neutral-50 desktop:leading-6'>
+                                        {formatLoanValue(
+                                            currentMarket?.value,
+                                            'price'
+                                        )}
+                                    </span>
+                                </div>
+                                <div className='flex w-[14%] flex-col desktop:w-[12%]'>
+                                    <MarketTab
+                                        name='Last Price'
+                                        value={formatLoanValue(
+                                            lastLoanValue,
+                                            'price'
+                                        )}
+                                    />
+                                </div>
+                                {marketStats && (
+                                    <>
+                                        <div className='flex w-[14%] desktop:w-[11%]'>
+                                            <MarketTab
+                                                name='24h High'
+                                                value={dailyMarketInfo.high}
+                                            />
+                                        </div>
+                                        <div className='flex w-[14%] desktop:w-[11%]'>
+                                            <MarketTab
+                                                name='24h Low'
+                                                value={dailyMarketInfo.low}
+                                            />
+                                        </div>
+                                        <div className='w-[14%] desktop:w-[12%]'>
+                                            <section
+                                                className='flex h-fit flex-grow flex-col'
+                                                aria-label='24h Volume'
                                             >
-                                                <span>
-                                                    24h Vol: {volumeInUSD}
+                                                <span className='laptop:typography-caption-2 whitespace-nowrap text-[11px] text-neutral-400'>
+                                                    24h Volume
                                                 </span>
-                                            </Tooltip>
-                                        </section>
-                                    </div>
-                                </>
-                            )}
-                            <div className={clsx('w-[14%] desktop:w-[11%]')}>
-                                <MarketTab
-                                    name={`${selectedAsset?.value} Price`}
-                                    value={usdFormat(currencyPrice, 2) || '$0'}
-                                    source={handlePriceSource(
-                                        selectedAsset?.value
-                                    )}
-                                />
+                                                <Tooltip
+                                                    iconElement={
+                                                        <span className='typography-caption flex items-center whitespace-nowrap leading-4 text-neutral-50 desktop:leading-6'>
+                                                            {volume24H}
+                                                        </span>
+                                                    }
+                                                >
+                                                    <span>
+                                                        24h Vol: {volumeInUSD}
+                                                    </span>
+                                                </Tooltip>
+                                            </section>
+                                        </div>
+                                    </>
+                                )}
+                                <div
+                                    className={clsx('w-[14%] desktop:w-[11%]')}
+                                >
+                                    <MarketTab
+                                        name={`${selectedAsset?.value} Price`}
+                                        value={
+                                            usdFormat(currencyPrice, 2) || '$0'
+                                        }
+                                        source={handlePriceSource(
+                                            selectedAsset?.value
+                                        )}
+                                    />
+                                </div>
+                                <div className='flex w-[14%] flex-col desktop:w-[10%]'>
+                                    <MarketTab
+                                        name='Countdown'
+                                        value={
+                                            <span className='tabular-nums'>{`${time?.days}:${time?.hours}:${time?.minutes}:${time?.seconds}`}</span>
+                                        }
+                                    />
+                                </div>
                             </div>
-                            <div className='flex w-[14%] flex-col desktop:w-[10%]'>
-                                <MarketTab
-                                    name='Countdown'
-                                    value={
-                                        <span className='tabular-nums'>{`${time?.days}:${time?.hours}:${time?.minutes}:${time?.seconds}`}</span>
-                                    }
-                                />
-                            </div>
-                        </div>
+                        )}
                     </div>
                 </div>
             </div>
