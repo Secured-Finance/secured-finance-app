@@ -45,8 +45,6 @@ export const useIsUnderCollateralThresholdForBorrowOrders = (
     currency: CurrencySymbol
 ) => {
     const { data: markets } = useLendingMarkets();
-    const { data: usedCurrencies = [] } = useCurrenciesForOrders(address);
-    const { data: position } = usePositions(address, usedCurrencies);
     const { data: availableToBorrow } = useBorrowableAmount(address, currency);
 
     const isUnderCollateralThreshold = useCallback(
@@ -62,10 +60,6 @@ export const useIsUnderCollateralThresholdForBorrowOrders = (
 
             if (side === OrderSide.LEND) return false;
 
-            if (market.isPreOrderPeriod) {
-                return price < market.currentMinDebtUnitPrice;
-            }
-
             const currentMinDebtUnitPrice = market.currentMinDebtUnitPrice;
             const fv = (amount * BigInt(10000)) / BigInt(price);
             const requiredCollateral =
@@ -73,11 +67,10 @@ export const useIsUnderCollateralThresholdForBorrowOrders = (
 
             return (
                 price < currentMinDebtUnitPrice &&
-                requiredCollateral > availableToBorrow &&
-                (position?.lendCurrencies.has(currency) ?? false)
+                requiredCollateral > availableToBorrow
             );
         },
-        [markets, address, availableToBorrow, position?.lendCurrencies]
+        [markets, address, availableToBorrow]
     );
 
     return isUnderCollateralThreshold;

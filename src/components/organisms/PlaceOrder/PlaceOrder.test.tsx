@@ -249,36 +249,6 @@ describe('PlaceOrder component', () => {
                         ).not.toBeInTheDocument();
                     });
                 });
-
-                describe('when the user does not have a lending position', () => {
-                    it.skip('should display a warning if the user places a borrow order', async () => {
-                        render(
-                            <UnderMinimumCollateralThreshold
-                                side={OrderSide.BORROW}
-                                orderAmount={
-                                    new Amount('100000000', CurrencySymbol.ETH)
-                                }
-                            />
-                        );
-                        expect(
-                            await screen.findByRole('alert')
-                        ).toBeInTheDocument();
-                    });
-
-                    it('should not display a warning if the user places a lend order', () => {
-                        render(
-                            <UnderMinimumCollateralThreshold
-                                side={OrderSide.BORROW}
-                                orderAmount={
-                                    new Amount('100000000', CurrencySymbol.ETH)
-                                }
-                            />
-                        );
-                        expect(
-                            screen.queryByRole('alert')
-                        ).not.toBeInTheDocument();
-                    });
-                });
             });
         });
 
