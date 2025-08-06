@@ -6,7 +6,7 @@ import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
 import { ButtonEvents, ButtonProperties, CurrencySymbol } from 'src/utils';
-import { Amount } from 'src/utils/entities';
+import { Amount, LoanValue } from 'src/utils/entities';
 import * as stories from './PlaceOrder.stories';
 
 const { Default, Delisted, UnderMinimumCollateralThreshold } =
@@ -219,8 +219,15 @@ describe('PlaceOrder component', () => {
                             <UnderMinimumCollateralThreshold
                                 side={OrderSide.BORROW}
                                 orderAmount={
-                                    new Amount('100000000', CurrencySymbol.WFIL)
+                                    new Amount(
+                                        '2400000000000000000',
+                                        CurrencySymbol.ETH
+                                    )
                                 }
+                                loanValue={LoanValue.fromPrice(
+                                    8500,
+                                    dec22Fixture.toNumber()
+                                )}
                             />
                         );
                         expect(
@@ -242,36 +249,6 @@ describe('PlaceOrder component', () => {
                         ).not.toBeInTheDocument();
                     });
                 });
-
-                describe('when the user does not have a lending position', () => {
-                    it('should display a warning if the user places a borrow order', async () => {
-                        render(
-                            <UnderMinimumCollateralThreshold
-                                side={OrderSide.BORROW}
-                                orderAmount={
-                                    new Amount('100000000', CurrencySymbol.ETH)
-                                }
-                            />
-                        );
-                        expect(
-                            await screen.findByRole('alert')
-                        ).toBeInTheDocument();
-                    });
-
-                    it('should not display a warning if the user places a lend order', () => {
-                        render(
-                            <UnderMinimumCollateralThreshold
-                                side={OrderSide.BORROW}
-                                orderAmount={
-                                    new Amount('100000000', CurrencySymbol.ETH)
-                                }
-                            />
-                        );
-                        expect(
-                            screen.queryByRole('alert')
-                        ).not.toBeInTheDocument();
-                    });
-                });
             });
         });
 
@@ -279,7 +256,13 @@ describe('PlaceOrder component', () => {
             render(
                 <UnderMinimumCollateralThreshold
                     side={OrderSide.BORROW}
-                    orderAmount={new Amount('100000000', CurrencySymbol.ETH)}
+                    orderAmount={
+                        new Amount('2400000000000000000', CurrencySymbol.ETH)
+                    }
+                    loanValue={LoanValue.fromPrice(
+                        8500,
+                        dec22Fixture.toNumber()
+                    )}
                 />
             );
             expect(await screen.findByRole('alert')).toBeInTheDocument();

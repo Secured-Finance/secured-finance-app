@@ -1,10 +1,13 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { useCallback } from 'react';
+import {
+    useBorrowableAmount,
+    useCurrenciesForOrders,
+    useLendingMarkets,
+    usePositions,
+} from 'src/hooks';
 import { UserAccount } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
-import { useCurrenciesForOrders } from '../useCurrenciesForOrders';
-import { useLendingMarkets } from '../useLendingMarkets';
-import { usePositions } from '../usePositions';
 
 export const useIsUnderCollateralThreshold = (address: UserAccount) => {
     const { data: markets } = useLendingMarkets();
@@ -32,6 +35,42 @@ export const useIsUnderCollateralThreshold = (address: UserAccount) => {
             );
         },
         [markets, address, position?.lendCurrencies]
+    );
+
+    return isUnderCollateralThreshold;
+};
+
+export const useIsUnderCollateralThresholdForBorrowOrders = (
+    address: UserAccount,
+    currency: CurrencySymbol
+) => {
+    const { data: markets } = useLendingMarkets();
+    const { data: availableToBorrow } = useBorrowableAmount(address, currency);
+
+    const isUnderCollateralThreshold = useCallback(
+        (
+            currency: CurrencySymbol,
+            maturity: number,
+            price: number,
+            side: OrderSide,
+            amount: bigint
+        ) => {
+            const market = markets?.[currency]?.[maturity];
+            if (!market || !address || !price) return false;
+
+            if (side === OrderSide.LEND) return false;
+
+            const currentMinDebtUnitPrice = market.currentMinDebtUnitPrice;
+            const fv = (amount * BigInt(10000)) / BigInt(price);
+            const requiredCollateral =
+                (fv * BigInt(currentMinDebtUnitPrice)) / BigInt(10000);
+
+            return (
+                price < currentMinDebtUnitPrice &&
+                requiredCollateral > availableToBorrow
+            );
+        },
+        [markets, address, availableToBorrow]
     );
 
     return isUnderCollateralThreshold;
