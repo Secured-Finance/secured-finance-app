@@ -1,6 +1,6 @@
 {
   "name": "secured-finance-web",
-  "version": "1.5.48",
+  "version": "1.5.49",
   "private": true,
   "homepage": ".",
   "dependencies": {
