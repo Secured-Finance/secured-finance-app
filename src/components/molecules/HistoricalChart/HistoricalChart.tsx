@@ -197,6 +197,12 @@ export function HistoricalChart({
         const { candlestickSeries, chart: candleStickChart } =
             createCandlestickChart(chartContainerRef.current, isMobile);
 
+        candlestickSeries.applyOptions({
+            borderVisible: true,
+            borderUpColor: colors.secondary['700'],
+            borderDownColor: colors.galacticOrange,
+        });
+
         const { volumeSeries, chart: volumeChart } = createVolumeChart(
             secondContainerRef.current,
             timeScale,
