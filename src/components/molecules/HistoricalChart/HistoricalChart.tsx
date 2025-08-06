@@ -197,8 +197,10 @@ export function HistoricalChart({
         const { candlestickSeries, chart: candleStickChart } =
             createCandlestickChart(chartContainerRef.current, isMobile);
 
-        candleStickChart.applyOptions({
-            timeScale: { barSpacing: isMobile ? 20 : 50 },
+        candlestickSeries.applyOptions({
+            borderVisible: true,
+            borderUpColor: colors.secondary['700'],
+            borderDownColor: colors.galacticOrange,
         });
 
         const { volumeSeries, chart: volumeChart } = createVolumeChart(
