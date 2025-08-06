@@ -14,7 +14,7 @@ import {
     CollateralBook,
     useBlockExplorerUrl,
     useHandleContractTransaction,
-    useIsUnderCollateralThreshold,
+    useIsUnderCollateralThresholdForBorrowOrders,
 } from 'src/hooks';
 import { OrderType, PlaceOrderFunction } from 'src/types';
 import {
@@ -140,13 +140,18 @@ export const PlaceOrder = ({
     const [txHash, setTxHash] = useState<string | undefined>();
 
     const { address } = useAccount();
-    const isUnderCollateralThreshold = useIsUnderCollateralThreshold(address);
+    const isUnderCollateralThreshold =
+        useIsUnderCollateralThresholdForBorrowOrders(
+            address,
+            orderAmount.currency
+        );
 
     const showWarning = isUnderCollateralThreshold(
         orderAmount.currency,
         maturity.toNumber(),
         loanValue.price,
-        side
+        side,
+        orderAmount.toBigInt()
     );
 
     const [errorMessage, setErrorMessage] = useState(

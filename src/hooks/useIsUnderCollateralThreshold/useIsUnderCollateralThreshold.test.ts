@@ -3,7 +3,10 @@ import { dec22Fixture, dec24Fixture } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook, waitFor } from 'src/test-utils';
 import { CurrencySymbol } from 'src/utils';
-import { useIsUnderCollateralThreshold } from './useIsUnderCollateralThreshold';
+import {
+    useIsUnderCollateralThreshold,
+    useIsUnderCollateralThresholdForBorrowOrders,
+} from './useIsUnderCollateralThreshold';
 
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
@@ -181,5 +184,50 @@ describe('useIsUnderCollateralThreshold', () => {
                 ).toBe(false)
             );
         });
+    });
+});
+
+describe('useIsUnderCollateralThresholdForBorrowOrders', () => {
+    // 9500 is the currentMinDebtUnitPrice for ETH in the mock, availableToBorrow is 2.6 ETH
+    it('returns true when price is less than currentMinDebtUnitPrice and required collateral is more than available to borrow', async () => {
+        const { result } = renderHook(() =>
+            useIsUnderCollateralThresholdForBorrowOrders(
+                '0xff',
+                CurrencySymbol.ETH
+            )
+        );
+
+        await waitFor(() =>
+            expect(
+                result.current(
+                    CurrencySymbol.ETH,
+                    dec22Fixture.toNumber(),
+                    8500,
+                    OrderSide.BORROW,
+                    BigInt(2400000000000000000)
+                )
+            ).toBe(true)
+        );
+    });
+
+    it('returns false when price is less than currentMinDebtUnitPrice and required collateral is less than available to borrow', async () => {
+        const { result } = renderHook(() =>
+            useIsUnderCollateralThresholdForBorrowOrders(
+                '0xff',
+                CurrencySymbol.ETH
+            )
+        );
+
+        await waitFor(() =>
+            expect(
+                result.current(
+                    CurrencySymbol.ETH,
+                    dec22Fixture.toNumber(),
+                    9000,
+                    OrderSide.BORROW,
+                    BigInt(2400000000000000000)
+                )
+            ).toBe(false)
+        );
     });
 });

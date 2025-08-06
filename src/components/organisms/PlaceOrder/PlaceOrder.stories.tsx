@@ -65,7 +65,7 @@ Delisted.args = {
 
 export const UnderMinimumCollateralThreshold = Template.bind({});
 UnderMinimumCollateralThreshold.args = {
-    loanValue: LoanValue.fromPrice(9000, dec22Fixture.toNumber()),
-    orderAmount: new Amount('100000000000000000000', CurrencySymbol.WFIL),
+    loanValue: LoanValue.fromPrice(8600, dec22Fixture.toNumber()),
+    orderAmount: new Amount('800000000000000000000', CurrencySymbol.WFIL),
     assetPrice: 6,
 };
