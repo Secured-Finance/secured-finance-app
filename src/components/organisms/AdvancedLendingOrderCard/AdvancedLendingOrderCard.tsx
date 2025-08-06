@@ -448,10 +448,6 @@ export function AdvancedLendingOrderCard({
                     />
                     <div className='flex flex-col gap-1 py-1'>
                         <OrderDisplayBox
-                            field='Required Collateral'
-                            value={'--'}
-                        />
-                        <OrderDisplayBox
                             field='Fees'
                             value={calculateFee(maturity, orderFee)}
                             informationText='A duration-based transaction fee only for market takers,
