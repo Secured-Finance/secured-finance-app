@@ -204,14 +204,13 @@ export function HistoricalChart({
         );
 
         setupCharts(candlestickSeries, volumeSeries);
-        candleStickChart.timeScale().fitContent();
 
         requestAnimationFrame(() => {
-            const candleDataLength = data.length;
-            if (candleDataLength > 30) {
+            if (data.length > 0) {
+                const from = Math.max(0, data.length - 30);
                 candleStickChart.timeScale().setVisibleLogicalRange({
-                    from: candleDataLength - 30,
-                    to: candleDataLength - 1,
+                    from,
+                    to: data.length - 1,
                 });
             }
         });
