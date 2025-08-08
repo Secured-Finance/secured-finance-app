@@ -205,15 +205,14 @@ export function HistoricalChart({
 
         setupCharts(candlestickSeries, volumeSeries);
 
-        requestAnimationFrame(() => {
-            if (data.length > 0) {
-                const from = Math.max(0, data.length - 30);
-                candleStickChart.timeScale().setVisibleLogicalRange({
-                    from,
-                    to: data.length - 1,
-                });
-            }
-        });
+        if (data.length > 0) {
+            const chartWidth = chartContainerRef.current?.clientWidth;
+            const targetBarSpacing = chartWidth / 30;
+
+            candleStickChart.timeScale().applyOptions({
+                barSpacing: targetBarSpacing,
+            });
+        }
 
         subscribeToChartEvents(
             candleStickChart,
