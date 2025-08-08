@@ -205,6 +205,15 @@ export function HistoricalChart({
 
         setupCharts(candlestickSeries, volumeSeries);
 
+        if (data.length > 0) {
+            const chartWidth = chartContainerRef.current?.clientWidth;
+            const targetBarSpacing = chartWidth / 30;
+
+            candleStickChart.timeScale().applyOptions({
+                barSpacing: targetBarSpacing,
+            });
+        }
+
         subscribeToChartEvents(
             candleStickChart,
             volumeChart,
