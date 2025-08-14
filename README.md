@@ -18,7 +18,11 @@ A DeFi Trading Platform utilizing Orderbook-based Rates, facilitating the lendin
 
 1. Clone this repository
 2. Login on the GitHub npm package repository with `npm login --registry=https://npm.pkg.github.com`
-3. Create a file `.env.local` at the root of the project. Please refer to `.env.local.sample` for the list of environment variables
+3. Set up environment variables:
+   ```bash
+   cp .env.example .env.local
+   # Edit .env.local with your secrets (WalletConnect ID required)
+   ```
 4. Run `nvm use` to ensure you are using the correct node version
 5. Install all required dependencies by running `npm install`
 6. Run `npm run start` to start development mode
