@@ -1,4 +1,4 @@
-name: Merge into main
+name: "Manual: Release - Merge to main"
 
 on:
   workflow_dispatch:

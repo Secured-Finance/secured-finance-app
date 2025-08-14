@@ -1,4 +1,4 @@
-name: Cypress Run Tests
+name: "Reusable: Cypress Tests"
 on:
   workflow_call:
     inputs:

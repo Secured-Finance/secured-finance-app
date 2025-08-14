@@ -1,4 +1,4 @@
-name: Create a Version and Tag It
+name: "Manual: Release - Create Tag"
 
 on:
   workflow_dispatch:
