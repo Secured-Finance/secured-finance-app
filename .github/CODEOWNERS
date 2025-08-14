@@ -1,0 +1,91 @@
+# Secured Finance CODEOWNERS
+# This file defines the default code reviewers for the repository
+# Documentation: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# ============================================================================
+# Team Structure
+# ============================================================================
+# @secured-finance/engineering-team - All engineering team members
+#   - @biga816 (Senior, Full-stack, Smart Contract Lead)
+#   - @as1602 (Middle, Full-stack, Operations)
+#   - @vijayeth (Middle, Front-end Focus)
+#   - @onion797jp (Senior, Full-stack, Founder & CEO)
+#
+# @taiga7 - UI/UX Tester (non-coder, excluded from automatic reviews)
+# ============================================================================
+
+# Default reviewers for all files
+# Using team assignment for better maintainability
+* @secured-finance/engineering-team
+
+# ============================================================================
+# Smart Contracts & Blockchain
+# ============================================================================
+# Smart contract lead should review all contract-related changes
+/contracts/ @biga816 @secured-finance/engineering-team
+/scripts/deploy/ @biga816 @secured-finance/engineering-team
+*.sol @biga816 @secured-finance/engineering-team
+hardhat.config.* @biga816 @secured-finance/engineering-team
+
+# ============================================================================
+# Frontend & UI Components
+# ============================================================================
+# Front-end focused developer should review UI changes
+/src/components/ @vijayeth @secured-finance/engineering-team
+/src/pages/ @vijayeth @secured-finance/engineering-team
+/src/stories/ @vijayeth @secured-finance/engineering-team
+/src/styles/ @vijayeth @secured-finance/engineering-team
+/public/ @vijayeth @secured-finance/engineering-team
+*.css @vijayeth @secured-finance/engineering-team
+*.scss @vijayeth @secured-finance/engineering-team
+
+# ============================================================================
+# Infrastructure & Operations
+# ============================================================================
+# Operations-focused developer should review infra changes
+/.github/ @as1602 @secured-finance/engineering-team
+/scripts/ci/ @as1602 @secured-finance/engineering-team
+docker* @as1602 @secured-finance/engineering-team
+Dockerfile* @as1602 @secured-finance/engineering-team
+*.yml @as1602 @secured-finance/engineering-team
+*.yaml @as1602 @secured-finance/engineering-team
+
+# ============================================================================
+# Business Logic & Core Application
+# ============================================================================
+# CEO should review critical business logic
+/src/hooks/ @onion797jp @secured-finance/engineering-team
+/src/utils/ @onion797jp @secured-finance/engineering-team
+/src/services/ @onion797jp @secured-finance/engineering-team
+/src/contexts/ @onion797jp @secured-finance/engineering-team
+
+# ============================================================================
+# Testing
+# ============================================================================
+# All team members should review tests
+/test/ @secured-finance/engineering-team
+/cypress/ @secured-finance/engineering-team
+*.test.* @secured-finance/engineering-team
+*.spec.* @secured-finance/engineering-team
+
+# ============================================================================
+# Configuration & Documentation
+# ============================================================================
+# CEO and operations should review configuration changes
+package.json @onion797jp @as1602 @secured-finance/engineering-team
+package-lock.json @onion797jp @as1602 @secured-finance/engineering-team
+tsconfig.* @secured-finance/engineering-team
+.env* @onion797jp @as1602
+README.md @onion797jp @secured-finance/engineering-team
+/docs/ @secured-finance/engineering-team
+
+# ============================================================================
+# Security-Critical Files
+# ============================================================================
+# Multiple reviewers required for security-sensitive files
+.github/CODEOWNERS @onion797jp @biga816
+.github/dependabot.yml @as1602 @biga816
+.github/workflows/*security* @as1602 @biga816
+*secret* @onion797jp @biga816
+*credential* @onion797jp @biga816
+*key* @onion797jp @biga816

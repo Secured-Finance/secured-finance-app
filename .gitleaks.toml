@@ -1,0 +1,85 @@
+# Gitleaks Configuration for Secured Finance
+# Documentation: https://github.com/gitleaks/gitleaks
+
+[extend]
+# Use default Gitleaks rules
+useDefault = true
+
+[allowlist]
+# Global allowlist
+description = "Global Allowlist"
+paths = [
+  # Test files often contain mock data
+  '''test\/.*''',
+  '''.*\.test\.(js|ts|tsx)$''',
+  '''.*\.spec\.(js|ts|tsx)$''',
+  '''.*\.stories\.(js|ts|tsx)$''',
+  
+  # Documentation
+  '''.*\.md$''',
+  '''docs\/.*''',
+  
+  # Build artifacts
+  '''build\/.*''',
+  '''dist\/.*''',
+  '''.next\/.*''',
+  
+  # Dependencies
+  '''node_modules\/.*''',
+  
+  # Lock files
+  '''package-lock\.json$''',
+  '''yarn\.lock$''',
+  '''pnpm-lock\.yaml$''',
+]
+
+# Additional patterns to ignore
+regexes = [
+  # Example addresses and hashes (common in blockchain projects)
+  '''0x[a-fA-F0-9]{40}''',  # Ethereum addresses
+  '''0x[a-fA-F0-9]{64}''',  # Transaction hashes
+  
+  # Test/Example API keys (clearly marked as examples)
+  '''(?i)(example|test|sample|demo|dummy).*key''',
+  '''(?i)key.*(example|test|sample|demo|dummy)''',
+]
+
+# Custom rules for Secured Finance specific patterns
+[[rules]]
+id = "secured-finance-api-key"
+description = "Secured Finance API Key"
+regex = '''(?i)(sf|secured[_-]?finance)[_-]?api[_-]?key[\"']?\s*[:=]\s*[\"']?[a-zA-Z0-9]{32,}'''
+tags = ["api", "key", "secured-finance"]
+
+[[rules]]
+id = "private-key-variable"
+description = "Private Key Variable Assignment"
+regex = '''(?i)private[_-]?key[\"']?\s*[:=]\s*[\"']?[a-fA-F0-9]{64}'''
+tags = ["key", "private"]
+
+[[rules]]
+id = "mnemonic-phrase"
+description = "Mnemonic Phrase (12/24 words)"
+regex = '''(?i)mnemonic[\"']?\s*[:=]\s*[\"']([a-z]+\s+){11,23}[a-z]+[\"']'''
+tags = ["mnemonic", "seed", "wallet"]
+
+# File-specific allowlists
+[[rules.allowlist]]
+description = "Allow example configurations"
+paths = [
+  '''\.env\.example$''',
+  '''\.env\.sample$''',
+  '''config\.example\..*''',
+]
+
+[[rules.allowlist]]
+description = "Allow GitHub Actions workflows"
+paths = [
+  '''\.github\/workflows\/.*\.yml$''',
+  '''\.github\/workflows\/.*\.yaml$''',
+]
+# But still check for hardcoded secrets in workflows
+regexes = [
+  '''\$\{\{.*secrets\..*\}\}''',  # GitHub secrets syntax
+  '''\$\{\{.*vars\..*\}\}''',      # GitHub variables syntax
+]

@@ -1,0 +1,121 @@
+# Dependabot configuration for automated dependency updates
+# Documentation: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates
+
+version: 2
+updates:
+  # ============================================================================
+  # NPM Dependencies (JavaScript/TypeScript)
+  # ============================================================================
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "03:00"
+      timezone: "Asia/Tokyo"
+    # Group updates to reduce PR noise
+    groups:
+      # Development dependencies
+      dev-dependencies:
+        dependency-type: "development"
+        patterns:
+          - "*"
+      # Production dependencies - more careful grouping
+      react-ecosystem:
+        patterns:
+          - "react*"
+          - "@types/react*"
+      testing:
+        patterns:
+          - "*test*"
+          - "*jest*"
+          - "cypress*"
+          - "@testing-library/*"
+      build-tools:
+        patterns:
+          - "webpack*"
+          - "babel*"
+          - "eslint*"
+          - "prettier*"
+      web3:
+        patterns:
+          - "ethers*"
+          - "wagmi*"
+          - "@wagmi/*"
+          - "viem*"
+    # Version update preferences
+    versioning-strategy: "increase"
+    # Open PRs limit
+    open-pull-requests-limit: 10
+    # Labels for PRs
+    labels:
+      - "dependencies"
+      - "npm"
+      - "automated"
+    # Reviewers
+    reviewers:
+      - "as1602"  # Operations focus
+      - "secured-finance/engineering-team"
+    # Commit message prefix
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    # Ignore specific dependencies or versions
+    ignore:
+      # Example: Ignore major versions of critical dependencies
+      # - dependency-name: "react"
+      #   versions: ["18.x", "19.x"]
+      # Ignore deprecated or problematic packages
+      - dependency-name: "node-sass"  # Use sass instead
+    # Security updates
+    allow:
+      - dependency-type: "all"
+
+  # ============================================================================
+  # GitHub Actions
+  # ============================================================================
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "03:00"
+      timezone: "Asia/Tokyo"
+    # Group all actions updates
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "github-actions"
+      - "automated"
+    reviewers:
+      - "as1602"  # Operations focus
+      - "secured-finance/engineering-team"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+
+  # ============================================================================
+  # Docker Dependencies
+  # ============================================================================
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "03:00"
+      timezone: "Asia/Tokyo"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "docker"
+      - "automated"
+    reviewers:
+      - "as1602"  # Operations focus
+      - "secured-finance/engineering-team"
+    commit-message:
+      prefix: "build"
+      include: "scope"

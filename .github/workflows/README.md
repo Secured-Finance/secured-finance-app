@@ -15,6 +15,9 @@ All workflow files follow a consistent naming pattern:
 |----------|------|---------|---------|
 | Auto: PR Build & Deploy | `auto-pr-build-deploy.yml` | Pull Request | Build, test, and deploy preview for PRs |
 | Auto: Push Deploy (Fleek) | `auto-push-deploy-fleek.yml` | Push to develop | Deploy to Fleek hosting |
+| Auto: Security - CodeQL | `auto-security-codeql.yml` | Push/PR/Schedule | Code security analysis and vulnerability scanning |
+| Auto: Security - Secrets | `auto-security-secrets.yml` | Push/PR | Scan for exposed secrets and credentials |
+| Auto: Security - License | `auto-security-license.yml` | Push/PR/Schedule | Check dependency license compliance |
 
 ### 🎮 Manual Workflows (workflow_dispatch)
 
@@ -66,6 +69,9 @@ graph TD
 - `CLOUDFLARE_ACCOUNT_ID` - Cloudflare account
 - `FLEEK_TOKEN` - Fleek deployment
 - `FLEEK_PROJECT_ID` - Fleek project
+- `GITLEAKS_LICENSE` - (Optional) Gitleaks enterprise features
+- `MACHINE_USER_APP_ID` - GitHub App ID for automated operations
+- `MACHINE_USER_PRIVATE_KEY` - GitHub App private key
 
 ## Required Variables
 
@@ -78,18 +84,21 @@ graph TD
 ## Testing Workflows
 
 ### Test a manual workflow
+
 ```bash
 gh workflow run manual-test-unit.yml --ref <branch>
 gh run list --workflow=manual-test-unit.yml
 ```
 
 ### Monitor workflow execution
+
 ```bash
 gh run watch <run-id>
 gh run view <run-id> --web
 ```
 
 ### Check PR status
+
 ```bash
 gh pr checks <pr-number>
 ```
@@ -118,6 +127,7 @@ gh api repos/:owner/:repo/actions/workflows
 ## Maintenance
 
 When adding new workflows:
+
 1. Follow the naming convention
 2. Add unique display name with appropriate prefix
 3. Document in this README
