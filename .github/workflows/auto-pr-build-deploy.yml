@@ -1,4 +1,4 @@
-name: Build Web App and Storybook
+name: "Auto: PR Build & Deploy"
 
 on:
   pull_request:

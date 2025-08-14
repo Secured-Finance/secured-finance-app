@@ -1,4 +1,4 @@
-name: Deploy on Fleek
+name: "Auto: Push Deploy (Fleek)"
 
 on:
   push:
