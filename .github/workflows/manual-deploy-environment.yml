@@ -9,11 +9,11 @@ on:
         default: 'uat'
         type: choice
         options:
-          - 'uat'
-          - 'staging'
-          - 'ci-build'
-          - 'development'
-          - 'production' #We should probably create a new workflow for this one
+        - 'uat'
+        - 'staging'
+        - 'ci-build'
+        - 'development'
+        - 'production'   #We should probably create a new workflow for this one
       ref:
         description: 'Branch, tag or commit to deploy'
         required: true
@@ -24,12 +24,12 @@ jobs:
     runs-on: ubuntu-latest
     name: Print Environment
     steps:
-      - name: Print Environment
-        run: echo "Deploying ${{ github.event.inputs.ref }} on ${{ github.event.inputs.environment }} Environment"
+    - name: Print Environment
+      run: echo "Deploying ${{ github.event.inputs.ref }} on ${{ github.event.inputs.environment }} Environment"
 
   build-and-test-all:
     name: Build and Test
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/reusable-build-webapp.yml
     needs: print-env
     with:
       artifact_name: WebApp
@@ -40,7 +40,7 @@ jobs:
   cypress-run:
     name: Cypress Run Tests
     needs: build-and-test-all
-    uses: ./.github/workflows/cypress-test.yml
+    uses: ./.github/workflows/reusable-test-cypress.yml
     with:
       artifact_name: WebApp
     secrets: inherit
@@ -55,17 +55,17 @@ jobs:
       FLEEK_PROJECT_ID: ${{ secrets.FLEEK_PROJECT_ID }}
     needs: [build-and-test-all, cypress-run]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+    - name: Checkout
+      uses: actions/checkout@v3
 
-      - name: Retrieve artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: WebApp
-          path: .deploy/${{ vars.FLEEK_ENV }}/build
+    - name: Retrieve artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: WebApp
+        path: .deploy/${{ vars.FLEEK_ENV }}/build
 
-      - name: Install Fleek CLI
-        run: npm i -g @fleek-platform/cli
+    - name: Install Fleek CLI
+      run: npm i -g @fleek-platform/cli
 
-      - name: Deploy Site
-        run: fleek sites deploy --config .deploy/${{ vars.FLEEK_ENV }}/fleek.config.json
+    - name: Deploy Site
+      run: fleek sites deploy --config .deploy/${{ vars.FLEEK_ENV }}/fleek.config.json
