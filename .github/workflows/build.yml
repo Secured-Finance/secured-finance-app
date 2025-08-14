@@ -60,7 +60,6 @@ jobs:
 
       - run: |
           cat <<'EOF' > .env.local
-          NEXT_PUBLIC_WALLET_CONNECT_ID=${{ vars.WALLET_CONNECT_ID }}
           NEXT_PUBLIC_ALCHEMY_API_KEY=${{ secrets.ALCHEMY_API_KEY }}
           NEXT_PUBLIC_ANKR_API_KEY=${{ secrets.ANKR_API_KEY }}
           NEXT_PUBLIC_AMPLITUDE_API_KEY=${{ secrets.AMPLITUDE_API_KEY }}
