@@ -61,11 +61,8 @@ export const getCommitHash = () => {
     const NEXT_PUBLIC_COMMIT_HASH = process.env.COMMIT_HASH;
 
     if (!NEXT_PUBLIC_COMMIT_HASH) {
-        // Only warn in non-test environments
-        if (process.env.NODE_ENV !== 'test') {
-            // eslint-disable-next-line no-console
-            console.warn('COMMIT_HASH is not set');
-        }
+        // eslint-disable-next-line no-console
+        console.warn('COMMIT_HASH is not set');
         return '';
     }
 
