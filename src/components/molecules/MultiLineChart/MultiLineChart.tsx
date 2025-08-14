@@ -30,7 +30,7 @@ ChartJS.register(
     Title,
     CategoryScale,
     Tooltip,
-    Filler,
+    Filler
 );
 
 type MultiLineChartProps = {
@@ -67,9 +67,9 @@ export const MultiLineChart = ({
     const defaultIndex = useMemo(
         () =>
             maturityList.findIndex(
-                element => element.maturity === maturity.toNumber(),
+                element => element.maturity === maturity.toNumber()
             ),
-        [maturityList, maturity],
+        [maturityList, maturity]
     );
 
     const updateTooltip = (chart: ChartJS<'line'>, index: number) => {
@@ -125,13 +125,13 @@ export const MultiLineChart = ({
             event as unknown as Event,
             'nearest',
             { axis: 'x', intersect: false, includeInvisible: true },
-            true,
+            true
         );
         if (element && element[0]) {
             const { index } = element[0];
             const label = data.labels?.[index];
             const selectedMaturityIndex = maturityList.findIndex(
-                element => element.label === label,
+                element => element.label === label
             );
             if (selectedMaturityIndex >= 0) {
                 if (lastActiveTooltip) {
@@ -156,7 +156,7 @@ export const MultiLineChart = ({
                     setLastActiveTooltip(null);
                 }
             },
-            hasRunOnce ? 3000 : 0,
+            hasRunOnce ? 3000 : 0
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [maturityList, maturity]);
@@ -170,7 +170,7 @@ export const MultiLineChart = ({
                 event as unknown as Event,
                 'nearest',
                 { axis: 'x', intersect: false, includeInvisible: true },
-                false,
+                false
             );
 
             if (elements.length > 0) {
@@ -180,7 +180,7 @@ export const MultiLineChart = ({
                 }
             }
         },
-        [lastActiveTooltip],
+        [lastActiveTooltip]
     );
 
     // Reset tooltip when dependencies change (like resizing or time scale changes)

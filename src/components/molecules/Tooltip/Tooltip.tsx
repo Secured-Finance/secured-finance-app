@@ -37,7 +37,7 @@ export const Tooltip = ({
                         modeStyles[mode],
                         {
                             'left-24': align === 'right',
-                        },
+                        }
                     )}
                 >
                     {children}
@@ -50,12 +50,12 @@ export const Tooltip = ({
                     'pointer-events-auto flex items-start focus:outline-none',
                     {
                         'cursor-pointer': !disabled,
-                    },
+                    }
                 )}
             >
                 {cloneElement(
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    iconElement as React.ReactElement<any>,
+                    iconElement as React.ReactElement<any>
                 )}
             </div>
         </Tippy>

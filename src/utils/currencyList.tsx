@@ -310,13 +310,10 @@ export const currencyMap: Readonly<
 
 const currencySymbolList = Object.keys(currencyMap) as CurrencySymbol[];
 export const createCurrencyMap = <T,>(defaultValue: T) =>
-    currencySymbolList.reduce(
-        (obj, ccy) => {
-            obj[ccy] = defaultValue;
-            return obj;
-        },
-        {} as Record<CurrencySymbol, T>,
-    );
+    currencySymbolList.reduce((obj, ccy) => {
+        obj[ccy] = defaultValue;
+        return obj;
+    }, {} as Record<CurrencySymbol, T>);
 
 const getCurrencyMapAsList = () => {
     return Object.values(currencyMap).sort((a, b) => a.index - b.index);
@@ -329,7 +326,7 @@ export const amountFormatterToBase = getCurrencyMapAsList().reduce<
         ...acc,
         [ccy.symbol]: ccy.toBaseUnit,
     }),
-    {} as Record<CurrencySymbol, (value: number) => bigint>,
+    {} as Record<CurrencySymbol, (value: number) => bigint>
 );
 
 export const amountFormatterFromBase = getCurrencyMapAsList().reduce<
@@ -339,7 +336,7 @@ export const amountFormatterFromBase = getCurrencyMapAsList().reduce<
         ...acc,
         [ccy.symbol]: ccy.fromBaseUnit,
     }),
-    {} as Record<CurrencySymbol, (value: bigint) => number>,
+    {} as Record<CurrencySymbol, (value: bigint) => number>
 );
 
 export type CurrencyInfo = {
@@ -412,7 +409,7 @@ const convertToBlockchainUnit = (amount: number | string, ccy: Currency) => {
 
 const convertFromBlockchainUnit = (amount: bigint, ccy: Currency) => {
     const value = new BigNumberJS(amount.toString()).dividedBy(
-        10 ** ccy.decimals,
+        10 ** ccy.decimals
     );
     return value.toNumber();
 };
@@ -420,24 +417,24 @@ const convertFromBlockchainUnit = (amount: bigint, ccy: Currency) => {
 export const multiply = (
     valueA: number | bigint,
     valueB: number | bigint,
-    precision = 2,
+    precision = 2
 ) => {
     return parseFloat(
         new BigNumberJS(valueA.toString())
             .multipliedBy(valueB.toString())
-            .toFixed(precision),
+            .toFixed(precision)
     );
 };
 
 export const divide = (
     valueA: number | bigint,
     valueB: number | bigint,
-    precision = 2,
+    precision = 2
 ) => {
     return parseFloat(
         new BigNumberJS(valueA.toString())
             .dividedBy(valueB.toString())
-            .toFixed(precision),
+            .toFixed(precision)
     );
 };
 
@@ -451,13 +448,13 @@ export const convertToGvUnit = (amount: number) =>
         new BigNumberJS(amount)
             .multipliedBy(new BigNumberJS(10 ** 24))
             .dp(0)
-            .toFixed(),
+            .toFixed()
     );
 
 export const convertZCTokenFromBaseAmount = (
     symbol: CurrencySymbol,
     amount: bigint,
-    maturity?: Maturity,
+    maturity?: Maturity
 ) =>
     !maturity || maturity.isZero()
         ? convertFromGvUnit(amount)
@@ -465,7 +462,7 @@ export const convertZCTokenFromBaseAmount = (
 export const convertZCTokenToBaseAmount = (
     symbol: CurrencySymbol,
     amount: number,
-    maturity?: Maturity,
+    maturity?: Maturity
 ) =>
     !maturity || maturity.isZero()
         ? convertToGvUnit(amount)
@@ -473,7 +470,7 @@ export const convertZCTokenToBaseAmount = (
 
 export const convertToZcTokenName = (
     symbol: CurrencySymbol,
-    maturity?: Maturity,
+    maturity?: Maturity
 ) =>
     `ZC ${symbol}${
         !maturity || maturity.isZero()

@@ -42,13 +42,13 @@ export const TabSelector: React.FC<TabSelectorProps> = ({
             <div
                 className={clsx(
                     'flex border-b border-neutral-600',
-                    util && 'flex-col tablet:flex-row',
+                    util && 'flex-col tablet:flex-row'
                 )}
             >
                 <HeadlessTab.List
                     className={clsx(
                         'flex h-11 w-full laptop:h-[60px]',
-                        tabGroupClassName,
+                        tabGroupClassName
                     )}
                 >
                     {tabDataArray.map((tabData, index) => {

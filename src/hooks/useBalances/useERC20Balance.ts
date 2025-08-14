@@ -25,7 +25,7 @@ export const useERC20Balance = (address: string | undefined) => {
                 queryFn: async () => {
                     const balance = await securedFinance?.getERC20Balance(
                         token.toCurrency() as Token,
-                        address ?? '',
+                        address ?? ''
                     );
                     return balance ?? ZERO_BI;
                 },

@@ -19,7 +19,7 @@ describe('useCollateralBalances', () => {
         });
 
         await waitFor(() =>
-            expect(mock.getERC20Balance).toHaveBeenCalledTimes(3),
+            expect(mock.getERC20Balance).toHaveBeenCalledTimes(3)
         );
 
         // Necessary to clone as bigint cannot be serialized

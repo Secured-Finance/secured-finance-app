@@ -71,7 +71,7 @@ const OrderBookCell = ({
                 'text-neutral-50': color === 'neutral',
                 'text-neutral-400': color === 'disabled',
                 'text-warning-300': color === 'warning',
-            },
+            }
         )}
     >
         {value ? value : <Fragment>&nbsp;</Fragment>}
@@ -101,7 +101,7 @@ const AmountCell = ({
         val = ordinaryFormat(
             currencyMap[currency].fromBaseUnit(value),
             currencyMap[currency].roundingDecimal,
-            currencyMap[currency].roundingDecimal,
+            currencyMap[currency].roundingDecimal
         );
         if (cbLimit) {
             val += '(CB)';
@@ -140,7 +140,7 @@ const PriceCell = ({
         return formatLoanValue(
             value,
             'price',
-            Math.abs(Math.log10(Math.min(aggregationFactor, 100) / 100)), // get the power of 10 of the aggregation factor for the number of decimals, but never more than 2
+            Math.abs(Math.log10(Math.min(aggregationFactor, 100) / 100)) // get the power of 10 of the aggregation factor for the number of decimals, but never more than 2
         );
     }, [aggregationFactor, amount, value]);
 
@@ -183,7 +183,7 @@ const initialState: VisibilityState = {
 
 const reducer = (
     state: VisibilityState,
-    action: VisibilityAction,
+    action: VisibilityAction
 ): VisibilityState => {
     switch (action) {
         case 'showOnlyBorrow':
@@ -251,9 +251,7 @@ export const NewOrderBookWidget = ({
     const [limit, setLimit] = useState(doubleMaxLines);
     useEffect(() => {
         setLimit(
-            state.showBorrow && state.showLend
-                ? doubleMaxLines
-                : singleMaxLines,
+            state.showBorrow && state.showLend ? doubleMaxLines : singleMaxLines
         );
     }, [doubleMaxLines, singleMaxLines, state]);
 
@@ -261,14 +259,14 @@ export const NewOrderBookWidget = ({
         orderbook.data,
         'borrowOrderbook',
         limit,
-        aggregationFactor,
+        aggregationFactor
     );
 
     const lendOrders = usePrepareOrderbookData(
         orderbook.data,
         'lendOrderbook',
         limit,
-        aggregationFactor,
+        aggregationFactor
     );
 
     const spread =
@@ -276,10 +274,10 @@ export const NewOrderBookWidget = ({
             ? ordinaryFormat(
                   Math.abs(
                       borrowOrders[borrowOrders.length - 1].value.price -
-                          lendOrders[0].value.price,
+                          lendOrders[0].value.price
                   ) / 100.0,
                   2,
-                  2,
+                  2
               )
             : '0.00';
 
@@ -290,11 +288,11 @@ export const NewOrderBookWidget = ({
                       borrowOrders[
                           borrowOrders.length - 1
                       ].value.apr.toNormalizedNumber() -
-                          lendOrders[0].value.apr.toNormalizedNumber(),
+                          lendOrders[0].value.apr.toNormalizedNumber()
                   ),
                   100,
                   2,
-                  2,
+                  2
               )
             : '0.00%';
 
@@ -366,7 +364,7 @@ export const NewOrderBookWidget = ({
                 ),
             }),
         ],
-        [aggregationFactor, currency, maxBorrowAmount, maxLendUnitPrice],
+        [aggregationFactor, currency, maxBorrowAmount, maxLendUnitPrice]
     );
 
     const sellColumns = useMemo(
@@ -429,7 +427,7 @@ export const NewOrderBookWidget = ({
                 ),
             }),
         ],
-        [aggregationFactor, currency, maxLendAmount, minBorrowUnitPrice],
+        [aggregationFactor, currency, maxLendAmount, minBorrowUnitPrice]
     );
 
     const handleClick = (rowId: string, side: OrderSide): void => {
@@ -439,7 +437,7 @@ export const NewOrderBookWidget = ({
                 : borrowOrders[parseInt(rowId)];
         globalDispatch(setOrderType(OrderType.LIMIT));
         globalDispatch(
-            setUnitPrice(divide(rowData.value.price, 100).toString()),
+            setUnitPrice(divide(rowData.value.price, 100).toString())
         );
     };
 
@@ -508,7 +506,7 @@ export const NewOrderBookWidget = ({
                         </div>
                         <div
                             className={clsx(
-                                'flex h-6 flex-row items-center py-1 font-secondary font-semibold laptop:h-fit laptop:bg-black-20 laptop:px-4 laptop:py-1',
+                                'flex h-6 flex-row items-center py-1 font-secondary font-semibold laptop:h-fit laptop:bg-black-20 laptop:px-4 laptop:py-1'
                             )}
                         >
                             <span
@@ -568,7 +566,7 @@ export const NewOrderBookWidget = ({
                             optionList={AGGREGATION_OPTIONS}
                             onChange={v =>
                                 setAggregationFactor(
-                                    Number(v) as AggregationFactorType,
+                                    Number(v) as AggregationFactorType
                                 )
                             }
                             variant='orderBook'
@@ -630,7 +628,7 @@ const OrderBookIconMobile = ({
         key={name}
         aria-label={name}
         className={clsx(
-            'flex h-6 w-6 items-center justify-center rounded border-0.5 border-neutral-500 bg-neutral-800',
+            'flex h-6 w-6 items-center justify-center rounded border-0.5 border-neutral-500 bg-neutral-800'
         )}
         onClick={onClick}
     >

@@ -37,9 +37,9 @@ export const MyWalletCard = ({
             generateWalletInformation(
                 addressRecord,
                 balanceRecord,
-                information,
+                information
             ),
-        [addressRecord, balanceRecord, information],
+        [addressRecord, balanceRecord, information]
     );
 
     return (

@@ -22,7 +22,7 @@ function deduplicate<T>(array: T[], getKey: (item: T) => string | number) {
 
 export const useMaturityOptions = (
     lendingMarkets: ContractMap,
-    filterFn: (market: LendingMarket) => unknown = passThrough,
+    filterFn: (market: LendingMarket) => unknown = passThrough
 ) => {
     return useMemo(() => {
         const optionList = Object.entries(lendingMarkets)

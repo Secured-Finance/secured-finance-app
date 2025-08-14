@@ -22,7 +22,7 @@ export const useMaturities = (ccy: CurrencySymbol, pastMaturityCount = 0) => {
                 for (let i = 0; i < pastMaturityCount - 1; i++) {
                     const autoRollLog = await securedFinance?.getAutoRollLog(
                         currency,
-                        Number(pastMaturities[0]),
+                        Number(pastMaturities[0])
                     );
 
                     if (autoRollLog && autoRollLog.prev) {

@@ -6,7 +6,7 @@ import { Position } from '../usePositions';
 
 export const useGenesisValues = (
     account: string | undefined,
-    positions: Position[],
+    positions: Position[]
 ) => {
     const securedFinance = useSF();
 
@@ -24,7 +24,7 @@ export const useGenesisValues = (
                     const genesisValue = currency
                         ? await securedFinance?.getGenesisValue(
                               toCurrency(currency),
-                              account || '',
+                              account || ''
                           )
                         : undefined;
 

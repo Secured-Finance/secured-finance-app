@@ -31,7 +31,7 @@ beforeAll(() => {
 describe('computeWeightedAverage', () => {
     it('should return the weighted average', () => {
         jest.spyOn(global.Date, 'now').mockImplementationOnce(() =>
-            new Date('2022-12-01T11:00:00.00Z').valueOf(),
+            new Date('2022-12-01T11:00:00.00Z').valueOf()
         );
         const trades = [
             {
@@ -47,8 +47,8 @@ describe('computeWeightedAverage', () => {
         ];
         expect(
             computeWeightedAverageRate(
-                trades as unknown as TransactionHistoryList,
-            ).toNumber(),
+                trades as unknown as TransactionHistoryList
+            ).toNumber()
         ).toEqual(196748);
     });
 
@@ -124,15 +124,15 @@ describe('computeNetValue', () => {
         expect(
             computeNetValue(
                 positions.filter(position => position.futureValue < 0),
-                priceMap,
-            ),
+                priceMap
+            )
         ).toEqual(-153000);
 
         expect(
             computeNetValue(
                 positions.filter(position => position.futureValue > 0),
-                priceMap,
-            ),
+                priceMap
+            )
         ).toEqual(153900);
     });
 });
@@ -140,7 +140,7 @@ describe('computeNetValue', () => {
 describe('formatOrders', () => {
     it('should return forward value', () => {
         expect(calculateFutureValue(BigInt(900), BigInt(9000))).toEqual(
-            BigInt(1000),
+            BigInt(1000)
         );
     });
 
@@ -311,7 +311,7 @@ describe('sortOrders', () => {
 
     for (let i = 0; i < sortedOrders.length - 1; i++) {
         expect(
-            sortedOrders[i].createdAt >= sortedOrders[i + 1].createdAt,
+            sortedOrders[i].createdAt >= sortedOrders[i + 1].createdAt
         ).toBeTruthy();
     }
 });
@@ -599,7 +599,7 @@ describe('getMappedOrderStatus', () => {
             isCircuitBreakerTriggered: false,
         };
         expect(getMappedOrderStatus(order)).toBe(
-            'Partially Filled & Cancelled',
+            'Partially Filled & Cancelled'
         );
     });
 });

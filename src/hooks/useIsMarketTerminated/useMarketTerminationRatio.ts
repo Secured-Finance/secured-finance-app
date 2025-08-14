@@ -29,10 +29,10 @@ export const useMarketTerminationRatio = () => {
                         currency: ccy,
                         ratio:
                             (await securedFinance?.getMarketTerminationRatio(
-                                toCurrency(ccy),
+                                toCurrency(ccy)
                             )) ?? ZERO_BI,
                     };
-                }),
+                })
             );
         },
         enabled: !!securedFinance,

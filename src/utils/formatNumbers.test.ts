@@ -17,13 +17,13 @@ describe('formatWithCurrency', () => {
     it('should format the number with the given currency and decimals', () => {
         expect(formatWithCurrency(123456789, 'USD')).toEqual('123,456,789 USD');
         expect(formatWithCurrency(123456789, 'USD', 0)).toEqual(
-            '123,456,789 USD',
+            '123,456,789 USD'
         );
         expect(formatWithCurrency(123456789.123, 'EUR', 3)).toEqual(
-            '123,456,789.123 EUR',
+            '123,456,789.123 EUR'
         );
         expect(formatWithCurrency(BigInt(123456789), 'JPY')).toEqual(
-            '123,456,789 JPY',
+            '123,456,789 JPY'
         );
     });
 });
@@ -153,7 +153,7 @@ describe('formatTimestampWithMonth', () => {
         expect(formatTimestampWithMonth(0)).toEqual('Jan 1, 1970 00:00:00');
         expect(formatTimestampWithMonth(86400)).toEqual('Jan 2, 1970 00:00:00');
         expect(formatTimestampWithMonth(1671859344)).toEqual(
-            'Dec 24, 2022 05:22:24',
+            'Dec 24, 2022 05:22:24'
         );
     });
 });
@@ -161,45 +161,37 @@ describe('formatTimestampWithMonth', () => {
 describe('formatLoanValue', () => {
     it('should format the price correctly with default max decimals', () => {
         expect(
-            formatLoanValue(LoanValue.fromPrice(9698, 100), 'price'),
+            formatLoanValue(LoanValue.fromPrice(9698, 100), 'price')
         ).toEqual('96.98');
         expect(
-            formatLoanValue(LoanValue.fromPrice(9600, 100), 'price'),
+            formatLoanValue(LoanValue.fromPrice(9600, 100), 'price')
         ).toEqual('96.00');
     });
 
     it('should format the rate correctly with default max decimals', () => {
         expect(
-            formatLoanValue(LoanValue.fromApr(new Rate(515000), 100), 'rate'),
+            formatLoanValue(LoanValue.fromApr(new Rate(515000), 100), 'rate')
         ).toEqual('51.50%');
         expect(
-            formatLoanValue(LoanValue.fromApr(new Rate(500000), 100), 'rate'),
+            formatLoanValue(LoanValue.fromApr(new Rate(500000), 100), 'rate')
         ).toEqual('50.00%');
     });
 
     it('should format the price correctly with custom max decimals', () => {
         expect(
-            formatLoanValue(LoanValue.fromPrice(9623, 100), 'price', 1),
+            formatLoanValue(LoanValue.fromPrice(9623, 100), 'price', 1)
         ).toEqual('96.2');
         expect(
-            formatLoanValue(LoanValue.fromPrice(9600, 100), 'price', 4),
+            formatLoanValue(LoanValue.fromPrice(9600, 100), 'price', 4)
         ).toEqual('96.0000');
     });
 
     it('should format the rate correctly with custom max decimals', () => {
         expect(
-            formatLoanValue(
-                LoanValue.fromApr(new Rate(515000), 100),
-                'rate',
-                1,
-            ),
+            formatLoanValue(LoanValue.fromApr(new Rate(515000), 100), 'rate', 1)
         ).toEqual('51.5%');
         expect(
-            formatLoanValue(
-                LoanValue.fromApr(new Rate(500000), 100),
-                'rate',
-                4,
-            ),
+            formatLoanValue(LoanValue.fromApr(new Rate(500000), 100), 'rate', 4)
         ).toEqual('50.0000%');
     });
 

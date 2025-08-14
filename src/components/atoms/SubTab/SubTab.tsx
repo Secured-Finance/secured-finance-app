@@ -9,7 +9,7 @@ export const SubTab = ({ text, active }: SubTabProps) => {
                 {
                     'bg-primary-700 text-neutral-50': active,
                     'text-neutral-400': !active,
-                },
+                }
             )}
         >
             {text}

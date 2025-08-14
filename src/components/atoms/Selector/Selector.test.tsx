@@ -55,7 +55,7 @@ describe('CollateralSelector component', () => {
                     value: CurrencySymbol.ETH,
                     note: '120 ETH Available',
                 }}
-            />,
+            />
         );
 
         expect(onChange).toBeCalledTimes(1);

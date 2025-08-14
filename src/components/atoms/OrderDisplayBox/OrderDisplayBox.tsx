@@ -19,7 +19,7 @@ export const OrderDisplayBox = ({
         <div
             className={clsx(
                 'laptop:typography-desktop-body-4 flex w-full flex-row items-center justify-between bg-transparent px-2 text-xs leading-4',
-                className,
+                className
             )}
         >
             {isLoading ? (

@@ -21,10 +21,10 @@ describe('AdvancedLendingEstimationFields Component', () => {
             expect(screen.getByTestId('Est. Price')).toHaveTextContent('80.00');
             expect(screen.getByTestId('Est. APR')).toHaveTextContent('25.03%');
             expect(screen.getByTestId('Present Value')).toHaveTextContent(
-                '100 WFIL ($356.00)',
+                '100 WFIL ($356.00)'
             );
             expect(screen.getByTestId('Future Value')).toHaveTextContent(
-                '125 WFIL ($445.00)',
+                '125 WFIL ($445.00)'
             );
         });
     });
@@ -41,10 +41,10 @@ describe('AdvancedLendingEstimationFields Component', () => {
             expect(screen.getByTestId('Est. Price')).toHaveTextContent('91.84');
             expect(screen.getByTestId('Est. APR')).toHaveTextContent('8.90%');
             expect(screen.getByTestId('Present Value')).toHaveTextContent(
-                '90 WFIL ($320.40)',
+                '90 WFIL ($320.40)'
             );
             expect(screen.getByTestId('Future Value')).toHaveTextContent(
-                '98 WFIL ($348.88)',
+                '98 WFIL ($348.88)'
             );
         });
     });

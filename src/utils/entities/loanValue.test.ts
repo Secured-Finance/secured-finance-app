@@ -145,10 +145,10 @@ describe('LoanValue', () => {
             const midPrice = (bidValue.price + askValue.price) / 2;
 
             expect(LoanValue.getMidValue(bidValue, askValue).price).toEqual(
-                midPrice,
+                midPrice
             );
             expect(LoanValue.getMidValue(bidValue, askValue).apr).toEqual(
-                new Rate(149743),
+                new Rate(149743)
             );
         });
 
@@ -159,10 +159,10 @@ describe('LoanValue', () => {
             const midPrice = (bidValue.price + askValue.price) / 2;
 
             expect(LoanValue.getMidValue(bidValue, askValue).price).toEqual(
-                midPrice,
+                midPrice
             );
             expect(LoanValue.getMidValue(bidValue, askValue).apr).toEqual(
-                new Rate(497592),
+                new Rate(497592)
             );
         });
 
@@ -171,7 +171,7 @@ describe('LoanValue', () => {
             const askValue = LoanValue.fromPrice(9700, 1675252801);
 
             expect(() =>
-                LoanValue.getMidValue(bidValue, askValue),
+                LoanValue.getMidValue(bidValue, askValue)
             ).toThrowError('cannot compute mid value: maturity mismatch');
         });
 
@@ -182,7 +182,7 @@ describe('LoanValue', () => {
             const midPrice = (0 + askValue.price) / 2;
 
             expect(LoanValue.getMidValue(bidValue, askValue).price).toEqual(
-                midPrice,
+                midPrice
             );
         });
 
@@ -193,7 +193,7 @@ describe('LoanValue', () => {
             const midPrice = (bidValue.price + 10000) / 2;
 
             expect(LoanValue.getMidValue(bidValue, askValue).price).toEqual(
-                midPrice,
+                midPrice
             );
         });
     });

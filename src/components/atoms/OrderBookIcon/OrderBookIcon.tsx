@@ -18,7 +18,7 @@ export const OrderBookIcon = ({
             {
                 'bg-neutral-700': active,
                 'bg-neutral-800': !active,
-            },
+            }
         )}
         onClick={onClick}
     >

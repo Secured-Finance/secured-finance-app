@@ -13,7 +13,7 @@ describe('Layout Component', () => {
         render(
             <Default>
                 <div>Content</div>
-            </Default>,
+            </Default>
         );
         expect(screen.getByText('Content')).toBeInTheDocument();
         expect(screen.getByRole('banner')).toBeInTheDocument();

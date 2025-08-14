@@ -19,10 +19,10 @@ describe('CollateralProgressBar Component', () => {
         expect(screen.getByText('N/A')).toBeInTheDocument();
 
         expect(screen.getByTestId('collateral-progress-bar-tick')).toHaveStyle(
-            'width: calc(100% * 0 + 4px )',
+            'width: calc(100% * 0 + 4px )'
         );
         expect(screen.getByTestId('collateral-progress-bar-track')).toHaveStyle(
-            'width: calc(100% * 0)',
+            'width: calc(100% * 0)'
         );
     });
 
@@ -35,10 +35,10 @@ describe('CollateralProgressBar Component', () => {
         expect(screen.queryByText('N/A')).not.toBeInTheDocument();
 
         expect(screen.getByTestId('collateral-progress-bar-tick')).toHaveStyle(
-            'width: calc(100% * 0 + 4px )',
+            'width: calc(100% * 0 + 4px )'
         );
         expect(screen.getByTestId('collateral-progress-bar-track')).toHaveStyle(
-            'width: calc(100% * 0)',
+            'width: calc(100% * 0)'
         );
 
         const information = screen.getByTestId('information-circle');
@@ -47,13 +47,13 @@ describe('CollateralProgressBar Component', () => {
         await userEvent.hover(information);
 
         expect(
-            screen.getByText('Your current collateral balance is'),
+            screen.getByText('Your current collateral balance is')
         ).toBeInTheDocument();
         expect(screen.getByText('$0')).toBeInTheDocument();
         expect(
             screen.getByText(
-                '. Deposit collateral assets to borrow on Secured Finance.',
-            ),
+                '. Deposit collateral assets to borrow on Secured Finance.'
+            )
         ).toBeInTheDocument();
     });
 
@@ -66,10 +66,10 @@ describe('CollateralProgressBar Component', () => {
         expect(screen.queryByText('N/A')).not.toBeInTheDocument();
 
         expect(screen.getByTestId('collateral-progress-bar-tick')).toHaveStyle(
-            'width: calc(100% * 0 + 4px )',
+            'width: calc(100% * 0 + 4px )'
         );
         expect(screen.getByTestId('collateral-progress-bar-track')).toHaveStyle(
-            'width: calc(100% * 0)',
+            'width: calc(100% * 0)'
         );
 
         const information = screen.getByTestId('information-circle');
@@ -78,18 +78,16 @@ describe('CollateralProgressBar Component', () => {
         await userEvent.hover(information);
 
         expect(
-            screen.getByText('Your current borrow limit is at'),
+            screen.getByText('Your current borrow limit is at')
         ).toBeInTheDocument();
         expect(screen.getAllByText('$80.00')).toHaveLength(2);
         expect(
-            screen.getByText(
-                'which is 80% of your $100.00 collateral deposit.',
-            ),
+            screen.getByText('which is 80% of your $100.00 collateral deposit.')
         ).toBeInTheDocument();
         expect(
             screen.getByText(
-                'Increasing collateral deposit will increase your borrow limit by 80% of its value.',
-            ),
+                'Increasing collateral deposit will increase your borrow limit by 80% of its value.'
+            )
         ).toBeInTheDocument();
     });
 
@@ -102,10 +100,10 @@ describe('CollateralProgressBar Component', () => {
         expect(screen.queryByText('N/A')).not.toBeInTheDocument();
 
         expect(screen.getByTestId('collateral-progress-bar-tick')).toHaveStyle(
-            'width: calc(100% * 0.37 + 4px )',
+            'width: calc(100% * 0.37 + 4px )'
         );
         expect(screen.getByTestId('collateral-progress-bar-track')).toHaveStyle(
-            'width: calc(100% * 0.37)',
+            'width: calc(100% * 0.37)'
         );
 
         const information = screen.getByTestId('information-circle');
@@ -114,18 +112,16 @@ describe('CollateralProgressBar Component', () => {
         await userEvent.hover(information);
 
         expect(
-            screen.getByText('Your current borrow limit is at'),
+            screen.getByText('Your current borrow limit is at')
         ).toBeInTheDocument();
         expect(screen.getAllByText('$43.00')).toHaveLength(2);
         expect(
-            screen.getByText(
-                'which is 43% of your $100.00 collateral deposit.',
-            ),
+            screen.getByText('which is 43% of your $100.00 collateral deposit.')
         ).toBeInTheDocument();
         expect(
             screen.getByText(
-                'Increasing collateral deposit will increase your borrow limit by 80% of its value.',
-            ),
+                'Increasing collateral deposit will increase your borrow limit by 80% of its value.'
+            )
         ).toBeInTheDocument();
     });
 });

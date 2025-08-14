@@ -62,8 +62,8 @@ Default.play = async ({ canvasElement }) => {
     await waitFor(async () => {
         await expect(
             screen.getByText(
-                'If the conditions are fulfilled, the trade will be executed.',
-            ),
+                'If the conditions are fulfilled, the trade will be executed.'
+            )
         ).toBeInTheDocument();
     });
 };

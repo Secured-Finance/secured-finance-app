@@ -14,7 +14,7 @@ describe('LineChart Component', () => {
                 ag.container
                     .querySelector('canvas')
                     ?.getContext('2d')
-                    ?.__getEvents(),
+                    ?.__getEvents()
             ).toMatchSnapshot();
         });
     });

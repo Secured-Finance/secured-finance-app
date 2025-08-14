@@ -19,7 +19,7 @@ jest.mock(
     'next/link',
     () =>
         ({ children }: { children: React.ReactNode }) =>
-            children,
+            children
 );
 
 const mock = mockUseSF();
@@ -31,7 +31,7 @@ describe('PortfolioManagement component', () => {
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
                 preloadedState: preloadedBalance,
-            }),
+            })
         );
     });
 
@@ -40,13 +40,13 @@ describe('PortfolioManagement component', () => {
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
                 preloadedState: preloadedBalance,
-            }),
+            })
         );
         await waitFor(() => {
             expect(
                 screen.getByText(
-                    'Please note that your contracts for USDC will be delisted at maturity on Secured Finance.',
-                ),
+                    'Please note that your contracts for USDC will be delisted at maturity on Secured Finance.'
+                )
             ).toBeInTheDocument();
         });
     });
@@ -57,13 +57,13 @@ describe('PortfolioManagement component', () => {
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
                 preloadedState: preloadedBalance,
-            }),
+            })
         );
         await waitFor(() => {
             expect(
                 screen.queryByText(
-                    'Please note that your contracts for USDC will be delisted at maturity on Secured Finance.',
-                ),
+                    'Please note that your contracts for USDC will be delisted at maturity on Secured Finance.'
+                )
             ).not.toBeInTheDocument();
         });
     });
@@ -74,14 +74,14 @@ describe('PortfolioManagement component', () => {
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
                 preloadedState: preloadedBalance,
-            }),
+            })
         );
 
         await waitFor(() => {
             expect(
                 screen.queryByText(
-                    'Please note that your contracts for USDC will be delisted at maturity on Secured Finance.',
-                ),
+                    'Please note that your contracts for USDC will be delisted at maturity on Secured Finance.'
+                )
             ).not.toBeInTheDocument();
         });
     });
@@ -94,20 +94,20 @@ describe('PortfolioManagement component', () => {
                 } else {
                     return Promise.resolve(true);
                 }
-            },
+            }
         );
         await waitFor(() =>
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
                 preloadedState: preloadedBalance,
-            }),
+            })
         );
 
         await waitFor(() => {
             expect(
                 screen.queryByText(
-                    'Please note that your contracts for WBTC will be delisted at maturity on Secured Finance.',
-                ),
+                    'Please note that your contracts for WBTC will be delisted at maturity on Secured Finance.'
+                )
             ).not.toBeInTheDocument();
         });
     });

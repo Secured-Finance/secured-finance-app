@@ -11,7 +11,7 @@ export const useDepositCollateral = (ccy: CurrencySymbol, amount: bigint) => {
         }
         const tx = await securedFinance.depositCollateral(
             toCurrency(ccy),
-            amount,
+            amount
         );
         return tx;
     }, [amount, securedFinance, ccy]);
@@ -28,7 +28,7 @@ export const useWithdrawCollateral = (ccy: CurrencySymbol, amount: bigint) => {
         }
         const tx = await securedFinance.tokenVault.withdrawCollateral(
             toCurrency(ccy),
-            amount,
+            amount
         );
         return tx;
     }, [securedFinance, ccy, amount]);

@@ -9,8 +9,8 @@ describe('DelistedCurrencyDisclaimer test', () => {
         render(<Default />);
         expect(
             screen.getByText(
-                'Please note that WFIL will be delisted on Secured Finance.',
-            ),
+                'Please note that WFIL will be delisted on Secured Finance.'
+            )
         ).toBeInTheDocument();
     });
 
@@ -18,8 +18,8 @@ describe('DelistedCurrencyDisclaimer test', () => {
         render(<TwoCurrencies />);
         expect(
             screen.getByText(
-                'Please note that WFIL and ETH will be delisted on Secured Finance.',
-            ),
+                'Please note that WFIL and ETH will be delisted on Secured Finance.'
+            )
         ).toBeInTheDocument();
     });
 
@@ -27,8 +27,8 @@ describe('DelistedCurrencyDisclaimer test', () => {
         render(<MultipleCurrencies />);
         expect(
             screen.getByText(
-                'Please note that WFIL, ETH and USDC will be delisted on Secured Finance.',
-            ),
+                'Please note that WFIL, ETH and USDC will be delisted on Secured Finance.'
+            )
         ).toBeInTheDocument();
     });
 
@@ -37,8 +37,8 @@ describe('DelistedCurrencyDisclaimer test', () => {
         render(<MultipleCurrencies />);
         expect(
             screen.queryByText(
-                'Please note that WFIL, ETH and USDC will be delisted on Secured Finance.',
-            ),
+                'Please note that WFIL, ETH and USDC will be delisted on Secured Finance.'
+            )
         ).not.toBeInTheDocument();
     });
 });

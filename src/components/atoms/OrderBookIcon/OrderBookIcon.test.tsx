@@ -14,7 +14,7 @@ describe('OrderBookIcon', () => {
         render(<Default />);
         fireEvent.click(screen.getByLabelText('Show All Orders'));
         expect(screen.getByLabelText('Show All Orders')).toHaveClass(
-            'bg-neutral-700',
+            'bg-neutral-700'
         );
     });
 });

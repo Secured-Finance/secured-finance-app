@@ -68,7 +68,7 @@ describe('PlaceOrder component', () => {
         render(<Default />);
 
         await waitFor(() =>
-            expect(screen.getByText('Dec 1, 2022')).toBeInTheDocument(),
+            expect(screen.getByText('Dec 1, 2022')).toBeInTheDocument()
         );
         const button = screen.getByTestId('disclaimer-button');
         expect(button).toHaveTextContent('Circuit Breaker Disclaimer');
@@ -76,8 +76,8 @@ describe('PlaceOrder component', () => {
         const disclaimerText = await screen.findByTestId('disclaimer-text');
         await waitFor(() =>
             expect(disclaimerText).toHaveTextContent(
-                'Circuit breaker will be triggered if the order is filled at over 96.72 which is the max slippage level at 1 block.',
-            ),
+                'Circuit breaker will be triggered if the order is filled at over 96.72 which is the max slippage level at 1 block.'
+            )
         );
     });
 
@@ -93,13 +93,13 @@ describe('PlaceOrder component', () => {
         fireEvent.click(screen.getByTestId('dialog-action-button'));
 
         await waitFor(() =>
-            expect(screen.getByText('Success!')).toBeInTheDocument(),
+            expect(screen.getByText('Success!')).toBeInTheDocument()
         );
 
         await waitFor(() =>
             expect(
-                screen.getByText('Your transaction request was successful.'),
-            ).toBeInTheDocument(),
+                screen.getByText('Your transaction request was successful.')
+            ).toBeInTheDocument()
         );
 
         await waitFor(() => expect(onClose).not.toHaveBeenCalled());
@@ -127,7 +127,7 @@ describe('PlaceOrder component', () => {
                 onPlaceOrder={onPlaceOrder}
                 orderType={OrderType.MARKET}
             />,
-            { preloadedState },
+            { preloadedState }
         );
         fireEvent.click(screen.getByTestId('dialog-action-button'));
         await waitFor(() =>
@@ -137,8 +137,8 @@ describe('PlaceOrder component', () => {
                 OrderSide.BORROW,
                 BigInt('100000000'),
                 0,
-                WalletSource.METAMASK,
-            ),
+                WalletSource.METAMASK
+            )
         );
     });
 
@@ -148,7 +148,7 @@ describe('PlaceOrder component', () => {
             .mockReturnValue(Promise.resolve('0x123'));
         render(
             <Default onPlaceOrder={onPlaceOrder} orderType={OrderType.LIMIT} />,
-            { preloadedState },
+            { preloadedState }
         );
         fireEvent.click(screen.getByTestId('dialog-action-button'));
         await waitFor(() =>
@@ -158,8 +158,8 @@ describe('PlaceOrder component', () => {
                 OrderSide.BORROW,
                 BigInt('100000000'),
                 9410,
-                WalletSource.METAMASK,
-            ),
+                WalletSource.METAMASK
+            )
         );
     });
 
@@ -168,8 +168,8 @@ describe('PlaceOrder component', () => {
             render(<Delisted />);
             expect(
                 screen.getByText(
-                    'Please note that USDC will be delisted on Secured Finance.',
-                ),
+                    'Please note that USDC will be delisted on Secured Finance.'
+                )
             ).toBeInTheDocument();
         });
 
@@ -177,8 +177,8 @@ describe('PlaceOrder component', () => {
             render(<Default />);
             expect(
                 screen.queryByText(
-                    'Please note that USDC will be delisted on Secured Finance.',
-                ),
+                    'Please note that USDC will be delisted on Secured Finance.'
+                )
             ).not.toBeInTheDocument();
         });
     });
@@ -190,10 +190,10 @@ describe('PlaceOrder component', () => {
                     render(
                         <UnderMinimumCollateralThreshold
                             maturity={dec24Fixture}
-                        />,
+                        />
                     );
                     expect(
-                        await screen.findByRole('alert'),
+                        await screen.findByRole('alert')
                     ).toBeInTheDocument();
                 });
 
@@ -205,7 +205,7 @@ describe('PlaceOrder component', () => {
                             orderAmount={
                                 new Amount('100000000', CurrencySymbol.WFIL)
                             }
-                        />,
+                        />
                     );
                     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
                 });
@@ -221,17 +221,17 @@ describe('PlaceOrder component', () => {
                                 orderAmount={
                                     new Amount(
                                         '2400000000000000000',
-                                        CurrencySymbol.ETH,
+                                        CurrencySymbol.ETH
                                     )
                                 }
                                 loanValue={LoanValue.fromPrice(
                                     8500,
-                                    dec22Fixture.toNumber(),
+                                    dec22Fixture.toNumber()
                                 )}
-                            />,
+                            />
                         );
                         expect(
-                            await screen.findByRole('alert'),
+                            await screen.findByRole('alert')
                         ).toBeInTheDocument();
                     });
 
@@ -242,10 +242,10 @@ describe('PlaceOrder component', () => {
                                 orderAmount={
                                     new Amount('100000000', CurrencySymbol.WFIL)
                                 }
-                            />,
+                            />
                         );
                         expect(
-                            screen.queryByRole('alert'),
+                            screen.queryByRole('alert')
                         ).not.toBeInTheDocument();
                     });
                 });
@@ -261,9 +261,9 @@ describe('PlaceOrder component', () => {
                     }
                     loanValue={LoanValue.fromPrice(
                         8500,
-                        dec22Fixture.toNumber(),
+                        dec22Fixture.toNumber()
                     )}
-                />,
+                />
             );
             expect(await screen.findByRole('alert')).toBeInTheDocument();
             expect(screen.getByTestId('dialog-action-button')).toBeDisabled();

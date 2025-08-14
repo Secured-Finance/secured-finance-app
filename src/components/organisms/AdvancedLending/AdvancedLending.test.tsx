@@ -26,13 +26,13 @@ describe.skip('Advanced Lending Component', () => {
         const { store } = await waitFor(() =>
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
-            }),
+            })
         );
         expect(store.getState().landingOrderForm.amount).toEqual('');
         await waitFor(() =>
             fireEvent.input(screen.getByRole('textbox', { name: 'Size' }), {
                 target: { value: '1' },
-            }),
+            })
         );
         expect(store.getState().landingOrderForm.amount).toEqual('1');
 
@@ -44,7 +44,7 @@ describe.skip('Advanced Lending Component', () => {
         await waitFor(() => {
             expect(store.getState().landingOrderForm.amount).toEqual('1');
             expect(screen.getByRole('textbox', { name: 'Size' })).toHaveValue(
-                '1',
+                '1'
             );
         });
     }, 8000);
@@ -54,13 +54,13 @@ describe.skip('Advanced Lending Component', () => {
         const { store } = await waitFor(() =>
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
-            }),
+            })
         );
         expect(store.getState().landingOrderForm.amount).toEqual('');
         await waitFor(() =>
             fireEvent.input(screen.getByRole('textbox', { name: 'Size' }), {
                 target: { value: '1' },
-            }),
+            })
         );
         expect(store.getState().landingOrderForm.amount).toEqual('1');
         fireEvent.click(screen.getByRole('button', { name: 'WFIL-DEC2022' }));
@@ -71,7 +71,7 @@ describe.skip('Advanced Lending Component', () => {
         await waitFor(() => {
             expect(store.getState().landingOrderForm.amount).toEqual('1');
             expect(screen.getByRole('textbox', { name: 'Size' })).toHaveValue(
-                '1',
+                '1'
             );
         });
     });
@@ -99,7 +99,7 @@ describe.skip('Advanced Lending Component', () => {
                     ...mockFilteredUserOrderHistory,
                     ...mockFilteredUserTransactionHistory,
                 ],
-            }),
+            })
         );
 
         expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
@@ -115,11 +115,11 @@ describe.skip('Advanced Lending Component', () => {
         await waitFor(() =>
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
-            }),
+            })
         );
         fireEvent.click(screen.getByRole('tab', { name: 'Open Orders' }));
         expect(
-            await screen.findAllByTestId('open-order-table-row'),
+            await screen.findAllByTestId('open-order-table-row')
         ).toHaveLength(1);
     });
 
@@ -134,19 +134,19 @@ describe.skip('Advanced Lending Component', () => {
         await waitFor(() =>
             render(<OpenOrdersConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
-            }),
+            })
         );
         expect(
             await screen.findByText(
-                'You will not be able to place additional orders as you currently have the maximum number of 20 orders. Please wait for your order to be filled or cancel existing orders before adding more.',
-            ),
+                'You will not be able to place additional orders as you currently have the maximum number of 20 orders. Please wait for your order to be filled or cancel existing orders before adding more.'
+            )
         ).toBeInTheDocument();
         const tooltipTrigger = await screen.findByTestId('Open Orders-tooltip');
 
         await userEvent.unhover(tooltipTrigger);
         await userEvent.hover(tooltipTrigger);
         const tooltip = await screen.findByText(
-            'You have too many open orders. Please ensure that you have fewer than 20 orders to place more orders.',
+            'You have too many open orders. Please ensure that you have fewer than 20 orders to place more orders.'
         );
         expect(tooltip).toBeInTheDocument();
     });
@@ -156,31 +156,31 @@ describe.skip('Advanced Lending Component', () => {
             await waitFor(() =>
                 render(<Default />, {
                     apolloMocks: Default.parameters?.apolloClient.mocks,
-                }),
+                })
             );
             expect(
-                mockSecuredFinance.getBorrowOrderBook,
+                mockSecuredFinance.getBorrowOrderBook
             ).toHaveBeenLastCalledWith(
                 expect.anything(),
                 expect.anything(),
                 expect.anything(),
-                15,
+                15
             );
 
             await waitFor(() =>
                 fireEvent.click(
                     screen.getByRole('button', {
                         name: 'Show Only Lend Orders',
-                    }),
-                ),
+                    })
+                )
             );
             expect(
-                mockSecuredFinance.getBorrowOrderBook,
+                mockSecuredFinance.getBorrowOrderBook
             ).toHaveBeenLastCalledWith(
                 expect.anything(),
                 expect.anything(),
                 expect.anything(),
-                30,
+                30
             );
         });
 
@@ -188,15 +188,15 @@ describe.skip('Advanced Lending Component', () => {
             await waitFor(() =>
                 render(<Default />, {
                     apolloMocks: Default.parameters?.apolloClient.mocks,
-                }),
+                })
             );
             expect(
-                mockSecuredFinance.getLendOrderBook,
+                mockSecuredFinance.getLendOrderBook
             ).toHaveBeenLastCalledWith(
                 expect.anything(),
                 expect.anything(),
                 expect.anything(),
-                15,
+                15
             );
             await waitFor(() => {
                 fireEvent.click(screen.getByRole('button', { name: '0.01' }));
@@ -204,13 +204,13 @@ describe.skip('Advanced Lending Component', () => {
             });
             await waitFor(() =>
                 expect(
-                    mockSecuredFinance.getLendOrderBook,
+                    mockSecuredFinance.getLendOrderBook
                 ).toHaveBeenLastCalledWith(
                     expect.anything(),
                     expect.anything(),
                     expect.anything(),
-                    1500,
-                ),
+                    1500
+                )
             );
         });
     });
@@ -232,7 +232,7 @@ describe.skip('Advance Lending with Itayose', () => {
             apolloMocks: Default.parameters?.apolloClient.mocks,
         });
         expect(
-            screen.queryByText('WFIL will be delisted'),
+            screen.queryByText('WFIL will be delisted')
         ).not.toBeInTheDocument();
     });
 
@@ -240,14 +240,14 @@ describe.skip('Advance Lending with Itayose', () => {
         await waitFor(() =>
             render(<OpenOrdersConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
-            }),
+            })
         );
         const btn = screen.getAllByRole('button', { name: 'WFIL-DEC2022' });
         fireEvent.click(btn[0]);
 
         await waitFor(() => {
             expect(
-                screen.getByRole('row', { name: 'USDC-DEC2022' }),
+                screen.getByRole('row', { name: 'USDC-DEC2022' })
             ).toBeInTheDocument();
         });
 
@@ -256,9 +256,9 @@ describe.skip('Advance Lending with Itayose', () => {
         await waitFor(() =>
             expect(
                 screen.queryByText(
-                    'You will not be able to place additional orders as you currently have the maximum number of 20 orders. Please wait for your order to be filled or cancel existing orders before adding more.',
-                ),
-            ).not.toBeInTheDocument(),
+                    'You will not be able to place additional orders as you currently have the maximum number of 20 orders. Please wait for your order to be filled or cancel existing orders before adding more.'
+                )
+            ).not.toBeInTheDocument()
         );
     }, 8000);
 
@@ -266,27 +266,27 @@ describe.skip('Advance Lending with Itayose', () => {
         await waitFor(() =>
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
-            }),
+            })
         );
         expect(mockSecuredFinance.getBorrowOrderBook).toHaveBeenLastCalledWith(
             expect.anything(),
             expect.anything(),
             expect.anything(),
-            15,
+            15
         );
 
         await waitFor(() =>
             fireEvent.click(
                 screen.getByRole('button', {
                     name: 'Show Only Lend Orders',
-                }),
-            ),
+                })
+            )
         );
         expect(mockSecuredFinance.getBorrowOrderBook).toHaveBeenLastCalledWith(
             expect.anything(),
             expect.anything(),
             expect.anything(),
-            30,
+            30
         );
     });
 });

@@ -9,7 +9,7 @@ describe('Tab component', () => {
         render(<Default />);
         const textElement = screen.getByText('Blue');
         expect(textElement.parentNode?.parentNode).toHaveClass(
-            'from-tabGradient-blue-start to-tabGradient-blue-end',
+            'from-tabGradient-blue-start to-tabGradient-blue-end'
         );
         expect(screen.getByTestId('Blue-tab')).toBeInTheDocument();
     });
@@ -18,7 +18,7 @@ describe('Tab component', () => {
         render(<Inactive />);
         const textElement = screen.getByText('Inactive');
         expect(textElement.parentNode?.parentNode).not.toHaveClass(
-            'from-tabGradient-blue-start to-tabGradient-blue-end',
+            'from-tabGradient-blue-start to-tabGradient-blue-end'
         );
     });
 

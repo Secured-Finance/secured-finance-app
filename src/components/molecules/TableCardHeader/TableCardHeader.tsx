@@ -27,7 +27,7 @@ export const TableCardHeader = ({
                     <span className='typography-mobile-sh-9 text-neutral-50'>
                         {`${currency}-${getUTCMonthYear(
                             maturity.toNumber(),
-                            true,
+                            true
                         )}`}
                     </span>
                     {price === 0 && displayMarketPrice ? (
@@ -40,9 +40,9 @@ export const TableCardHeader = ({
                                 LoanValue.fromPrice(
                                     price,
                                     maturity.toNumber(),
-                                    calculationDate,
+                                    calculationDate
                                 ),
-                                'price',
+                                'price'
                             )}
                         </span>
                     )}
@@ -66,9 +66,9 @@ export const TableCardHeader = ({
                                     LoanValue.fromPrice(
                                         price,
                                         maturity.toNumber(),
-                                        calculationDate,
+                                        calculationDate
                                     ),
-                                    'rate',
+                                    'rate'
                                 )}
                             </span>
                         </div>

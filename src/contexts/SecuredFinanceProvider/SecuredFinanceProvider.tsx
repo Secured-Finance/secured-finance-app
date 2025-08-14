@@ -86,17 +86,17 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
                 associateWallet(accounts[0], chainName);
             }
         },
-        [chainName],
+        [chainName]
     );
 
     const dispatchChainError = useCallback(
         (chainId: number) => {
             dispatch(
-                updateChainError(!getSupportedChainIds().includes(chainId)),
+                updateChainError(!getSupportedChainIds().includes(chainId))
             );
             dispatch(updateChainId(chainId));
         },
-        [dispatch],
+        [dispatch]
     );
 
     const handleChainChanged = useCallback(
@@ -106,7 +106,7 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
                 [InterfaceProperties.CHAIN]: chainName,
             });
         },
-        [chainName, dispatchChainError],
+        [chainName, dispatchChainError]
     );
 
     useEffect(() => {
@@ -136,7 +136,7 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
     useEffect(() => {
         const connectSFClient = async (
             publicClient: PublicClient,
-            walletClient?: WalletClient,
+            walletClient?: WalletClient
         ) => {
             const securedFinanceLib = new SecuredFinanceClient();
             await securedFinanceLib.init(publicClient, walletClient);
@@ -193,7 +193,7 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
         const cachedProvider = readWalletFromStore();
         if (cachedProvider && cachedProvider === 'MetaMask') {
             const connector = connectors.find(
-                connector => connector.name === cachedProvider,
+                connector => connector.name === cachedProvider
             );
             if (connector) connect({ connector: connector });
         }
@@ -212,8 +212,8 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
                         QUERIES_TO_INVALIDATE.map(queryKey =>
                             queryClient.invalidateQueries({
                                 queryKey: [queryKey],
-                            }),
-                        ),
+                            })
+                        )
                     );
                 }
             },
@@ -228,7 +228,7 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
             unwatch();
             window.ethereum?.removeListener(
                 'accountsChanged',
-                handleAccountChanged,
+                handleAccountChanged
             );
         };
     }, [
@@ -248,19 +248,19 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
 
         if (selectedChainId === chainId) {
             const newSearchParams = new URLSearchParams(
-                searchParams.toString(),
+                searchParams.toString()
             );
             newSearchParams.delete('chain_id');
 
             router.push(
                 Array.from(newSearchParams.keys()).length === 0
                     ? ''
-                    : `?${newSearchParams.toString()}`,
+                    : `?${newSearchParams.toString()}`
             );
         } else if (getSupportedChainIds().includes(selectedChainId)) {
             const provider = readWalletFromStore();
             const connector = connectors.find(
-                connect => connect.name === provider,
+                connect => connect.name === provider
             );
 
             if (connector) {

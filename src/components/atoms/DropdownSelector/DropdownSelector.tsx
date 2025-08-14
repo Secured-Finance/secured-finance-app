@@ -177,12 +177,12 @@ export const DropdownSelector = <T extends string = string>({
         | 'tabWidthFull';
 }) => {
     const [selectedOptionValue, setSelectedOptionValue] = useState<T>(
-        selected.value,
+        selected.value
     );
 
     const selectedOption = useMemo(
         () => optionList.find(o => o.value === selectedOptionValue),
-        [optionList, selectedOptionValue],
+        [optionList, selectedOptionValue]
     );
 
     const handleSelect = useCallback(
@@ -192,7 +192,7 @@ export const DropdownSelector = <T extends string = string>({
                 onChange(option.value);
             }
         },
-        [onChange, selectedOptionValue],
+        [onChange, selectedOptionValue]
     );
 
     const prevSelectedValue = useRef('');
@@ -286,7 +286,7 @@ export const DropdownSelector = <T extends string = string>({
                                 'bottom-0 mb-7 w-full origin-top-right laptop:bottom-auto laptop:w-fit':
                                     variant === 'orderBook',
                                 'w-72': variant === 'fixedWidth',
-                            },
+                            }
                         )}
                     >
                         {optionList.map((asset, i) => (
@@ -303,7 +303,7 @@ export const DropdownSelector = <T extends string = string>({
                                                 'flex flex-row items-center justify-between space-x-2 rounded-lg p-3 text-white-80',
                                                 {
                                                     'bg-horizonBlue': active,
-                                                },
+                                                }
                                             )}
                                         >
                                             <div className='flex flex-row items-center justify-start space-x-2'>

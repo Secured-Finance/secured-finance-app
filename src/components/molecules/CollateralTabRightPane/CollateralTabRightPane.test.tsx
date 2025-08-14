@@ -16,10 +16,10 @@ describe('CollateralTabRightPane component', () => {
     it('should render CollateralTabRightPane', () => {
         render(<NotConnectedToWallet />);
         expect(
-            screen.getByTestId('collateral-progress-bar'),
+            screen.getByTestId('collateral-progress-bar')
         ).toBeInTheDocument();
         expect(
-            screen.getByTestId('liquidation-progress-bar'),
+            screen.getByTestId('liquidation-progress-bar')
         ).toBeInTheDocument();
         expect(screen.getByText('Collateral Utilization')).toBeInTheDocument();
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();

@@ -7,7 +7,7 @@ export const computeAvailableToBorrow = (
     totalCollateral: number,
     totalUnusedCollateralAmount: number,
     coverage: number, // [0,100]
-    collateralThreshold: number, // [0,100]
+    collateralThreshold: number // [0,100]
 ) => {
     if (collateralThreshold <= coverage) return 0;
     const threshold = divide(collateralThreshold, 100);

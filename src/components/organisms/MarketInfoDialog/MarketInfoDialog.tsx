@@ -75,7 +75,7 @@ export const MarketInfoDialog = ({
                                     <span>
                                         {formatLoanValue(
                                             lastLoanValue,
-                                            'price',
+                                            'price'
                                         )}
                                     </span>
                                 </div>

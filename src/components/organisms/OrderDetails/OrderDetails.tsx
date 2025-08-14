@@ -93,9 +93,9 @@ export const OrderDetails = ({
                             {formatLoanValue(
                                 LoanValue.fromPrice(
                                     market.currentMinDebtUnitPrice,
-                                    market.maturity,
+                                    market.maturity
                                 ),
-                                'price',
+                                'price'
                             )}
                         </span>
                         . Your adjusted PV will be{' '}
@@ -106,12 +106,12 @@ export const OrderDetails = ({
                                         amount.value,
                                         LoanValue.fromPrice(
                                             amount.value,
-                                            market.maturity,
-                                        ).price,
+                                            market.maturity
+                                        ).price
                                     ),
-                                    market.currentMinDebtUnitPrice,
+                                    market.currentMinDebtUnitPrice
                                 ),
-                                amount.currency,
+                                amount.currency
                             )}
                         </span>
                         . To place the order you need to deposit sufficient
@@ -133,17 +133,14 @@ export const OrderDetails = ({
                             : prefixTilde(
                                   formatLoanValue(
                                       loanValue ?? LoanValue.ZERO,
-                                      'price',
-                                  ),
+                                      'price'
+                                  )
                               ),
                     ],
                     [
                         'APR',
                         prefixTilde(
-                            formatLoanValue(
-                                loanValue ?? LoanValue.ZERO,
-                                'rate',
-                            ),
+                            formatLoanValue(loanValue ?? LoanValue.ZERO, 'rate')
                         ),
                     ],
                     ['Maturity Date', formatDate(maturity.toNumber())],
@@ -164,7 +161,7 @@ export const OrderDetails = ({
                             [
                                 <FeeItem key={maturity.toString()} />,
                                 prefixTilde(
-                                    calculateFee(maturity.toNumber(), orderFee),
+                                    calculateFee(maturity.toNumber(), orderFee)
                                 ),
                             ],
                         ]}

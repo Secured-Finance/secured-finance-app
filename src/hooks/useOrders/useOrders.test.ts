@@ -37,7 +37,7 @@ describe('useOrders hook', () => {
                 OrderSide.LEND,
                 currencyMap.ETH.toBaseUnit(1),
                 9863,
-                WalletSource.METAMASK,
+                WalletSource.METAMASK
             );
             expect(mockSecuredFinance.placeOrder).toHaveBeenCalledTimes(1);
             expect(mockSecuredFinance.placeOrder).toHaveBeenCalledWith(
@@ -46,7 +46,7 @@ describe('useOrders hook', () => {
                 0,
                 BigInt('1000000000000000000'),
                 WalletSource.METAMASK,
-                9863,
+                9863
             );
         });
 
@@ -59,7 +59,7 @@ describe('useOrders hook', () => {
                 OrderSide.LEND,
                 currencyMap.ETH.toBaseUnit(1),
                 0,
-                WalletSource.METAMASK,
+                WalletSource.METAMASK
             );
 
             expect(mockSecuredFinance.placeOrder).toHaveBeenCalledWith(
@@ -68,7 +68,7 @@ describe('useOrders hook', () => {
                 0,
                 BigInt('1000000000000000000'),
                 WalletSource.METAMASK,
-                0,
+                0
             );
         });
     });
@@ -91,7 +91,7 @@ describe('useOrders hook', () => {
                 OrderSide.LEND,
                 currencyMap.ETH.toBaseUnit(1),
                 9863,
-                WalletSource.METAMASK,
+                WalletSource.METAMASK
             );
             expect(mockSecuredFinance.placePreOrder).toHaveBeenCalledTimes(1);
             expect(mockSecuredFinance.placePreOrder).toHaveBeenCalledWith(
@@ -100,7 +100,7 @@ describe('useOrders hook', () => {
                 0,
                 BigInt('1000000000000000000'),
                 WalletSource.METAMASK,
-                9863,
+                9863
             );
         });
     });

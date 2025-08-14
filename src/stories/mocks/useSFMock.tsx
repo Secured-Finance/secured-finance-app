@@ -60,7 +60,7 @@ export function generateSimpleOrders(
     maturity: number,
     currency: string,
     isPreOrder: boolean,
-    count: number,
+    count: number
 ) {
     return Array(count)
         .fill(0)
@@ -96,7 +96,7 @@ export const mockUseSF = () => {
                 BigInt(9643),
                 BigInt(9627),
                 BigInt(9617),
-            ]),
+            ])
         ),
         getLendUnitPrices: jest.fn(() =>
             Promise.resolve([
@@ -108,7 +108,7 @@ export const mockUseSF = () => {
                 BigInt(9641),
                 BigInt(9625),
                 BigInt(9615),
-            ]),
+            ])
         ),
         getMidUnitPrices: jest
             .fn<Promise<bigint[]>, Currency[]>()
@@ -186,7 +186,7 @@ export const mockUseSF = () => {
                 BigInt('1743120000'),
                 BigInt('1750982400'),
                 BigInt('1758844800'),
-            ]),
+            ])
         ),
 
         getOrderBookDetails: jest.fn(() => {
@@ -197,28 +197,28 @@ export const mockUseSF = () => {
                 maturitiesMockFromContract(usdcBytes32),
             ];
             return Promise.resolve(
-                maturities.reduce((r, e) => (r.push(...e), r), []),
+                maturities.reduce((r, e) => (r.push(...e), r), [])
             );
         }),
 
         depositCollateral: jest.fn(() =>
-            Promise.resolve('0xb98bd7c7f656290hu071e52d1a56e6uyh98765e4'),
+            Promise.resolve('0xb98bd7c7f656290hu071e52d1a56e6uyh98765e4')
         ),
 
         depositZCToken: jest.fn(() =>
-            Promise.resolve('0xb98bd7c7f656290hu071e52d1a56e6uyh98765e4'),
+            Promise.resolve('0xb98bd7c7f656290hu071e52d1a56e6uyh98765e4')
         ),
 
         withdrawZCToken: jest.fn(() =>
-            Promise.resolve('0xb98bd7c7f656290hu071e52d1a56e6uyh98765e4'),
+            Promise.resolve('0xb98bd7c7f656290hu071e52d1a56e6uyh98765e4')
         ),
 
         getBorrowOrderBook: jest.fn((_, __, ___, limit: number) =>
-            Promise.resolve(generateOrderbook(limit)),
+            Promise.resolve(generateOrderbook(limit))
         ),
 
         getLendOrderBook: jest.fn((_, __, ___, limit: number) =>
-            Promise.resolve(generateOrderbook(limit)),
+            Promise.resolve(generateOrderbook(limit))
         ),
 
         getERC20Balance: jest.fn((token: Token, _) => {
@@ -234,28 +234,23 @@ export const mockUseSF = () => {
         }),
 
         getERC20TokenBalance: jest.fn(() =>
-            Promise.resolve(BigInt('1000000000000000000')),
+            Promise.resolve(BigInt('1000000000000000000'))
         ),
 
         cancelLendingOrder: jest.fn(() =>
-            Promise.resolve('0xb98bd7c7f656290hu071e52d1a56e6uyh98765e4'),
+            Promise.resolve('0xb98bd7c7f656290hu071e52d1a56e6uyh98765e4')
         ),
 
         getERC20TokenContractAddress: jest.fn(() =>
-            Promise.resolve('0xEd4733fE7BAc4C2934F7e9CE4e0696b2169701D8'),
+            Promise.resolve('0xEd4733fE7BAc4C2934F7e9CE4e0696b2169701D8')
         ),
 
         mintERC20Token: jest.fn(() =>
-            Promise.resolve('0xb98bd7c7f656290hu071e52d1a56e6uyh98765e4'),
+            Promise.resolve('0xb98bd7c7f656290hu071e52d1a56e6uyh98765e4')
         ),
 
         getCurrencies: jest.fn(() =>
-            Promise.resolve([
-                ethBytes32,
-                wfilBytes32,
-                wbtcBytes32,
-                usdcBytes32,
-            ]),
+            Promise.resolve([ethBytes32, wfilBytes32, wbtcBytes32, usdcBytes32])
         ),
 
         getProtocolDepositAmount: jest.fn(() =>
@@ -264,18 +259,13 @@ export const mockUseSF = () => {
                 WFIL: BigInt('100000000000000000000000'), // 100 000 WFIL
                 USDC: BigInt('1000000000000'), // 1 000 000 USDC
                 WBTC: BigInt('1000000000000'), // 1000 BTC
-            }),
+            })
         ),
 
         unwindPosition: jest.fn(() => Promise.resolve('0x123')),
 
         getUsedCurrenciesForOrders: jest.fn(() =>
-            Promise.resolve([
-                ethBytes32,
-                wfilBytes32,
-                wbtcBytes32,
-                usdcBytes32,
-            ]),
+            Promise.resolve([ethBytes32, wfilBytes32, wbtcBytes32, usdcBytes32])
         ),
 
         getOrderList: jest.fn((_, useCurrencies: Currency[]) => {
@@ -283,7 +273,7 @@ export const mockUseSF = () => {
                 useCurrencies.includes(
                     currencyMap[
                         hexToCurrencySymbol(order.ccy) ?? CurrencySymbol.WFIL
-                    ].toCurrency(),
+                    ].toCurrency()
                 );
             return Promise.resolve({
                 activeOrders: [
@@ -341,13 +331,13 @@ export const mockUseSF = () => {
                         jun23Fixture.toNumber(),
                         wfilBytes32,
                         false,
-                        20,
+                        20
                     ),
                     ...generateSimpleOrders(
                         dec24Fixture.toNumber(),
                         wfilBytes32,
                         true,
-                        20,
+                        20
                     ),
                 ].filter(order => filterFn(order)),
                 inactiveOrders: [
@@ -401,7 +391,7 @@ export const mockUseSF = () => {
                     presentValue: BigInt('-63000000'),
                     futureValue: BigInt('-67000000'),
                 },
-            ]),
+            ])
         ),
 
         getOrderFeeRate: jest.fn(() => Promise.resolve(BigInt('100'))),
@@ -415,7 +405,7 @@ export const mockUseSF = () => {
                 amount,
                 _unitPrice,
                 _additionalDepositAmount,
-                _ignoreBorrowedAmount,
+                _ignoreBorrowedAmount
             ) => {
                 if (amount === ZERO_BI) {
                     return Promise.resolve({
@@ -429,7 +419,7 @@ export const mockUseSF = () => {
                     filledAmount: BigInt('90000000000000000000'),
                     filledAmountInFV: BigInt('98000000000000000000'),
                 });
-            },
+            }
         ),
 
         currencyExists: jest.fn((currency: Currency) => {
@@ -446,7 +436,7 @@ export const mockUseSF = () => {
         isTerminated: jest.fn(() => Promise.resolve(false)),
 
         getMarketTerminationDate: jest.fn(() =>
-            Promise.resolve(BigInt('1609210000')),
+            Promise.resolve(BigInt('1609210000'))
         ),
 
         getMarketTerminationRatio: jest.fn((currency: Currency) => {
@@ -492,7 +482,7 @@ export const mockUseSF = () => {
         isRedemptionRequired: jest.fn(() => Promise.resolve(true)),
 
         getCollateralCurrencies: jest.fn(() =>
-            Promise.resolve([ethBytes32, wbtcBytes32, usdcBytes32]),
+            Promise.resolve([ethBytes32, wbtcBytes32, usdcBytes32])
         ),
 
         executeEmergencySettlement: jest.fn(() => Promise.resolve('0x123')),
@@ -507,7 +497,7 @@ export const mockUseSF = () => {
             ccyMap.axlFIL = BigInt('600000000');
 
             return Promise.resolve(
-                ccyMap[toCurrencySymbol(ccy.symbol) ?? CurrencySymbol.WFIL],
+                ccyMap[toCurrencySymbol(ccy.symbol) ?? CurrencySymbol.WFIL]
             );
         }),
 
@@ -521,7 +511,7 @@ export const mockUseSF = () => {
             ccyMap.axlFIL = 26;
 
             return Promise.resolve(
-                ccyMap[toCurrencySymbol(ccy.symbol) ?? CurrencySymbol.WFIL],
+                ccyMap[toCurrencySymbol(ccy.symbol) ?? CurrencySymbol.WFIL]
             );
         }),
 
@@ -531,19 +521,19 @@ export const mockUseSF = () => {
                 lastLendUnitPrice: BigInt(9975),
                 lastBorrowUnitPrice: BigInt(9970),
                 totalOffsetAmount: BigInt(40000000),
-            }),
+            })
         ),
 
         getTotalPresentValueInBaseCurrency: jest.fn(() =>
-            Promise.resolve(BigInt(250000000000)),
+            Promise.resolve(BigInt(250000000000))
         ),
 
         getZCToken: jest.fn(() =>
-            Promise.resolve('0x1234567890123456789012345678901234567890'),
+            Promise.resolve('0x1234567890123456789012345678901234567890')
         ),
 
         getWithdrawableZCTokenAmount: jest.fn(() =>
-            Promise.resolve(BigInt('1000000000000000000')),
+            Promise.resolve(BigInt('1000000000000000000'))
         ),
 
         getLatestAutoRollLog: jest.fn(() =>
@@ -553,7 +543,7 @@ export const mockUseSF = () => {
                 lastAutoRollAmount: BigInt('1000000000000000000'),
                 next: BigInt('0'),
                 prev: BigInt('1719532800'),
-            }),
+            })
         ),
 
         getAutoRollLog: jest.fn(() =>
@@ -563,7 +553,7 @@ export const mockUseSF = () => {
                 lastAutoRollAmount: BigInt('1000000000000000000'),
                 next: BigInt('1727395200'),
                 prev: BigInt('1711670400'),
-            }),
+            })
         ),
 
         getGenesisValue: jest.fn(() =>
@@ -571,7 +561,7 @@ export const mockUseSF = () => {
                 BigInt('1000000000000000000'),
                 BigInt('2000000000000000000'),
                 BigInt('3000000000000000000'),
-            ]),
+            ])
         ),
 
         tokenVault: {
@@ -599,21 +589,21 @@ export const mockUseSF = () => {
                     collateralCoverage: collateralBook37.coverage,
                     totalCollateralAmount: BigInt('1210034000000'),
                     totalUnusedCollateralAmount: BigInt('762321420000'),
-                }),
+                })
             ),
 
             getCollateralParameters: jest.fn(() =>
                 Promise.resolve({
                     liquidationThresholdRate: BigInt('12500'),
-                }),
+                })
             ),
 
             getWithdrawableCollateral: jest.fn(() =>
-                Promise.resolve(BigInt(1000000000000)),
+                Promise.resolve(BigInt(1000000000000))
             ),
 
             withdrawCollateral: jest.fn(() =>
-                Promise.resolve('0xb98bd7c7f656290hu071e52d1a56e6uyh98765e4'),
+                Promise.resolve('0xb98bd7c7f656290hu071e52d1a56e6uyh98765e4')
             ),
         },
     };

@@ -25,7 +25,7 @@ import { useAccount } from 'wagmi';
 export const generateCollateralList = (
     balance: Partial<Record<CurrencySymbol, bigint>>,
     useAllCurrencies: boolean,
-    currencies: CurrencySymbol[],
+    currencies: CurrencySymbol[]
 ): Record<CurrencySymbol, CollateralInfo> => {
     let collateralRecords: Record<string, CollateralInfo> = {};
     currencies
@@ -68,7 +68,7 @@ export const CollateralTab = ({
 
     const depositCollateralList = useMemo(
         () => generateCollateralList(balances, true, currencies),
-        [balances, currencies],
+        [balances, currencies]
     );
 
     const withdrawCollateralList = useMemo(
@@ -79,13 +79,13 @@ export const CollateralTab = ({
                     ...collateralBook.nonCollateral,
                 },
                 true,
-                currencies,
+                currencies
             ),
         [
             collateralBook.nonCollateral,
             collateralBook.withdrawableCollateral,
             currencies,
-        ],
+        ]
     );
 
     const withdrawZcBondList = zcBonds.reduce(
@@ -114,7 +114,7 @@ export const CollateralTab = ({
                 availableAmount: bigint;
                 maturity?: Maturity;
             }
-        >,
+        >
     );
 
     return (

@@ -26,7 +26,7 @@ export type Transaction = {
 
 export const HistoricalWidget = () => {
     const { currency, maturity } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm),
+        selectLandingOrderForm(state.landingOrderForm)
     );
     const [selectedTimeScale, setSelectedTimeScale] =
         useState<HistoricalDataIntervals>(HistoricalDataIntervals['5M']);
@@ -37,12 +37,12 @@ export const HistoricalWidget = () => {
             currency: toBytes32(currency),
             maturity: maturity,
         },
-        queries.TransactionCandleStickDocument,
+        queries.TransactionCandleStickDocument
     );
 
     const data = useTransactionCandleStickData(
         historicalTradeData,
-        selectedTimeScale,
+        selectedTimeScale
     );
 
     const onTimeScaleChange = (time: string) => {

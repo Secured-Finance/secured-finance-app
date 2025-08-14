@@ -19,20 +19,20 @@ describe('RemoveOrderDialog Component', () => {
         render(<Default />);
         fireEvent.click(screen.getByText('OK'));
         await waitFor(() =>
-            expect(mockSecuredFinance.cancelLendingOrder).toHaveBeenCalled(),
+            expect(mockSecuredFinance.cancelLendingOrder).toHaveBeenCalled()
         );
     });
 
     it('should proceed to failure screen if cancelLendingOrder throws an error', async () => {
         mockSecuredFinance.cancelLendingOrder.mockRejectedValueOnce(
-            new Error('error'),
+            new Error('error')
         );
         const spy = jest.spyOn(console, 'error').mockImplementation();
         render(<Default />);
 
         fireEvent.click(screen.getByText('OK'));
         await waitFor(() =>
-            expect(mockSecuredFinance.cancelLendingOrder).toHaveBeenCalled(),
+            expect(mockSecuredFinance.cancelLendingOrder).toHaveBeenCalled()
         );
         await waitFor(() => expect(spy).toHaveBeenCalled());
         await waitFor(() => {
@@ -55,7 +55,7 @@ describe('RemoveOrderDialog Component', () => {
         expect(screen.queryByText('Borrow Remaining')).not.toBeInTheDocument();
         expect(screen.queryByText('Transaction Fee %')).not.toBeInTheDocument();
         expect(
-            screen.queryByText('Circuit Breaker Disclaimer'),
+            screen.queryByText('Circuit Breaker Disclaimer')
         ).not.toBeInTheDocument();
     });
 

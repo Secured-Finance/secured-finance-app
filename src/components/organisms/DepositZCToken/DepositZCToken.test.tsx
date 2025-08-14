@@ -18,7 +18,7 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 describe('DepositZCToken component', () => {
     beforeEach(() => {
         mockSecuredFinance.getERC20TokenBalance.mockResolvedValueOnce(
-            BigInt('10000000000'),
+            BigInt('10000000000')
         );
     });
 
@@ -38,7 +38,7 @@ describe('DepositZCToken component', () => {
         render(<Default />);
         expect(screen.getByRole('textbox').getAttribute('value')).toBe('');
         expect(screen.getByRole('textbox').getAttribute('placeholder')).toBe(
-            '0',
+            '0'
         );
     });
 
@@ -66,8 +66,8 @@ describe('DepositZCToken component', () => {
 
             expect(
                 screen.getByText(
-                    'You have successfully deposited ZC Bonds on Secured Finance.',
-                ),
+                    'You have successfully deposited ZC Bonds on Secured Finance.'
+                )
             ).toBeInTheDocument();
             expect(screen.getByText('Status')).toBeInTheDocument();
             expect(screen.getByText('Complete')).toBeInTheDocument();
@@ -82,7 +82,7 @@ describe('DepositZCToken component', () => {
 
     it('should reach failure screen when transaction fails', async () => {
         mockSecuredFinance.depositZCToken.mockRejectedValueOnce(
-            new Error('error'),
+            new Error('error')
         );
         const onClose = jest.fn();
         render(<Default onClose={onClose} />);
@@ -146,7 +146,7 @@ describe('DepositZCToken component', () => {
                         [ZCTokenProperties.MATURITY]: 1719532800,
                         [ZCTokenProperties.AMOUNT]: '7500',
                         [ZCTokenProperties.SOURCE]: 'Source Of Deposit',
-                    },
+                    }
                 );
             });
         });

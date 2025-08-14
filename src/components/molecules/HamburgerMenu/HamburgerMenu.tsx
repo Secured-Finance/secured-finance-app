@@ -16,7 +16,7 @@ const NextLink = forwardRef(
             href: string | UrlObject;
             target?: string;
         },
-        ref: Ref<HTMLAnchorElement>,
+        ref: Ref<HTMLAnchorElement>
     ) => {
         const { href, children, ...rest } = props;
         return (
@@ -24,7 +24,7 @@ const NextLink = forwardRef(
                 {children}
             </Link>
         );
-    },
+    }
 );
 NextLink.displayName = 'NextLink';
 
@@ -39,7 +39,7 @@ const MenuItemLink = ({ text, link }: { text: string; link: string }) => {
                     href={link}
                     className={clsx(
                         'typography-mobile-h-6 flex w-full items-center justify-start whitespace-nowrap px-2 py-1.5 text-center',
-                        { underline: isActive },
+                        { underline: isActive }
                     )}
                 >
                     {text}
@@ -65,7 +65,7 @@ const MobileItemLink = ({
             <NextLink
                 className={clsx(
                     'typography-mobile-h-6 flex w-full flex-row items-center justify-start gap-3 whitespace-nowrap px-3 py-1.5 text-center',
-                    { underline: isActive },
+                    { underline: isActive }
                 )}
                 href={href}
                 target={target}
@@ -127,7 +127,7 @@ export const HamburgerMenu = ({
                                 <Menu.Item
                                     as='div'
                                     className={clsx(
-                                        'typography-mobile-h-6 flex w-full items-center',
+                                        'typography-mobile-h-6 flex w-full items-center'
                                     )}
                                 >
                                     {() => (
@@ -138,7 +138,7 @@ export const HamburgerMenu = ({
                                             }}
                                             aria-label='Show More'
                                             className={clsx(
-                                                'flex items-center justify-between gap-2 px-2 py-2 text-center focus:outline-none',
+                                                'flex items-center justify-between gap-2 px-2 py-2 text-center focus:outline-none'
                                             )}
                                         >
                                             More
@@ -147,7 +147,7 @@ export const HamburgerMenu = ({
                                                     'relative top-[1px] inline h-6 w-6',
                                                     {
                                                         'rotate-90': showMore,
-                                                    },
+                                                    }
                                                 )}
                                             />
                                         </button>
@@ -157,7 +157,7 @@ export const HamburgerMenu = ({
                                 {showMore && (
                                     <div className='w-full px-4'>
                                         {LinkList.filter(
-                                            link => !link.isInternal,
+                                            link => !link.isInternal
                                         ).map(link => (
                                             <MobileItemLink
                                                 key={link.text}

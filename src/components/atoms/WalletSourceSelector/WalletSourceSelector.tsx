@@ -29,14 +29,14 @@ export type WalletSourceOption = {
 const formatOption = (
     available: bigint,
     asset: CurrencySymbol,
-    showAssetName = false,
+    showAssetName = false
 ) => {
     return `${ordinaryFormat(
         Math.floor(
-            currencyMap[asset].fromBaseUnit(available) * AMOUNT_PRECISION,
+            currencyMap[asset].fromBaseUnit(available) * AMOUNT_PRECISION
         ) / AMOUNT_PRECISION,
         0,
-        6,
+        6
     )} ${showAssetName ? ` ${asset}` : ''}`;
 };
 
@@ -56,14 +56,14 @@ export const WalletSourceSelector = ({
         () =>
             optionList.filter(
                 (obj, _index) =>
-                    obj.available > 0 || obj.source === WalletSource.METAMASK,
+                    obj.available > 0 || obj.source === WalletSource.METAMASK
             ),
-        [optionList],
+        [optionList]
     );
 
     const selectedOption = useMemo(
         () => list.find(o => o === selected) || list[0],
-        [list, selected],
+        [list, selected]
     );
 
     return (
@@ -87,7 +87,7 @@ export const WalletSourceSelector = ({
                                             {
                                                 'cursor-pointer': account,
                                                 'cursor-default': !account,
-                                            },
+                                            }
                                         )}
                                     >
                                         <div className='flex flex-row items-center gap-1'>
@@ -104,13 +104,13 @@ export const WalletSourceSelector = ({
                                                             account,
                                                         'text-grayScale/50':
                                                             !account,
-                                                    },
+                                                    }
                                                 )}
                                             >
                                                 {account
                                                     ? formatSource(
                                                           selectedOption.source,
-                                                          account,
+                                                          account
                                                       )
                                                     : 'Connect'}
                                             </span>
@@ -126,7 +126,7 @@ export const WalletSourceSelector = ({
                                         {account
                                             ? formatOption(
                                                   selectedOption.available,
-                                                  selectedOption.asset,
+                                                  selectedOption.asset
                                               )
                                             : '--'}
                                     </div>
@@ -152,7 +152,7 @@ export const WalletSourceSelector = ({
                                                                 {
                                                                     'bg-horizonBlue':
                                                                         active,
-                                                                },
+                                                                }
                                                             )}
                                                         >
                                                             <div className='flex items-center gap-3'>
@@ -162,7 +162,7 @@ export const WalletSourceSelector = ({
                                                                 <span className='typography-caption-2 leading-4 text-grayScale'>
                                                                     {formatSource(
                                                                         assetObj.source,
-                                                                        account,
+                                                                        account
                                                                     )}
                                                                 </span>
                                                             </div>
@@ -170,7 +170,7 @@ export const WalletSourceSelector = ({
                                                                 {formatOption(
                                                                     assetObj.available,
                                                                     assetObj.asset,
-                                                                    true,
+                                                                    true
                                                                 )}
                                                             </span>
                                                         </div>

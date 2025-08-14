@@ -21,7 +21,7 @@ export const publicClient = createPublicClient({
 });
 
 publicClient.waitForTransactionReceipt = async (
-    args: WaitForTransactionReceiptParameters<Chain>,
+    args: WaitForTransactionReceiptParameters<Chain>
 ) => {
     return {
         blockNumber: args.hash ? BigInt('123') : BigInt('0'),

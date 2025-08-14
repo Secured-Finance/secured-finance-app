@@ -24,7 +24,7 @@ describe('usePreventPageScroll', () => {
         expect(addEventListenerSpy).toHaveBeenCalledWith(
             'touchmove',
             expect.any(Function),
-            { passive: false },
+            { passive: false }
         );
     });
 });

@@ -77,8 +77,8 @@ describe('AdvancedLendingOrderCard Component', () => {
         render(<Default />, { preloadedState });
         await waitFor(() =>
             expect(screen.getByTestId('place-order-button')).toHaveTextContent(
-                'Place Order',
-            ),
+                'Place Order'
+            )
         );
         expect(screen.getAllByRole('radio')).toHaveLength(4);
         expect(screen.getAllByRole('radiogroup')).toHaveLength(2);
@@ -95,11 +95,11 @@ describe('AdvancedLendingOrderCard Component', () => {
         await waitFor(() => {
             expect(screen.getByText('37%')).toBeInTheDocument();
             expect(
-                screen.getByTestId('collateral-progress-bar-track'),
+                screen.getByTestId('collateral-progress-bar-track')
             ).toHaveStyle('width: calc(100% * 0.37)');
             expect(screen.getByText('$5,203.15')).toBeInTheDocument();
             expect(
-                screen.getByText('of $12,100.34 available'),
+                screen.getByText('of $12,100.34 available')
             ).toBeInTheDocument();
         });
 
@@ -108,7 +108,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(screen.getByText('Low')).toHaveClass('text-secondary-500');
         expect(screen.getByText('43%')).toBeInTheDocument();
         expect(screen.getByTestId('liquidation-progress-bar-tick')).toHaveStyle(
-            'width: calc(100% * 0.37 + 4px )',
+            'width: calc(100% * 0.37 + 4px )'
         );
     });
 
@@ -126,11 +126,11 @@ describe('AdvancedLendingOrderCard Component', () => {
 
         expect(screen.getByText('Present Value')).toBeInTheDocument();
         expect(
-            await screen.findByText('500 USDC ($500.00)'),
+            await screen.findByText('500 USDC ($500.00)')
         ).toBeInTheDocument();
         expect(screen.getByText('Future Value')).toBeInTheDocument();
         expect(
-            await screen.findByText('526 USDC ($526.00)'),
+            await screen.findByText('526 USDC ($526.00)')
         ).toBeInTheDocument();
     });
 
@@ -138,14 +138,14 @@ describe('AdvancedLendingOrderCard Component', () => {
         render(<Default />, { preloadedState });
         expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
         expect(
-            await screen.findByTestId('place-order-button'),
+            await screen.findByTestId('place-order-button')
         ).toBeInTheDocument();
         expect(await screen.findByText('Place Order')).toBeEnabled();
         fireEvent.click(screen.getByTestId('place-order-button'));
         expect(
             screen.getByRole('dialog', {
                 name: 'Confirm Borrow',
-            }),
+            })
         ).toBeInTheDocument();
     });
 
@@ -153,12 +153,12 @@ describe('AdvancedLendingOrderCard Component', () => {
         render(<Default />, { preloadedState });
         await waitFor(() =>
             expect(
-                screen.getByRole('radio', { name: 'Market' }),
-            ).not.toHaveClass('hidden'),
+                screen.getByRole('radio', { name: 'Market' })
+            ).not.toHaveClass('hidden')
         );
         expect(screen.getByRole('radio', { name: 'Market' })).not.toBeChecked();
         expect(screen.getByRole('radio', { name: 'Limit' })).not.toHaveClass(
-            'hidden',
+            'hidden'
         );
         expect(screen.getByRole('radio', { name: 'Limit' })).toBeChecked();
     });
@@ -184,7 +184,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(await screen.findByText('4,000')).toBeInTheDocument();
 
         const walletSourceButton = screen.getByTestId(
-            'wallet-source-selector-button',
+            'wallet-source-selector-button'
         );
         fireEvent.click(walletSourceButton);
 
@@ -203,7 +203,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         await waitFor(() => {
             expect(screen.getByText('$5,203.15')).toBeInTheDocument();
             expect(
-                screen.getByText('of $12,100.34 available'),
+                screen.getByText('of $12,100.34 available')
             ).toBeInTheDocument();
         });
 
@@ -246,11 +246,11 @@ describe('AdvancedLendingOrderCard Component', () => {
         fireEvent.change(input, { target: { value: '50' } });
 
         expect(
-            await screen.findByTestId('wallet-source-selector-button'),
+            await screen.findByTestId('wallet-source-selector-button')
         ).toBeInTheDocument();
 
         const walletSourceButton = screen.getByTestId(
-            'wallet-source-selector-button',
+            'wallet-source-selector-button'
         );
         fireEvent.click(walletSourceButton);
         const option = screen.getByTestId('option-1');
@@ -272,7 +272,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                         amount: '500000000000000000000',
                     },
                 },
-            }),
+            })
         );
 
         expect(await screen.findByText('10,000 WFIL')).toBeInTheDocument();
@@ -314,7 +314,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                         amount: '500000000000000000000',
                     },
                 },
-            }),
+            })
         );
 
         expect(await screen.findByText('10,000 WFIL')).toBeInTheDocument();
@@ -363,12 +363,12 @@ describe('AdvancedLendingOrderCard Component', () => {
             const placeOrderButton = screen.queryByTestId('place-order-button');
             expect(placeOrderButton).not.toBeInTheDocument();
             const depositButton = screen.getByTestId(
-                'deposit-collateral-button',
+                'deposit-collateral-button'
             );
             expect(depositButton).toBeInTheDocument();
             fireEvent.click(depositButton);
             expect(
-                screen.getByRole('dialog', { name: 'Deposit' }),
+                screen.getByRole('dialog', { name: 'Deposit' })
             ).toBeInTheDocument();
         });
     });
@@ -396,7 +396,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         });
 
         await waitFor(() =>
-            expect(screen.getByTestId('place-order-button')).not.toBeDisabled(),
+            expect(screen.getByTestId('place-order-button')).not.toBeDisabled()
         );
     });
 
@@ -431,7 +431,7 @@ describe('AdvancedLendingOrderCard Component', () => {
             },
         });
         expect(
-            screen.queryByText('Available to Borrow'),
+            screen.queryByText('Available to Borrow')
         ).not.toBeInTheDocument();
         expect(screen.queryByText('Available to Lend')).toBeInTheDocument();
     });
@@ -442,14 +442,14 @@ describe('AdvancedLendingOrderCard Component', () => {
         // lending side
         fireEvent.click(screen.getByRole('radio', { name: 'Lend/Buy' }));
         expect(
-            screen.queryByRole('input', { name: 'Price' }),
+            screen.queryByRole('input', { name: 'Price' })
         ).not.toBeInTheDocument();
 
         // borrow side
         fireEvent.click(screen.getByRole('radio', { name: 'Borrow/Sell' }));
 
         expect(
-            screen.queryByRole('textbox', { name: 'Size' }),
+            screen.queryByRole('textbox', { name: 'Size' })
         ).not.toBeInTheDocument();
     });
 
@@ -457,10 +457,10 @@ describe('AdvancedLendingOrderCard Component', () => {
         it('should hide both market and limit order when in onlyLimitOrder mode', async () => {
             render(<Default isItayose preOrderPosition='none' />);
             expect(
-                screen.queryByRole('radio', { name: 'Market' }),
+                screen.queryByRole('radio', { name: 'Market' })
             ).not.toBeInTheDocument();
             expect(
-                screen.queryByRole('radio', { name: 'Limit' }),
+                screen.queryByRole('radio', { name: 'Limit' })
             ).not.toBeInTheDocument();
         });
 
@@ -480,28 +480,28 @@ describe('AdvancedLendingOrderCard Component', () => {
                             amount: '500000000000000000000',
                         },
                     },
-                },
+                }
             );
 
             expect(
                 screen.queryByText(
-                    'Simultaneous borrow and lend orders are not allowed during the pre-open market period.',
-                ),
+                    'Simultaneous borrow and lend orders are not allowed during the pre-open market period.'
+                )
             ).not.toBeInTheDocument();
             await waitFor(() =>
                 expect(
-                    screen.getByTestId('place-order-button'),
-                ).not.toBeDisabled(),
+                    screen.getByTestId('place-order-button')
+                ).not.toBeDisabled()
             );
 
             fireEvent.click(screen.getByRole('radio', { name: 'Lend/Buy' }));
             expect(
                 screen.queryByText(
-                    'Simultaneous borrow and lend orders are not allowed during the pre-open market period.',
-                ),
+                    'Simultaneous borrow and lend orders are not allowed during the pre-open market period.'
+                )
             ).toBeInTheDocument();
             expect(
-                screen.getByRole('button', { name: 'Place Order' }),
+                screen.getByRole('button', { name: 'Place Order' })
             ).toBeDisabled();
         });
     });
@@ -525,7 +525,7 @@ describe('AdvancedLendingOrderCard Component', () => {
 
         const assertInvalidBondPriceErrorIsNotShown = () => {
             expect(
-                screen.queryByText('Invalid bond price'),
+                screen.queryByText('Invalid bond price')
             ).not.toBeInTheDocument();
         };
 
@@ -542,7 +542,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                     },
                 });
                 expect(
-                    await screen.findByText('Place Order'),
+                    await screen.findByText('Place Order')
                 ).toBeInTheDocument();
 
                 changeInputValue('Price', '0');
@@ -567,7 +567,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                     },
                 });
                 expect(
-                    await screen.findByText('4,000 USDC'),
+                    await screen.findByText('4,000 USDC')
                 ).toBeInTheDocument();
                 changeInputValue('Price', '0');
                 changeInputValue('Size', '10');
@@ -636,7 +636,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                     },
                 });
                 expect(
-                    await screen.findByText('Place Order'),
+                    await screen.findByText('Place Order')
                 ).toBeInTheDocument();
 
                 changeInputValue('Size', '10');
@@ -656,7 +656,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                     },
                 });
                 expect(
-                    await screen.findByText('4,000 USDC'),
+                    await screen.findByText('4,000 USDC')
                 ).toBeInTheDocument();
                 changeInputValue('Size', '10');
                 await assertPlaceOrderButtonIsEnabled();
@@ -675,7 +675,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                     },
                 });
                 expect(
-                    await screen.findByText('Place Order'),
+                    await screen.findByText('Place Order')
                 ).toBeInTheDocument();
                 changeInputValue('Size', '10');
                 await assertPlaceOrderButtonIsEnabled();

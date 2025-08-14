@@ -21,7 +21,7 @@ type QueryResultType<T, K extends keyof T> = Omit<
 
 export function useGraphClientHook<T, TVariables>(
     variables: TVariables,
-    queryDocument: Parameters<typeof useQuery<T>>[0],
+    queryDocument: Parameters<typeof useQuery<T>>[0]
 ): QueryResult<T>;
 
 export function useGraphClientHook<T, TVariables, K extends keyof T>(
@@ -29,7 +29,7 @@ export function useGraphClientHook<T, TVariables, K extends keyof T>(
     queryDocument: Parameters<typeof useQuery<T>>[0],
     entity: K,
     skip?: boolean,
-    realTime?: boolean,
+    realTime?: boolean
 ): QueryResultType<T, K>;
 
 export function useGraphClientHook<T, TVariables, K extends keyof T>(
@@ -38,7 +38,7 @@ export function useGraphClientHook<T, TVariables, K extends keyof T>(
     entity?: K,
     skip = false,
     realTime = false,
-    client?: GraphApolloClient,
+    client?: GraphApolloClient
 ) {
     const [result, setResult] = useState<
         Omit<QueryResult<T>, 'data' | 'error'> & {
@@ -54,7 +54,7 @@ export function useGraphClientHook<T, TVariables, K extends keyof T>(
     });
 
     const block = useSelector(
-        (state: RootState) => state.blockchain.latestBlock,
+        (state: RootState) => state.blockchain.latestBlock
     );
 
     const { refetch, networkStatus, loading } = useQuery<T, TVariables>(
@@ -88,7 +88,7 @@ export function useGraphClientHook<T, TVariables, K extends keyof T>(
                 });
                 console.error(error);
             },
-        },
+        }
     );
 
     useEffect(() => {

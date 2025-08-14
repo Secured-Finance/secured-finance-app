@@ -48,7 +48,7 @@ export const WithdrawTokenTable = ({ data }: { data: TokenPosition[] }) => {
                 },
             };
         },
-        {} as Record<CurrencySymbol, CollateralInfo>,
+        {} as Record<CurrencySymbol, CollateralInfo>
     );
 
     const [currencyToWithdraw, setCurrencyToWithdraw] = useState<
@@ -60,7 +60,7 @@ export const WithdrawTokenTable = ({ data }: { data: TokenPosition[] }) => {
             withdrawableAssetColumnDefinition(
                 columnHelper,
                 'Asset',
-                'contract',
+                'contract'
             ),
             amountColumnDefinition(
                 columnHelper,
@@ -74,7 +74,7 @@ export const WithdrawTokenTable = ({ data }: { data: TokenPosition[] }) => {
                     showCurrency: true,
                 },
                 undefined,
-                'right',
+                'right'
             ),
             columnHelper.accessor('currency', {
                 id: 'action',
@@ -85,8 +85,8 @@ export const WithdrawTokenTable = ({ data }: { data: TokenPosition[] }) => {
                                 onClick={() => {
                                     setCurrencyToWithdraw(
                                         hexToCurrencySymbol(
-                                            info.row.original.currency,
-                                        ),
+                                            info.row.original.currency
+                                        )
                                     );
                                     setOpenModal(true);
                                 }}
@@ -99,7 +99,7 @@ export const WithdrawTokenTable = ({ data }: { data: TokenPosition[] }) => {
                 header: tableHeaderDefinition('Action', undefined, 'right'),
             }),
         ],
-        [priceList],
+        [priceList]
     );
 
     return (

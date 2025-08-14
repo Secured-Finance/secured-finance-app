@@ -35,7 +35,7 @@ export const WithdrawPositionTable = ({
             withdrawableAssetColumnDefinition(
                 columnHelper,
                 'Asset',
-                'contract',
+                'contract'
             ),
             loanTypeFromFVColumnDefinition(columnHelper, 'Type', 'side'),
             amountColumnDefinition(
@@ -50,10 +50,10 @@ export const WithdrawPositionTable = ({
                     showCurrency: true,
                 },
                 undefined,
-                'right',
+                'right'
             ),
         ],
-        [priceList],
+        [priceList]
     );
 
     return (

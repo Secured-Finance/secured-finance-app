@@ -28,7 +28,7 @@ describe('FailurePanel Component', () => {
         fireEvent.click(copyButton);
         expect(screen.getByText('Copied!')).toBeInTheDocument();
         expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
-            'This is an error.',
+            'This is an error.'
         );
     });
 
@@ -36,8 +36,8 @@ describe('FailurePanel Component', () => {
         render(<LongErrorMessage />);
         expect(
             screen.getByText(
-                'This is an example of a Long Error Message. This message should enable vertical scrollbar. This is an example of a Long Error Message. This message should enable vertical scrollbar. This is an example of a Long Error Message. This message should enable vertical scrollbar.',
-            ),
+                'This is an example of a Long Error Message. This message should enable vertical scrollbar. This is an example of a Long Error Message. This message should enable vertical scrollbar. This is an example of a Long Error Message. This message should enable vertical scrollbar.'
+            )
         ).toBeInTheDocument();
     });
 });

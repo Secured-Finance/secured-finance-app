@@ -10,7 +10,7 @@ export const useCurrenciesForOrders = (account: string | undefined) => {
         queryKey: [QueryKeys.USED_CURRENCIES_FOR_ORDERS, account],
         queryFn: async () => {
             const currencies = await securedFinance?.getUsedCurrenciesForOrders(
-                account ?? '',
+                account ?? ''
             );
             return currencies ?? [];
         },

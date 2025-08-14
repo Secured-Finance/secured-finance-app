@@ -96,7 +96,7 @@ export const CurrencyMaturityDropdown = ({
                 return 0;
             });
         },
-        [sortState],
+        [sortState]
     );
 
     const { data: lendingMarkets = baseContracts } = useLendingMarkets();
@@ -137,7 +137,7 @@ export const CurrencyMaturityDropdown = ({
                         marketUnitPrice || openingUnitPrice
                             ? LoanValue.fromPrice(
                                   marketUnitPrice || openingUnitPrice,
-                                  +maturity.value,
+                                  +maturity.value
                               )
                             : undefined;
 
@@ -146,7 +146,7 @@ export const CurrencyMaturityDropdown = ({
                             (savedMarket: SavedMarket) =>
                                 savedMarket.market === marketLabel &&
                                 savedMarket.address === address &&
-                                savedMarket.chainId === currentChainId,
+                                savedMarket.chainId === currentChainId
                         ) ?? false;
 
                     if (

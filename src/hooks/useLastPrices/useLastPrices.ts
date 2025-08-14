@@ -11,7 +11,7 @@ export const useLastPrices = (chainId?: number) => {
     const securedFinance = useSF();
     const { data: currencies, isSuccess: isCurrencySuccess } = useCurrencies(
         true,
-        chainId,
+        chainId
     );
 
     return useQuery({
@@ -24,27 +24,24 @@ export const useLastPrices = (chainId?: number) => {
                         ccy,
                         (await securedFinance?.getLastPrice(
                             toCurrency(ccy),
-                            chainId,
+                            chainId
                         )) ?? ZERO_BI,
                     ] as [CurrencySymbol, bigint];
-                }),
+                })
             );
         },
         select: data => {
-            return data.reduce(
-                (acc, [ccy, price]) => {
-                    try {
-                        acc[ccy] = new BigNumberJS(price.toString())
-                            .dividedBy(10 ** DECIMALS)
-                            .toNumber();
-                    } catch (e) {
-                        acc[ccy] = 0;
-                    }
+            return data.reduce((acc, [ccy, price]) => {
+                try {
+                    acc[ccy] = new BigNumberJS(price.toString())
+                        .dividedBy(10 ** DECIMALS)
+                        .toNumber();
+                } catch (e) {
+                    acc[ccy] = 0;
+                }
 
-                    return acc;
-                },
-                {} as Record<CurrencySymbol, number>,
-            );
+                return acc;
+            }, {} as Record<CurrencySymbol, number>);
         },
         initialData: () =>
             [

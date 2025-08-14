@@ -40,7 +40,7 @@ describe('computeTotalDailyVolumeInUSD', () => {
         expectedVolumes.WFIL = BigInt(657000);
 
         expect(
-            computeTotalDailyVolumeInUSD(dailyVolumes, assetPriceMap),
+            computeTotalDailyVolumeInUSD(dailyVolumes, assetPriceMap)
         ).toEqual({
             totalVolumeUSD: 3942030,
             volumePerCurrency: expectedVolumes,
@@ -68,7 +68,7 @@ describe('computeTotalProtocolVolumeInUSD', () => {
             },
         ];
         expect(
-            computeTotalProtocolVolumeInUSD(volumesByCurrency, assetPriceMap),
+            computeTotalProtocolVolumeInUSD(volumesByCurrency, assetPriceMap)
         ).toEqual({
             totalVolumeUSD: 3942030,
         });

@@ -10,7 +10,7 @@ describe('ZCTokenInput component', () => {
         expect(screen.getByText('Amount')).toBeInTheDocument();
         expect(screen.getAllByRole('button')).toHaveLength(4);
         expect(screen.getByRole('textbox').getAttribute('placeholder')).toBe(
-            '0',
+            '0'
         );
         expect(screen.getByRole('textbox').getAttribute('value')).toBe('');
     });

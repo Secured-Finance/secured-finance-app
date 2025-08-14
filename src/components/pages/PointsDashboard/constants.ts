@@ -7,7 +7,7 @@ export const getShareMessage = (code: string) => {
     };
     const shareMessage = getReferralMessage().replace(
         /%\w+%/g,
-        all => replacements[all] || all,
+        all => replacements[all] || all
     );
     return encodeURIComponent(shareMessage);
 };

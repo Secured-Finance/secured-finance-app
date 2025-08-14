@@ -90,11 +90,11 @@ describe('use24HVolume', () => {
 
         expect(result.current.data[expectedWFILKey]).toBeCloseTo(
             expectedWFILAmount,
-            12,
+            12
         );
         expect(result.current.data[expectedUSDCKey]).toBeCloseTo(
             expectedUSDCAmount,
-            12,
+            12
         );
     });
 });

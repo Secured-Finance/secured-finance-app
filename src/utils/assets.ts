@@ -3,7 +3,7 @@ import { CurrencySymbol, currencyMap } from './currencyList';
 
 export const toOptions = (
     symbols: CurrencySymbol[] | undefined,
-    fallback: CurrencySymbol,
+    fallback: CurrencySymbol
 ) => {
     return (
         symbols

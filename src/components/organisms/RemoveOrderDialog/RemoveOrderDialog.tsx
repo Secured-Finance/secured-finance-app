@@ -86,7 +86,7 @@ export const RemoveOrderDialog = ({
         state: State,
         action: {
             type: string;
-        },
+        }
     ) => {
         switch (action.type) {
             case 'next':
@@ -116,7 +116,7 @@ export const RemoveOrderDialog = ({
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [txHash, setTxHash] = useState<string | undefined>();
     const [errorMessage, setErrorMessage] = useState(
-        'Your order could not be removed.',
+        'Your order could not be removed.'
     );
     const globalDispatch = useDispatch();
 
@@ -125,7 +125,7 @@ export const RemoveOrderDialog = ({
 
     const marketValue = LoanValue.fromPrice(
         orderUnitPrice,
-        maturity.toNumber(),
+        maturity.toNumber()
     );
 
     useEffect(() => {
@@ -142,7 +142,7 @@ export const RemoveOrderDialog = ({
             trackButtonEvent(
                 ButtonEvents.CANCEL_BUTTON,
                 ButtonProperties.CANCEL_ACTION,
-                'Cancel Remove Order',
+                'Cancel Remove Order'
             );
         }
         onClose();
@@ -191,7 +191,7 @@ export const RemoveOrderDialog = ({
                     break;
             }
         },
-        [handleCancelOrder, handleClose],
+        [handleCancelOrder, handleClose]
     );
 
     const renderSelection = () => {

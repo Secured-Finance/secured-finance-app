@@ -29,7 +29,7 @@ describe('TableHeader Component', () => {
     it('should center the text by default', () => {
         render(<Default />);
         expect(screen.getByTestId('table-header-wrapper')).toHaveClass(
-            'justify-center',
+            'justify-center'
         );
     });
 
@@ -41,14 +41,14 @@ describe('TableHeader Component', () => {
     it('should remove horizontal padding when horizontalPadding is falsy', () => {
         render(<Default horizontalPadding={false} />);
         expect(screen.getByTestId('table-header-wrapper')).not.toHaveClass(
-            'px-3',
+            'px-3'
         );
     });
 
     it('should align the text to the right when align is right', () => {
         render(<Default align='right' />);
         expect(screen.getByTestId('table-header-wrapper')).toHaveClass(
-            'justify-end',
+            'justify-end'
         );
     });
 
@@ -68,7 +68,7 @@ describe('TableHeader Component', () => {
         await userEvent.unhover(button);
 
         expect(
-            screen.queryByText('This is a title hint.'),
+            screen.queryByText('This is a title hint.')
         ).not.toBeInTheDocument();
         expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
     });

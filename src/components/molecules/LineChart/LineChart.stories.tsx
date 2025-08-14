@@ -33,7 +33,7 @@ export default {
                     segment: {
                         borderColor: ctx =>
                             getCurveGradient(
-                                ctx as unknown as ScriptableContext<'line'>,
+                                ctx as unknown as ScriptableContext<'line'>
                             ),
                     },
                 },
@@ -97,7 +97,7 @@ ZeroCurve.args = {
                 segment: {
                     borderColor: ctx =>
                         getCurveGradient(
-                            ctx as unknown as ScriptableContext<'line'>,
+                            ctx as unknown as ScriptableContext<'line'>
                         ),
                 },
             },

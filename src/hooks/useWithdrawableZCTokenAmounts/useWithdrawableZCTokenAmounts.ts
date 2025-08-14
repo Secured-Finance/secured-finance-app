@@ -9,7 +9,7 @@ export const useWithdrawableZCTokenAmounts = (
         currency: CurrencySymbol;
         maturity?: Maturity;
     }[],
-    account: string,
+    account: string
 ) => {
     const securedFinance = useSF();
 
@@ -22,11 +22,11 @@ export const useWithdrawableZCTokenAmounts = (
                         await securedFinance?.getWithdrawableZCTokenAmount(
                             toCurrency(zcBond.currency),
                             zcBond.maturity?.toNumber() ?? 0,
-                            account,
+                            account
                         );
 
                     return { ...zcBond, withdrawableZCTokenAmount };
-                }),
+                })
             ),
         enabled:
             !!securedFinance && !!account && !!zcBonds && zcBonds.length > 0,

@@ -85,7 +85,7 @@ const reducer = (
     state: State,
     action: {
         type: string;
-    },
+    }
 ) => {
     switch (action.type) {
         case 'next':
@@ -168,14 +168,14 @@ export const WithdrawZCToken = ({
     const [collateral, setCollateral] = useState<bigint>();
     const [txHash, setTxHash] = useState<string | undefined>();
     const [errorMessage, setErrorMessage] = useState(
-        'Your withdrawal transaction has failed.',
+        'Your withdrawal transaction has failed.'
     );
 
     const { data: priceList } = useLastPrices();
     const { onWithdrawZCToken } = useWithdrawZCToken(
         currencySymbol,
         (asset && zcBondList[asset]?.maturity) || new Maturity(0),
-        collateral ?? BigInt(0),
+        collateral ?? BigInt(0)
     );
 
     const formatOption = (option: {
@@ -188,7 +188,7 @@ export const WithdrawZCToken = ({
         const available = convertZCTokenFromBaseAmount(
             option.symbol,
             option.availableTokenAmount,
-            option.maturity,
+            option.maturity
         );
         return {
             label: convertToZcTokenName(option.symbol, option.maturity),
@@ -205,7 +205,7 @@ export const WithdrawZCToken = ({
 
     const zcBondOptions = useMemo(
         () => Object.values(zcBondList).map(formatOption),
-        [zcBondList],
+        [zcBondList]
     );
 
     const handleClose = useCallback(() => {
@@ -214,7 +214,7 @@ export const WithdrawZCToken = ({
             trackButtonEvent(
                 ButtonEvents.CANCEL_BUTTON,
                 ButtonProperties.CANCEL_ACTION,
-                'Cancel Withdraw ZC Bonds',
+                'Cancel Withdraw ZC Bonds'
             );
         }
         setCollateral(undefined);
@@ -246,7 +246,7 @@ export const WithdrawZCToken = ({
                     currencySymbol,
                     maturity ?? 0,
                     collateral ?? BigInt(0),
-                    source ?? '',
+                    source ?? ''
                 );
                 setTxHash(tx);
                 dispatch({ type: 'next' });
@@ -281,7 +281,7 @@ export const WithdrawZCToken = ({
                     break;
             }
         },
-        [handleWithdrawZCToken, handleClose],
+        [handleWithdrawZCToken, handleClose]
     );
 
     const handleChange = useCallback(
@@ -290,7 +290,7 @@ export const WithdrawZCToken = ({
             setAsset(asset);
             setCollateral(undefined);
         },
-        [],
+        []
     );
 
     return (
@@ -318,7 +318,7 @@ export const WithdrawZCToken = ({
                                         if (zcBond.key !== asset) {
                                             handleChange(
                                                 zcBond.symbol,
-                                                zcBond.key,
+                                                zcBond.key
                                             );
                                         }
                                     }}
@@ -383,8 +383,8 @@ export const WithdrawZCToken = ({
                                                 asset
                                                     ? zcBondList[asset]
                                                           ?.maturity
-                                                    : undefined,
-                                            ),
+                                                    : undefined
+                                            )
                                         )}`,
                                     ],
                                 ]}

@@ -99,7 +99,7 @@ import { useAccount } from 'wagmi';
 const useTradeHistoryDetails = (
     transactions: TransactionList,
     currency: CurrencySymbol,
-    maturity: Maturity,
+    maturity: Maturity
 ) => {
     return useMemo(() => {
         let min = 10000;
@@ -149,7 +149,7 @@ export const AdvancedLending = ({
 }) => {
     const isTablet = useBreakpoint('laptop');
     const { currency, maturity } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm),
+        selectLandingOrderForm(state.landingOrderForm)
     );
     const [timestamp, setTimestamp] = useState<number>(1643713200);
     const [isChecked, setIsChecked] = useState(false);
@@ -168,7 +168,7 @@ export const AdvancedLending = ({
         marketPhase === MarketPhase.ITAYOSE ||
         marketPhase === MarketPhase.PRE_ORDER;
     const [selectedTable, setSelectedTable] = useState(
-        isItayosePeriod ? TableType.OPEN_ORDERS : TableType.ACTIVE_POSITION,
+        isItayosePeriod ? TableType.OPEN_ORDERS : TableType.ACTIVE_POSITION
     );
 
     const { data: volumePerMarket } = use24HVolume();
@@ -176,14 +176,14 @@ export const AdvancedLending = ({
     const selectedTerm = useMemo(() => {
         return (
             maturitiesOptionList.find(option =>
-                option.value.equals(new Maturity(maturity)),
+                option.value.equals(new Maturity(maturity))
             ) || maturitiesOptionList[0]
         );
     }, [maturity, maturitiesOptionList]);
 
     const { data: itayoseEstimation } = useItayoseEstimation(
         currency,
-        maturity,
+        maturity
     );
 
     const estimatedOpeningUnitPrice = lendingMarkets[currency][maturity]
@@ -191,7 +191,7 @@ export const AdvancedLending = ({
         ? LoanValue.fromPrice(
               lendingMarkets[currency][maturity]?.openingUnitPrice ?? 0,
               maturity,
-              lendingContracts[selectedTerm.value.toNumber()]?.utcOpeningDate,
+              lendingContracts[selectedTerm.value.toNumber()]?.utcOpeningDate
           )
         : undefined;
 
@@ -199,7 +199,7 @@ export const AdvancedLending = ({
         address,
         currency,
         maturity,
-        (o: { isPreOrder: boolean }) => o.isPreOrder,
+        (o: { isPreOrder: boolean }) => o.isPreOrder
     ).map(o => {
         return {
             ...o,
@@ -212,7 +212,7 @@ export const AdvancedLending = ({
         : fullPositions?.positions.filter(
               position =>
                   position.maturity === maturity.toString() &&
-                  hexToCurrencySymbol(position.currency) === currency,
+                  hexToCurrencySymbol(position.currency) === currency
           );
 
     const [savedMarkets, setSavedMarkets] = useState(() => {
@@ -221,14 +221,14 @@ export const AdvancedLending = ({
 
     const { data: fullOrderList = emptyOrderList } = useOrderList(
         address,
-        usedCurrencies,
+        usedCurrencies
     );
     const orderList = isChecked
         ? fullOrderList.activeOrderList
         : fullOrderList.activeOrderList.filter(
               o =>
                   o.maturity === maturity.toString() &&
-                  hexToCurrencySymbol(o.currency) === currency,
+                  hexToCurrencySymbol(o.currency) === currency
           );
 
     const currencyPrice = priceList[currency];
@@ -259,7 +259,7 @@ export const AdvancedLending = ({
 
             setSavedMarkets(readMarketsFromStore());
         },
-        [address, currentChainId],
+        [address, currentChainId]
     );
 
     const filteredInactiveOrderList = useMemo(() => {
@@ -268,7 +268,7 @@ export const AdvancedLending = ({
             : fullOrderList.inactiveOrderList.filter(
                   o =>
                       o.maturity === maturity.toString() &&
-                      hexToCurrencySymbol(o.currency) === currency,
+                      hexToCurrencySymbol(o.currency) === currency
               );
     }, [isChecked, fullOrderList.inactiveOrderList, maturity, currency]);
 
@@ -282,7 +282,7 @@ export const AdvancedLending = ({
         },
         queries.FilteredUserOrderHistoryDocument,
         'user',
-        selectedTable !== TableType.ORDER_HISTORY || isChecked,
+        selectedTable !== TableType.ORDER_HISTORY || isChecked
     );
 
     const fullUserOrderHistory = useGraphClientHook(
@@ -291,14 +291,14 @@ export const AdvancedLending = ({
         },
         queries.FullUserOrderHistoryDocument,
         'user',
-        selectedTable !== TableType.ORDER_HISTORY || !isChecked,
+        selectedTable !== TableType.ORDER_HISTORY || !isChecked
     );
 
     const userOrderHistory = isItayosePeriod
         ? filteredUserOrderHistory
         : isChecked
-          ? fullUserOrderHistory
-          : filteredUserOrderHistory;
+        ? fullUserOrderHistory
+        : filteredUserOrderHistory;
 
     const filteredUserTransactionHistory = useGraphClientHook(
         {
@@ -308,7 +308,7 @@ export const AdvancedLending = ({
         },
         queries.FilteredUserTransactionHistoryDocument,
         'user',
-        selectedTable !== TableType.MY_TRANSACTIONS || isChecked,
+        selectedTable !== TableType.MY_TRANSACTIONS || isChecked
     );
 
     const fullUserTransactionHistory = useGraphClientHook(
@@ -317,7 +317,7 @@ export const AdvancedLending = ({
         },
         queries.FullUserTransactionHistoryDocument,
         'user',
-        selectedTable !== TableType.MY_TRANSACTIONS || !isChecked,
+        selectedTable !== TableType.MY_TRANSACTIONS || !isChecked
     );
 
     const userTransactionHistory = isChecked
@@ -331,8 +331,8 @@ export const AdvancedLending = ({
             const status = isItayosePeriod
                 ? getMappedOrderStatus(order)
                 : checkOrderIsFilled(order, filteredInactiveOrderList)
-                  ? 'Filled'
-                  : getMappedOrderStatus(order);
+                ? 'Filled'
+                : getMappedOrderStatus(order);
 
             return {
                 ...order,
@@ -369,7 +369,7 @@ export const AdvancedLending = ({
     } = useBorrowOrderBook(
         currency,
         maturity,
-        Number(itayoseEstimation?.lastBorrowUnitPrice ?? ZERO_BI),
+        Number(itayoseEstimation?.lastBorrowUnitPrice ?? ZERO_BI)
     );
 
     const {
@@ -379,7 +379,7 @@ export const AdvancedLending = ({
     } = useLendOrderBook(
         currency,
         maturity,
-        Number(itayoseEstimation?.lastLendUnitPrice ?? ZERO_BI),
+        Number(itayoseEstimation?.lastLendUnitPrice ?? ZERO_BI)
     );
 
     const isLoadingMap = {
@@ -415,7 +415,7 @@ export const AdvancedLending = ({
     ]);
 
     const [orderBook, setMultiplier, setIsShowingAll] = useOrderbook(
-        ...orderbookArgs,
+        ...orderbookArgs
     );
 
     const { data: transactionHistory } = useGraphClientHook(
@@ -428,7 +428,7 @@ export const AdvancedLending = ({
         },
         queries.TransactionHistoryDocument,
         'transactionHistory',
-        !isSubgraphSupported,
+        !isSubgraphSupported
     );
 
     const selectedAsset = useMemo(() => {
@@ -440,7 +440,7 @@ export const AdvancedLending = ({
     const tradeHistoryDetails = useTradeHistoryDetails(
         transactionHistory ?? [],
         currency,
-        selectedTerm.value,
+        selectedTerm.value
     );
 
     const dailyMarketInfo: DailyMarketInfo = {
@@ -489,10 +489,10 @@ export const AdvancedLending = ({
             trackButtonEvent(
                 ButtonEvents.CURRENCY_CHANGE,
                 ButtonProperties.CURRENCY,
-                v,
+                v
             );
         },
-        [dispatch],
+        [dispatch]
     );
 
     const handleTermChange = useCallback(
@@ -502,22 +502,22 @@ export const AdvancedLending = ({
             trackButtonEvent(
                 ButtonEvents.TERM_CHANGE,
                 ButtonProperties.TERM,
-                selectedTerm.label,
+                selectedTerm.label
             );
         },
-        [dispatch, selectedTerm.label],
+        [dispatch, selectedTerm.label]
     );
 
     const handleFilterChange = useCallback(
         (state: VisibilityState) => {
             setIsShowingAll(state.showBorrow && state.showLend);
         },
-        [setIsShowingAll],
+        [setIsShowingAll]
     );
 
     const maximumOpenOrderLimit =
         fullOrderList.activeOrderList.filter(
-            o => hexToCurrencySymbol(o.currency) === currency,
+            o => hexToCurrencySymbol(o.currency) === currency
         ).length >= 20;
 
     const tooltipMap: Record<number, string> = {};
@@ -531,13 +531,13 @@ export const AdvancedLending = ({
             ? ['Open Orders', 'Order History']
             : ['Open Orders']
         : isSubgraphSupported
-          ? [
-                'Active Positions',
-                'Open Orders',
-                'Order History',
-                'My Transactions',
-            ]
-          : ['Active Positions', 'Open Orders'];
+        ? [
+              'Active Positions',
+              'Open Orders',
+              'Order History',
+              'My Transactions',
+          ]
+        : ['Active Positions', 'Open Orders'];
 
     const preOrderDays = useMemo(() => {
         const contract = lendingContracts[selectedTerm.value.toNumber()];
@@ -721,7 +721,7 @@ export const AdvancedLending = ({
                                                 ? positions.map(position => {
                                                       const ccy =
                                                           hexToCurrencySymbol(
-                                                              position.currency,
+                                                              position.currency
                                                           );
                                                       if (!ccy) return position;
                                                       return {
@@ -730,15 +730,15 @@ export const AdvancedLending = ({
                                                               isUnderCollateralThreshold(
                                                                   ccy,
                                                                   Number(
-                                                                      position.maturity,
+                                                                      position.maturity
                                                                   ),
                                                                   Number(
-                                                                      position.marketPrice,
+                                                                      position.marketPrice
                                                                   ),
                                                                   position.futureValue >
                                                                       0
                                                                       ? OrderSide.LEND
-                                                                      : OrderSide.BORROW,
+                                                                      : OrderSide.BORROW
                                                               ),
                                                       };
                                                   })
@@ -849,7 +849,7 @@ const MovingTape = ({
                     marketUnitPrice || openingUnitPrice
                         ? LoanValue.fromPrice(
                               marketUnitPrice || openingUnitPrice,
-                              +maturity.value,
+                              +maturity.value
                           )
                         : undefined;
 
@@ -859,10 +859,10 @@ const MovingTape = ({
                     isNotReady,
                     isFavourite: favourites.some(
                         (fav: SavedMarket) =>
-                            fav.market === `${asset}-${maturity.label}`,
+                            fav.market === `${asset}-${maturity.label}`
                     ),
                 };
-            }),
+            })
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [

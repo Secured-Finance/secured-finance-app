@@ -14,7 +14,7 @@ export const HighlightChip = ({
                 'typography-dropdown-selection-label h-5 w-10 font-semibold text-white':
                     size === 'large',
                 'typography-caption-3 h-4 w-8 text-neutral-8': size === 'small',
-            },
+            }
         )}
     >
         {text}

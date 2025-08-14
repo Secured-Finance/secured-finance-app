@@ -24,7 +24,7 @@ export type OrderBook = Array<OrderBookEntry>;
 export const sortOrders = (
     a: OrderBookEntry,
     b: OrderBookEntry,
-    order: 'asc' | 'desc',
+    order: 'asc' | 'desc'
 ) => {
     return order === 'asc'
         ? a.value.price - b.value.price
@@ -36,7 +36,7 @@ const transformOrderbook = (
     maturity: number,
     calculationDate: number | undefined,
     startPrice?: bigint,
-    amount?: bigint,
+    amount?: bigint
 ): OrderBook => {
     return input.unitPrices.map((unitPrice, index) => {
         return {
@@ -47,7 +47,7 @@ const transformOrderbook = (
             value: LoanValue.fromPrice(
                 Number(unitPrice),
                 maturity,
-                calculationDate,
+                calculationDate
             ),
             cumulativeAmount: ZERO_BI,
         };
@@ -61,7 +61,7 @@ export const useOrderbook = (
     borrowStartPrice?: bigint,
     borrowAmount?: bigint,
     lendStartPrice?: bigint,
-    lendAmount?: bigint,
+    lendAmount?: bigint
 ) => {
     const securedFinance = useSF();
     const [depth, setDepth] = useState(DEFAULT_ORDERBOOK_DEPTH);
@@ -70,7 +70,7 @@ export const useOrderbook = (
 
     useEffect(() => {
         setDepth(
-            (DEFAULT_ORDERBOOK_DEPTH * multiplier) / (isShowingAll ? 2 : 1),
+            (DEFAULT_ORDERBOOK_DEPTH * multiplier) / (isShowingAll ? 2 : 1)
         );
     }, [isShowingAll, multiplier]);
 
@@ -91,13 +91,13 @@ export const useOrderbook = (
                         currency,
                         maturity,
                         Number(borrowStartPrice ?? ZERO_BI),
-                        depth,
+                        depth
                     ),
                     securedFinance?.getLendOrderBook(
                         currency,
                         maturity,
                         Number(lendStartPrice ?? ZERO_BI),
-                        depth,
+                        depth
                     ),
                 ]);
 
@@ -123,14 +123,14 @@ export const useOrderbook = (
                         maturity,
                         calculationDate,
                         borrowStartPrice,
-                        borrowAmount,
+                        borrowAmount
                     ),
                     lendOrderbook: transformOrderbook(
                         data.lendOrderbook as SmartContractOrderbook,
                         maturity,
                         calculationDate,
                         lendStartPrice,
-                        lendAmount,
+                        lendAmount
                     ),
                 };
             },
@@ -144,7 +144,7 @@ export const useOrderbook = (
 export const useBorrowOrderBook = (
     ccy: CurrencySymbol,
     maturity: number,
-    lastBorrowPrice: number,
+    lastBorrowPrice: number
 ) => {
     const securedFinance = useSF();
 
@@ -164,15 +164,15 @@ export const useBorrowOrderBook = (
                     currency,
                     maturity,
                     Number(borrowOrderBook.next),
-                    1000,
+                    1000
                 )) as SmartContractOrderbook;
                 borrowOrderBook = {
                     unitPrices: borrowOrderBook.unitPrices.concat(
-                        orderBook.unitPrices,
+                        orderBook.unitPrices
                     ),
                     amounts: borrowOrderBook.amounts.concat(orderBook.amounts),
                     quantities: borrowOrderBook.quantities.concat(
-                        orderBook.quantities,
+                        orderBook.quantities
                     ),
                     next: orderBook.next,
                 };
@@ -195,7 +195,7 @@ export const useBorrowOrderBook = (
 export const useLendOrderBook = (
     ccy: CurrencySymbol,
     maturity: number,
-    lastLendPrice: number,
+    lastLendPrice: number
 ) => {
     const securedFinance = useSF();
 
@@ -215,15 +215,15 @@ export const useLendOrderBook = (
                     currency,
                     maturity,
                     Number(lendOrderBook.next),
-                    1000,
+                    1000
                 )) as SmartContractOrderbook;
                 lendOrderBook = {
                     unitPrices: lendOrderBook.unitPrices.concat(
-                        orderBook.unitPrices,
+                        orderBook.unitPrices
                     ),
                     amounts: lendOrderBook.amounts.concat(orderBook.amounts),
                     quantities: lendOrderBook.quantities.concat(
-                        orderBook.quantities,
+                        orderBook.quantities
                     ),
                     next: orderBook.next,
                 };

@@ -18,8 +18,8 @@ describe('CollateralTabLeftPane component', () => {
         expect(screen.getByText('$0.00')).toBeInTheDocument();
         expect(
             screen.getByText(
-                'Connect your wallet to see your deposited collateral balance.',
-            ),
+                'Connect your wallet to see your deposited collateral balance.'
+            )
         ).toBeInTheDocument();
     });
 
@@ -60,7 +60,7 @@ describe('CollateralTabLeftPane component', () => {
         render(<Default onClick={onClick} />);
         fireEvent.click(screen.getByTestId('deposit-collateral'));
         expect(track).toHaveBeenCalledWith(
-            ButtonEvents.DEPOSIT_COLLATERAL_BUTTON,
+            ButtonEvents.DEPOSIT_COLLATERAL_BUTTON
         );
         expect(onClick).toHaveBeenCalledWith('deposit');
     });
@@ -71,7 +71,7 @@ describe('CollateralTabLeftPane component', () => {
         render(<Default onClick={onClick} />);
         fireEvent.click(screen.getByTestId('withdraw-collateral'));
         expect(track).toHaveBeenCalledWith(
-            ButtonEvents.WITHDRAW_COLLATERAL_BUTTON,
+            ButtonEvents.WITHDRAW_COLLATERAL_BUTTON
         );
         expect(onClick).toHaveBeenCalledWith('withdraw');
     });
@@ -82,8 +82,8 @@ describe('CollateralTabLeftPane component', () => {
         expect(screen.getByText('$12,700.34')).toBeInTheDocument();
         expect(
             screen.getAllByText(
-                'Deposit collateral from your connected wallet to enable lending service on Secured Finance.',
-            )[0],
+                'Deposit collateral from your connected wallet to enable lending service on Secured Finance.'
+            )[0]
         ).toBeInTheDocument();
     });
 
@@ -91,8 +91,8 @@ describe('CollateralTabLeftPane component', () => {
         render(<Default collateralBook={emptyUSDCollateral} />);
         expect(
             screen.getAllByText(
-                'Deposit collateral from your connected wallet to enable lending service on Secured Finance.',
-            )[0],
+                'Deposit collateral from your connected wallet to enable lending service on Secured Finance.'
+            )[0]
         ).toBeInTheDocument();
         expect(screen.getByText('Non-collateral')).toBeInTheDocument();
     });
@@ -101,7 +101,7 @@ describe('CollateralTabLeftPane component', () => {
         render(
             <Default
                 collateralBook={{ ...collateralBook80, usdCollateral: 210.2 }}
-            />,
+            />
         );
         const input = screen.getByTestId('vault-balance');
         expect(input).toHaveClass('text-xl');

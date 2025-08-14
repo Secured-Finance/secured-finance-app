@@ -28,7 +28,7 @@ export const GlobalItayose = () => {
     const assetList = toOptions(currencies, CurrencySymbol.USDC);
 
     const { currency } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm),
+        selectLandingOrderForm(state.landingOrderForm)
     );
 
     const { data: lendingContracts = baseContracts } = useLendingMarkets();
@@ -59,7 +59,7 @@ export const GlobalItayose = () => {
             dispatch(setCurrency(v));
             dispatch(resetUnitPrice());
         },
-        [dispatch],
+        [dispatch]
     );
 
     return (
@@ -133,7 +133,7 @@ export const GlobalItayose = () => {
                                     value: usdFormat(
                                         totalValueLockedInUSD,
                                         2,
-                                        'compact',
+                                        'compact'
                                     ),
                                 },
                             ]}

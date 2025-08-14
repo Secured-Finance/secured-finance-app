@@ -29,7 +29,7 @@ export const getCountdown = (targetTimestamp: number) => {
         new Date(now).getUTCHours(),
         new Date(now).getUTCMinutes(),
         new Date(now).getUTCSeconds(),
-        new Date(now).getUTCMilliseconds(),
+        new Date(now).getUTCMilliseconds()
     );
 
     // Calculate difference between current time and target time
@@ -57,7 +57,7 @@ export const getTimestampRelativeToNow = (hours: number, isFuture = false) => {
     const now = new Date();
     const offset = isFuture ? 1 : -1;
     const adjustedTimestamp = new Date(
-        now.getTime() + offset * hours * 60 * 60 * 1000,
+        now.getTime() + offset * hours * 60 * 60 * 1000
     );
     return Math.floor(adjustedTimestamp.getTime() / 1000);
 };
@@ -71,7 +71,7 @@ export const calculateTimeDifference = (timestamp: number) => {
 export const isMaturityPastDays = (
     maturity: number,
     days: number,
-    inFuture = false,
+    inFuture = false
 ) => {
     const timeDiff = calculateTimeDifference(maturity);
     const millisecondsInDays = days * 24 * 60 * 60 * 1000;

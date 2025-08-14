@@ -64,7 +64,7 @@ export const CoreTable = <T,>({
     } | null>(null);
 
     const { currency } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm),
+        selectLandingOrderForm(state.landingOrderForm)
     );
     const { data: priceList } = useLastPrices();
     const price = priceList[currency];
@@ -81,7 +81,7 @@ export const CoreTable = <T,>({
                 return activeRow && Number(rowId) <= Number(activeRow);
             }
         },
-        [activeRow, coreTableOptions.hoverDirection],
+        [activeRow, coreTableOptions.hoverDirection]
     );
 
     const filteredColumns = columns.filter(column => {
@@ -125,7 +125,7 @@ export const CoreTable = <T,>({
 
     const handleMouseEnter = (
         event: MouseEvent<HTMLTableRowElement>,
-        row: Row<T>,
+        row: Row<T>
     ) => {
         setActiveRow(row.id);
         const rowData = row.original as any;
@@ -155,14 +155,14 @@ export const CoreTable = <T,>({
                 sum +
                 calculateFutureValue(
                     BigInt(order.amount),
-                    BigInt(order.value._price),
+                    BigInt(order.value._price)
                 ),
-            BigInt(0),
+            BigInt(0)
         );
 
         const totalPVAmount = relevantRows.reduce(
             (sum, order) => sum + BigInt(order.amount),
-            BigInt(0),
+            BigInt(0)
         );
 
         const avgPrice =
@@ -172,7 +172,7 @@ export const CoreTable = <T,>({
 
         const avgApr = LoanValue.fromPrice(
             avgPrice * 10000,
-            maturity,
+            maturity
         ).apr.toNormalizedNumber();
 
         const totalAmount = amountFormatterFromBase[currency](totalPVAmount);
@@ -211,7 +211,7 @@ export const CoreTable = <T,>({
                                             : flexRender(
                                                   header.column.columnDef
                                                       .header,
-                                                  header.getContext(),
+                                                  header.getContext()
                                               )}
                                     </th>
                                 ))}
@@ -242,24 +242,24 @@ export const CoreTable = <T,>({
                                             'down',
                                         'cursor-pointer bg-neutral-100/10':
                                             coreTableOptions.hoverRow?.(
-                                                row.id,
+                                                row.id
                                             ) &&
                                             activeRow &&
                                             coreTableOptions.hoverRow?.(
-                                                activeRow,
+                                                activeRow
                                             ) &&
                                             onHoverBackground(row.id),
                                         'border-dashed border-z-neutral-100':
                                             coreTableOptions.hoverRow?.(
-                                                row.id,
+                                                row.id
                                             ) &&
                                             activeRow &&
                                             coreTableOptions.hoverRow?.(
-                                                activeRow,
+                                                activeRow
                                             ) &&
                                             Number(row.id) ===
                                                 Number(activeRow),
-                                    },
+                                    }
                                 )}
                                 onClick={() =>
                                     coreTableOptions.hoverRow?.(row.id) &&
@@ -281,12 +281,12 @@ export const CoreTable = <T,>({
                                     >
                                         {flexRender(
                                             cell.column.columnDef.cell,
-                                            cell.getContext(),
+                                            cell.getContext()
                                         )}
                                     </td>
                                 ))}
                             </tr>
-                        ),
+                        )
                     )}
                 </tbody>
             </table>

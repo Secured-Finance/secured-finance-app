@@ -22,7 +22,7 @@ const TitleChip = ({
                 {
                     'bg-primary-700': selected,
                     'bg-neutral-700 hover:bg-neutral-600': !selected,
-                },
+                }
             )}
         >
             {title}
@@ -80,7 +80,7 @@ export const HorizontalTabTable = ({
         >
             <div
                 className={clsx(
-                    'flex h-full flex-col rounded-xl border border-neutral-600 bg-neutral-900 laptop:rounded-t-none',
+                    'flex h-full flex-col rounded-xl border border-neutral-600 bg-neutral-900 laptop:rounded-t-none'
                 )}
             >
                 <HeadlessTab.List className='flex justify-between border-b border-neutral-600 px-4 py-3 laptop:h-fit laptop:py-3.5'>
@@ -140,7 +140,7 @@ export const HorizontalTabTable = ({
                 </HeadlessTab.List>
                 <HeadlessTab.Panels
                     className={clsx(
-                        'h-full rounded-b-xl bg-neutral-900 tablet:min-h-[25vh] laptop:pb-2',
+                        'h-full rounded-b-xl bg-neutral-900 tablet:min-h-[25vh] laptop:pb-2'
                     )}
                 >
                     {arrayChildren[selectedIndex]}

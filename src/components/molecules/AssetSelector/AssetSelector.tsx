@@ -27,7 +27,7 @@ export const AssetSelector = ({
 
     const selectedOption = useMemo(
         () => options.find(o => o.value === assetValue),
-        [options, assetValue],
+        [options, assetValue]
     );
 
     const amountInUsd = useMemo(() => {
@@ -50,7 +50,7 @@ export const AssetSelector = ({
                 onAssetChange(v);
             }
         },
-        [onAssetChange],
+        [onAssetChange]
     );
 
     const handleAmountChange = useCallback(
@@ -60,7 +60,7 @@ export const AssetSelector = ({
                 onAmountChange(amount ?? '');
             }
         },
-        [onAmountChange, selectedOption],
+        [onAmountChange, selectedOption]
     );
 
     return (

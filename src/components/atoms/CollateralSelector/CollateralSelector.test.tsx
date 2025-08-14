@@ -63,7 +63,7 @@ describe('CollateralSelector component', () => {
                     name: 'Ethereum',
                     availableFullValue: BigInt('120000000000000000000'),
                 }}
-            />,
+            />
         );
 
         expect(onChange).toBeCalledTimes(1);

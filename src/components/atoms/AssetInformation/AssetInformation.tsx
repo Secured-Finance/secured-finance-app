@@ -57,7 +57,7 @@ export const AssetInformation = ({
                                     label={ordinaryFormat(
                                         amount,
                                         currencyMap[currency].roundingDecimal,
-                                        currencyMap[currency].roundingDecimal,
+                                        currencyMap[currency].roundingDecimal
                                     )}
                                     ccy={currency}
                                     price={totalPrice}
@@ -65,7 +65,7 @@ export const AssetInformation = ({
                                 />
                             </div>
                         </div>
-                    ),
+                    )
                 )}
             </div>
         )

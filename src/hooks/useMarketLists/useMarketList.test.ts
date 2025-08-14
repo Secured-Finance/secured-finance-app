@@ -8,15 +8,15 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 describe('useMarketList', () => {
     it('should return all open and itayose markets', async () => {
         jest.spyOn(mockSecuredFinance, 'currencyExists').mockResolvedValue(
-            true,
+            true
         );
         const { result } = renderHook(() => useMarketLists());
 
         await waitFor(() =>
-            expect(result.current.openMarkets).toHaveLength(32),
+            expect(result.current.openMarkets).toHaveLength(32)
         );
         await waitFor(() =>
-            expect(result.current.itayoseMarkets).toHaveLength(4),
+            expect(result.current.itayoseMarkets).toHaveLength(4)
         );
         await waitFor(() => expect(result.current.allMarkets).toHaveLength(36));
     });

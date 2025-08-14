@@ -34,14 +34,14 @@ export const OrderInputBox = ({
                 onValueChange(amount);
             }
         },
-        [onValueChange],
+        [onValueChange]
     );
 
     return (
         <div
             className={clsx(
                 'grid h-fit grid-cols-2 place-content-between items-center rounded-lg border border-neutral-500 bg-neutral-900 px-3 py-2 ring-inset',
-                bgClassName,
+                bgClassName
             )}
         >
             <div className='flex flex-row items-center gap-2'>

@@ -26,7 +26,7 @@ export const getData = (
     label: string,
     labels: string[],
     itayoseMarketIndex: Set<number>,
-    itayoseBorderColor: string,
+    itayoseBorderColor: string
 ): ChartData<'line'> => {
     return {
         labels: labels,
@@ -39,7 +39,7 @@ export const getData = (
                         itayoseMarketIndex.has(ctx.p1.parsed.x)
                             ? itayoseBorderColor
                             : getCurveGradient(
-                                  ctx as unknown as ScriptableContext<'line'>,
+                                  ctx as unknown as ScriptableContext<'line'>
                               ),
                     borderDash: ctx =>
                         itayoseMarketIndex.has(ctx.p1.parsed.x)
@@ -50,7 +50,7 @@ export const getData = (
                     itayoseMarketIndex.has(ctx.dataIndex)
                         ? itayoseBorderColor
                         : getCurveGradient(
-                              ctx as unknown as ScriptableContext<'line'>,
+                              ctx as unknown as ScriptableContext<'line'>
                           ),
             },
         ],
@@ -122,7 +122,7 @@ export const getCurveGradient = (context: ScriptableContext<'line'>) => {
         0,
         0,
         ctx.canvas.offsetWidth,
-        0,
+        0
     );
     yieldCurveGradient.addColorStop(0, 'rgba(255, 89, 248, 0)');
     yieldCurveGradient.addColorStop(0.2, 'rgba(174, 114, 255, 1)');
@@ -190,7 +190,7 @@ export const options: ChartOptions<'line'> = {
     onHover: (
         _event: ChartEvent,
         _elements: ActiveElement[],
-        chart: Chart<'line'>,
+        chart: Chart<'line'>
     ) => {
         chart.canvas.style.cursor = 'pointer';
     },

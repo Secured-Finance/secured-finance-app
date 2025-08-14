@@ -16,13 +16,13 @@ describe('PointsDashboard Component', () => {
         await waitFor(() =>
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
-            }),
+            })
         );
         expect(
-            screen.getByText('Join the Secured Finance Points Program!'),
+            screen.getByText('Join the Secured Finance Points Program!')
         ).toBeInTheDocument();
         expect(
-            screen.queryAllByRole('button', { name: 'Connect Wallet' })[1],
+            screen.queryAllByRole('button', { name: 'Connect Wallet' })[1]
         ).toBeInTheDocument();
     });
 });

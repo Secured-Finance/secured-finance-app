@@ -21,7 +21,7 @@ export const Toggle = ({
                     'bg-starBlue': checked,
                     'bg-neutral-300': !checked,
                     'disabled:opacity-50': disabled,
-                },
+                }
             )}
         >
             <span

@@ -91,7 +91,7 @@ export const CoreTable = <T,>({
     };
     const [hasMoreData, setHasMoreData] = useState(
         !!coreTableOptions.pagination?.totalData &&
-            coreTableOptions.pagination?.totalData > 0,
+            coreTableOptions.pagination?.totalData > 0
     );
 
     useEffect(() => {
@@ -165,7 +165,7 @@ export const CoreTable = <T,>({
                             'border-b border-white-10':
                                 coreTableOptions.border &&
                                 !coreTableOptions.stickyHeader,
-                        },
+                        }
                     )}
                 >
                     {table.getHeaderGroups().map(headerGroup => (
@@ -184,14 +184,14 @@ export const CoreTable = <T,>({
                                                 coreTableOptions.responsive &&
                                                 columnIndex === 0 &&
                                                 coreTableOptions?.stickyFirstColumn,
-                                        },
+                                        }
                                     )}
                                 >
                                     {header.isPlaceholder
                                         ? null
                                         : flexRender(
                                               header.column.columnDef.header,
-                                              header.getContext(),
+                                              header.getContext()
                                           )}
                                 </th>
                             ))}
@@ -213,7 +213,7 @@ export const CoreTable = <T,>({
                             key={row.id}
                             className={clsx('h-7', {
                                 'cursor-pointer': coreTableOptions.hoverRow?.(
-                                    row.id,
+                                    row.id
                                 ),
                                 'hover:bg-black-30':
                                     coreTableOptions.hoverRow?.(row.id),
@@ -240,17 +240,17 @@ export const CoreTable = <T,>({
                                                 coreTableOptions?.stickyFirstColumn,
                                             'py-2': !coreTableOptions.compact,
                                             'py-1': coreTableOptions.compact,
-                                        },
+                                        }
                                     )}
                                 >
                                     {flexRender(
                                         cell.column.columnDef.cell,
-                                        cell.getContext(),
+                                        cell.getContext()
                                     )}
                                 </td>
                             ))}
                         </tr>
-                    ),
+                    )
                 )}
             </tbody>
         </table>
@@ -303,7 +303,7 @@ export const CompactCoreTable = <T,>({
     };
     const [hasMoreData, setHasMoreData] = useState(
         !!coreTableOptions.pagination?.totalData &&
-            coreTableOptions.pagination?.totalData > 0,
+            coreTableOptions.pagination?.totalData > 0
     );
 
     useEffect(() => {
@@ -361,7 +361,7 @@ export const CompactCoreTable = <T,>({
             {coreTableOptions.showHeaders ? (
                 <thead
                     className={clsx(
-                        'sticky inset-0 z-20 h-8 bg-neutral-900 py-1.5 text-2.5 leading-5 text-neutral-300 after:absolute after:bottom-0 after:z-20 after:w-full after:border-b after:border-neutral-600',
+                        'sticky inset-0 z-20 h-8 bg-neutral-900 py-1.5 text-2.5 leading-5 text-neutral-300 after:absolute after:bottom-0 after:z-20 after:w-full after:border-b after:border-neutral-600'
                     )}
                 >
                     {table.getHeaderGroups().map(headerGroup => (
@@ -379,7 +379,7 @@ export const CompactCoreTable = <T,>({
                                         ? null
                                         : flexRender(
                                               header.column.columnDef.header,
-                                              header.getContext(),
+                                              header.getContext()
                                           )}
                                 </th>
                             ))}
@@ -402,12 +402,12 @@ export const CompactCoreTable = <T,>({
                                     {
                                         'pt-2': index === 0,
                                         'pt-0': index !== 0,
-                                    },
+                                    }
                                 )}
                             >
                                 {flexRender(
                                     cell.column.columnDef.cell,
-                                    cell.getContext(),
+                                    cell.getContext()
                                 )}
                             </td>
                         ))}

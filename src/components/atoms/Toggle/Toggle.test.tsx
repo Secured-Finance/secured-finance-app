@@ -14,7 +14,7 @@ describe('Toggle component', () => {
         render(<Default />);
         expect(screen.getByRole('switch')).toHaveAttribute(
             'aria-checked',
-            'true',
+            'true'
         );
     });
 

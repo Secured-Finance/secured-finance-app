@@ -11,17 +11,17 @@ describe('useMarket', () => {
     it('should return the corresponding market', async () => {
         const maturity = dec22Fixture.toNumber();
         const { result } = renderHook(() =>
-            useMarket(CurrencySymbol.ETH, maturity),
+            useMarket(CurrencySymbol.ETH, maturity)
         );
         const value = result.current;
         expect(value).toEqual(undefined);
 
         await waitFor(() =>
-            expect(mock.getOrderBookDetails).toHaveBeenCalledTimes(1),
+            expect(mock.getOrderBookDetails).toHaveBeenCalledTimes(1)
         );
 
         await waitFor(() =>
-            expect(result.current).toEqual(maturities[maturity]),
+            expect(result.current).toEqual(maturities[maturity])
         );
     });
 });

@@ -39,13 +39,13 @@ export function syncCrosshair(
         | WhitespaceData<Time>
         | HistogramData<Time>
         | CandlestickData<Time>
-        | null,
+        | null
 ) {
     if (dataPoint) {
         chart.setCrosshairPosition(
             (dataPoint as HistogramData<Time>).value,
             dataPoint.time,
-            series,
+            series
         );
         return;
     }
@@ -59,7 +59,7 @@ export function HistoricalChart({
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const secondContainerRef = useRef<HTMLDivElement>(null);
     const { currency, maturity } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm),
+        selectLandingOrderForm(state.landingOrderForm)
     );
     const { data: prices } = useLastPrices();
     const usdPrice = prices[currency];
@@ -106,13 +106,13 @@ export function HistoricalChart({
             candlestickSeries.setData(candleData);
             volumeSeries.setData(volumeData);
         },
-        [data],
+        [data]
     );
 
     useEffect(() => {
         const handleDisplayLegend = (
             candleData: WhitespaceData<Time> | CandlestickData<Time> | null,
-            volumeData: WhitespaceData<Time> | HistogramData<Time> | null,
+            volumeData: WhitespaceData<Time> | HistogramData<Time> | null
         ) => {
             const mergeData = {
                 ...candleData,
@@ -139,7 +139,7 @@ export function HistoricalChart({
             candleStickChart: IChartApi,
             volumeChart: IChartApi,
             candlestickSeries: TSeries,
-            volumeSeries: TSeries,
+            volumeSeries: TSeries
         ) => {
             const updateLegendData = (param: MouseEventParams<Time>) => {
                 if (!param.seriesData.size) return;
@@ -150,7 +150,7 @@ export function HistoricalChart({
                         .data()
                         .findIndex(
                             (item: Record<'time', Time>) =>
-                                item.time === param.time,
+                                item.time === param.time
                         );
                 }
 
@@ -164,7 +164,7 @@ export function HistoricalChart({
             candleStickChart.subscribeCrosshairMove(function (param) {
                 const dataPoint = getCrosshairDataPoint(
                     candlestickSeries,
-                    param,
+                    param
                 );
                 syncCrosshair(volumeChart, volumeSeries, dataPoint);
                 updateLegendData(param);
@@ -200,7 +200,7 @@ export function HistoricalChart({
         const { volumeSeries, chart: volumeChart } = createVolumeChart(
             secondContainerRef.current,
             timeScale,
-            isMobile,
+            isMobile
         );
 
         setupCharts(candlestickSeries, volumeSeries);
@@ -209,7 +209,7 @@ export function HistoricalChart({
             candleStickChart,
             volumeChart,
             candlestickSeries,
-            volumeSeries,
+            volumeSeries
         );
 
         volumeChart.timeScale();
@@ -217,7 +217,7 @@ export function HistoricalChart({
 
         const updateTitleData = (
             param: MouseEventParams<Time>,
-            sourceChart: string,
+            sourceChart: string
         ) => {
             if (!param.seriesData.size) return;
 
@@ -226,8 +226,7 @@ export function HistoricalChart({
                 index = candlestickSeries
                     .data()
                     .findIndex(
-                        (item: Record<'time', Time>) =>
-                            item.time === param.time,
+                        (item: Record<'time', Time>) => item.time === param.time
                     );
             }
 

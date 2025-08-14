@@ -15,7 +15,7 @@ describe('MenuItem component', () => {
         expect(screen.getByText('Example')).toBeInTheDocument();
         expect(screen.getByRole('link')).toHaveAttribute(
             'href',
-            'https://secured.finance/',
+            'https://secured.finance/'
         );
     });
 });

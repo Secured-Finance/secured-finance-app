@@ -22,7 +22,7 @@ export const Separator = ({
                     'border-moonGrey border-opacity-30': color === 'moonGrey',
                     'border-white-10': color === 'white-10',
                     'border-white-5': color === 'default',
-                },
+                }
             )}
             data-testid={'separator'}
         />

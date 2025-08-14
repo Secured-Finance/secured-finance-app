@@ -18,28 +18,28 @@ describe('HorizontalTab Component', () => {
     it('should highlight the selected tab', () => {
         render(<Default />);
         expect(screen.getByRole('tab', { selected: true })).toHaveTextContent(
-            'Active Contracts',
+            'Active Contracts'
         );
         expect(screen.getByTestId('Active Contracts')).toHaveClass(
-            'bg-black-30',
+            'bg-black-30'
         );
         expect(screen.getByTestId('Trade History')).not.toHaveClass(
-            'bg-black-30',
+            'bg-black-30'
         );
         fireEvent.click(screen.getByTestId('Trade History'));
         expect(screen.getByRole('tab', { selected: true })).toHaveTextContent(
-            'Trade History',
+            'Trade History'
         );
     });
 
     it('should display the content of the selected tab', () => {
         render(<Default />);
         expect(
-            screen.getByText('This is a Great Tab Content'),
+            screen.getByText('This is a Great Tab Content')
         ).toBeInTheDocument();
         fireEvent.click(screen.getByTestId('Trade History'));
         expect(
-            screen.getByText('This is the content of the second tab'),
+            screen.getByText('This is the content of the second tab')
         ).toBeInTheDocument();
     });
 

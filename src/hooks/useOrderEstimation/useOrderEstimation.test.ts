@@ -37,7 +37,7 @@ describe('useOrderEstimation', () => {
                 BigInt('5000000'),
                 9800,
                 ZERO_BI,
-                false,
+                false
             );
             const value = result.current.data;
             expect(value.coverage).toEqual(BigInt(5500));
@@ -65,7 +65,7 @@ describe('useOrderEstimation', () => {
                 BigInt('5000000'),
                 9800,
                 ZERO_BI,
-                true,
+                true
             );
             const value = result.current.data;
             expect(value.coverage).toEqual(BigInt(5500));
@@ -95,7 +95,7 @@ describe('useOrderEstimation', () => {
                 BigInt('5000000'),
                 9800,
                 ZERO_BI,
-                false,
+                false
             );
             const value = result.current.data;
             expect(value.coverage).toEqual(BigInt(5500));
@@ -123,7 +123,7 @@ describe('useOrderEstimation', () => {
                 BigInt('5000000'),
                 9800,
                 BigInt('5000000'),
-                false,
+                false
             );
             const value = result.current.data;
             expect(value.coverage).toEqual(BigInt(5500));
@@ -152,7 +152,7 @@ describe('useOrderEstimation', () => {
                 BigInt('5000000'),
                 9800,
                 ZERO_BI,
-                false,
+                false
             );
             const value = result.current.data;
             expect(value.coverage).toEqual(BigInt(5500));
@@ -174,7 +174,7 @@ describe('useOrderEstimation', () => {
                 BigInt('5000000'),
                 9800,
                 ZERO_BI,
-                false,
+                false
             );
             const value = result.current.data;
             expect(value.coverage).toEqual(BigInt(5500));

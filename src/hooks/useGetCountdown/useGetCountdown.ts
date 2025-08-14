@@ -3,7 +3,7 @@ import { CountdownFormat, getCountdown } from 'src/utils';
 
 export const useGetCountdown = (targetTime: number) => {
     const [time, setTime] = useState<CountdownFormat | undefined>(
-        getCountdown(targetTime),
+        getCountdown(targetTime)
     );
 
     useEffect(() => {

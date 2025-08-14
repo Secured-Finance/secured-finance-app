@@ -11,8 +11,8 @@ export const useMarketOrderList = (
     filterFn: (
         order: NonNullable<
             ReturnType<typeof useOrderList>['data']
-        >['activeOrderList'][0],
-    ) => unknown = passThrough,
+        >['activeOrderList'][0]
+    ) => unknown = passThrough
 ) => {
     const { data: orderList = emptyOrderList } = useOrderList(account, [ccy]);
 

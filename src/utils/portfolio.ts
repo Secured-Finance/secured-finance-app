@@ -17,24 +17,24 @@ export const computeWeightedAverageRate = (trades: TransactionHistoryList) => {
 
     const totalAmount = trades.reduce(
         (acc: number, trade: Transaction) => acc + trade.amount,
-        0,
+        0
     );
     const total = trades.reduce(
         (acc: number, trade: Transaction) =>
             acc +
             LoanValue.fromPrice(
                 Number(trade.averagePrice),
-                Number(trade.maturity),
+                Number(trade.maturity)
             ).apr.toNumber() *
                 trade.amount,
-        0,
+        0
     );
     return new Rate(total / totalAmount);
 };
 
 export const computeNetValue = (
     positions: Pick<Position, 'amount' | 'currency'>[],
-    priceList: AssetPriceMap,
+    priceList: AssetPriceMap
 ) => {
     return positions.reduce((acc, { amount, currency }) => {
         const ccy = hexToCurrencySymbol(currency);
@@ -56,7 +56,7 @@ export type TradeSummary = {
 
 export const calculateFutureValue = (
     amount: bigint,
-    unitPrice: bigint,
+    unitPrice: bigint
 ): bigint => {
     return (amount * BigInt(10000)) / unitPrice;
 };
@@ -85,7 +85,7 @@ export const formatOrders = (orders: OrderList): TransactionHistoryList => {
 
 export const checkOrderIsFilled = (
     order: Order,
-    orders: OrderList,
+    orders: OrderList
 ): boolean => {
     for (let i = 0; i < orders.length; i++) {
         if (checkOrdersAreSame(order, orders[i])) {
@@ -114,7 +114,7 @@ export const getMaxAmount = (orders: { cumulativeAmount: bigint }[]) => {
     return orders.reduce(
         (prev, current) =>
             prev > current.cumulativeAmount ? prev : current.cumulativeAmount,
-        orders[0].cumulativeAmount,
+        orders[0].cumulativeAmount
     );
 };
 

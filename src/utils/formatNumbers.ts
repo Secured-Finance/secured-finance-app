@@ -5,7 +5,7 @@ import { LoanValue } from './entities';
 export const usdFormat = (
     number: number | bigint,
     digits = 0,
-    notation: 'standard' | 'compact' = 'standard',
+    notation: 'standard' | 'compact' = 'standard'
 ) => {
     return Intl.NumberFormat('en-US', {
         style: 'currency',
@@ -20,7 +20,7 @@ export const percentFormat = (
     number: number,
     dividedBy = 100,
     minimumFractionDigits = 0,
-    maximumFractionDigits = 2,
+    maximumFractionDigits = 2
 ) => {
     const value = dividedBy === 0 ? 0 : number / dividedBy;
     return Intl.NumberFormat('en-US', {
@@ -34,7 +34,7 @@ export const ordinaryFormat = (
     number: number | bigint,
     minDecimals = 0,
     maxDecimals = 2,
-    notation: 'standard' | 'compact' = 'standard',
+    notation: 'standard' | 'compact' = 'standard'
 ) => {
     return Intl.NumberFormat('en-US', {
         minimumFractionDigits: minDecimals,
@@ -50,7 +50,7 @@ export const formatAmount = (number: number | bigint) => {
 export const formatWithCurrency = (
     number: number | bigint,
     currency: string,
-    decimals = 2,
+    decimals = 2
 ) => {
     return `${ordinaryFormat(number, 0, decimals)} ${currency}`;
 };
@@ -58,7 +58,7 @@ export const formatWithCurrency = (
 export const formatLoanValue = (
     value: LoanValue | undefined,
     type: 'price' | 'rate',
-    decimal = 2,
+    decimal = 2
 ) => {
     if (type === 'price') {
         if (!value) return '--.--';
@@ -69,7 +69,7 @@ export const formatLoanValue = (
             value.apr.toNormalizedNumber(),
             100,
             decimal,
-            decimal,
+            decimal
         );
     }
 };

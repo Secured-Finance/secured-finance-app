@@ -19,7 +19,7 @@ export const useIsUnderCollateralThreshold = (address: UserAccount) => {
             currency: CurrencySymbol,
             maturity: number,
             price: number,
-            side: OrderSide,
+            side: OrderSide
         ) => {
             const market = markets?.[currency]?.[maturity];
             if (!market || !address) return false;
@@ -34,7 +34,7 @@ export const useIsUnderCollateralThreshold = (address: UserAccount) => {
                 (position?.lendCurrencies.has(currency) ?? false)
             );
         },
-        [markets, address, position?.lendCurrencies],
+        [markets, address, position?.lendCurrencies]
     );
 
     return isUnderCollateralThreshold;
@@ -42,7 +42,7 @@ export const useIsUnderCollateralThreshold = (address: UserAccount) => {
 
 export const useIsUnderCollateralThresholdForBorrowOrders = (
     address: UserAccount,
-    currency: CurrencySymbol,
+    currency: CurrencySymbol
 ) => {
     const { data: markets } = useLendingMarkets();
     const { data: availableToBorrow } = useBorrowableAmount(address, currency);
@@ -53,7 +53,7 @@ export const useIsUnderCollateralThresholdForBorrowOrders = (
             maturity: number,
             price: number,
             side: OrderSide,
-            amount: bigint,
+            amount: bigint
         ) => {
             const market = markets?.[currency]?.[maturity];
             if (!market || !address || !price) return false;
@@ -70,7 +70,7 @@ export const useIsUnderCollateralThresholdForBorrowOrders = (
                 requiredCollateral > availableToBorrow
             );
         },
-        [markets, address, availableToBorrow],
+        [markets, address, availableToBorrow]
     );
 
     return isUnderCollateralThreshold;

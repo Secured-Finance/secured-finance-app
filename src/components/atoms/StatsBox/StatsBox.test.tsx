@@ -12,7 +12,7 @@ describe('test StatsBox component', () => {
             () => expect(screen.getByText('$8.02')).toBeInTheDocument(),
             {
                 timeout: 3000,
-            },
+            }
         );
     });
 });

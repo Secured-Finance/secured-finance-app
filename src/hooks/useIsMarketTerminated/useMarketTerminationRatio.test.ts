@@ -38,7 +38,7 @@ describe('useMarketTerminationRatio hook', () => {
                     default:
                         throw new Error('Not implemented');
                 }
-            },
+            }
         );
 
         const { result } = renderHook(() => useMarketTerminationRatio());

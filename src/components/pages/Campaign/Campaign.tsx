@@ -43,9 +43,9 @@ export const Campaign = () => {
             generateCollateralList(
                 collateralBalances,
                 false,
-                collateralCurrencies,
+                collateralCurrencies
             ),
-        [collateralBalances, collateralCurrencies],
+        [collateralBalances, collateralCurrencies]
     );
 
     // const handleDepositClick = useCallback(() => {

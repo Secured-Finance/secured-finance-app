@@ -23,21 +23,21 @@ describe('CurrencyAmountItem Component', () => {
     it('should align the currency amount to the right', () => {
         render(<Default align='right' />);
         expect(screen.getByTestId('currency-amount-item')).toHaveClass(
-            'text-right',
+            'text-right'
         );
     });
 
     it('should align the currency amount to the center', () => {
         render(<Default align='center' />);
         expect(screen.getByTestId('currency-amount-item')).toHaveClass(
-            'text-center',
+            'text-center'
         );
     });
 
     it('should align the currency amount to the left by default', () => {
         render(<Default />);
         expect(screen.getByTestId('currency-amount-item')).toHaveClass(
-            'text-left',
+            'text-left'
         );
     });
 
@@ -55,21 +55,21 @@ describe('CurrencyAmountItem Component', () => {
     it('should display the currency amount in neutral by default', () => {
         render(<Default />);
         expect(
-            screen.getByTestId('currency-amount-item').firstChild,
+            screen.getByTestId('currency-amount-item').firstChild
         ).toHaveClass('text-neutral-8');
     });
 
     it('should display the currency amount in green', () => {
         render(<Default color='positive' />);
         expect(
-            screen.getByTestId('currency-amount-item').firstChild,
+            screen.getByTestId('currency-amount-item').firstChild
         ).toHaveClass('text-nebulaTeal');
     });
 
     it('should display the currency amount in red', () => {
         render(<Default color='negative' />);
         expect(
-            screen.getByTestId('currency-amount-item').firstChild,
+            screen.getByTestId('currency-amount-item').firstChild
         ).toHaveClass('text-galacticOrange');
     });
 

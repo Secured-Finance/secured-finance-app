@@ -12,10 +12,10 @@ describe('SortArrows Component', () => {
     it('should render a the two arrows in gray', () => {
         render(<Default />);
         expect(screen.getByTestId('up-sort-arrows')).toHaveClass(
-            'text-neutral-400',
+            'text-neutral-400'
         );
         expect(screen.getByTestId('down-sort-arrows')).toHaveClass(
-            'text-neutral-400',
+            'text-neutral-400'
         );
     });
 
@@ -23,17 +23,17 @@ describe('SortArrows Component', () => {
         render(<Ascending />);
         expect(screen.getByTestId('up-sort-arrows')).toHaveClass('text-white');
         expect(screen.getByTestId('down-sort-arrows')).toHaveClass(
-            'text-neutral-400',
+            'text-neutral-400'
         );
     });
 
     it('should render a the down arrow in white when sorting is desc', () => {
         render(<Descending />);
         expect(screen.getByTestId('up-sort-arrows')).toHaveClass(
-            'text-neutral-400',
+            'text-neutral-400'
         );
         expect(screen.getByTestId('down-sort-arrows')).toHaveClass(
-            'text-white',
+            'text-white'
         );
     });
 });

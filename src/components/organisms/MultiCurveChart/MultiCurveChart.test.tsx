@@ -18,7 +18,7 @@ describe('MultiCurveChart Component', () => {
                 ag.container
                     .querySelector('canvas')
                     ?.getContext('2d')
-                    ?.__getEvents(),
+                    ?.__getEvents()
             ).toMatchSnapshot();
         });
     });
@@ -33,7 +33,7 @@ describe('MultiCurveChart Component', () => {
                 ag.container
                     .querySelector('canvas')
                     ?.getContext('2d')
-                    ?.__getEvents(),
+                    ?.__getEvents()
             ).toMatchSnapshot();
         });
     });

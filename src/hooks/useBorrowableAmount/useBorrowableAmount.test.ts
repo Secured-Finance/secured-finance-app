@@ -9,7 +9,7 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 describe('useBorrowableAmount', () => {
     it('should fetch borrowable balance', async () => {
         const { result } = renderHook(() =>
-            useBorrowableAmount('0x1', CurrencySymbol.WBTC),
+            useBorrowableAmount('0x1', CurrencySymbol.WBTC)
         );
 
         const value = result.current;
@@ -17,7 +17,7 @@ describe('useBorrowableAmount', () => {
 
         await waitFor(() => {
             expect(mock.tokenVault.getBorrowableAmount).toHaveBeenCalledTimes(
-                1,
+                1
             );
             expect(result.current.data.toString()).toEqual('10000000');
         });

@@ -46,7 +46,7 @@ describe('OrderInputBox component', () => {
     it('should render a input with a name from the field', () => {
         render(<Amount field='great name' />);
         expect(
-            screen.getByRole('textbox', { name: 'great name' }),
+            screen.getByRole('textbox', { name: 'great name' })
         ).toBeInTheDocument();
     });
 
@@ -63,7 +63,7 @@ describe('OrderInputBox component', () => {
     it('should not display hint when the input is disabled', () => {
         render(<WithInformationText disabled={true} />);
         expect(
-            screen.queryByTestId('information-circle'),
+            screen.queryByTestId('information-circle')
         ).not.toBeInTheDocument();
     });
 

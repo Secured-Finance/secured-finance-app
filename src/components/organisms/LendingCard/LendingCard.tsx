@@ -57,7 +57,7 @@ export const LendingCard = ({
 }) => {
     const { currency, maturity, side, sourceAccount, amount, amountExists } =
         useSelector((state: RootState) =>
-            selectLandingOrderForm(state.landingOrderForm),
+            selectLandingOrderForm(state.landingOrderForm)
         );
 
     const dispatch = useDispatch();
@@ -72,7 +72,7 @@ export const LendingCard = ({
     const selectedTerm = useMemo(() => {
         return (
             maturitiesOptionList.find(option =>
-                option.value.equals(new Maturity(maturity)),
+                option.value.equals(new Maturity(maturity))
             ) || maturitiesOptionList[0]
         );
     }, [maturity, maturitiesOptionList]);
@@ -82,7 +82,7 @@ export const LendingCard = ({
             currency,
             balanceRecord[currency],
             collateralBook.withdrawableCollateral[currency] ||
-                collateralBook.nonCollateral[currency],
+                collateralBook.nonCollateral[currency]
         );
     }, [
         balanceRecord,
@@ -118,14 +118,14 @@ export const LendingCard = ({
 
     const marketValue = useMemo(
         () => LoanValue.fromPrice(marketPrice ?? 0, maturity),
-        [marketPrice, maturity],
+        [marketPrice, maturity]
     );
 
     const handleCurrencyChange = useCallback(
         (v: CurrencySymbol) => {
             dispatch(setCurrency(v));
         },
-        [dispatch],
+        [dispatch]
     );
 
     const handleWalletSourceChange = (source: WalletSource) => {
@@ -160,14 +160,14 @@ export const LendingCard = ({
                         setSide(
                             option === 'Borrow'
                                 ? OrderSide.BORROW
-                                : OrderSide.LEND,
-                        ),
+                                : OrderSide.LEND
+                        )
                     );
                     dispatch(setSourceAccount(WalletSource.METAMASK));
                     trackButtonEvent(
                         ButtonEvents.ORDER_SIDE,
                         ButtonProperties.ORDER_SIDE,
-                        option,
+                        option
                     );
                 }}
             />
@@ -197,15 +197,15 @@ export const LendingCard = ({
                                         v === ''
                                             ? ''
                                             : amountFormatterToBase[currency](
-                                                  Number(v),
-                                              ).toString(),
-                                    ),
+                                                  Number(v)
+                                              ).toString()
+                                    )
                                 )
                             }
                             initialValue={
                                 amountExists
                                     ? amountFormatterFromBase[currency](
-                                          amount,
+                                          amount
                                       ).toString()
                                     : ''
                             }
@@ -214,7 +214,7 @@ export const LendingCard = ({
                                 trackButtonEvent(
                                     ButtonEvents.CURRENCY_CHANGE,
                                     ButtonProperties.CURRENCY,
-                                    v,
+                                    v
                                 );
                             }}
                         />
@@ -223,7 +223,7 @@ export const LendingCard = ({
                                 showError={getAmountValidation(
                                     amount,
                                     availableToLend,
-                                    side,
+                                    side
                                 )}
                                 errorMessage='Insufficient amount in source'
                             />
@@ -244,14 +244,14 @@ export const LendingCard = ({
                             trackButtonEvent(
                                 ButtonEvents.TERM_CHANGE,
                                 ButtonProperties.TERM,
-                                selectedTerm.label,
+                                selectedTerm.label
                             );
                         }}
                         transformLabel={getTransformMaturityOption(
                             maturitiesOptionList.map(o => ({
                                 ...o,
                                 value: o.value.toString(),
-                            })),
+                            }))
                         )}
                     />
 

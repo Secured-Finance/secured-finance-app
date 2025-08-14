@@ -22,7 +22,7 @@ const TitleChip = ({
                 {
                     'rounded-3xl bg-black-30 text-neutral-8': selected,
                     'text-neutral-4': !selected,
-                },
+                }
             )}
         >
             {title}
@@ -77,7 +77,7 @@ export const HorizontalTab = ({
             <div
                 className={clsx(
                     'flex h-full flex-col border border-white-10 bg-gunMetal/40 shadow-tab tablet:rounded-b-2xl',
-                    className,
+                    className
                 )}
             >
                 <HeadlessTab.List className='h-16 justify-start border-b border-white-10 p-3'>

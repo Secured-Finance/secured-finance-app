@@ -56,8 +56,8 @@ describe('useTransactionCandleStickData', () => {
         const { result } = renderHook(() =>
             useTransactionCandleStickData(
                 historicalTradeData,
-                selectedTimeScale,
-            ),
+                selectedTimeScale
+            )
         );
 
         expect(result.current).toEqual([

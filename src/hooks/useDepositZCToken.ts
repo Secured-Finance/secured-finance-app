@@ -6,7 +6,7 @@ import { Maturity } from 'src/utils/entities';
 export const useDepositZCToken = (
     ccy: CurrencySymbol,
     maturity: Maturity,
-    amount: bigint,
+    amount: bigint
 ) => {
     const securedFinance = useSF();
 
@@ -17,7 +17,7 @@ export const useDepositZCToken = (
         const tx = await securedFinance.depositZCToken(
             toCurrency(ccy),
             maturity.toNumber(),
-            amount,
+            amount
         );
         return tx;
     }, [securedFinance, ccy, maturity, amount]);
@@ -28,7 +28,7 @@ export const useDepositZCToken = (
 export const useWithdrawZCToken = (
     ccy: CurrencySymbol,
     maturity: Maturity,
-    amount: bigint,
+    amount: bigint
 ) => {
     const securedFinance = useSF();
 
@@ -39,7 +39,7 @@ export const useWithdrawZCToken = (
         const tx = await securedFinance.withdrawZCToken(
             toCurrency(ccy),
             maturity.toNumber(),
-            amount,
+            amount
         );
         return tx;
     }, [securedFinance, ccy, maturity, amount]);

@@ -22,7 +22,7 @@ export const use24HVolume = (): { data: Record<string, number> } => {
             first: TRANSACTIONS_LIMIT,
             skip: transactionSkip,
         },
-        queries.TransactionsHistory24HDocument,
+        queries.TransactionsHistory24HDocument
     );
 
     useEffect(() => {

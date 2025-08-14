@@ -20,7 +20,7 @@ export function RadioButton({ options, value, onChange }: ButtonSelectProps) {
                                 value === option.value,
                             'text-white opacity-40 hover:opacity-80':
                                 value !== option.value,
-                        },
+                        }
                     )}
                     onClick={() => onChange(option.value)}
                     data-testid={option.label}

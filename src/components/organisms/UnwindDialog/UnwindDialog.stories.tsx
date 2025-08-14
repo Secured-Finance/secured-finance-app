@@ -19,7 +19,7 @@ export default {
         maturity: dec22Fixture,
         amount: new Amount(
             BigInt('100000000000000000000'),
-            CurrencySymbol.WFIL,
+            CurrencySymbol.WFIL
         ),
         side: OrderSide.BORROW,
     },

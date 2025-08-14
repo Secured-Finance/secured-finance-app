@@ -15,7 +15,7 @@ describe('useMaturityOptions', () => {
 
     it('should return an array of Maturity Option with filter', async () => {
         const { result } = renderHook(() =>
-            useMaturityOptions(maturities, market => market.isPreOrderPeriod),
+            useMaturityOptions(maturities, market => market.isPreOrderPeriod)
         );
         expect(result.current.length).toBe(1);
         expect(result.current[0].label).toBe('DEC2024');
@@ -24,7 +24,7 @@ describe('useMaturityOptions', () => {
 
     it('should return an array with the empty option if no options are available', async () => {
         const { result } = renderHook(() =>
-            useMaturityOptions(maturities, () => false),
+            useMaturityOptions(maturities, () => false)
         );
         expect(result.current.length).toBe(1);
         expect(result.current[0].label).toBe('');
@@ -39,7 +39,7 @@ describe('useMaturityOptions', () => {
                     ...maturities[1669852800],
                     name: 'DEC2022',
                 },
-            }),
+            })
         );
         expect(result.current.length).toBe(9);
         expect(result.current[0].label).toBe('DEC2022');

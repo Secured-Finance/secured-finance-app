@@ -26,20 +26,20 @@ describe('useGenesisValues', () => {
         ]);
 
         const { result } = renderHook(() =>
-            useGenesisValues('0x123', positions),
+            useGenesisValues('0x123', positions)
         );
 
         await waitFor(() => {
             expect(result.current.length).toEqual(1);
             expect(result.current[0].data.currency).toEqual(CurrencySymbol.ETH);
             expect(result.current[0].data.amount.toString()).toEqual(
-                '1000000000000000000',
+                '1000000000000000000'
             );
             expect(result.current[0].data.amountInPV.toString()).toEqual(
-                '2000000000000000000',
+                '2000000000000000000'
             );
             expect(result.current[0].data.amountInFV.toString()).toEqual(
-                '3000000000000000000',
+                '3000000000000000000'
             );
         });
     });

@@ -10,7 +10,7 @@ import { ZERO_BI, toCurrency } from 'src/utils';
 
 export const useOrderEstimation = (
     account: string | undefined,
-    skip = false,
+    skip = false
 ) => {
     const securedFinance = useSF();
 
@@ -23,12 +23,12 @@ export const useOrderEstimation = (
         isBorrowedCollateral,
         sourceAccount,
     } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm),
+        selectLandingOrderForm(state.landingOrderForm)
     );
 
     const ignoreBorrowedAmount = useMemo(
         () => (side === OrderSide.BORROW ? isBorrowedCollateral : false),
-        [isBorrowedCollateral, side],
+        [isBorrowedCollateral, side]
     );
 
     const additionalDepositAmount =
@@ -57,7 +57,7 @@ export const useOrderEstimation = (
                 amount,
                 (unitPrice ?? 0) * 100.0,
                 additionalDepositAmount,
-                ignoreBorrowedAmount,
+                ignoreBorrowedAmount
             );
             return orderEstimation;
         },

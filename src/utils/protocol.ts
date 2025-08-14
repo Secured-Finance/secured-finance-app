@@ -9,7 +9,7 @@ import {
 
 export function computeTotalDailyVolumeInUSD(
     dailyVolumes: DailyVolumes,
-    priceMap: AssetPriceMap,
+    priceMap: AssetPriceMap
 ): {
     totalVolumeUSD: number;
     volumePerCurrency: Record<CurrencySymbol, bigint>;
@@ -46,7 +46,7 @@ export function computeTotalDailyVolumeInUSD(
 
 export function computeTotalProtocolVolumeInUSD(
     protocolVolume: ProtocolVolume,
-    priceMap: AssetPriceMap,
+    priceMap: AssetPriceMap
 ): {
     totalVolumeUSD: number;
 } {
@@ -61,7 +61,7 @@ export function computeTotalProtocolVolumeInUSD(
         }
 
         const volumeInBaseUnit = currencyMap[ccy].fromBaseUnit(
-            BigInt(totalVolume),
+            BigInt(totalVolume)
         );
 
         const valueInUSD = volumeInBaseUnit * priceMap[ccy];

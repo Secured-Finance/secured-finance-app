@@ -61,7 +61,7 @@ describe('test Button component', () => {
     it('should render a transparent background when variant is secondary', async () => {
         render(<Secondary />);
         expect(screen.getByRole('button')).toHaveClass(
-            'bg-transparent border-primary-300',
+            'bg-transparent border-primary-300'
         );
     });
     it('should render an outlined button when variant is tertiary', async () => {

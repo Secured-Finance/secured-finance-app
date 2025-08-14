@@ -4,7 +4,7 @@ export const yieldTimeScales = Object.entries(HistoricalYieldIntervals).map(
     interval => ({
         label: interval[0],
         value: interval[1],
-    }),
+    })
 );
 
 export const getColor = (index: number, opacity: number) => {

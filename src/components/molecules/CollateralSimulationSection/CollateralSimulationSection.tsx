@@ -46,25 +46,25 @@ export const CollateralSimulationSection = ({
 
     const { data: availableToBorrow } = useBorrowableAmount(
         address,
-        tradeAmount.currency,
+        tradeAmount.currency
     );
 
     const getZCUsage = useZCUsage(address, side);
 
     const filledAmount = amountFormatterFromBase[tradeAmount.currency](
-        orderEstimationInfo?.filledAmount ?? BigInt(0),
+        orderEstimationInfo?.filledAmount ?? BigInt(0)
     );
 
     const zcUsage = getZCUsage(
         maturity.toNumber(),
         tradeAmount.currency,
-        filledAmount,
+        filledAmount
     );
 
     const initialZCUsage = getZCUsage(
         maturity.toNumber(),
         tradeAmount.currency,
-        0,
+        0
     );
 
     const coverage = Number(orderEstimationInfo?.coverage ?? 0);
@@ -76,7 +76,7 @@ export const CollateralSimulationSection = ({
 
     const remainingToBorrow = Math.max(
         0,
-        amountFormatterFromBase[tradeAmount.currency](remainingToBorrowBitInt),
+        amountFormatterFromBase[tradeAmount.currency](remainingToBorrowBitInt)
     );
 
     const items: [string | React.ReactNode, string | React.ReactNode][] = [

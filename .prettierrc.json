@@ -4,7 +4,6 @@
   "jsxSingleQuote": true,
   "arrowParens": "avoid",
   "parser": "typescript",
-  "tailwindConfig": "./tailwind.config.js",
   "overrides": [
     {
       "files": "*.scss",

@@ -17,12 +17,12 @@ describe('Network Selector component', () => {
     it('should render component with unsupported network', async () => {
         render(<Default networkName='mainnet' />);
         expect(
-            await screen.findByTestId('exclamation-circle-icon'),
+            await screen.findByTestId('exclamation-circle-icon')
         ).toBeInTheDocument();
         const networkButton = await screen.findByRole('button');
         fireEvent.click(networkButton);
         expect(
-            await screen.findByTestId('exclamation-circle-icon'),
+            await screen.findByTestId('exclamation-circle-icon')
         ).toBeInTheDocument();
     });
 });

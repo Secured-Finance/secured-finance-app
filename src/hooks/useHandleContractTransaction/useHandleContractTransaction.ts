@@ -25,15 +25,15 @@ export const useHandleContractTransaction = () => {
             // Invalidate all queries
             await Promise.all(
                 QUERIES_TO_INVALIDATE.map(queryKey =>
-                    queryClient.invalidateQueries({ queryKey: [queryKey] }),
-                ),
+                    queryClient.invalidateQueries({ queryKey: [queryKey] })
+                )
             );
             if (contractReceipt && contractReceipt.blockNumber) {
                 return true;
             }
             return false;
         },
-        [dispatch, publicClient, queryClient],
+        [dispatch, publicClient, queryClient]
     );
     return handleContractTransaction;
 };

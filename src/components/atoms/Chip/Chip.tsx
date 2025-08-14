@@ -19,7 +19,7 @@ export const Chip = ({
                 'inline-flex items-center justify-center border py-0.5',
                 { 'w-full': isFullWidth },
                 colorStyle[color],
-                sizeStyle[size],
+                sizeStyle[size]
             )}
         >
             {label}

@@ -14,7 +14,7 @@ describe('CurrencyDropdown', () => {
         expect(
             screen.getByRole('button', {
                 name: 'WBTC',
-            }),
+            })
         ).toBeInTheDocument;
     });
 
@@ -37,18 +37,18 @@ describe('CurrencyDropdown', () => {
         fireEvent.click(dropdown);
         expect(
             await within(
-                screen.getByRole('menuitem', { name: 'USDC' }),
-            ).findByText('Delisting'),
+                screen.getByRole('menuitem', { name: 'USDC' })
+            ).findByText('Delisting')
         ).toBeInTheDocument();
 
         expect(
-            screen.getByRole('menuitem', { name: 'WFIL' }),
+            screen.getByRole('menuitem', { name: 'WFIL' })
         ).not.toHaveTextContent('Delisting');
         expect(
-            screen.getByRole('menuitem', { name: 'ETH' }),
+            screen.getByRole('menuitem', { name: 'ETH' })
         ).not.toHaveTextContent('Delisting');
         expect(
-            screen.getByRole('menuitem', { name: 'WBTC' }),
+            screen.getByRole('menuitem', { name: 'WBTC' })
         ).not.toHaveTextContent('Delisting');
     });
 
@@ -60,8 +60,8 @@ describe('CurrencyDropdown', () => {
         fireEvent.click(dropdown);
         expect(
             await within(
-                screen.getByRole('menuitem', { name: 'WBTC' }),
-            ).findByRole('img'),
+                screen.getByRole('menuitem', { name: 'WBTC' })
+            ).findByRole('img')
         ).toBeInTheDocument();
     });
 

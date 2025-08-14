@@ -4,7 +4,7 @@ import { timeScaleMapping } from 'src/components/molecules/TimeScaleSelector/con
 
 export const useTooltipVisibility = (
     isMaximized: boolean,
-    showOnMount = false,
+    showOnMount = false
 ) => {
     useEffect(() => {
         const tooltips = [
@@ -23,7 +23,7 @@ export const useTooltipVisibility = (
 export function createTooltipElement(
     id: string,
     minWidth: string,
-    isMaximised: boolean,
+    isMaximised: boolean
 ): HTMLDivElement {
     let tooltipEl = document.getElementById(id) as HTMLDivElement | null;
 
@@ -31,7 +31,7 @@ export function createTooltipElement(
         tooltipEl = document.createElement('div');
         tooltipEl.id = id;
         (document.getElementById('chart-area') ?? document.body).appendChild(
-            tooltipEl,
+            tooltipEl
         );
     }
 
@@ -50,7 +50,7 @@ export function createTooltipElement(
         `desktop:min-w-[${minWidth}px]`,
         `w-[${Number(minWidth) - 20}px]`,
         'pointer-events-none',
-        'whitespace-nowrap',
+        'whitespace-nowrap'
     );
 
     return tooltipEl;
@@ -58,7 +58,7 @@ export function createTooltipElement(
 
 export const generateTooltipContent = (
     tooltip: TooltipModel<'line'>,
-    selectedTimeScales: { label: string; value: string }[],
+    selectedTimeScales: { label: string; value: string }[]
 ) => {
     const lineContentEl = document.createElement('div');
     const barContentEl = document.createElement('div');
@@ -79,7 +79,7 @@ export const generateTooltipContent = (
         if (!scale) return;
 
         const formattedValue = Number(
-            dataPoint.formattedValue.replace(/,/g, ''),
+            dataPoint.formattedValue.replace(/,/g, '')
         );
 
         // Line content
@@ -117,10 +117,10 @@ export const generateTooltipContent = (
             const barValue = document.createElement('span');
             barValue.classList.add('font-numerical');
             barValue.classList.add(
-                value < 0 ? 'text-[#FF9FAE]' : 'text-[#AAE8B0]',
+                value < 0 ? 'text-[#FF9FAE]' : 'text-[#AAE8B0]'
             );
             barValue.textContent = `${value >= 0 ? '+' : ''}${value.toFixed(
-                2,
+                2
             )}%`;
 
             barRow.appendChild(barLabel);
@@ -135,7 +135,7 @@ export const generateTooltipContent = (
 export const cloneAndAppend = (
     element: HTMLElement | null,
     refToUse: React.RefObject<HTMLDivElement>,
-    clonedElements: HTMLElement[],
+    clonedElements: HTMLElement[]
 ) => {
     if (!element || !refToUse.current) return;
 

@@ -24,7 +24,7 @@ export const getMultiLineChartData = (
     label: string,
     labels: string[],
     itayoseMarketIndex: Set<number>,
-    itayoseBorderColor: string,
+    itayoseBorderColor: string
 ): ChartData<'line'> => {
     return {
         labels: labels,
@@ -132,7 +132,7 @@ export const multiLineChartOptions: ChartOptions<'line'> = {
     onHover: (
         _event: ChartEvent,
         _elements: ActiveElement[],
-        chart: Chart<'line'>,
+        chart: Chart<'line'>
     ) => {
         chart.canvas.style.cursor = 'pointer';
     },

@@ -27,7 +27,7 @@ const columnHelper = createColumnHelper<Transaction>();
 const priceYieldColumnDef = (
     headerTitle: string,
     id: string,
-    formatType: Parameters<typeof formatLoanValue>[1],
+    formatType: Parameters<typeof formatLoanValue>[1]
 ) => {
     return columnHelper.accessor('averagePrice', {
         id: id,
@@ -38,9 +38,9 @@ const priceYieldColumnDef = (
                         {formatLoanValue(
                             LoanValue.fromPrice(
                                 Number(info.getValue().toString() * 10000), //TODO: remove this hack
-                                Number(info.row.original.maturity),
+                                Number(info.row.original.maturity)
                             ),
-                            formatType,
+                            formatType
                         )}
                     </span>
                 </div>
@@ -84,7 +84,7 @@ const MyTransactionsTableMobile = ({
                                 {
                                     'border-b border-neutral-600':
                                         index !== data.length - 1,
-                                },
+                                }
                             )}
                             key={index}
                         >
@@ -109,7 +109,7 @@ const MyTransactionsTableMobile = ({
                                             amount={getFVWithFee(
                                                 BigInt(futureValue),
                                                 BigInt(feeInFV),
-                                                side,
+                                                side
                                             )}
                                         />
                                     }
@@ -144,7 +144,7 @@ export const MyTransactionsTable = ({
                 variant,
                 undefined,
                 'left',
-                'left',
+                'left'
             ),
             loanTypeColumnDefinition(columnHelper, 'Type', 'type'),
             priceYieldColumnDef('Price', 'price', 'price'),
@@ -160,7 +160,7 @@ export const MyTransactionsTable = ({
                     fontSize: 'typography-caption-2 font-numerical',
                 },
                 '',
-                'right',
+                'right'
             ),
             amountColumnDefinition(
                 columnHelper,
@@ -170,7 +170,7 @@ export const MyTransactionsTable = ({
                     getFVWithFee(
                         BigInt(row.futureValue),
                         BigInt(row.feeInFV),
-                        row.side,
+                        row.side
                     ),
                 {
                     compact: true,
@@ -178,10 +178,10 @@ export const MyTransactionsTable = ({
                     fontSize: 'typography-caption-2 font-numerical',
                 },
                 '',
-                'right',
+                'right'
             ),
         ],
-        [variant],
+        [variant]
     );
 
     return isTablet ? (

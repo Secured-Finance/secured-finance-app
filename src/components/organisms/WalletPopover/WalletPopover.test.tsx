@@ -31,7 +31,7 @@ describe('WalletPopover component', () => {
         await userEvent.unhover(alertIcon);
         await userEvent.hover(alertIcon);
         const tooltip = await screen.findByText(
-            'Secured Finance is not supported on this network. Please switch to a supported network.',
+            'Secured Finance is not supported on this network. Please switch to a supported network.'
         );
         expect(tooltip).toBeInTheDocument();
     });

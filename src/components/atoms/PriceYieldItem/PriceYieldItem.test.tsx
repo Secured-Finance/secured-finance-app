@@ -19,7 +19,7 @@ describe('PriceYieldItem Component', () => {
         render(<Default align='right' />);
 
         expect(screen.getByText('98.00').parentElement).toHaveClass(
-            'text-right',
+            'text-right'
         );
     });
 });

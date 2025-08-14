@@ -37,7 +37,7 @@ describe('Dropdown Asset Selection Component', () => {
         expect(screen.getByTestId('chevron-down-icon')).toBeInTheDocument();
         fireEvent.click(screen.getByRole('button'));
         expect(screen.getByTestId('chevron-down-icon')).toHaveClass(
-            'rotate-180',
+            'rotate-180'
         );
     });
 
@@ -102,7 +102,7 @@ describe('Dropdown Asset Selection Component', () => {
                 <AssetDropdown
                     onChange={onChange}
                     selected={{ label: 'ETH', value: 'ETH' }}
-                />,
+                />
             );
             expect(onChange).toHaveBeenNthCalledWith(2, 'ETH');
             expect(onChange).toHaveBeenCalledTimes(2);

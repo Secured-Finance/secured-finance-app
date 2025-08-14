@@ -20,7 +20,7 @@ export const StatsBar = ({
                     `grid grid-cols-2 grid-rows-1`,
                     values.length > 2
                         ? 'grid-rows-2 tablet:grid-cols-4  tablet:grid-rows-1'
-                        : '',
+                        : ''
                 )}
                 role='grid'
             >

@@ -69,7 +69,7 @@ const reducer = (
     state: State,
     action: {
         type: string;
-    },
+    }
 ) => {
     switch (action.type) {
         case 'next':
@@ -123,14 +123,14 @@ export const EmergencyRedeemDialog = ({
                 header: 'Snapshot Rate',
             }),
         ],
-        [],
+        []
     );
 
     const { blockExplorerUrl } = useBlockExplorerUrl();
     const securedFinance = useSF();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [errorMessage, setErrorMessage] = useState(
-        'Your transaction has failed.',
+        'Your transaction has failed.'
     );
     const [txHash, setTxHash] = useState<string | undefined>();
 
@@ -173,7 +173,7 @@ export const EmergencyRedeemDialog = ({
                     break;
             }
         },
-        [handleClose, handleExecuteSettlement],
+        [handleClose, handleExecuteSettlement]
     );
 
     return (
@@ -205,7 +205,7 @@ export const EmergencyRedeemDialog = ({
                                             options={{ stickyHeader: false }}
                                         />
                                         <div className='typography-caption-2 text-center leading-6 text-slateGray'>{`Snapshot as of ${formatTimestamp(
-                                            snapshotDate ?? 0,
+                                            snapshotDate ?? 0
                                         )}`}</div>
                                     </div>
                                 </Section>

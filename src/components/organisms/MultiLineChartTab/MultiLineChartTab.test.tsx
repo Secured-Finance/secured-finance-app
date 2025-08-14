@@ -41,13 +41,13 @@ describe('MultiLineChartTab Component', () => {
             (tag: string): HTMLElement => {
                 if (tag === 'a') {
                     const anchor = originalCreateElement(
-                        'a',
+                        'a'
                     ) as HTMLAnchorElement;
                     anchor.click = mockLinkClick;
                     return anchor;
                 }
                 return originalCreateElement(tag);
-            },
+            }
         );
 
         render(<Default />);

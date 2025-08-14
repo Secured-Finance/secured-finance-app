@@ -2,7 +2,7 @@ import { RefObject, useEffect, useRef } from 'react';
 
 // Custom hook to prevent page scrolling when interacting with a specific element
 export function usePreventPageScroll<T extends HTMLElement>(
-    ref: RefObject<T>,
+    ref: RefObject<T>
 ): void {
     const isDragging = useRef<boolean>(false);
 

@@ -10,7 +10,7 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 describe('useItayoseEstimation', () => {
     it('should return the itayose estimation values', async () => {
         const { result } = renderHook(() =>
-            useItayoseEstimation(CurrencySymbol.WFIL, dec22Fixture.toNumber()),
+            useItayoseEstimation(CurrencySymbol.WFIL, dec22Fixture.toNumber())
         );
         expect(result.current.isPending).toEqual(true);
 

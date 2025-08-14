@@ -62,7 +62,7 @@ const MenuAddToken = ({
                                 'flex w-full flex-row items-center justify-start gap-2 rounded-md px-4 py-2 text-left text-white-60 focus:outline-none',
                                 {
                                     'bg-slateGray': active,
-                                },
+                                }
                             )}
                         >
                             <ClipboardDocumentIcon className='h-6 w-6 text-planetaryPurple' />
@@ -80,7 +80,7 @@ const MenuAddToken = ({
                                 'flex w-full flex-row items-center justify-start gap-2 rounded-md px-4 py-2 text-left text-white-60 focus:outline-none',
                                 {
                                     'bg-slateGray': active,
-                                },
+                                }
                             )}
                         >
                             <WalletIcon className='h-6 w-6 text-planetaryPurple' />
@@ -94,7 +94,7 @@ const MenuAddToken = ({
 };
 export const Faucet = () => {
     const chainError = useSelector(
-        (state: RootState) => state.blockchain.chainError,
+        (state: RootState) => state.blockchain.chainError
     );
 
     const { blockExplorerUrl } = useBlockExplorerUrl();
@@ -107,7 +107,7 @@ export const Faucet = () => {
     const assetList = toOptions(currencies, CurrencySymbol.USDC).filter(
         ccy =>
             currencyMap[ccy.value].toCurrency().isToken &&
-            ccy.label !== CurrencySymbol.USDFC,
+            ccy.label !== CurrencySymbol.USDFC
     );
 
     const [ccy, setCcy] = useState<CurrencySymbol | null>(null);
@@ -162,7 +162,7 @@ export const Faucet = () => {
                 },
             });
         },
-        [client, address],
+        [client, address]
     );
 
     useEffect(() => {
@@ -216,7 +216,7 @@ export const Faucet = () => {
                                                             className='flex h-9 w-9 items-center justify-center rounded-2xl bg-gunMetal'
                                                             onClick={() =>
                                                                 navigator.clipboard.writeText(
-                                                                    address,
+                                                                    address
                                                                 )
                                                             }
                                                         >
@@ -236,11 +236,11 @@ export const Faucet = () => {
                                                                 {
                                                                     'cursor-default':
                                                                         !client,
-                                                                },
+                                                                }
                                                             )}
                                                             onClick={() =>
                                                                 addToMetamask(
-                                                                    token,
+                                                                    token
                                                                 )
                                                             }
                                                         >
@@ -250,7 +250,7 @@ export const Faucet = () => {
                                                                     {
                                                                         'hover:text-planetaryPurple':
                                                                             client,
-                                                                    },
+                                                                    }
                                                                 )}
                                                             />
                                                         </button>
@@ -283,7 +283,7 @@ export const Faucet = () => {
                                             {account
                                                 ? AddressUtils.format(
                                                       account,
-                                                      6,
+                                                      6
                                                   )
                                                 : ''}
                                         </span>

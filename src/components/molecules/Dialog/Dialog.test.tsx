@@ -15,8 +15,8 @@ describe('Dialog component', () => {
         expect(screen.getByText('Dialog Title')).toBeInTheDocument();
         expect(
             screen.getByText(
-                'Description goes here. Try to keep message to not more than three lines.',
-            ),
+                'Description goes here. Try to keep message to not more than three lines.'
+            )
         ).toBeInTheDocument();
         const button = screen.getByTestId('dialog-action-button');
         expect(button).toHaveTextContent('Ok');
@@ -27,7 +27,7 @@ describe('Dialog component', () => {
     it('should display the button at the bottom of the modal in full width', () => {
         render(<Default />);
         expect(screen.getByTestId('dialog-action-button')).toHaveClass(
-            'w-full',
+            'w-full'
         );
     });
 
@@ -49,14 +49,14 @@ describe('Dialog component', () => {
     it('should show cancel button when showCancelButton is true', () => {
         render(<WithCancelButton />);
         expect(
-            screen.getByRole('button', { name: 'Cancel' }),
+            screen.getByRole('button', { name: 'Cancel' })
         ).toBeInTheDocument();
     });
 
     it('should not show cancel button when showCancelButton is false', () => {
         render(<Default />);
         expect(
-            screen.queryByRole('button', { name: 'Cancel' }),
+            screen.queryByRole('button', { name: 'Cancel' })
         ).not.toBeInTheDocument();
     });
 

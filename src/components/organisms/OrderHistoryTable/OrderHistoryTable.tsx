@@ -62,7 +62,7 @@ const OrderHistoryTableMobile = ({
                                 {
                                     'border-b border-neutral-600':
                                         index !== data.length - 1,
-                                },
+                                }
                             )}
                             key={index}
                         >
@@ -140,7 +140,7 @@ export const OrderHistoryTable = ({
                 variant,
                 undefined,
                 'left',
-                'left',
+                'left'
             ),
             loanTypeColumnDefinition(columnHelper, 'Type', 'type'),
             inputPriceYieldColumnDefinition(
@@ -148,14 +148,14 @@ export const OrderHistoryTable = ({
                 'Price',
                 'price',
                 row => row.inputUnitPrice,
-                'price',
+                'price'
             ),
             inputPriceYieldColumnDefinition(
                 columnHelper,
                 'APR%',
                 'yield',
                 row => row.inputUnitPrice,
-                'rate',
+                'rate'
             ),
             inputAmountColumnDefinition(
                 columnHelper,
@@ -167,7 +167,7 @@ export const OrderHistoryTable = ({
                     color: false,
                     priceList: priceList,
                     fontSize: 'typography-desktop-body-5 font-numerical',
-                },
+                }
             ),
             amountColumnDefinition(
                 columnHelper,
@@ -181,7 +181,7 @@ export const OrderHistoryTable = ({
                     fontSize: 'typography-desktop-body-5 font-numerical',
                 },
                 '',
-                'right',
+                'right'
             ),
             columnHelper.accessor('status', {
                 cell: info => (
@@ -196,10 +196,10 @@ export const OrderHistoryTable = ({
                 'Order Time',
                 'createdAt',
                 row => row.createdAt,
-                blockExplorerUrl,
+                blockExplorerUrl
             ),
         ],
-        [blockExplorerUrl, priceList, variant],
+        [blockExplorerUrl, priceList, variant]
     );
 
     return isTablet ? (

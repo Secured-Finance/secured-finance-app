@@ -33,7 +33,7 @@ describe('CollateralUsageSection Component', () => {
             <Default
                 currency={CurrencySymbol.USDC}
                 availableToBorrow={BigInt('5203154000')}
-            />,
+            />
         );
 
         expect(screen.getByText('Available to borrow')).toBeInTheDocument();

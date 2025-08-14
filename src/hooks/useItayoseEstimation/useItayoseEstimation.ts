@@ -26,7 +26,7 @@ export const useItayoseEstimation = (ccy: CurrencySymbol, maturity: number) => {
             const itayoseEstimation =
                 await securedFinance?.getItayoseEstimation(
                     toCurrency(ccy),
-                    maturity,
+                    maturity
                 );
             return itayoseEstimation ?? emptyOrderEstimation;
         },

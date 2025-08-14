@@ -3,12 +3,12 @@ import { useEffect, useRef, useState } from 'react';
 const arraysAreEqual = <Q>(arr1: Q[], arr2: Q[]) =>
     arr1.length === arr2.length &&
     arr1.every(
-        (value, index) => JSON.stringify(value) === JSON.stringify(arr2[index]),
+        (value, index) => JSON.stringify(value) === JSON.stringify(arr2[index])
     );
 
 const updateData = <T extends { id: string | number }>(
     prevData: T[],
-    newData: T[],
+    newData: T[]
 ): T[] => {
     const idToItemMap = new Map(prevData.map(item => [item.id, item]));
     for (const newItem of newData) {
@@ -20,7 +20,7 @@ const updateData = <T extends { id: string | number }>(
 export const usePagination = <T extends { id: string | number }>(
     data: T[],
     dataUser: string | undefined,
-    currentUser: string | undefined,
+    currentUser: string | undefined
 ) => {
     const [totalData, setTotalData] = useState<T[]>([]);
     const prevDataRef = useRef<T[]>([]);

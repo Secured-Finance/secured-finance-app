@@ -38,7 +38,7 @@ describe('TimeScaleCheckBox Component', () => {
     it('should call onChange when clicking on the label', async () => {
         const handleChange = jest.fn();
         render(
-            <Default isChecked={false} onChange={handleChange} label='Label' />,
+            <Default isChecked={false} onChange={handleChange} label='Label' />
         );
         const checkbox = screen.getByRole('checkbox');
         expect(checkbox).not.toBeChecked();

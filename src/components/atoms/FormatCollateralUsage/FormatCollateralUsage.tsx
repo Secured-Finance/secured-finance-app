@@ -12,7 +12,7 @@ export const FormatCollateralUsage = ({
 }) => {
     const initialColor = getLiquidationInformation(initialValue / 100).color;
     const finalColor = getLiquidationInformation(
-        Math.min(finalValue, maxValue) / 100,
+        Math.min(finalValue, maxValue) / 100
     ).color;
 
     return (

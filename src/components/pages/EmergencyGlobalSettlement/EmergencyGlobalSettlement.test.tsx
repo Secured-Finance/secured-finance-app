@@ -25,10 +25,10 @@ describe('EmergencyGlobalSettlement Component', () => {
             mock.isRedemptionRequired.mockResolvedValue(false);
             render(<Default />);
             expect(
-                await screen.findByTestId('emergency-step-2'),
+                await screen.findByTestId('emergency-step-2')
             ).toBeInTheDocument();
             expect(
-                screen.queryByTestId('emergency-step-1'),
+                screen.queryByTestId('emergency-step-1')
             ).not.toBeInTheDocument();
         });
 
@@ -36,10 +36,10 @@ describe('EmergencyGlobalSettlement Component', () => {
             mock.isRedemptionRequired.mockResolvedValue(true);
             render(<Default />);
             expect(
-                await screen.findByTestId('emergency-step-1'),
+                await screen.findByTestId('emergency-step-1')
             ).toBeInTheDocument();
             expect(
-                screen.queryByTestId('emergency-step-2'),
+                screen.queryByTestId('emergency-step-2')
             ).not.toBeInTheDocument();
         });
     });

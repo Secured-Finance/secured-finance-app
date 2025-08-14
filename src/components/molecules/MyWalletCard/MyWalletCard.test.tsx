@@ -20,7 +20,7 @@ describe('test MyWalletCard component', () => {
     it('should hide bridge dialog when hideBridge is true', async () => {
         await waitFor(() => render(<HideBridge />));
         expect(
-            screen.queryByRole('button', { name: 'Bridge' }),
+            screen.queryByRole('button', { name: 'Bridge' })
         ).not.toBeInTheDocument();
     });
 });

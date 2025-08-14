@@ -12,7 +12,7 @@ describe('useGetCountdown', () => {
 
     it('should return initial countdown value', () => {
         const { result } = renderHook(() =>
-            useGetCountdown(Date.now() + 10000),
+            useGetCountdown(Date.now() + 10000)
         );
         expect(result.current).toBeDefined();
     });

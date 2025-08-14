@@ -33,7 +33,7 @@ function render(
         }),
         apolloMocks = null,
         ...renderOptions
-    } = {},
+    } = {}
 ) {
     function Wrapper({ children }) {
         const queryClient = new QueryClient(defaultOptions);
@@ -75,7 +75,7 @@ function renderHook(
         }),
         apolloMocks = null,
         ...renderOptions
-    } = {},
+    } = {}
 ) {
     function Wrapper({ children }) {
         const queryClient = new QueryClient(defaultOptions);

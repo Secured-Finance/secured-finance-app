@@ -16,7 +16,7 @@ const usedCurrencies = [CurrencySymbol.ETH, CurrencySymbol.WFIL];
 describe('usePositions', () => {
     it('should return an array of positions', async () => {
         const { result } = renderHook(() =>
-            usePositions('0x1', usedCurrencies),
+            usePositions('0x1', usedCurrencies)
         );
 
         const value = result.current;
@@ -37,46 +37,46 @@ describe('usePositions', () => {
 
     it('positions should have marketPrice', async () => {
         const { result } = renderHook(() =>
-            usePositions('0x1', usedCurrencies),
+            usePositions('0x1', usedCurrencies)
         );
 
         await waitFor(() => {
             const newValue = result.current;
             expect(newValue.data.positions).toHaveLength(4);
             expect(newValue.data.positions[0].marketPrice).toStrictEqual(
-                BigInt(9750),
+                BigInt(9750)
             );
             expect(newValue.data.positions[1].marketPrice).toStrictEqual(
-                BigInt(9500),
+                BigInt(9500)
             );
             expect(newValue.data.positions[2].marketPrice).toStrictEqual(
-                BigInt(9750),
+                BigInt(9750)
             );
             expect(newValue.data.positions[3].marketPrice).toStrictEqual(
-                BigInt(9403),
+                BigInt(9403)
             );
         });
     });
 
     it('should return a set with the borrow currencies and the lend currencies of the positions', async () => {
         const { result } = renderHook(() =>
-            usePositions('0x1', usedCurrencies),
+            usePositions('0x1', usedCurrencies)
         );
 
         await waitFor(() => {
             const newValue = result.current;
             expect(newValue.data.lendCurrencies).toEqual(
-                new Set([CurrencySymbol.ETH, CurrencySymbol.WFIL]),
+                new Set([CurrencySymbol.ETH, CurrencySymbol.WFIL])
             );
             expect(newValue.data.borrowCurrencies).toEqual(
-                new Set([CurrencySymbol.USDC, CurrencySymbol.ETH]),
+                new Set([CurrencySymbol.USDC, CurrencySymbol.ETH])
             );
         });
     });
 
     it('should return total borrow and total lend amount', async () => {
         const { result } = renderHook(() =>
-            usePositions('0x1', usedCurrencies),
+            usePositions('0x1', usedCurrencies)
         );
 
         await waitFor(() => {

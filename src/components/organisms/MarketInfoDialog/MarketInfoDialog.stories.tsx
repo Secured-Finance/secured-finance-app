@@ -18,7 +18,7 @@ export default {
         currentMarket: {
             value: LoanValue.fromPrice(
                 9600,
-                maturityOptions[0].value.toNumber(),
+                maturityOptions[0].value.toNumber()
             ),
             time: 1646920200,
             type: 'block',
@@ -27,7 +27,7 @@ export default {
         marketInfo: dailyMarketStats,
         lastLoanValue: LoanValue.fromPrice(
             lastTradePrice,
-            maturityOptions[0].value.toNumber(),
+            maturityOptions[0].value.toNumber()
         ),
         volumeInfo: {
             volume24H: '520 WFIL',

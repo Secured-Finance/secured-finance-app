@@ -16,7 +16,7 @@ describe('useDecimals', () => {
                 [CurrencySymbol.WFIL]: 26,
                 [CurrencySymbol.USDC]: 8,
                 [CurrencySymbol.WBTC]: 8,
-            }),
+            })
         );
     });
 });

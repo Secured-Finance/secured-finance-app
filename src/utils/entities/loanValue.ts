@@ -29,7 +29,7 @@ export class LoanValue {
     public static fromPrice(
         price: number,
         maturity: number,
-        calculationDate?: number,
+        calculationDate?: number
     ): LoanValue {
         const loanValue = new LoanValue();
         loanValue._price = price;
@@ -55,15 +55,12 @@ export class LoanValue {
             if (yearFraction <= 1) {
                 this._price = Math.floor(
                     LoanValue.PAR_VALUE /
-                        (1 + this._apr.toAbsoluteNumber() * yearFraction),
+                        (1 + this._apr.toAbsoluteNumber() * yearFraction)
                 );
             } else {
                 this._price = Math.floor(
                     LoanValue.PAR_VALUE /
-                        Math.pow(
-                            1 + this._apr.toAbsoluteNumber(),
-                            yearFraction,
-                        ),
+                        Math.pow(1 + this._apr.toAbsoluteNumber(), yearFraction)
                 );
             }
         }
@@ -86,16 +83,16 @@ export class LoanValue {
                     this._apr = new Rate(
                         ((LoanValue.PAR_VALUE / this._price - 1) /
                             yearFraction) *
-                            this.PAR_VALUE_RATE,
+                            this.PAR_VALUE_RATE
                     );
                 } else {
                     this._apr = new Rate(
                         (Math.pow(
                             LoanValue.PAR_VALUE / this._price,
-                            1 / yearFraction,
+                            1 / yearFraction
                         ) -
                             1) *
-                            this.PAR_VALUE_RATE,
+                            this.PAR_VALUE_RATE
                     );
                 }
             }
@@ -139,7 +136,7 @@ export class LoanValue {
                     this._calculationDate !== 0
                     ? this._calculationDate * 1000
                     : Date.now(),
-                'second',
+                'second'
             );
     }
 

@@ -120,7 +120,7 @@ export const getGoogleAnalyticsTag = () => {
     if (!NEXT_PUBLIC_GOOGLE_ANALYTICS_TAG) {
         // eslint-disable-next-line no-console
         console.warn(
-            'Google Analytics Tag is not set: No analytics will be sent',
+            'Google Analytics Tag is not set: No analytics will be sent'
         );
         return '';
     }

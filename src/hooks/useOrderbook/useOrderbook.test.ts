@@ -10,7 +10,7 @@ const maturity = 1675252800;
 describe('useOrderbook', () => {
     it('should return an array of number for borrow rates and two callback functions to set parameters for depth calculation', async () => {
         const { result } = renderHook(() =>
-            useOrderbook(CurrencySymbol.ETH, maturity),
+            useOrderbook(CurrencySymbol.ETH, maturity)
         );
 
         expect(result.current.data).toBeUndefined();
@@ -26,22 +26,22 @@ describe('useOrderbook', () => {
 
     it('should return the transformed orderbook', async () => {
         const { result } = renderHook(() =>
-            useOrderbook(CurrencySymbol.ETH, maturity),
+            useOrderbook(CurrencySymbol.ETH, maturity)
         );
 
         await waitFor(() => {
             expect(
                 result.current[0].data.borrowOrderbook.map(
-                    (v: OrderBookEntry) => v.value.price,
-                ),
+                    (v: OrderBookEntry) => v.value.price
+                )
             ).toEqual([
                 9690, 9687, 9685, 9679, 9674, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             ]);
 
             expect(
                 result.current[0].data.borrowOrderbook.map(
-                    (v: OrderBookEntry) => v.amount.toString(),
-                ),
+                    (v: OrderBookEntry) => v.amount.toString()
+                )
             ).toEqual([
                 '43000000000000000000000',
                 '23000000000000000000000',
@@ -65,29 +65,29 @@ describe('useOrderbook', () => {
     it('should return the transformed orderbook with calculationDate when it is passed', async () => {
         const calculationDate = 1669852800;
         const { result } = renderHook(() =>
-            useOrderbook(CurrencySymbol.ETH, maturity, calculationDate),
+            useOrderbook(CurrencySymbol.ETH, maturity, calculationDate)
         );
 
         await waitFor(() => {
             expect(
                 result.current[0].data.borrowOrderbook.map(
-                    (v: OrderBookEntry) => v.value.price,
-                ),
+                    (v: OrderBookEntry) => v.value.price
+                )
             ).toEqual([
                 9690, 9687, 9685, 9679, 9674, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             ]);
 
             expect(
                 result.current[0].data.borrowOrderbook.map(
-                    (v: OrderBookEntry) => v.value.calculationDate,
-                ),
+                    (v: OrderBookEntry) => v.value.calculationDate
+                )
             ).toEqual(Array(15).fill(calculationDate));
         });
     });
 
     it('should double the depth when not showing all orderbook', async () => {
         const { result } = renderHook(() =>
-            useOrderbook(CurrencySymbol.ETH, maturity),
+            useOrderbook(CurrencySymbol.ETH, maturity)
         );
 
         await waitFor(() => {
@@ -105,7 +105,7 @@ describe('useOrderbook', () => {
 
     it('should multiply the depth when multiplier is set', async () => {
         const { result } = renderHook(() =>
-            useOrderbook(CurrencySymbol.ETH, maturity),
+            useOrderbook(CurrencySymbol.ETH, maturity)
         );
 
         await waitFor(() => {

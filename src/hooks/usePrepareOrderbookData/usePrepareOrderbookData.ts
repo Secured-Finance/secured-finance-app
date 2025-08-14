@@ -6,18 +6,18 @@ import { LoanValue } from 'src/utils/entities';
 export type AggregationFactorType = 1 | 10 | 100 | 1000;
 
 export const usePrepareOrderbookData = <
-    T extends keyof NonNullable<ReturnType<typeof useOrderbook>[0]['data']>,
+    T extends keyof NonNullable<ReturnType<typeof useOrderbook>[0]['data']>
 >(
     data: ReturnType<typeof useOrderbook>[0]['data'],
     orderbookType: T,
     limit: number,
-    aggregationFactor: AggregationFactorType,
+    aggregationFactor: AggregationFactorType
 ) => {
     return useMemo(() => {
         if (!data) return [];
 
         const zeroValues = data[orderbookType].filter(
-            order => order.amount === ZERO_BI,
+            order => order.amount === ZERO_BI
         );
 
         const result: Record<number, OrderBookEntry> = {};
@@ -36,7 +36,7 @@ export const usePrepareOrderbookData = <
                         value: LoanValue.fromPrice(
                             price,
                             order.value.maturity,
-                            order.value.calculationDate,
+                            order.value.calculationDate
                         ),
                         cumulativeAmount: ZERO_BI,
                     };
@@ -46,7 +46,7 @@ export const usePrepareOrderbookData = <
             });
 
         const sortedResult = [...Object.values(result)].sort((a, b) =>
-            sortOrders(a, b, 'desc'),
+            sortOrders(a, b, 'desc')
         );
 
         if (sortedResult.length > 0) {

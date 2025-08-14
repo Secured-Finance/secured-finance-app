@@ -107,7 +107,7 @@ const sortedResults = [
 describe('usePrepareOrderbookData', () => {
     it('should return an empty array when no data is provided', () => {
         const { result } = renderHook(() =>
-            usePrepareOrderbookData(undefined, 'borrowOrderbook', 6, 1),
+            usePrepareOrderbookData(undefined, 'borrowOrderbook', 6, 1)
         );
         expect(result.current).toEqual([]);
     });
@@ -115,7 +115,7 @@ describe('usePrepareOrderbookData', () => {
     describe('aggregation', () => {
         it('should return the correct data when provided with valid data', () => {
             const { result } = renderHook(() =>
-                usePrepareOrderbookData(data, 'borrowOrderbook', 6, 10),
+                usePrepareOrderbookData(data, 'borrowOrderbook', 6, 10)
             );
             expect(result.current).toEqual([
                 {
@@ -138,14 +138,14 @@ describe('usePrepareOrderbookData', () => {
 
         it('should not aggregate the data when provided with an aggregation factor of 1 but still sort it and order the zeros', () => {
             const { result } = renderHook(() =>
-                usePrepareOrderbookData(data, 'borrowOrderbook', 6, 1),
+                usePrepareOrderbookData(data, 'borrowOrderbook', 6, 1)
             );
             expect(result.current).toEqual(sortedResults);
         });
 
         it('should aggregate the data by 1000 when provided with an aggregation factor of 1000', () => {
             const { result } = renderHook(() =>
-                usePrepareOrderbookData(data, 'lendOrderbook', 6, 1000),
+                usePrepareOrderbookData(data, 'lendOrderbook', 6, 1000)
             );
             expect(result.current).toEqual([
                 {
@@ -195,8 +195,8 @@ describe('usePrepareOrderbookData', () => {
                     },
                     'lendOrderbook',
                     4,
-                    1,
-                ),
+                    1
+                )
             );
             expect(result.current).toEqual([
                 {
@@ -231,8 +231,8 @@ describe('usePrepareOrderbookData', () => {
                     },
                     'borrowOrderbook',
                     4,
-                    1,
-                ),
+                    1
+                )
             );
             expect(result.current).toEqual([
                 {
@@ -262,7 +262,7 @@ describe('usePrepareOrderbookData', () => {
     describe('limit', () => {
         it('should limit the data to the provided limit for lend orderbook to the biggest prices', () => {
             const { result } = renderHook(() =>
-                usePrepareOrderbookData(data, 'lendOrderbook', 3, 1),
+                usePrepareOrderbookData(data, 'lendOrderbook', 3, 1)
             );
             expect(result.current).toEqual([
                 {
@@ -285,7 +285,7 @@ describe('usePrepareOrderbookData', () => {
 
         it('should limit the data to the provided limit for borrow orderbook to the smallest prices', () => {
             const { result } = renderHook(() =>
-                usePrepareOrderbookData(data, 'borrowOrderbook', 3, 1),
+                usePrepareOrderbookData(data, 'borrowOrderbook', 3, 1)
             );
             expect(result.current).toEqual([
                 {
@@ -308,14 +308,14 @@ describe('usePrepareOrderbookData', () => {
 
         it('should return all the data if limit is zero', () => {
             const { result } = renderHook(() =>
-                usePrepareOrderbookData(data, 'borrowOrderbook', 0, 1),
+                usePrepareOrderbookData(data, 'borrowOrderbook', 0, 1)
             );
             expect(result.current).toEqual(sortedResults);
         });
 
         it('should return all the data if limit is bigger than the length of the data', () => {
             const { result } = renderHook(() =>
-                usePrepareOrderbookData(data, 'borrowOrderbook', 10, 1),
+                usePrepareOrderbookData(data, 'borrowOrderbook', 10, 1)
             );
             expect(result.current).toEqual(sortedResults);
         });

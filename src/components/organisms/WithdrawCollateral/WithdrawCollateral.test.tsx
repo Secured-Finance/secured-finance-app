@@ -35,7 +35,7 @@ describe('WithdrawCollateral component', () => {
         render(<Default />);
         expect(screen.getByRole('textbox').getAttribute('value')).toBe('');
         expect(screen.getByRole('textbox').getAttribute('placeholder')).toBe(
-            '0',
+            '0'
         );
     });
 
@@ -74,7 +74,7 @@ describe('WithdrawCollateral component', () => {
         fireEvent.click(screen.getByTestId('option-1'));
         expect(screen.getByRole('textbox').getAttribute('value')).toBe('');
         expect(screen.getByRole('textbox').getAttribute('placeholder')).toBe(
-            '0',
+            '0'
         );
     });
 
@@ -91,7 +91,7 @@ describe('WithdrawCollateral component', () => {
 
     it('should proceed to failure screen and call onclose when block number is undefined', async () => {
         mockSecuredFinance.tokenVault.withdrawCollateral.mockResolvedValueOnce(
-            '',
+            ''
         );
         const onClose = jest.fn();
         render(<Default onClose={onClose} />);
@@ -108,10 +108,10 @@ describe('WithdrawCollateral component', () => {
         fireEvent.click(button);
 
         await waitFor(() =>
-            expect(screen.queryByText('Success!')).not.toBeInTheDocument(),
+            expect(screen.queryByText('Success!')).not.toBeInTheDocument()
         );
         await waitFor(() =>
-            expect(screen.queryByText('Failed!')).toBeInTheDocument(),
+            expect(screen.queryByText('Failed!')).toBeInTheDocument()
         );
         const onCloseButton = screen.getByTestId('dialog-action-button');
         fireEvent.click(onCloseButton);
@@ -150,8 +150,8 @@ describe('WithdrawCollateral component', () => {
                     [CollateralProperties.ASSET_TYPE]: 'USDC',
                     [CollateralProperties.AMOUNT]: '37.5',
                     [CollateralProperties.SOURCE]: 'Source of Withdrawal',
-                },
-            ),
+                }
+            )
         );
     });
 
@@ -170,8 +170,8 @@ describe('WithdrawCollateral component', () => {
             expect(screen.getByText('Success!')).toBeInTheDocument();
             expect(
                 screen.getByText(
-                    'You have successfully withdrawn collateral on Secured Finance.',
-                ),
+                    'You have successfully withdrawn collateral on Secured Finance.'
+                )
             ).toBeInTheDocument();
             expect(screen.getByText('Status')).toBeInTheDocument();
             expect(screen.getByText('Complete')).toBeInTheDocument();
@@ -179,7 +179,7 @@ describe('WithdrawCollateral component', () => {
             expect(screen.getByText('37.5 USDC')).toBeInTheDocument();
 
             expect(
-                screen.getByTestId('dialog-action-button'),
+                screen.getByTestId('dialog-action-button')
             ).toHaveTextContent('OK');
         });
 
@@ -195,7 +195,7 @@ describe('WithdrawCollateral component', () => {
 
         expect(screen.getByText('Bitcoin')).toBeInTheDocument();
         expect(
-            screen.getByText('1.1235 Bitcoin Available'),
+            screen.getByText('1.1235 Bitcoin Available')
         ).toBeInTheDocument();
 
         fireEvent.click(screen.getByTestId(100));
@@ -211,8 +211,8 @@ describe('WithdrawCollateral component', () => {
                     [CollateralProperties.ASSET_TYPE]: 'WBTC',
                     [CollateralProperties.AMOUNT]: '1.12349999',
                     [CollateralProperties.SOURCE]: 'Source of Withdrawal',
-                },
-            ),
+                }
+            )
         );
     });
 

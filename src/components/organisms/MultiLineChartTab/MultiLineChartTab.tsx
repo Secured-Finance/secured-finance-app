@@ -61,10 +61,10 @@ export const MultiLineChartTab = ({
     const router = useRouter();
     const { data: isGlobalItayose } = useIsGlobalItayose();
     const { currency, maturity } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm),
+        selectLandingOrderForm(state.landingOrderForm)
     );
     const currentChainId = useSelector(
-        (state: RootState) => state.blockchain.chainId,
+        (state: RootState) => state.blockchain.chainId
     );
 
     useEffect(() => {
@@ -93,9 +93,7 @@ export const MultiLineChartTab = ({
             const historicalDatasets = selectedTimeScales
                 .map(
                     interval =>
-                        fetchedRates[
-                            interval.value as HistoricalYieldIntervals
-                        ],
+                        fetchedRates[interval.value as HistoricalYieldIntervals]
                 )
                 .filter(data => data && data.length > 0);
             if (rates && rates.length > 0) {
@@ -114,7 +112,7 @@ export const MultiLineChartTab = ({
         'Market price',
         maturityList.map(item => item.label),
         itayoseMarketIndexSet,
-        itayoseBorderColor,
+        itayoseBorderColor
     );
 
     const chartOptions: ChartOptions<'line'> = {
@@ -134,19 +132,19 @@ export const MultiLineChartTab = ({
                     const lineTooltipEl = createTooltipElement(
                         'chart-tooltip-line',
                         '160',
-                        isMaximized,
+                        isMaximized
                     );
                     const barTooltipEl = createTooltipElement(
                         'chart-tooltip-bar',
                         '130',
-                        isMaximized,
+                        isMaximized
                     );
 
                     lineTooltipEl.innerHTML = '';
                     barTooltipEl.innerHTML = '';
                     const { lineContent, barContent } = generateTooltipContent(
                         tooltip,
-                        selectedTimeScales,
+                        selectedTimeScales
                     );
                     lineTooltipEl.appendChild(lineContent);
                     barTooltipEl.appendChild(barContent);
@@ -175,14 +173,14 @@ export const MultiLineChartTab = ({
                             lastPoint.x +
                             window.scrollX +
                             (isLastDataPoint ? -160 : 50),
-                        window.scrollY + canvasRect.top + lastPoint.y - 30,
+                        window.scrollY + canvasRect.top + lastPoint.y - 30
                     );
 
                     if (selectedTimeScales.length < 1) {
                         positionElement(
                             lineTooltipEl,
                             tooltip.caretX,
-                            tooltip.caretY,
+                            tooltip.caretY
                         );
                         barTooltipEl.remove();
                         return;
@@ -200,7 +198,7 @@ export const MultiLineChartTab = ({
                             window.scrollY +
                                 canvasRect.top +
                                 lineChartHeight +
-                                30,
+                                30
                         );
                     } else {
                         barTooltipEl.style.opacity = '0';
@@ -211,7 +209,7 @@ export const MultiLineChartTab = ({
     };
 
     const handleDownload = async (
-        refToUse: React.RefObject<HTMLDivElement>,
+        refToUse: React.RefObject<HTMLDivElement>
     ) => {
         if (!refToUse.current) return;
 
@@ -256,8 +254,8 @@ export const MultiLineChartTab = ({
                 ? 'h-[50%]'
                 : 'h-[12rem]'
             : isMaximized
-              ? 'h-[70%]'
-              : 'h-[20rem]';
+            ? 'h-[70%]'
+            : 'h-[20rem]';
 
     const handleChartClick = useCallback(
         (maturityIndex: number) => {
@@ -266,7 +264,7 @@ export const MultiLineChartTab = ({
             trackButtonEvent(
                 ButtonEvents.TERM_CHANGE,
                 ButtonProperties.TERM,
-                label,
+                label
             );
             const market = `${currency}-${label}`;
             router.push({
@@ -276,7 +274,7 @@ export const MultiLineChartTab = ({
                 },
             });
         },
-        [currency, dispatch, maturityList, router],
+        [currency, dispatch, maturityList, router]
     );
 
     return loading ? (
@@ -338,7 +336,7 @@ export const MultiLineChartTab = ({
                     className={clsx(
                         'flex flex-col border-t border-[#5b7280]',
                         isMaximized ? 'h-[40%]' : 'h-[125px]',
-                        'w-full',
+                        'w-full'
                     )}
                 >
                     <span className='mb-[-10px] ml-2 pt-1 font-numerical text-[11px] text-neutral-400'>

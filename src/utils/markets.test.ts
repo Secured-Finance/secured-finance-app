@@ -25,7 +25,7 @@ describe('markets', () => {
         it('should write the market-address pair to localStorage', () => {
             writeMarketInStore(marketToSave);
             const savedMarkets = JSON.parse(
-                localStorage.getItem('SAVED_MARKETS_KEY') || '[]',
+                localStorage.getItem('SAVED_MARKETS_KEY') || '[]'
             );
             expect(savedMarkets).toEqual([marketToSave]);
         });
@@ -51,7 +51,7 @@ describe('markets', () => {
         it('should remove the market from localStorage', () => {
             localStorage.setItem(
                 'SAVED_MARKETS_KEY',
-                JSON.stringify([marketToSave]),
+                JSON.stringify([marketToSave])
             );
             removeMarketFromStore(marketToSave);
             expect(localStorage.getItem('SAVED_MARKETS_KEY')).toEqual('[]');

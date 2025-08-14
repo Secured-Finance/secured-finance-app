@@ -9,8 +9,8 @@ describe('test ConnectWalletCard component', () => {
         render(<Default />);
         expect(
             screen.getByText(
-                'Welcome to the future of DeFi. Secured Finance brings Interbank-grade lending solution to Web3.',
-            ),
+                'Welcome to the future of DeFi. Secured Finance brings Interbank-grade lending solution to Web3.'
+            )
         ).toBeInTheDocument();
         expect(screen.getByRole('button')).toBeInTheDocument();
         expect(screen.getByText('Connect Wallet')).toBeInTheDocument();

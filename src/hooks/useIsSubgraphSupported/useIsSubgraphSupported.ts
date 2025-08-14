@@ -6,6 +6,6 @@ export const useIsSubgraphSupported = (currentChainId?: number) => {
         () =>
             currentChainId &&
             !getNonSubgraphSupportedChainIds().includes(currentChainId),
-        [currentChainId],
+        [currentChainId]
     );
 };
