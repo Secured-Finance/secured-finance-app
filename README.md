@@ -122,9 +122,16 @@ npm run test:cov
 npm run test
 ```
 
-Note: If you cannot run `npm ci` due to authentication issues with private packages, you can:
-1. Ask your team for a GitHub Personal Access Token with `read:packages` scope
-2. Or use a pre-configured development container/environment
+**Important**: Running tests locally requires all dependencies to be installed:
+
+1. You need a GitHub Personal Access Token with `read:packages` scope for private packages
+2. Set it up with: `npm login --registry=https://npm.pkg.github.com`
+3. Then run: `npm ci` to install dependencies
+4. Finally: `npm run test:cov` to run tests
+
+Alternative options:
+- Use Docker with the provided `Dockerfile.test` and `test-local.sh` script
+- Or rely on CI results in pull requests
 
 ## 👨‍💻 Test the app
 

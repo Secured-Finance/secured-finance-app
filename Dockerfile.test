@@ -1,0 +1,24 @@
+# Dockerfile for running tests locally with the same environment as CI
+FROM node:18-alpine
+
+# Install git for npm dependencies
+RUN apk add --no-cache git
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Set npm registry for @secured-finance packages
+RUN npm config set @secured-finance:registry https://npm.pkg.github.com
+
+# Install dependencies (requires GitHub PAT)
+ARG NPM_AUTH_TOKEN
+ENV NPM_AUTH_TOKEN=$NPM_AUTH_TOKEN
+RUN npm ci
+
+# Copy application files
+COPY . .
+
+# Run tests
+CMD ["npm", "run", "test:cov"]
