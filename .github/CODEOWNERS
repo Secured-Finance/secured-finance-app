@@ -1,0 +1,4 @@
+# CODEOWNERS - Minimal configuration
+# All code reviewed by engineering team
+
+* @secured-finance/engineering-team
