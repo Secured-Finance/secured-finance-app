@@ -23,8 +23,6 @@ beforeAll(() => {
     timemachine.config({
         dateString: '2021-12-01T11:00:00.00Z',
     });
-    // Set COMMIT_HASH for all tests to avoid console.warn
-    process.env.COMMIT_HASH = process.env.COMMIT_HASH || 'test-hash';
 });
 
 afterAll(() => {

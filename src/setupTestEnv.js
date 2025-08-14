@@ -1,3 +1,6 @@
+// Set test environment variables
+process.env.COMMIT_HASH = process.env.COMMIT_HASH || '1234567890';
+
 global.ResizeObserver = jest.fn().mockImplementation(() => ({
     observe: jest.fn(),
     unobserve: jest.fn(),
