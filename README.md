@@ -107,6 +107,25 @@ npm run lint:write
 npm run typecheck
 ```
 
+### Running Tests Locally (Same as CI)
+
+To run tests exactly as they run in CI:
+
+```bash
+# Set required environment variables for tests
+export COMMIT_HASH="local-test"
+
+# Run tests with coverage (same as CI)
+npm run test:cov
+
+# Or run tests in watch mode for development
+npm run test
+```
+
+Note: If you cannot run `npm ci` due to authentication issues with private packages, you can:
+1. Ask your team for a GitHub Personal Access Token with `read:packages` scope
+2. Or use a pre-configured development container/environment
+
 ## 👨‍💻 Test the app
 
 The web application is tested in multiple ways:
