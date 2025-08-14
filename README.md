@@ -8,6 +8,7 @@
 A DeFi Trading Platform utilizing Orderbook-based Rates, facilitating the lending and borrowing of digital assets for constructing yield curves within the DeFi ecosystem.
 
 ### Quick Links
+
 [![Static Badge](https://img.shields.io/badge/Homepage-5162FF?style=for-the-badge)](https://secured.finance)
 [![Static Badge](https://img.shields.io/badge/Trading_Platform-white?style=for-the-badge)](https://app.secured.finance)
 [![Static Badge](https://img.shields.io/badge/Docs-11CABE?style=for-the-badge)](https://docs.secured.finance/)
@@ -16,19 +17,59 @@ A DeFi Trading Platform utilizing Orderbook-based Rates, facilitating the lendin
 
 ## ⚡️ Quick Start
 
+### Prerequisites
+
+- Node.js 18.x (use `nvm use` to switch to the correct version)
+- GitHub Personal Access Token (PAT) with `read:packages` scope for private npm packages
+
+### Setup Steps
+
 1. Clone this repository
-2. Login on the GitHub npm package repository with `npm login --registry=https://npm.pkg.github.com`
+2. Set up GitHub npm registry authentication:
+
+   ```bash
+   npm login --registry=https://npm.pkg.github.com
+   # Username: YOUR_GITHUB_USERNAME
+   # Password: YOUR_GITHUB_PAT
+   # Email: YOUR_EMAIL
+   ```
+
 3. Set up environment variables:
+
    ```bash
    cp .env.local.example .env.local
-   # Edit .env.local with your secrets
+   # Edit .env.local and add your API keys (see Environment Variables section below)
    ```
-4. Run `nvm use` to ensure you are using the correct node version
-5. Install all required dependencies by running `npm install`
-6. Run `npm run start` to start development mode
+
+4. Install dependencies:
+
+   ```bash
+   nvm use  # Switch to correct Node version
+   npm ci   # Clean install from package-lock.json
+   ```
+
+5. Start development server:
+
+   ```bash
+   npm run start
+   ```
+
+### Environment Variables
+
+The project uses two environment files:
+
+- `.env` - Default values (committed to Git)
+- `.env.local` - Your local secrets (gitignored)
+
+Required variables in `.env.local`:
+
+- `NEXT_PUBLIC_ALCHEMY_API_KEY` - Alchemy API key for blockchain interaction
+- `NEXT_PUBLIC_AMPLITUDE_API_KEY` - Analytics tracking (optional for local dev)
 
 ## 👍 Recommended Development Environment
+
 This repository provides a `.vscode/settings.json` which assumes you have the following extensions installed in your code editor:
+
 - ESLint
 - Prettier
 - TailwindCSS Intellisense
@@ -36,21 +77,57 @@ This repository provides a `.vscode/settings.json` which assumes you have the fo
 
 Those extensions helps streamline the development process by creating a standard way of formatting the code.
 
+## 🛠️ Development Workflow
+
+### Code Formatting
+
+The project uses Prettier for code formatting. To ensure consistency:
+
+```bash
+# Check formatting
+npm run prettier:check
+
+# Auto-fix formatting
+npm run prettier:write
+```
+
+### Linting
+
+```bash
+# Check for linting issues
+npm run lint:check
+
+# Auto-fix linting issues
+npm run lint:write
+```
+
+### Type Checking
+
+```bash
+npm run typecheck
+```
+
 ## 👨‍💻 Test the app
+
 The web application is tested in multiple ways:
 
 ### Unit test
+
 - Run `npm run test`
 
 ### Running the End to End tests locally with the interactive runner
+
 You can find more information about the test runner [here](https://docs.cypress.io/guides/core-concepts/test-runner#Clicking-on-Commands)
+
 - Create a file `cypress.env.json` at the root of the project. Please refer to `cypress.env.json.sample` for the list of environment variables needed
 - Start the development server with `npm run start`
 - Start the cypress interactive runner with `npm run cypress:open`
 - Click on the spec to run it or all the specs
 
 ### Running the End to End test locally with the headless runner
+
 This headless runner is a command line runner used for our continuous integration.
+
 - Create a file `cypress.env.json` at the root of the project. Please refer to `cypress.env.json.sample` for the list of environment variables needed
 - Start the development server with `npm run start`
 - Start the cypress headless runner with `npm run cypress:run`
