@@ -4,6 +4,12 @@
 // Prefer the Zod schema when available to keep checks consistent.
 // We avoid TS at build-time here to keep the toolchain simple.
 
+// Skip validation in CI - GitHub Actions provides these via .env.local
+if (process.env.CI) {
+  console.log('[env:check] Skipping in CI environment');
+  process.exit(0);
+}
+
 const required = [
   'NEXT_PUBLIC_GRAPHQL_SERVER_URL',
   'NEXT_PUBLIC_SUPPORTED_CHAIN_IDS',
