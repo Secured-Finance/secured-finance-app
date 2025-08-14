@@ -10,7 +10,7 @@ jobs:
     uses: ./.github/workflows/reusable-build-webapp.yml
     with:
       artifact_name: smoke-test-webapp
-      environment_name: ci-test
+      environment_name: ci-build
       ref: ${{ github.ref }}
     secrets: inherit
 
@@ -22,7 +22,6 @@ jobs:
     uses: ./.github/workflows/reusable-test-cypress.yml
     with:
       artifact_name: smoke-test-webapp
-      environment_name: ci-test
     secrets: inherit
 
   # Summary job
