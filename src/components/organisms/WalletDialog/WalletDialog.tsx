@@ -60,11 +60,11 @@ export const WalletDialog = () => {
 
     const [wallet, setWallet] = useState<string>('');
     const [errorMessage, setErrorMessage] = useState(
-        'Your wallet could not be connected.'
+        'Your wallet could not be connected.',
     );
 
     const isOpen = useSelector(
-        (state: RootState) => state.interactions.walletDialogOpen
+        (state: RootState) => state.interactions.walletDialogOpen,
     );
     const dispatch = useDispatch();
 
@@ -103,7 +103,7 @@ export const WalletDialog = () => {
     const handleConnect = useCallback(
         async (provider: Wallet, account: string | undefined) => {
             const connector = connectors.find(
-                connect => connect.name === provider
+                connect => connect.name === provider,
             );
 
             if (!connector) {
@@ -129,7 +129,7 @@ export const WalletDialog = () => {
                 writeWalletInStore(provider);
             }
         },
-        [connect, connectors, searchParams]
+        [connect, connectors, searchParams],
     );
 
     const connectWallet = useCallback(
@@ -142,7 +142,7 @@ export const WalletDialog = () => {
                 reset();
             }
         },
-        [handleConnect, reset, wallet]
+        [handleConnect, reset, wallet],
     );
 
     const dialogText = () => {

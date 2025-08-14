@@ -38,7 +38,7 @@ function webpackOverride(config) {
     config.plugins.push(
         new webpack.ProvidePlugin({
             Buffer: ['buffer', 'Buffer'],
-        })
+        }),
     );
 
     config.resolve.alias = {

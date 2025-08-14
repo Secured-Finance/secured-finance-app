@@ -32,11 +32,11 @@ describe('HistoricalChart component', () => {
         const { store } = await waitFor(() =>
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
-            })
+            }),
         );
 
         expect(store.getState().landingOrderForm.maturity).toEqual(
-            dec22Fixture.toNumber()
+            dec22Fixture.toNumber(),
         );
         expect(store.getState().landingOrderForm.currency).toEqual('WFIL');
     });

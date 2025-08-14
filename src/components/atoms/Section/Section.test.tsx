@@ -12,7 +12,7 @@ describe('Section Component', () => {
     it('should show warning variant', () => {
         render(<Warning />);
         expect(
-            screen.getByRole('img', { name: 'warning' })
+            screen.getByRole('img', { name: 'warning' }),
         ).toBeInTheDocument();
         expect(screen.getByRole('alert')).toBeInTheDocument();
     });

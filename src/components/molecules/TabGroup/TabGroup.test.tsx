@@ -17,12 +17,12 @@ describe('TabGroup component', () => {
         render(<Default />);
         const lendButton = screen.getByText('Lend');
         expect(lendButton.parentNode?.parentNode).toHaveClass(
-            'from-tabGradient-lend-start to-tabGradient-lend-end'
+            'from-tabGradient-lend-start to-tabGradient-lend-end',
         );
 
         const borrowButton = screen.getByText('Borrow');
         expect(borrowButton.parentNode?.parentNode).not.toHaveClass(
-            'from-tabGradient-borrow-start to-tabGradient-borrow-end'
+            'from-tabGradient-borrow-start to-tabGradient-borrow-end',
         );
     });
 
@@ -32,14 +32,14 @@ describe('TabGroup component', () => {
 
         const borrowButton = screen.getByText('Borrow');
         expect(borrowButton.parentNode?.parentNode).not.toHaveClass(
-            'from-tabGradient-borrow-start to-tabGradient-borrow-end'
+            'from-tabGradient-borrow-start to-tabGradient-borrow-end',
         );
 
         fireEvent.click(borrowButton);
         expect(handleClick).toBeCalledTimes(1);
         expect(handleClick).toHaveBeenCalledWith('Borrow');
         expect(borrowButton.parentNode?.parentNode).toHaveClass(
-            'from-tabGradient-borrow-start to-tabGradient-borrow-end'
+            'from-tabGradient-borrow-start to-tabGradient-borrow-end',
         );
     });
 });

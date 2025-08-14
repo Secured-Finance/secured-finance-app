@@ -13,7 +13,7 @@ describe('useZCToken', () => {
         mock.getZCToken.mockResolvedValueOnce(TOKEN_ADDRESS);
 
         const { result } = renderHook(() =>
-            useZCToken(CurrencySymbol.ETH, new Maturity(0))
+            useZCToken(CurrencySymbol.ETH, new Maturity(0)),
         );
         await waitFor(() => expect(result.current.data).toEqual(TOKEN_ADDRESS));
     });

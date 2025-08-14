@@ -10,7 +10,7 @@ describe('HamburgerMenu Component', () => {
         expect(
             screen.getByRole('button', {
                 name: 'Hamburger Menu',
-            })
+            }),
         ).toBeInTheDocument();
         expect(screen.queryByRole('menu')).not.toBeInTheDocument();
     });
@@ -24,7 +24,7 @@ describe('HamburgerMenu Component', () => {
                 screen.getByRole('button', {
                     name: 'Hamburger Menu',
                     expanded: true,
-                })
+                }),
             ).toBeInTheDocument();
             expect(screen.getByRole('menu')).toBeInTheDocument();
         });

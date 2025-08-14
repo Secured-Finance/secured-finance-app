@@ -55,7 +55,7 @@ const SimpleAdvancedButton = ({
                 {
                     'bg-starBlue text-white': active,
                     'text-white opacity-40': !active,
-                }
+                },
             )}
         >
             {text}

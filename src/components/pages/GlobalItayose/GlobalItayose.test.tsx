@@ -19,10 +19,10 @@ describe('GlobalItayose Component', () => {
     it('should show a link to the fair price discovery page', () => {
         render(<Default />);
         expect(
-            screen.getByRole('link', { name: 'Secured Finance Docs' })
+            screen.getByRole('link', { name: 'Secured Finance Docs' }),
         ).toHaveAttribute(
             'href',
-            'https://docs.secured.finance/platform-guide/unique-features/fair-price-discovery/'
+            'https://docs.secured.finance/platform-guide/unique-features/fair-price-discovery/',
         );
     });
 });

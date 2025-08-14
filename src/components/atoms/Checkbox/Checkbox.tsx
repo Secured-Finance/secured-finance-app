@@ -28,7 +28,7 @@ export const Checkbox = ({
                                 !isChecked,
                             'border-neutral-300 bg-neutral-200': disabled,
                         },
-                        sizeStyle[size]
+                        sizeStyle[size],
                     )}
                     id='checkbox'
                     type='checkbox'
@@ -42,7 +42,7 @@ export const Checkbox = ({
                         {
                             'text-primary-500': isChecked && !disabled,
                             'text-neutral-300': isChecked && disabled,
-                        }
+                        },
                     )}
                 >
                     <svg

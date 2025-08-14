@@ -68,7 +68,7 @@ describe('CoreTable Component', () => {
 
     it('should have a sticky column if responsive is true', () => {
         render(
-            <Default options={{ responsive: true, stickyFirstColumn: true }} />
+            <Default options={{ responsive: true, stickyFirstColumn: true }} />,
         );
         const header = screen.getAllByTestId('core-table-header-cell')[0];
         expect(header).toHaveClass('sticky');
@@ -117,8 +117,8 @@ describe('CoreTable Component', () => {
                             containerHeight: false,
                         },
                     }}
-                />
-            )
+                />,
+            ),
         );
         expect(screen.getAllByTestId('core-table-row')).toHaveLength(20);
         await waitFor(async () => {
@@ -135,7 +135,7 @@ describe('CoreTable Component', () => {
     it('should not show the headers if showHeaders is false', () => {
         render(<Default options={{ showHeaders: false }} />);
         expect(
-            screen.queryByTestId('core-table-header')
+            screen.queryByTestId('core-table-header'),
         ).not.toBeInTheDocument();
     });
 });

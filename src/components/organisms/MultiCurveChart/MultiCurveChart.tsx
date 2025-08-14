@@ -27,7 +27,7 @@ ChartJS.register(
     LineElement,
     Title,
     CategoryScale,
-    Tooltip
+    Tooltip,
 );
 
 type Position = {
@@ -60,7 +60,7 @@ export const options: ChartOptions<'line'> = {
     onHover: (
         _event: ChartEvent,
         _elements: ActiveElement[],
-        chart: ChartJS<'line'>
+        chart: ChartJS<'line'>,
     ) => {
         chart.canvas.style.cursor = 'pointer';
     },
@@ -112,7 +112,7 @@ const getData = (
     curves: Partial<Record<CurrencySymbol, Rate[]>>,
     currencies: Set<CurrencySymbol>,
     labels: string[],
-    isGlobalItayose?: boolean
+    isGlobalItayose?: boolean,
 ) => {
     return {
         labels: labels,
@@ -153,7 +153,7 @@ const CurveChip = ({
                 `flex w-fit items-center justify-center rounded-xl px-3 py-2 font-secondary text-xs font-semibold uppercase leading-3 text-neutral-8`,
                 {
                     'opacity-50': !active,
-                }
+                },
             )}
             onClick={() => {
                 setActive(!active);
@@ -235,7 +235,7 @@ export const MultiCurveChart = ({
                 }
             }
         },
-        [tooltipPos?.left, tooltipPos?.top]
+        [tooltipPos?.left, tooltipPos?.top],
     );
 
     const dataOptions: ChartOptions<'line'> = {
@@ -262,14 +262,17 @@ export const MultiCurveChart = ({
 
         const activeData = Object.keys(curves)
             .filter(curr => activeCurrencies.has(curr as CurrencySymbol))
-            .reduce((result, curr) => {
-                const currency = curr as CurrencySymbol;
-                const currencyRate = curves[currency]?.[tooltipIndex];
-                if (currencyRate) {
-                    result[currency] = currencyRate;
-                }
-                return result;
-            }, {} as Partial<Record<CurrencySymbol, Rate>>);
+            .reduce(
+                (result, curr) => {
+                    const currency = curr as CurrencySymbol;
+                    const currencyRate = curves[currency]?.[tooltipIndex];
+                    if (currencyRate) {
+                        result[currency] = currencyRate;
+                    }
+                    return result;
+                },
+                {} as Partial<Record<CurrencySymbol, Rate>>,
+            );
 
         return activeData;
     }, [activeCurrencies, curves, labels, tooltipLabel]);
@@ -304,7 +307,7 @@ export const MultiCurveChart = ({
                         curves,
                         activeCurrencies,
                         labels,
-                        isGlobalItayose
+                        isGlobalItayose,
                     )}
                     options={dataOptions}
                     ref={chartRef}

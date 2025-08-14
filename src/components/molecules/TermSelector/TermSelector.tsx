@@ -15,7 +15,7 @@ export const TermSelector = <T extends string = string>({
     const [termValue, setTermValue] = useState(selected.value);
     const selectedTerm = useMemo(
         () => options.find(o => o.value === termValue),
-        [options, termValue]
+        [options, termValue],
     );
 
     const handleTermChange = (v: T) => {

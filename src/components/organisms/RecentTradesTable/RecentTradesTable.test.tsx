@@ -13,7 +13,7 @@ describe('RecentTradesTable component', () => {
         });
 
         expect(
-            screen.getByLabelText('Recent trades table')
+            screen.getByLabelText('Recent trades table'),
         ).toBeInTheDocument();
     });
 
@@ -22,7 +22,7 @@ describe('RecentTradesTable component', () => {
             apolloMocks: Default.parameters?.apolloClient.mocks,
         });
         expect(
-            screen.getByRole('alertdialog', { name: 'Loading' })
+            screen.getByRole('alertdialog', { name: 'Loading' }),
         ).toBeInTheDocument();
     });
 
@@ -31,7 +31,7 @@ describe('RecentTradesTable component', () => {
             apolloMocks: Default.parameters?.apolloClient.mocks,
         });
         expect(
-            screen.queryByText('Only the last 100 trades are shown.')
+            screen.queryByText('Only the last 100 trades are shown.'),
         ).not.toBeInTheDocument();
     });
 
@@ -60,10 +60,10 @@ describe('RecentTradesTable component', () => {
         });
         expect(getButton('Show All Orders')).toHaveClass('bg-neutral-700');
         expect(getButton('Show Only Lend Orders')).not.toHaveClass(
-            'bg-neutral-700'
+            'bg-neutral-700',
         );
         expect(getButton('Show Only Borrow Orders')).not.toHaveClass(
-            'bg-neutral-700'
+            'bg-neutral-700',
         );
     });
 
@@ -75,19 +75,19 @@ describe('RecentTradesTable component', () => {
         fireEvent.click(getButton('Show Only Borrow Orders'));
         expect(getButton('Show All Orders')).not.toHaveClass('bg-neutral-700');
         expect(getButton('Show Only Lend Orders')).not.toHaveClass(
-            'bg-neutral-700'
+            'bg-neutral-700',
         );
         expect(getButton('Show Only Borrow Orders')).toHaveClass(
-            'bg-neutral-700'
+            'bg-neutral-700',
         );
 
         fireEvent.click(getButton('Show Only Lend Orders'));
         expect(getButton('Show All Orders')).not.toHaveClass('bg-neutral-700');
         expect(getButton('Show Only Borrow Orders')).not.toHaveClass(
-            'bg-neutral-700'
+            'bg-neutral-700',
         );
         expect(getButton('Show Only Lend Orders')).toHaveClass(
-            'bg-neutral-700'
+            'bg-neutral-700',
         );
     });
 });

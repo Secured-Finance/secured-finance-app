@@ -46,7 +46,7 @@ export const MarketLoanWidget = ({
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
 
     const filteredItayoseMarkets = itayoseMarkets.filter(
-        market => !delistedCurrencySet.has(market.ccy)
+        market => !delistedCurrencySet.has(market.ccy),
     );
 
     const [selectedCurrency, setSelectedCurrency] = useState<
@@ -67,17 +67,17 @@ export const MarketLoanWidget = ({
             if (markets[0].isItayosePeriod || markets[0].isPreOrderPeriod) {
                 return markets.filter(
                     market =>
-                        !selectedCurrency || market.ccy === selectedCurrency
+                        !selectedCurrency || market.ccy === selectedCurrency,
                 );
             }
 
             return markets.filter(
                 market =>
                     (!selectedCurrency || market.ccy === selectedCurrency) &&
-                    (!selectedTerm || market.maturity === selectedTerm)
+                    (!selectedTerm || market.maturity === selectedTerm),
             );
         },
-        [selectedCurrency, selectedTerm]
+        [selectedCurrency, selectedTerm],
     );
 
     const handleClick = useCallback(
@@ -96,7 +96,7 @@ export const MarketLoanWidget = ({
                 },
             });
         },
-        [dispatch, router]
+        [dispatch, router],
     );
 
     const columns = useMemo(
@@ -109,7 +109,7 @@ export const MarketLoanWidget = ({
                 undefined,
                 'left',
                 'left',
-                ''
+                '',
             ),
             columnHelper.accessor('maturity', {
                 id: 'maturity',
@@ -136,9 +136,9 @@ export const MarketLoanWidget = ({
                                 ? formatLoanValue(
                                       LoanValue.fromPrice(
                                           info.getValue(),
-                                          info.row.original.maturity
+                                          info.row.original.maturity,
                                       ),
-                                      'rate'
+                                      'rate',
                                   )
                                 : 'N/A'}
                         </div>
@@ -179,7 +179,7 @@ export const MarketLoanWidget = ({
                 header: tableHeaderDefinition('Actions', '', 'right'),
             }),
         ],
-        [handleClick]
+        [handleClick],
     );
 
     const itayoseHighlight: TabHighlight = {

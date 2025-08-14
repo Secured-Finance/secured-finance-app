@@ -12,7 +12,7 @@ describe('MyTransactionsTable Component', () => {
     it('should load more data when scrolled if pagination is available', async () => {
         await waitFor(() => render(<WithPagination />));
         expect(screen.getAllByTestId('my-transactions-table-row')).toHaveLength(
-            20
+            20,
         );
         await waitFor(async () => {
             fireEvent.scroll(window, { target: { scrollTop: 100 } });
@@ -21,7 +21,7 @@ describe('MyTransactionsTable Component', () => {
         await waitFor(() => {
             expect(screen.getByText('Loading...')).toBeInTheDocument();
             expect(
-                screen.getAllByTestId('my-transactions-table-row')
+                screen.getAllByTestId('my-transactions-table-row'),
             ).toHaveLength(40);
         });
     });
@@ -29,7 +29,7 @@ describe('MyTransactionsTable Component', () => {
     it('should not load more data when scrolled if pagination is not available', async () => {
         await waitFor(() => render(<Default />));
         expect(screen.getAllByTestId('my-transactions-table-row')).toHaveLength(
-            5
+            5,
         );
         await waitFor(async () => {
             fireEvent.scroll(window, { target: { scrollTop: 100 } });
@@ -38,7 +38,7 @@ describe('MyTransactionsTable Component', () => {
         await waitFor(() => {
             expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
             expect(
-                screen.queryAllByTestId('my-transactions-table-row')
+                screen.queryAllByTestId('my-transactions-table-row'),
             ).toHaveLength(5);
         });
     });
@@ -53,11 +53,11 @@ describe('MyTransactionsTable Component', () => {
                         getMoreData: getMoreData,
                         containerHeight: false,
                     }}
-                />
-            )
+                />,
+            ),
         );
         expect(screen.getAllByTestId('my-transactions-table-row')).toHaveLength(
-            5
+            5,
         );
         await waitFor(async () => {
             fireEvent.scroll(window, { target: { scrollTop: 100 } });
@@ -67,7 +67,7 @@ describe('MyTransactionsTable Component', () => {
             expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
             expect(getMoreData).not.toBeCalled();
             expect(
-                screen.getAllByTestId('my-transactions-table-row')
+                screen.getAllByTestId('my-transactions-table-row'),
             ).toHaveLength(5);
         });
     });

@@ -74,7 +74,7 @@ export const CollateralSnapshot = ({
             {
                 data: data.map(item => item.ratio / 100),
                 backgroundColor: data.map(
-                    item => currencyMap[item.currency].chartColor
+                    item => currencyMap[item.currency].chartColor,
                 ),
             },
         ],
@@ -104,7 +104,7 @@ export const CollateralSnapshot = ({
                 header: 'Snapshot Rate',
             }),
         ],
-        []
+        [],
     );
 
     return (
@@ -123,7 +123,7 @@ export const CollateralSnapshot = ({
                             ...data.sort(
                                 (a, b) =>
                                     currencyMap[a.currency].index -
-                                    currencyMap[b.currency].index
+                                    currencyMap[b.currency].index,
                             ),
                         ]}
                         options={{

@@ -15,7 +15,7 @@ jest.mock(
     'next/link',
     () =>
         ({ children }: { children: React.ReactNode }) =>
-            children
+            children,
 );
 
 describe('Faucet Component', () => {

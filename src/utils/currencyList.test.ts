@@ -32,10 +32,10 @@ describe('currencyList toBaseUnit', () => {
         expect(eth.toBaseUnit(1).toString()).toEqual('1000000000000000000');
         expect(eth.toBaseUnit(1.23).toString()).toEqual('1230000000000000000');
         expect(eth.toBaseUnit(1.23456789).toString()).toEqual(
-            '1234567890000000000'
+            '1234567890000000000',
         );
         expect(eth.toBaseUnit(9999999).toString()).toEqual(
-            '9999999000000000000000000'
+            '9999999000000000000000000',
         );
         expect(eth.toBaseUnit(0.00000001).toString()).toEqual('10000000000');
         expect(eth.toBaseUnit(0.000000000001).toString()).toEqual('1000000');
@@ -46,7 +46,7 @@ describe('currencyList toBaseUnit', () => {
         expect(wfil.toBaseUnit(1).toString()).toEqual('1000000000000000000');
         expect(wfil.toBaseUnit(1.23).toString()).toEqual('1230000000000000000');
         expect(wfil.toBaseUnit(1.23456789).toString()).toEqual(
-            '1234567890000000000'
+            '1234567890000000000',
         );
         expect(wfil.toBaseUnit(0.00000001).toString()).toEqual('10000000000');
         expect(wfil.toBaseUnit(0.000000000001).toString()).toEqual('1000000');
@@ -57,7 +57,7 @@ describe('currencyList toBaseUnit', () => {
         expect(wfil.toBaseUnit(0.0000000000000000001).toString()).toEqual('0');
         expect(wfil.toBaseUnit(0.0000000000000000009).toString()).toEqual('0');
         expect(wfil.toBaseUnit(0.000000000000000000001).toString()).toEqual(
-            '0'
+            '0',
         );
         expect(eth.toBaseUnit(0.0000000000000000001).toString()).toEqual('0');
         expect(eth.toBaseUnit(0.000000000000000000001).toString()).toEqual('0');
@@ -76,48 +76,48 @@ describe('currencyList toBaseUnit', () => {
 describe('currencyList fromBaseUnit', () => {
     it('should return the value in ETH for wei amount', () => {
         expect(
-            eth.fromBaseUnit(BigInt('1000000000000000000')).toString()
+            eth.fromBaseUnit(BigInt('1000000000000000000')).toString(),
         ).toEqual('1');
         expect(
-            eth.fromBaseUnit(BigInt('1230000000000000000')).toString()
+            eth.fromBaseUnit(BigInt('1230000000000000000')).toString(),
         ).toEqual('1.23');
         expect(
-            eth.fromBaseUnit(BigInt('1234567890000000000')).toString()
+            eth.fromBaseUnit(BigInt('1234567890000000000')).toString(),
         ).toEqual('1.23456789');
         expect(
-            eth.fromBaseUnit(BigInt('9999999000000000000000000')).toString()
+            eth.fromBaseUnit(BigInt('9999999000000000000000000')).toString(),
         ).toEqual('9999999');
         expect(eth.fromBaseUnit(BigInt('10000000000')).toString()).toEqual(
-            '1e-8'
+            '1e-8',
         );
         expect(eth.fromBaseUnit(BigInt('1000000')).toString()).toEqual('1e-12');
     });
 
     it('should return the value in FIL for attoFil amount', () => {
         expect(
-            wfil.fromBaseUnit(BigInt('1000000000000000000')).toString()
+            wfil.fromBaseUnit(BigInt('1000000000000000000')).toString(),
         ).toEqual('1');
         expect(
-            wfil.fromBaseUnit(BigInt('1230000000000000000')).toString()
+            wfil.fromBaseUnit(BigInt('1230000000000000000')).toString(),
         ).toEqual('1.23');
         expect(
-            wfil.fromBaseUnit(BigInt('1234567890000000000')).toString()
+            wfil.fromBaseUnit(BigInt('1234567890000000000')).toString(),
         ).toEqual('1.23456789');
         expect(wfil.fromBaseUnit(BigInt('10000000000')).toString()).toEqual(
-            '1e-8'
+            '1e-8',
         );
         expect(wfil.fromBaseUnit(BigInt('1000000')).toString()).toEqual(
-            '1e-12'
+            '1e-12',
         );
     });
 
     it('should return the value in WBTC for satoshi amount', () => {
         expect(wbtc.fromBaseUnit(BigInt('100000000')).toString()).toEqual('1');
         expect(wbtc.fromBaseUnit(BigInt('123000000')).toString()).toEqual(
-            '1.23'
+            '1.23',
         );
         expect(wbtc.fromBaseUnit(BigInt('123456789')).toString()).toEqual(
-            '1.23456789'
+            '1.23456789',
         );
         expect(wbtc.fromBaseUnit(BigInt('1')).toString()).toEqual('1e-8');
         expect(wbtc.fromBaseUnit(BigInt('0')).toString()).toEqual('0');
@@ -127,10 +127,10 @@ describe('currencyList fromBaseUnit', () => {
 describe('toCurrency', () => {
     it('should convert currency symbol to Currency object', () => {
         expect(toCurrency(CurrencySymbol.ETH)).toEqual(
-            currencyMap.ETH.toCurrency()
+            currencyMap.ETH.toCurrency(),
         );
         expect(toCurrency(CurrencySymbol.WFIL)).toEqual(
-            currencyMap.WFIL.toCurrency()
+            currencyMap.WFIL.toCurrency(),
         );
     });
 });
@@ -180,14 +180,14 @@ describe('currencyList amountFormatterFromBase', () => {
     it('should return the value in ETH for wei amount', () => {
         const format = amountFormatterFromBase[CurrencySymbol.ETH];
         expect(format(BigInt('1000000000000000000000000')).toString()).toEqual(
-            '1000000'
+            '1000000',
         );
         expect(format(BigInt('1000000000000000000')).toString()).toEqual('1');
         expect(format(BigInt('1230000000000000000')).toString()).toEqual(
-            '1.23'
+            '1.23',
         );
         expect(format(BigInt('1234567890000000000')).toString()).toEqual(
-            '1.23456789'
+            '1.23456789',
         );
         expect(format(BigInt('10000000000')).toString()).toEqual('1e-8');
         expect(format(BigInt('1000000')).toString()).toEqual('1e-12');
@@ -197,10 +197,10 @@ describe('currencyList amountFormatterFromBase', () => {
         const format = amountFormatterFromBase[CurrencySymbol.WFIL];
         expect(format(BigInt('1000000000000000000')).toString()).toEqual('1');
         expect(format(BigInt('1230000000000000000')).toString()).toEqual(
-            '1.23'
+            '1.23',
         );
         expect(format(BigInt('1234567890000000000')).toString()).toEqual(
-            '1.23456789'
+            '1.23456789',
         );
         expect(format(BigInt('10000000000')).toString()).toEqual('1e-8');
         expect(format(BigInt('1000000')).toString()).toEqual('1e-12');
@@ -284,10 +284,10 @@ describe('ZC Tokens', () => {
     describe('convertFromGvUnit', () => {
         it('should convert from GV unit correctly', () => {
             expect(convertFromGvUnit(BigInt('1000000000000000000000000'))).toBe(
-                1
+                1,
             );
             expect(convertFromGvUnit(BigInt('500000000000000000000000'))).toBe(
-                0.5
+                0.5,
             );
         });
     });
@@ -295,10 +295,10 @@ describe('ZC Tokens', () => {
     describe('convertToGvUnit', () => {
         it('should convert to GV unit correctly', () => {
             expect(convertToGvUnit(1)).toBe(
-                BigInt('1000000000000000000000000')
+                BigInt('1000000000000000000000000'),
             );
             expect(convertToGvUnit(0.5)).toBe(
-                BigInt('500000000000000000000000')
+                BigInt('500000000000000000000000'),
             );
         });
     });
@@ -308,15 +308,15 @@ describe('ZC Tokens', () => {
             expect(
                 convertZCTokenFromBaseAmount(
                     CurrencySymbol.USDC,
-                    BigInt('1000000000000000000000000')
-                )
+                    BigInt('1000000000000000000000000'),
+                ),
             ).toBe(1);
             expect(
                 convertZCTokenFromBaseAmount(
                     CurrencySymbol.USDC,
                     BigInt('1000000000000000000000000'),
-                    { isZero: () => true } as Maturity
-                )
+                    { isZero: () => true } as Maturity,
+                ),
             ).toBe(1);
         });
 
@@ -327,8 +327,8 @@ describe('ZC Tokens', () => {
                 convertZCTokenFromBaseAmount(
                     CurrencySymbol.USDC,
                     mockAmount,
-                    mockMaturity
-                )
+                    mockMaturity,
+                ),
             ).toBe(1);
         });
     });
@@ -336,12 +336,12 @@ describe('ZC Tokens', () => {
     describe('convertZCTokenToBaseAmount', () => {
         it('should convert to base amount when maturity is zero or undefined', () => {
             expect(
-                convertZCTokenToBaseAmount(CurrencySymbol.USDC, 1).toString()
+                convertZCTokenToBaseAmount(CurrencySymbol.USDC, 1).toString(),
             ).toBe('1000000000000000000000000');
             expect(
                 convertZCTokenToBaseAmount(CurrencySymbol.USDC, 1, {
                     isZero: () => true,
-                } as Maturity).toString()
+                } as Maturity).toString(),
             ).toBe('1000000000000000000000000');
         });
 
@@ -351,15 +351,15 @@ describe('ZC Tokens', () => {
                 convertZCTokenToBaseAmount(
                     CurrencySymbol.USDC,
                     1,
-                    mockMaturity
-                ).toString()
+                    mockMaturity,
+                ).toString(),
             ).toBe('1000000');
             expect(
                 convertZCTokenToBaseAmount(
                     CurrencySymbol.ETH,
                     2.5,
-                    mockMaturity
-                ).toString()
+                    mockMaturity,
+                ).toString(),
             ).toBe('2500000000000000000');
         });
     });
@@ -370,7 +370,7 @@ describe('ZC Tokens', () => {
             expect(
                 convertToZcTokenName(CurrencySymbol.USDC, {
                     isZero: () => true,
-                } as Maturity)
+                } as Maturity),
             ).toBe('ZC USDC');
         });
 
@@ -379,7 +379,7 @@ describe('ZC Tokens', () => {
                 convertToZcTokenName(CurrencySymbol.USDC, {
                     isZero: () => false,
                     toNumber: () => 1623456789,
-                } as Maturity)
+                } as Maturity),
             ).toBe('ZC USDC JUN2021');
         });
     });

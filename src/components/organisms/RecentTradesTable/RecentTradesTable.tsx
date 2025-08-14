@@ -33,7 +33,7 @@ export const RecentTradesTable = ({
     maturity,
 }: RecentTradesTableProps) => {
     const [timestamp, setTimestamp] = useState<number>(() =>
-        Math.round(Date.now() / 1000)
+        Math.round(Date.now() / 1000),
     );
     const { blockExplorerUrl } = useBlockExplorerUrl();
     const [showSide, setShowSide] = useState<OrderSide | null>(null);
@@ -61,19 +61,19 @@ export const RecentTradesTable = ({
         },
         queries.TransactionHistoryDocument,
         'transactionHistory',
-        !isSubgraphSupported
+        !isSubgraphSupported,
     );
 
     const data = useMemo(() => {
         return transactionHistory
             ?.map(transaction => {
                 const sizeActual = currencyMap[currency].fromBaseUnit(
-                    BigInt(+transaction.amount)
+                    BigInt(+transaction.amount),
                 );
                 const size = ordinaryFormat(
                     sizeActual,
                     currencyMap[currency].roundingDecimal,
-                    currencyMap[currency].roundingDecimal
+                    currencyMap[currency].roundingDecimal,
                 );
 
                 if (Math.abs(Number(sizeActual)) > 0) {
@@ -88,7 +88,7 @@ export const RecentTradesTable = ({
             .sort(
                 (a, b) =>
                     new Date(+b.createdAt).getTime() -
-                    new Date(+a.createdAt).getTime()
+                    new Date(+a.createdAt).getTime(),
             );
     }, [currency, transactionHistory]);
 
@@ -140,7 +140,7 @@ export const RecentTradesTable = ({
                             key={column.key}
                             className={clsx(
                                 'h-8 !rounded-none border-b border-neutral-600 bg-neutral-900 pr-0 font-normal text-neutral-300 first:pl-4 last:pr-4 laptop:h-6',
-                                column.className
+                                column.className,
                             )}
                         >
                             <span className='relative top-[1px]'>
@@ -163,7 +163,7 @@ export const RecentTradesTable = ({
                     {(item: TradeMetadata) => {
                         const loanValue = LoanValue.fromPrice(
                             +item.executionPrice,
-                            maturity
+                            maturity,
                         );
                         return (
                             <TableRow
@@ -178,7 +178,7 @@ export const RecentTradesTable = ({
                                                 item.side === OrderSide.LEND,
                                             'text-error-300':
                                                 item.side === OrderSide.BORROW,
-                                        }
+                                        },
                                     )}
                                 >
                                     {formatLoanValue(loanValue, 'price')}

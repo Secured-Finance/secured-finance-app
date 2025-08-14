@@ -44,20 +44,20 @@ export const AdvancedLendingEstimationFields = ({
         unitPriceExists,
         side,
     } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
+        selectLandingOrderForm(state.landingOrderForm),
     );
 
     const isMobile = useBreakpoint('tablet');
 
     const { data: orderEstimationInfo } = useOrderEstimation(
         address,
-        orderType === OrderType.LIMIT
+        orderType === OrderType.LIMIT,
     );
 
     const orderEstimationAmount = useMemo(() => {
         if (!orderEstimationInfo || !orderEstimationInfo.filledAmount) return 0;
         return amountFormatterFromBase[currency](
-            orderEstimationInfo.filledAmount
+            orderEstimationInfo.filledAmount,
         );
     }, [currency, orderEstimationInfo]);
 
@@ -65,7 +65,7 @@ export const AdvancedLendingEstimationFields = ({
         if (!orderEstimationInfo || !orderEstimationInfo.filledAmountInFV)
             return 0;
         return amountFormatterFromBase[currency](
-            orderEstimationInfo.filledAmountInFV
+            orderEstimationInfo.filledAmountInFV,
         );
     }, [currency, orderEstimationInfo]);
 
@@ -80,13 +80,13 @@ export const AdvancedLendingEstimationFields = ({
                 multiply(
                     amountFormatterFromBase[currency](amount),
                     100,
-                    currencyMap[currency].roundingDecimal
+                    currencyMap[currency].roundingDecimal,
                 ),
                 unitPrice,
-                currencyMap[currency].roundingDecimal
+                currencyMap[currency].roundingDecimal,
             );
         },
-        [currency]
+        [currency],
     );
 
     const loanValue = useMemo(() => {
@@ -95,7 +95,7 @@ export const AdvancedLendingEstimationFields = ({
             return LoanValue.fromPrice(
                 unitPrice * 100.0,
                 maturity,
-                calculationDate
+                calculationDate,
             );
         }
         if (!marketPrice) return LoanValue.ZERO;
@@ -115,13 +115,13 @@ export const AdvancedLendingEstimationFields = ({
                 multiply(
                     orderEstimationInfo.filledAmount,
                     10000.0,
-                    currencyMap[currency].roundingDecimal
+                    currencyMap[currency].roundingDecimal,
                 ),
                 orderEstimationInfo.filledAmountInFV,
-                currencyMap[currency].roundingDecimal
+                currencyMap[currency].roundingDecimal,
             ),
             maturity,
-            calculationDate
+            calculationDate,
         );
     }, [orderEstimationInfo, currency, maturity, calculationDate]);
 
@@ -174,7 +174,7 @@ export const AdvancedLendingEstimationFields = ({
 
         return formatLoanValue(
             orderType === OrderType.LIMIT ? loanValue : estimatedLoanValue,
-            'price'
+            'price',
         );
     }, [showDashes, orderType, loanValue, estimatedLoanValue]);
 
@@ -183,7 +183,7 @@ export const AdvancedLendingEstimationFields = ({
 
         return formatLoanValue(
             orderType === OrderType.LIMIT ? loanValue : estimatedLoanValue,
-            'rate'
+            'rate',
         );
     }, [showDashes, orderType, loanValue, estimatedLoanValue]);
 
@@ -192,20 +192,20 @@ export const AdvancedLendingEstimationFields = ({
 
         const amount =
             orderType === OrderType.LIMIT
-                ? orderAmount?.value ?? 0
+                ? (orderAmount?.value ?? 0)
                 : orderEstimationAmount;
 
         if (isMobile) {
             return `${ordinaryFormat(
                 amount,
                 0,
-                currencyMap[currency].roundingDecimal
+                currencyMap[currency].roundingDecimal,
             )} ${currency}`;
         } else {
             return `${ordinaryFormat(
                 amount,
                 0,
-                currencyMap[currency].roundingDecimal
+                currencyMap[currency].roundingDecimal,
             )} ${currency} (${usdFormat(amount * assetPrice ?? 0, 2)})`;
         }
     }, [
@@ -232,13 +232,13 @@ export const AdvancedLendingEstimationFields = ({
             return `${ordinaryFormat(
                 fv,
                 0,
-                currencyMap[currency].roundingDecimal
+                currencyMap[currency].roundingDecimal,
             )} ${currency}`;
         } else {
             return `${ordinaryFormat(
                 fv,
                 0,
-                currencyMap[currency].roundingDecimal
+                currencyMap[currency].roundingDecimal,
             )} ${currency} (${usdFormat(totalValue, 2)})`;
         }
     }, [

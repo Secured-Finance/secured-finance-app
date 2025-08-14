@@ -21,14 +21,14 @@ export const GlobalItayoseMultiCurveChart = () => {
                     curves[ccy].push(
                         LoanValue.fromPrice(
                             contract.openingUnitPrice,
-                            contract.maturity
-                        ).apr
+                            contract.maturity,
+                        ).apr,
                     );
                 } else {
                     curves[ccy] = [
                         LoanValue.fromPrice(
                             contract.openingUnitPrice,
-                            contract.maturity
+                            contract.maturity,
                         ).apr,
                     ];
                 }

@@ -49,7 +49,7 @@ export const Button = ({
                     'text-primary-300': variant === ButtonVariants.secondary,
                     'w-full': fullWidth,
                     'w-fit': !fullWidth,
-                }
+                },
             )}
         >
             {StartIcon && (

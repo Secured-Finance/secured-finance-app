@@ -31,7 +31,7 @@ describe('test AssetInformation component', () => {
         await userEvent.unhover(information);
         await userEvent.hover(information);
         const tooltip = await screen.findByText(
-            'Only USDC and ETH are eligible as collateral.'
+            'Only USDC and ETH are eligible as collateral.',
         );
         expect(tooltip).toBeInTheDocument();
     });

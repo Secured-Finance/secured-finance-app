@@ -17,7 +17,7 @@ export class CustomizedBridge extends Eip1193Bridge {
     constructor(
         signer: Signer,
         provider?: providers.Provider,
-        chainId?: number
+        chainId?: number,
     ) {
         super(signer, provider);
         this.chainId = chainId || 5;
@@ -54,7 +54,7 @@ export class CustomizedBridge extends Eip1193Bridge {
                 throw new Error(
                     `personal_sign account mismatch or account not found: ${
                         params[1] as string
-                    }`
+                    }`,
                 );
             }
             return this.signer.signMessage(utils.arrayify(params[0]));
@@ -77,7 +77,7 @@ export class CustomizedBridge extends Eip1193Bridge {
             const tx = await (this.signer as any)._signTypedData(
                 parsed.domain,
                 parsed.types,
-                parsed.message
+                parsed.message,
             );
             return tx;
         }

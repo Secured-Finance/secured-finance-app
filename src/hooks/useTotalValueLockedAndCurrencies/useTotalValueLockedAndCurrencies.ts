@@ -17,7 +17,7 @@ export const useTotalValueLockedAndCurrencies = () => {
 
     const currenciesInvolved = useMemo(
         () => Array.from(new Set([...currencies, ...collateralCurrencies])),
-        [collateralCurrencies, currencies]
+        [collateralCurrencies, currencies],
     );
 
     const totalValueLockedInUSD = useMemo(() => {
@@ -30,8 +30,8 @@ export const useTotalValueLockedAndCurrencies = () => {
             val += BigInt(
                 Math.floor(
                     currencyMap[ccy].fromBaseUnit(valueLockedByCurrency[ccy]) *
-                        (priceList[ccy] ?? 0)
-                )
+                        (priceList[ccy] ?? 0),
+                ),
             );
         }
 

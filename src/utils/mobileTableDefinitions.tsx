@@ -27,7 +27,7 @@ export const AmountCell = ({
             {ordinaryFormat(
                 currency.fromBaseUnit(amount),
                 currency.roundingDecimal,
-                currency.roundingDecimal
+                currency.roundingDecimal,
             )}
         </span>
     );
@@ -64,7 +64,7 @@ export const OrderTimeCell = ({
 const formatMaturity = (
     maturityTimeStamp: number,
     timeUnit: 'day' | 'hours' | 'minutes',
-    currentTime: number
+    currentTime: number,
 ) => dayjs.unix(maturityTimeStamp).diff(currentTime, timeUnit);
 
 export const MaturityCell = ({

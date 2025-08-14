@@ -15,7 +15,7 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 describe('WithdrawZCToken component', () => {
     beforeEach(() => {
         mockSecuredFinance.getERC20TokenBalance.mockResolvedValueOnce(
-            BigInt('10000000000')
+            BigInt('10000000000'),
         );
     });
 
@@ -35,7 +35,7 @@ describe('WithdrawZCToken component', () => {
         render(<Default />);
         expect(screen.getByRole('textbox').getAttribute('value')).toBe('');
         expect(screen.getByRole('textbox').getAttribute('placeholder')).toBe(
-            '0'
+            '0',
         );
     });
 
@@ -78,8 +78,8 @@ describe('WithdrawZCToken component', () => {
                 expect(screen.getByText('Success!')).toBeInTheDocument();
                 expect(
                     screen.getByText(
-                        'You have successfully withdrawn ZC Bonds on Secured Finance.'
-                    )
+                        'You have successfully withdrawn ZC Bonds on Secured Finance.',
+                    ),
                 ).toBeInTheDocument();
                 expect(screen.getByText('Status')).toBeInTheDocument();
                 expect(screen.getByText('Complete')).toBeInTheDocument();
@@ -87,7 +87,7 @@ describe('WithdrawZCToken component', () => {
                 expect(screen.getByText('750')).toBeInTheDocument();
 
                 expect(
-                    screen.getByTestId('dialog-action-button')
+                    screen.getByTestId('dialog-action-button'),
                 ).toHaveTextContent('OK');
             });
 

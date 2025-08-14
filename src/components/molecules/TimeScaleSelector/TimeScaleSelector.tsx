@@ -21,7 +21,7 @@ export default function TimeScaleSelector({
     }) => {
         setSelected(prevSelected => {
             const isAlreadySelected = prevSelected.some(
-                item => item.value === timePeriod.value
+                item => item.value === timePeriod.value,
             );
             const newSelected = isAlreadySelected
                 ? prevSelected.filter(item => item.value !== timePeriod.value)
@@ -69,13 +69,13 @@ export default function TimeScaleSelector({
                                         label={timePeriod.label}
                                         isChecked={selected.some(
                                             item =>
-                                                item.value === timePeriod.value
+                                                item.value === timePeriod.value,
                                         )}
                                         onChange={() =>
                                             handleCheckboxChange(timePeriod)
                                         }
                                         disabled={disabledIntervals.has(
-                                            timePeriod.value
+                                            timePeriod.value,
                                         )}
                                     />
                                 </div>
@@ -105,13 +105,13 @@ export default function TimeScaleSelector({
                                 <TimeScaleCheckBox
                                     label={timePeriod.label}
                                     isChecked={selected.some(
-                                        item => item.value === timePeriod.value
+                                        item => item.value === timePeriod.value,
                                     )}
                                     onChange={() =>
                                         handleCheckboxChange(timePeriod)
                                     }
                                     disabled={disabledIntervals.has(
-                                        timePeriod.value
+                                        timePeriod.value,
                                     )}
                                 />
                             </div>
@@ -124,7 +124,7 @@ export default function TimeScaleSelector({
                     <ul className='flex gap-4'>
                         {sortedSelected.map((scale, index) => {
                             const originalIndex = selected.findIndex(
-                                item => item.value === scale.value
+                                item => item.value === scale.value,
                             );
                             return (
                                 <li
@@ -136,7 +136,7 @@ export default function TimeScaleSelector({
                                         style={{
                                             backgroundColor: getColor(
                                                 originalIndex,
-                                                1
+                                                1,
                                             ),
                                         }}
                                     />

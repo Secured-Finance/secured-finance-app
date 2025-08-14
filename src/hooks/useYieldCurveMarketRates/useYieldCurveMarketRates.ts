@@ -8,7 +8,7 @@ import { baseContracts, useLendingMarkets } from '../useLendingMarkets';
 
 export const useYieldCurveMarketRates = () => {
     const { currency } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
+        selectLandingOrderForm(state.landingOrderForm),
     );
 
     const { data: lendingMarkets = baseContracts } = useLendingMarkets();
@@ -24,7 +24,7 @@ export const useYieldCurveMarketRates = () => {
 
     const sortedLendingContracts = Object.values(lendingContracts)
         .filter(
-            obj => obj.isOpened || obj.isItayosePeriod || obj.isPreOrderPeriod
+            obj => obj.isOpened || obj.isItayosePeriod || obj.isPreOrderPeriod,
         )
         .sort((a, b) => a.maturity - b.maturity);
 
@@ -46,7 +46,7 @@ export const useYieldCurveMarketRates = () => {
             rate = LoanValue.fromPrice(
                 obj.openingUnitPrice,
                 obj.maturity,
-                obj.utcOpeningDate
+                obj.utcOpeningDate,
             ).apr;
 
             itayoseMarketIndexSet.add(currentIndex);

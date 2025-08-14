@@ -24,7 +24,7 @@ export const GradientBox = ({
                             variant === 'default',
                         'bg-gradient-to-b from-[rgba(111,116,176,0.35)] to-[rgba(57,77,174,0)]':
                             variant === 'high-contrast',
-                    }
+                    },
                 )}
             >
                 {header ? (

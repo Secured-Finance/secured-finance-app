@@ -19,19 +19,22 @@ export const useDecimals = () => {
                         (await securedFinance?.getDecimals(toCurrency(ccy))) ??
                             0,
                     ] as [CurrencySymbol, number];
-                })
+                }),
             );
         },
         select: data => {
-            return data.reduce((acc, [ccy, decimal]) => {
-                try {
-                    acc[ccy] = decimal;
-                } catch (e) {
-                    acc[ccy] = 0;
-                }
+            return data.reduce(
+                (acc, [ccy, decimal]) => {
+                    try {
+                        acc[ccy] = decimal;
+                    } catch (e) {
+                        acc[ccy] = 0;
+                    }
 
-                return acc;
-            }, {} as Record<CurrencySymbol, number>);
+                    return acc;
+                },
+                {} as Record<CurrencySymbol, number>,
+            );
         },
         enabled: !!securedFinance,
         staleTime: Infinity,

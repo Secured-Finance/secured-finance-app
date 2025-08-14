@@ -17,7 +17,7 @@ const usedCurrencies = [
 describe('useOrderList', () => {
     it('should return a sorted array of activeOrders and inactiveOrders by creation date', async () => {
         const { result } = renderHook(() =>
-            useOrderList('0x1', usedCurrencies)
+            useOrderList('0x1', usedCurrencies),
         );
 
         const value = result.current;
@@ -33,16 +33,16 @@ describe('useOrderList', () => {
             for (let i = 0; i < newValue.data.activeOrderList.length - 1; i++) {
                 expect(
                     newValue.data.activeOrderList[i].createdAt >=
-                        newValue.data.activeOrderList[i + 1].createdAt
+                        newValue.data.activeOrderList[i + 1].createdAt,
                 ).toBeTruthy();
             }
 
             expect(newValue.data.inactiveOrderList.length).toBe(2);
             expect(newValue.data.inactiveOrderList[0].currency).toBe(
-                ethBytes32
+                ethBytes32,
             );
             expect(newValue.data.inactiveOrderList[1].currency).toBe(
-                wfilBytes32
+                wfilBytes32,
             );
             expect(newValue.isPending).toEqual(false);
         });

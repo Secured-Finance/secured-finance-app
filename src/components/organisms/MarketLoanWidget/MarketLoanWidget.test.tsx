@@ -73,7 +73,7 @@ describe('MarketLoanWidget Component', () => {
     it('should hide the APR column when the market is in itayose mode', async () => {
         const lendingMarkets = await mock.getOrderBookDetails();
         const marketIndex = lendingMarkets.findIndex(
-            value => value.ccy === wbtcBytes32 && value.name === 'DEC2024'
+            value => value.ccy === wbtcBytes32 && value.name === 'DEC2024',
         );
         const market = lendingMarkets[marketIndex];
         lendingMarkets[marketIndex] = {
@@ -100,14 +100,14 @@ describe('MarketLoanWidget Component', () => {
         expect(screen.queryByText('APR')).not.toBeInTheDocument();
         expect(screen.getByText('All Assets')).toBeInTheDocument();
         expect(
-            screen.queryByRole('button', { name: 'DEC2024' })
+            screen.queryByRole('button', { name: 'DEC2024' }),
         ).not.toBeInTheDocument();
     });
 
     it('should disble pre open tab if no itayose or pre order market is available', async () => {
         const lendingMarkets = await mock.getOrderBookDetails();
         mock.getOrderBookDetails.mockResolvedValueOnce(
-            lendingMarkets.slice(0, 8)
+            lendingMarkets.slice(0, 8),
         );
 
         render(<Default />);

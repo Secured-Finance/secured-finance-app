@@ -27,7 +27,7 @@ export const Slider = ({
         (_event: Event, value: number | number[], _activeThumb: number) => {
             onChange(value as number);
         },
-        [onChange]
+        [onChange],
     );
     return (
         <div ref={sliderRef}>
@@ -44,7 +44,7 @@ export const Slider = ({
                             {
                                 'ring-transparent': disabled,
                                 'ring-starBlue-80': !disabled,
-                            }
+                            },
                         ),
                     },
                     root: {
@@ -53,7 +53,7 @@ export const Slider = ({
                             {
                                 'cursor-default': disabled,
                                 'cursor-pointer': !disabled,
-                            }
+                            },
                         ),
                     },
                     rail: {

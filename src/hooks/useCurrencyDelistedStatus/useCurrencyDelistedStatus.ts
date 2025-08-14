@@ -15,8 +15,8 @@ export const useCurrencyDelistedStatus = () => {
         queryFn: async () => {
             const currencyExistList = await Promise.all(
                 currencies.map(symbol =>
-                    securedFinance?.currencyExists(toCurrency(symbol))
-                )
+                    securedFinance?.currencyExists(toCurrency(symbol)),
+                ),
             );
 
             const delistedStatusSet: Set<CurrencySymbol> = new Set();

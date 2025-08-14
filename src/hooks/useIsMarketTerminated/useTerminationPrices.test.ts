@@ -17,7 +17,7 @@ describe('useTerminationPrices hook', () => {
                 [CurrencySymbol.USDC]: 1.0,
                 [CurrencySymbol.WBTC]: 25577.71480752,
                 [CurrencySymbol.WFIL]: 3.2045255490229336,
-            })
+            }),
         );
     });
 });

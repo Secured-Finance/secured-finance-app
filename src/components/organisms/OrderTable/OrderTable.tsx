@@ -72,7 +72,7 @@ const OrderTableMobile = ({
                                 {
                                     'border-b border-neutral-600':
                                         index !== data.length - 1,
-                                }
+                                },
                             )}
                             key={index}
                         >
@@ -141,7 +141,7 @@ export const OrderTable = ({
                 'compact',
                 undefined,
                 'left',
-                'left'
+                'left',
             ),
             loanTypeColumnDefinition(columnHelper, 'Type', 'type'),
             priceYieldColumnDefinition(
@@ -149,7 +149,7 @@ export const OrderTable = ({
                 'Order Price',
                 'price',
                 row => row.unitPrice,
-                'compact'
+                'compact',
             ),
             priceYieldColumnDefinition(
                 columnHelper,
@@ -157,7 +157,7 @@ export const OrderTable = ({
                 'yield',
                 row => row.unitPrice,
                 'compact',
-                'rate'
+                'rate',
             ),
             amountColumnDefinition(
                 columnHelper,
@@ -170,13 +170,13 @@ export const OrderTable = ({
                     fontSize: 'typography-caption-2 font-numerical',
                 },
                 '',
-                'right'
+                'right',
             ),
             dateAndTimeColumnDefinition(
                 columnHelper,
                 'Order Time',
                 'createdAt',
-                row => row.createdAt
+                row => row.createdAt,
             ),
             columnHelper.display({
                 id: 'actions',
@@ -217,7 +217,7 @@ export const OrderTable = ({
                 ),
             }),
         ],
-        []
+        [],
     );
 
     return (

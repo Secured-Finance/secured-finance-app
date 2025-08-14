@@ -35,7 +35,7 @@ const MenuItem = ({
                 {
                     'hover:bg-horizonBlue': onClick,
                     'flex-col': label,
-                }
+                },
             )}
         >
             {label && (
@@ -50,7 +50,7 @@ const MenuItem = ({
                     'flex flex-row items-center justify-start space-x-2',
                     {
                         'cursor-default': !onClick,
-                    }
+                    },
                 )}
             >
                 <div className='flex h-10 w-10 items-center justify-center'>
@@ -77,7 +77,7 @@ export const WalletPopover = ({
     const { isConnected } = useAccount();
     const dispatch = useDispatch();
     const chainError = useSelector(
-        (state: RootState) => state.blockchain.chainError
+        (state: RootState) => state.blockchain.chainError,
     );
 
     const handleSignOutClick = useCallback(() => {
@@ -101,7 +101,7 @@ export const WalletPopover = ({
                             {
                                 'bg-white-10 ring-white-10': open,
                                 'ring-neutral-500': !open,
-                            }
+                            },
                         )}
                     >
                         <span>
@@ -118,7 +118,7 @@ export const WalletPopover = ({
                                 'h-3.5 w-3.5 text-neutral-400 laptop:h-4 laptop:w-4',
                                 {
                                     'rotate-180': open,
-                                }
+                                },
                             )}
                         />
                     </Popover.Button>

@@ -15,7 +15,7 @@ describe('useIsUnderCollateralThreshold', () => {
     describe('Edge cases', () => {
         it('should return false if the user is not connected', async () => {
             const { result } = renderHook(() =>
-                useIsUnderCollateralThreshold(undefined)
+                useIsUnderCollateralThreshold(undefined),
             );
 
             await waitFor(() =>
@@ -24,15 +24,15 @@ describe('useIsUnderCollateralThreshold', () => {
                         CurrencySymbol.USDC,
                         1,
                         100,
-                        OrderSide.BORROW
-                    )
-                ).toBe(false)
+                        OrderSide.BORROW,
+                    ),
+                ).toBe(false),
             );
         });
 
         it('returns false if market is not defined', async () => {
             const { result } = renderHook(() =>
-                useIsUnderCollateralThreshold('0xff')
+                useIsUnderCollateralThreshold('0xff'),
             );
 
             await waitFor(() =>
@@ -41,9 +41,9 @@ describe('useIsUnderCollateralThreshold', () => {
                         CurrencySymbol.USDC,
                         1,
                         100,
-                        OrderSide.BORROW
-                    )
-                ).toBe(false)
+                        OrderSide.BORROW,
+                    ),
+                ).toBe(false),
             );
         });
     });
@@ -51,7 +51,7 @@ describe('useIsUnderCollateralThreshold', () => {
     describe('When OrderSide is Lend', () => {
         it('should always return false whatever the price', async () => {
             const { result } = renderHook(() =>
-                useIsUnderCollateralThreshold('0xff')
+                useIsUnderCollateralThreshold('0xff'),
             );
 
             await waitFor(() =>
@@ -60,9 +60,9 @@ describe('useIsUnderCollateralThreshold', () => {
                         CurrencySymbol.USDC,
                         dec24Fixture.toNumber(),
                         9800,
-                        OrderSide.LEND
-                    )
-                ).toBe(false)
+                        OrderSide.LEND,
+                    ),
+                ).toBe(false),
             );
 
             await waitFor(() =>
@@ -71,9 +71,9 @@ describe('useIsUnderCollateralThreshold', () => {
                         CurrencySymbol.USDC,
                         dec24Fixture.toNumber(),
                         9200,
-                        OrderSide.LEND
-                    )
-                ).toBe(false)
+                        OrderSide.LEND,
+                    ),
+                ).toBe(false),
             );
         });
     });
@@ -81,7 +81,7 @@ describe('useIsUnderCollateralThreshold', () => {
     describe('Pre-Order markets', () => {
         it('returns false if the price is above the threshold', async () => {
             const { result } = renderHook(() =>
-                useIsUnderCollateralThreshold('0xff')
+                useIsUnderCollateralThreshold('0xff'),
             );
 
             await waitFor(() =>
@@ -90,15 +90,15 @@ describe('useIsUnderCollateralThreshold', () => {
                         CurrencySymbol.USDC,
                         dec24Fixture.toNumber(),
                         9800,
-                        OrderSide.BORROW
-                    )
-                ).toBe(false)
+                        OrderSide.BORROW,
+                    ),
+                ).toBe(false),
             );
         });
 
         it('returns true if the price is above the threshold', async () => {
             const { result } = renderHook(() =>
-                useIsUnderCollateralThreshold('0xff')
+                useIsUnderCollateralThreshold('0xff'),
             );
 
             await waitFor(() =>
@@ -107,9 +107,9 @@ describe('useIsUnderCollateralThreshold', () => {
                         CurrencySymbol.USDC,
                         dec24Fixture.toNumber(),
                         9200,
-                        OrderSide.BORROW
-                    )
-                ).toBe(true)
+                        OrderSide.BORROW,
+                    ),
+                ).toBe(true),
             );
         });
     });
@@ -117,7 +117,7 @@ describe('useIsUnderCollateralThreshold', () => {
     describe('when user has an active lend position', () => {
         it('returns false when price is higher than currentMinDebtUnitPrice', async () => {
             const { result } = renderHook(() =>
-                useIsUnderCollateralThreshold('0xff')
+                useIsUnderCollateralThreshold('0xff'),
             );
 
             await waitFor(() =>
@@ -126,15 +126,15 @@ describe('useIsUnderCollateralThreshold', () => {
                         CurrencySymbol.WFIL,
                         dec22Fixture.toNumber(),
                         9800,
-                        OrderSide.BORROW
-                    )
-                ).toBe(false)
+                        OrderSide.BORROW,
+                    ),
+                ).toBe(false),
             );
         });
 
         it('returns false when price is lower than currentMinDebtUnitPrice', async () => {
             const { result } = renderHook(() =>
-                useIsUnderCollateralThreshold('0xff')
+                useIsUnderCollateralThreshold('0xff'),
             );
 
             await waitFor(() =>
@@ -143,9 +143,9 @@ describe('useIsUnderCollateralThreshold', () => {
                         CurrencySymbol.WFIL,
                         dec22Fixture.toNumber(),
                         9200,
-                        OrderSide.BORROW
-                    )
-                ).toBe(true)
+                        OrderSide.BORROW,
+                    ),
+                ).toBe(true),
             );
         });
     });
@@ -153,7 +153,7 @@ describe('useIsUnderCollateralThreshold', () => {
     describe('when user does not have an active lend position', () => {
         it('returns false when price is higher than currentMinDebtUnitPrice', async () => {
             const { result } = renderHook(() =>
-                useIsUnderCollateralThreshold('0xff')
+                useIsUnderCollateralThreshold('0xff'),
             );
 
             await waitFor(() =>
@@ -162,15 +162,15 @@ describe('useIsUnderCollateralThreshold', () => {
                         CurrencySymbol.USDC,
                         dec22Fixture.toNumber(),
                         9800,
-                        OrderSide.BORROW
-                    )
-                ).toBe(false)
+                        OrderSide.BORROW,
+                    ),
+                ).toBe(false),
             );
         });
 
         it('returns false when price is lower than currentMinDebtUnitPrice', async () => {
             const { result } = renderHook(() =>
-                useIsUnderCollateralThreshold('0xff')
+                useIsUnderCollateralThreshold('0xff'),
             );
 
             await waitFor(() =>
@@ -179,9 +179,9 @@ describe('useIsUnderCollateralThreshold', () => {
                         CurrencySymbol.USDC,
                         dec22Fixture.toNumber(),
                         9200,
-                        OrderSide.BORROW
-                    )
-                ).toBe(false)
+                        OrderSide.BORROW,
+                    ),
+                ).toBe(false),
             );
         });
     });
@@ -193,8 +193,8 @@ describe('useIsUnderCollateralThresholdForBorrowOrders', () => {
         const { result } = renderHook(() =>
             useIsUnderCollateralThresholdForBorrowOrders(
                 '0xff',
-                CurrencySymbol.ETH
-            )
+                CurrencySymbol.ETH,
+            ),
         );
 
         await waitFor(() =>
@@ -204,9 +204,9 @@ describe('useIsUnderCollateralThresholdForBorrowOrders', () => {
                     dec22Fixture.toNumber(),
                     8500,
                     OrderSide.BORROW,
-                    BigInt(2400000000000000000)
-                )
-            ).toBe(true)
+                    BigInt(2400000000000000000),
+                ),
+            ).toBe(true),
         );
     });
 
@@ -214,8 +214,8 @@ describe('useIsUnderCollateralThresholdForBorrowOrders', () => {
         const { result } = renderHook(() =>
             useIsUnderCollateralThresholdForBorrowOrders(
                 '0xff',
-                CurrencySymbol.ETH
-            )
+                CurrencySymbol.ETH,
+            ),
         );
 
         await waitFor(() =>
@@ -225,9 +225,9 @@ describe('useIsUnderCollateralThresholdForBorrowOrders', () => {
                     dec22Fixture.toNumber(),
                     9000,
                     OrderSide.BORROW,
-                    BigInt(2400000000000000000)
-                )
-            ).toBe(false)
+                    BigInt(2400000000000000000),
+                ),
+            ).toBe(false),
         );
     });
 });

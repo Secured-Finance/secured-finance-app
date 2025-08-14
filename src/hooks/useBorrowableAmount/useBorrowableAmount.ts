@@ -5,7 +5,7 @@ import { CurrencySymbol, ZERO_BI, toCurrency } from 'src/utils';
 
 export const useBorrowableAmount = (
     address: string | undefined,
-    ccy: CurrencySymbol
+    ccy: CurrencySymbol,
 ) => {
     const securedFinance = useSF();
 
@@ -14,7 +14,7 @@ export const useBorrowableAmount = (
         queryFn: async () => {
             const amount = await securedFinance?.tokenVault.getBorrowableAmount(
                 address ?? '',
-                toCurrency(ccy)
+                toCurrency(ccy),
             );
             return amount ?? ZERO_BI;
         },

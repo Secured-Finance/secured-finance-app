@@ -14,14 +14,14 @@ export const useOrders = () => {
                 const tx = await securedFinance.cancelLendingOrder(
                     toCurrency(ccy),
                     maturity.toNumber(),
-                    Number(orderId)
+                    Number(orderId),
                 );
                 return tx;
             } catch (error) {
                 console.error(error);
             }
         },
-        [securedFinance]
+        [securedFinance],
     );
 
     const placeOrder = useCallback(
@@ -31,7 +31,7 @@ export const useOrders = () => {
             side: OrderSide,
             amount: bigint,
             unitPrice: number,
-            sourceWallet: WalletSource
+            sourceWallet: WalletSource,
         ) => {
             try {
                 if (!securedFinance) return;
@@ -42,7 +42,7 @@ export const useOrders = () => {
                     side,
                     amount,
                     sourceWallet,
-                    unitPrice
+                    unitPrice,
                 );
 
                 return tx;
@@ -51,7 +51,7 @@ export const useOrders = () => {
                 throw error;
             }
         },
-        [securedFinance]
+        [securedFinance],
     );
 
     const unwindPosition = useCallback(
@@ -61,7 +61,7 @@ export const useOrders = () => {
 
                 const tx = await securedFinance.unwindPosition(
                     toCurrency(ccy),
-                    maturity.toNumber()
+                    maturity.toNumber(),
                 );
 
                 return tx;
@@ -70,7 +70,7 @@ export const useOrders = () => {
                 throw error;
             }
         },
-        [securedFinance]
+        [securedFinance],
     );
 
     const placePreOrder = useCallback(
@@ -80,7 +80,7 @@ export const useOrders = () => {
             side: OrderSide,
             amount: bigint,
             unitPrice: number,
-            sourceWallet: WalletSource
+            sourceWallet: WalletSource,
         ) => {
             try {
                 if (!securedFinance) return;
@@ -91,7 +91,7 @@ export const useOrders = () => {
                     side,
                     amount,
                     sourceWallet,
-                    unitPrice
+                    unitPrice,
                 );
 
                 return tx;
@@ -100,7 +100,7 @@ export const useOrders = () => {
                 throw error;
             }
         },
-        [securedFinance]
+        [securedFinance],
     );
 
     const repayPosition = useCallback(
@@ -110,7 +110,7 @@ export const useOrders = () => {
 
                 const tx = await securedFinance.executeRepayment(
                     toCurrency(ccy),
-                    maturity.toNumber()
+                    maturity.toNumber(),
                 );
 
                 return tx;
@@ -119,7 +119,7 @@ export const useOrders = () => {
                 throw error;
             }
         },
-        [securedFinance]
+        [securedFinance],
     );
 
     const redeemPosition = useCallback(
@@ -129,7 +129,7 @@ export const useOrders = () => {
 
                 const tx = await securedFinance.executeRedemption(
                     toCurrency(ccy),
-                    maturity.toNumber()
+                    maturity.toNumber(),
                 );
 
                 return tx;
@@ -138,7 +138,7 @@ export const useOrders = () => {
                 throw error;
             }
         },
-        [securedFinance]
+        [securedFinance],
     );
 
     return {

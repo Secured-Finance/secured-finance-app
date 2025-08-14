@@ -12,7 +12,7 @@ export const useWalletStore = () => {
         watch: true,
     });
     const block = useSelector(
-        (state: RootState) => state.blockchain.latestBlock
+        (state: RootState) => state.blockchain.latestBlock,
     );
 
     useEffect(() => {

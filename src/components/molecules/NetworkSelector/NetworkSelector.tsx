@@ -34,7 +34,7 @@ const MenuItem = ({
         <button
             data-cy={formatDataCy(text)}
             className={clsx(
-                'flex w-full rounded px-3 py-2 transition duration-150 ease-in-out hover:bg-neutral-700 focus:outline-none'
+                'flex w-full rounded px-3 py-2 transition duration-150 ease-in-out hover:bg-neutral-700 focus:outline-none',
             )}
             onClick={onClick}
         >
@@ -78,7 +78,7 @@ const generateChainList = () => {
 export const NetworkSelector = ({ networkName }: { networkName: string }) => {
     const router = useRouter();
     const testnetEnabled = useSelector(
-        (state: RootState) => state.blockchain.testnetEnabled
+        (state: RootState) => state.blockchain.testnetEnabled,
     );
     const availableChains = useMemo(() => generateChainList(), []);
     const chainList = testnetEnabled
@@ -86,7 +86,7 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
         : availableChains.mainnetChainsList;
 
     const selectedNetwork = chainList.find(
-        d => Networks[d.chainId].toLowerCase() === networkName.toLowerCase()
+        d => Networks[d.chainId].toLowerCase() === networkName.toLowerCase(),
     );
     const { connectors } = useConnect();
 
@@ -95,7 +95,7 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
             const id = chainList[index].chainId;
             const provider = readWalletFromStore();
             const connector = connectors.find(
-                connect => connect.name === provider
+                connect => connect.name === provider,
             );
             if (!connector) {
                 return;
@@ -106,7 +106,7 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
                 query: undefined,
             });
         },
-        [chainList, connectors, router]
+        [chainList, connectors, router],
     );
 
     return (
@@ -118,7 +118,7 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
                     'flex items-center gap-2 rounded-lg bg-neutral-800 p-2 ring-1 ring-neutral-500 focus:outline-none tablet:rounded-xl tablet:p-2.5 tablet:ring-[1.5px]',
                     {
                         'pr-2': !selectedNetwork,
-                    }
+                    },
                 )}
             >
                 {selectedNetwork ? (
@@ -151,7 +151,7 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
                                                 icon={link.icon}
                                                 onClick={async () => {
                                                     await handleNetworkChange(
-                                                        index
+                                                        index,
                                                     );
                                                     close();
                                                 }}

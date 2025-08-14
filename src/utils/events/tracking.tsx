@@ -19,7 +19,7 @@ import {
 export async function associateWallet(
     account: string | null,
     chainName: string | undefined,
-    raiseEvent = true
+    raiseEvent = true,
 ) {
     if (!account) return;
     setUserId(account);
@@ -39,7 +39,7 @@ export function trackCollateralEvent(
     event: CollateralEvents,
     assetType: CurrencySymbol,
     amount: bigint,
-    source: string
+    source: string,
 ) {
     track(event, {
         [CollateralProperties.ASSET_TYPE]: assetType,
@@ -54,7 +54,7 @@ export function trackZCTokenEvent(
     assetType: CurrencySymbol,
     maturity: number,
     amount: bigint,
-    source: string
+    source: string,
 ) {
     track(event, {
         [ZCTokenProperties.ASSET_TYPE]: assetType,
@@ -68,7 +68,7 @@ export function trackZCTokenEvent(
 export function trackButtonEvent(
     event: ButtonEvents,
     property: ButtonProperties,
-    value: string
+    value: string,
 ) {
     track(event, { [property]: value });
 }

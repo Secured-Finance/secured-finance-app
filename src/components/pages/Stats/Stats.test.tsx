@@ -17,7 +17,7 @@ jest.mock(
     'next/link',
     () =>
         ({ children }: { children: React.ReactNode }) =>
-            children
+            children,
 );
 
 const mock = mockUseSF();
@@ -30,7 +30,7 @@ const renderDefault = async () => {
             preloadedState: {
                 ...preloadedBalance,
             },
-        })
+        }),
     );
 };
 
@@ -41,7 +41,7 @@ const renderConnected = async () => {
             preloadedState: {
                 ...preloadedBalance,
             },
-        })
+        }),
     );
 };
 
@@ -57,7 +57,7 @@ describe('MarketDashboard Component', () => {
                 expect(await screen.findByText('12.15K')).toBeInTheDocument(),
             {
                 timeout: 8000,
-            }
+            },
         );
     }, 8000);
 
@@ -70,7 +70,7 @@ describe('MarketDashboard Component', () => {
     it.skip('should render the collateral widget when connected', async () => {
         await renderConnected();
         const collateralWidget = await screen.findByText(
-            'Collateral Utilization'
+            'Collateral Utilization',
         );
         expect(collateralWidget).toBeInTheDocument();
     }, 10000); //TODO: TEST THROWS TIMEOUT EXCEEDED WARNING ON GITHUB ACTIONS
@@ -80,8 +80,8 @@ describe('MarketDashboard Component', () => {
         await waitFor(() => {
             expect(
                 screen.getByText(
-                    'Please note that USDC will be delisted on Secured Finance.'
-                )
+                    'Please note that USDC will be delisted on Secured Finance.',
+                ),
             ).toBeInTheDocument();
         });
     }, 8000);
@@ -92,8 +92,8 @@ describe('MarketDashboard Component', () => {
         await waitFor(() => {
             expect(
                 screen.queryByText(
-                    'Please note that USDC will be delisted on Secured Finance.'
-                )
+                    'Please note that USDC will be delisted on Secured Finance.',
+                ),
             ).not.toBeInTheDocument();
         });
     });

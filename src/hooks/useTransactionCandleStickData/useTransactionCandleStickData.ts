@@ -15,7 +15,7 @@ const safeDivide = (value: string | number, divisor: number): number => {
 
 export const useTransactionCandleStickData = (
     historicalTradeData: { data?: { transactionCandleSticks?: Transaction[] } },
-    selectedTimeScale: HistoricalDataIntervals
+    selectedTimeScale: HistoricalDataIntervals,
 ) => {
     return useMemo(() => {
         let previousItem: Transaction | null = null;
@@ -52,7 +52,7 @@ export const useTransactionCandleStickData = (
         for (const item of editableTransactions) {
             const ccy = hexToCurrencySymbol(item.currency);
             const volAdjusted = amountFormatterFromBase[ccy as CurrencySymbol](
-                BigInt(item.volume)
+                BigInt(item.volume),
             );
 
             // Fill missing timestamps data

@@ -39,7 +39,7 @@ describe('SectionWithItems Component', () => {
         render(<WithHeader />);
         expect(screen.getByText('Header')).toBeInTheDocument();
         expect(screen.getByText('Header')).toHaveClass(
-            'text-slateGray text-secondary'
+            'text-slateGray text-secondary',
         );
         expect(screen.getByText('Label A')).toBeInTheDocument();
         expect(screen.getByText('Label A')).toHaveClass('text-planetaryPurple');

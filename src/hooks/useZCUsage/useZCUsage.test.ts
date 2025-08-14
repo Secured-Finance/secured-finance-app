@@ -52,99 +52,99 @@ describe('useZCUsage', () => {
     describe('Borrow orders', () => {
         it('user has no orders', async () => {
             const { result } = renderHook(() =>
-                useZCUsage('0xff', OrderSide.BORROW)
+                useZCUsage('0xff', OrderSide.BORROW),
             );
 
             await waitFor(() => {
                 expect(
-                    result.current(dec22Fixture, CurrencySymbol.ETH, 1000)
+                    result.current(dec22Fixture, CurrencySymbol.ETH, 1000),
                 ).toBe(0);
             });
         });
 
         it('user only has borrow orders and no offset order', async () => {
             const { result } = renderHook(() =>
-                useZCUsage('0xff', OrderSide.BORROW)
+                useZCUsage('0xff', OrderSide.BORROW),
             );
 
             await waitFor(() => {
                 expect(
-                    result.current(dec22Fixture, CurrencySymbol.USDC, 1000)
+                    result.current(dec22Fixture, CurrencySymbol.USDC, 1000),
                 ).toBe(0);
             });
         });
 
         it('user only has borrow orders and offset order', async () => {
             const { result } = renderHook(() =>
-                useZCUsage('0xff', OrderSide.BORROW)
+                useZCUsage('0xff', OrderSide.BORROW),
             );
 
             await waitFor(() => {
                 expect(
-                    result.current(mar23Fixture, CurrencySymbol.USDC, 1000)
+                    result.current(mar23Fixture, CurrencySymbol.USDC, 1000),
                 ).toBe(0);
             });
         });
 
         it('user only has lend orders and no offset order', async () => {
             const { result } = renderHook(() =>
-                useZCUsage('0xff', OrderSide.BORROW)
+                useZCUsage('0xff', OrderSide.BORROW),
             );
 
             await waitFor(() => {
                 expect(
-                    result.current(mar23Fixture, CurrencySymbol.WFIL, 5)
+                    result.current(mar23Fixture, CurrencySymbol.WFIL, 5),
                 ).toBe(5022.7278434918);
             });
         });
 
         it('user only has lend orders and offset order', async () => {
             const { result } = renderHook(() =>
-                useZCUsage('0xff', OrderSide.BORROW)
+                useZCUsage('0xff', OrderSide.BORROW),
             );
 
             await waitFor(() => {
                 expect(
-                    result.current(dec22Fixture, CurrencySymbol.WFIL, 1)
+                    result.current(dec22Fixture, CurrencySymbol.WFIL, 1),
                 ).toBe(0);
             });
         });
 
         it('user has lend and borrow positions with offset order', async () => {
             jest.spyOn(mock, 'getPositions').mockResolvedValueOnce(
-                mockPositions
+                mockPositions,
             );
             const { result } = renderHook(() =>
-                useZCUsage('0xff', OrderSide.BORROW)
+                useZCUsage('0xff', OrderSide.BORROW),
             );
 
             await waitFor(() =>
                 expect(
-                    result.current(mar23Fixture, CurrencySymbol.ETH, 5)
-                ).toBe(7814.488388471232)
+                    result.current(mar23Fixture, CurrencySymbol.ETH, 5),
+                ).toBe(7814.488388471232),
             );
         });
 
         it('user only has lend orders and offset order with value greater than ZC bond', async () => {
             const { result } = renderHook(() =>
-                useZCUsage('0xff', OrderSide.BORROW)
+                useZCUsage('0xff', OrderSide.BORROW),
             );
 
             await waitFor(() => {
                 expect(
-                    result.current(dec22Fixture, CurrencySymbol.WFIL, 9)
+                    result.current(dec22Fixture, CurrencySymbol.WFIL, 9),
                 ).toBe(0);
             });
         });
 
         it('Maximum ZC usage should be 8000', async () => {
             const { result } = renderHook(() =>
-                useZCUsage('0xff', OrderSide.BORROW)
+                useZCUsage('0xff', OrderSide.BORROW),
             );
 
             await waitFor(() => {
                 expect(
-                    result.current(dec22Fixture, CurrencySymbol.ETH, 6)
+                    result.current(dec22Fixture, CurrencySymbol.ETH, 6),
                 ).toBe(8000);
             });
         });
@@ -153,49 +153,49 @@ describe('useZCUsage', () => {
     describe('Lend orders', () => {
         it('should not change ZC usage for lend orders if there are no positions', async () => {
             const { result } = renderHook(() =>
-                useZCUsage('0xff', OrderSide.LEND)
+                useZCUsage('0xff', OrderSide.LEND),
             );
 
             await waitFor(() =>
                 expect(
-                    result.current(mar23Fixture, CurrencySymbol.WBTC, 10000)
-                ).toBe(0)
+                    result.current(mar23Fixture, CurrencySymbol.WBTC, 10000),
+                ).toBe(0),
             );
         });
 
         it('should not change ZC usage for lend orders if there are no borrow positions and only lend positions', async () => {
             const { result } = renderHook(() =>
-                useZCUsage('0xff', OrderSide.LEND)
+                useZCUsage('0xff', OrderSide.LEND),
             );
 
             await waitFor(() =>
                 expect(
-                    result.current(mar23Fixture, CurrencySymbol.WFIL, 10000)
-                ).toBe(0)
+                    result.current(mar23Fixture, CurrencySymbol.WFIL, 10000),
+                ).toBe(0),
             );
         });
 
         it('should show correct ZC usage for borrow positions', async () => {
             const { result } = renderHook(() =>
-                useZCUsage('0xff', OrderSide.LEND)
+                useZCUsage('0xff', OrderSide.LEND),
             );
 
             await waitFor(() =>
                 expect(
-                    result.current(jun23Fixture, CurrencySymbol.USDC, 100)
-                ).toBe(6300)
+                    result.current(jun23Fixture, CurrencySymbol.USDC, 100),
+                ).toBe(6300),
             );
         });
 
         it('should show correct ZC usage for borrow offset positions', async () => {
             const { result } = renderHook(() =>
-                useZCUsage('0xff', OrderSide.LEND)
+                useZCUsage('0xff', OrderSide.LEND),
             );
 
             await waitFor(() =>
                 expect(
-                    result.current(mar23Fixture, CurrencySymbol.ETH, 5)
-                ).toBe(5583.521089958864)
+                    result.current(mar23Fixture, CurrencySymbol.ETH, 5),
+                ).toBe(5583.521089958864),
             );
         });
     });

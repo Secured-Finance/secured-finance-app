@@ -18,13 +18,13 @@ export const useBalances = () => {
     };
 
     const { address, balance } = useSelector(
-        (state: RootState) => state.wallet
+        (state: RootState) => state.wallet,
     );
     const { data: currencies } = useCurrencies(true);
 
     const nativeCurrency = useMemo(() => {
         const targetCurrency = currencies?.find(
-            currency => currencyMap[currency].toCurrency().isNative
+            currency => currencyMap[currency].toCurrency().isNative,
         );
         return targetCurrency ? currencyMap[targetCurrency] : undefined;
     }, [currencies]);

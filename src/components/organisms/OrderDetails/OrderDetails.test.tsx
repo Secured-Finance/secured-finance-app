@@ -55,8 +55,8 @@ describe('OrderDetails Component', () => {
         const disclaimerText = await screen.findByTestId('disclaimer-text');
         await waitFor(() =>
             expect(disclaimerText).toHaveTextContent(
-                'Circuit breaker will be triggered if the order is filled at over 96.72 which is the max slippage level at 1 block.'
-            )
+                'Circuit breaker will be triggered if the order is filled at over 96.72 which is the max slippage level at 1 block.',
+            ),
         );
     });
 
@@ -65,8 +65,8 @@ describe('OrderDetails Component', () => {
         await waitFor(() => {
             expect(
                 screen.getByText(
-                    'Please note that USDC will be delisted on Secured Finance.'
-                )
+                    'Please note that USDC will be delisted on Secured Finance.',
+                ),
             ).toBeInTheDocument();
         });
     });
@@ -75,8 +75,8 @@ describe('OrderDetails Component', () => {
         render(<Default />);
         expect(
             screen.queryByText(
-                'Please note that USDC will be delisted on Secured Finance.'
-            )
+                'Please note that USDC will be delisted on Secured Finance.',
+            ),
         ).not.toBeInTheDocument();
     });
 
@@ -105,7 +105,7 @@ describe('OrderDetails Component', () => {
             <Default
                 amount={new Amount('50000000000000000000', CurrencySymbol.WFIL)}
                 maturity={mar23Fixture}
-            />
+            />,
         );
         expect(screen.getByText('ZC Usage')).toBeInTheDocument();
         await waitFor(() => {

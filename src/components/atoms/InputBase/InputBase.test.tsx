@@ -75,7 +75,7 @@ describe('test InputBase component', () => {
                             maxChar: Infinity,
                         },
                     }}
-                />
+                />,
             );
             const input = screen.getByRole('textbox');
             expect(input).toHaveClass('text-3xl');
@@ -106,7 +106,7 @@ describe('test InputBase component', () => {
                             maxChar: 8,
                         },
                     }}
-                />
+                />,
             );
             const input = screen.getByRole('textbox');
             expect(input).toHaveClass('text-3xl');
@@ -135,7 +135,7 @@ describe('test InputBase component', () => {
                             maxChar: 8,
                         },
                     }}
-                />
+                />,
             );
             const input = screen.getByRole('textbox');
             fireEvent.input(input, { target: { value: '12345678' } });

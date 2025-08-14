@@ -73,7 +73,7 @@ export const useLendingMarkets = () => {
         ],
         queryFn: async () => {
             const lendingMarkets = await securedFinance?.getOrderBookDetails(
-                currencies?.map(ccy => currencyMap[ccy].toCurrency()) ?? []
+                currencies?.map(ccy => currencyMap[ccy].toCurrency()) ?? [],
             );
             return lendingMarkets ?? [];
         },
@@ -137,10 +137,10 @@ export const useLendingMarkets = () => {
                             minBorrowUnitPrice: Number(minBorrowUnitPrice),
                             maxLendUnitPrice: Number(maxLendUnitPrice),
                             currentMinDebtUnitPrice: Number(
-                                currentMinDebtUnitPrice
+                                currentMinDebtUnitPrice,
                             ),
                             lastBlockUnitPriceTimestamp: Number(
-                                lastBlockUnitPriceTimestamp
+                                lastBlockUnitPriceTimestamp,
                             ),
                         },
                     };

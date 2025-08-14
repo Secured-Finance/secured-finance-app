@@ -44,7 +44,7 @@ export const FilterButtons = ({
     const handleFilterClick = (
         currency?: CurrencySymbol,
         isItayose = false,
-        isFavorites = false
+        isFavorites = false,
     ) => {
         setCurrentCurrency(currency);
         setIsItayose(isItayose);

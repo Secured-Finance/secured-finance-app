@@ -52,7 +52,7 @@ const ActiveTradeTableMobile = ({
         maturity: number,
         amount: bigint,
         ccy: CurrencySymbol,
-        side: OrderSide
+        side: OrderSide,
     ) => {
         text: string;
         onClick: () => void;
@@ -80,7 +80,7 @@ const ActiveTradeTableMobile = ({
                     maturity.toNumber(),
                     absAmount,
                     ccy,
-                    reversedSide
+                    reversedSide,
                 );
 
                 return (
@@ -90,7 +90,7 @@ const ActiveTradeTableMobile = ({
                             {
                                 'border-b border-neutral-600':
                                     index !== data.length - 1,
-                            }
+                            },
                         )}
                         key={index}
                     >
@@ -186,7 +186,7 @@ export const ActiveTradeTable = ({
             dispatch(setCurrency(v));
             dispatch(resetUnitPrice());
         },
-        [dispatch]
+        [dispatch],
     );
 
     const getTableActionMenu = useCallback(
@@ -194,7 +194,7 @@ export const ActiveTradeTable = ({
             maturity: number,
             amount: bigint,
             ccy: CurrencySymbol,
-            side: OrderSide
+            side: OrderSide,
         ) => {
             const items = [
                 {
@@ -266,27 +266,27 @@ export const ActiveTradeTable = ({
                 },
             ];
         },
-        [delistedCurrencySet, dispatch, handleCurrencyChange, router]
+        [delistedCurrencySet, dispatch, handleCurrencyChange, router],
     );
 
     const getMaturityDisplayValue = useCallback(
         (
             maturityTimestamp: number,
             side: OrderSide,
-            currency: CurrencySymbol | undefined
+            currency: CurrencySymbol | undefined,
         ) => {
             const currentTime = Date.now();
             const dayToMaturity = formatMaturity(
                 maturityTimestamp,
                 'day',
-                currentTime
+                currentTime,
             );
 
             if (!isPastDate(maturityTimestamp)) {
                 const diffHours = formatMaturity(
                     maturityTimestamp,
                     'hours',
-                    currentTime
+                    currentTime,
                 );
                 const diffMinutes =
                     formatMaturity(maturityTimestamp, 'minutes', currentTime) %
@@ -322,7 +322,7 @@ export const ActiveTradeTable = ({
                 }
             }
         },
-        [delistedCurrencySet]
+        [delistedCurrencySet],
     );
 
     const columns = useMemo(
@@ -334,13 +334,13 @@ export const ActiveTradeTable = ({
                 variant,
                 delistedCurrencySet,
                 'left',
-                'left'
+                'left',
             ),
             loanTypeFromFVColumnDefinition(
                 columnHelper,
                 'Type',
                 'side',
-                'left'
+                'left',
             ),
             columnHelper.accessor('maturity', {
                 cell: info => {
@@ -355,7 +355,7 @@ export const ActiveTradeTable = ({
                     const maturityValue = getMaturityDisplayValue(
                         maturityTimestamp,
                         side,
-                        ccy
+                        ccy,
                     );
 
                     return (
@@ -371,7 +371,7 @@ export const ActiveTradeTable = ({
                                             'text-white':
                                                 ccy &&
                                                 !delistedCurrencySet.has(ccy),
-                                        }
+                                        },
                                     )}
                                 >
                                     {maturityValue}
@@ -386,7 +386,7 @@ export const ActiveTradeTable = ({
                 header: tableHeaderDefinition(
                     'Time to Maturity',
                     'Maturity of a loan contract is the date on which the contract is set to expire.',
-                    'left'
+                    'left',
                 ),
             }),
             priceYieldColumnDefinition(
@@ -399,7 +399,7 @@ export const ActiveTradeTable = ({
                         : row.marketPrice,
                 'compact',
                 'price',
-                'Mark Price is the volume-weighted average unit price of filled orders at the last block.'
+                'Mark Price is the volume-weighted average unit price of filled orders at the last block.',
             ),
             priceYieldColumnDefinition(
                 columnHelper,
@@ -410,7 +410,7 @@ export const ActiveTradeTable = ({
                         ? BigInt(10000)
                         : row.marketPrice,
                 'compact',
-                'rate'
+                'rate',
             ),
             amountColumnDefinition(
                 columnHelper,
@@ -425,7 +425,7 @@ export const ActiveTradeTable = ({
                     fontSize: 'typography-desktop-body-5 font-numerical',
                 },
                 'Present Value (PV) is the current worth of the contract, taking into account the time value of money.',
-                'right'
+                'right',
             ),
             futureValueColumnDefinition(
                 columnHelper,
@@ -434,7 +434,7 @@ export const ActiveTradeTable = ({
                 row => row.futureValue,
                 { color: false, priceList: priceList, compact: true },
                 'Future Value (FV) of a loan contract is the obligation value of the contract at time of maturity.',
-                'right'
+                'right',
             ),
             columnHelper.display({
                 id: 'actions',
@@ -455,7 +455,7 @@ export const ActiveTradeTable = ({
                                 maturity,
                                 absAmount,
                                 ccy,
-                                side
+                                side,
                             )}
                         />
                     );
@@ -471,7 +471,7 @@ export const ActiveTradeTable = ({
             getTableActionMenu,
             priceList,
             variant,
-        ]
+        ],
     );
 
     return (
@@ -519,5 +519,5 @@ export const ActiveTradeTable = ({
 const formatMaturity = (
     maturityTimeStamp: number,
     timeUnit: 'day' | 'hours' | 'minutes',
-    currentTime: number
+    currentTime: number,
 ) => dayjs.unix(maturityTimeStamp).diff(currentTime, timeUnit);

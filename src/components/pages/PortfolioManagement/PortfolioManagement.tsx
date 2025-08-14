@@ -67,7 +67,7 @@ export const TabSpinner = () => (
 export const PortfolioManagement = () => {
     const { address } = useAccount();
     const [selectedTable, setSelectedTable] = useState(
-        TableType.ACTIVE_POSITION
+        TableType.ACTIVE_POSITION,
     );
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
     const { data: lendingMarkets = { ...baseContracts } } = useLendingMarkets();
@@ -83,7 +83,7 @@ export const PortfolioManagement = () => {
         },
         queries.FullUserOrderHistoryDocument,
         'user',
-        selectedTable !== TableType.ORDER_HISTORY
+        selectedTable !== TableType.ORDER_HISTORY,
     );
 
     const userTransactionHistory = useGraphClientHook(
@@ -92,13 +92,13 @@ export const PortfolioManagement = () => {
         },
         queries.FullUserTransactionHistoryDocument,
         'user',
-        selectedTable !== TableType.MY_TRANSACTIONS
+        selectedTable !== TableType.MY_TRANSACTIONS,
     );
 
     const { data: usedCurrencies = [] } = useCurrenciesForOrders(address);
     const { data: orderList = emptyOrderList } = useOrderList(
         address,
-        usedCurrencies
+        usedCurrencies,
     );
 
     const activeOrderList = useMemo(() => {
@@ -137,13 +137,13 @@ export const PortfolioManagement = () => {
     const { data: positions } = usePositions(address, usedCurrencies);
     const genesisValues = useGenesisValues(
         address,
-        positions?.positions || []
+        positions?.positions || [],
     ).map(({ data }) => data);
     const { allMarkets } = useMarketLists();
 
     const zcBonds = useMemo(() => {
         const lendingPositions = positions?.positions.filter(
-            position => position.amount >= 0
+            position => position.amount >= 0,
         );
 
         const zcBonds: ZCBond[] = [];
@@ -153,7 +153,7 @@ export const PortfolioManagement = () => {
 
             if (currency) {
                 const targetMarkets = allMarkets.filter(
-                    market => market.currency === position.currency
+                    market => market.currency === position.currency,
                 );
                 const hasGenesisValue =
                     targetMarkets.length > 0 &&
@@ -163,7 +163,7 @@ export const PortfolioManagement = () => {
                     amountInFV: genesisValueAmountInFV = BigInt(0),
                     amount: tokenAmount,
                 } = genesisValues.find(
-                    genesisValue => genesisValue?.currency === currency
+                    genesisValue => genesisValue?.currency === currency,
                 ) ?? {};
 
                 if (hasGenesisValue && tokenAmount && tokenAmount > 0) {
@@ -233,17 +233,17 @@ export const PortfolioManagement = () => {
         const borrowedPV = positions
             ? computeNetValue(
                   positions.positions.filter(
-                      position => position.futureValue < 0
+                      position => position.futureValue < 0,
                   ),
-                  priceMap
+                  priceMap,
               )
             : 0;
         const lentPV = positions
             ? computeNetValue(
                   positions.positions.filter(
-                      position => position.futureValue > 0
+                      position => position.futureValue > 0,
                   ),
-                  priceMap
+                  priceMap,
               )
             : 0;
         return {
@@ -312,7 +312,7 @@ export const PortfolioManagement = () => {
                                 <p>
                                     Please note that your contracts for{' '}
                                     {generateDelistedCurrencyText(
-                                        userDelistedCurrenciesArray
+                                        userDelistedCurrenciesArray,
                                     )}{' '}
                                     will be delisted at maturity on Secured
                                     Finance.{' '}
@@ -343,7 +343,7 @@ export const PortfolioManagement = () => {
                             {
                                 name: 'Net Asset Value',
                                 value: usdFormat(
-                                    portfolioAnalytics.netAssetValue
+                                    portfolioAnalytics.netAssetValue,
                                 ),
                             },
                             {
@@ -385,7 +385,7 @@ export const PortfolioManagement = () => {
                                 positions
                                     ? positions.positions.map(position => {
                                           const ccy = hexToCurrencySymbol(
-                                              position.currency
+                                              position.currency,
                                           );
                                           if (!ccy) return position;
                                           return {
@@ -395,11 +395,11 @@ export const PortfolioManagement = () => {
                                                       ccy,
                                                       Number(position.maturity),
                                                       Number(
-                                                          position.marketPrice
+                                                          position.marketPrice,
                                                       ),
                                                       position.futureValue > 0
                                                           ? OrderSide.LEND
-                                                          : OrderSide.BORROW
+                                                          : OrderSide.BORROW,
                                                   ),
                                           };
                                       })

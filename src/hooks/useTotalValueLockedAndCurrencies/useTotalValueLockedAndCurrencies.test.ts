@@ -20,10 +20,10 @@ describe('useTotalValueLockedAndCurrencies', () => {
         await waitFor(() => {
             expect(mockSecuredFinance.getCurrencies).toHaveBeenCalledTimes(1);
             expect(
-                mockSecuredFinance.getCollateralCurrencies
+                mockSecuredFinance.getCollateralCurrencies,
             ).toHaveBeenCalledTimes(1);
             expect(
-                mockSecuredFinance.getProtocolDepositAmount
+                mockSecuredFinance.getProtocolDepositAmount,
             ).toHaveBeenCalledTimes(1);
             expect(mockSecuredFinance.getLastPrice).toHaveBeenCalledTimes(4);
             const newValue = result.current;
@@ -39,7 +39,7 @@ describe('useTotalValueLockedAndCurrencies', () => {
         await waitFor(() => {
             expect(mockSecuredFinance.getCurrencies).toHaveBeenCalledTimes(1);
             expect(
-                mockSecuredFinance.getCollateralCurrencies
+                mockSecuredFinance.getCollateralCurrencies,
             ).toHaveBeenCalledTimes(1);
             const newValue = result.current;
             expect(newValue.currencies).toHaveLength(4);

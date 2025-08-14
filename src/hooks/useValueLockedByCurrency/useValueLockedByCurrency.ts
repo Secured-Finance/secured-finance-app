@@ -14,9 +14,8 @@ export const useValueLockedByCurrency = (chainId?: number) => {
     return useQuery({
         queryKey: [QueryKeys.PROTOCOL_DEPOSIT_AMOUNT, chainId],
         queryFn: async () => {
-            const value = await securedFinance?.getProtocolDepositAmount(
-                chainId
-            );
+            const value =
+                await securedFinance?.getProtocolDepositAmount(chainId);
             return (value as ValueLockedBook) ?? emptyValueLockedBook;
         },
         enabled: !!securedFinance,

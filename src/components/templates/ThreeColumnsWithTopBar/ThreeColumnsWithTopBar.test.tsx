@@ -17,13 +17,13 @@ describe('ThreeColumnsWithTopBar', () => {
     it('renders the children props in the correct columns', () => {
         render(<Default />);
         expect(screen.getByText('Column 1').parentElement).toHaveClass(
-            'order-2'
+            'order-2',
         );
         expect(screen.getByText('Column 2').parentElement).toHaveClass(
-            'order-4'
+            'order-4',
         );
         expect(screen.getByText('Column 3').parentElement).toHaveClass(
-            'order-3'
+            'order-3',
         );
     });
 
@@ -33,7 +33,7 @@ describe('ThreeColumnsWithTopBar', () => {
                 <span>Child 1</span>
                 <button>Child 2</button>
                 <input placeholder='Child 3' />
-            </Default>
+            </Default>,
         );
         expect(screen.getByText('Child 1')).toBeInTheDocument();
         expect(screen.getByText('Child 2')).toBeInTheDocument();

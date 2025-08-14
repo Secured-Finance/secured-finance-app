@@ -21,7 +21,7 @@ export type PlaceOrderFunction = (
     side: OrderSide,
     amount: bigint,
     unitPrice: number,
-    sourceWallet: WalletSource
+    sourceWallet: WalletSource,
 ) => Promise<Hex | undefined>;
 
 type UserOrderHistoryQuery = Awaited<
@@ -81,12 +81,10 @@ export interface ColorFormat {
 
 export type Alignment = 'left' | 'center' | 'right' | 'top' | 'top-right';
 
-export type IndexOf<T extends unknown[]> = Exclude<
-    keyof T,
-    keyof unknown[]
-> extends `${infer I extends number}`
-    ? I
-    : never;
+export type IndexOf<T extends unknown[]> =
+    Exclude<keyof T, keyof unknown[]> extends `${infer I extends number}`
+        ? I
+        : never;
 
 export type MarketPhase = 'Closed' | 'PreOrder' | 'Itayose' | 'Open';
 

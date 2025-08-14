@@ -28,20 +28,19 @@ import { LoanValue, Maturity } from './entities';
 export const tableHeaderDefinition =
     <TData,>(title: string, titleHint?: string, align: Alignment = 'center') =>
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (header: HeaderContext<TData, any>) =>
-        (
-            <TableHeader
-                title={title}
-                titleHint={titleHint}
-                sortingHandler={header.column.getToggleSortingHandler()}
-                isSorted={
-                    header.column.getCanSort()
-                        ? header.column.getIsSorted()
-                        : undefined
-                }
-                align={align}
-            />
-        );
+    (header: HeaderContext<TData, any>) => (
+        <TableHeader
+            title={title}
+            titleHint={titleHint}
+            sortingHandler={header.column.getToggleSortingHandler()}
+            isSorted={
+                header.column.getCanSort()
+                    ? header.column.getIsSorted()
+                    : undefined
+            }
+            align={align}
+        />
+    );
 
 type CurrencyProperty = {
     currency: string;
@@ -80,19 +79,19 @@ type InputAmountColumnType = InputAmountProperty &
     StatusProperty;
 
 function hasAmountProperty<T extends AmountColumnType>(
-    obj: T
+    obj: T,
 ): obj is T & AmountProperty {
     return (obj as AmountProperty).amount !== undefined;
 }
 
 function hasFutureValueProperty<T extends AmountColumnType>(
-    obj: T
+    obj: T,
 ): obj is T & FutureValueProperty {
     return (obj as FutureValueProperty).futureValue !== undefined;
 }
 
 function hasSideProperty<T extends AmountColumnType>(
-    obj: T
+    obj: T,
 ): obj is T & SideProperty {
     return (obj as SideProperty).side !== undefined;
 }
@@ -109,7 +108,7 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
         showCurrency?: boolean;
     },
     titleHint?: string,
-    align: Alignment = 'center'
+    align: Alignment = 'center',
 ) => {
     return columnHelper.accessor(accessor, {
         id: id,
@@ -177,7 +176,7 @@ export const inputAmountColumnDefinition = <T extends InputAmountColumnType>(
         priceList?: AssetPriceMap;
         fontSize?: string;
     },
-    titleHint?: string
+    titleHint?: string,
 ) => {
     return columnHelper.accessor(accessor, {
         id: id,
@@ -226,7 +225,7 @@ export const futureValueColumnDefinition = <T extends AmountColumnType>(
         priceList?: AssetPriceMap;
     },
     titleHint?: string,
-    align: Alignment = 'center'
+    align: Alignment = 'center',
 ) => {
     return columnHelper.accessor(accessor, {
         id: id,
@@ -270,7 +269,7 @@ export const futureValueColumnDefinition = <T extends AmountColumnType>(
 export const loanTypeColumnDefinition = <T extends SideProperty>(
     columnHelper: ColumnHelper<T>,
     title: string,
-    id: string
+    id: string,
 ) => {
     const assessorFn: AccessorFn<T, number> = row => row.side;
 
@@ -301,7 +300,7 @@ export const loanTypeFromFVColumnDefinition = <T extends FutureValueProperty>(
     columnHelper: ColumnHelper<T>,
     title: string,
     id: string,
-    align: Alignment = 'center'
+    align: Alignment = 'center',
 ) => {
     const assessorFn: AccessorFn<T, bigint> = row => row.futureValue;
 
@@ -339,7 +338,7 @@ export const contractColumnDefinition = <
         maturity: string | number;
         currency: string;
         futureValue?: bigint;
-    }
+    },
 >(
     columnHelper: ColumnHelper<T>,
     title: string,
@@ -352,7 +351,7 @@ export const contractColumnDefinition = <
     delistedCurrencySet?: Set<CurrencySymbol>,
     alignCell: Alignment = 'center',
     alignHeader: Alignment = 'center',
-    titleHint?: string
+    titleHint?: string,
 ) => {
     const assessorFn: AccessorFn<T, string> = row => row.maturity.toString();
     return columnHelper.accessor(assessorFn, {
@@ -395,11 +394,11 @@ export const withdrawableAssetColumnDefinition = <
         maturity: string | number;
         currency: string;
         type: 'position' | 'collateral' | 'lending-order';
-    }
+    },
 >(
     columnHelper: ColumnHelper<T>,
     title: string,
-    id: string
+    id: string,
 ) => {
     const assessorFn: AccessorFn<T, string> = row => row.maturity.toString();
     return columnHelper.accessor(assessorFn, {
@@ -425,11 +424,11 @@ export const withdrawableAssetColumnDefinition = <
 };
 
 const contractSortingFn = <
-    T extends { maturity: string | number; currency: string }
+    T extends { maturity: string | number; currency: string },
 >(
     rowA: Row<T>,
     rowB: Row<T>,
-    _column: string
+    _column: string,
 ) => {
     const ccyA = hexToCurrencySymbol(rowA.original.currency)?.toString() ?? '';
     const ccyB = hexToCurrencySymbol(rowB.original.currency)?.toString() ?? '';
@@ -444,7 +443,7 @@ const contractSortingFn = <
 };
 
 export const priceYieldColumnDefinition = <
-    T extends { maturity: string; calculationDate?: number }
+    T extends { maturity: string; calculationDate?: number },
 >(
     columnHelper: ColumnHelper<T>,
     title: string,
@@ -452,7 +451,7 @@ export const priceYieldColumnDefinition = <
     accessor: AccessorFn<T, bigint>,
     variant: 'compact' | 'default' = 'default',
     type: Parameters<typeof PriceYieldItem>[0]['firstLineType'] = 'price',
-    titleHint?: string
+    titleHint?: string,
 ) => {
     return columnHelper.accessor(accessor, {
         id: id,
@@ -464,7 +463,7 @@ export const priceYieldColumnDefinition = <
                         loanValue={LoanValue.fromPrice(
                             Number(info.getValue().toString()),
                             Number(info.row.original.maturity.toString()),
-                            calculationDate
+                            calculationDate,
                         )}
                         compact={variant === 'compact'}
                         firstLineType={type}
@@ -482,7 +481,7 @@ export const inputPriceYieldColumnDefinition = <T extends { maturity: string }>(
     title: string,
     id: string,
     accessor: AccessorFn<T, bigint>,
-    type: Parameters<typeof PriceYieldItem>[0]['firstLineType'] = 'price'
+    type: Parameters<typeof PriceYieldItem>[0]['firstLineType'] = 'price',
 ) => {
     return columnHelper.accessor(accessor, {
         id: id,
@@ -497,7 +496,7 @@ export const inputPriceYieldColumnDefinition = <T extends { maturity: string }>(
                         <PriceYieldItem
                             loanValue={LoanValue.fromPrice(
                                 Number(info.getValue().toString()),
-                                Number(info.row.original.maturity.toString())
+                                Number(info.row.original.maturity.toString()),
                             )}
                             firstLineType={type}
                             align='left'
@@ -516,7 +515,7 @@ export const dateAndTimeColumnDefinition = <T extends { createdAt: bigint }>(
     title: string,
     id: string,
     accessor: AccessorFn<T, bigint>,
-    titleHint?: string
+    titleHint?: string,
 ) => {
     return columnHelper.accessor(accessor, {
         id: id,
@@ -536,14 +535,14 @@ export const dateAndTimeColumnDefinition = <T extends { createdAt: bigint }>(
 };
 
 export const dateTimeViewColumnDefinition = <
-    T extends { createdAt: bigint; txHash: string }
+    T extends { createdAt: bigint; txHash: string },
 >(
     columnHelper: ColumnHelper<T>,
     title: string,
     id: string,
     accessor: AccessorFn<T, bigint>,
     blockExplorerUrl?: string,
-    titleHint?: string
+    titleHint?: string,
 ) => {
     return columnHelper.accessor(accessor, {
         id: id,

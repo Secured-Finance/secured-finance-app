@@ -29,7 +29,7 @@ ChartJS.register(
     LineElement,
     Title,
     CategoryScale,
-    Tooltip
+    Tooltip,
 );
 
 const triggerHover = (chart: ChartJS<'line'>, index: number) => {
@@ -119,13 +119,13 @@ export const LineChart = ({
             event as unknown as Event,
             'nearest',
             { axis: 'x', intersect: false, includeInvisible: true },
-            true
+            true,
         );
         if (element && element[0]) {
             const { index } = element[0];
             const label = data.labels?.[index];
             const selectedMaturityIndex = maturityList.findIndex(
-                element => element.label === label
+                element => element.label === label,
             );
             if (selectedMaturityIndex >= 0) {
                 handleChartClick(selectedMaturityIndex);
@@ -138,7 +138,7 @@ export const LineChart = ({
 
         const numberOfElements = chartRef.current.data.datasets[0].data.length;
         let index = maturityList.findIndex(
-            element => element.maturity === maturity.toNumber()
+            element => element.maturity === maturity.toNumber(),
         );
 
         if (numberOfElements) {

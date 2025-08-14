@@ -16,7 +16,7 @@ describe('useCurrencies', () => {
                 CurrencySymbol.ETH,
                 CurrencySymbol.WBTC,
                 CurrencySymbol.WFIL,
-            ])
+            ]),
         );
     });
 
@@ -27,7 +27,7 @@ describe('useCurrencies', () => {
             expect(result.current.data).toEqual([
                 CurrencySymbol.ETH,
                 CurrencySymbol.iFIL,
-            ])
+            ]),
         );
     });
 
@@ -35,7 +35,7 @@ describe('useCurrencies', () => {
         mock.getCurrencies.mockResolvedValueOnce([ethBytes32, '0x0']);
         const { result } = renderHook(() => useCurrencies());
         await waitFor(() =>
-            expect(result.current.data).toEqual([CurrencySymbol.ETH])
+            expect(result.current.data).toEqual([CurrencySymbol.ETH]),
         );
     });
 });

@@ -24,7 +24,7 @@ describe('UnwindDialog Component', () => {
         render(<Default />);
         fireEvent.click(screen.getByText('OK'));
         await waitFor(() =>
-            expect(mockSecuredFinance.unwindPosition).toHaveBeenCalled()
+            expect(mockSecuredFinance.unwindPosition).toHaveBeenCalled(),
         );
     });
 
@@ -38,14 +38,14 @@ describe('UnwindDialog Component', () => {
 
     it('should proceed to failure screen if unwindPosition throws an error', async () => {
         mockSecuredFinance.unwindPosition.mockRejectedValueOnce(
-            new Error('error')
+            new Error('error'),
         );
         const spy = jest.spyOn(console, 'error').mockImplementation();
         render(<Default />);
 
         fireEvent.click(screen.getByText('OK'));
         await waitFor(() =>
-            expect(mockSecuredFinance.unwindPosition).toHaveBeenCalled()
+            expect(mockSecuredFinance.unwindPosition).toHaveBeenCalled(),
         );
         await waitFor(() => expect(spy).toHaveBeenCalled());
         await waitFor(() => {
@@ -59,7 +59,7 @@ describe('UnwindDialog Component', () => {
         expect(screen.getByText('Repay Position')).toBeInTheDocument();
         fireEvent.click(screen.getByText('OK'));
         await waitFor(() =>
-            expect(mockSecuredFinance.executeRepayment).toHaveBeenCalled()
+            expect(mockSecuredFinance.executeRepayment).toHaveBeenCalled(),
         );
     });
 
@@ -68,7 +68,7 @@ describe('UnwindDialog Component', () => {
         expect(screen.getByText('Redeem Position')).toBeInTheDocument();
         fireEvent.click(screen.getByText('OK'));
         await waitFor(() =>
-            expect(mockSecuredFinance.executeRedemption).toHaveBeenCalled()
+            expect(mockSecuredFinance.executeRedemption).toHaveBeenCalled(),
         );
     });
 

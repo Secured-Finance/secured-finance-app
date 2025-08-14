@@ -27,7 +27,7 @@ export const Alert = ({
             : undefined;
 
     const [isVisible, setIsVisible] = useState(
-        value ? !(value === localStorageValue) : true
+        value ? !(value === localStorageValue) : true,
     );
 
     const handleClose = () => {
@@ -54,7 +54,7 @@ export const Alert = ({
                 {
                     'py-1.5': !subtitle,
                     'py-2': subtitle,
-                }
+                },
             )}
         >
             <div className='flex items-start gap-1.5 pr-4 laptop:gap-2'>
@@ -67,7 +67,7 @@ export const Alert = ({
                                 {
                                     'mt-[2.5px] laptop:mt-0.5': !subtitle,
                                     'mt-[3px] laptop:mt-1': subtitle,
-                                }
+                                },
                             ),
                         })}
                     </span>
@@ -98,7 +98,7 @@ export const Alert = ({
                         'h-[13px] w-[13px] flex-shrink-0 laptop:h-4 laptop:w-4',
                         {
                             'mt-[3px] laptop:mt-0.5': !subtitle,
-                        }
+                        },
                     )}
                     data-testid='close-button'
                 >

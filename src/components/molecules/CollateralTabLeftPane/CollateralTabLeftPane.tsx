@@ -39,7 +39,7 @@ interface CollateralTabLeftPaneProps {
             | 'deposit'
             | 'withdraw'
             | 'deposit-zc-tokens'
-            | 'withdraw-zc-tokens'
+            | 'withdraw-zc-tokens',
     ) => void;
     collateralBook: CollateralBook;
     netAssetValue: number;
@@ -71,7 +71,7 @@ const getInformationText = (collateralCurrencies: CurrencySymbol[]) => {
 };
 
 const checkAssetQuantityExist = (
-    collateralBook: CollateralBook['collateral' | 'nonCollateral']
+    collateralBook: CollateralBook['collateral' | 'nonCollateral'],
 ) => {
     let exist = false;
     collateralBook &&
@@ -106,7 +106,7 @@ export const CollateralTabLeftPane = ({
 }: CollateralTabLeftPaneProps) => {
     const [selectedTable, setSelectedTable] = useState(TableType.TOKENS);
     const chainError = useSelector(
-        (state: RootState) => state.blockchain.chainError
+        (state: RootState) => state.blockchain.chainError,
     );
 
     const { data: collateralCurrencies = [] } = useCollateralCurrencies();
@@ -137,8 +137,8 @@ export const CollateralTabLeftPane = ({
                         });
                         return acc;
                     },
-                    []
-                )
+                    [],
+                ),
         );
     }, [collateralBook, priceList]);
 
@@ -152,15 +152,15 @@ export const CollateralTabLeftPane = ({
                     currency: zcBond.currency,
                     label: convertToZcTokenName(
                         zcBond.currency,
-                        zcBond.maturity
+                        zcBond.maturity,
                     ),
                     amount: amountFormatterFromBase[zcBond.currency](
-                        zcBond.tokenAmount
+                        zcBond.tokenAmount,
                     ),
                     price: priceList[zcBond.currency],
                     totalPrice:
                         amountFormatterFromBase[zcBond.currency](
-                            zcBond.amount
+                            zcBond.amount,
                         ) * priceList[zcBond.currency],
                 });
             } else {
@@ -171,7 +171,7 @@ export const CollateralTabLeftPane = ({
                     price: priceList[zcBond.currency],
                     totalPrice:
                         amountFormatterFromBase[zcBond.currency](
-                            zcBond.amount
+                            zcBond.amount,
                         ) * priceList[zcBond.currency],
                 });
             }
@@ -199,7 +199,7 @@ export const CollateralTabLeftPane = ({
                                     netAssetValue.toString().length <= 9,
                                 'text-md tablet:text-smd':
                                     netAssetValue.toString().length > 9,
-                            }
+                            },
                         )}
                     >
                         {usdFormat(netAssetValue, 2)}
@@ -238,7 +238,7 @@ export const CollateralTabLeftPane = ({
                                     <AssetInformation
                                         header='Collateral'
                                         informationText={getInformationText(
-                                            collateralCurrencies
+                                            collateralCurrencies,
                                         )}
                                         values={collateralInformation}
                                     ></AssetInformation>

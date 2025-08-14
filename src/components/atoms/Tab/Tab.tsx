@@ -38,7 +38,7 @@ export const Tab = ({
                         active && !disabled,
                     'h-full': isFullHeight,
                     'pointer-events-none bg-transparent': disabled,
-                }
+                },
             )}
         >
             <div
@@ -53,7 +53,7 @@ export const Tab = ({
                     {
                         'h-full': isFullHeight,
                         'h-auto': !isFullHeight,
-                    }
+                    },
                 )}
             >
                 <p
@@ -63,7 +63,7 @@ export const Tab = ({
                             [`${[textStyle[variant]]}`]: active && !disabled,
                             'text-neutral-200': !active,
                             'text-neutral-400': disabled,
-                        }
+                        },
                     )}
                     data-testid={`${text}-tab`}
                 >

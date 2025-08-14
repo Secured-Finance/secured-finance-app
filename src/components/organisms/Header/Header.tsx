@@ -85,13 +85,13 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
 
     const securedFinance = useSF();
     const chainError = useSelector(
-        (state: RootState) => state.blockchain.chainError
+        (state: RootState) => state.blockchain.chainError,
     );
     const currentChainId = useSelector(
-        (state: RootState) => state.blockchain.chainId
+        (state: RootState) => state.blockchain.chainId,
     );
     const isChainIdDetected = useSelector(
-        (state: RootState) => state.blockchain.isChainIdDetected
+        (state: RootState) => state.blockchain.isChainIdDetected,
     );
     const isProduction = isProdEnv();
 
@@ -126,7 +126,7 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                                         key={link.text}
                                         className={clsx(
                                             'h-full w-full',
-                                            link.className
+                                            link.className,
                                         )}
                                     >
                                         <ItemLink
@@ -263,7 +263,7 @@ const PointsTag = ({
                 {
                     'tablet:pl-3': !showPoints,
                     'tablet:pl-2.5': showPoints,
-                }
+                },
             )}
             aria-label='Points Tag'
         >
@@ -279,7 +279,7 @@ const StablecoinExternalLink = () => {
             href={getStablecoinAppUrl()}
             target='_blank'
             className={clsx(
-                'typography-mobile-body-5 tablet:typography-desktop-body-4 flex h-8 flex-shrink-0 items-center justify-center gap-1.5 rounded-lg bg-neutral-800 px-2.5 py-2.5 font-semibold text-neutral-50 ring-1 ring-neutral-500 hover:bg-white-10 hover:ring-white-10 active:border-transparent tablet:h-10 tablet:rounded-xl tablet:pr-3 tablet:ring-[1.5px]'
+                'typography-mobile-body-5 tablet:typography-desktop-body-4 flex h-8 flex-shrink-0 items-center justify-center gap-1.5 rounded-lg bg-neutral-800 px-2.5 py-2.5 font-semibold text-neutral-50 ring-1 ring-neutral-500 hover:bg-white-10 hover:ring-white-10 active:border-transparent tablet:h-10 tablet:rounded-xl tablet:pr-3 tablet:ring-[1.5px]',
             )}
             aria-label='Stablecoin external link'
         >

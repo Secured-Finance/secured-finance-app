@@ -25,7 +25,7 @@ describe('Tooltip Component', () => {
         await userEvent.unhover(information);
         await userEvent.hover(information);
         const tooltip = await screen.findByText(
-            'If the conditions are fulfilled, the trade will be executed.'
+            'If the conditions are fulfilled, the trade will be executed.',
         );
         expect(tooltip).toBeInTheDocument();
     });
@@ -36,8 +36,8 @@ describe('Tooltip Component', () => {
         await userEvent.unhover(information);
         expect(
             screen.queryByText(
-                'If the conditions are fulfilled, the trade will be executed.'
-            )
+                'If the conditions are fulfilled, the trade will be executed.',
+            ),
         ).not.toBeInTheDocument();
         expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
     });

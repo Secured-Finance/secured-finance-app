@@ -13,7 +13,7 @@ describe('useCurrencyDelistedStatus hook', () => {
         const delistedCurrencySet = new Set([CurrencySymbol.USDC]);
 
         await waitFor(() =>
-            expect(mock.currencyExists).toHaveBeenCalledTimes(4)
+            expect(mock.currencyExists).toHaveBeenCalledTimes(4),
         );
         const newValue = result.current;
         expect(newValue.data).toEqual(delistedCurrencySet);

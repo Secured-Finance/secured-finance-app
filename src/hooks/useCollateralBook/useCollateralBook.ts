@@ -87,19 +87,19 @@ export const useCollateralBook = (account: string | undefined) => {
                 securedFinance?.tokenVault.getCollateralBook(account ?? ''),
                 securedFinance?.tokenVault.getCollateralParameters(),
                 securedFinance?.getTotalPresentValueInBaseCurrency(
-                    account ?? ''
+                    account ?? '',
                 ),
                 await Promise.all(
                     collateralCurrencyList.map(async ccy => {
                         const withdrawableCollateral =
                             await securedFinance?.tokenVault.getWithdrawableCollateral(
                                 toCurrency(ccy),
-                                account ?? ''
+                                account ?? '',
                             );
                         return {
                             [ccy]: withdrawableCollateral ?? ZERO_BI,
                         };
-                    })
+                    }),
                 ),
             ]);
 
@@ -116,7 +116,7 @@ export const useCollateralBook = (account: string | undefined) => {
                 formatCollateral(data.collateralValues.collateral, priceList);
 
             const liquidationThresholdRate = Number(
-                data.collateralParameters.liquidationThresholdRate
+                data.collateralParameters.liquidationThresholdRate,
             );
             const collateralThreshold =
                 liquidationThresholdRate === 0
@@ -131,12 +131,12 @@ export const useCollateralBook = (account: string | undefined) => {
             const usdCollateral = divide(
                 data.collateralValues.totalCollateralAmount,
                 DIVIDER,
-                8
+                8,
             );
             const usdUnusedCollateral = divide(
                 data.collateralValues.totalUnusedCollateralAmount,
                 DIVIDER,
-                8
+                8,
             );
             const coverage = Number(data.collateralValues.collateralCoverage);
 
@@ -148,7 +148,7 @@ export const useCollateralBook = (account: string | undefined) => {
                     usdCollateral,
                     usdUnusedCollateral,
                     divide(coverage, 100),
-                    collateralThreshold
+                    collateralThreshold,
                 ),
                 usdNonCollateral: usdNonCollateral,
                 coverage: coverage,
@@ -166,7 +166,7 @@ export const useCollateralBook = (account: string | undefined) => {
 
 const formatCollateral = (
     collateral: Record<string, bigint>,
-    priceList: AssetPriceMap
+    priceList: AssetPriceMap,
 ) => {
     let collateralBook: CollateralBook['collateral'] = {};
     let nonCollateralBook: CollateralBook['nonCollateral'] = {};
@@ -176,7 +176,7 @@ const formatCollateral = (
         .sort(
             (a, b) =>
                 currencyMap[a as CurrencySymbol].index -
-                currencyMap[b as CurrencySymbol].index
+                currencyMap[b as CurrencySymbol].index,
         )
         .forEach((ccy: string) => {
             const currency = ccy as CurrencySymbol;

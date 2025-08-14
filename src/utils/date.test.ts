@@ -87,7 +87,7 @@ describe('getTimeStampRelativeToNow function', () => {
         const hours = 3;
         const result = getTimestampRelativeToNow(hours, true);
         const expectedTimestamp = Math.floor(
-            currentTimestamp + hours * 60 * 60
+            currentTimestamp + hours * 60 * 60,
         );
         expect(result).toBe(expectedTimestamp);
     });
@@ -97,7 +97,7 @@ describe('getTimeStampRelativeToNow function', () => {
         const isFuture = false;
         const result = getTimestampRelativeToNow(hours, isFuture);
         const expectedTimestamp = Math.floor(
-            currentTimestamp - hours * 60 * 60
+            currentTimestamp - hours * 60 * 60,
         );
         expect(result).toBe(expectedTimestamp);
     });

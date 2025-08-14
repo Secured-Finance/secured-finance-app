@@ -57,7 +57,7 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
     const balance = useBalances();
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
     const { currency, side, maturity } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
+        selectLandingOrderForm(state.landingOrderForm),
     );
     const { data: lendingMarkets = baseContracts } = useLendingMarkets();
     const lendingContracts = lendingMarkets[currency];
@@ -67,12 +67,12 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
 
     const maturityOptionList = useMaturityOptions(
         lendingContracts,
-        market => market.isOpened
+        market => market.isOpened,
     );
 
     const nonMaturedMarketOptionList = useMaturityOptions(
         lendingContracts,
-        market => !market.isMatured
+        market => !market.isMatured,
     );
 
     const securedFinance = useSF();
@@ -87,13 +87,13 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
     const [preOrderDays, setPreOrderDays] = useState<number | undefined>();
 
     const itayoseMarket = Object.entries(lendingContracts).find(
-        ([, market]) => market.isPreOrderPeriod || market.isItayosePeriod
+        ([, market]) => market.isPreOrderPeriod || market.isItayosePeriod,
     )?.[1];
 
     const unitPrices = useLoanValues(
         lendingContracts,
         side === OrderSide.BORROW ? RateType.Borrow : RateType.Lend,
-        market => market.isOpened
+        market => market.isOpened,
     );
 
     const marketPrice = useMemo(() => {
@@ -107,7 +107,7 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
         {}, // no variables
         queries.DailyVolumesDocument,
         'dailyVolumes',
-        !isSubgraphSupported
+        !isSubgraphSupported,
     );
 
     useEffect(() => {
@@ -159,7 +159,7 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
                             asset={currency}
                             dailyVolumes={
                                 isSubgraphSupported
-                                    ? dailyVolumes.data ?? []
+                                    ? (dailyVolumes.data ?? [])
                                     : undefined
                             }
                         />
@@ -244,7 +244,7 @@ export const WithBanner = ({
                     <>
                         {`Market ${ccy}-${getUTCMonthYear(
                             market.maturity,
-                            true
+                            true,
                         )} is open for pre-orders now until ${Intl.DateTimeFormat(
                             'en-US',
                             {
@@ -252,21 +252,21 @@ export const WithBanner = ({
                                 year: 'numeric',
                                 month: 'long',
                                 day: 'numeric',
-                            }
+                            },
                         ).format(preOrderTimeLimit)} ${Intl.DateTimeFormat(
                             'en-GB',
                             {
                                 timeZone: 'UTC',
                                 hour: '2-digit',
                                 minute: '2-digit',
-                            }
+                            },
                         ).format(preOrderTimeLimit)} (UTC)`}
 
                         <span className='pl-4'>
                             <Link
                                 href={`/?market=${ccy}-${getUTCMonthYear(
                                     market.maturity,
-                                    true
+                                    true,
                                 )}`}
                                 className='text-planetaryPurple underline'
                             >

@@ -17,7 +17,7 @@ describe('TermSelector Component', () => {
         const option = WithTransformFunction.args.options[3].label;
         fireEvent.click(screen.getByText(option));
         expect(
-            screen.getByTestId('term-selector-transformed-value')
+            screen.getByTestId('term-selector-transformed-value'),
         ).toHaveTextContent(option);
     });
 
@@ -25,15 +25,15 @@ describe('TermSelector Component', () => {
         assert(WithTransformFunction.args?.options);
         render(<WithTransformFunction />);
         expect(
-            screen.getByTestId('term-selector-transformed-value')
+            screen.getByTestId('term-selector-transformed-value'),
         ).toHaveTextContent(
-            WithTransformFunction.args.options[0].label.toUpperCase()
+            WithTransformFunction.args.options[0].label.toUpperCase(),
         );
         fireEvent.click(screen.getByRole('button'));
         const option = WithTransformFunction.args.options[3].label;
         fireEvent.click(screen.getByText(option));
         expect(
-            screen.getByTestId('term-selector-transformed-value')
+            screen.getByTestId('term-selector-transformed-value'),
         ).toHaveTextContent(option.toUpperCase());
     });
 

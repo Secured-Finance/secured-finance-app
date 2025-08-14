@@ -16,7 +16,7 @@ describe('SubTab component', () => {
         render(<Default />);
 
         expect(screen.getByText('Tab label')).toHaveClass(
-            'bg-primary-700 text-neutral-50'
+            'bg-primary-700 text-neutral-50',
         );
     });
 

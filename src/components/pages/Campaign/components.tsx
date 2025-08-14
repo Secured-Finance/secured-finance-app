@@ -167,10 +167,10 @@ export const CampaignStatus = ({
                                     >
                                         {`${ordinaryFormat(
                                             amountFormatterFromBase[ccy](
-                                                valueLocked[ccy] ?? ZERO_BI
+                                                valueLocked[ccy] ?? ZERO_BI,
                                             ),
                                             0,
-                                            1
+                                            1,
                                         )} ${ccy}`}
                                     </span>
                                 );
@@ -306,7 +306,7 @@ const TimeDesign = (val: string, text: string, isLast?: boolean) => {
                 'col-span-3 flex justify-center gap-[7px] laptop:col-span-6 desktop:col-span-3',
                 {
                     'border-r border-neutral-600 laptop:border-r-0': !isLast,
-                }
+                },
             )}
         >
             <span className='font-numerical text-[22px] font-medium leading-8 tracking-[1.368px] text-neutral-50 tablet:text-6 desktop:text-9'>

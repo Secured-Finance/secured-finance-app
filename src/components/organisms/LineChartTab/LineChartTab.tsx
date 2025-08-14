@@ -38,7 +38,7 @@ export const LineChartTab = ({
     const { data: isGlobalItayose } = useIsGlobalItayose();
 
     const { currency, maturity } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
+        selectLandingOrderForm(state.landingOrderForm),
     );
 
     const chartOptions: ChartOptions<'line'> = {
@@ -89,7 +89,7 @@ export const LineChartTab = ({
         'Market price',
         maturityList.map(item => item.label),
         itayoseMarketIndexSet,
-        itayoseBorderColor
+        itayoseBorderColor,
     );
 
     return (
@@ -106,7 +106,7 @@ export const LineChartTab = ({
                         trackButtonEvent(
                             ButtonEvents.TERM_CHANGE,
                             ButtonProperties.TERM,
-                            label
+                            label,
                         );
 
                         const market = `${currency}-${label}`;

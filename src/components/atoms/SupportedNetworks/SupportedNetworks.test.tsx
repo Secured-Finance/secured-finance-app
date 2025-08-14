@@ -9,8 +9,8 @@ describe('SupportedNetworks Component', () => {
         render(<Default />);
         expect(
             screen.getByText(
-                'Secured Finance is not supported on this network. Please switch to a supported network.'
-            )
+                'Secured Finance is not supported on this network. Please switch to a supported network.',
+            ),
         ).toBeInTheDocument();
     });
 });

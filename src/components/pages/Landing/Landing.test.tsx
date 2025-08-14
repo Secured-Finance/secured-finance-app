@@ -25,7 +25,7 @@ jest.mock(
     'next/link',
     () =>
         ({ children }: { children: React.ReactNode }) =>
-            children
+            children,
 );
 
 const mock = mockUseSF();
@@ -88,7 +88,7 @@ describe('Landing Component', () => {
             },
         });
         expect(
-            await within(screen.getByTestId('market-rate')).findByText('3.26%')
+            await within(screen.getByTestId('market-rate')).findByText('3.26%'),
         ).toBeInTheDocument();
 
         fireEvent.click(screen.getByRole('button', { name: 'DEC2022' }));
@@ -132,7 +132,7 @@ describe('Landing Component', () => {
             });
 
             await waitFor(() =>
-                expect(screen.getByText('DEC2022')).toBeInTheDocument()
+                expect(screen.getByText('DEC2022')).toBeInTheDocument(),
             );
             assertInputValue('Amount', '');
             assertInputValue('Bond Price', '96.85');
@@ -171,8 +171,8 @@ describe('Landing Component', () => {
 
             await waitFor(() =>
                 expect(
-                    screen.getByRole('button', { name: 'DEC2022' })
-                ).toBeInTheDocument()
+                    screen.getByRole('button', { name: 'DEC2022' }),
+                ).toBeInTheDocument(),
             );
 
             // ensure wallet is connected
@@ -221,16 +221,16 @@ describe('Landing Component', () => {
         await waitFor(() =>
             fireEvent.input(screen.getByRole('textbox', { name: 'Size' }), {
                 target: { value: '1000' },
-            })
+            }),
         );
         expect(screen.getByRole('slider')).toHaveValue('10');
         await waitFor(() =>
             fireEvent.input(screen.getByRole('textbox', { name: 'Size' }), {
                 target: { value: '5000' },
-            })
+            }),
         );
         await waitFor(() =>
-            expect(screen.getByRole('slider')).toHaveValue('50')
+            expect(screen.getByRole('slider')).toHaveValue('50'),
         );
     });
 
@@ -263,8 +263,8 @@ describe('Landing Component', () => {
         await waitFor(() => {
             expect(
                 screen.getByText(
-                    'Please note that USDC will be delisted on Secured Finance.'
-                )
+                    'Please note that USDC will be delisted on Secured Finance.',
+                ),
             ).toBeInTheDocument();
         });
     });
@@ -282,8 +282,8 @@ describe('Landing Component', () => {
         await waitFor(() => {
             expect(
                 screen.queryByText(
-                    'Please note that USDC will be delisted on Secured Finance.'
-                )
+                    'Please note that USDC will be delisted on Secured Finance.',
+                ),
             ).not.toBeInTheDocument();
         });
     });
@@ -299,8 +299,8 @@ describe('Landing Component', () => {
         await waitFor(() => {
             expect(
                 screen.getByText(
-                    'Market WFIL-DEC2024 is open for pre-orders now until May 31, 2023 23:00 (UTC)'
-                )
+                    'Market WFIL-DEC2024 is open for pre-orders now until May 31, 2023 23:00 (UTC)',
+                ),
             ).toBeInTheDocument();
         });
     }, 8000);
@@ -312,18 +312,23 @@ describe('Landing Component', () => {
         });
 
         expect(
-            screen.getByText('Welcome! Please deposit funds to enable trading.')
+            screen.getByText(
+                'Welcome! Please deposit funds to enable trading.',
+            ),
         ).toBeInTheDocument();
     });
 
     it('shows warning when maximumOpenOrderLimit is true', () => {
         render(
-            <WithBanner {...baseWithBannerProps} maximumOpenOrderLimit={true} />
+            <WithBanner
+                {...baseWithBannerProps}
+                maximumOpenOrderLimit={true}
+            />,
         );
         expect(
             screen.getByText(
-                /you currently have the maximum number of 20 orders/i
-            )
+                /you currently have the maximum number of 20 orders/i,
+            ),
         ).toBeInTheDocument();
     });
 
@@ -333,12 +338,12 @@ describe('Landing Component', () => {
                 {...baseWithBannerProps}
                 isItayose={true}
                 preOrderDays={5}
-            />
+            />,
         );
         expect(
             screen.getByText(
-                /secure your market position by placing limit orders up to 5 days before trading begins/i
-            )
+                /secure your market position by placing limit orders up to 5 days before trading begins/i,
+            ),
         ).toBeInTheDocument();
         expect(screen.getByText(/Secured Finance Docs/)).toBeInTheDocument();
     });
@@ -346,7 +351,9 @@ describe('Landing Component', () => {
     it('shows info when market is open for pre-orders and not itayose', () => {
         render(<WithBanner {...baseWithBannerProps} isItayose={false} />);
         expect(
-            screen.getByText(/Market aUSDC-.*is open for pre-orders now until/i)
+            screen.getByText(
+                /Market aUSDC-.*is open for pre-orders now until/i,
+            ),
         ).toBeInTheDocument();
         expect(screen.getByText(/Place Order Now/)).toBeInTheDocument();
     });

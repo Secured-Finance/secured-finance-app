@@ -26,7 +26,7 @@ const CurveHeaderNotes = ({
     const totalVolume = useMemo(() => {
         const { volumePerCurrency } = computeTotalDailyVolumeInUSD(
             dailyVolumes,
-            priceList
+            priceList,
         );
 
         return { volumePerCurrency };
@@ -38,7 +38,7 @@ const CurveHeaderNotes = ({
                 header='Total Volume (Asset)'
                 footer={formatWithCurrency(
                     totalVolume.volumePerCurrency[asset],
-                    asset.toString()
+                    asset.toString(),
                 )}
             />
 
@@ -46,7 +46,7 @@ const CurveHeaderNotes = ({
                 header='Total Volume (USD)'
                 footer={usdFormat(
                     Number(totalVolume.volumePerCurrency[asset]) *
-                        priceList[asset]
+                        priceList[asset],
                 )}
             />
         </div>

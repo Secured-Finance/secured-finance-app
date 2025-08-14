@@ -36,7 +36,7 @@ const sortOrders = (a: Order, b: Order) => {
 
 export const useOrderList = (
     account: string | undefined,
-    usedCurrencies: CurrencySymbol[]
+    usedCurrencies: CurrencySymbol[],
 ) => {
     const securedFinance = useSF();
 
@@ -52,7 +52,7 @@ export const useOrderList = (
         queryFn: async () => {
             const orders = await securedFinance?.getOrderList(
                 account ?? '',
-                usedCurrencies.map(c => toCurrency(c))
+                usedCurrencies.map(c => toCurrency(c)),
             );
             return (
                 orders ?? {
@@ -116,11 +116,11 @@ export const useOrderList = (
                             isPreOrder: boolean;
                         }[],
                         totalPVOfOpenOrdersInUSD: 0,
-                    }
+                    },
                 );
 
             const sortedActiveOrderList = activeOrderList.sort((a, b) =>
-                sortOrders(a, b)
+                sortOrders(a, b),
             );
 
             const inactiveOrderList = inactiveOrders

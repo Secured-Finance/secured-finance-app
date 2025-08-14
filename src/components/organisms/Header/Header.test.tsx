@@ -9,7 +9,7 @@ jest.mock(
     'next/link',
     () =>
         ({ children }: { children: React.ReactNode }) =>
-            children
+            children,
 );
 
 describe('Header component', () => {
@@ -27,7 +27,7 @@ describe('Header component', () => {
         render(<Primary />);
         const textElement = screen.getByText('Fixed Income');
         expect(textElement.parentNode?.parentNode).toHaveClass(
-            'from-tabGradient-blue-start to-tabGradient-blue-end'
+            'from-tabGradient-blue-start to-tabGradient-blue-end',
         );
     });
 
@@ -36,7 +36,7 @@ describe('Header component', () => {
         render(<Primary />);
         const textElement = screen.getByText('Fixed Income');
         expect(textElement.parentNode?.parentNode).toHaveClass(
-            'from-tabGradient-blue-start to-tabGradient-blue-end'
+            'from-tabGradient-blue-start to-tabGradient-blue-end',
         );
     });
 
@@ -48,7 +48,7 @@ describe('Header component', () => {
 
         const textElement = screen.getByText('Stats');
         expect(textElement.parentNode?.parentNode).toHaveClass(
-            'from-tabGradient-blue-start to-tabGradient-blue-end'
+            'from-tabGradient-blue-start to-tabGradient-blue-end',
         );
     });
 
@@ -58,7 +58,7 @@ describe('Header component', () => {
         render(<Primary />);
         const textElement = screen.getByText('Fixed Income');
         expect(textElement.parentNode?.parentNode).toHaveClass(
-            'from-tabGradient-blue-start to-tabGradient-blue-end'
+            'from-tabGradient-blue-start to-tabGradient-blue-end',
         );
     });
 
@@ -76,7 +76,7 @@ describe('Header component', () => {
         });
         expect(screen.getByTestId('testnet-info')).toBeInTheDocument();
         expect(
-            screen.getByText('You are visiting Secured Finance on testnet')
+            screen.getByText('You are visiting Secured Finance on testnet'),
         ).toBeInTheDocument();
     });
 
@@ -95,8 +95,8 @@ describe('Header component', () => {
         expect(screen.getByTestId('testnet-alert')).toBeInTheDocument();
         expect(
             screen.getByText(
-                'Secured Finance is not supported on this network. Please switch to a supported network.'
-            )
+                'Secured Finance is not supported on this network. Please switch to a supported network.',
+            ),
         ).toBeInTheDocument();
     });
 

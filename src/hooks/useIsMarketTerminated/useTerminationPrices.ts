@@ -27,13 +27,13 @@ export const useTerminationPrices = () => {
                 currencyList.map(async ccy => {
                     return (
                         (await securedFinance?.getMarketTerminationPriceAndDecimals(
-                            toCurrency(ccy)
+                            toCurrency(ccy),
                         )) ?? {
                             price: ZERO_BI,
                             decimals: 0,
                         }
                     );
-                })
+                }),
             );
 
             const assetPriceMap: AssetPriceMap = currencyList.reduce(
@@ -45,13 +45,13 @@ export const useTerminationPrices = () => {
                     return {
                         ...acc,
                         [ccy]: new BigNumberJS(
-                            marketTerminationArray[index].price.toString()
+                            marketTerminationArray[index].price.toString(),
                         )
                             .multipliedBy(10 ** decimals)
                             .toNumber(),
                     };
                 },
-                {} as AssetPriceMap
+                {} as AssetPriceMap,
             );
 
             return assetPriceMap;

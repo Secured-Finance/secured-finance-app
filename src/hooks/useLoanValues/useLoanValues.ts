@@ -13,7 +13,7 @@ const passThrough = () => true;
 export const useLoanValues = (
     lendingMarkets: ContractMap,
     type: RateType,
-    filterFn: (market: LendingMarket) => unknown = passThrough
+    filterFn: (market: LendingMarket) => unknown = passThrough,
 ) => {
     return useMemo(() => {
         return getLoanValues(lendingMarkets, type, filterFn);
@@ -24,7 +24,7 @@ export const useLoanValues = (
 export const getLoanValues = (
     lendingMarkets: ContractMap,
     type: RateType,
-    filterFn: (market: LendingMarket) => unknown = passThrough
+    filterFn: (market: LendingMarket) => unknown = passThrough,
 ) => {
     const loanValues = new Map<number, LoanValue>();
     Object.values(lendingMarkets)

@@ -72,7 +72,7 @@ describe('Wallet Dialog component', () => {
         expect(
             screen.getByRole('button', {
                 name: 'Cancel',
-            })
+            }),
         ).toBeInTheDocument();
     });
 });

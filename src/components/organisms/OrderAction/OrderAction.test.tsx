@@ -51,19 +51,19 @@ describe('OrderAction component', () => {
                         amount: '6000000000',
                     },
                 },
-            })
+            }),
         );
         expect(
-            await screen.findByTestId('deposit-collateral-button')
+            await screen.findByTestId('deposit-collateral-button'),
         ).toBeInTheDocument();
         expect(screen.getByText('Deposit')).toBeInTheDocument();
         const button = screen.getByTestId('deposit-collateral-button');
         fireEvent.click(button);
         expect(track).toHaveBeenCalledWith(
-            ButtonEvents.DEPOSIT_COLLATERAL_BUTTON
+            ButtonEvents.DEPOSIT_COLLATERAL_BUTTON,
         );
         expect(
-            screen.getByRole('dialog', { name: 'Deposit' })
+            screen.getByRole('dialog', { name: 'Deposit' }),
         ).toBeInTheDocument();
     });
 
@@ -80,10 +80,10 @@ describe('OrderAction component', () => {
                         chainError: true,
                     },
                 },
-            })
+            }),
         );
         expect(
-            await screen.findByTestId('deposit-collateral-button')
+            await screen.findByTestId('deposit-collateral-button'),
         ).toBeInTheDocument();
         expect(screen.getByText('Deposit')).toBeInTheDocument();
         expect(screen.getByTestId('deposit-collateral-button')).toBeDisabled();
@@ -95,14 +95,14 @@ describe('OrderAction component', () => {
             render(<EnoughCollateral />, { preloadedState });
         });
         expect(
-            await screen.findByTestId('place-order-button')
+            await screen.findByTestId('place-order-button'),
         ).toBeInTheDocument();
         const button = screen.getByTestId('place-order-button');
         await waitFor(() => expect(button).toBeEnabled());
         fireEvent.click(button);
         expect(track).toHaveBeenCalledWith(ButtonEvents.PLACE_ORDER_BUTTON);
         expect(
-            screen.getByRole('dialog', { name: 'Confirm Borrow' })
+            screen.getByRole('dialog', { name: 'Confirm Borrow' }),
         ).toBeInTheDocument();
     });
 
@@ -118,7 +118,7 @@ describe('OrderAction component', () => {
             });
         });
         expect(
-            await screen.findByTestId('place-order-button')
+            await screen.findByTestId('place-order-button'),
         ).toBeInTheDocument();
         const button = screen.getByTestId('place-order-button');
         await waitFor(() => expect(button).toBeDisabled());
@@ -126,20 +126,20 @@ describe('OrderAction component', () => {
 
     it('should render order side on the place order button if provided as props', async () => {
         await waitFor(() =>
-            render(<RenderOrderSideButton />, { preloadedState })
+            render(<RenderOrderSideButton />, { preloadedState }),
         );
         expect(
-            await screen.findByTestId('place-order-button')
+            await screen.findByTestId('place-order-button'),
         ).toBeInTheDocument();
         expect(screen.getByText('Borrow')).toBeInTheDocument();
     });
 
     it('should render place order button as it is', async () => {
         await waitFor(() =>
-            render(<EnoughCollateral renderSide={false} />, { preloadedState })
+            render(<EnoughCollateral renderSide={false} />, { preloadedState }),
         );
         expect(
-            await screen.findByTestId('place-order-button')
+            await screen.findByTestId('place-order-button'),
         ).toBeInTheDocument();
         expect(screen.getByText('Place Order')).toBeInTheDocument();
     });
@@ -157,20 +157,20 @@ describe('OrderAction component', () => {
             });
         });
         expect(
-            screen.queryByTestId('place-order-button')
+            screen.queryByTestId('place-order-button'),
         ).not.toBeInTheDocument();
         const button = screen.getByTestId('deposit-collateral-button');
         await waitFor(() => expect(button).toBeEnabled());
         fireEvent.click(button);
         expect(
-            screen.getByRole('dialog', { name: 'Deposit' })
+            screen.getByRole('dialog', { name: 'Deposit' }),
         ).toBeInTheDocument();
     });
 
     it('should disable the button if the market is not open or pre-open', async () => {
         const lendingMarkets = await mockSecuredFinance.getOrderBookDetails();
         const marketIndex = lendingMarkets.findIndex(
-            value => value.ccy === usdcBytes32 && value.name === 'DEC2022'
+            value => value.ccy === usdcBytes32 && value.name === 'DEC2022',
         );
         const market = lendingMarkets[marketIndex];
         lendingMarkets[marketIndex] = {
@@ -180,15 +180,15 @@ describe('OrderAction component', () => {
             isOpened: false,
         };
         mockSecuredFinance.getOrderBookDetails.mockResolvedValueOnce(
-            lendingMarkets
+            lendingMarkets,
         );
 
         render(<EnoughCollateral />, { preloadedState });
 
         await waitFor(async () =>
             expect(
-                await screen.findByTestId('place-order-button')
-            ).toBeDisabled()
+                await screen.findByTestId('place-order-button'),
+            ).toBeDisabled(),
         );
     });
 });

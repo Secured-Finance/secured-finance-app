@@ -33,7 +33,7 @@ export const CollateralUsageSection = ({
                 <p className='typography-caption font-bold text-white'>
                     {formatWithCurrency(
                         amountFormatterFromBase[currency](availableToBorrow),
-                        currency
+                        currency,
                     )}
                 </p>
             </div>

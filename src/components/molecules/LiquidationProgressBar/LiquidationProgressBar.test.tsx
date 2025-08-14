@@ -17,7 +17,7 @@ describe('LiquidationProgressBar Component', () => {
         expect(screen.getByText('N/A')).toBeInTheDocument();
 
         expect(screen.getByTestId('liquidation-progress-bar-tick')).toHaveStyle(
-            'width: calc(100% * 0 + 4px )'
+            'width: calc(100% * 0 + 4px )',
         );
     });
 
@@ -32,12 +32,12 @@ describe('LiquidationProgressBar Component', () => {
         expect(screen.getByText('35%')).toHaveClass('text-warning-500');
 
         expect(
-            screen.getByText('threshold to liquidation')
+            screen.getByText('threshold to liquidation'),
         ).toBeInTheDocument();
         expect(screen.queryByText('N/A')).not.toBeInTheDocument();
 
         expect(screen.getByTestId('liquidation-progress-bar-tick')).toHaveStyle(
-            'width: calc(100% * 0.5625 + 4px )'
+            'width: calc(100% * 0.5625 + 4px )',
         );
 
         const information = screen.getByTestId('information-circle');
@@ -47,15 +47,15 @@ describe('LiquidationProgressBar Component', () => {
 
         expect(
             screen.getByText(
-                'Liquidation threshold is the limit where your collateral will be eligible for liquidation.'
-            )
+                'Liquidation threshold is the limit where your collateral will be eligible for liquidation.',
+            ),
         ).toBeInTheDocument();
         expect(screen.getByText('You are currently')).toBeInTheDocument();
         expect(screen.getAllByText('35%')).toHaveLength(2);
         expect(
             screen.getByText(
-                'under the liquidation threshold (80% of deposit balance).'
-            )
+                'under the liquidation threshold (80% of deposit balance).',
+            ),
         ).toBeInTheDocument();
     });
 

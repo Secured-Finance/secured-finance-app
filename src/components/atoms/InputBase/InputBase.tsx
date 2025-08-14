@@ -30,7 +30,7 @@ export const InputBase = ({
 }: InputBaseProps) => {
     const handleValueChange = (
         values: NumberFormatValues,
-        _sourceInfo: SourceInfo
+        _sourceInfo: SourceInfo,
     ) => {
         let value = values.value;
         if (onValueChange) {
@@ -66,7 +66,7 @@ export const InputBase = ({
             className={clsx(
                 'bg-transparent placeholder-opacity-50 focus:outline-none',
                 className,
-                fontSizeClass
+                fontSizeClass,
             )}
             placeholder='0'
             thousandSeparator={true}

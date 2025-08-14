@@ -29,7 +29,7 @@ export const AmountCard = ({
                             'typography-body-2': formattedValue.length > 10,
                             'typography-button-3 leading-6':
                                 formattedValue.length <= 10,
-                        }
+                        },
                     )}
                 >
                     {formattedValue}

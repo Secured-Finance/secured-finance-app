@@ -74,7 +74,7 @@ export const Stats = () => {
         const unitPrices = getLoanValues(
             lendingContracts[ccy],
             RateType.Market,
-            market => market.isReady && !market.isMatured
+            market => market.isReady && !market.isMatured,
         );
 
         if (unitPrices.size !== 0) {
@@ -86,7 +86,7 @@ export const Stats = () => {
         {}, // no variables
         queries.UserCountAndVolumeDocument,
         'protocol',
-        !isSubgraphSupported
+        !isSubgraphSupported,
     );
 
     const { data: priceList } = useLastPrices();
@@ -95,10 +95,10 @@ export const Stats = () => {
         return usdFormat(
             computeTotalProtocolVolumeInUSD(
                 userCountAndVolume.data?.volumesByCurrency ?? [],
-                priceList
+                priceList,
             ).totalVolumeUSD,
             2,
-            'compact'
+            'compact',
         );
     }, [userCountAndVolume.data?.volumesByCurrency, priceList]);
 
@@ -132,7 +132,7 @@ export const Stats = () => {
                                 value: usdFormat(
                                     totalValueLockedInUSD,
                                     2,
-                                    'compact'
+                                    'compact',
                                 ),
                             },
                             ...(isSubgraphSupported
@@ -145,7 +145,7 @@ export const Stats = () => {
                                           name: 'Total Users',
                                           value: computeTotalUsers(
                                               userCountAndVolume.data
-                                                  ?.totalUsers
+                                                  ?.totalUsers,
                                           ),
                                       },
                                   ]
@@ -158,7 +158,7 @@ export const Stats = () => {
                                 title='Yield Curve'
                                 curves={curves}
                                 labels={Object.values(
-                                    lendingContracts[defaultCurrency]
+                                    lendingContracts[defaultCurrency],
                                 )
                                     .filter(o => o.isReady && !o.isMatured)
                                     .map(o => o.name)}

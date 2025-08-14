@@ -42,7 +42,7 @@ const commonOptions = {
 
 export const createCandlestickChart = (
     ref: HTMLDivElement,
-    isMobile: boolean
+    isMobile: boolean,
 ) => {
     const chart = createChart(ref, {
         ...commonOptions,
@@ -63,9 +63,8 @@ export const createCandlestickChart = (
         },
     });
     if (ref.querySelector('canvas')) {
-        (
-            ref.querySelector('canvas') as HTMLCanvasElement
-        ).style.borderBottom = `2px solid ${colors.neutral['700']}`;
+        (ref.querySelector('canvas') as HTMLCanvasElement).style.borderBottom =
+            `2px solid ${colors.neutral['700']}`;
     }
 
     const candlestickSeries = chart.addCandlestickSeries({
@@ -84,7 +83,7 @@ export const createCandlestickChart = (
 export const createVolumeChart = (
     ref: HTMLDivElement,
     timeInterval: HistoricalDataIntervals,
-    isMobile: boolean
+    isMobile: boolean,
 ) => {
     const chart = createChart(ref, {
         ...commonOptions,

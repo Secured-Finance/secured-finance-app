@@ -37,7 +37,7 @@ const Template: StoryFn<typeof ActiveTradeTable> = args => {
             currency: wfilBytes32,
             futureValue: BigInt('500000000000000000000'),
             maturity: new Maturity(
-                getTimestampRelativeToNow(22, true)
+                getTimestampRelativeToNow(22, true),
             ).toString(),
             marketPrice: BigInt(10000),
         },
@@ -46,7 +46,7 @@ const Template: StoryFn<typeof ActiveTradeTable> = args => {
             currency: wfilBytes32,
             futureValue: BigInt('500000000000000000000'),
             maturity: new Maturity(
-                getTimestampRelativeToNow(28, true)
+                getTimestampRelativeToNow(28, true),
             ).toString(),
             marketPrice: BigInt(10000),
         },

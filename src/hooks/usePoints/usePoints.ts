@@ -20,7 +20,7 @@ export const usePoints = () => {
         });
 
     const [verify, { data: verifyData, loading, error }] = useVerifyMutation(
-        POINT_API_QUERY_OPTIONS
+        POINT_API_QUERY_OPTIONS,
     );
     useEffect(() => {
         if (verifyData) {

@@ -16,7 +16,7 @@ export const Layout = ({
         <div
             className={clsx(
                 'flex h-screen w-full flex-col justify-between',
-                !isCampaignPage && 'gap-8'
+                !isCampaignPage && 'gap-8',
             )}
             data-testid='wrapper-div'
         >

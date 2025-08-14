@@ -33,7 +33,7 @@ describe('DepositCollateral component', () => {
         render(<Default />);
         expect(screen.getByRole('textbox').getAttribute('value')).toBe('');
         expect(screen.getByRole('textbox').getAttribute('placeholder')).toBe(
-            '0'
+            '0',
         );
     });
 
@@ -63,7 +63,7 @@ describe('DepositCollateral component', () => {
         fireEvent.click(screen.getByTestId('option-1'));
         expect(screen.getByRole('textbox').getAttribute('value')).toBe('');
         expect(screen.getByRole('textbox').getAttribute('placeholder')).toBe(
-            '0'
+            '0',
         );
     });
 
@@ -97,8 +97,8 @@ describe('DepositCollateral component', () => {
             expect(screen.getByText('Success!')).toBeInTheDocument();
             expect(
                 screen.getByText(
-                    'You have successfully deposited collateral on Secured Finance.'
-                )
+                    'You have successfully deposited collateral on Secured Finance.',
+                ),
             ).toBeInTheDocument();
             expect(screen.getByText('Status')).toBeInTheDocument();
             expect(screen.getByText('Complete')).toBeInTheDocument();
@@ -108,7 +108,7 @@ describe('DepositCollateral component', () => {
             expect(screen.getByText('37.5 USDC')).toBeInTheDocument();
 
             expect(
-                screen.getByTestId('dialog-action-button')
+                screen.getByTestId('dialog-action-button'),
             ).toHaveTextContent('OK');
         });
 
@@ -138,7 +138,7 @@ describe('DepositCollateral component', () => {
                         name: 'Ethereum',
                     },
                 }}
-            />
+            />,
         );
         expect(screen.getByText('Ethereum')).toBeInTheDocument();
         expect(screen.getByText('10 Ethereum Available')).toBeInTheDocument();
@@ -148,7 +148,7 @@ describe('DepositCollateral component', () => {
 
     it('should reach failure screen when transaction fails', async () => {
         mockSecuredFinance.depositCollateral.mockRejectedValueOnce(
-            new Error('error')
+            new Error('error'),
         );
         const onClose = jest.fn();
         render(<Default onClose={onClose} />);
@@ -207,8 +207,8 @@ describe('DepositCollateral component', () => {
                     [CollateralProperties.ASSET_TYPE]: 'USDC',
                     [CollateralProperties.AMOUNT]: '37.5',
                     [CollateralProperties.SOURCE]: 'Source Of Deposit',
-                }
-            )
+                },
+            ),
         );
     });
 

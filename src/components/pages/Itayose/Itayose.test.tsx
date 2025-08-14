@@ -21,7 +21,7 @@ jest.mock(
     'next/link',
     () =>
         ({ children }: { children: React.ReactNode }) =>
-            children
+            children,
 );
 
 jest.mock('src/hooks/useYieldCurveHistoricalRates', () => ({
@@ -49,7 +49,7 @@ describe('Itayose Component', () => {
         await waitFor(() =>
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
-            })
+            }),
         );
     });
 
@@ -58,7 +58,7 @@ describe('Itayose Component', () => {
             render(<Default />, {
                 preloadedState,
                 apolloMocks: Default.parameters?.apolloClient.mocks,
-            })
+            }),
         );
         expect(store.getState().landingOrderForm.amount).toEqual('0');
         const ele = await screen.findByRole('textbox', { name: 'Size' });
@@ -75,7 +75,7 @@ describe('Itayose Component', () => {
         await waitFor(() => {
             expect(store.getState().landingOrderForm.amount).toEqual('1');
             expect(screen.getByRole('textbox', { name: 'Size' })).toHaveValue(
-                '1'
+                '1',
             );
         });
     }, 8000);
@@ -96,29 +96,29 @@ describe('Itayose Component', () => {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
             });
             expect(
-                mockSecuredFinance.getLendOrderBook
+                mockSecuredFinance.getLendOrderBook,
             ).toHaveBeenLastCalledWith(
                 expect.anything(),
                 expect.anything(),
                 expect.anything(),
-                15
+                15,
             );
             await waitFor(() =>
                 fireEvent.click(
                     screen.getByRole('button', {
                         name: 'Show Only Lend Orders',
-                    })
-                )
+                    }),
+                ),
             );
             await waitFor(() =>
                 expect(
-                    mockSecuredFinance.getBorrowOrderBook
+                    mockSecuredFinance.getBorrowOrderBook,
                 ).toHaveBeenLastCalledWith(
                     expect.anything(),
                     expect.anything(),
                     expect.anything(),
-                    30
-                )
+                    30,
+                ),
             );
         });
 
@@ -127,12 +127,12 @@ describe('Itayose Component', () => {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
             });
             expect(
-                mockSecuredFinance.getLendOrderBook
+                mockSecuredFinance.getLendOrderBook,
             ).toHaveBeenLastCalledWith(
                 expect.anything(),
                 expect.anything(),
                 expect.anything(),
-                15
+                15,
             );
             await waitFor(() => {
                 fireEvent.click(screen.getByRole('button', { name: '0.01' }));
@@ -140,13 +140,13 @@ describe('Itayose Component', () => {
             });
             await waitFor(() =>
                 expect(
-                    mockSecuredFinance.getLendOrderBook
+                    mockSecuredFinance.getLendOrderBook,
                 ).toHaveBeenLastCalledWith(
                     expect.anything(),
                     expect.anything(),
                     expect.anything(),
-                    1500
-                )
+                    1500,
+                ),
             );
         }, 8000);
     });

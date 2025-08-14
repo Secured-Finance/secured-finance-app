@@ -116,8 +116,8 @@ describe('ActiveTradeTable Component', () => {
         const maturity = screen.getByText('Time to Maturity');
         expect(
             screen.queryByText(
-                'Maturity of a loan contract is the date on which the contract is set to expire.'
-            )
+                'Maturity of a loan contract is the date on which the contract is set to expire.',
+            ),
         ).not.toBeInTheDocument();
         await waitFor(async () => {
             await userEvent.hover(maturity);
@@ -125,8 +125,8 @@ describe('ActiveTradeTable Component', () => {
         waitFor(() => {
             expect(
                 screen.queryByText(
-                    'Maturity of a loan contract is the date on which the contract is set to expire.'
-                )
+                    'Maturity of a loan contract is the date on which the contract is set to expire.',
+                ),
             ).toBeInTheDocument();
         });
     });
@@ -156,10 +156,10 @@ describe('ActiveTradeTable Component', () => {
             expect(activeContractRow).toHaveTextContent('22h');
 
             const delistRowOnlyFv = await within(
-                delistedContractRow
+                delistedContractRow,
             ).findAllByTestId('currency-amount-item');
             const activeRowFvAndPv = await within(
-                activeContractRow
+                activeContractRow,
             ).findAllByTestId('currency-amount-item');
             expect(delistRowOnlyFv).toHaveLength(1);
             expect(activeRowFvAndPv).toHaveLength(2);
@@ -185,7 +185,7 @@ describe('ActiveTradeTable Component', () => {
             expect(closeToMaturityRow).toHaveTextContent('1d to redeem');
             const redeemButton = within(closeToMaturityRow).getByRole(
                 'button',
-                { name: 'Redeem' }
+                { name: 'Redeem' },
             );
             expect(redeemButton).toBeDisabled();
         });
@@ -196,7 +196,7 @@ describe('ActiveTradeTable Component', () => {
             expect(closeToMaturityRow).toHaveTextContent('Redeemable');
             const redeemButton = within(closeToMaturityRow).getByRole(
                 'button',
-                { name: 'Redeem' }
+                { name: 'Redeem' },
             );
             expect(redeemButton).not.toBeDisabled();
             fireEvent.click(redeemButton);

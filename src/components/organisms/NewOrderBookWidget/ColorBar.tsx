@@ -23,11 +23,11 @@ export const ColorBar = ({
         Math.max(
             multiply(
                 divide(Number(calculatePercentage(value, total)), 100),
-                maxWidth
+                maxWidth,
             ),
-            COLORBAR_MIN_WIDTH
+            COLORBAR_MIN_WIDTH,
         ),
-        maxWidth
+        maxWidth,
     );
 
     return (

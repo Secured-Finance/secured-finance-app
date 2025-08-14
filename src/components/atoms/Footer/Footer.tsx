@@ -46,7 +46,7 @@ const StatusButton = ({ active = true }) => {
                     {
                         'border-success-300': active,
                         'border-neutral-300': !active,
-                    }
+                    },
                 )}
             >
                 <span
@@ -61,7 +61,7 @@ const StatusButton = ({ active = true }) => {
                         {
                             'text-success-300': active,
                             'text-neutral-300': !active,
-                        }
+                        },
                     )}
                 >
                     {active ? 'Online' : 'Offline'}

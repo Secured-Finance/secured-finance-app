@@ -11,7 +11,7 @@ interface LiquidationProgressBarProps {
 
 const getInformationText = (
     liquidationPercentage: number,
-    collateralThreshold: number
+    collateralThreshold: number,
 ) => {
     return (
         <div className='flex flex-col gap-4'>
@@ -25,7 +25,7 @@ const getInformationText = (
                     {percentFormat(
                         collateralThreshold > liquidationPercentage
                             ? collateralThreshold - liquidationPercentage
-                            : 0
+                            : 0,
                     )}
                 </span>
                 <span>{` under the liquidation threshold (${collateralThreshold}% of deposit balance).`}</span>
@@ -85,7 +85,7 @@ export const LiquidationProgressBar = ({
                                     collateralThreshold > liquidationPercentage
                                         ? collateralThreshold -
                                               liquidationPercentage
-                                        : 0
+                                        : 0,
                                 )}
                             </span>
                             <span className='text-planetaryPurple'>
@@ -95,7 +95,7 @@ export const LiquidationProgressBar = ({
                         <InfoToolTip>
                             {getInformationText(
                                 liquidationPercentage,
-                                collateralThreshold
+                                collateralThreshold,
                             )}
                         </InfoToolTip>
                     </div>

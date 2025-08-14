@@ -89,11 +89,11 @@ const generateOrderBookEntries = (n: number, start: number) => {
 };
 const btcEntriesBorrow: Array<OrderBookEntry> = generateOrderBookEntries(
     40,
-    9800
+    9800,
 );
 const btcEntriesLend: Array<OrderBookEntry> = generateOrderBookEntries(
     40,
-    9700
+    9700,
 );
 
 const ethEntries: Array<OrderBookEntry> = [

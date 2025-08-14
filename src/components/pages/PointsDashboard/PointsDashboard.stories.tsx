@@ -88,7 +88,7 @@ const users = [
                         id: `${index}`,
                         walletAddress: utils.hexlify(
                             BigInt((index + 1).toString().padEnd(40, '0')) +
-                                BigInt(index)
+                                BigInt(index),
                         ),
                         point: 100 - index,
                         rank: index + 1,

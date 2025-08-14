@@ -7,7 +7,7 @@ describe('usePagination', () => {
             props => usePagination(props, '0x', '0x1'),
             {
                 initialProps: [{ id: 1 }, { id: 2 }],
-            }
+            },
         );
         expect(result.current).toEqual([]);
     });
@@ -17,7 +17,7 @@ describe('usePagination', () => {
             props => usePagination(props, '0x1', '0x1'),
             {
                 initialProps: [{ id: 1 }, { id: 2 }],
-            }
+            },
         );
         expect(result.current).toEqual([{ id: 1 }, { id: 2 }]);
 
@@ -33,7 +33,7 @@ describe('usePagination', () => {
             props => usePagination(props, '0x1', '0x1'),
             {
                 initialProps: [{ id: 1 }, { id: 2 }],
-            }
+            },
         );
         expect(result.current).toEqual([{ id: 1 }, { id: 2 }]);
 
@@ -60,7 +60,7 @@ describe('usePagination', () => {
             props => usePagination(props, '0x1', '0x1'),
             {
                 initialProps: initialProps,
-            }
+            },
         );
         expect(result.current).toEqual(initialProps);
 
@@ -76,7 +76,7 @@ describe('usePagination', () => {
                         maths: 60,
                         science: 95,
                         history: 60,
-                    }))
+                    })),
             );
         });
 
@@ -118,7 +118,7 @@ describe('usePagination', () => {
                         maths: 60,
                         science: 95,
                         history: 60,
-                    }))
+                    })),
             );
         });
 

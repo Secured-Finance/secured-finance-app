@@ -10,7 +10,7 @@ describe('toOptions', () => {
                 CurrencySymbol.WFIL,
                 CurrencySymbol.USDC,
             ],
-            CurrencySymbol.WBTC
+            CurrencySymbol.WBTC,
         );
         expect(options).toEqual([
             {

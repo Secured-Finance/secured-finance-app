@@ -49,7 +49,7 @@ export const CurrencyMaturityTable = ({
 
     const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
     const chainError = useSelector(
-        (state: RootState) => state.blockchain.chainError
+        (state: RootState) => state.blockchain.chainError,
     );
     const isTablet = useBreakpoint('laptop');
     const { isConnected } = useAccount();
@@ -61,7 +61,7 @@ export const CurrencyMaturityTable = ({
             const CcyIcon = currencyMap[currency]?.icon;
 
             const timestampDifference = calculateTimeDifference(
-                +option.maturity
+                +option.maturity,
             );
 
             switch (columnKey) {
@@ -114,7 +114,7 @@ export const CurrencyMaturityTable = ({
                     return null;
             }
         },
-        [isConnected, onFavouriteToggle]
+        [isConnected, onFavouriteToggle],
     );
 
     return (
@@ -127,7 +127,7 @@ export const CurrencyMaturityTable = ({
                     {
                         'h-[calc(100vh-355px)]': chainError,
                         'h-[calc(100vh-332px)]': !chainError,
-                    }
+                    },
                 ),
                 table: 'laptop:border-separate laptop:border-spacing-y-1',
                 sortIcon: 'hidden',
@@ -144,7 +144,7 @@ export const CurrencyMaturityTable = ({
                 {columns
                     .filter(
                         col =>
-                            !(!isSubgraphSupported && col?.isSubgraphSupported)
+                            !(!isSubgraphSupported && col?.isSubgraphSupported),
                     )
                     .map((column: ColumnType) => {
                         return (
@@ -158,7 +158,7 @@ export const CurrencyMaturityTable = ({
                                 <div
                                     className={clsx(
                                         'flex gap-1',
-                                        column?.className
+                                        column?.className,
                                     )}
                                 >
                                     {column.label}

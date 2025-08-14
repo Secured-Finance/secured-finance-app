@@ -91,7 +91,7 @@ const ReferralCode = ({ code }: { code: string }) => {
                                                     `${
                                                         window.location.origin +
                                                         window.location.pathname
-                                                    }?ref=${code}`
+                                                    }?ref=${code}`,
                                                 )
                                             }
                                         >
@@ -110,7 +110,7 @@ const ReferralCode = ({ code }: { code: string }) => {
                                                 onClick={() => {
                                                     window.open(
                                                         `https://x.com/intent/tweet?text=${shareMessage}&url=${quoteTweetUrl}`,
-                                                        '_blank'
+                                                        '_blank',
                                                     );
                                                 }}
                                             >
@@ -185,7 +185,7 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
                             `grid grid-cols-2 grid-rows-1`,
                             questTypes.length > 2
                                 ? 'grid-rows-2 tablet:grid-cols-4  tablet:grid-rows-1'
-                                : ''
+                                : '',
                         )}
                         role='grid'
                     >
@@ -202,7 +202,7 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
                                     value={String(
                                         userData?.user.pointDetails?.[
                                             snakeCase(questType)
-                                        ] ?? 0
+                                        ] ?? 0,
                                     )}
                                 />
                                 {
@@ -244,7 +244,7 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
                                     +{' '}
                                     {percentFormat(
                                         userData?.user.boostPercentage,
-                                        10000
+                                        10000,
                                     )}
                                 </div>
                             </div>
@@ -349,9 +349,9 @@ const QuestList = ({ chainId }: { chainId: number }) => {
             generateCollateralList(
                 collateralBalances,
                 false,
-                collateralCurrencies
+                collateralCurrencies,
             ),
-        [collateralBalances, collateralCurrencies]
+        [collateralBalances, collateralCurrencies],
     );
 
     const provider = readWalletFromStore();
@@ -367,7 +367,7 @@ const QuestList = ({ chainId }: { chainId: number }) => {
         isHighlight: boolean;
     }) => {
         const suffix = [QuestType.DailyLogin, QuestType.Referral].includes(
-            questType
+            questType,
         )
             ? 'pt'
             : 'pt / $ / day';
@@ -414,11 +414,11 @@ const QuestList = ({ chainId }: { chainId: number }) => {
                                     (
                                         (questPoint + bonusPoints['lend']) /
                                         questPoint
-                                    ).toFixed(1)
+                                    ).toFixed(1),
                                 )}x`}
                                 color={ChipColors.Teal}
                             />
-                        </div>
+                        </div>,
                     );
                 }
                 if (bonusPoints['borrow'] > 0) {
@@ -429,11 +429,11 @@ const QuestList = ({ chainId }: { chainId: number }) => {
                                     (
                                         (questPoint + bonusPoints['borrow']) /
                                         questPoint
-                                    ).toFixed(1)
+                                    ).toFixed(1),
                                 )}x`}
                                 color={ChipColors.Red}
                             />
-                        </div>
+                        </div>,
                     );
                 }
             }
@@ -528,7 +528,7 @@ const QuestList = ({ chainId }: { chainId: number }) => {
                                         {
                                             SupportedChainsList.find(
                                                 ({ chain }) =>
-                                                    chain.id === item.chainId
+                                                    chain.id === item.chainId,
                                             )?.icon
                                         }
                                     </div>
@@ -572,9 +572,9 @@ const QuestList = ({ chainId }: { chainId: number }) => {
                             {(item.startAt || item.endAt) && (
                                 <div className='pl-2'>
                                     {`${formatDate(
-                                        dayjs(item.startAt).unix()
+                                        dayjs(item.startAt).unix(),
                                     )} ~ ${formatDate(
-                                        dayjs(item.endAt).unix()
+                                        dayjs(item.endAt).unix(),
                                     )}`}
                                 </div>
                             )}

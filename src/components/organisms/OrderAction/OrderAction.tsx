@@ -47,7 +47,7 @@ export const OrderAction = ({
     const dispatch = useDispatch();
     const { placeOrder, placePreOrder } = useOrders();
     const chainError = useSelector(
-        (state: RootState) => state.blockchain.chainError
+        (state: RootState) => state.blockchain.chainError,
     );
 
     const [openDepositCollateralDialog, setOpenDepositCollateralDialog] =
@@ -56,7 +56,7 @@ export const OrderAction = ({
 
     const { currency, amount, side, maturity, orderType, sourceAccount } =
         useSelector((state: RootState) =>
-            selectLandingOrderForm(state.landingOrderForm)
+            selectLandingOrderForm(state.landingOrderForm),
         );
 
     const marketPhase = useMarketPhase(currency, maturity);
@@ -72,9 +72,9 @@ export const OrderAction = ({
             generateCollateralList(
                 balances,
                 true,
-                side === OrderSide.BORROW ? currencies : [currency]
+                side === OrderSide.BORROW ? currencies : [currency],
             ),
-        [balances, currencies, currency, side]
+        [balances, currencies, currency, side],
     );
 
     const getButtonText = () => {

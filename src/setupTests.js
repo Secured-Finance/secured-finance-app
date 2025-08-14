@@ -13,7 +13,7 @@ jest.mock('next/router', () => jest.requireActual('next-router-mock'));
 failOnConsole({
     silenceMessage: errorMessage => {
         return errorMessage.startsWith(
-            "Warning: Can't perform a React state update on an unmounted component."
+            "Warning: Can't perform a React state update on an unmounted component.",
         );
     },
 });

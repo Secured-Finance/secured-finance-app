@@ -19,13 +19,13 @@ describe('useCollateralBook hook', () => {
         expect(value.isPending).toEqual(true);
 
         await waitFor(() =>
-            expect(mock.tokenVault.getCollateralBook).toHaveBeenCalledTimes(1)
+            expect(mock.tokenVault.getCollateralBook).toHaveBeenCalledTimes(1),
         );
         expect(mock.tokenVault.getCollateralParameters).toHaveBeenCalledTimes(
-            1
+            1,
         );
         expect(mock.tokenVault.getWithdrawableCollateral).toHaveBeenCalledTimes(
-            3
+            3,
         );
 
         const newValue = result.current;
@@ -34,7 +34,7 @@ describe('useCollateralBook hook', () => {
         expect(colBook.collateral.USDC).toEqual(BigInt('100000000'));
         expect(colBook.collateral.WBTC).toEqual(BigInt('20000000'));
         expect(colBook.nonCollateral.WFIL).toEqual(
-            BigInt('100000000000000000000')
+            BigInt('100000000000000000000'),
         );
         expect(colBook.coverage).toEqual(3700);
         expect(colBook.collateralThreshold).toEqual(80);
@@ -59,13 +59,13 @@ describe('useCollateralBook hook', () => {
         const { result } = renderHook(() => useCollateralBook('0x0'));
 
         await waitFor(() =>
-            expect(mock.tokenVault.getCollateralBook).toHaveBeenCalledTimes(1)
+            expect(mock.tokenVault.getCollateralBook).toHaveBeenCalledTimes(1),
         );
         const colBook = result.current.data as CollateralBook;
         expect(colBook.usdNonCollateral).toEqual(
             amountFormatterFromBase[CurrencySymbol.WFIL](
-                colBook.nonCollateral.WFIL ?? BigInt(0)
-            ) * FIL_PRICE
+                colBook.nonCollateral.WFIL ?? BigInt(0),
+            ) * FIL_PRICE,
         );
     });
 });

@@ -58,7 +58,7 @@ import {
 import { useAccount } from 'wagmi';
 
 const getOrderSideText = (
-    side: (typeof OrderSideMap)[OrderSide.LEND | OrderSide.BORROW]
+    side: (typeof OrderSideMap)[OrderSide.LEND | OrderSide.BORROW],
 ) => {
     if (side === 'Lend') return 'Lend/Buy';
     return 'Borrow/Sell';
@@ -90,12 +90,12 @@ export function AdvancedLendingOrderCard({
         amountExists,
         unitPriceExists,
     } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
+        selectLandingOrderForm(state.landingOrderForm),
     );
 
     const [orderBook, setMultiplier, setIsShowingAll] = useOrderbook(
         currency,
-        maturity
+        maturity,
     );
 
     const { data: orderFee = 0 } = useOrderFee(currency);
@@ -127,7 +127,7 @@ export function AdvancedLendingOrderCard({
             return LoanValue.fromPrice(
                 unitPrice * 100.0,
                 maturity,
-                calculationDate
+                calculationDate,
             );
         }
         if (!marketPrice) return LoanValue.ZERO;
@@ -190,7 +190,7 @@ export function AdvancedLendingOrderCard({
             currency,
             balanceRecord[currency],
             collateralBook.withdrawableCollateral[currency] ||
-                collateralBook.nonCollateral[currency]
+                collateralBook.nonCollateral[currency],
         );
     }, [
         balanceRecord,
@@ -228,8 +228,8 @@ export function AdvancedLendingOrderCard({
         });
         dispatch(
             setAmount(
-                ((BigInt(percentage) * available) / BigInt(100)).toString()
-            )
+                ((BigInt(percentage) * available) / BigInt(100)).toString(),
+            ),
         );
         setSliderValue(percentage);
     };
@@ -252,7 +252,7 @@ export function AdvancedLendingOrderCard({
         if (available > 0) {
             const percentage = (inputValue * BigInt(100)) / available;
             setSliderValue(
-                Number(percentage > BigInt(100) ? BigInt(100) : percentage)
+                Number(percentage > BigInt(100) ? BigInt(100) : percentage),
             );
         } else {
             setSliderValue(0);
@@ -283,7 +283,7 @@ export function AdvancedLendingOrderCard({
         (state: VisibilityState) => {
             setIsShowingAll(state.showBorrow && state.showLend);
         },
-        [setIsShowingAll]
+        [setIsShowingAll],
     );
 
     const orderSideOptions = Object.values(OrderSideMap).map(option => ({
@@ -302,13 +302,13 @@ export function AdvancedLendingOrderCard({
                             setSide(
                                 option === 'Borrow/Sell'
                                     ? OrderSide.BORROW
-                                    : OrderSide.LEND
-                            )
+                                    : OrderSide.LEND,
+                            ),
                         );
                         trackButtonEvent(
                             ButtonEvents.ORDER_SIDE,
                             ButtonProperties.ORDER_SIDE,
-                            option
+                            option,
                         );
                     }}
                     isFullHeight
@@ -327,7 +327,7 @@ export function AdvancedLendingOrderCard({
                                 trackButtonEvent(
                                     ButtonEvents.ORDER_TYPE,
                                     ButtonProperties.ORDER_TYPE,
-                                    option
+                                    option,
                                 );
                             }}
                         />
@@ -344,10 +344,10 @@ export function AdvancedLendingOrderCard({
                                     amountFormatterFromBase[currency](
                                         side === OrderSide.BORROW
                                             ? availableToBorrow
-                                            : availableToLend
+                                            : availableToLend,
                                     ),
                                     0,
-                                    2
+                                    2,
                                 )} ${isMobile ? '' : currency}`}
                             </span>
                         </div>
@@ -381,7 +381,7 @@ export function AdvancedLendingOrderCard({
                                     disabled={!midPrice}
                                     onClick={() =>
                                         dispatch(
-                                            setUnitPrice(midPrice?.toString())
+                                            setUnitPrice(midPrice?.toString()),
                                         )
                                     }
                                 >
@@ -399,7 +399,7 @@ export function AdvancedLendingOrderCard({
                             initialValue={
                                 amountExists
                                     ? amountFormatterFromBase[currency](
-                                          amount
+                                          amount,
                                       ).toString()
                                     : ''
                             }

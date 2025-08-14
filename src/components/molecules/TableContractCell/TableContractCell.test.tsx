@@ -28,7 +28,7 @@ describe('TableContractCell Component', () => {
             await userEvent.unhover(information);
             await userEvent.hover(information);
             const tooltip = await screen.findByText(
-                'Delisting: Redemption will be available 7 days post-maturity.'
+                'Delisting: Redemption will be available 7 days post-maturity.',
             );
             expect(tooltip).toBeInTheDocument();
         });

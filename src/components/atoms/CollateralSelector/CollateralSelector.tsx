@@ -46,7 +46,7 @@ export const CollateralSelector = ({
                                     <span className='typography-caption-2 flex h-6 w-full max-w-[200px] items-center justify-end pr-2 text-secondary7'>
                                         {formatOption(
                                             selected.available,
-                                            selected.name
+                                            selected.name,
                                         )}
                                     </span>
                                     <div className='absolute right-3'>
@@ -89,7 +89,7 @@ export const CollateralSelector = ({
                                                         <span className='typography-caption-2 flex h-6 w-full max-w-[200px] items-center justify-end text-secondary7'>
                                                             {formatOption(
                                                                 assetObj.available,
-                                                                assetObj.name
+                                                                assetObj.name,
                                                             )}
                                                         </span>
                                                     </div>

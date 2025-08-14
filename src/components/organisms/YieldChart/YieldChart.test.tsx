@@ -19,7 +19,7 @@ describe('YieldChart Component', () => {
         render(<Default />);
         const btn = screen.getByRole('button');
         expect(screen.getByTestId('yield-chart-component')).toHaveClass(
-            'w-[640px]'
+            'w-[640px]',
         );
 
         fireEvent.click(btn);
@@ -27,14 +27,14 @@ describe('YieldChart Component', () => {
 
         fireEvent.click(btn);
         expect(screen.getByTestId('yield-chart-component')).toHaveClass(
-            'w-[640px]'
+            'w-[640px]',
         );
     });
 
     it('should show the spinner when loading', async () => {
         render(<Loading />);
         expect(
-            screen.getByRole('alertdialog', { name: 'Loading' })
+            screen.getByRole('alertdialog', { name: 'Loading' }),
         ).toBeInTheDocument();
     });
 });

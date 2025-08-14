@@ -88,7 +88,7 @@ const reducer = (
     state: State,
     action: {
         type: string;
-    }
+    },
 ) => {
     switch (action.type) {
         case 'next':
@@ -149,7 +149,7 @@ export const DepositZCToken = ({
     const [collateral, setCollateral] = useState<bigint>();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [errorMessage, setErrorMessage] = useState(
-        'Your deposit transaction has failed.'
+        'Your deposit transaction has failed.',
     );
     const [txHash, setTxHash] = useState<string | undefined>();
 
@@ -162,7 +162,7 @@ export const DepositZCToken = ({
     const { onDepositZCToken } = useDepositZCToken(
         currencySymbol,
         maturity,
-        collateral ?? BigInt(0)
+        collateral ?? BigInt(0),
     );
 
     const handleClose = useCallback(() => {
@@ -171,7 +171,7 @@ export const DepositZCToken = ({
             trackButtonEvent(
                 ButtonEvents.CANCEL_BUTTON,
                 ButtonProperties.CANCEL_ACTION,
-                'Cancel Deposit ZC Bonds'
+                'Cancel Deposit ZC Bonds',
             );
         }
         setCollateral(undefined);
@@ -211,7 +211,7 @@ export const DepositZCToken = ({
                     currencySymbol,
                     maturity.toNumber(),
                     collateral ?? BigInt(0),
-                    source ?? ''
+                    source ?? '',
                 );
                 dispatch({ type: 'next' });
             }
@@ -244,7 +244,7 @@ export const DepositZCToken = ({
                     break;
             }
         },
-        [handleClose, handleDepositZCToken]
+        [handleClose, handleDepositZCToken],
     );
 
     const handleCurrencyChange = useCallback(
@@ -252,7 +252,7 @@ export const DepositZCToken = ({
             setCurrencySymbol(currencySymbol);
             setCollateral(undefined);
         },
-        []
+        [],
     );
 
     const handleMaturityChange = useCallback((maturity: Maturity) => {
@@ -287,12 +287,12 @@ export const DepositZCToken = ({
                                             currency => ({
                                                 label: currency,
                                                 value: currency,
-                                            })
+                                            }),
                                         )}
                                         onChange={v => {
                                             if (v.value !== currencySymbol) {
                                                 handleCurrencyChange(
-                                                    v.value as CurrencySymbol
+                                                    v.value as CurrencySymbol,
                                                 );
                                             }
                                         }}
@@ -306,7 +306,7 @@ export const DepositZCToken = ({
                                                 v.value !== maturity.toNumber()
                                             ) {
                                                 handleMaturityChange(
-                                                    new Maturity(v.value)
+                                                    new Maturity(v.value),
                                                 );
                                             }
                                         }}
@@ -321,7 +321,7 @@ export const DepositZCToken = ({
                                     <div className='typography-caption-2 min-w-[120px] truncate text-left text-neutral-300'>
                                         {convertToZcTokenName(
                                             currencySymbol,
-                                            maturity
+                                            maturity,
                                         )}
                                     </div>
                                     <div className='w-full text-right text-neutral-300'>
@@ -329,10 +329,10 @@ export const DepositZCToken = ({
                                             convertZCTokenFromBaseAmount(
                                                 currencySymbol,
                                                 availableTokenAmount,
-                                                maturity
+                                                maturity,
                                             ) || 0,
                                             0,
-                                            4
+                                            4,
                                         )} Available`}
                                     </div>
                                 </div>
@@ -373,8 +373,8 @@ export const DepositZCToken = ({
                                             convertZCTokenFromBaseAmount(
                                                 currencySymbol,
                                                 collateral || BigInt(0),
-                                                maturity
-                                            )
+                                                maturity,
+                                            ),
                                         )}`,
                                     ],
                                 ]}

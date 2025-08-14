@@ -45,5 +45,3 @@ export function parseEnv(input: NodeJS.ProcessEnv): Env {
     }
     return result.data as Env;
 }
-
-

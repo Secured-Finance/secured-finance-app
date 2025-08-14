@@ -11,11 +11,11 @@ describe('CollateralTab Component', () => {
         expect(screen.getByText('$0.00')).toBeInTheDocument();
         expect(
             screen.getByText(
-                'Connect your wallet to see your deposited collateral balance.'
-            )
+                'Connect your wallet to see your deposited collateral balance.',
+            ),
         ).toBeInTheDocument();
         expect(
-            screen.getByTestId('collateral-tab-right-pane')
+            screen.getByTestId('collateral-tab-right-pane'),
         ).toBeInTheDocument();
     });
 });

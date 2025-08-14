@@ -10,7 +10,7 @@ describe('HighlightChip Component', () => {
         const chip = screen.getByText('NEW');
         expect(chip).toBeInTheDocument();
         expect(chip).toHaveClass(
-            'h-5 w-10 typography-dropdown-selection-label text-white'
+            'h-5 w-10 typography-dropdown-selection-label text-white',
         );
     });
 

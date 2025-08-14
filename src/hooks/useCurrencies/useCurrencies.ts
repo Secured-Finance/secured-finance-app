@@ -21,7 +21,7 @@ export const useCurrencies = (showAll = false, chainId?: number) => {
                 .filter(
                     (ccy): ccy is CurrencySymbol =>
                         ccy !== undefined &&
-                        (showAll || currencyMap[ccy].hasOrderBook)
+                        (showAll || currencyMap[ccy].hasOrderBook),
                 )
                 .sort((a, b) => currencyMap[a].index - currencyMap[b].index),
         enabled: !!securedFinance,

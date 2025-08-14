@@ -29,7 +29,7 @@ describe('CurrencyMaturityDropdown', () => {
         openDropdown();
 
         expect(
-            screen.getByLabelText('Currency Maturity Dropdown')
+            screen.getByLabelText('Currency Maturity Dropdown'),
         ).toBeInTheDocument();
     });
 
@@ -92,14 +92,14 @@ describe('CurrencyMaturityDropdown', () => {
 
         await waitFor(() => {
             const favouriteBtn = screen.getByLabelText(
-                'Add WBTC-DEC2022 to favorites'
+                'Add WBTC-DEC2022 to favorites',
             );
             expect(favouriteBtn).toBeInTheDocument();
             fireEvent.click(favouriteBtn);
         });
 
         expect(
-            screen.getByLabelText('Remove WBTC-DEC2022 from favorites')
+            screen.getByLabelText('Remove WBTC-DEC2022 from favorites'),
         ).toBeInTheDocument();
     });
 
@@ -115,7 +115,7 @@ describe('CurrencyMaturityDropdown', () => {
 
         await waitFor(() => {
             expect(
-                screen.getByRole('heading', { name: 'WBTC-DEC2022' })
+                screen.getByRole('heading', { name: 'WBTC-DEC2022' }),
             ).toBeInTheDocument();
         });
 
@@ -132,7 +132,7 @@ describe('CurrencyMaturityDropdown', () => {
             () => {
                 expect(getTopRow()).toHaveTextContent('WBTC-SEP2024');
             },
-            { timeout: 500 }
+            { timeout: 500 },
         );
     }, 8000);
 
@@ -148,7 +148,7 @@ describe('CurrencyMaturityDropdown', () => {
 
         await waitFor(() => {
             expect(
-                screen.getByRole('heading', { name: 'WBTC-DEC2022' })
+                screen.getByRole('heading', { name: 'WBTC-DEC2022' }),
             ).toBeInTheDocument();
         });
 
@@ -166,7 +166,7 @@ describe('CurrencyMaturityDropdown', () => {
             () => {
                 expect(getTopRow()).toHaveTextContent('$3,942,000');
             },
-            { timeout: 500 }
+            { timeout: 500 },
         );
     }, 8000);
 });

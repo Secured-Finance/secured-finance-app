@@ -46,8 +46,8 @@ describe('LendingCard Component', () => {
             fireEvent.click(
                 screen.getByRole('button', {
                     name: DEFAULT_CHOICE.symbol,
-                })
-            )
+                }),
+            ),
         );
         fireEvent.click(screen.getByRole('menuitem', { name: 'ETH' }));
     };
@@ -59,14 +59,14 @@ describe('LendingCard Component', () => {
     it('should render the component with Borrow as the default', async () => {
         render(<Default />, { preloadedState });
         expect(
-            await screen.findByTestId('place-order-button')
+            await screen.findByTestId('place-order-button'),
         ).toHaveTextContent('Borrow');
     });
 
     it('should show correct market rate', async () => {
         render(<Default />, { preloadedState });
         expect(await screen.findByTestId('market-rate')).toHaveTextContent(
-            '1.01%'
+            '1.01%',
         );
     });
 
@@ -83,7 +83,7 @@ describe('LendingCard Component', () => {
             () => {
                 expect(screen.queryByRole('dialog')).toBeInTheDocument();
             },
-            { timeout: 500 }
+            { timeout: 500 },
         );
         expect(screen.getByText('Confirm Borrow')).toBeInTheDocument();
         const button = screen.getByTestId('dialog-action-button');
@@ -94,24 +94,24 @@ describe('LendingCard Component', () => {
         await waitFor(() => render(<Default />, { preloadedState }));
 
         expect(
-            await screen.findByText(DEFAULT_CHOICE.symbol)
+            await screen.findByText(DEFAULT_CHOICE.symbol),
         ).toBeInTheDocument();
         expect(screen.queryByText('USDC')).not.toBeInTheDocument();
         expect(screen.queryByText('Ethereum')).not.toBeInTheDocument();
         fireEvent.click(
             screen.getByRole('button', {
                 name: 'WFIL',
-            })
+            }),
         );
 
         expect(
-            screen.getByRole('menuitem', { name: 'USDC' })
+            screen.getByRole('menuitem', { name: 'USDC' }),
         ).toBeInTheDocument();
         expect(
-            screen.getByRole('menuitem', { name: 'WFIL' })
+            screen.getByRole('menuitem', { name: 'WFIL' }),
         ).toBeInTheDocument();
         expect(
-            screen.getByRole('menuitem', { name: 'ETH' })
+            screen.getByRole('menuitem', { name: 'ETH' }),
         ).toBeInTheDocument();
     });
 
@@ -139,7 +139,7 @@ describe('LendingCard Component', () => {
         fireEvent.click(
             screen.getByRole('button', {
                 name: 'DEC2022',
-            })
+            }),
         );
         fireEvent.click(screen.getByText('MAR2023'));
         const dateWithTimezone = formatDate(mar23Fixture.toNumber());
@@ -154,9 +154,8 @@ describe('LendingCard Component', () => {
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '10' } });
 
-        const placeOrderButton = await screen.findByTestId(
-            'place-order-button'
-        );
+        const placeOrderButton =
+            await screen.findByTestId('place-order-button');
         fireEvent.click(placeOrderButton);
         expect(screen.getByText('Confirm Borrow')).toBeInTheDocument();
     });
@@ -173,7 +172,7 @@ describe('LendingCard Component', () => {
         const input = screen.getByRole('textbox');
         expect(input).toHaveValue('');
         await waitFor(() =>
-            expect(screen.getByTestId('place-order-button')).toBeDisabled()
+            expect(screen.getByTestId('place-order-button')).toBeDisabled(),
         );
         await waitFor(() => {
             fireEvent.change(input, { target: { value: '10' } });
@@ -196,7 +195,7 @@ describe('LendingCard Component', () => {
         });
 
         const walletSourceButton = screen.getByTestId(
-            'wallet-source-selector-button'
+            'wallet-source-selector-button',
         );
         fireEvent.click(walletSourceButton);
 
@@ -213,7 +212,7 @@ describe('LendingCard Component', () => {
         const lendTab = screen.getByText('Lend');
         fireEvent.click(lendTab);
         expect(
-            screen.queryByText('Available to borrow')
+            screen.queryByText('Available to borrow'),
         ).not.toBeInTheDocument();
         expect(screen.queryByText('Collateral Usage')).not.toBeInTheDocument();
     });
@@ -232,7 +231,7 @@ describe('LendingCard Component', () => {
             expect(button).not.toBeDisabled();
         });
         expect(
-            screen.queryByText('Insufficient amount in source')
+            screen.queryByText('Insufficient amount in source'),
         ).not.toBeInTheDocument();
 
         fireEvent.change(input, { target: { value: '20000' } });
@@ -241,7 +240,7 @@ describe('LendingCard Component', () => {
         expect(depositButton).toBeInTheDocument();
         fireEvent.click(depositButton);
         expect(
-            screen.getByRole('dialog', { name: 'Deposit' })
+            screen.getByRole('dialog', { name: 'Deposit' }),
         ).toBeInTheDocument();
     });
 

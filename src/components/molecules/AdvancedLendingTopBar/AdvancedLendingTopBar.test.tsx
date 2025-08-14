@@ -11,7 +11,7 @@ describe('AdvancedLendingTopBar Component', () => {
         });
 
         expect(
-            screen.getByRole('button', { name: 'WFIL-DEC2022' })
+            screen.getByRole('button', { name: 'WFIL-DEC2022' }),
         ).toBeInTheDocument();
         expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
 
@@ -31,13 +31,13 @@ describe('AdvancedLendingTopBar Component', () => {
         });
 
         expect(
-            screen.getByRole('button', { name: 'WFIL-DEC2022' })
+            screen.getByRole('button', { name: 'WFIL-DEC2022' }),
         ).toBeInTheDocument();
         const source = screen.getByRole('link');
         expect(source).toBeInTheDocument();
         expect(source).toHaveAttribute(
             'href',
-            'https://www.coingecko.com/en/coins/filecoin'
+            'https://www.coingecko.com/en/coins/filecoin',
         );
     });
 });

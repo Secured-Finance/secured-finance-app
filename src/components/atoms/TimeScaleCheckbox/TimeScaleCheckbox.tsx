@@ -29,7 +29,7 @@ export const TimeScaleCheckBox = ({
                             'cursor-not-allowed bg-neutral-3 text-slateGray':
                                 disabled,
                         },
-                        TimeScaleCheckBoxSizeStyle[size]
+                        TimeScaleCheckBoxSizeStyle[size],
                     )}
                     id='checkbox'
                     type='checkbox'
@@ -39,7 +39,7 @@ export const TimeScaleCheckBox = ({
                 />
                 <span
                     className={clsx(
-                        'pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-primary-300 opacity-0 peer-checked:opacity-100'
+                        'pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-primary-300 opacity-0 peer-checked:opacity-100',
                     )}
                 >
                     <svg
@@ -66,7 +66,7 @@ export const TimeScaleCheckBox = ({
                         {
                             'cursor-pointer text-neutral-400': !disabled,
                             'cursor-not-allowed text-slateGray': disabled,
-                        }
+                        },
                     )}
                 >
                     {label}

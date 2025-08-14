@@ -33,24 +33,24 @@ describe.skip('NewOrderBookWidget Component', () => {
         it('should display the market price', () => {
             render(<Default />);
             expect(
-                screen.getByTestId('current-market-price')
+                screen.getByTestId('current-market-price'),
             ).toHaveTextContent('93.00');
         });
 
         it('should display the market price in the correct color', () => {
             render(<Default />);
             expect(screen.getByTestId('current-market-price')).toHaveClass(
-                'text-nebulaTeal'
+                'text-nebulaTeal',
             );
         });
 
         it('should show a placeholder when the market price is not available', () => {
             render(<Default marketPrice={undefined} />);
             expect(
-                screen.getByTestId('current-market-price')
+                screen.getByTestId('current-market-price'),
             ).toHaveTextContent('--.--');
             expect(screen.getByTestId('current-market-price')).toHaveClass(
-                'text-slateGray'
+                'text-slateGray',
             );
         });
     });
@@ -60,7 +60,7 @@ describe.skip('NewOrderBookWidget Component', () => {
         const row = screen.getAllByTestId('sellOrders-row')[0];
         fireEvent.click(row);
         expect(store.getState().landingOrderForm.orderType).toEqual(
-            OrderType.LIMIT
+            OrderType.LIMIT,
         );
         expect(store.getState().landingOrderForm.unitPrice).toEqual('92');
     });
@@ -71,7 +71,7 @@ describe.skip('NewOrderBookWidget Component', () => {
         fireEvent.click(row);
 
         expect(store.getState().landingOrderForm.orderType).toEqual(
-            OrderType.LIMIT
+            OrderType.LIMIT,
         );
         expect(store.getState().landingOrderForm.unitPrice).toEqual('94');
     });
@@ -79,7 +79,7 @@ describe.skip('NewOrderBookWidget Component', () => {
     it('should display the spinner when loading', () => {
         render(<Loading />);
         expect(
-            screen.getByRole('alertdialog', { name: 'Loading' })
+            screen.getByRole('alertdialog', { name: 'Loading' }),
         ).toBeInTheDocument();
     });
 
@@ -98,7 +98,7 @@ describe.skip('NewOrderBookWidget Component', () => {
     it('should not display delisting disclaimer if no currency is being delisted', () => {
         render(<Default />);
         expect(
-            screen.queryByText('WFIL will be delisted')
+            screen.queryByText('WFIL will be delisted'),
         ).not.toBeInTheDocument();
     });
 
@@ -122,10 +122,10 @@ describe.skip('NewOrderBookWidget Component', () => {
             render(<Default />);
             expect(getButton('Show All Orders')).toHaveClass('bg-neutral-900');
             expect(getButton('Show Only Lend Orders')).not.toHaveClass(
-                'bg-neutral-900'
+                'bg-neutral-900',
             );
             expect(getButton('Show Only Borrow Orders')).not.toHaveClass(
-                'bg-neutral-900'
+                'bg-neutral-900',
             );
         });
 
@@ -136,13 +136,13 @@ describe.skip('NewOrderBookWidget Component', () => {
 
             fireEvent.click(getButton('Show Only Borrow Orders'));
             expect(getButton('Show All Orders')).not.toHaveClass(
-                'bg-neutral-900'
+                'bg-neutral-900',
             );
             expect(getButton('Show Only Lend Orders')).not.toHaveClass(
-                'bg-neutral-900'
+                'bg-neutral-900',
             );
             expect(getButton('Show Only Borrow Orders')).toHaveClass(
-                'bg-neutral-900'
+                'bg-neutral-900',
             );
             expectToHaveRows('buyOrders');
             expectNotToHaveRows('sellOrders');
@@ -150,10 +150,10 @@ describe.skip('NewOrderBookWidget Component', () => {
             fireEvent.click(getButton('Show Only Borrow Orders'));
             expect(getButton('Show All Orders')).toHaveClass('bg-neutral-900');
             expect(getButton('Show Only Lend Orders')).not.toHaveClass(
-                'bg-neutral-900'
+                'bg-neutral-900',
             );
             expect(getButton('Show Only Borrow Orders')).not.toHaveClass(
-                'bg-neutral-900'
+                'bg-neutral-900',
             );
             expectToHaveRows('buyOrders');
             expectToHaveRows('sellOrders');
@@ -166,13 +166,13 @@ describe.skip('NewOrderBookWidget Component', () => {
 
             fireEvent.click(getButton('Show Only Lend Orders'));
             expect(getButton('Show All Orders')).not.toHaveClass(
-                'bg-neutral-900'
+                'bg-neutral-900',
             );
             expect(getButton('Show Only Lend Orders')).toHaveClass(
-                'bg-neutral-900'
+                'bg-neutral-900',
             );
             expect(getButton('Show Only Borrow Orders')).not.toHaveClass(
-                'bg-neutral-900'
+                'bg-neutral-900',
             );
             expectNotToHaveRows('buyOrders');
             expectToHaveRows('sellOrders');
@@ -180,10 +180,10 @@ describe.skip('NewOrderBookWidget Component', () => {
             fireEvent.click(getButton('Show Only Lend Orders'));
             expect(getButton('Show All Orders')).toHaveClass('bg-neutral-900');
             expect(getButton('Show Only Lend Orders')).not.toHaveClass(
-                'bg-neutral-900'
+                'bg-neutral-900',
             );
             expect(getButton('Show Only Borrow Orders')).not.toHaveClass(
-                'bg-neutral-900'
+                'bg-neutral-900',
             );
             expectToHaveRows('buyOrders');
             expectToHaveRows('sellOrders');
@@ -192,15 +192,15 @@ describe.skip('NewOrderBookWidget Component', () => {
         it('should hide the current market price when Show Only Lend Orders is clicked and show it again when re clicked', () => {
             render(<Default />);
             expect(
-                screen.getByTestId('current-market-price')
+                screen.getByTestId('current-market-price'),
             ).toBeInTheDocument();
             fireEvent.click(getButton('Show Only Lend Orders'));
             expect(
-                screen.queryByTestId('current-market-price')
+                screen.queryByTestId('current-market-price'),
             ).not.toBeInTheDocument();
             fireEvent.click(getButton('Show Only Lend Orders'));
             expect(
-                screen.getByTestId('current-market-price')
+                screen.getByTestId('current-market-price'),
             ).toBeInTheDocument();
         });
 
@@ -209,21 +209,21 @@ describe.skip('NewOrderBookWidget Component', () => {
             expect(screen.getByTestId('buyOrders')).toBeInTheDocument();
             expect(screen.getByTestId('sellOrders')).toBeInTheDocument();
             expect(
-                screen.getByTestId('current-market-price')
+                screen.getByTestId('current-market-price'),
             ).toBeInTheDocument();
 
             fireEvent.click(getButton('Show Only Lend Orders'));
             expectNotToHaveRows('buyOrders');
             expectToHaveRows('sellOrders');
             expect(
-                screen.queryByTestId('current-market-price')
+                screen.queryByTestId('current-market-price'),
             ).not.toBeInTheDocument();
 
             fireEvent.click(getButton('Show Only Borrow Orders'));
             expectToHaveRows('buyOrders');
             expectNotToHaveRows('sellOrders');
             expect(
-                screen.queryByTestId('current-market-price')
+                screen.queryByTestId('current-market-price'),
             ).not.toBeInTheDocument();
         });
 
@@ -336,7 +336,7 @@ describe.skip('NewOrderBookWidget Component', () => {
             expect(sumBefore).toEqual(sumAfter);
             fireEvent.click(options[4]);
             const sumAfterAgain = sumSecondColumn(
-                screen.getByTestId('buyOrders')
+                screen.getByTestId('buyOrders'),
             );
             expect(sumBefore).toEqual(sumAfterAgain);
         });
@@ -397,7 +397,7 @@ describe('Orderbook tooltip on CoreTable', () => {
 
         fireEvent.scroll(window);
         expect(
-            screen.queryByTestId('orderBookTooltip')
+            screen.queryByTestId('orderBookTooltip'),
         ).not.toBeInTheDocument();
     });
 
@@ -409,7 +409,7 @@ describe('Orderbook tooltip on CoreTable', () => {
 
         fireEvent.mouseLeave(sellOrdersRows[0]);
         expect(
-            screen.queryByTestId('orderBookTooltip')
+            screen.queryByTestId('orderBookTooltip'),
         ).not.toBeInTheDocument();
     });
 });

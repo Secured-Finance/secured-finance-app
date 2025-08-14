@@ -82,7 +82,7 @@ const reducer = (
     state: State,
     action: {
         type: string;
-    }
+    },
 ) => {
     switch (action.type) {
         case 'next':
@@ -118,7 +118,7 @@ export const WithdrawCollateral = ({
     const [collateral, setCollateral] = useState<string>();
     const [txHash, setTxHash] = useState<string | undefined>();
     const [errorMessage, setErrorMessage] = useState(
-        'Your withdrawal transaction has failed.'
+        'Your withdrawal transaction has failed.',
     );
     const [collateralBigInt, setCollateralBigInt] = useState<bigint>(ZERO_BI);
     const [isFullCoverage, setIsFullCoverage] = useState<boolean>(false);
@@ -126,11 +126,11 @@ export const WithdrawCollateral = ({
     useEffect(() => {
         if (!isFullCoverage) {
             setCollateralBigInt(
-                amountFormatterToBase[asset](Number(collateral ?? ''))
+                amountFormatterToBase[asset](Number(collateral ?? '')),
             );
         } else {
             setCollateralBigInt(
-                collateralList[asset]?.availableFullValue ?? ZERO_BI
+                collateralList[asset]?.availableFullValue ?? ZERO_BI,
             );
             setCollateral(collateralList[asset]?.available.toString());
         }
@@ -139,7 +139,7 @@ export const WithdrawCollateral = ({
     const { data: priceList } = useLastPrices();
     const { onWithdrawCollateral } = useWithdrawCollateral(
         asset,
-        collateralBigInt
+        collateralBigInt,
     );
 
     const handleClose = useCallback(() => {
@@ -153,7 +153,7 @@ export const WithdrawCollateral = ({
             trackButtonEvent(
                 ButtonEvents.CANCEL_BUTTON,
                 ButtonProperties.CANCEL_ACTION,
-                'Cancel Withdraw Collateral'
+                'Cancel Withdraw Collateral',
             );
         }
         onClose();
@@ -179,7 +179,7 @@ export const WithdrawCollateral = ({
                     CollateralEvents.WITHDRAW_COLLATERAL,
                     asset,
                     collateralBigInt,
-                    source ?? ''
+                    source ?? '',
                 );
                 setTxHash(tx);
                 dispatch({ type: 'next' });
@@ -215,7 +215,7 @@ export const WithdrawCollateral = ({
                     break;
             }
         },
-        [handleWithdrawCollateral, handleClose]
+        [handleWithdrawCollateral, handleClose],
     );
 
     const handleChange = useCallback((v: CollateralInfo) => {
@@ -290,8 +290,8 @@ export const WithdrawCollateral = ({
                                         'Amount',
                                         `${formatAmount(
                                             amountFormatterFromBase[asset](
-                                                collateralBigInt
-                                            )
+                                                collateralBigInt,
+                                            ),
                                         )} ${asset}`,
                                     ],
                                 ]}

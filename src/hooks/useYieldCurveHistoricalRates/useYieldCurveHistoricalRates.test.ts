@@ -59,15 +59,15 @@ describe('useYieldCurveMarketRatesHistorical', () => {
         };
 
         (useLendingMarkets as jest.Mock).mockImplementation(
-            () => mockLendingMarkets
+            () => mockLendingMarkets,
         );
 
         const { result } = renderHook(() =>
-            useYieldCurveMarketRatesHistorical()
+            useYieldCurveMarketRatesHistorical(),
         );
 
         expect(
-            result.current.historicalRates[HistoricalYieldIntervals['30M']]
+            result.current.historicalRates[HistoricalYieldIntervals['30M']],
         ).toEqual([]);
     });
 });

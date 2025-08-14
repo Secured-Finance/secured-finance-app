@@ -5,8 +5,8 @@ describe('AddressUtils.format', () => {
         expect(
             AddressUtils.format(
                 '0x1234567890123456789012345678901234567890',
-                10
-            )
+                10,
+            ),
         ).toEqual('0x12345678...7890');
     });
     it('should return an ... if the input is empty', () => {
@@ -19,16 +19,16 @@ describe('AddressUtils.equals', () => {
         expect(
             AddressUtils.equals(
                 '0x1234567890123456789012345678901234567890',
-                '0x1234567890123456789012345678901234567890'
-            )
+                '0x1234567890123456789012345678901234567890',
+            ),
         ).toBeTruthy();
     });
     it('should return false if two wallet addresses are not equal', () => {
         expect(
             AddressUtils.equals(
                 '0x1234567890123456789012345678901234567890',
-                '0x1234567890123456789012345678901234567891'
-            )
+                '0x1234567890123456789012345678901234567891',
+            ),
         ).toBeFalsy();
     });
 
@@ -36,14 +36,14 @@ describe('AddressUtils.equals', () => {
         expect(
             AddressUtils.equals(
                 '0x1234567890123456789012345678901234567890',
-                '0X1234567890123456789012345678901234567890'
-            )
+                '0X1234567890123456789012345678901234567890',
+            ),
         ).toBeTruthy();
         expect(
             AddressUtils.equals(
                 '0x1234567890123456789012345678901234567890',
-                '0X1234567890123456789012345678901234567891'
-            )
+                '0X1234567890123456789012345678901234567891',
+            ),
         ).toBeFalsy();
     });
 });

@@ -69,7 +69,7 @@ export const AdvancedLendingTopBar = ({
         },
         queries.TransactionHistoryDocument,
         'lastTransaction',
-        !isSubgraphSupported
+        !isSubgraphSupported,
     );
 
     const marketKey = `${selectedAsset?.value}-${maturity}`;
@@ -79,7 +79,7 @@ export const AdvancedLendingTopBar = ({
     const volume24H = formatWithCurrency(
         volumePerMarket[marketKey] ?? 0,
         selectedAsset?.value as CurrencySymbol,
-        currencyMap[selectedAsset?.value as CurrencySymbol]?.roundingDecimal
+        currencyMap[selectedAsset?.value as CurrencySymbol]?.roundingDecimal,
     );
 
     const lastLoanValue = useMemo(() => {
@@ -92,7 +92,7 @@ export const AdvancedLendingTopBar = ({
 
     const selectedTerm = useMemo(
         () => options.find(o => o.value === selected.value),
-        [options, selected]
+        [options, selected],
     );
 
     useEffect(() => {
@@ -103,7 +103,7 @@ export const AdvancedLendingTopBar = ({
         (v: Maturity) => {
             onTermChange(v);
         },
-        [onTermChange]
+        [onTermChange],
     );
 
     const onChange = (asset: CurrencySymbol, maturity: Maturity) => {
@@ -118,13 +118,13 @@ export const AdvancedLendingTopBar = ({
                 <div className='border-white-10 laptop:border-x laptop:border-b laptop:bg-neutral-900'>
                     <div
                         className={clsx(
-                            'grid grid-cols-12 gap-y-3 px-6 py-3 laptop:flex laptop:p-0'
+                            'grid grid-cols-12 gap-y-3 px-6 py-3 laptop:flex laptop:p-0',
                         )}
                     >
                         <div
                             className={clsx(
                                 'col-span-12 flex grid-cols-12  justify-between gap-3 border-neutral-600 pr-2 laptop:grid laptop:gap-y-0 laptop:border-r laptop:px-6 laptop:py-4',
-                                marketInfo && 'tablet:gap-y-6'
+                                marketInfo && 'tablet:gap-y-6',
                             )}
                         >
                             <div className='col-span-8 grid gap-x-3 gap-y-1 text-neutral-4 laptop:col-span-12 desktop:gap-x-5'>
@@ -150,7 +150,7 @@ export const AdvancedLendingTopBar = ({
                                                     options.map(o => ({
                                                         ...o,
                                                         value: o.value.toString(),
-                                                    }))
+                                                    })),
                                                 )(selectedTerm.label)
                                             }`}
                                         </p>
@@ -161,7 +161,7 @@ export const AdvancedLendingTopBar = ({
                                 <div
                                     className={clsx(
                                         'col-span-4 flex justify-end pl-2 laptop:hidden',
-                                        marketInfo && 'tablet:pl-0'
+                                        marketInfo && 'tablet:pl-0',
                                     )}
                                 >
                                     <button
@@ -204,7 +204,7 @@ export const AdvancedLendingTopBar = ({
                                     <span className='typography-caption whitespace-nowrap font-semibold leading-4 text-neutral-50 desktop:leading-6'>
                                         {formatLoanValue(
                                             currentMarket?.value,
-                                            'price'
+                                            'price',
                                         )}
                                     </span>
                                 </div>
@@ -213,7 +213,7 @@ export const AdvancedLendingTopBar = ({
                                         name='Last Price'
                                         value={formatLoanValue(
                                             lastLoanValue,
-                                            'price'
+                                            'price',
                                         )}
                                     />
                                 </div>
@@ -263,7 +263,7 @@ export const AdvancedLendingTopBar = ({
                                             usdFormat(currencyPrice, 2) || '$0'
                                         }
                                         source={handlePriceSource(
-                                            selectedAsset?.value
+                                            selectedAsset?.value,
                                         )}
                                     />
                                 </div>

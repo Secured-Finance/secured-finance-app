@@ -16,7 +16,7 @@ const useHistoricalRates = (maturityList: number[], currency: string) => {
     const intervals = useMemo(() => {
         const now = Math.floor(Date.now() / 1000);
         return Object.values(HistoricalYieldIntervals).map(
-            offset => now - Number(offset)
+            offset => now - Number(offset),
         );
     }, []);
 
@@ -26,22 +26,22 @@ const useHistoricalRates = (maturityList: number[], currency: string) => {
             maturityList: maturityList,
             currency: toBytes32(currency),
         }),
-        [intervals, maturityList, currency]
+        [intervals, maturityList, currency],
     );
 
     const { data, loading } = useQuery(
         TRANSACTIONS_BY_TIMESTAMP_AND_MATURITY_QUERY(
             variables.intervals,
             variables.maturityList,
-            variables.currency
-        )
+            variables.currency,
+        ),
     );
     return { data, loading, intervals };
 };
 
 export const useYieldCurveMarketRatesHistorical = () => {
     const { currency, maturity } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
+        selectLandingOrderForm(state.landingOrderForm),
     );
     const { data: lendingMarkets = baseContracts } = useLendingMarkets();
     const lendingContracts = lendingMarkets[currency];
@@ -52,7 +52,7 @@ export const useYieldCurveMarketRatesHistorical = () => {
 
     const sortedLendingContracts = Object.values(lendingContracts)
         .filter(
-            obj => obj.isOpened || obj.isItayosePeriod || obj.isPreOrderPeriod
+            obj => obj.isOpened || obj.isItayosePeriod || obj.isPreOrderPeriod,
         )
         .sort((a, b) => a.maturity - b.maturity);
 
@@ -71,7 +71,7 @@ export const useYieldCurveMarketRatesHistorical = () => {
 
     const { data, loading, intervals } = useHistoricalRates(
         maturities,
-        currency
+        currency,
     );
 
     const historicalRates = useMemo(() => {
@@ -94,7 +94,7 @@ export const useYieldCurveMarketRatesHistorical = () => {
                         ? LoanValue.fromPrice(
                               executionPrice,
                               item.maturity,
-                              intervals[i]
+                              intervals[i],
                           ).apr
                         : new Rate(0);
 

@@ -51,7 +51,7 @@ export const CurrencyItem = ({
         firstLine = ordinaryFormat(
             currency.fromBaseUnit(amount),
             minDecimals,
-            maxDecimals
+            maxDecimals,
         );
         if (showCurrency) {
             firstLine += ` ${ccy}`;

@@ -14,7 +14,7 @@ const getInformationText = (
     totalCollateralInUSD: number,
     collateralCoverage: number,
     availableToBorrow: number,
-    collateralThreshold: number
+    collateralThreshold: number,
 ) => {
     if (totalCollateralInUSD === 0) {
         return (
@@ -35,10 +35,10 @@ const getInformationText = (
                     {usdFormat(availableToBorrow, 2)}
                 </span>
                 <span>{` which is ${percentFormat(
-                    collateralThreshold - collateralCoverage * 100
+                    collateralThreshold - collateralCoverage * 100,
                 )} of your ${usdFormat(
                     totalCollateralInUSD,
-                    2
+                    2,
                 )} collateral deposit.`}</span>
             </div>
             <div>
@@ -104,7 +104,7 @@ export const CollateralProgressBar = ({
                             </span>
                             <span>{`of ${usdFormat(
                                 totalCollateralInUSD,
-                                2
+                                2,
                             )} available`}</span>
                         </div>
                         <InfoToolTip placement='bottom-start'>
@@ -112,7 +112,7 @@ export const CollateralProgressBar = ({
                                 totalCollateralInUSD,
                                 collateralCoverage,
                                 availableToBorrow,
-                                collateralThreshold
+                                collateralThreshold,
                             )}
                         </InfoToolTip>
                     </div>

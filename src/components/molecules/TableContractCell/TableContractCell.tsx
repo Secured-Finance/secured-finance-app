@@ -38,7 +38,7 @@ export const TableContractCell = ({
             return `${getUTCMonthYear(maturity.toNumber())}`;
         return `${ccy}-${getUTCMonthYear(
             maturity.toNumber(),
-            variant === 'compact'
+            variant === 'compact',
         )}`;
     }, [ccy, maturity, variant]);
 
@@ -115,7 +115,7 @@ export const TableContractCell = ({
                                 variant === 'default' ||
                                 variant === 'compactCurrencyOnly',
                             'ml-11': variant === 'currencyOnly',
-                        }
+                        },
                     )}
                 >
                     {currencyMap[ccy].name}

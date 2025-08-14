@@ -8,14 +8,14 @@ describe('Separator Component', () => {
     it('should render a Separator', () => {
         render(<Default />);
         expect(screen.getByTestId('separator')).toHaveClass(
-            'border-b border-white-5'
+            'border-b border-white-5',
         );
     });
 
     it('should render custom color Separator with vertical orientation', () => {
         render(<Primary />);
         expect(screen.getByTestId('separator')).toHaveClass(
-            'border-l border-moonGrey border-opacity-30'
+            'border-l border-moonGrey border-opacity-30',
         );
     });
 });

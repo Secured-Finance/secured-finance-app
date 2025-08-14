@@ -29,7 +29,7 @@ describe('useHandleContractTransaction', () => {
 
     it('should dispatch updateLastActionTimestamp', async () => {
         const { result, store } = renderHook(() =>
-            useHandleContractTransaction()
+            useHandleContractTransaction(),
         );
         expect(store.getState().blockchain.lastActionTimestamp).toBeFalsy();
         await result.current(txHash);

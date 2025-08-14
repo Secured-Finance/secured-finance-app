@@ -86,7 +86,7 @@ export const CollateralManagementConciseTab = ({
                             </span>
                             <span>{`of ${usdFormat(
                                 totalCollateralInUSD,
-                                2
+                                2,
                             )} available`}</span>
                         </>
                     )}

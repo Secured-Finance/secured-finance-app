@@ -15,7 +15,7 @@ export const useZCUsage = (address: UserAccount, side: OrderSide) => {
     const getZCUsage = (
         maturity: number,
         currency: CurrencySymbol,
-        filledAmount: number
+        filledAmount: number,
     ) => {
         let estimatedBorrowPV = 0;
         let estimatedLendPV = 0;
@@ -28,7 +28,7 @@ export const useZCUsage = (address: UserAccount, side: OrderSide) => {
 
         const pvOfActivePositionsInOrderMaturity = getPVInMaturity(
             maturity,
-            currency
+            currency,
         );
 
         const offsetPV =
@@ -37,7 +37,7 @@ export const useZCUsage = (address: UserAccount, side: OrderSide) => {
             (pvOfActivePositionsInOrderMaturity < 0 && side === OrderSide.LEND)
                 ? Math.min(
                       Math.abs(pvOfActivePositionsInOrderMaturity),
-                      filledAmount
+                      filledAmount,
                   )
                 : 0;
 
@@ -64,14 +64,14 @@ export const useZCUsage = (address: UserAccount, side: OrderSide) => {
             const positionInMaturity = position?.positions.find(
                 pos =>
                     pos.maturity === maturity.toString() &&
-                    hexToCurrencySymbol(pos.currency) === currency
+                    hexToCurrencySymbol(pos.currency) === currency,
             );
 
             return amountFormatterFromBase[currency](
-                positionInMaturity?.amount ?? BigInt(0)
+                positionInMaturity?.amount ?? BigInt(0),
             );
         },
-        [position?.positions]
+        [position?.positions],
     );
 
     return getZCUsage;

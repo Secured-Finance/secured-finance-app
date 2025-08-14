@@ -95,12 +95,12 @@ export const Toolbar = ({
     const { data: volumePerMarket } = use24HVolume();
     const selectedTerm = useMemo(
         () => options.find(o => o.value === selected.value),
-        [options, selected]
+        [options, selected],
     );
 
     const onHandleTermChange = useCallback(
         (v: Maturity) => handleTermChange(v),
-        [handleTermChange]
+        [handleTermChange],
     );
 
     const onChange = (asset: CurrencySymbol, maturity: Maturity) => {
@@ -113,7 +113,7 @@ export const Toolbar = ({
             <div className='h-1 bg-starBlue'></div>
             <div
                 className={clsx(
-                    'border-b border-l border-r border-white-10 bg-neutral-900'
+                    'border-b border-l border-r border-white-10 bg-neutral-900',
                 )}
             >
                 <div className='flex min-w-fit flex-row items-center justify-start gap-10 px-6 py-4 tablet:justify-between'>
@@ -137,7 +137,7 @@ export const Toolbar = ({
                                                 options.map(o => ({
                                                     ...o,
                                                     value: o.value.toString(),
-                                                }))
+                                                })),
                                             )(selectedTerm.label)
                                         }`}
                                     </p>
@@ -170,7 +170,7 @@ export const Itayose = () => {
     const isTablet = useBreakpoint('laptop');
 
     const { currency, maturity } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
+        selectLandingOrderForm(state.landingOrderForm),
     );
     const [selectedTable, setSelectedTable] = useState(TableType.OPEN_ORDERS);
 
@@ -179,7 +179,7 @@ export const Itayose = () => {
     const { data: lendingMarkets = baseContracts } = useLendingMarkets();
     const { data: itayoseEstimation } = useItayoseEstimation(
         currency,
-        maturity
+        maturity,
     );
     const lendingContracts = lendingMarkets[currency];
 
@@ -192,7 +192,7 @@ export const Itayose = () => {
 
     const maturityOptionList = useMaturityOptions(
         lendingContracts,
-        market => !market.isMatured
+        market => !market.isMatured,
     );
 
     const {
@@ -208,7 +208,7 @@ export const Itayose = () => {
     const selectedTerm = useMemo(() => {
         return (
             maturityOptionList.find(option =>
-                option.value.equals(new Maturity(maturity))
+                option.value.equals(new Maturity(maturity)),
             ) || maturityOptionList[0]
         );
     }, [maturity, maturityOptionList]);
@@ -217,9 +217,9 @@ export const Itayose = () => {
     const assetList = useMemo(
         () =>
             toOptions(currencies, currency).filter(
-                ccy => !delistedCurrencySet.has(ccy.label as CurrencySymbol)
+                ccy => !delistedCurrencySet.has(ccy.label as CurrencySymbol),
             ),
-        [currencies, currency, delistedCurrencySet]
+        [currencies, currency, delistedCurrencySet],
     );
     const userOrderHistory = useGraphClientHook(
         {
@@ -229,7 +229,7 @@ export const Itayose = () => {
         },
         queries.FilteredUserOrderHistoryDocument,
         'user',
-        selectedTable !== TableType.ORDER_HISTORY
+        selectedTable !== TableType.ORDER_HISTORY,
     );
 
     const sortedOrderHistory = useMemo(() => {
@@ -248,7 +248,7 @@ export const Itayose = () => {
         ? LoanValue.fromPrice(
               lendingMarkets[currency][maturity]?.openingUnitPrice ?? 0,
               maturity,
-              lendingContracts[selectedTerm.value.toNumber()]?.utcOpeningDate
+              lendingContracts[selectedTerm.value.toNumber()]?.utcOpeningDate,
           )
         : undefined;
 
@@ -263,7 +263,7 @@ export const Itayose = () => {
     } = useBorrowOrderBook(
         currency,
         maturity,
-        Number(itayoseEstimation?.lastBorrowUnitPrice ?? ZERO_BI)
+        Number(itayoseEstimation?.lastBorrowUnitPrice ?? ZERO_BI),
     );
 
     const {
@@ -273,7 +273,7 @@ export const Itayose = () => {
     } = useLendOrderBook(
         currency,
         maturity,
-        Number(itayoseEstimation?.lastLendUnitPrice ?? ZERO_BI)
+        Number(itayoseEstimation?.lastLendUnitPrice ?? ZERO_BI),
     );
 
     const [orderBook, setMultiplier, setIsShowingAll] = useOrderbook(
@@ -283,7 +283,7 @@ export const Itayose = () => {
         itayoseEstimation?.lastBorrowUnitPrice,
         borrowAmount,
         itayoseEstimation?.lastLendUnitPrice,
-        lendAmount
+        lendAmount,
     );
 
     const { data: collateralBook = emptyCollateralBook } =
@@ -293,7 +293,7 @@ export const Itayose = () => {
         address,
         currency,
         maturity,
-        o => o.isPreOrder
+        o => o.isPreOrder,
     ).map(o => {
         return {
             ...o,
@@ -308,7 +308,7 @@ export const Itayose = () => {
             dispatch(resetAmount());
             dispatch(setCurrency(v));
         },
-        [dispatch]
+        [dispatch],
     );
 
     const isLoadingMap = {
@@ -329,7 +329,7 @@ export const Itayose = () => {
         (state: VisibilityState) => {
             setIsShowingAll(state.showBorrow && state.showLend);
         },
-        [setIsShowingAll]
+        [setIsShowingAll],
     );
 
     return (

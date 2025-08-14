@@ -27,7 +27,7 @@ export default {
         currentMarket: {
             value: LoanValue.fromPrice(
                 lastTradePrice,
-                maturityOptions[0].value.toNumber()
+                maturityOptions[0].value.toNumber(),
             ),
             time: 1646920200,
             type: 'block',

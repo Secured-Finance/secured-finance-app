@@ -21,7 +21,7 @@ export type CollateralInfo = {
 export const generateWalletInformation = (
     accounts: Partial<Record<WalletSource, string>>,
     balance: Record<string, bigint>,
-    information: Partial<Record<WalletSource, CurrencySymbol[]>>
+    information: Partial<Record<WalletSource, CurrencySymbol[]>>,
 ): AssetDisclosureProps[] => {
     const collateralRecords = [];
     const walletConfiguration = information;
@@ -55,7 +55,7 @@ export const generateWalletInformation = (
 export const generateWalletSourceInformation = (
     asset: CurrencySymbol,
     metamaskBalance: bigint,
-    vaultBalance?: bigint
+    vaultBalance?: bigint,
 ): WalletSourceOption[] => {
     return [
         {

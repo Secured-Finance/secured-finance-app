@@ -39,7 +39,7 @@ export const ZCTokenInput = ({
                 Number(inputAmount) ===
                     Math.round(
                         convertZCTokenFromBaseAmount(symbol, amount, maturity) *
-                            10000
+                            10000,
                     ) /
                         10000.0
             ) {
@@ -53,12 +53,12 @@ export const ZCTokenInput = ({
                     convertZCTokenToBaseAmount(
                         symbol,
                         Number(inputAmount),
-                        maturity
-                    )
+                        maturity,
+                    ),
                 );
             }
         },
-        [amount, maturity, onAmountChange, symbol]
+        [amount, maturity, onAmountChange, symbol],
     );
 
     const handleClick = useCallback(
@@ -74,17 +74,17 @@ export const ZCTokenInput = ({
                           convertZCTokenFromBaseAmount(
                               symbol,
                               amount,
-                              maturity
-                          ).toFixed(4)
+                              maturity,
+                          ).toFixed(4),
                       ).toString()
-                    : undefined
+                    : undefined,
             );
 
             if (onAmountChange) {
                 onAmountChange(amount);
             }
         },
-        [availableTokenAmount, maturity, onAmountChange, symbol]
+        [availableTokenAmount, maturity, onAmountChange, symbol],
     );
 
     const totalPrice = useMemo(() => {

@@ -96,7 +96,7 @@ export const UnwindDialog = ({
                 success: 'Your position was successfully repaid',
             },
         }),
-        [redeemPosition, repayPosition, unwindPosition]
+        [redeemPosition, repayPosition, unwindPosition],
     );
 
     const stateRecord: Record<Step, State> = {
@@ -134,7 +134,7 @@ export const UnwindDialog = ({
         state: State,
         action: {
             type: string;
-        }
+        },
     ) => {
         switch (action.type) {
             case 'next':
@@ -176,7 +176,7 @@ export const UnwindDialog = ({
             trackButtonEvent(
                 ButtonEvents.CANCEL_BUTTON,
                 ButtonProperties.CANCEL_ACTION,
-                'Cancel Unwind Order'
+                'Cancel Unwind Order',
             );
         }
         onClose();
@@ -199,11 +199,11 @@ export const UnwindDialog = ({
                     setErrorMessage,
                     dispatch,
                     globalDispatch,
-                    setLastMessage
+                    setLastMessage,
                 );
             }
         },
-        [stateMap, type, handleContractTransaction, globalDispatch]
+        [stateMap, type, handleContractTransaction, globalDispatch],
     );
 
     const onClick = useCallback(
@@ -223,7 +223,7 @@ export const UnwindDialog = ({
                     break;
             }
         },
-        [amount.currency, handleClose, handleUnwindPosition, maturity]
+        [amount.currency, handleClose, handleUnwindPosition, maturity],
     );
 
     const renderSelection = () => {

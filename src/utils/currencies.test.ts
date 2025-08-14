@@ -30,7 +30,7 @@ describe('currencies.generateWalletInformation', () => {
                     CurrencySymbol.WFIL,
                     CurrencySymbol.USDC,
                 ],
-            }
+            },
         );
 
         expect(options).toHaveLength(1);
@@ -60,7 +60,7 @@ describe('currencies.generateWalletInformation', () => {
         options[0].data.forEach((data, index) => {
             expect(data.asset).toEqual(dataResult[index].asset);
             expect(data.quantity.toString()).toEqual(
-                dataResult[index].quantity.toString()
+                dataResult[index].quantity.toString(),
             );
         });
     });
@@ -71,7 +71,7 @@ describe('currencies.generateWalletSourceInformation', () => {
         const options = generateWalletSourceInformation(
             CurrencySymbol.USDC,
             BigInt('1000000000'),
-            BigInt('500000000')
+            BigInt('500000000'),
         );
         expect(options).toHaveLength(2);
         expect(options[0].source).toEqual(Source.METAMASK);
@@ -87,8 +87,8 @@ describe('currencies.handlePriceSource', () => {
 
         expect(source).toEqual(
             COIN_GECKO_SOURCE.concat(
-                currencyMap[CurrencySymbol.USDC].coinGeckoId
-            )
+                currencyMap[CurrencySymbol.USDC].coinGeckoId,
+            ),
         );
     });
 });

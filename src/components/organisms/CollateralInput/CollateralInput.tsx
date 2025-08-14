@@ -39,7 +39,7 @@ export const CollateralInput = ({
                 onAmountChange(inputAmount);
             }
         },
-        [amount, onAmountChange, fullCoverage, setFullCoverage]
+        [amount, onAmountChange, fullCoverage, setFullCoverage],
     );
 
     const handleClick = useCallback(
@@ -58,7 +58,7 @@ export const CollateralInput = ({
                 onAmountChange(amount.toString());
             }
         },
-        [availableAmount, onAmountChange, setFullCoverage]
+        [availableAmount, onAmountChange, setFullCoverage],
     );
 
     return (

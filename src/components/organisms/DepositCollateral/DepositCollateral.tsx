@@ -81,7 +81,7 @@ const reducer = (
     state: State,
     action: {
         type: string;
-    }
+    },
 ) => {
     switch (action.type) {
         case 'next':
@@ -114,7 +114,7 @@ export const DepositCollateral = ({
     const [collateral, setCollateral] = useState<string>();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [errorMessage, setErrorMessage] = useState(
-        'Your deposit transaction has failed.'
+        'Your deposit transaction has failed.',
     );
     const [txHash, setTxHash] = useState<string | undefined>();
 
@@ -124,11 +124,11 @@ export const DepositCollateral = ({
     useEffect(() => {
         if (!isFullCoverage) {
             setCollateralBigInt(
-                amountFormatterToBase[asset](Number(collateral ?? ''))
+                amountFormatterToBase[asset](Number(collateral ?? '')),
             );
         } else {
             setCollateralBigInt(
-                collateralList[asset]?.availableFullValue ?? ZERO_BI
+                collateralList[asset]?.availableFullValue ?? ZERO_BI,
             );
             setCollateral(collateralList[asset]?.available.toString());
         }
@@ -137,7 +137,7 @@ export const DepositCollateral = ({
     const { data: priceList } = useLastPrices();
     const { onDepositCollateral } = useDepositCollateral(
         asset,
-        collateralBigInt
+        collateralBigInt,
     );
     const handleContractTransaction = useHandleContractTransaction();
 
@@ -152,7 +152,7 @@ export const DepositCollateral = ({
             trackButtonEvent(
                 ButtonEvents.CANCEL_BUTTON,
                 ButtonProperties.CANCEL_ACTION,
-                'Cancel Deposit Collateral'
+                'Cancel Deposit Collateral',
             );
         }
         onClose();
@@ -161,7 +161,7 @@ export const DepositCollateral = ({
     const optionList = Object.values(collateralList);
 
     const defaultCcyIndex = optionList.findIndex(
-        col => col.symbol === defaultCcySymbol
+        col => col.symbol === defaultCcySymbol,
     );
     if (defaultCcyIndex >= 0) {
         [optionList[0], optionList[defaultCcyIndex]] = [
@@ -191,7 +191,7 @@ export const DepositCollateral = ({
                     CollateralEvents.DEPOSIT_COLLATERAL,
                     asset,
                     collateralBigInt,
-                    source ?? ''
+                    source ?? '',
                 );
                 dispatch({ type: 'next' });
             }
@@ -227,7 +227,7 @@ export const DepositCollateral = ({
                     break;
             }
         },
-        [handleClose, handleDepositCollateral]
+        [handleClose, handleDepositCollateral],
     );
 
     const handleChange = useCallback((v: CollateralInfo) => {
@@ -291,8 +291,8 @@ export const DepositCollateral = ({
                                         'Amount',
                                         `${formatAmount(
                                             amountFormatterFromBase[asset](
-                                                collateralBigInt
-                                            )
+                                                collateralBigInt,
+                                            ),
                                         )} ${asset}`,
                                     ],
                                 ]}

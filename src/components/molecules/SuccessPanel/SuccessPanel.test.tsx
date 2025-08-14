@@ -32,7 +32,7 @@ describe('SuccessPanel Component', () => {
 
         expect(window.open).toHaveBeenCalledWith(
             'https://sepolia.etherscan.io/tx/1123456789',
-            '_blank'
+            '_blank',
         );
 
         await userEvent.unhover(address);

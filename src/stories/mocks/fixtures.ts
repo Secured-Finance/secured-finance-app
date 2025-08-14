@@ -1044,7 +1044,7 @@ function generateDailyVolumes(days: number) {
             ])
                 volumes.push({
                     id: `${fromBytes32(
-                        currency
+                        currency,
                     )}-${openingDateTimestamp}-2023-02-${i}`,
                     currency: wfilBytes32,
                     maturity: dec22Fixture,

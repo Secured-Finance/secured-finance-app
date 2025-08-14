@@ -10,7 +10,7 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 describe('useOrderList', () => {
     it('should return an empty array if no orders match the given criteria', async () => {
         const { result } = renderHook(() =>
-            useMarketOrderList('0x1', CurrencySymbol.ETH, 123)
+            useMarketOrderList('0x1', CurrencySymbol.ETH, 123),
         );
 
         expect(result.current).toEqual([]);
@@ -22,8 +22,8 @@ describe('useOrderList', () => {
             useMarketOrderList(
                 'account',
                 CurrencySymbol.WFIL,
-                dec24Fixture.toNumber()
-            )
+                dec24Fixture.toNumber(),
+            ),
         );
 
         await waitFor(() => expect(result.current).toHaveLength(21));
@@ -60,8 +60,8 @@ describe('useOrderList', () => {
                 'account',
                 CurrencySymbol.WFIL,
                 dec24Fixture.toNumber(),
-                order => order.unitPrice === BigInt('7800')
-            )
+                order => order.unitPrice === BigInt('7800'),
+            ),
         );
 
         await waitFor(() =>
@@ -76,7 +76,7 @@ describe('useOrderList', () => {
                     createdAt: BigInt('1409220000'),
                     isPreOrder: true,
                 },
-            ])
+            ]),
         );
     });
 });

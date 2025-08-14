@@ -94,7 +94,7 @@ if (typeof window !== 'undefined') {
 
 const chainIds = getSupportedChainIds();
 const networks = getSupportedNetworks().filter(chain =>
-    chainIds.includes(chain.id)
+    chainIds.includes(chain.id),
 );
 
 const ankrNetworkKeys: Record<string, string> = {
@@ -125,7 +125,7 @@ const { chains, publicClient } = configureChains(
         }),
         publicProvider(),
     ],
-    { pollingInterval: 12_000 }
+    { pollingInterval: 12_000 },
 );
 
 const config = createConfig({
@@ -223,7 +223,7 @@ const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             chainId: state.blockchain.chainId,
         }),
         (prev, next) =>
-            prev.network === next.network && prev.chainId === next.chainId
+            prev.network === next.network && prev.chainId === next.chainId,
     );
 
     const client = useMemo(() => {
@@ -234,7 +234,7 @@ const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 authLink.concat(httpLink),
                 subgraphUrl
                     ? createHttpLink({ uri: subgraphUrl })
-                    : new GraphApolloClient({ network }).link
+                    : new GraphApolloClient({ network }).link,
             ),
             cache: new InMemoryCache(),
         });

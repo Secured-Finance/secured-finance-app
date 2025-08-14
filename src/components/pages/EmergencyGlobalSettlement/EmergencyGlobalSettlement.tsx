@@ -31,7 +31,7 @@ export const EmergencyGlobalSettlement = () => {
     const { data: usedCurrencies = [] } = useCurrenciesForOrders(address);
     const { data: orders = emptyOrderList } = useOrderList(
         address,
-        usedCurrencies
+        usedCurrencies,
     );
     const { data: positions } = usePositions(address, usedCurrencies);
     const { data: collateralBook = emptyCollateralBook } =

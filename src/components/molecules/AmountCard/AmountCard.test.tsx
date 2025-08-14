@@ -37,13 +37,13 @@ describe('AmountCard Component', () => {
                 amount={
                     new Amount(
                         '500000000000000000000000000',
-                        CurrencySymbol.WFIL
+                        CurrencySymbol.WFIL,
                     )
                 }
-            />
+            />,
         );
         expect(screen.getByText('500,000,000')).toHaveClass(
-            'flex justify-end font-semibold text-white typography-body-2'
+            'flex justify-end font-semibold text-white typography-body-2',
         );
     });
 
@@ -59,7 +59,7 @@ describe('AmountCard Component', () => {
                     amount={
                         new Amount('1001000000000000000', CurrencySymbol.ETH)
                     }
-                />
+                />,
             );
             expect(screen.getByText('1.001')).toBeInTheDocument();
         });

@@ -19,7 +19,7 @@ export type Position = {
 
 export const usePositions = (
     account: string | undefined,
-    usedCurrencies: CurrencySymbol[]
+    usedCurrencies: CurrencySymbol[],
 ) => {
     const securedFinance = useSF();
 
@@ -33,7 +33,7 @@ export const usePositions = (
         queryFn: async () => {
             const positions = await securedFinance?.getPositions(
                 account ?? '',
-                usedCurrencies.map(c => toCurrency(c))
+                usedCurrencies.map(c => toCurrency(c)),
             );
             return positions ?? [];
         },
@@ -56,13 +56,13 @@ export const usePositions = (
                     futureValue: position.futureValue,
                     marketPrice: calculateMarketPrice(
                         position.presentValue,
-                        position.futureValue
+                        position.futureValue,
                     ),
                 } as Position);
                 const ccy = hexToCurrencySymbol(position.ccy);
                 if (!ccy) return;
                 const presentValue = amountFormatterFromBase[ccy](
-                    position.presentValue
+                    position.presentValue,
                 );
                 if (presentValue >= 0) {
                     lendCurrencies.add(ccy);
@@ -90,7 +90,7 @@ export const usePositions = (
 
 const calculateMarketPrice = (
     presentValue: bigint,
-    futureValue: bigint
+    futureValue: bigint,
 ): bigint => {
     const marketPrice = (presentValue * BigInt(1000000)) / futureValue;
     return BigInt(Math.round(Number(marketPrice) / 100));

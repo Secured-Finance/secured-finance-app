@@ -30,7 +30,7 @@ describe('getSupportedChainIds ', () => {
     it('should throw error if variable is not set', () => {
         process.env.NEXT_PUBLIC_SUPPORTED_CHAIN_IDS = '';
         expect(() => getSupportedChainIds()).toThrowError(
-            'NEXT_PUBLIC_SUPPORTED_CHAIN_IDS is not set'
+            'NEXT_PUBLIC_SUPPORTED_CHAIN_IDS is not set',
         );
     });
 });
@@ -64,7 +64,7 @@ describe('getWalletConnectId', () => {
     it('should throw error if variable is not set', () => {
         process.env.NEXT_PUBLIC_WALLET_CONNECT_ID = '';
         expect(() => getWalletConnectId()).toThrowError(
-            'NEXT_PUBLIC_WALLET_CONNECT_ID is not set'
+            'NEXT_PUBLIC_WALLET_CONNECT_ID is not set',
         );
     });
 });
@@ -152,7 +152,7 @@ describe('getGraphqlServerUrl', () => {
     it('should throw error if variable is not set', () => {
         process.env.NEXT_PUBLIC_GRAPHQL_SERVER_URL = '';
         expect(() => getGraphqlServerUrl()).toThrowError(
-            'NEXT_PUBLIC_GRAPHQL_SERVER_URL is not set'
+            'NEXT_PUBLIC_GRAPHQL_SERVER_URL is not set',
         );
     });
 });
@@ -188,7 +188,7 @@ describe('getStablecoinAppUrl', () => {
     it('should throw error if variable is not set', () => {
         process.env.NEXT_PUBLIC_STABLECOIN_APP_URL = '';
         expect(() => getStablecoinAppUrl()).toThrowError(
-            'NEXT_PUBLIC_STABLECOIN_APP_URL is not set'
+            'NEXT_PUBLIC_STABLECOIN_APP_URL is not set',
         );
     });
 });

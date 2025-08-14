@@ -109,7 +109,7 @@ export const PlaceOrder = ({
         state: State,
         action: {
             type: string;
-        }
+        },
     ) => {
         switch (action.type) {
             case 'next':
@@ -143,7 +143,7 @@ export const PlaceOrder = ({
     const isUnderCollateralThreshold =
         useIsUnderCollateralThresholdForBorrowOrders(
             address,
-            orderAmount.currency
+            orderAmount.currency,
         );
 
     const showWarning = isUnderCollateralThreshold(
@@ -151,11 +151,11 @@ export const PlaceOrder = ({
         maturity.toNumber(),
         loanValue.price,
         side,
-        orderAmount.toBigInt()
+        orderAmount.toBigInt(),
     );
 
     const [errorMessage, setErrorMessage] = useState(
-        'Your order could not be placed'
+        'Your order could not be placed',
     );
 
     const handleClose = useCallback(() => {
@@ -164,7 +164,7 @@ export const PlaceOrder = ({
             trackButtonEvent(
                 ButtonEvents.CANCEL_BUTTON,
                 ButtonProperties.CANCEL_ACTION,
-                'Cancel Place Order'
+                'Cancel Place Order',
             );
         }
         onClose();
@@ -183,7 +183,7 @@ export const PlaceOrder = ({
             side: OrderSide,
             amount: bigint,
             unitPrice: number,
-            walletSource: WalletSource
+            walletSource: WalletSource,
         ) => {
             try {
                 const tx = await onPlaceOrder(
@@ -192,7 +192,7 @@ export const PlaceOrder = ({
                     side,
                     amount,
                     unitPrice,
-                    walletSource
+                    walletSource,
                 );
                 const transactionStatus = await handleContractTransaction(tx);
                 if (!transactionStatus) {
@@ -207,7 +207,7 @@ export const PlaceOrder = ({
                         [OrderProperties.ASSET_TYPE]: ccy,
                         [OrderProperties.ORDER_MATURITY]: getUTCMonthYear(
                             maturity.toNumber(),
-                            true
+                            true,
                         ),
                         [OrderProperties.ORDER_AMOUNT]: orderAmount.value,
                         [OrderProperties.ORDER_PRICE]: unitPrice ?? 0,
@@ -218,7 +218,7 @@ export const PlaceOrder = ({
                 handleContractError(e, setErrorMessage, dispatch);
             }
         },
-        [onPlaceOrder, handleContractTransaction, orderType, orderAmount.value]
+        [onPlaceOrder, handleContractTransaction, orderType, orderAmount.value],
     );
 
     const onClick = useCallback(
@@ -233,7 +233,7 @@ export const PlaceOrder = ({
                             side,
                             orderAmount.toBigInt(),
                             0,
-                            walletSource
+                            walletSource,
                         );
                     } else if (orderType === OrderType.LIMIT && loanValue) {
                         handlePlaceOrder(
@@ -242,7 +242,7 @@ export const PlaceOrder = ({
                             side,
                             orderAmount.toBigInt(),
                             loanValue.price,
-                            walletSource
+                            walletSource,
                         );
                     } else {
                         console.error('Invalid order type');
@@ -268,7 +268,7 @@ export const PlaceOrder = ({
             orderType,
             side,
             walletSource,
-        ]
+        ],
     );
 
     return (

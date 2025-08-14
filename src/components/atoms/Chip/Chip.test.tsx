@@ -14,11 +14,11 @@ describe('Chip Component', () => {
 
     it('should render the chip with custom color and size', () => {
         render(
-            <Default color={ChipColors.Red} size={ChipSizes.lg} label='Test' />
+            <Default color={ChipColors.Red} size={ChipSizes.lg} label='Test' />,
         );
         const chip = screen.getByText('Test');
         expect(chip).toHaveClass(
-            'text-error-300 bg-error-300/10 border-error-300 px-2 text-xs leading-4 rounded-md'
+            'text-error-300 bg-error-300/10 border-error-300 px-2 text-xs leading-4 rounded-md',
         );
     });
 

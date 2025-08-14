@@ -13,7 +13,7 @@ describe('Footer component', () => {
             const links = screen.getAllByRole('link');
             expect(links[0]).toHaveAttribute(
                 'href',
-                'https://secured-finance.statuspage.io/'
+                'https://secured-finance.statuspage.io/',
             );
             expect(screen.getByText('Online')).toBeInTheDocument();
         });
@@ -24,7 +24,7 @@ describe('Footer component', () => {
             process.env.NEXT_PUBLIC_USE_PACKAGE_VERSION = 'true';
             render(<Default />);
             expect(
-                screen.getByText(`Secured Finance v${packageJson.version}`)
+                screen.getByText(`Secured Finance v${packageJson.version}`),
             ).toBeInTheDocument();
             expect(screen.getByText('(dev)')).toBeInTheDocument();
         });
@@ -34,7 +34,7 @@ describe('Footer component', () => {
             process.env.SF_ENV = 'staging';
             render(<Default />);
             expect(
-                screen.getByText(`Secured Finance v${packageJson.version}`)
+                screen.getByText(`Secured Finance v${packageJson.version}`),
             ).toBeInTheDocument();
             expect(screen.getByText('(stg)')).toBeInTheDocument();
         });
@@ -44,7 +44,7 @@ describe('Footer component', () => {
             process.env.COMMIT_HASH = '.storybook';
             render(<Default />);
             expect(
-                screen.getByText(`Secured Finance v.storybook`)
+                screen.getByText(`Secured Finance v.storybook`),
             ).toBeInTheDocument();
         });
     });
