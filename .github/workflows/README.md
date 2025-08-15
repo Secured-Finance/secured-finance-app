@@ -21,7 +21,6 @@ All workflow files follow a consistent naming pattern:
 | Workflow | File | Purpose |
 |----------|------|---------|
 | Manual: Unit Tests | `manual-test-unit.yml` | Run specific unit tests on demand |
-| Manual: CI Smoke | `manual-ci-smoke.yml` | Test CI pipeline connectivity |
 | Manual: Deploy to Environment | `manual-deploy-environment.yml` | Deploy to specific environment |
 | Manual: Release - Merge to main | `manual-release-merge-main.yml` | Merge approved changes to main branch |
 | Manual: Release - Create Tag | `manual-release-tag.yml` | Create version tag for release |
@@ -48,9 +47,6 @@ graph TD
     
     F[manual-deploy-environment] --> C
     F --> D
-    
-    G[manual-ci-smoke] --> C
-    G --> D
 ```
 
 ## Required Secrets
