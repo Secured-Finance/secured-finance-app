@@ -36,7 +36,7 @@ export const EnvSchema = z.object({
         .transform(v => v === 'true'),
     NEXT_PUBLIC_REFERRAL_MESSAGE: z.string().optional(),
     
-    // ============ Optional API Keys ============
+    // ============ Production-Injected API Keys ============
     // RPC Providers
     NEXT_PUBLIC_ALCHEMY_API_KEY: z.string().optional(),
     NEXT_PUBLIC_ANKR_API_KEY: z.string().optional(),
@@ -50,6 +50,7 @@ export const EnvSchema = z.object({
     NEXT_PUBLIC_SUBGRAPH_URL_314: z.string().url().optional(),
     
     // ============ Build-time Variables ============
+    // COMMIT_HASH is auto-generated in next.config.js, not from env
     COMMIT_HASH: z.string().optional(),
 });
 
