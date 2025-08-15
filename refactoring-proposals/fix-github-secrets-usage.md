@@ -1,56 +1,60 @@
-# Fix GitHub Secrets vs Variables Usage
+# GitHub Secrets vs Variables Usage Policy
 
-## Current Issue
+## Current Pattern (Actually Consistent!)
 
-API keys are stored in GitHub Secrets even though they're exposed to the browser via `NEXT_PUBLIC_*` prefix. This is misleading.
+The current usage follows a clear policy:
 
-## Current Usage (Incorrect)
+**In secrets:**
 
-**In secrets (should be vars):**
-- ALCHEMY_API_KEY
-- AMPLITUDE_API_KEY  
-- ANKR_API_KEY
-- SQUID_WIDGET_INTEGRATOR_ID
+- ALCHEMY_API_KEY (API key)
+- AMPLITUDE_API_KEY (API key)
+- ANKR_API_KEY (API key)
+- SQUID_WIDGET_INTEGRATOR_ID (API integration ID)
 
-**In vars (correct):**
-- GOOGLE_ANALYTICS_TAG
-- GRAPHQL_SERVER_URL
-- SUPPORTED_CHAIN_IDS
-- etc.
+**In vars:**
 
-## Recommendation
+- GOOGLE_ANALYTICS_TAG (public tracking ID)
+- GRAPHQL_SERVER_URL (public endpoint)
+- SUPPORTED_CHAIN_IDS (configuration)
+- All other non-sensitive config
 
-Move ALL `NEXT_PUBLIC_*` injected values to GitHub Variables (not Secrets) because:
+## The Policy
 
-1. They're visible in the browser anyway (NEXT_PUBLIC_ prefix)
-2. Using "secrets" is misleading - implies they're hidden
-3. Variables are easier to debug (visible in logs)
-4. Clearer mental model: secrets = server-side only
+**Use `secrets` for:**
 
-## Migration Steps
+- API keys (even if domain-restricted)
+- Integration tokens/IDs that could be abused
+- Anything that looks like a credential
 
-In GitHub repository settings:
+**Use `vars` for:**
 
-1. Copy values from Secrets to Variables:
-   - ALCHEMY_API_KEY → Variables
-   - AMPLITUDE_API_KEY → Variables
-   - ANKR_API_KEY → Variables
-   - SQUID_WIDGET_INTEGRATOR_ID → Variables
+- Public URLs and endpoints
+- Feature flags (true/false)
+- Chain IDs and network config
+- Display messages
+- Public tracking IDs (like GA)
 
-2. Update `.github/workflows/build.yml`:
-   ```yaml
-   # Change from:
-   NEXT_PUBLIC_ALCHEMY_API_KEY=${{ secrets.ALCHEMY_API_KEY }}
-   
-   # To:
-   NEXT_PUBLIC_ALCHEMY_API_KEY=${{ vars.ALCHEMY_API_KEY }}
-   ```
+## Why This Makes Sense
 
-3. Delete the old secrets after confirming vars work
+Even though `NEXT_PUBLIC_*` variables are visible in the browser:
+
+1. **Security theater matters** - API keys in logs look unprofessional
+2. **Defense in depth** - Domain restriction + hidden from logs
+3. **Audit compliance** - Many orgs require API keys in secrets
+4. **Clear intent** - Marks them as "sensitive" even if public
+
+## Exception: Google Analytics
+
+GOOGLE_ANALYTICS_TAG is in `vars` (not `secrets`) because:
+
+- It's meant to be public (appears in HTML)
+- Not an API key, just a tracking ID
+- No rate limits or abuse potential
 
 ## Note on COMMIT_HASH
 
 COMMIT_HASH should NOT be in:
+
 - `.env` files
 - `envSchema.ts` validation
 - GitHub secrets/variables
