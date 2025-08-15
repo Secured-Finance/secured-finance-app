@@ -1,0 +1,69 @@
+name: "Auto: PR Build & Deploy"
+
+on:
+  pull_request:
+    types:
+    - opened
+    - synchronize
+    - reopened
+
+jobs:
+  identify-env:
+    name: Identify the environment
+    uses: ./.github/workflows/reusable-util-identify-env.yml
+    with:
+      branch_name: ${{ github.ref }}
+
+  build-and-test-all:
+    name: Build and Test
+    needs: identify-env
+    uses: ./.github/workflows/reusable-build-webapp.yml
+    with:
+      artifact_name: WebApp
+      environment_name: ${{ needs.identify-env.outputs.environment_name }}
+    secrets: inherit
+
+  cypress-run:
+    name: Cypress Run Tests
+    needs: build-and-test-all
+    uses: ./.github/workflows/reusable-test-cypress.yml
+    with:
+      artifact_name: WebApp
+    secrets: inherit
+
+  publish:
+    runs-on: ubuntu-latest
+    name: Publish to Cloudflare Pages
+    permissions:
+      contents: read
+      deployments: write
+      pull-requests: write
+    needs: [build-and-test-all]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Retrieve artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: WebApp
+        path: .deploy/build
+
+    - name: Publish to Cloudflare Pages
+      uses: cloudflare/pages-action@v1
+      id: deploy
+      with:
+        apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        projectName: secured-finance-app
+        directory: .deploy/build
+        branch: ${{ github.event.pull_request.head.ref || github.ref_name }}
+
+    - name: Get the output url
+      run: echo "Deploy url is ${{ steps.deploy.outputs.url }}"
+
+    - name: Comment on PR
+      uses: mshick/add-pr-comment@v2
+      with:
+        message: |-
+          🚀 This branch can be previewed at ${{ steps.deploy.outputs.url }} or ${{ steps.deploy.outputs.alias }}
