@@ -16,7 +16,9 @@ export const EnvSchema = z.object({
     NEXT_PUBLIC_NON_SUBGRAPH_SUPPORTED_CHAIN_IDS: z
         .string()
         .optional()
-        .transform(s => s ? s.split(',').map(n => parseInt(n.trim(), 10)) : []),
+        .transform(s =>
+            s ? s.split(',').map(n => parseInt(n.trim(), 10)) : []
+        ),
 
     // ============ API Endpoints ============
     NEXT_PUBLIC_GRAPHQL_SERVER_URL: z.string().url(),
