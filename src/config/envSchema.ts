@@ -1,10 +1,14 @@
 import { z } from 'zod';
 
 // Environment schema: validates environment variables at runtime.
-// Organized to match .env file structure for clarity.
+// Order matches .env file structure for consistency.
 export const EnvSchema = z.object({
-    // ============ Required Public Defaults (.env) ============
-    // Blockchain
+    // ============ Core Configuration ============
+    SF_ENV: z
+        .enum(['development', 'staging', 'production'])
+        .default('development'),
+    
+    // Blockchain Networks
     NEXT_PUBLIC_SUPPORTED_CHAIN_IDS: z
         .string()
         .min(1)
@@ -14,15 +18,14 @@ export const EnvSchema = z.object({
         .optional()
         .transform(s => s ? s.split(',').map(n => parseInt(n.trim(), 10)) : []),
     
-    // APIs
+    // ============ API Endpoints ============
     NEXT_PUBLIC_GRAPHQL_SERVER_URL: z.string().url(),
     NEXT_PUBLIC_STABLECOIN_APP_URL: z.string().url(),
+    
+    // ============ Required API Keys ============
     NEXT_PUBLIC_WALLET_CONNECT_ID: z.string().min(1),
     
-    // App
-    SF_ENV: z
-        .enum(['development', 'staging', 'production'])
-        .default('development'),
+    // ============ Feature Flags ============
     NEXT_PUBLIC_USE_PACKAGE_VERSION: z
         .enum(['true', 'false'])
         .default('false')
@@ -33,19 +36,18 @@ export const EnvSchema = z.object({
         .transform(v => v === 'true'),
     NEXT_PUBLIC_REFERRAL_MESSAGE: z.string().optional(),
     
-    // ============ Optional Public Variables (.env) ============
+    // ============ Optional API Keys ============
+    // RPC Providers
+    NEXT_PUBLIC_ALCHEMY_API_KEY: z.string().optional(),
+    NEXT_PUBLIC_ANKR_API_KEY: z.string().optional(),
+    
     // Analytics
     NEXT_PUBLIC_GOOGLE_ANALYTICS_TAG: z.string().optional(),
     NEXT_PUBLIC_AMPLITUDE_API_KEY: z.string().optional(),
     
-    // Integrations
+    // Third-party Integrations
     NEXT_PUBLIC_SQUID_WIDGET_INTEGRATOR_ID: z.string().optional(),
     NEXT_PUBLIC_SUBGRAPH_URL_314: z.string().url().optional(),
-    
-    // ============ Optional Secrets (.env.local) ============
-    // RPC Providers
-    NEXT_PUBLIC_ALCHEMY_API_KEY: z.string().optional(),
-    NEXT_PUBLIC_ANKR_API_KEY: z.string().optional(),
     
     // ============ Build-time Variables ============
     COMMIT_HASH: z.string().optional(),
