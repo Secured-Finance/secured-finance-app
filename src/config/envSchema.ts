@@ -7,7 +7,7 @@ export const EnvSchema = z.object({
     SF_ENV: z
         .enum(['development', 'staging', 'production'])
         .default('development'),
-    
+
     // Blockchain Networks
     NEXT_PUBLIC_SUPPORTED_CHAIN_IDS: z
         .string()
@@ -17,14 +17,14 @@ export const EnvSchema = z.object({
         .string()
         .optional()
         .transform(s => s ? s.split(',').map(n => parseInt(n.trim(), 10)) : []),
-    
+
     // ============ API Endpoints ============
     NEXT_PUBLIC_GRAPHQL_SERVER_URL: z.string().url(),
     NEXT_PUBLIC_STABLECOIN_APP_URL: z.string().url(),
-    
+
     // ============ Required API Keys ============
     NEXT_PUBLIC_WALLET_CONNECT_ID: z.string().min(1),
-    
+
     // ============ Feature Flags ============
     NEXT_PUBLIC_USE_PACKAGE_VERSION: z
         .enum(['true', 'false'])
@@ -35,23 +35,19 @@ export const EnvSchema = z.object({
         .default('false')
         .transform(v => v === 'true'),
     NEXT_PUBLIC_REFERRAL_MESSAGE: z.string().optional(),
-    
+
     // ============ Production-Injected API Keys ============
     // RPC Providers
     NEXT_PUBLIC_ALCHEMY_API_KEY: z.string().optional(),
     NEXT_PUBLIC_ANKR_API_KEY: z.string().optional(),
-    
+
     // Analytics
     NEXT_PUBLIC_GOOGLE_ANALYTICS_TAG: z.string().optional(),
     NEXT_PUBLIC_AMPLITUDE_API_KEY: z.string().optional(),
-    
+
     // Third-party Integrations
     NEXT_PUBLIC_SQUID_WIDGET_INTEGRATOR_ID: z.string().optional(),
     NEXT_PUBLIC_SUBGRAPH_URL_314: z.string().url().optional(),
-    
-    // ============ Build-time Variables ============
-    // COMMIT_HASH is auto-generated in next.config.js, not from env
-    COMMIT_HASH: z.string().optional(),
 });
 
 export type Env = z.infer<typeof EnvSchema> & {
