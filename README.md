@@ -20,35 +20,25 @@ A DeFi Trading Platform utilizing Orderbook-based Rates, facilitating the lendin
 ### Prerequisites
 
 - Node.js 18.x (use `nvm use` to switch to the correct version)
-- GitHub Personal Access Token (PAT) with `read:packages` scope for private npm packages
 
 ### Setup Steps
 
 1. Clone this repository
-2. Set up GitHub npm registry authentication:
-
-   ```bash
-   npm login --registry=https://npm.pkg.github.com
-   # Username: YOUR_GITHUB_USERNAME
-   # Password: YOUR_GITHUB_PAT
-   # Email: YOUR_EMAIL
-   ```
-
-3. Set up environment variables:
+2. Set up environment variables:
 
    ```bash
    cp .env.local.example .env.local
    # Edit .env.local and add your API keys (see Environment Variables section below)
    ```
 
-4. Install dependencies:
+3. Install dependencies:
 
    ```bash
    nvm use  # Switch to correct Node version
-   npm ci   # Clean install from package-lock.json
+   npm install  # Install dependencies
    ```
 
-5. Start development server:
+4. Start development server:
 
    ```bash
    npm run start
@@ -107,31 +97,19 @@ npm run lint:write
 npm run typecheck
 ```
 
-### Running Tests Locally (Same as CI)
+### Running Tests
 
-To run tests exactly as they run in CI:
+For most contributors, tests will automatically run in CI when you create a pull request.
+
+If you need to run tests locally (core team members):
 
 ```bash
-# Set required environment variables for tests
-export COMMIT_HASH="local-test"
+# Requires GitHub authentication for @secured-finance packages
+# See internal documentation for setup
 
-# Run tests with coverage (same as CI)
-npm run test:cov
-
-# Or run tests in watch mode for development
-npm run test
+npm run test        # Watch mode for development
+npm run test:cov    # With coverage (same as CI)
 ```
-
-**Important**: Running tests locally requires all dependencies to be installed:
-
-1. You need a GitHub Personal Access Token with `read:packages` scope for private packages
-2. Set it up with: `npm login --registry=https://npm.pkg.github.com`
-3. Then run: `npm ci` to install dependencies
-4. Finally: `npm run test:cov` to run tests
-
-Alternative options:
-- Use Docker with the provided `Dockerfile.test` and `test-local.sh` script
-- Or rely on CI results in pull requests
 
 ## 👨‍💻 Test the app
 
