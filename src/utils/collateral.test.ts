@@ -1,33 +1,188 @@
-import { calculatePercentage, computeAvailableToBorrow } from './collateral';
+import { CollateralCalculator } from './collateral';
 
 const ONE_ETH = BigInt('1000000000000000000');
 const TWO_ETH = BigInt('2000000000000000000');
 const ZERO_ETH = BigInt('0');
 
-describe('collateral.computeAvailableToBorrow', () => {
-    it('should compute the available amount to borrow with a collateral threshold of 80%', () => {
-        expect(computeAvailableToBorrow(1000, 1000, 0, 80)).toEqual(800);
-        expect(computeAvailableToBorrow(1000, 900, 10, 80)).toEqual(700);
-        expect(computeAvailableToBorrow(1000, 800, 20, 80)).toEqual(600);
-        expect(computeAvailableToBorrow(1000, 700, 30, 80)).toEqual(500);
-        expect(computeAvailableToBorrow(1000, 600, 40, 80)).toEqual(400);
-        expect(computeAvailableToBorrow(1000, 500, 50, 80)).toEqual(300);
-        expect(computeAvailableToBorrow(1000, 400, 60, 80)).toEqual(200);
-        expect(computeAvailableToBorrow(1000, 300, 70, 80)).toEqual(100);
-        expect(computeAvailableToBorrow(1000, 200, 80, 80)).toEqual(0);
+describe('CollateralCalculator', () => {
+    describe('calculatePercentage', () => {
+        it('should compute the percentage', () => {
+            expect(
+                CollateralCalculator.calculatePercentage(ONE_ETH, TWO_ETH)
+            ).toEqual(BigInt(50));
+        });
+
+        it('should return 0 when total is zero', () => {
+            expect(
+                CollateralCalculator.calculatePercentage(ONE_ETH, ZERO_ETH)
+            ).toEqual(ZERO_ETH);
+        });
     });
 
-    it('should return 0 if coverage is over threshold', () => {
-        expect(computeAvailableToBorrow(1000, 150, 85, 80)).toEqual(0);
-    });
-});
+    describe('calculateAvailableToBorrow', () => {
+        it('should compute the available amount to borrow with a collateral threshold of 80%', () => {
+            expect(
+                CollateralCalculator.calculateAvailableToBorrow(
+                    1000,
+                    1000,
+                    0,
+                    80
+                )
+            ).toEqual(800);
+            expect(
+                CollateralCalculator.calculateAvailableToBorrow(
+                    1000,
+                    900,
+                    10,
+                    80
+                )
+            ).toEqual(700);
+            expect(
+                CollateralCalculator.calculateAvailableToBorrow(
+                    1000,
+                    800,
+                    20,
+                    80
+                )
+            ).toEqual(600);
+            expect(
+                CollateralCalculator.calculateAvailableToBorrow(
+                    1000,
+                    700,
+                    30,
+                    80
+                )
+            ).toEqual(500);
+            expect(
+                CollateralCalculator.calculateAvailableToBorrow(
+                    1000,
+                    600,
+                    40,
+                    80
+                )
+            ).toEqual(400);
+            expect(
+                CollateralCalculator.calculateAvailableToBorrow(
+                    1000,
+                    500,
+                    50,
+                    80
+                )
+            ).toEqual(300);
+            expect(
+                CollateralCalculator.calculateAvailableToBorrow(
+                    1000,
+                    400,
+                    60,
+                    80
+                )
+            ).toEqual(200);
+            expect(
+                CollateralCalculator.calculateAvailableToBorrow(
+                    1000,
+                    300,
+                    70,
+                    80
+                )
+            ).toEqual(100);
+            expect(
+                CollateralCalculator.calculateAvailableToBorrow(
+                    1000,
+                    200,
+                    80,
+                    80
+                )
+            ).toEqual(0);
+        });
 
-describe('collateral.calculatePercentage', () => {
-    it('should compute the percentage', () => {
-        expect(calculatePercentage(ONE_ETH, TWO_ETH)).toEqual(BigInt(50));
+        it('should return 0 if coverage is over threshold', () => {
+            expect(
+                CollateralCalculator.calculateAvailableToBorrow(
+                    1000,
+                    150,
+                    85,
+                    80
+                )
+            ).toEqual(0);
+        });
+    });
+    describe('calculateCollateralRatio', () => {
+        it('should calculate collateral ratio correctly', () => {
+            expect(
+                CollateralCalculator.calculateCollateralRatio(1000, 500)
+            ).toBe(200);
+            expect(
+                CollateralCalculator.calculateCollateralRatio(800, 1000)
+            ).toBe(80);
+            expect(
+                CollateralCalculator.calculateCollateralRatio(1500, 750)
+            ).toBe(200);
+        });
+
+        it('should return Infinity when borrowed value is 0', () => {
+            expect(CollateralCalculator.calculateCollateralRatio(1000, 0)).toBe(
+                Infinity
+            );
+        });
+
+        it('should handle zero collateral value', () => {
+            expect(CollateralCalculator.calculateCollateralRatio(0, 500)).toBe(
+                0
+            );
+        });
     });
 
-    it('should return 0 when total is zero', () => {
-        expect(calculatePercentage(ONE_ETH, ZERO_ETH)).toEqual(ZERO_ETH);
+    describe('calculateRequiredCollateral', () => {
+        it('should calculate required collateral correctly', () => {
+            expect(
+                CollateralCalculator.calculateRequiredCollateral(1000, 80)
+            ).toBe(800);
+            expect(
+                CollateralCalculator.calculateRequiredCollateral(500, 120)
+            ).toBe(600);
+            expect(
+                CollateralCalculator.calculateRequiredCollateral(2000, 75)
+            ).toBe(1500);
+        });
+
+        it('should handle zero borrow amount', () => {
+            expect(
+                CollateralCalculator.calculateRequiredCollateral(0, 80)
+            ).toBe(0);
+        });
+
+        it('should handle zero threshold', () => {
+            expect(
+                CollateralCalculator.calculateRequiredCollateral(1000, 0)
+            ).toBe(0);
+        });
+    });
+
+    describe('calculateLiquidationPrice', () => {
+        it('should calculate liquidation price correctly', () => {
+            expect(
+                CollateralCalculator.calculateLiquidationPrice(
+                    10,
+                    1000,
+                    80,
+                    100
+                )
+            ).toBe(80);
+            expect(
+                CollateralCalculator.calculateLiquidationPrice(5, 500, 120, 200)
+            ).toBe(120);
+        });
+
+        it('should return 0 when collateral amount is 0', () => {
+            expect(
+                CollateralCalculator.calculateLiquidationPrice(0, 1000, 80, 100)
+            ).toBe(0);
+        });
+
+        it('should handle zero borrowed amount', () => {
+            expect(
+                CollateralCalculator.calculateLiquidationPrice(10, 0, 80, 100)
+            ).toBe(0);
+        });
     });
 });

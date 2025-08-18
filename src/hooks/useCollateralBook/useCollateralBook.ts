@@ -4,10 +4,10 @@ import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
 import { AssetPriceMap } from 'src/types';
 import {
+    CollateralCalculator,
     CurrencySymbol,
     ZERO_BI,
     amountFormatterFromBase,
-    computeAvailableToBorrow,
     currencyMap,
     divide,
     toCurrency,
@@ -144,12 +144,13 @@ export const useCollateralBook = (account: string | undefined) => {
                 collateral: collateralBook,
                 nonCollateral: nonCollateralBook,
                 usdCollateral: usdCollateral,
-                usdAvailableToBorrow: computeAvailableToBorrow(
-                    usdCollateral,
-                    usdUnusedCollateral,
-                    divide(coverage, 100),
-                    collateralThreshold
-                ),
+                usdAvailableToBorrow:
+                    CollateralCalculator.calculateAvailableToBorrow(
+                        usdCollateral,
+                        usdUnusedCollateral,
+                        divide(coverage, 100),
+                        collateralThreshold
+                    ),
                 usdNonCollateral: usdNonCollateral,
                 coverage: coverage,
                 collateralThreshold: collateralThreshold,

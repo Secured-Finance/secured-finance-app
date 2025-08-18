@@ -7,7 +7,7 @@ import {
     usePositions,
 } from 'src/hooks';
 import { UserAccount } from 'src/types';
-import { CurrencySymbol } from 'src/utils';
+import { CollateralCalculator, CurrencySymbol } from 'src/utils';
 
 export const useIsUnderCollateralThreshold = (address: UserAccount) => {
     const { data: markets } = useLendingMarkets();
@@ -61,13 +61,16 @@ export const useIsUnderCollateralThresholdForBorrowOrders = (
             if (side === OrderSide.LEND) return false;
 
             const currentMinDebtUnitPrice = market.currentMinDebtUnitPrice;
-            const fv = (amount * BigInt(10000)) / BigInt(price);
+            const fv = Number((amount * BigInt(10000)) / BigInt(price));
             const requiredCollateral =
-                (fv * BigInt(currentMinDebtUnitPrice)) / BigInt(10000);
+                CollateralCalculator.calculateRequiredCollateral(
+                    fv,
+                    currentMinDebtUnitPrice / 100
+                );
 
             return (
                 price < currentMinDebtUnitPrice &&
-                requiredCollateral > availableToBorrow
+                requiredCollateral > Number(availableToBorrow)
             );
         },
         [markets, address, availableToBorrow]
