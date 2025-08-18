@@ -12,6 +12,7 @@ import {
     divide,
     toCurrency,
 } from 'src/utils';
+import { LiquidationCalculator } from 'src/utils/liquidation';
 
 export interface CollateralBook {
     collateral: Partial<Record<CurrencySymbol, bigint>>;
@@ -119,9 +120,9 @@ export const useCollateralBook = (account: string | undefined) => {
                 data.collateralParameters.liquidationThresholdRate
             );
             const collateralThreshold =
-                liquidationThresholdRate === 0
-                    ? 0
-                    : 1000000 / liquidationThresholdRate;
+                LiquidationCalculator.calculateLiquidationThreshold(
+                    liquidationThresholdRate
+                );
 
             const withdrawableCollateral: CollateralBook['withdrawableCollateral'] =
                 data.withdrawableCollateral.reduce((acc, obj) => ({

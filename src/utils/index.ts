@@ -8,6 +8,7 @@ export * from './date';
 export * from './env';
 export * from './events/interface';
 export * from './fee';
+export * from './liquidation';
 export * from './formatNumbers';
 export * from './handleContractError';
 export * from './links';
