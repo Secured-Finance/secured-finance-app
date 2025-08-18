@@ -21,7 +21,6 @@ import ZcEthIcon from 'src/assets/coins/zc-eth.svg';
 import ZcFilIcon from 'src/assets/coins/zc-fil.svg';
 import ZcUsdcIcon from 'src/assets/coins/zc-usdc.svg';
 import { SvgIcon } from 'src/types';
-import { hexToString } from 'viem';
 import { ZERO_BI } from './collateral';
 import { AUSDC } from './currencies/ausdc';
 import { AXLFIL } from './currencies/axlfil';
@@ -35,6 +34,7 @@ import { USDFC } from './currencies/usdfc';
 import { WBTC } from './currencies/wbtc';
 import { WETHE } from './currencies/wethe';
 import { WPFIL } from './currencies/wpfil';
+import { CurrencyConverter } from './currencyConverter';
 import { Maturity } from './entities';
 
 BigNumberJS.set({ EXPONENTIAL_AT: 30 }); // setting to a decent limit
@@ -357,46 +357,20 @@ export type CurrencyInfo = {
     hasOrderBook: boolean;
 };
 
+export { CurrencyConverter } from './currencyConverter';
+
+// Unified conversion functions - using CurrencyConverter internally
 export const toCurrency = (ccy: CurrencySymbol) => {
-    return currencyMap[ccy].toCurrency();
+    return CurrencyConverter.symbolToContract(ccy);
 };
 
-export function toCurrencySymbol(ccy: string) {
-    switch (ccy) {
-        case CurrencySymbol.ETH:
-            return CurrencySymbol.ETH;
-        case CurrencySymbol.FIL:
-            return CurrencySymbol.FIL;
-        case CurrencySymbol.tFIL:
-            return CurrencySymbol.tFIL;
-        case CurrencySymbol.WETHe:
-            return CurrencySymbol.WETHe;
-        case CurrencySymbol.WFIL:
-            return CurrencySymbol.WFIL;
-        case CurrencySymbol.USDC:
-            return CurrencySymbol.USDC;
-        case CurrencySymbol.USDFC:
-            return CurrencySymbol.USDFC;
-        case CurrencySymbol.WBTC:
-            return CurrencySymbol.WBTC;
-        case CurrencySymbol.BTCb:
-            return CurrencySymbol.BTCb;
-        case CurrencySymbol.aUSDC:
-            return CurrencySymbol.aUSDC;
-        case CurrencySymbol.axlFIL:
-            return CurrencySymbol.axlFIL;
-        case CurrencySymbol.iFIL:
-            return CurrencySymbol.iFIL;
-        case CurrencySymbol.wpFIL:
-            return CurrencySymbol.wpFIL;
-        default:
-            return undefined;
-    }
-}
+export const toCurrencySymbol = (ccy: string) => {
+    return CurrencyConverter.stringToSymbol(ccy);
+};
 
-export function hexToCurrencySymbol(hex: string) {
-    return toCurrencySymbol(hexToString(hex as `0x${string}`, { size: 32 }));
-}
+export const hexToCurrencySymbol = (hex: string) => {
+    return CurrencyConverter.hexToSymbol(hex);
+};
 
 const convertToBlockchainUnit = (amount: number | string, ccy: Currency) => {
     const value = new BigNumberJS(amount).multipliedBy(10 ** ccy.decimals);

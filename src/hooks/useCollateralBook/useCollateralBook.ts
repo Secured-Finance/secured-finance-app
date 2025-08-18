@@ -10,7 +10,7 @@ import {
     computeAvailableToBorrow,
     currencyMap,
     divide,
-    toCurrency,
+    CurrencyConverter,
 } from 'src/utils';
 
 export interface CollateralBook {
@@ -93,7 +93,7 @@ export const useCollateralBook = (account: string | undefined) => {
                     collateralCurrencyList.map(async ccy => {
                         const withdrawableCollateral =
                             await securedFinance?.tokenVault.getWithdrawableCollateral(
-                                toCurrency(ccy),
+                                CurrencyConverter.symbolToContract(ccy),
                                 account ?? ''
                             );
                         return {
