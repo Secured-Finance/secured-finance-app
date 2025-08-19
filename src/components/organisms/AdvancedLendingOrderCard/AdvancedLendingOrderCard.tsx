@@ -42,8 +42,7 @@ import {
     ButtonProperties,
     CurrencySymbol,
     ZERO_BI,
-    amountFormatterFromBase,
-    amountFormatterToBase,
+    AmountConverter,
     calculateFee,
     divide,
     generateWalletSourceInformation,
@@ -243,7 +242,7 @@ export function AdvancedLendingOrderCard({
     }, [amount, availableToBorrow, availableToLend, side]);
 
     const handleInputChange = (v: string) => {
-        const inputValue = amountFormatterToBase[currency](Number(v));
+        const inputValue = AmountConverter.toBase(Number(v), currency);
 
         dispatch(setAmount(v === '' ? '' : inputValue.toString()));
         const available =
@@ -341,10 +340,11 @@ export function AdvancedLendingOrderCard({
                             }`}</span>
                             <span className='text-right text-primary-300'>
                                 {`${ordinaryFormat(
-                                    amountFormatterFromBase[currency](
+                                    AmountConverter.fromBase(
                                         side === OrderSide.BORROW
                                             ? availableToBorrow
-                                            : availableToLend
+                                            : availableToLend,
+                                        currency
                                     ),
                                     0,
                                     2
@@ -398,8 +398,9 @@ export function AdvancedLendingOrderCard({
                             unit={currency}
                             initialValue={
                                 amountExists
-                                    ? amountFormatterFromBase[currency](
-                                          amount
+                                    ? AmountConverter.fromBase(
+                                          amount,
+                                          currency
                                       ).toString()
                                     : ''
                             }

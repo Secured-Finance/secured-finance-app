@@ -23,6 +23,7 @@ import ZcUsdcIcon from 'src/assets/coins/zc-usdc.svg';
 import { SvgIcon } from 'src/types';
 import { hexToString } from 'viem';
 import { ZERO_BI } from './collateral';
+import { AmountConverter } from './amountConverter';
 import { AUSDC } from './currencies/ausdc';
 import { AXLFIL } from './currencies/axlfil';
 import { BTCB } from './currencies/btcb';
@@ -319,12 +320,16 @@ const getCurrencyMapAsList = () => {
     return Object.values(currencyMap).sort((a, b) => a.index - b.index);
 };
 
+export { AmountConverter } from './amountConverter';
+
+// Unified conversion functions - using AmountConverter internally
 export const amountFormatterToBase = getCurrencyMapAsList().reduce<
     Record<CurrencySymbol, (value: number) => bigint>
 >(
     (acc, ccy) => ({
         ...acc,
-        [ccy.symbol]: ccy.toBaseUnit,
+        [ccy.symbol]: (value: number) =>
+            AmountConverter.toBase(value, ccy.symbol),
     }),
     {} as Record<CurrencySymbol, (value: number) => bigint>
 );
@@ -334,7 +339,8 @@ export const amountFormatterFromBase = getCurrencyMapAsList().reduce<
 >(
     (acc, ccy) => ({
         ...acc,
-        [ccy.symbol]: ccy.fromBaseUnit,
+        [ccy.symbol]: (value: bigint) =>
+            AmountConverter.fromBase(value, ccy.symbol),
     }),
     {} as Record<CurrencySymbol, (value: bigint) => number>
 );
