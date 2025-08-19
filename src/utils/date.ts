@@ -1,3 +1,5 @@
+import { TimestampConverter } from './timestampConverter';
+
 export function isPastDate(utcTimestamp: number): boolean {
     return utcTimestamp <= Date.now() / 1000;
 }
@@ -63,9 +65,7 @@ export const getTimestampRelativeToNow = (hours: number, isFuture = false) => {
 };
 
 export const calculateTimeDifference = (timestamp: number) => {
-    const targetDate = new Date(timestamp * 1000);
-    const currentDate = new Date();
-    return currentDate.getTime() - targetDate.getTime();
+    return TimestampConverter.calculateTimeDifference(timestamp);
 };
 
 export const isMaturityPastDays = (

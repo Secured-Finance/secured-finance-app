@@ -2,7 +2,6 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { formatDate, getUTCMonthYear } from '@secured-finance/sf-core';
 import { createColumnHelper } from '@tanstack/react-table';
 import clsx from 'clsx';
-import * as dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { useCallback, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -36,6 +35,7 @@ import {
     priceYieldColumnDefinition,
     tableHeaderDefinition,
 } from 'src/utils';
+import { TimestampConverter } from 'src/utils/timestampConverter';
 import { Amount, Maturity } from 'src/utils/entities';
 
 const columnHelper = createColumnHelper<
@@ -520,4 +520,5 @@ const formatMaturity = (
     maturityTimeStamp: number,
     timeUnit: 'day' | 'hours' | 'minutes',
     currentTime: number
-) => dayjs.unix(maturityTimeStamp).diff(currentTime, timeUnit);
+) =>
+    TimestampConverter.formatMaturity(maturityTimeStamp, timeUnit, currentTime);

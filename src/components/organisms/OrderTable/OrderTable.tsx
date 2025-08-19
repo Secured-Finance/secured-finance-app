@@ -28,6 +28,7 @@ import {
     priceYieldColumnDefinition,
 } from 'src/utils';
 import { Amount, Maturity } from 'src/utils/entities';
+import { TimestampConverter } from 'src/utils/timestampConverter';
 
 export type OpenOrder = Order & { calculationDate?: number };
 
@@ -61,7 +62,7 @@ const OrderTableMobile = ({
                 const amount = row.amount;
                 const unitPrice = row.unitPrice;
                 const orderId = row.orderId;
-                const timestamp = Number(row.createdAt);
+                const timestamp = TimestampConverter.toNumber(row.createdAt);
                 const calculationDate = row.calculationDate;
 
                 return (

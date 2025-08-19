@@ -1,7 +1,6 @@
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
 import { OrderSide } from '@secured-finance/sf-client';
 import { formatDate } from '@secured-finance/sf-core';
-import * as dayjs from 'dayjs';
 import {
     CurrencySymbol,
     currencyMap,
@@ -10,6 +9,7 @@ import {
     isPastDate,
     ordinaryFormat,
 } from 'src/utils';
+import { TimestampConverter } from './timestampConverter';
 
 export const AmountCell = ({
     ccy,
@@ -65,7 +65,8 @@ const formatMaturity = (
     maturityTimeStamp: number,
     timeUnit: 'day' | 'hours' | 'minutes',
     currentTime: number
-) => dayjs.unix(maturityTimeStamp).diff(currentTime, timeUnit);
+) =>
+    TimestampConverter.formatMaturity(maturityTimeStamp, timeUnit, currentTime);
 
 export const MaturityCell = ({
     timestamp,

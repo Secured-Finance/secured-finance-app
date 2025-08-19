@@ -1,0 +1,70 @@
+import * as dayjs from 'dayjs';
+
+export class TimestampConverter {
+    static toDate(timestamp: number): Date {
+        return new Date(timestamp * 1000);
+    }
+
+    static toNumber(value: string | number | bigint): number {
+        return Number(value);
+    }
+
+    static formatTimestamp(timestamp: number): string {
+        const date = this.toDate(timestamp);
+        return new Intl.DateTimeFormat(undefined, {
+            dateStyle: 'short',
+            timeStyle: 'short',
+        }).format(date);
+    }
+
+    static formatTimestampDDMMYY(timestamp: number): string {
+        const date = this.toDate(timestamp);
+        const formattedDate = new Intl.DateTimeFormat('en-GB', {
+            day: '2-digit',
+            month: '2-digit',
+            year: '2-digit',
+        }).format(date);
+
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+
+        return `${formattedDate}, ${hours}:${minutes}`;
+    }
+
+    static formatTimestampWithMonth(timestamp: number): string {
+        const date = this.toDate(timestamp);
+        const month = new Intl.DateTimeFormat('en-US', {
+            month: 'short',
+        }).format(date);
+        const day = date.getDate();
+        const year = date.getFullYear();
+        const time = date.toLocaleTimeString('en-GB', { timeZone: 'UTC' });
+
+        return `${month} ${day}, ${year} ${time}`;
+    }
+
+    static formatTimeStampWithTimezone(timestamp: number): string {
+        const date = this.toDate(timestamp);
+        return new Intl.DateTimeFormat('en-GB', {
+            timeStyle: 'long',
+        }).format(date);
+    }
+
+    static formatMaturity(
+        maturityTimeStamp: number,
+        timeUnit: 'day' | 'hours' | 'minutes',
+        currentTime: number
+    ): number {
+        return dayjs.unix(maturityTimeStamp).diff(currentTime, timeUnit);
+    }
+
+    static calculateTimeDifference(timestamp: number): number {
+        const targetDate = this.toDate(timestamp);
+        const currentDate = new Date();
+        return currentDate.getTime() - targetDate.getTime();
+    }
+
+    static getCurrentTimestamp(): number {
+        return Math.floor(Date.now() / 1000);
+    }
+}

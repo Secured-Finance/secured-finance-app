@@ -1,5 +1,6 @@
 import { MAX_COVERAGE } from './collateral';
 import { divide } from './currencyList';
+import { TimestampConverter } from './timestampConverter';
 import { LoanValue } from './entities';
 
 export const usdFormat = (
@@ -79,45 +80,19 @@ export function formatCollateralRatio(collateral: number) {
 }
 
 export const formatTimestamp = (timestamp: number) => {
-    const date = new Date(timestamp * 1000);
-    return new Intl.DateTimeFormat(undefined, {
-        dateStyle: 'short',
-        timeStyle: 'short',
-    }).format(date);
+    return TimestampConverter.formatTimestamp(timestamp);
 };
 
 export const formatTimestampDDMMYY = (timestamp: number) => {
-    const date = new Date(timestamp * 1000);
-    const formattedDate = new Intl.DateTimeFormat('en-GB', {
-        day: '2-digit',
-        month: '2-digit',
-        year: '2-digit',
-    }).format(date);
-
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-
-    return `${formattedDate}, ${hours}:${minutes}`;
+    return TimestampConverter.formatTimestampDDMMYY(timestamp);
 };
 
 export const formatTimestampWithMonth = (timestamp: number) => {
-    const date = new Date(timestamp * 1000);
-
-    const month = new Intl.DateTimeFormat('en-US', {
-        month: 'short',
-    }).format(date);
-    const day = date.getDate();
-    const year = date.getFullYear();
-    const time = date.toLocaleTimeString('en-GB', { timeZone: 'UTC' });
-
-    return `${month} ${day}, ${year} ${time}`;
+    return TimestampConverter.formatTimestampWithMonth(timestamp);
 };
 
 export const formatTimeStampWithTimezone = (timestamp: number) => {
-    const date = new Date(timestamp * 1000);
-    return new Intl.DateTimeFormat('en-GB', {
-        timeStyle: 'long',
-    }).format(date);
+    return TimestampConverter.formatTimeStampWithTimezone(timestamp);
 };
 
 export const formatDuration = (durationMs: number) => {
