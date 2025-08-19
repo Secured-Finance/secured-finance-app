@@ -1,4 +1,4 @@
-import { getUTCMonthYear } from '@secured-finance/sf-core';
+import { MaturityConverter } from 'src/utils/maturityConverter';
 import clsx from 'clsx';
 import {
     CandlestickData,
@@ -63,7 +63,7 @@ export function HistoricalChart({
     );
     const { data: prices } = useLastPrices();
     const usdPrice = prices[currency];
-    const prettyMaturity = getUTCMonthYear(+maturity);
+    const prettyMaturity = MaturityConverter.getUTCMonthYear(+maturity);
     const VOLUME_KEY_NAME = `Vol(${currency} ${prettyMaturity})`;
     const isMobile = useBreakpoint('tablet');
     const legendArray = isMobile

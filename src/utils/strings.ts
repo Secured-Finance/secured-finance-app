@@ -1,4 +1,4 @@
-import { formatDate } from '@secured-finance/sf-core';
+import { MaturityConverter } from './maturityConverter';
 import { Option } from 'src/components/atoms';
 import { getEnvironment } from './env';
 export enum Environment {
@@ -18,7 +18,7 @@ export function getTransformMaturityOption(options: Option[]) {
             return label;
         }
 
-        return formatDate(Number(ts));
+        return MaturityConverter.formatDate(Number(ts));
     };
 }
 

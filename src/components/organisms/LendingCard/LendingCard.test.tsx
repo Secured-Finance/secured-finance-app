@@ -1,5 +1,5 @@
 import * as analytics from '@amplitude/analytics-browser';
-import { formatDate } from '@secured-finance/sf-core';
+import { MaturityConverter } from 'src/utils/maturityConverter';
 import { composeStories } from '@storybook/react';
 import { mar23Fixture } from 'src/stories/mocks/fixtures';
 import { initialStore } from 'src/stories/mocks/mockStore';
@@ -142,7 +142,9 @@ describe('LendingCard Component', () => {
             })
         );
         fireEvent.click(screen.getByText('MAR2023'));
-        const dateWithTimezone = formatDate(mar23Fixture.toNumber());
+        const dateWithTimezone = MaturityConverter.formatDate(
+            mar23Fixture.toNumber()
+        );
         expect(track).toHaveBeenCalledWith(ButtonEvents.TERM_CHANGE, {
             [ButtonProperties.TERM]: 'MAR2023',
         });

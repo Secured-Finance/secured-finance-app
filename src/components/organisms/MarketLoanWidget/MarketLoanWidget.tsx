@@ -1,4 +1,4 @@
-import { formatDate, getUTCMonthYear } from '@secured-finance/sf-core';
+import { MaturityConverter } from 'src/utils/maturityConverter';
 import { fromBytes32 } from '@secured-finance/sf-graph-client';
 import { CellContext, createColumnHelper } from '@tanstack/react-table';
 import { useRouter } from 'next/router';
@@ -117,10 +117,13 @@ export const MarketLoanWidget = ({
                     return (
                         <div className='flex flex-col justify-center text-left'>
                             <div className='typography-caption text-neutral-8'>
-                                {getUTCMonthYear(info.getValue(), true)}
+                                {MaturityConverter.getUTCMonthYear(
+                                    info.getValue(),
+                                    true
+                                )}
                             </div>
                             <div className='typography-caption text-slateGray'>
-                                {formatDate(info.getValue())}
+                                {MaturityConverter.formatDate(info.getValue())}
                             </div>
                         </div>
                     );

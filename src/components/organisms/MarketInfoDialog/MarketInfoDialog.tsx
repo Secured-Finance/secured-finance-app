@@ -1,6 +1,6 @@
 import { Dialog } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/20/solid';
-import { formatDate } from '@secured-finance/sf-core';
+import { MaturityConverter } from 'src/utils/maturityConverter';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import ArrowUpSquare from 'src/assets/icons/arrow-up-square.svg';
@@ -59,7 +59,9 @@ export const MarketInfoDialog = ({
                                             {currency}
                                         </h3>
                                         <span className='typography-mobile-body-6'>
-                                            {formatDate(maturity)}
+                                            {MaturityConverter.formatDate(
+                                                maturity
+                                            )}
                                         </span>
                                     </div>
                                 </div>

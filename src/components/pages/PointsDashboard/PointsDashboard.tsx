@@ -3,7 +3,7 @@ import {
     ShareIcon,
     TrophyIcon,
 } from '@heroicons/react/24/outline';
-import { formatDate } from '@secured-finance/sf-core';
+import { MaturityConverter } from 'src/utils/maturityConverter';
 import {
     QuestType,
     useGetQuestsQuery,
@@ -571,9 +571,9 @@ const QuestList = ({ chainId }: { chainId: number }) => {
                             )}
                             {(item.startAt || item.endAt) && (
                                 <div className='pl-2'>
-                                    {`${formatDate(
+                                    {`${MaturityConverter.formatDate(
                                         dayjs(item.startAt).unix()
-                                    )} ~ ${formatDate(
+                                    )} ~ ${MaturityConverter.formatDate(
                                         dayjs(item.endAt).unix()
                                     )}`}
                                 </div>

@@ -1,5 +1,5 @@
 import { OrderSide } from '@secured-finance/sf-client';
-import { getUTCMonthYear } from '@secured-finance/sf-core';
+import { MaturityConverter } from 'src/utils/maturityConverter';
 import clsx from 'clsx';
 import { useMemo } from 'react';
 import ErrorCircleIcon from 'src/assets/icons/error-circle.svg';
@@ -35,8 +35,8 @@ export const TableContractCell = ({
         if (variant === 'currencyOnly' || variant === 'compactCurrencyOnly')
             return `${ccy}`;
         if (variant === 'contractOnly')
-            return `${getUTCMonthYear(maturity.toNumber())}`;
-        return `${ccy}-${getUTCMonthYear(
+            return `${MaturityConverter.getUTCMonthYear(maturity.toNumber())}`;
+        return `${ccy}-${MaturityConverter.getUTCMonthYear(
             maturity.toNumber(),
             variant === 'compact'
         )}`;
