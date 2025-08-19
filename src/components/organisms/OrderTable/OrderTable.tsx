@@ -28,6 +28,7 @@ import {
     priceYieldColumnDefinition,
 } from 'src/utils';
 import { Amount, Maturity } from 'src/utils/entities';
+import { OrderTypeConverter } from 'src/utils/orderTypeConverter';
 
 export type OpenOrder = Order & { calculationDate?: number };
 
@@ -54,10 +55,7 @@ const OrderTableMobile = ({
             {data.map((row, index) => {
                 const ccy = hexToCurrencySymbol(row.currency);
                 const maturity = new Maturity(row.maturity);
-                const side =
-                    row.side.toString() === '1'
-                        ? OrderSide.BORROW
-                        : OrderSide.LEND;
+                const side = OrderTypeConverter.fromString(row.side.toString());
                 const amount = row.amount;
                 const unitPrice = row.unitPrice;
                 const orderId = row.orderId;
@@ -184,10 +182,9 @@ export const OrderTable = ({
                     const ccy = hexToCurrencySymbol(info.row.original.currency);
                     if (!ccy) return null;
 
-                    const side =
-                        info.row.original.side === 0
-                            ? OrderSide.LEND
-                            : OrderSide.BORROW;
+                    const side = OrderTypeConverter.fromNumber(
+                        info.row.original.side
+                    );
 
                     const amount = BigInt(info.row.original.amount);
                     const removeOrder = () => {

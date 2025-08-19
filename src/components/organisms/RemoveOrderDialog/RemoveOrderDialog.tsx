@@ -18,6 +18,7 @@ import {
 } from 'src/hooks';
 import { setLastMessage } from 'src/store/lastError';
 import { AddressUtils, ButtonEvents, ButtonProperties } from 'src/utils';
+import { OrderTypeConverter } from 'src/utils/orderTypeConverter';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 import { trackButtonEvent } from 'src/utils/events';
 
@@ -55,7 +56,7 @@ export const RemoveOrderDialog = ({
         [Step.remove]: {
             currentStep: Step.remove,
             nextStep: Step.processing,
-            title: side === OrderSide.BORROW ? 'Remove Borrow' : 'Remove Lend',
+            title: `Remove ${OrderTypeConverter.toDisplayString(side)}`,
             description: '',
             buttonText: 'OK',
         },
@@ -98,8 +99,9 @@ export const RemoveOrderDialog = ({
                     ...stateRecord[Step.error],
                 };
             case 'updateSide':
-                const title =
-                    side === OrderSide.BORROW ? 'Remove Borrow' : 'Remove Lend';
+                const title = `Remove ${OrderTypeConverter.toDisplayString(
+                    side
+                )}`;
                 return {
                     ...stateRecord[Step.remove],
                     title: title,

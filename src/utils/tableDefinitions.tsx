@@ -24,6 +24,7 @@ import {
     hexToCurrencySymbol,
 } from './currencyList';
 import { LoanValue, Maturity } from './entities';
+import { OrderTypeConverter } from './orderTypeConverter';
 
 export const tableHeaderDefinition =
     <TData,>(title: string, titleHint?: string, align: Alignment = 'center') =>
@@ -123,7 +124,11 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
 
             let color: ColorFormat['color'];
             if (hasSideProperty(info.row.original)) {
-                color = info.row.original.side === 1 ? 'negative' : 'positive';
+                color =
+                    OrderTypeConverter.fromNumber(info.row.original.side) ===
+                    OrderSide.BORROW
+                        ? 'negative'
+                        : 'positive';
             } else if (hasAmountProperty(info.row.original)) {
                 color = info.row.original.amount < 0 ? 'negative' : 'positive';
             } else {
@@ -186,7 +191,10 @@ export const inputAmountColumnDefinition = <T extends InputAmountColumnType>(
             if (!ccy) return null;
 
             const color: ColorFormat['color'] =
-                info.row.original.side === 1 ? 'negative' : 'positive';
+                OrderTypeConverter.fromNumber(info.row.original.side) ===
+                OrderSide.BORROW
+                    ? 'negative'
+                    : 'positive';
 
             const inputAmount =
                 info.row.original.type === 'Market' &&
@@ -236,7 +244,11 @@ export const futureValueColumnDefinition = <T extends AmountColumnType>(
 
             let color: ColorFormat['color'];
             if (hasSideProperty(info.row.original)) {
-                color = info.row.original.side === 1 ? 'negative' : 'positive';
+                color =
+                    OrderTypeConverter.fromNumber(info.row.original.side) ===
+                    OrderSide.BORROW
+                        ? 'negative'
+                        : 'positive';
             } else if (hasFutureValueProperty(info.row.original)) {
                 color =
                     info.row.original.futureValue < 0 ? 'negative' : 'positive';

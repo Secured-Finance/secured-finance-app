@@ -20,6 +20,7 @@ import {
     loanTypeColumnDefinition,
     tableHeaderDefinition,
 } from 'src/utils';
+import { OrderTypeConverter } from 'src/utils/orderTypeConverter';
 import { LoanValue, Maturity } from 'src/utils/entities';
 
 const columnHelper = createColumnHelper<Transaction>();
@@ -51,7 +52,7 @@ const priceYieldColumnDef = (
 };
 
 const getFVWithFee = (futureValue: bigint, fee: bigint, side: number) => {
-    if (side === 0) {
+    if (OrderTypeConverter.fromNumber(side) === OrderSide.LEND) {
         return futureValue - fee;
     }
     return futureValue + fee;
@@ -67,10 +68,7 @@ const MyTransactionsTableMobile = ({
             {data.map((row, index) => {
                 const ccy = hexToCurrencySymbol(row.currency);
                 const maturity = new Maturity(row.maturity);
-                const side =
-                    row.side.toString() === '1'
-                        ? OrderSide.BORROW
-                        : OrderSide.LEND;
+                const side = OrderTypeConverter.fromString(row.side.toString());
                 const amount = row.amount;
                 const averagePrice = row.averagePrice;
                 const futureValue = row.futureValue;
