@@ -3,43 +3,28 @@ import { fromBytes32 } from '@secured-finance/sf-graph-client';
 import { hexToString } from 'viem';
 import { CurrencySymbol, currencyMap } from './currencyList';
 
+let ALLOWED_SYMBOLS: Set<string> | null = null;
+
+function getAllowedSymbols(): Set<string> {
+    if (!ALLOWED_SYMBOLS) {
+        ALLOWED_SYMBOLS = new Set(
+            Object.values(CurrencySymbol) as CurrencySymbol[]
+        );
+    }
+    return ALLOWED_SYMBOLS;
+}
+
 export class CurrencyConverter {
     static hexToSymbol(hex: string): CurrencySymbol | undefined {
         const symbolString = hexToString(hex as `0x${string}`, { size: 32 });
-        return this.stringToSymbol(symbolString);
+        return this.parseSymbol(symbolString);
     }
 
-    static stringToSymbol(str: string): CurrencySymbol | undefined {
-        switch (str) {
-            case CurrencySymbol.ETH:
-                return CurrencySymbol.ETH;
-            case CurrencySymbol.FIL:
-                return CurrencySymbol.FIL;
-            case CurrencySymbol.tFIL:
-                return CurrencySymbol.tFIL;
-            case CurrencySymbol.WETHe:
-                return CurrencySymbol.WETHe;
-            case CurrencySymbol.WFIL:
-                return CurrencySymbol.WFIL;
-            case CurrencySymbol.USDC:
-                return CurrencySymbol.USDC;
-            case CurrencySymbol.USDFC:
-                return CurrencySymbol.USDFC;
-            case CurrencySymbol.WBTC:
-                return CurrencySymbol.WBTC;
-            case CurrencySymbol.BTCb:
-                return CurrencySymbol.BTCb;
-            case CurrencySymbol.aUSDC:
-                return CurrencySymbol.aUSDC;
-            case CurrencySymbol.axlFIL:
-                return CurrencySymbol.axlFIL;
-            case CurrencySymbol.iFIL:
-                return CurrencySymbol.iFIL;
-            case CurrencySymbol.wpFIL:
-                return CurrencySymbol.wpFIL;
-            default:
-                return undefined;
-        }
+    static parseSymbol(str: string): CurrencySymbol | undefined {
+        if (!str) return undefined;
+        return getAllowedSymbols().has(str)
+            ? (str as CurrencySymbol)
+            : undefined;
     }
 
     static symbolToContract(symbol: CurrencySymbol): Currency {
@@ -56,15 +41,13 @@ export class CurrencyConverter {
         return symbols.map(symbol => this.symbolToContract(symbol));
     }
 
-    static batchStringToSymbol(
-        strings: string[]
-    ): (CurrencySymbol | undefined)[] {
-        return strings.map(str => this.stringToSymbol(str));
+    static batchParseSymbol(strings: string[]): (CurrencySymbol | undefined)[] {
+        return strings.map(str => this.parseSymbol(str));
     }
 
     static bytes32ToSymbol(bytes32: string): CurrencySymbol | undefined {
         const symbolString = fromBytes32(bytes32);
-        return this.stringToSymbol(symbolString);
+        return this.parseSymbol(symbolString);
     }
 
     static batchBytes32ToSymbol(

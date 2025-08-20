@@ -365,7 +365,7 @@ export const toCurrency = (ccy: CurrencySymbol) => {
 };
 
 export const toCurrencySymbol = (ccy: string) => {
-    return CurrencyConverter.stringToSymbol(ccy);
+    return CurrencyConverter.parseSymbol(ccy);
 };
 
 export const hexToCurrencySymbol = (hex: string) => {

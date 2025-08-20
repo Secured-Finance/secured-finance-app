@@ -31,25 +31,25 @@ describe('CurrencyConverter', () => {
         });
     });
 
-    describe('stringToSymbol', () => {
+    describe('parseSymbol', () => {
         it('should convert valid strings to currency symbols', () => {
-            expect(CurrencyConverter.stringToSymbol('ETH')).toBe(
+            expect(CurrencyConverter.parseSymbol('ETH')).toBe(
                 CurrencySymbol.ETH
             );
-            expect(CurrencyConverter.stringToSymbol('USDC')).toBe(
+            expect(CurrencyConverter.parseSymbol('USDC')).toBe(
                 CurrencySymbol.USDC
             );
-            expect(CurrencyConverter.stringToSymbol('WBTC')).toBe(
+            expect(CurrencyConverter.parseSymbol('WBTC')).toBe(
                 CurrencySymbol.WBTC
             );
-            expect(CurrencyConverter.stringToSymbol('FIL')).toBe(
+            expect(CurrencyConverter.parseSymbol('FIL')).toBe(
                 CurrencySymbol.FIL
             );
         });
 
         it('should return undefined for invalid strings', () => {
-            expect(CurrencyConverter.stringToSymbol('INVALID')).toBeUndefined();
-            expect(CurrencyConverter.stringToSymbol('')).toBeUndefined();
+            expect(CurrencyConverter.parseSymbol('INVALID')).toBeUndefined();
+            expect(CurrencyConverter.parseSymbol('')).toBeUndefined();
         });
     });
 
@@ -95,10 +95,10 @@ describe('CurrencyConverter', () => {
         });
     });
 
-    describe('batchStringToSymbol', () => {
+    describe('batchParseSymbol', () => {
         it('should convert array of strings to currency symbols', () => {
             const strings = ['ETH', 'USDC', 'INVALID'];
-            const result = CurrencyConverter.batchStringToSymbol(strings);
+            const result = CurrencyConverter.batchParseSymbol(strings);
             expect(result).toEqual([
                 CurrencySymbol.ETH,
                 CurrencySymbol.USDC,
