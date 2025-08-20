@@ -1,0 +1,1123 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "currentMaturity",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "nextMaturity",
+        "type": "uint256"
+      }
+    ],
+    "name": "AutoRollLogAlreadyUpdated",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "CompoundFactorIsZero",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "CurrencyAlreadyInitialized",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InitialCompoundFactorAlreadyFinalized",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InsufficientBalance",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InsufficientLockedBalance",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidAmount",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidMaturity",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidOrderFeeRate",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      }
+    ],
+    "name": "MissingAddress",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "maturity",
+        "type": "uint256"
+      }
+    ],
+    "name": "NoCompoundFactorExists",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      }
+    ],
+    "name": "OnlyAcceptedContract",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ResidualAmountIsNotZero",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ResolverAlreadyRegistered",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "UnitPriceIsZero",
+    "type": "error"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "ccy",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "lendingCompoundFactor",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "borrowingCompoundFactor",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "unitPrice",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "currentMaturity",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "previousMaturity",
+        "type": "uint256"
+      }
+    ],
+    "name": "AutoRollExecuted",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "ccy",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      }
+    ],
+    "name": "BalanceLocked",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "ccy",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      }
+    ],
+    "name": "BalanceUnlocked",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "name",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "destination",
+        "type": "address"
+      }
+    ],
+    "name": "CacheUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "version",
+        "type": "uint8"
+      }
+    ],
+    "name": "Initialized",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "ccy",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "int256",
+        "name": "value",
+        "type": "int256"
+      }
+    ],
+    "name": "Transfer",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "buildCache",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "int256",
+        "name": "_balance",
+        "type": "int256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_fromMaturity",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_toMaturity",
+        "type": "uint256"
+      }
+    ],
+    "name": "calculateBalanceFluctuationByAutoRolls",
+    "outputs": [
+      {
+        "internalType": "int256",
+        "name": "fluctuation",
+        "type": "int256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_basisMaturity",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_destinationMaturity",
+        "type": "uint256"
+      },
+      {
+        "internalType": "int256",
+        "name": "_futureValue",
+        "type": "int256"
+      }
+    ],
+    "name": "calculateFVFromFV",
+    "outputs": [
+      {
+        "internalType": "int256",
+        "name": "",
+        "type": "int256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_basisMaturity",
+        "type": "uint256"
+      },
+      {
+        "internalType": "int256",
+        "name": "_genesisValue",
+        "type": "int256"
+      }
+    ],
+    "name": "calculateFVFromGV",
+    "outputs": [
+      {
+        "internalType": "int256",
+        "name": "",
+        "type": "int256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_basisMaturity",
+        "type": "uint256"
+      },
+      {
+        "internalType": "int256",
+        "name": "_futureValue",
+        "type": "int256"
+      }
+    ],
+    "name": "calculateGVFromFV",
+    "outputs": [
+      {
+        "internalType": "int256",
+        "name": "",
+        "type": "int256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maturity",
+        "type": "uint256"
+      }
+    ],
+    "name": "cleanUpBalance",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      }
+    ],
+    "name": "decimals",
+    "outputs": [
+      {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maturity",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_nextMaturity",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_unitPrice",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_orderFeeRate",
+        "type": "uint256"
+      }
+    ],
+    "name": "executeAutoRoll",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maturity",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      },
+      {
+        "internalType": "int256",
+        "name": "_amountInFV",
+        "type": "int256"
+      }
+    ],
+    "name": "executeForcedReset",
+    "outputs": [
+      {
+        "internalType": "int256",
+        "name": "removedAmountInFV",
+        "type": "int256"
+      },
+      {
+        "internalType": "int256",
+        "name": "balance",
+        "type": "int256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      }
+    ],
+    "name": "executeForcedReset",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maturity",
+        "type": "uint256"
+      }
+    ],
+    "name": "getAutoRollLog",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "unitPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "lendingCompoundFactor",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "borrowingCompoundFactor",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "next",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "prev",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct AutoRollLog",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maturity",
+        "type": "uint256"
+      }
+    ],
+    "name": "getBalance",
+    "outputs": [
+      {
+        "internalType": "int256",
+        "name": "",
+        "type": "int256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maturity",
+        "type": "uint256"
+      }
+    ],
+    "name": "getBalanceFluctuationByAutoRolls",
+    "outputs": [
+      {
+        "internalType": "int256",
+        "name": "fluctuation",
+        "type": "int256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getBorrowingCompoundFactor",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getCurrentMaturity",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getLatestAutoRollLog",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "unitPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "lendingCompoundFactor",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "borrowingCompoundFactor",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "next",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "prev",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct AutoRollLog",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getLendingCompoundFactor",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maturity",
+        "type": "uint256"
+      }
+    ],
+    "name": "getMaturityGenesisValue",
+    "outputs": [
+      {
+        "internalType": "int256",
+        "name": "",
+        "type": "int256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getRevision",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getTotalBorrowingSupply",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getTotalLendingSupply",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getTotalLockedBalance",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_resolver",
+        "type": "address"
+      }
+    ],
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint8",
+        "name": "_decimals",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_compoundFactor",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maturity",
+        "type": "uint256"
+      }
+    ],
+    "name": "initializeCurrencySetting",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maturity",
+        "type": "uint256"
+      }
+    ],
+    "name": "isAutoRolled",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      }
+    ],
+    "name": "isInitialized",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "isResolverCached",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "lock",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "lockedAmount",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "requiredContracts",
+    "outputs": [
+      {
+        "internalType": "bytes32[]",
+        "name": "contracts",
+        "type": "bytes32[]"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "resolver",
+    "outputs": [
+      {
+        "internalType": "contract IAddressResolver",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "_sender",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_receiver",
+        "type": "address"
+      },
+      {
+        "internalType": "int256",
+        "name": "_amount",
+        "type": "int256"
+      }
+    ],
+    "name": "transferFrom",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "unlock",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint8",
+        "name": "_decimals",
+        "type": "uint8"
+      }
+    ],
+    "name": "updateDecimals",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_basisMaturity",
+        "type": "uint256"
+      },
+      {
+        "internalType": "int256",
+        "name": "_fvAmount",
+        "type": "int256"
+      }
+    ],
+    "name": "updateGenesisValueWithFutureValue",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_basisMaturity",
+        "type": "uint256"
+      }
+    ],
+    "name": "updateGenesisValueWithResidualAmount",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_unitPrice",
+        "type": "uint256"
+      }
+    ],
+    "name": "updateInitialCompoundFactor",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

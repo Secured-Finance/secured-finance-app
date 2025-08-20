@@ -1,0 +1,994 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_resolver",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      }
+    ],
+    "name": "MissingAddress",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      }
+    ],
+    "name": "OnlyAcceptedContract",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ResolverAlreadyRegistered",
+    "type": "error"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "name",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "destination",
+        "type": "address"
+      }
+    ],
+    "name": "CacheUpdated",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "buildCache",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getBestBorrowUnitPrices",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getBestLendUnitPrices",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maturity",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_start",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_limit",
+        "type": "uint256"
+      }
+    ],
+    "name": "getBorrowOrderBook",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "unitPrices",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "amounts",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "quantities",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "next",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maturity",
+        "type": "uint256"
+      }
+    ],
+    "name": "getItayoseEstimation",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "openingUnitPrice",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lastLendUnitPrice",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lastBorrowUnitPrice",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "totalOffsetAmount",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maturity",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_start",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_limit",
+        "type": "uint256"
+      }
+    ],
+    "name": "getLendOrderBook",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "unitPrices",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "amounts",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "quantities",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "next",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maturity",
+        "type": "uint256"
+      }
+    ],
+    "name": "getOrderBookDetail",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "bytes32",
+            "name": "ccy",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maturity",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "bestLendUnitPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "bestBorrowUnitPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "marketUnitPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "blockUnitPriceHistory",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "lastBlockUnitPriceTimestamp",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxLendUnitPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "minBorrowUnitPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "openingUnitPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "openingDate",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "preOpeningDate",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "currentMinDebtUnitPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isReady",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct LendingMarketReader.OrderBookDetail",
+        "name": "orderBookDetail",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getOrderBookDetails",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "bytes32",
+            "name": "ccy",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maturity",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "bestLendUnitPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "bestBorrowUnitPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "marketUnitPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "blockUnitPriceHistory",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "lastBlockUnitPriceTimestamp",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxLendUnitPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "minBorrowUnitPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "openingUnitPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "openingDate",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "preOpeningDate",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "currentMinDebtUnitPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isReady",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct LendingMarketReader.OrderBookDetail[]",
+        "name": "orderBookDetails",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32[]",
+        "name": "_ccys",
+        "type": "bytes32[]"
+      }
+    ],
+    "name": "getOrderBookDetails",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "bytes32",
+            "name": "ccy",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maturity",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "bestLendUnitPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "bestBorrowUnitPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "marketUnitPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "blockUnitPriceHistory",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "lastBlockUnitPriceTimestamp",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxLendUnitPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "minBorrowUnitPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "openingUnitPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "openingDate",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "preOpeningDate",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "currentMinDebtUnitPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isReady",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct LendingMarketReader.OrderBookDetail[]",
+        "name": "orderBookDetails",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maturity",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      }
+    ],
+    "name": "getOrders",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint48",
+            "name": "orderId",
+            "type": "uint48"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "ccy",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maturity",
+            "type": "uint256"
+          },
+          {
+            "internalType": "enum ProtocolTypes.Side",
+            "name": "side",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "unitPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "timestamp",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isPreOrder",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct LendingMarketReader.Order[]",
+        "name": "activeOrders",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint48",
+            "name": "orderId",
+            "type": "uint48"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "ccy",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maturity",
+            "type": "uint256"
+          },
+          {
+            "internalType": "enum ProtocolTypes.Side",
+            "name": "side",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "unitPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "timestamp",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isPreOrder",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct LendingMarketReader.Order[]",
+        "name": "inactiveOrders",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32[]",
+        "name": "_ccys",
+        "type": "bytes32[]"
+      },
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      }
+    ],
+    "name": "getOrders",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint48",
+            "name": "orderId",
+            "type": "uint48"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "ccy",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maturity",
+            "type": "uint256"
+          },
+          {
+            "internalType": "enum ProtocolTypes.Side",
+            "name": "side",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "unitPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "timestamp",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isPreOrder",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct LendingMarketReader.Order[]",
+        "name": "activeOrders",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint48",
+            "name": "orderId",
+            "type": "uint48"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "ccy",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maturity",
+            "type": "uint256"
+          },
+          {
+            "internalType": "enum ProtocolTypes.Side",
+            "name": "side",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "unitPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "timestamp",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isPreOrder",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct LendingMarketReader.Order[]",
+        "name": "inactiveOrders",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      }
+    ],
+    "name": "getOrders",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint48",
+            "name": "orderId",
+            "type": "uint48"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "ccy",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maturity",
+            "type": "uint256"
+          },
+          {
+            "internalType": "enum ProtocolTypes.Side",
+            "name": "side",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "unitPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "timestamp",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isPreOrder",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct LendingMarketReader.Order[]",
+        "name": "activeOrders",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint48",
+            "name": "orderId",
+            "type": "uint48"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "ccy",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maturity",
+            "type": "uint256"
+          },
+          {
+            "internalType": "enum ProtocolTypes.Side",
+            "name": "side",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "unitPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "timestamp",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isPreOrder",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct LendingMarketReader.Order[]",
+        "name": "inactiveOrders",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32[]",
+        "name": "_ccys",
+        "type": "bytes32[]"
+      },
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      }
+    ],
+    "name": "getPositions",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "bytes32",
+            "name": "ccy",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maturity",
+            "type": "uint256"
+          },
+          {
+            "internalType": "int256",
+            "name": "presentValue",
+            "type": "int256"
+          },
+          {
+            "internalType": "int256",
+            "name": "futureValue",
+            "type": "int256"
+          }
+        ],
+        "internalType": "struct LendingMarketReader.Position[]",
+        "name": "positions",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_ccy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      }
+    ],
+    "name": "getPositions",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "bytes32",
+            "name": "ccy",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maturity",
+            "type": "uint256"
+          },
+          {
+            "internalType": "int256",
+            "name": "presentValue",
+            "type": "int256"
+          },
+          {
+            "internalType": "int256",
+            "name": "futureValue",
+            "type": "int256"
+          }
+        ],
+        "internalType": "struct LendingMarketReader.Position[]",
+        "name": "positions",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "isResolverCached",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "requiredContracts",
+    "outputs": [
+      {
+        "internalType": "bytes32[]",
+        "name": "contracts",
+        "type": "bytes32[]"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "resolver",
+    "outputs": [
+      {
+        "internalType": "contract IAddressResolver",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]
