@@ -27,12 +27,12 @@ import {
 import { RootState } from 'src/store/types';
 import { MaturityOptionList, OrderSideMap } from 'src/types';
 import {
+    amountFormatterFromBase,
+    amountFormatterToBase,
     ButtonEvents,
     ButtonProperties,
     CurrencySymbol,
     ZERO_BI,
-    amountFormatterFromBase,
-    amountFormatterToBase,
     formatLoanValue,
     generateWalletSourceInformation,
     getAmountValidation,
@@ -197,7 +197,7 @@ export const LendingCard = ({
                                         v === ''
                                             ? ''
                                             : amountFormatterToBase[currency](
-                                                  Number(v)
+                                                  v
                                               ).toString()
                                     )
                                 )

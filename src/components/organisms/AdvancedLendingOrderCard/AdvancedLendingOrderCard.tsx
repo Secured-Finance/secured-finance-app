@@ -38,11 +38,12 @@ import {
 import { RootState } from 'src/store/types';
 import { OrderSideMap, OrderType, OrderTypeOptions } from 'src/types';
 import {
+    amountFormatterFromBase,
+    amountFormatterToBase,
     ButtonEvents,
     ButtonProperties,
     CurrencySymbol,
     ZERO_BI,
-    AmountConverter,
     calculateFee,
     divide,
     generateWalletSourceInformation,
@@ -242,7 +243,7 @@ export function AdvancedLendingOrderCard({
     }, [amount, availableToBorrow, availableToLend, side]);
 
     const handleInputChange = (v: string) => {
-        const inputValue = AmountConverter.toBase(Number(v), currency);
+        const inputValue = amountFormatterToBase[currency](v);
 
         dispatch(setAmount(v === '' ? '' : inputValue.toString()));
         const available =
@@ -340,11 +341,10 @@ export function AdvancedLendingOrderCard({
                             }`}</span>
                             <span className='text-right text-primary-300'>
                                 {`${ordinaryFormat(
-                                    AmountConverter.fromBase(
+                                    amountFormatterFromBase[currency](
                                         side === OrderSide.BORROW
                                             ? availableToBorrow
-                                            : availableToLend,
-                                        currency
+                                            : availableToLend
                                     ),
                                     0,
                                     2
@@ -398,9 +398,8 @@ export function AdvancedLendingOrderCard({
                             unit={currency}
                             initialValue={
                                 amountExists
-                                    ? AmountConverter.fromBase(
-                                          amount,
-                                          currency
+                                    ? amountFormatterFromBase[currency](
+                                          amount
                                       ).toString()
                                     : ''
                             }

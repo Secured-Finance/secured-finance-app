@@ -125,9 +125,7 @@ export const WithdrawCollateral = ({
 
     useEffect(() => {
         if (!isFullCoverage) {
-            setCollateralBigInt(
-                amountFormatterToBase[asset](Number(collateral ?? ''))
-            );
+            setCollateralBigInt(amountFormatterToBase[asset](collateral ?? ''));
         } else {
             setCollateralBigInt(
                 collateralList[asset]?.availableFullValue ?? ZERO_BI

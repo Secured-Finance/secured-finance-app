@@ -5,8 +5,23 @@ export class AmountConverter {
         return currencyMap[currency].fromBaseUnit(amount);
     }
 
-    static toBase(amount: number, currency: CurrencySymbol): bigint {
-        return currencyMap[currency].toBaseUnit(amount);
+    static toBase(input: string | number, currency: CurrencySymbol): bigint {
+        if (typeof input === 'string') {
+            // Handle edge cases for user input
+            if (!input || input === '.' || input === '') {
+                return BigInt(0);
+            }
+
+            // Parse string to number, handling precision
+            const parsed = parseFloat(input);
+            if (isNaN(parsed)) {
+                return BigInt(0);
+            }
+
+            return currencyMap[currency].toBaseUnit(parsed);
+        }
+
+        return currencyMap[currency].toBaseUnit(input);
     }
 
     static formatWithPrecision(
@@ -29,7 +44,7 @@ export class AmountConverter {
     }
 
     static batchToBase(
-        amounts: number[],
+        amounts: (string | number)[],
         currencies: CurrencySymbol[]
     ): bigint[] {
         return amounts.map((amount, index) =>

@@ -45,6 +45,34 @@ describe('AmountConverter', () => {
             const result = AmountConverter.toBase(1.5, CurrencySymbol.ETH);
             expect(result.toString()).toBe('1500000000000000000');
         });
+
+        it('should handle string input', () => {
+            const result = AmountConverter.toBase('1.5', CurrencySymbol.ETH);
+            expect(result.toString()).toBe('1500000000000000000');
+        });
+
+        it('should handle empty string input', () => {
+            const result = AmountConverter.toBase('', CurrencySymbol.ETH);
+            expect(result.toString()).toBe('0');
+        });
+
+        it('should handle dot-only input', () => {
+            const result = AmountConverter.toBase('.', CurrencySymbol.ETH);
+            expect(result.toString()).toBe('0');
+        });
+
+        it('should handle invalid string input', () => {
+            const result = AmountConverter.toBase(
+                'invalid',
+                CurrencySymbol.ETH
+            );
+            expect(result.toString()).toBe('0');
+        });
+
+        it('should handle partial decimal input', () => {
+            const result = AmountConverter.toBase('0.5', CurrencySymbol.ETH);
+            expect(result.toString()).toBe('500000000000000000');
+        });
     });
 
     describe('formatWithPrecision', () => {

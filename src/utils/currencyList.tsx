@@ -320,18 +320,15 @@ const getCurrencyMapAsList = () => {
     return Object.values(currencyMap).sort((a, b) => a.index - b.index);
 };
 
-export { AmountConverter } from './amountConverter';
-
-// Unified conversion functions - using AmountConverter internally
 export const amountFormatterToBase = getCurrencyMapAsList().reduce<
-    Record<CurrencySymbol, (value: number) => bigint>
+    Record<CurrencySymbol, (value: string | number) => bigint>
 >(
     (acc, ccy) => ({
         ...acc,
-        [ccy.symbol]: (value: number) =>
+        [ccy.symbol]: (value: string | number) =>
             AmountConverter.toBase(value, ccy.symbol),
     }),
-    {} as Record<CurrencySymbol, (value: number) => bigint>
+    {} as Record<CurrencySymbol, (value: string | number) => bigint>
 );
 
 export const amountFormatterFromBase = getCurrencyMapAsList().reduce<
