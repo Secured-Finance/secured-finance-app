@@ -58,6 +58,14 @@ jobs:
         env:
           NPM_AUTH_TOKEN: ${{ secrets.PAT }}
 
+      - name: Generate Wagmi Code
+        run: npm run codegen:wagmi
+        env:
+          SF_ENV: ${{ vars.SF_ENV }}
+
+      - name: Verify Generated Code is Up-to-Date
+        run: git diff --exit-code || (echo "Generated files out of sync! Run 'npm run codegen:wagmi' and commit the changes." && exit 1)
+
       - run: |
           cat <<'EOF' > .env.local
           NEXT_PUBLIC_ALCHEMY_API_KEY=${{ secrets.ALCHEMY_API_KEY }}
