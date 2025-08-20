@@ -1,5 +1,4 @@
 import { OrderSide } from '@secured-finance/sf-client';
-import { MaturityConverter } from 'src/utils/maturityConverter';
 import clsx from 'clsx';
 import { useMemo } from 'react';
 import ErrorCircleIcon from 'src/assets/icons/error-circle.svg';
@@ -11,6 +10,7 @@ import {
     hexToCurrencySymbol,
     isMaturityPastDays,
     isPastDate,
+    MaturityConverter,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
@@ -35,9 +35,9 @@ export const TableContractCell = ({
         if (variant === 'currencyOnly' || variant === 'compactCurrencyOnly')
             return `${ccy}`;
         if (variant === 'contractOnly')
-            return `${MaturityConverter.getUTCMonthYear(maturity.toNumber())}`;
-        return `${ccy}-${MaturityConverter.getUTCMonthYear(
-            maturity.toNumber(),
+            return `${MaturityConverter.toUTCMonthYear(maturity)}`;
+        return `${ccy}-${MaturityConverter.toUTCMonthYear(
+            maturity,
             variant === 'compact'
         )}`;
     }, [ccy, maturity, variant]);

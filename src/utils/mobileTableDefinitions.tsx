@@ -81,7 +81,7 @@ export const MaturityCell = ({
     const currentTime = Date.now();
     const dayToMaturity = formatMaturity(timestamp, 'day', currentTime);
 
-    const firstLine = MaturityConverter.formatDate(timestamp);
+    const firstLine = MaturityConverter.toDateString(timestamp);
     let secondLine = '';
 
     if (!isPastDate(timestamp)) {

@@ -1,30 +1,83 @@
 import { MaturityConverter } from './maturityConverter';
+import { Maturity } from './entities';
 
 describe('MaturityConverter', () => {
-    const DEC_2022_TIMESTAMP = 1669852800; // Dec 1, 2022 00:00:00 UTC
+    const testTimestamp = 1735689600; // 2025-01-01 00:00:00 UTC
+    const testMaturity = new Maturity(testTimestamp);
 
-    describe('getUTCMonthYear', () => {
-        it('should return 2-digit year when numeric is false/undefined', () => {
-            expect(MaturityConverter.getUTCMonthYear(DEC_2022_TIMESTAMP)).toBe(
-                'DEC22'
-            );
-            expect(
-                MaturityConverter.getUTCMonthYear(DEC_2022_TIMESTAMP, false)
-            ).toBe('DEC22');
+    describe('fromInput', () => {
+        it('should create Maturity from string', () => {
+            const result = MaturityConverter.fromInput('1735689600');
+            expect(result).toBeInstanceOf(Maturity);
+            expect(result.toNumber()).toBe(1735689600);
         });
 
-        it('should return 4-digit year when numeric is true', () => {
-            expect(
-                MaturityConverter.getUTCMonthYear(DEC_2022_TIMESTAMP, true)
-            ).toBe('DEC2022');
+        it('should create Maturity from number', () => {
+            const result = MaturityConverter.fromInput(1735689600);
+            expect(result).toBeInstanceOf(Maturity);
+            expect(result.toNumber()).toBe(1735689600);
+        });
+
+        it('should create Maturity from bigint', () => {
+            const result = MaturityConverter.fromInput(BigInt(1735689600));
+            expect(result).toBeInstanceOf(Maturity);
+            expect(result.toNumber()).toBe(1735689600);
         });
     });
 
-    describe('formatDate', () => {
-        it('should format date correctly', () => {
-            expect(MaturityConverter.formatDate(DEC_2022_TIMESTAMP)).toBe(
-                'Dec 1, 2022'
+    describe('toNumber', () => {
+        it('should convert Maturity to number', () => {
+            const result = MaturityConverter.toNumber(testMaturity);
+            expect(result).toBe(testTimestamp);
+        });
+    });
+
+    describe('toString', () => {
+        it('should convert Maturity to string', () => {
+            const result = MaturityConverter.toString(testMaturity);
+            expect(result).toBe(testTimestamp.toString());
+        });
+    });
+
+    describe('toUTCMonthYear', () => {
+        it('should format timestamp as UTC month/year', () => {
+            const result = MaturityConverter.toUTCMonthYear(testTimestamp);
+            expect(result).toBe('JAN25');
+        });
+
+        it('should format with numeric year', () => {
+            const result = MaturityConverter.toUTCMonthYear(
+                testTimestamp,
+                true
             );
+            expect(result).toBe('JAN2025');
+        });
+
+        it('should handle string input', () => {
+            const result = MaturityConverter.toUTCMonthYear('1735689600');
+            expect(result).toBe('JAN25');
+        });
+
+        it('should handle Maturity object input', () => {
+            const result = MaturityConverter.toUTCMonthYear(testMaturity);
+            expect(result).toBe('JAN25');
+        });
+    });
+
+    describe('toDateString', () => {
+        it('should format timestamp as date string', () => {
+            const result = MaturityConverter.toDateString(testTimestamp);
+            expect(result).toBe('Jan 1, 2025');
+        });
+
+        it('should handle string input', () => {
+            const result = MaturityConverter.toDateString('1735689600');
+            expect(result).toBe('Jan 1, 2025');
+        });
+
+        it('should handle Maturity object input', () => {
+            const result = MaturityConverter.toDateString(testMaturity);
+            expect(result).toBe('Jan 1, 2025');
         });
     });
 });

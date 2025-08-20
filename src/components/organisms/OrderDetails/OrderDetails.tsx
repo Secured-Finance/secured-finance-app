@@ -1,6 +1,5 @@
 import { Disclosure, Transition } from '@headlessui/react';
 import { OrderSide } from '@secured-finance/sf-client';
-import { MaturityConverter } from 'src/utils/maturityConverter';
 import { useMemo } from 'react';
 import {
     ExpandIndicator,
@@ -21,6 +20,7 @@ import {
     divide,
     formatLoanValue,
     formatWithCurrency,
+    MaturityConverter,
     multiply,
     prefixTilde,
 } from 'src/utils';
@@ -143,10 +143,7 @@ export const OrderDetails = ({
                             formatLoanValue(loanValue ?? LoanValue.ZERO, 'rate')
                         ),
                     ],
-                    [
-                        'Maturity Date',
-                        MaturityConverter.formatDate(maturity.toNumber()),
-                    ],
+                    ['Maturity Date', MaturityConverter.toDateString(maturity)],
                 ]}
             />
             {!isRemoveOrder && (

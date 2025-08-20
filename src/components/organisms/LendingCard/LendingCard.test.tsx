@@ -1,5 +1,4 @@
 import * as analytics from '@amplitude/analytics-browser';
-import { MaturityConverter } from 'src/utils/maturityConverter';
 import { composeStories } from '@storybook/react';
 import { mar23Fixture } from 'src/stories/mocks/fixtures';
 import { initialStore } from 'src/stories/mocks/mockStore';
@@ -9,6 +8,7 @@ import {
     ButtonEvents,
     ButtonProperties,
     CurrencySymbol,
+    MaturityConverter,
     currencyMap,
 } from 'src/utils';
 import timemachine from 'timemachine';
@@ -142,9 +142,7 @@ describe('LendingCard Component', () => {
             })
         );
         fireEvent.click(screen.getByText('MAR2023'));
-        const dateWithTimezone = MaturityConverter.formatDate(
-            mar23Fixture.toNumber()
-        );
+        const dateWithTimezone = MaturityConverter.toDateString(mar23Fixture);
         expect(track).toHaveBeenCalledWith(ButtonEvents.TERM_CHANGE, {
             [ButtonProperties.TERM]: 'MAR2023',
         });

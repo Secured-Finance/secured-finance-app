@@ -3,7 +3,6 @@ import {
     ShareIcon,
     TrophyIcon,
 } from '@heroicons/react/24/outline';
-import { MaturityConverter } from 'src/utils/maturityConverter';
 import {
     QuestType,
     useGetQuestsQuery,
@@ -46,6 +45,7 @@ import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
+    MaturityConverter,
     SupportedChainsList,
     ordinaryFormat,
     percentFormat,
@@ -571,9 +571,9 @@ const QuestList = ({ chainId }: { chainId: number }) => {
                             )}
                             {(item.startAt || item.endAt) && (
                                 <div className='pl-2'>
-                                    {`${MaturityConverter.formatDate(
+                                    {`${MaturityConverter.toDateString(
                                         dayjs(item.startAt).unix()
-                                    )} ~ ${MaturityConverter.formatDate(
+                                    )} ~ ${MaturityConverter.toDateString(
                                         dayjs(item.endAt).unix()
                                     )}`}
                                 </div>
