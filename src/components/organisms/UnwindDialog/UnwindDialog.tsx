@@ -20,7 +20,7 @@ import {
 } from 'src/hooks';
 import { setLastMessage } from 'src/store/lastError';
 import {
-    AddressUtils,
+    AddressConverter,
     ButtonEvents,
     ButtonProperties,
     CurrencySymbol,
@@ -253,7 +253,7 @@ export const UnwindDialog = ({
                             ['Status', 'Complete'],
                             [
                                 'Transaction Hash',
-                                AddressUtils.format(txHash ?? '', 8),
+                                AddressConverter.format(txHash ?? '', 8),
                             ],
                         ]}
                         txHash={txHash}

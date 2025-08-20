@@ -14,7 +14,7 @@ import {
 } from 'src/hooks';
 import { useWithdrawCollateral } from 'src/hooks/useDepositCollateral';
 import {
-    AddressUtils,
+    AddressConverter,
     CollateralInfo,
     CurrencySymbol,
     ZERO_BI,
@@ -284,7 +284,10 @@ export const WithdrawCollateral = ({
                                     ['Status', 'Complete'],
                                     [
                                         'Ethereum Address',
-                                        AddressUtils.format(address ?? '', 8),
+                                        AddressConverter.format(
+                                            address ?? '',
+                                            8
+                                        ),
                                     ],
                                     [
                                         'Amount',

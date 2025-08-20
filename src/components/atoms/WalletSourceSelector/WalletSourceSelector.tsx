@@ -5,7 +5,7 @@ import { Fragment, useMemo } from 'react';
 import { ExpandIndicator, Separator } from 'src/components/atoms';
 import { SvgIcon } from 'src/types';
 import {
-    AddressUtils,
+    AddressConverter,
     currencyMap,
     CurrencySymbol,
     ordinaryFormat,
@@ -42,7 +42,7 @@ const formatOption = (
 
 const formatSource = (walletSource: WalletSource, account: string) => {
     return walletSource === WalletSource.METAMASK
-        ? AddressUtils.format(account, 6)
+        ? AddressConverter.format(account, 6)
         : walletSource;
 };
 

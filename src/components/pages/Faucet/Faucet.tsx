@@ -32,7 +32,7 @@ import {
 import useSF from 'src/hooks/useSecuredFinance';
 import { RootState } from 'src/store/types';
 import {
-    AddressUtils,
+    AddressConverter,
     CurrencySymbol,
     currencyMap,
     toCurrency,
@@ -50,7 +50,7 @@ const MenuAddToken = ({
     return (
         <Menu as='div' className='relative inline tablet:hidden'>
             <Menu.Button className='flex flex-row items-center justify-between gap-2'>
-                <span>{AddressUtils.format(address, 6)}</span>
+                <span>{AddressConverter.format(address, 6)}</span>
                 <EllipsisHorizontalIcon className='h-6 w-6' />
             </Menu.Button>
             <Menu.Items className='typography-caption-2 absolute -left-4 -top-20 z-50 w-fit min-w-[150px] whitespace-nowrap rounded-md bg-gunMetal text-neutral-8 shadow-dropdown focus:outline-none'>
@@ -281,7 +281,7 @@ export const Faucet = () => {
                                     <div className='typography-caption text-white-60 tablet:pr-10'>
                                         <span className='inline tablet:hidden'>
                                             {account
-                                                ? AddressUtils.format(
+                                                ? AddressConverter.format(
                                                       account,
                                                       6
                                                   )
@@ -377,7 +377,7 @@ export const Faucet = () => {
                         ['Status', 'Success'],
                         [
                             'Ethereum Address',
-                            AddressUtils.format(account ?? '', 8),
+                            AddressConverter.format(account ?? '', 8),
                         ],
                     ]}
                     txHash={txHash}
