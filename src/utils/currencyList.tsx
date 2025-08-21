@@ -7,6 +7,7 @@ import {
 } from '@secured-finance/sf-core';
 import { BigNumber as BigNumberJS } from 'bignumber.js';
 import tailwindConfig from 'src/../tailwind.config';
+import { HexConverter } from './hexConverter';
 import BtcIcon from 'src/assets/coins/btc.svg';
 import EthIcon from 'src/assets/coins/eth2.svg';
 import FilIcon from 'src/assets/coins/fil.svg';
@@ -21,7 +22,6 @@ import ZcEthIcon from 'src/assets/coins/zc-eth.svg';
 import ZcFilIcon from 'src/assets/coins/zc-fil.svg';
 import ZcUsdcIcon from 'src/assets/coins/zc-usdc.svg';
 import { SvgIcon } from 'src/types';
-import { hexToString } from 'viem';
 import { ZERO_BI } from './collateral';
 import { AUSDC } from './currencies/ausdc';
 import { AXLFIL } from './currencies/axlfil';
@@ -395,7 +395,7 @@ export function toCurrencySymbol(ccy: string) {
 }
 
 export function hexToCurrencySymbol(hex: string) {
-    return toCurrencySymbol(hexToString(hex as `0x${string}`, { size: 32 }));
+    return toCurrencySymbol(HexConverter.hexToString(hex, 32));
 }
 
 const convertToBlockchainUnit = (amount: number | string, ccy: Currency) => {
