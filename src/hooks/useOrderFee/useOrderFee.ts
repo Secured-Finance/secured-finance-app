@@ -12,7 +12,7 @@ export const useOrderFee = (ccy: CurrencySymbol) => {
             const orderFee = securedFinance?.getOrderFeeRate(toCurrency(ccy));
             return orderFee ?? ZERO_BI;
         },
-        select: fee => FeeCalculator.calculateProtocolFee(Number(fee)),
+        select: fee => FeeCalculator.calculateProtocolFee(fee),
         enabled: !!securedFinance,
     });
 };

@@ -5,15 +5,19 @@ const SECONDS_IN_YEAR = 365 * 24 * 60 * 60;
 
 export class FeeCalculator {
     static calculateTransactionFees(
-        maturity: number,
+        maturity: number | { toNumber(): number },
         annualFee: number
     ): string {
-        const diff = dayjs.unix(maturity).diff(Date.now(), 'second');
+        const normalizedMaturity =
+            typeof maturity === 'object' ? maturity.toNumber() : maturity;
+        const diff = dayjs.unix(normalizedMaturity).diff(Date.now(), 'second');
         const fee = Math.max((diff * annualFee) / SECONDS_IN_YEAR, 0);
         return percentFormat(fee);
     }
 
-    static calculateProtocolFee(feeRate: number): number {
-        return feeRate / 100;
+    static calculateProtocolFee(feeRate: number | bigint): number {
+        const normalizedFee =
+            typeof feeRate === 'bigint' ? Number(feeRate) : feeRate;
+        return normalizedFee / 100;
     }
 }

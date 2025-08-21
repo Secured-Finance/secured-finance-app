@@ -162,7 +162,7 @@ export const OrderDetails = ({
                                 <FeeItem key={maturity.toString()} />,
                                 prefixTilde(
                                     FeeCalculator.calculateTransactionFees(
-                                        maturity.toNumber(),
+                                        maturity,
                                         orderFee
                                     )
                                 ),
