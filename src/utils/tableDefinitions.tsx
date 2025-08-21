@@ -125,7 +125,7 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
             let color: ColorFormat['color'];
             if (hasSideProperty(info.row.original)) {
                 color =
-                    OrderTypeConverter.fromNumber(info.row.original.side) ===
+                    OrderTypeConverter.from(info.row.original.side) ===
                     OrderSide.BORROW
                         ? 'negative'
                         : 'positive';
@@ -191,7 +191,7 @@ export const inputAmountColumnDefinition = <T extends InputAmountColumnType>(
             if (!ccy) return null;
 
             const color: ColorFormat['color'] =
-                OrderTypeConverter.fromNumber(info.row.original.side) ===
+                OrderTypeConverter.from(info.row.original.side) ===
                 OrderSide.BORROW
                     ? 'negative'
                     : 'positive';
@@ -245,7 +245,7 @@ export const futureValueColumnDefinition = <T extends AmountColumnType>(
             let color: ColorFormat['color'];
             if (hasSideProperty(info.row.original)) {
                 color =
-                    OrderTypeConverter.fromNumber(info.row.original.side) ===
+                    OrderTypeConverter.from(info.row.original.side) ===
                     OrderSide.BORROW
                         ? 'negative'
                         : 'positive';
@@ -296,11 +296,13 @@ export const loanTypeColumnDefinition = <T extends SideProperty>(
                         isFullWidth
                         size={ChipSizes.md}
                         color={
-                            value.toString() === '1'
+                            OrderTypeConverter.from(value) === OrderSide.BORROW
                                 ? ChipColors.Red
                                 : ChipColors.Teal
                         }
-                        label={value.toString() === '1' ? 'Borrow' : 'Lend'}
+                        label={OrderTypeConverter.toDisplayString(
+                            OrderTypeConverter.from(value)
+                        )}
                     />
                 </div>
             );

@@ -52,7 +52,7 @@ const priceYieldColumnDef = (
 };
 
 const getFVWithFee = (futureValue: bigint, fee: bigint, side: number) => {
-    if (OrderTypeConverter.fromNumber(side) === OrderSide.LEND) {
+    if (OrderTypeConverter.from(side) === OrderSide.LEND) {
         return futureValue - fee;
     }
     return futureValue + fee;
@@ -68,7 +68,7 @@ const MyTransactionsTableMobile = ({
             {data.map((row, index) => {
                 const ccy = hexToCurrencySymbol(row.currency);
                 const maturity = new Maturity(row.maturity);
-                const side = OrderTypeConverter.fromString(row.side.toString());
+                const side = OrderTypeConverter.from(row.side);
                 const amount = row.amount;
                 const averagePrice = row.averagePrice;
                 const futureValue = row.futureValue;
