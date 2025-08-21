@@ -3,7 +3,7 @@ import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useEffect, useState } from 'react';
 import { useGraphClientHook } from 'src/hooks';
 import { Transaction24HVolume } from 'src/types';
-import { amountFormatterFromBase, CurrencySymbol } from 'src/utils';
+import { AmountConverter, CurrencySymbol } from 'src/utils';
 
 const TRANSACTIONS_LIMIT = 1000;
 
@@ -45,7 +45,8 @@ export const use24HVolume = (): { data: Record<string, number> } => {
             const symbol = fromBytes32(tx.currency) as CurrencySymbol;
             const key = `${symbol}-${tx.maturity}`;
             result[key] =
-                (result[key] || 0) + amountFormatterFromBase[symbol](tx.amount);
+                (result[key] || 0) +
+                AmountConverter.fromBase(tx.amount, symbol);
         }
     }
 

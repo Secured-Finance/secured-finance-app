@@ -3,8 +3,8 @@ import { useCallback } from 'react';
 import { useCurrenciesForOrders, usePositions } from 'src/hooks';
 import { UserAccount } from 'src/types';
 import {
+    AmountConverter,
     CurrencySymbol,
-    amountFormatterFromBase,
     hexToCurrencySymbol,
 } from 'src/utils';
 
@@ -67,8 +67,9 @@ export const useZCUsage = (address: UserAccount, side: OrderSide) => {
                     hexToCurrencySymbol(pos.currency) === currency
             );
 
-            return amountFormatterFromBase[currency](
-                positionInMaturity?.amount ?? BigInt(0)
+            return AmountConverter.fromBase(
+                positionInMaturity?.amount ?? BigInt(0),
+                currency
             );
         },
         [position?.positions]

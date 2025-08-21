@@ -461,7 +461,7 @@ export const convertZCTokenFromBaseAmount = (
 ) =>
     !maturity || maturity.isZero()
         ? convertFromGvUnit(amount)
-        : amountFormatterFromBase[symbol](amount);
+        : AmountConverter.fromBase(amount, symbol);
 export const convertZCTokenToBaseAmount = (
     symbol: CurrencySymbol,
     amount: number,
@@ -469,7 +469,7 @@ export const convertZCTokenToBaseAmount = (
 ) =>
     !maturity || maturity.isZero()
         ? convertToGvUnit(amount)
-        : amountFormatterToBase[symbol](amount);
+        : AmountConverter.toBase(amount, symbol);
 
 export const convertToZcTokenName = (
     symbol: CurrencySymbol,

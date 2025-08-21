@@ -27,8 +27,6 @@ import {
 import { RootState } from 'src/store/types';
 import { MaturityOptionList, OrderSideMap } from 'src/types';
 import {
-    amountFormatterFromBase,
-    amountFormatterToBase,
     ButtonEvents,
     ButtonProperties,
     CurrencySymbol,
@@ -39,6 +37,7 @@ import {
     getTransformMaturityOption,
     toOptions,
 } from 'src/utils';
+import { AmountConverter } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { trackButtonEvent } from 'src/utils/events';
 import { useAccount } from 'wagmi';
@@ -196,16 +195,18 @@ export const LendingCard = ({
                                     setAmount(
                                         v === ''
                                             ? ''
-                                            : amountFormatterToBase[currency](
-                                                  v
+                                            : AmountConverter.toBase(
+                                                  v,
+                                                  currency
                                               ).toString()
                                     )
                                 )
                             }
                             initialValue={
                                 amountExists
-                                    ? amountFormatterFromBase[currency](
-                                          amount
+                                    ? AmountConverter.fromBase(
+                                          amount,
+                                          currency
                                       ).toString()
                                     : ''
                             }

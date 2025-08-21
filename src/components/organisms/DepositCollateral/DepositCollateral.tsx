@@ -19,10 +19,9 @@ import {
     CollateralInfo,
     CurrencySymbol,
     ZERO_BI,
-    amountFormatterFromBase,
-    amountFormatterToBase,
     formatAmount,
 } from 'src/utils';
+import { AmountConverter } from 'src/utils';
 import {
     ButtonEvents,
     ButtonProperties,
@@ -123,7 +122,9 @@ export const DepositCollateral = ({
 
     useEffect(() => {
         if (!isFullCoverage) {
-            setCollateralBigInt(amountFormatterToBase[asset](collateral ?? ''));
+            setCollateralBigInt(
+                AmountConverter.toBase(collateral ?? '', asset)
+            );
         } else {
             setCollateralBigInt(
                 collateralList[asset]?.availableFullValue ?? ZERO_BI
@@ -288,8 +289,9 @@ export const DepositCollateral = ({
                                     [
                                         'Amount',
                                         `${formatAmount(
-                                            amountFormatterFromBase[asset](
-                                                collateralBigInt
+                                            AmountConverter.fromBase(
+                                                collateralBigInt,
+                                                asset
                                             )
                                         )} ${asset}`,
                                     ],

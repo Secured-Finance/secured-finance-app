@@ -38,8 +38,6 @@ import {
 import { RootState } from 'src/store/types';
 import { OrderSideMap, OrderType, OrderTypeOptions } from 'src/types';
 import {
-    amountFormatterFromBase,
-    amountFormatterToBase,
     ButtonEvents,
     ButtonProperties,
     CurrencySymbol,
@@ -49,6 +47,7 @@ import {
     generateWalletSourceInformation,
     ordinaryFormat,
 } from 'src/utils';
+import { AmountConverter } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import {
     InteractionEvents,
@@ -243,7 +242,7 @@ export function AdvancedLendingOrderCard({
     }, [amount, availableToBorrow, availableToLend, side]);
 
     const handleInputChange = (v: string) => {
-        const inputValue = amountFormatterToBase[currency](v);
+        const inputValue = AmountConverter.toBase(v, currency);
 
         dispatch(setAmount(v === '' ? '' : inputValue.toString()));
         const available =
@@ -341,10 +340,11 @@ export function AdvancedLendingOrderCard({
                             }`}</span>
                             <span className='text-right text-primary-300'>
                                 {`${ordinaryFormat(
-                                    amountFormatterFromBase[currency](
+                                    AmountConverter.fromBase(
                                         side === OrderSide.BORROW
                                             ? availableToBorrow
-                                            : availableToLend
+                                            : availableToLend,
+                                        currency
                                     ),
                                     0,
                                     2
@@ -398,8 +398,9 @@ export function AdvancedLendingOrderCard({
                             unit={currency}
                             initialValue={
                                 amountExists
-                                    ? amountFormatterFromBase[currency](
-                                          amount
+                                    ? AmountConverter.fromBase(
+                                          amount,
+                                          currency
                                       ).toString()
                                     : ''
                             }

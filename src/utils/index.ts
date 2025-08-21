@@ -1,4 +1,5 @@
 export * from './address';
+export * from './amountConverter';
 export * from './assets';
 export * from './bridge';
 export * from './collateral';
