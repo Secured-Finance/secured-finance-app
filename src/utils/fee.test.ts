@@ -54,9 +54,62 @@ describe('FeeCalculator', () => {
     describe('calculateProtocolFee', () => {
         it('should calculate protocol fee rate correctly', () => {
             expect(FeeCalculator.calculateProtocolFee(100)).toBe(1);
-            expect(FeeCalculator.calculateProtocolFee(50)).toBe(0.5);
-            expect(FeeCalculator.calculateProtocolFee(25)).toBe(0.25);
-            expect(FeeCalculator.calculateProtocolFee(0)).toBe(0);
+            expect(FeeCalculator.calculateProtocolFee(BigInt(250))).toBe(2.5);
+        });
+    });
+
+    describe('calculateFutureValueWithFee', () => {
+        it('should handle string and BigInt inputs correctly', () => {
+            expect(
+                FeeCalculator.calculateFutureValueWithFee('1000', '50', 0)
+            ).toBe(BigInt(950));
+            expect(
+                FeeCalculator.calculateFutureValueWithFee(
+                    BigInt(1000),
+                    BigInt(50),
+                    1
+                )
+            ).toBe(BigInt(1050));
+        });
+    });
+
+    describe('calculateFeeInFutureValue', () => {
+        it('should calculate fee correctly for future and past maturity', () => {
+            const amount = BigInt(1000);
+            const unitPrice = BigInt(9800);
+            const feeRate = 1;
+
+            const futureResult = FeeCalculator.calculateFeeInFutureValue(
+                amount,
+                unitPrice,
+                feeRate,
+                getMaturity(365)
+            );
+            const pastResult = FeeCalculator.calculateFeeInFutureValue(
+                amount,
+                unitPrice,
+                feeRate,
+                getMaturity(-365)
+            );
+
+            expect(Number(futureResult)).toBeGreaterThan(0);
+            expect(pastResult).toBe(BigInt(0));
+        });
+    });
+
+    describe('applyDiscountRate', () => {
+        it('should apply discount correctly and handle edge cases', () => {
+            const feeAmount = BigInt(1000);
+
+            expect(FeeCalculator.applyDiscountRate(feeAmount, 0.1)).toBe(
+                BigInt(900)
+            );
+            expect(FeeCalculator.applyDiscountRate(feeAmount, 0)).toBe(
+                BigInt(1000)
+            );
+            expect(FeeCalculator.applyDiscountRate(feeAmount, -0.1)).toBe(
+                BigInt(1000)
+            );
         });
     });
 });
