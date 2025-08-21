@@ -65,7 +65,7 @@ export const useIsUnderCollateralThresholdForBorrowOrders = (
             const requiredCollateral =
                 CollateralCalculator.calculateRequiredCollateral(
                     fv,
-                    currentMinDebtUnitPrice / 100
+                    currentMinDebtUnitPrice
                 );
 
             return (

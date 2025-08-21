@@ -2,8 +2,8 @@ export const MAX_COVERAGE = 10000;
 export const ZERO_BI = BigInt(0);
 
 export class CollateralCalculator {
-    static calculatePercentage(value: bigint, total: bigint): bigint {
-        return total === ZERO_BI ? ZERO_BI : (value * BigInt(100)) / total;
+    static calculatePercentage(value: bigint, total: bigint): number {
+        return total === ZERO_BI ? 0 : Number((value * BigInt(100)) / total);
     }
 
     static calculateCollateralRatio(
@@ -18,7 +18,11 @@ export class CollateralCalculator {
         borrowAmount: number,
         collateralThreshold: number
     ): number {
-        return (borrowAmount * collateralThreshold) / 100;
+        const threshold =
+            collateralThreshold > 1000
+                ? collateralThreshold / 100
+                : collateralThreshold;
+        return (borrowAmount * threshold) / 100;
     }
 
     static calculateLiquidationPrice(
@@ -43,7 +47,8 @@ export class CollateralCalculator {
         coverage: number,
         collateralThreshold: number
     ): number {
-        if (collateralThreshold <= coverage) return 0;
+        const normalizedCoverage = coverage > 100 ? coverage / 100 : coverage;
+        if (collateralThreshold <= normalizedCoverage) return 0;
         const threshold = collateralThreshold / 100;
         const usedAmount = totalCollateral - totalUnusedCollateralAmount;
         return totalCollateral * threshold - usedAmount;

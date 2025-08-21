@@ -23,9 +23,7 @@ export const ColorBar = ({
         Math.max(
             multiply(
                 divide(
-                    Number(
-                        CollateralCalculator.calculatePercentage(value, total)
-                    ),
+                    CollateralCalculator.calculatePercentage(value, total),
                     100
                 ),
                 maxWidth

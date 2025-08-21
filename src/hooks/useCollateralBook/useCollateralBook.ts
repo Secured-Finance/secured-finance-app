@@ -148,7 +148,7 @@ export const useCollateralBook = (account: string | undefined) => {
                     CollateralCalculator.calculateAvailableToBorrow(
                         usdCollateral,
                         usdUnusedCollateral,
-                        divide(coverage, 100),
+                        coverage,
                         collateralThreshold
                     ),
                 usdNonCollateral: usdNonCollateral,

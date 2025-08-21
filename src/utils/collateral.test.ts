@@ -9,13 +9,13 @@ describe('CollateralCalculator', () => {
         it('should compute the percentage', () => {
             expect(
                 CollateralCalculator.calculatePercentage(ONE_ETH, TWO_ETH)
-            ).toEqual(BigInt(50));
+            ).toEqual(50);
         });
 
         it('should return 0 when total is zero', () => {
             expect(
                 CollateralCalculator.calculatePercentage(ONE_ETH, ZERO_ETH)
-            ).toEqual(ZERO_ETH);
+            ).toEqual(0);
         });
     });
 
