@@ -21,10 +21,9 @@ import {
     CurrencySymbol,
     currencyMap,
     formatLoanValue,
-    formatWithCurrency,
     getTransformMaturityOption,
     handlePriceSource,
-    usdFormat,
+    PriceFormatter,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { AdvancedLendingTopBarProp } from './types';
@@ -75,8 +74,8 @@ export const AdvancedLendingTopBar = ({
     const marketKey = `${selectedAsset?.value}-${maturity}`;
     const rawVolume = volumePerMarket?.[marketKey] ?? 0;
 
-    const volumeInUSD = usdFormat(rawVolume * currencyPrice, 2);
-    const volume24H = formatWithCurrency(
+    const volumeInUSD = PriceFormatter.formatUSD(rawVolume * currencyPrice, 2);
+    const volume24H = PriceFormatter.formatWithCurrency(
         volumePerMarket[marketKey] ?? 0,
         selectedAsset?.value as CurrencySymbol,
         currencyMap[selectedAsset?.value as CurrencySymbol]?.roundingDecimal
@@ -191,7 +190,10 @@ export const AdvancedLendingTopBar = ({
                                 <div>
                                     <MarketTab
                                         name={`${currency} Price`}
-                                        value={usdFormat(currencyPrice, 2)}
+                                        value={PriceFormatter.formatUSD(
+                                            currencyPrice,
+                                            2
+                                        )}
                                     />
                                 </div>
                             </div>
@@ -260,7 +262,10 @@ export const AdvancedLendingTopBar = ({
                                     <MarketTab
                                         name={`${selectedAsset?.value} Price`}
                                         value={
-                                            usdFormat(currencyPrice, 2) || '$0'
+                                            PriceFormatter.formatUSD(
+                                                currencyPrice,
+                                                2
+                                            ) || '$0'
                                         }
                                         source={handlePriceSource(
                                             selectedAsset?.value
@@ -285,7 +290,9 @@ export const AdvancedLendingTopBar = ({
                 onClose={() => setIsMarketInfoDialogOpen(false)}
                 currency={selectedAsset.value}
                 currentMarket={currentMarket}
-                currencyPrice={usdFormat(currencyPrice, 2) || '$0'}
+                currencyPrice={
+                    PriceFormatter.formatUSD(currencyPrice, 2) || '$0'
+                }
                 marketInfo={marketInfo}
                 volumeInfo={{
                     volume24H,

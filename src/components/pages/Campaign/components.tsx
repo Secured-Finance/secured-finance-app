@@ -12,8 +12,7 @@ import {
     CurrencySymbol,
     ZERO_BI,
     amountFormatterFromBase,
-    ordinaryFormat,
-    usdFormat,
+    PriceFormatter,
 } from 'src/utils';
 import { stages } from './constants';
 
@@ -165,7 +164,7 @@ export const CampaignStatus = ({
                                         className='typography-mobile-body-3 block text-center text-white tablet:text-left tablet:text-[22px] tablet:font-semibold desktop:text-7 desktop:leading-8'
                                         key={ccy}
                                     >
-                                        {`${ordinaryFormat(
+                                        {`${PriceFormatter.formatOrdinary(
                                             amountFormatterFromBase[ccy](
                                                 valueLocked[ccy] ?? ZERO_BI
                                             ),
@@ -176,7 +175,10 @@ export const CampaignStatus = ({
                                 );
                             })}
                             <span className='typography-mobile-body-4 laptop:typography-desktop-body-4 block text-center text-white/40 tablet:text-left desktop:text-4 desktop:leading-8'>
-                                {`≈ ${usdFormat(totalUSDValue, 2)}`}
+                                {`≈ ${PriceFormatter.formatUSD(
+                                    totalUSDValue,
+                                    2
+                                )}`}
                             </span>
                         </div>
                     </div>

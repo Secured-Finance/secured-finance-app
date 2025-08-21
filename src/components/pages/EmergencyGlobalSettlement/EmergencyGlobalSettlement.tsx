@@ -21,7 +21,7 @@ import {
     usePositions,
     useTerminationPrices,
 } from 'src/hooks';
-import { ZERO_BI, computeNetValue, usdFormat } from 'src/utils';
+import { ZERO_BI, computeNetValue, PriceFormatter } from 'src/utils';
 import { toHex } from 'viem';
 import { useAccount } from 'wagmi';
 
@@ -181,7 +181,7 @@ export const EmergencyGlobalSettlement = () => {
                 }}
                 data={snapshotWithPrice ?? []}
                 snapshotDate={snapshotDate}
-                netValue={usdFormat(netValue)}
+                netValue={PriceFormatter.formatUSD(netValue)}
             />
         </Page>
     );

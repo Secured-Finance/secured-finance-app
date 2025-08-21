@@ -21,8 +21,8 @@ import {
     CurrencySymbol,
     convertToZcTokenName,
     convertZCTokenFromBaseAmount,
-    formatAmount,
     handleContractError,
+    PriceFormatter,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import {
@@ -193,7 +193,7 @@ export const WithdrawZCToken = ({
         return {
             label: convertToZcTokenName(option.symbol, option.maturity),
             value: option.key,
-            note: `${formatAmount(available)} Available`,
+            note: `${PriceFormatter.formatAmount(available)} Available`,
             icon: (
                 <CopyTokenAddressButton
                     symbol={option.symbol}
@@ -376,7 +376,7 @@ export const WithdrawZCToken = ({
                                     ],
                                     [
                                         'Amount',
-                                        `${formatAmount(
+                                        `${PriceFormatter.formatAmount(
                                             convertZCTokenFromBaseAmount(
                                                 currencySymbol,
                                                 collateral || BigInt(0),

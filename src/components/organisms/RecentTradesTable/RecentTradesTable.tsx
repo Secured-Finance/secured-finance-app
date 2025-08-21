@@ -23,7 +23,7 @@ import {
     useIsSubgraphSupported,
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
-import { currencyMap, formatLoanValue, ordinaryFormat } from 'src/utils';
+import { currencyMap, formatLoanValue, PriceFormatter } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import { columns } from './constants';
 import { RecentTradesTableProps, TradeMetadata } from './types';
@@ -70,7 +70,7 @@ export const RecentTradesTable = ({
                 const sizeActual = currencyMap[currency].fromBaseUnit(
                     BigInt(+transaction.amount)
                 );
-                const size = ordinaryFormat(
+                const size = PriceFormatter.formatOrdinary(
                     sizeActual,
                     currencyMap[currency].roundingDecimal,
                     currencyMap[currency].roundingDecimal

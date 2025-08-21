@@ -1,59 +1,7 @@
 import { MAX_COVERAGE } from './collateral';
 import { divide } from './currencyList';
 import { LoanValue } from './entities';
-
-export const usdFormat = (
-    number: number | bigint,
-    digits = 0,
-    notation: 'standard' | 'compact' = 'standard'
-) => {
-    return Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        currencySign: 'accounting',
-        maximumFractionDigits: digits,
-        notation: notation,
-    }).format(number);
-};
-
-export const percentFormat = (
-    number: number,
-    dividedBy = 100,
-    minimumFractionDigits = 0,
-    maximumFractionDigits = 2
-) => {
-    const value = dividedBy === 0 ? 0 : number / dividedBy;
-    return Intl.NumberFormat('en-US', {
-        style: 'percent',
-        minimumFractionDigits,
-        maximumFractionDigits,
-    }).format(value);
-};
-
-export const ordinaryFormat = (
-    number: number | bigint,
-    minDecimals = 0,
-    maxDecimals = 2,
-    notation: 'standard' | 'compact' = 'standard'
-) => {
-    return Intl.NumberFormat('en-US', {
-        minimumFractionDigits: minDecimals,
-        maximumFractionDigits: maxDecimals,
-        notation: notation,
-    }).format(number);
-};
-
-export const formatAmount = (number: number | bigint) => {
-    return ordinaryFormat(number, 0, 4);
-};
-
-export const formatWithCurrency = (
-    number: number | bigint,
-    currency: string,
-    decimals = 2
-) => {
-    return `${ordinaryFormat(number, 0, decimals)} ${currency}`;
-};
+import { PriceFormatter } from './priceFormatter';
 
 export const formatLoanValue = (
     value: LoanValue | undefined,
@@ -62,10 +10,10 @@ export const formatLoanValue = (
 ) => {
     if (type === 'price') {
         if (!value) return '--.--';
-        return divide(value.price, 100).toFixed(decimal).toString();
+        return PriceFormatter.formatToFixed(divide(value.price, 100), decimal);
     } else {
         if (!value) return '--.--%';
-        return percentFormat(
+        return PriceFormatter.formatPercentage(
             value.apr.toNormalizedNumber(),
             100,
             decimal,
@@ -75,7 +23,7 @@ export const formatLoanValue = (
 };
 
 export function formatCollateralRatio(collateral: number) {
-    return percentFormat(collateral, MAX_COVERAGE, 0);
+    return PriceFormatter.formatPercentage(collateral, MAX_COVERAGE, 0);
 }
 
 export const formatTimestamp = (timestamp: number) => {
@@ -131,7 +79,10 @@ export const formatDuration = (durationMs: number) => {
     const fractionOfYear = durationInDays / daysInYear;
 
     // Format the fraction of year to two decimal places
-    const fractionOfYearFormatted = fractionOfYear.toFixed(2);
+    const fractionOfYearFormatted = PriceFormatter.formatToFixed(
+        fractionOfYear,
+        2
+    );
 
     const daysLeft = Math.round(durationInDays);
 

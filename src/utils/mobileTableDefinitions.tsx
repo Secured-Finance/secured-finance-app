@@ -8,8 +8,8 @@ import {
     formatTimestampDDMMYY,
     isMaturityPastDays,
     isPastDate,
-    ordinaryFormat,
 } from 'src/utils';
+import { PriceFormatter } from 'src/utils/priceFormatter';
 
 export const AmountCell = ({
     ccy,
@@ -24,7 +24,7 @@ export const AmountCell = ({
     }
     return (
         <span className='font-numerical text-3 leading-4 text-white'>
-            {ordinaryFormat(
+            {PriceFormatter.formatOrdinary(
                 currency.fromBaseUnit(amount),
                 currency.roundingDecimal,
                 currency.roundingDecimal

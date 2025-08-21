@@ -15,8 +15,7 @@ import {
     AddressUtils,
     formatTimestamp,
     handleContractError,
-    percentFormat,
-    usdFormat,
+    PriceFormatter,
 } from 'src/utils';
 
 enum Step {
@@ -111,13 +110,14 @@ export const EmergencyRedeemDialog = ({
                 header: 'Asset',
             }),
             columnHelper.accessor('ratio', {
-                cell: info => percentFormat(info.getValue() / 100),
+                cell: info =>
+                    PriceFormatter.formatPercentage(info.getValue() / 100),
                 header: 'Ratio of Collateral',
             }),
             columnHelper.accessor('price', {
                 cell: info => (
                     <div className='text-right'>
-                        {usdFormat(info.getValue(), 2)}
+                        {PriceFormatter.formatUSD(info.getValue(), 2)}
                     </div>
                 ),
                 header: 'Snapshot Rate',

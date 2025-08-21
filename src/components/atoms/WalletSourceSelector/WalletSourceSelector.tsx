@@ -8,7 +8,7 @@ import {
     AddressUtils,
     currencyMap,
     CurrencySymbol,
-    ordinaryFormat,
+    PriceFormatter,
 } from 'src/utils';
 import { AMOUNT_PRECISION } from 'src/utils/entities';
 
@@ -31,7 +31,7 @@ const formatOption = (
     asset: CurrencySymbol,
     showAssetName = false
 ) => {
-    return `${ordinaryFormat(
+    return `${PriceFormatter.formatOrdinary(
         Math.floor(
             currencyMap[asset].fromBaseUnit(available) * AMOUNT_PRECISION
         ) / AMOUNT_PRECISION,

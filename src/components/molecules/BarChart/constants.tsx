@@ -1,6 +1,6 @@
 import { ChartOptions } from 'chart.js';
 import { getColor } from 'src/components/molecules/TimeScaleSelector/constants';
-import { percentFormat, Rate } from 'src/utils';
+import { PriceFormatter, Rate } from 'src/utils';
 
 export const options: ChartOptions<'bar'> = {
     responsive: true,
@@ -27,7 +27,12 @@ export const options: ChartOptions<'bar'> = {
             },
             ticks: {
                 callback: function (value: string | number) {
-                    return percentFormat(Number(value), 100, 1, 1);
+                    return PriceFormatter.formatPercentage(
+                        Number(value),
+                        100,
+                        1,
+                        1
+                    );
                 },
                 color: 'rgba(255, 255, 255, 0.6)',
                 padding: 20,

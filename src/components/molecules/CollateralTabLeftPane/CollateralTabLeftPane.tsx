@@ -22,7 +22,7 @@ import {
     amountFormatterFromBase,
     convertFromGvUnit,
     convertToZcTokenName,
-    usdFormat,
+    PriceFormatter,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
@@ -202,7 +202,7 @@ export const CollateralTabLeftPane = ({
                             }
                         )}
                     >
-                        {usdFormat(netAssetValue, 2)}
+                        {PriceFormatter.formatUSD(netAssetValue, 2)}
                     </span>
                 </div>
                 {!account ? (

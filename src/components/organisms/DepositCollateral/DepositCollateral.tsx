@@ -21,7 +21,7 @@ import {
     ZERO_BI,
     amountFormatterFromBase,
     amountFormatterToBase,
-    formatAmount,
+    PriceFormatter,
 } from 'src/utils';
 import {
     ButtonEvents,
@@ -289,7 +289,7 @@ export const DepositCollateral = ({
                                     ],
                                     [
                                         'Amount',
-                                        `${formatAmount(
+                                        `${PriceFormatter.formatAmount(
                                             amountFormatterFromBase[asset](
                                                 collateralBigInt
                                             )

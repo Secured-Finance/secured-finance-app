@@ -47,7 +47,7 @@ import {
     calculateFee,
     divide,
     generateWalletSourceInformation,
-    ordinaryFormat,
+    PriceFormatter,
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import {
@@ -340,7 +340,7 @@ export function AdvancedLendingOrderCard({
                                 side === OrderSide.BORROW ? 'Borrow' : 'Lend'
                             }`}</span>
                             <span className='text-right text-primary-300'>
-                                {`${ordinaryFormat(
+                                {`${PriceFormatter.formatOrdinary(
                                     amountFormatterFromBase[currency](
                                         side === OrderSide.BORROW
                                             ? availableToBorrow

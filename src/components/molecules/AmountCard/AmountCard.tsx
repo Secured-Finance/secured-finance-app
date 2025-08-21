@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { currencyMap, formatAmount, prefixTilde, usdFormat } from 'src/utils';
+import { currencyMap, prefixTilde, PriceFormatter } from 'src/utils';
 import { Amount } from 'src/utils/entities';
 
 export const AmountCard = ({
@@ -9,7 +9,7 @@ export const AmountCard = ({
     amount: Amount;
     price: number;
 }) => {
-    const formattedValue = formatAmount(amount.value);
+    const formattedValue = PriceFormatter.formatAmount(amount.value);
 
     return (
         <div className='mb-3 grid w-full grid-cols-2 justify-around'>
@@ -35,7 +35,7 @@ export const AmountCard = ({
                     {formattedValue}
                 </span>
                 <div className='typography-caption-3 text-right text-white-60'>
-                    {prefixTilde(usdFormat(amount.toUSD(price)))}
+                    {prefixTilde(PriceFormatter.formatUSD(amount.toUSD(price)))}
                 </div>
             </div>
         </div>

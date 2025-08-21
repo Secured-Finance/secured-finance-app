@@ -1,6 +1,6 @@
 import Tick from 'src/assets/icons/tick.svg';
 import { InfoToolTip } from 'src/components/molecules';
-import { percentFormat, usdFormat } from 'src/utils';
+import { PriceFormatter } from 'src/utils';
 
 interface CollateralProgressBarProps {
     collateralCoverage: number;
@@ -32,11 +32,11 @@ const getInformationText = (
             <div>
                 <span>Your current borrow limit is at </span>
                 <span className='text-nebulaTeal'>
-                    {usdFormat(availableToBorrow, 2)}
+                    {PriceFormatter.formatUSD(availableToBorrow, 2)}
                 </span>
-                <span>{` which is ${percentFormat(
+                <span>{` which is ${PriceFormatter.formatPercentage(
                     collateralThreshold - collateralCoverage * 100
-                )} of your ${usdFormat(
+                )} of your ${PriceFormatter.formatUSD(
                     totalCollateralInUSD,
                     2
                 )} collateral deposit.`}</span>
@@ -70,7 +70,7 @@ export const CollateralProgressBar = ({
                     Collateral Utilization
                 </span>
                 <span className='typography-body-1 text-white'>
-                    {percentFormat(collateralCoverage, 1)}
+                    {PriceFormatter.formatPercentage(collateralCoverage, 1)}
                 </span>
             </div>
             <div className='flex flex-col gap-[6px]'>
@@ -100,9 +100,12 @@ export const CollateralProgressBar = ({
                     <div className='mt-1 flex w-full flex-row items-center gap-1'>
                         <div className='typography-caption flex flex-row text-planetaryPurple'>
                             <span className='whitespace-pre font-semibold text-nebulaTeal'>
-                                {`${usdFormat(availableToBorrow, 2)} `}
+                                {`${PriceFormatter.formatUSD(
+                                    availableToBorrow,
+                                    2
+                                )} `}
                             </span>
-                            <span>{`of ${usdFormat(
+                            <span>{`of ${PriceFormatter.formatUSD(
                                 totalCollateralInUSD,
                                 2
                             )} available`}</span>

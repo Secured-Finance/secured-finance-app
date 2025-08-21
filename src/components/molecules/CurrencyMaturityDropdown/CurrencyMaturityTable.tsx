@@ -23,7 +23,7 @@ import {
     calculateTimeDifference,
     currencyMap,
     formatDuration,
-    usdFormat,
+    PriceFormatter,
 } from 'src/utils';
 import { useAccount } from 'wagmi';
 import { desktopColumns, mobileColumns } from './constants';
@@ -108,7 +108,7 @@ export const CurrencyMaturityTable = ({
                     );
                 case 'volume':
                     return option.volume
-                        ? usdFormat(option.volume, 2, 'compact')
+                        ? PriceFormatter.formatUSD(option.volume, 2, 'compact')
                         : '-';
                 default:
                     return null;

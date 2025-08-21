@@ -14,6 +14,7 @@ import {
     ONE_PERCENT,
     Rate,
     currencyMap,
+    PriceFormatter,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import { trackButtonEvent } from 'src/utils/events';
@@ -65,11 +66,9 @@ export const LineChartTab = ({
                             context.dataIndex === 0 &&
                             marketCloseToMaturityOriginalRate > maximumRate
                         ) {
-                            return (
-                                (
-                                    marketCloseToMaturityOriginalRate /
-                                    ONE_PERCENT
-                                ).toFixed(3) + '%'
+                            return PriceFormatter.formatRate(
+                                marketCloseToMaturityOriginalRate / ONE_PERCENT,
+                                3
                             );
                         } else {
                             return context.formattedValue + '%';

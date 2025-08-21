@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import Tick from 'src/assets/icons/tick.svg';
-import { percentFormat, usdFormat } from 'src/utils';
+import { PriceFormatter } from 'src/utils';
 
 interface CollateralManagementConciseTabProps {
     collateralCoverage: number;
@@ -63,7 +63,10 @@ export const CollateralManagementConciseTab = ({
                     <span>Collateral Utilization</span>
                     {account && (
                         <span className='font-semibold text-secondary-500'>
-                            {percentFormat(collateralCoverage, 100)}
+                            {PriceFormatter.formatPercentage(
+                                collateralCoverage,
+                                100
+                            )}
                         </span>
                     )}
                 </div>
@@ -82,9 +85,12 @@ export const CollateralManagementConciseTab = ({
                     ) : (
                         <>
                             <span className='font-semibold text-secondary-300'>
-                                {`${usdFormat(availableToBorrow, 2)} `}
+                                {`${PriceFormatter.formatUSD(
+                                    availableToBorrow,
+                                    2
+                                )} `}
                             </span>
-                            <span>{`of ${usdFormat(
+                            <span>{`of ${PriceFormatter.formatUSD(
                                 totalCollateralInUSD,
                                 2
                             )} available`}</span>
@@ -127,7 +133,7 @@ export const CollateralManagementConciseTab = ({
                         <>
                             Threshold:{' '}
                             <span className='font-semibold'>
-                                {percentFormat(threshold)}
+                                {PriceFormatter.formatPercentage(threshold)}
                             </span>
                         </>
                     ) : (

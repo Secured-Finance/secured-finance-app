@@ -7,7 +7,7 @@ import {
     useOrderEstimation,
     useZCUsage,
 } from 'src/hooks';
-import { amountFormatterFromBase, usdFormat } from 'src/utils';
+import { amountFormatterFromBase, PriceFormatter } from 'src/utils';
 import { Amount, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
@@ -80,7 +80,10 @@ export const CollateralSimulationSection = ({
     );
 
     const items: [string | React.ReactNode, string | React.ReactNode][] = [
-        ['Borrow Remaining', usdFormat(remainingToBorrow * assetPrice, 2)],
+        [
+            'Borrow Remaining',
+            PriceFormatter.formatUSD(remainingToBorrow * assetPrice, 2),
+        ],
         [
             'ZC Usage',
             <FormatCollateralUsage

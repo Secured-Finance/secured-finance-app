@@ -12,8 +12,7 @@ import {
     divide,
     formatLoanValue,
     multiply,
-    ordinaryFormat,
-    usdFormat,
+    PriceFormatter,
 } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
@@ -196,17 +195,20 @@ export const AdvancedLendingEstimationFields = ({
                 : orderEstimationAmount;
 
         if (isMobile) {
-            return `${ordinaryFormat(
+            return `${PriceFormatter.formatOrdinary(
                 amount,
                 0,
                 currencyMap[currency].roundingDecimal
             )} ${currency}`;
         } else {
-            return `${ordinaryFormat(
+            return `${PriceFormatter.formatOrdinary(
                 amount,
                 0,
                 currencyMap[currency].roundingDecimal
-            )} ${currency} (${usdFormat(amount * assetPrice ?? 0, 2)})`;
+            )} ${currency} (${PriceFormatter.formatUSD(
+                amount * assetPrice,
+                2
+            )})`;
         }
     }, [
         showDashes,
@@ -229,17 +231,17 @@ export const AdvancedLendingEstimationFields = ({
         const totalValue = assetPrice ? fv * assetPrice : 0;
 
         if (isMobile) {
-            return `${ordinaryFormat(
+            return `${PriceFormatter.formatOrdinary(
                 fv,
                 0,
                 currencyMap[currency].roundingDecimal
             )} ${currency}`;
         } else {
-            return `${ordinaryFormat(
+            return `${PriceFormatter.formatOrdinary(
                 fv,
                 0,
                 currencyMap[currency].roundingDecimal
-            )} ${currency} (${usdFormat(totalValue, 2)})`;
+            )} ${currency} (${PriceFormatter.formatUSD(totalValue, 2)})`;
         }
     }, [
         showDashes,

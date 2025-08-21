@@ -1,0 +1,71 @@
+export class PriceFormatter {
+    static formatUSD(
+        number: number | bigint,
+        digits = 0,
+        notation: 'standard' | 'compact' = 'standard'
+    ): string {
+        return Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            currencySign: 'accounting',
+            maximumFractionDigits: digits,
+            notation: notation,
+        }).format(number);
+    }
+
+    static formatPercentage(
+        number: number,
+        dividedBy = 100,
+        minimumFractionDigits = 0,
+        maximumFractionDigits = 2
+    ): string {
+        const value = dividedBy === 0 ? 0 : number / dividedBy;
+        return Intl.NumberFormat('en-US', {
+            style: 'percent',
+            minimumFractionDigits,
+            maximumFractionDigits,
+        }).format(value);
+    }
+
+    static formatOrdinary(
+        number: number | bigint,
+        minDecimals = 0,
+        maxDecimals = 2,
+        notation: 'standard' | 'compact' = 'standard'
+    ): string {
+        return Intl.NumberFormat('en-US', {
+            minimumFractionDigits: minDecimals,
+            maximumFractionDigits: maxDecimals,
+            notation: notation,
+        }).format(number);
+    }
+
+    static formatAmount(number: number | bigint): string {
+        return this.formatOrdinary(number, 0, 4);
+    }
+
+    static formatWithCurrency(
+        number: number | bigint,
+        currency: string,
+        decimals = 2
+    ): string {
+        return `${this.formatOrdinary(number, 0, decimals)} ${currency}`;
+    }
+
+    static formatToFixed(
+        value: number | string | bigint,
+        decimals = 2
+    ): string {
+        const num =
+            typeof value === 'string' ? parseFloat(value) : Number(value);
+        return num.toFixed(decimals);
+    }
+
+    static formatPrice(price: number, decimals = 2): string {
+        return (price / 100).toFixed(decimals);
+    }
+
+    static formatRate(rate: number, decimals = 2): string {
+        return rate.toFixed(decimals) + '%';
+    }
+}

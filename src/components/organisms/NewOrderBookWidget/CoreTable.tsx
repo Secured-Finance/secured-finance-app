@@ -18,9 +18,7 @@ import { RootState } from 'src/store/types';
 import {
     amountFormatterFromBase,
     calculateFutureValue,
-    ordinaryFormat,
-    percentFormat,
-    usdFormat,
+    PriceFormatter,
 } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
 
@@ -179,10 +177,20 @@ export const CoreTable = <T,>({
         const totalUsd = new Amount(totalPVAmount, currency)?.toUSD(price);
 
         setOrderBookInfoData({
-            avgPrice: (avgPrice * 100).toFixed(2),
-            avgApr: percentFormat(Math.min(avgApr, 1000), 100, 2, 2),
-            totalUsd: usdFormat(Number(totalUsd), 2, 'compact'),
-            totalAmount: ordinaryFormat(totalAmount, 0, 2, 'compact'),
+            avgPrice: PriceFormatter.formatToFixed(avgPrice * 100, 2),
+            avgApr: PriceFormatter.formatPercentage(
+                Math.min(avgApr, 1000),
+                100,
+                2,
+                2
+            ),
+            totalUsd: PriceFormatter.formatUSD(Number(totalUsd), 2, 'compact'),
+            totalAmount: PriceFormatter.formatOrdinary(
+                totalAmount,
+                0,
+                2,
+                'compact'
+            ),
             position,
         });
     };

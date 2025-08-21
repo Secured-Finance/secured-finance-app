@@ -36,8 +36,7 @@ import {
     divide,
     formatLoanValue,
     getMaxAmount,
-    ordinaryFormat,
-    percentFormat,
+    PriceFormatter,
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import { ColorBar } from './ColorBar';
@@ -98,7 +97,7 @@ const AmountCell = ({
     if (value === ZERO_BI) {
         val = undefined;
     } else {
-        val = ordinaryFormat(
+        val = PriceFormatter.formatOrdinary(
             currencyMap[currency].fromBaseUnit(value),
             currencyMap[currency].roundingDecimal,
             currencyMap[currency].roundingDecimal
@@ -271,7 +270,7 @@ export const NewOrderBookWidget = ({
 
     const spread =
         lendOrders.length > 0 && borrowOrders.length > 0
-            ? ordinaryFormat(
+            ? PriceFormatter.formatOrdinary(
                   Math.abs(
                       borrowOrders[borrowOrders.length - 1].value.price -
                           lendOrders[0].value.price
@@ -283,7 +282,7 @@ export const NewOrderBookWidget = ({
 
     const aprSpread =
         lendOrders.length > 0 && borrowOrders.length > 0
-            ? percentFormat(
+            ? PriceFormatter.formatPercentage(
                   Math.abs(
                       borrowOrders[
                           borrowOrders.length - 1

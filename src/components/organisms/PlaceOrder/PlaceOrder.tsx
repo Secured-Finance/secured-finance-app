@@ -22,8 +22,8 @@ import {
     CurrencySymbol,
     OrderEvents,
     OrderProperties,
-    formatAmount,
     handleContractError,
+    PriceFormatter,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 import {
@@ -315,9 +315,9 @@ export const PlaceOrder = ({
                                     ],
                                     [
                                         'Amount',
-                                        `${formatAmount(orderAmount.value)} ${
-                                            orderAmount.currency
-                                        }`,
+                                        `${PriceFormatter.formatAmount(
+                                            orderAmount.value
+                                        )} ${orderAmount.currency}`,
                                     ],
                                 ]}
                                 txHash={txHash}

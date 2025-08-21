@@ -3,8 +3,7 @@ import { getLiquidationInformation } from 'src/components/atoms';
 import {
     amountFormatterFromBase,
     CurrencySymbol,
-    formatWithCurrency,
-    percentFormat,
+    PriceFormatter,
 } from 'src/utils';
 
 export const CollateralUsageSection = ({
@@ -19,7 +18,7 @@ export const CollateralUsageSection = ({
     collateralCoverage = collateralCoverage / 100.0;
 
     const collateralUsagePercent = useMemo(() => {
-        return percentFormat(collateralCoverage);
+        return PriceFormatter.formatPercentage(collateralCoverage);
     }, [collateralCoverage]);
 
     const info = getLiquidationInformation(collateralCoverage);
@@ -31,7 +30,7 @@ export const CollateralUsageSection = ({
                     Available to borrow
                 </h3>
                 <p className='typography-caption font-bold text-white'>
-                    {formatWithCurrency(
+                    {PriceFormatter.formatWithCurrency(
                         amountFormatterFromBase[currency](availableToBorrow),
                         currency
                     )}
