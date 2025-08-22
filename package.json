@@ -61,6 +61,7 @@
     "test:cov": "node --expose-gc --no-compilation-cache ./node_modules/.bin/jest --watchAll=false --collectCoverage --logHeapUsage --ci",
     "typecheck": "tsc  -p ./tsconfig.json",
     "codegen:wagmi": "wagmi generate -c src/wagmi.config.ts",
+    "check:generated": "npm run codegen:wagmi && git diff --exit-code",
     "prettier:check": "prettier --check 'src/**/*.{ts,tsx,js,jsx,json}' '*.{ts,tsx,js,jsx,json}' '!package.json'",
     "prettier:write": "prettier --write 'src/**/*.{ts,tsx,js,jsx,json}' '*.{ts,tsx,js,jsx,json}' '!package.json'",
     "lint:check": "eslint . --max-warnings=0",
