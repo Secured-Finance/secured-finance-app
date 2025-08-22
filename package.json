@@ -45,10 +45,12 @@
     "react-responsive": "^9.0.2",
     "siwe": "^2.3.2",
     "viem": "^1.21.1",
-    "wagmi": "^1.4.12"
+    "wagmi": "^1.4.12",
+    "zod": "^3.22.4"
   },
   "scripts": {
     "start": "next dev",
+    "prebuild": "npm run env:check",
     "build": "next build",
     "postbuild": "npm run export",
     "preview:server": "next build && next start",
@@ -63,6 +65,7 @@
     "prettier:write": "prettier --write 'src/**/*.{ts,tsx,js,jsx,json}' '*.{ts,tsx,js,jsx,json}' '!package.json'",
     "lint:check": "eslint . --max-warnings=0",
     "lint:write": "eslint --fix .",
+    "env:check": "node scripts/env/check.js",
     "cert": "openssl req -nodes -config certs/openssl.cnf -new -x509 -keyout certs/server.key -out certs/server.cert; openssl x509 -in certs/server.cert -out certs/cert.pem -outform PEM",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
@@ -71,11 +74,7 @@
     "cypress:run": "cypress run"
   },
   "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
+    "production": [">0.2%", "not dead", "not op_mini all"],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
