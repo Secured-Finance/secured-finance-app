@@ -4,7 +4,7 @@ const ONE_ETH = BigInt('1000000000000000000');
 const TWO_ETH = BigInt('2000000000000000000');
 const ZERO_ETH = BigInt('0');
 
-describe('CollateralCalculator', () => {
+describe('Collateral Functions', () => {
     describe('calculatePercentage', () => {
         it('should compute the percentage', () => {
             expect(
@@ -110,13 +110,13 @@ describe('CollateralCalculator', () => {
         it('should calculate collateral ratio correctly', () => {
             expect(
                 CollateralCalculator.calculateCollateralRatio(1000, 500)
-            ).toBe(200);
+            ).toBe(2);
             expect(
                 CollateralCalculator.calculateCollateralRatio(800, 1000)
-            ).toBe(80);
+            ).toBeCloseTo(0.8);
             expect(
                 CollateralCalculator.calculateCollateralRatio(1500, 750)
-            ).toBe(200);
+            ).toBe(2);
         });
 
         it('should return Infinity when borrowed value is 0', () => {
@@ -161,28 +161,40 @@ describe('CollateralCalculator', () => {
     describe('calculateLiquidationPrice', () => {
         it('should calculate liquidation price correctly', () => {
             expect(
-                CollateralCalculator.calculateLiquidationPrice(
-                    10,
-                    1000,
-                    80,
-                    100
-                )
-            ).toBe(80);
+                CollateralCalculator.calculateLiquidationPrice(10, 1000, 80)
+            ).toBeCloseTo(80);
             expect(
-                CollateralCalculator.calculateLiquidationPrice(5, 500, 120, 200)
-            ).toBe(120);
+                CollateralCalculator.calculateLiquidationPrice(5, 500, 120)
+            ).toBeCloseTo(120);
         });
 
         it('should return 0 when collateral amount is 0', () => {
             expect(
-                CollateralCalculator.calculateLiquidationPrice(0, 1000, 80, 100)
+                CollateralCalculator.calculateLiquidationPrice(0, 1000, 80)
             ).toBe(0);
         });
 
         it('should handle zero borrowed amount', () => {
             expect(
-                CollateralCalculator.calculateLiquidationPrice(10, 0, 80, 100)
+                CollateralCalculator.calculateLiquidationPrice(10, 0, 80)
             ).toBe(0);
+        });
+    });
+
+    describe('calculateCollateralThreshold', () => {
+        it('should calculate collateral threshold correctly', () => {
+            expect(
+                CollateralCalculator.calculateCollateralThreshold(12500)
+            ).toBe(80);
+            expect(
+                CollateralCalculator.calculateCollateralThreshold(10000)
+            ).toBe(100);
+        });
+
+        it('should return 0 when liquidation threshold rate is 0', () => {
+            expect(CollateralCalculator.calculateCollateralThreshold(0)).toBe(
+                0
+            );
         });
     });
 });

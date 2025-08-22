@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 import { useBreakpoint } from 'src/hooks';
 import { ColorFormat } from 'src/types';
-import { divide, multiply } from 'src/utils';
 import { ZERO_BI, CollateralCalculator } from 'src/utils/collateral';
 
 const COLORBAR_MIN_WIDTH = 5;
@@ -19,17 +18,9 @@ export const ColorBar = ({
     const isTablet = useBreakpoint('laptop');
     const maxWidth = isTablet ? COLORBAR_MAX_WIDTH_MOBILE : COLORBAR_MAX_WIDTH;
 
+    const percentage = CollateralCalculator.calculatePercentage(value, total);
     const width = Math.min(
-        Math.max(
-            multiply(
-                divide(
-                    CollateralCalculator.calculatePercentage(value, total),
-                    100
-                ),
-                maxWidth
-            ),
-            COLORBAR_MIN_WIDTH
-        ),
+        Math.max((percentage / 100) * maxWidth, COLORBAR_MIN_WIDTH),
         maxWidth
     );
 

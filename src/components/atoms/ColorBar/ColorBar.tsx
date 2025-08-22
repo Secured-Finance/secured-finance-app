@@ -1,6 +1,5 @@
 import clsx from 'clsx';
 import { ColorFormat } from 'src/types';
-import { divide, multiply } from 'src/utils';
 import { ZERO_BI, CollateralCalculator } from 'src/utils/collateral';
 
 const COLORBAR_MIN_WIDTH = 5;
@@ -15,17 +14,9 @@ export const ColorBar = ({
     total: bigint;
     align: 'left' | 'right';
 } & Required<ColorFormat>) => {
+    const percentage = CollateralCalculator.calculatePercentage(value, total);
     const width = Math.min(
-        Math.max(
-            multiply(
-                divide(
-                    CollateralCalculator.calculatePercentage(value, total),
-                    100
-                ),
-                COLORBAR_MAX_WIDTH
-            ),
-            COLORBAR_MIN_WIDTH
-        ),
+        Math.max((percentage / 100) * COLORBAR_MAX_WIDTH, COLORBAR_MIN_WIDTH),
         COLORBAR_MAX_WIDTH
     );
     return (

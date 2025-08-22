@@ -115,13 +115,10 @@ export const useCollateralBook = (account: string | undefined) => {
             const { collateralBook, nonCollateralBook, usdNonCollateral } =
                 formatCollateral(data.collateralValues.collateral, priceList);
 
-            const liquidationThresholdRate = Number(
-                data.collateralParameters.liquidationThresholdRate
-            );
             const collateralThreshold =
-                liquidationThresholdRate === 0
-                    ? 0
-                    : 1000000 / liquidationThresholdRate;
+                CollateralCalculator.calculateCollateralThreshold(
+                    data.collateralParameters.liquidationThresholdRate
+                );
 
             const withdrawableCollateral: CollateralBook['withdrawableCollateral'] =
                 data.withdrawableCollateral.reduce((acc, obj) => ({
@@ -138,7 +135,7 @@ export const useCollateralBook = (account: string | undefined) => {
                 DIVIDER,
                 8
             );
-            const coverage = Number(data.collateralValues.collateralCoverage);
+            const coverage = data.collateralValues.collateralCoverage;
 
             const colBook: CollateralBook = {
                 collateral: collateralBook,
@@ -152,7 +149,7 @@ export const useCollateralBook = (account: string | undefined) => {
                         collateralThreshold
                     ),
                 usdNonCollateral: usdNonCollateral,
-                coverage: coverage,
+                coverage: CollateralCalculator.toNumber(coverage),
                 collateralThreshold: collateralThreshold,
                 withdrawableCollateral: withdrawableCollateral,
                 totalPresentValue: divide(data.totalPresentValue, DIVIDER, 8),
