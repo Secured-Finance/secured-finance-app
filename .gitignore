@@ -43,3 +43,6 @@ build-storybook.log
 
 # Typecheck
 tsconfig.tsbuildinfo
+
+# Generated code
+/src/generated/
