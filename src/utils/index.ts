@@ -19,5 +19,6 @@ export * from './protocol';
 export * from './rate';
 export * from './strings';
 export * from './tableDefinitions';
+export * from './unifiedFormatter';
 export * from './validation';
 export * from './wallet';
