@@ -181,7 +181,7 @@ export const EmergencyGlobalSettlement = () => {
                 }}
                 data={snapshotWithPrice ?? []}
                 snapshotDate={snapshotDate}
-                netValue={PriceFormatter.formatUSD(netValue)}
+                netValue={PriceFormatter.formatUSDValue(netValue, 2)}
             />
         </Page>
     );

@@ -10,7 +10,7 @@ export const AmountCard = ({
     price: number;
 }) => {
     const formattedValue = PriceFormatter.formatAmount(amount.value);
-
+    const formattedValueInUSD = PriceFormatter.formatUSD(amount.value, price);
     return (
         <div className='mb-3 grid w-full grid-cols-2 justify-around'>
             <div className='col-span-1 grid items-center justify-start'>
@@ -35,7 +35,7 @@ export const AmountCard = ({
                     {formattedValue}
                 </span>
                 <div className='typography-caption-3 text-right text-white-60'>
-                    {prefixTilde(PriceFormatter.formatUSD(amount.toUSD(price)))}
+                    {prefixTilde(formattedValueInUSD)}
                 </div>
             </div>
         </div>

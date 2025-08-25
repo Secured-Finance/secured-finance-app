@@ -206,7 +206,8 @@ export const AdvancedLendingEstimationFields = ({
                 0,
                 currencyMap[currency].roundingDecimal
             )} ${currency} (${PriceFormatter.formatUSD(
-                amount * assetPrice,
+                amount,
+                assetPrice,
                 2
             )})`;
         }
@@ -241,7 +242,7 @@ export const AdvancedLendingEstimationFields = ({
                 fv,
                 0,
                 currencyMap[currency].roundingDecimal
-            )} ${currency} (${PriceFormatter.formatUSD(totalValue, 2)})`;
+            )} ${currency} (${PriceFormatter.formatUSDValue(totalValue, 2)})`;
         }
     }, [
         showDashes,

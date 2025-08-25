@@ -1,7 +1,25 @@
 export class PriceFormatter {
     static formatUSD(
         number: number | bigint,
+        price: number | bigint,
         digits = 0,
+        notation: 'standard' | 'compact' = 'standard'
+    ): string {
+        const num = typeof number === 'bigint' ? Number(number) : number;
+        const priceNum = typeof price === 'bigint' ? Number(price) : price;
+
+        return Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            currencySign: 'accounting',
+            maximumFractionDigits: digits,
+            notation: notation,
+        }).format(num * priceNum);
+    }
+
+    static formatUSDValue(
+        value: number | bigint,
+        digits = 2,
         notation: 'standard' | 'compact' = 'standard'
     ): string {
         return Intl.NumberFormat('en-US', {
@@ -10,7 +28,7 @@ export class PriceFormatter {
             currencySign: 'accounting',
             maximumFractionDigits: digits,
             notation: notation,
-        }).format(number);
+        }).format(value);
     }
 
     static formatPercentage(

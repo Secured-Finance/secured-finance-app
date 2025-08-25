@@ -3,12 +3,35 @@ import { PriceFormatter } from './priceFormatter';
 describe('PriceFormatter', () => {
     describe('formatUSD', () => {
         it('should format USD currency with default settings', () => {
-            expect(PriceFormatter.formatUSD(1000)).toBe('$1,000');
-            expect(PriceFormatter.formatUSD(BigInt(1000))).toBe('$1,000');
+            expect(PriceFormatter.formatUSDValue(1000)).toBe('$1,000.00');
+            expect(PriceFormatter.formatUSDValue(BigInt(1000))).toBe(
+                '$1,000.00'
+            );
         });
 
         it('should format USD with specified digits', () => {
-            expect(PriceFormatter.formatUSD(1000.567, 2)).toBe('$1,000.57');
+            expect(PriceFormatter.formatUSD(1000.567, 1, 2)).toBe('$1,000.57');
+        });
+    });
+
+    describe('formatUSDValue', () => {
+        it('should format pre-calculated USD values', () => {
+            expect(PriceFormatter.formatUSDValue(1000)).toBe('$1,000.00');
+            expect(PriceFormatter.formatUSDValue(1000.567, 2)).toBe(
+                '$1,000.57'
+            );
+        });
+
+        it('should handle compact notation for USD values', () => {
+            expect(PriceFormatter.formatUSDValue(1000000, 0, 'compact')).toBe(
+                '$1M'
+            );
+        });
+
+        it('should preserve BigInt precision for USD values', () => {
+            expect(
+                PriceFormatter.formatUSDValue(BigInt('123456789123456789'))
+            ).toBe('$123,456,789,123,456,789.00');
         });
     });
 

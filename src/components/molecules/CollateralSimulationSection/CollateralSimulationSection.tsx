@@ -82,7 +82,7 @@ export const CollateralSimulationSection = ({
     const items: [string | React.ReactNode, string | React.ReactNode][] = [
         [
             'Borrow Remaining',
-            PriceFormatter.formatUSD(remainingToBorrow * assetPrice, 2),
+            PriceFormatter.formatUSD(remainingToBorrow, assetPrice, 2),
         ],
         [
             'ZC Usage',

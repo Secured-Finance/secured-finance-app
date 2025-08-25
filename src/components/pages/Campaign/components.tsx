@@ -175,7 +175,7 @@ export const CampaignStatus = ({
                                 );
                             })}
                             <span className='typography-mobile-body-4 laptop:typography-desktop-body-4 block text-center text-white/40 tablet:text-left desktop:text-4 desktop:leading-8'>
-                                {`≈ ${PriceFormatter.formatUSD(
+                                {`≈ ${PriceFormatter.formatUSDValue(
                                     totalUSDValue,
                                     2
                                 )}`}

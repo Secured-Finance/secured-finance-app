@@ -31,7 +31,7 @@ export default {
         ),
         volumeInfo: {
             volume24H: '520 WFIL',
-            volumeInUSD: PriceFormatter.formatUSD(1851),
+            volumeInUSD: PriceFormatter.formatUSDValue(1851, 2),
         },
     },
     parameters: {

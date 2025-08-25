@@ -91,7 +91,7 @@ export const Stats = () => {
     const { data: priceList } = useLastPrices();
 
     const totalVolume = useMemo(() => {
-        return PriceFormatter.formatUSD(
+        return PriceFormatter.formatUSDValue(
             computeTotalProtocolVolumeInUSD(
                 userCountAndVolume.data?.volumesByCurrency ?? [],
                 priceList
@@ -128,7 +128,7 @@ export const Stats = () => {
                             },
                             {
                                 name: 'Total Value Locked',
-                                value: PriceFormatter.formatUSD(
+                                value: PriceFormatter.formatUSDValue(
                                     totalValueLockedInUSD,
                                     2,
                                     'compact'

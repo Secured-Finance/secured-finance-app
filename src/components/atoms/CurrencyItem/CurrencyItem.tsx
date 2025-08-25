@@ -33,11 +33,12 @@ export const CurrencyItem = ({
     const currency = currencyMap[ccy];
     if (amount !== undefined && price !== undefined) {
         secondLine = PriceFormatter.formatUSD(
-            currency.fromBaseUnit(amount) * price,
+            currency.fromBaseUnit(amount),
+            price,
             2
         );
     } else if (price) {
-        secondLine = PriceFormatter.formatUSD(price, 2);
+        secondLine = PriceFormatter.formatUSDValue(price, 2);
     } else {
         secondLine = currency.name;
     }

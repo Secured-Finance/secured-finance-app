@@ -85,12 +85,12 @@ export const CollateralManagementConciseTab = ({
                     ) : (
                         <>
                             <span className='font-semibold text-secondary-300'>
-                                {`${PriceFormatter.formatUSD(
+                                {`${PriceFormatter.formatUSDValue(
                                     availableToBorrow,
                                     2
                                 )} `}
                             </span>
-                            <span>{`of ${PriceFormatter.formatUSD(
+                            <span>{`of ${PriceFormatter.formatUSDValue(
                                 totalCollateralInUSD,
                                 2
                             )} available`}</span>

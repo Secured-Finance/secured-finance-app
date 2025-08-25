@@ -115,7 +115,7 @@ export const ZCTokenInput = ({
                 {!!availableAmount && (
                     <div className='typography-body-2'>
                         <span className='text-center text-neutral-8'>
-                            {PriceFormatter.formatUSD(totalPrice, 2)}
+                            {PriceFormatter.formatUSDValue(totalPrice, 2)}
                         </span>
                         <span className='pl-2 text-center text-neutral-4'>
                             USD

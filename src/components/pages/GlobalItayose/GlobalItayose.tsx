@@ -130,7 +130,7 @@ export const GlobalItayose = () => {
                                 },
                                 {
                                     name: 'Total Value Locked',
-                                    value: PriceFormatter.formatUSD(
+                                    value: PriceFormatter.formatUSDValue(
                                         totalValueLockedInUSD,
                                         2,
                                         'compact'

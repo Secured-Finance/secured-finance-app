@@ -184,7 +184,11 @@ export const CoreTable = <T,>({
                 2,
                 2
             ),
-            totalUsd: PriceFormatter.formatUSD(Number(totalUsd), 2, 'compact'),
+            totalUsd: PriceFormatter.formatUSDValue(
+                Number(totalUsd),
+                2,
+                'compact'
+            ),
             totalAmount: PriceFormatter.formatOrdinary(
                 totalAmount,
                 0,

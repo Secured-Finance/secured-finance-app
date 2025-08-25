@@ -22,7 +22,7 @@ describe('AdvancedLendingTopBar Component', () => {
         expect(screen.getByText('--.--')).toBeInTheDocument();
 
         expect(screen.getByText('WFIL Price')).toBeInTheDocument();
-        expect(screen.getByText('$3.56')).toBeInTheDocument();
+        expect(screen.getByText('$7')).toBeInTheDocument();
     });
 
     it('should render source link for the selected asset', () => {

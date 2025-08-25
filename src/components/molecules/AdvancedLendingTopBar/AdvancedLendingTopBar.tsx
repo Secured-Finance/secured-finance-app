@@ -74,7 +74,7 @@ export const AdvancedLendingTopBar = ({
     const marketKey = `${selectedAsset?.value}-${maturity}`;
     const rawVolume = volumePerMarket?.[marketKey] ?? 0;
 
-    const volumeInUSD = PriceFormatter.formatUSD(rawVolume * currencyPrice, 2);
+    const volumeInUSD = PriceFormatter.formatUSD(rawVolume, currencyPrice, 2);
     const volume24H = PriceFormatter.formatWithCurrency(
         volumePerMarket[marketKey] ?? 0,
         selectedAsset?.value as CurrencySymbol,

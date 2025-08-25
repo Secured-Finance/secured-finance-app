@@ -98,7 +98,7 @@ export const CollateralSnapshot = ({
             columnHelper.accessor('price', {
                 cell: info => (
                     <div className='text-right'>
-                        {PriceFormatter.formatUSD(info.getValue(), 2)}
+                        {PriceFormatter.formatUSDValue(info.getValue(), 2)}
                     </div>
                 ),
                 header: 'Snapshot Rate',

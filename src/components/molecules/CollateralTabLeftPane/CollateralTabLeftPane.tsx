@@ -202,7 +202,7 @@ export const CollateralTabLeftPane = ({
                             }
                         )}
                     >
-                        {PriceFormatter.formatUSD(netAssetValue, 2)}
+                        {PriceFormatter.formatUSDValue(netAssetValue, 2)}
                     </span>
                 </div>
                 {!account ? (

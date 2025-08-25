@@ -94,7 +94,7 @@ export const WithdrawPositionTable = ({
                                 Net Value
                             </span>
                             <span className='typography-body-2 font-semibold leading-4 text-neutral-8'>
-                                {PriceFormatter.formatUSD(netValue)}
+                                {PriceFormatter.formatUSDValue(netValue, 0)}
                             </span>
                         </span>
                         <Button

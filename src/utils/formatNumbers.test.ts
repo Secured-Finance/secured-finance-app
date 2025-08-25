@@ -30,35 +30,35 @@ describe('formatWithCurrency', () => {
 describe('usdFormat', () => {
     it('formats a number as USD currency with the default parameters', () => {
         const number = 123456.789;
-        const result = PriceFormatter.formatUSD(number);
-        expect(result).toBe('$123,457');
+        const result = PriceFormatter.formatUSDValue(number);
+        expect(result).toBe('$123,456.79');
     });
 
     it('formats a number as USD currency with specified number of fraction digits', () => {
         const number = 123456.789;
         const digits = 2;
-        const result = PriceFormatter.formatUSD(number, digits);
+        const result = PriceFormatter.formatUSDValue(number, digits);
         expect(result).toBe('$123,456.79');
     });
 
     it('formats a number as USD currency with specified notation', () => {
         const number = 123456.789;
         const notation = 'compact';
-        const result = PriceFormatter.formatUSD(number, 0, notation);
+        const result = PriceFormatter.formatUSDValue(number, 0, notation);
         expect(result).toBe('$123K');
     });
 
     it('formats a bigint as USD currency with the default parameters', () => {
         const number = BigInt('123456789123456789');
-        const result = PriceFormatter.formatUSD(number);
-        expect(result).toBe('$123,456,789,123,456,789');
+        const result = PriceFormatter.formatUSDValue(number);
+        expect(result).toBe('$123,456,789,123,456,789.00');
     });
 
     it('formats a bigint as USD currency with specified number with a compact notation', () => {
         const number = BigInt('123456789123');
         const digits = 0;
         const notation = 'compact';
-        const result = PriceFormatter.formatUSD(number, digits, notation);
+        const result = PriceFormatter.formatUSDValue(number, digits, notation);
         expect(result).toBe('$123B');
     });
 });

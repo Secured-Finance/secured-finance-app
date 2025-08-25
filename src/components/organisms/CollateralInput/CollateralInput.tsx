@@ -76,7 +76,8 @@ export const CollateralInput = ({
                 <div className='typography-body-2'>
                     <span className='text-center text-neutral-8'>
                         {PriceFormatter.formatUSD(
-                            price * Number(amount ?? ''),
+                            Number(amount ?? ''),
+                            price,
                             2
                         )}
                     </span>

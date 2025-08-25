@@ -17,7 +17,7 @@ export const CurveHeaderAsset = ({ ccy, value }: CurveHeaderAssetProps) => {
                     {currencyMap[ccy].name}
                 </span>
                 <span className='typography-caption flex h-full items-center text-neutral-8'>
-                    {PriceFormatter.formatUSD(value, 2)}
+                    {PriceFormatter.formatUSDValue(value, 2)}
                 </span>
             </div>
         </div>

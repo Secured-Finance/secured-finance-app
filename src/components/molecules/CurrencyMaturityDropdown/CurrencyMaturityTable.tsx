@@ -108,7 +108,11 @@ export const CurrencyMaturityTable = ({
                     );
                 case 'volume':
                     return option.volume
-                        ? PriceFormatter.formatUSD(option.volume, 2, 'compact')
+                        ? PriceFormatter.formatUSDValue(
+                              option.volume,
+                              2,
+                              'compact'
+                          )
                         : '-';
                 default:
                     return null;

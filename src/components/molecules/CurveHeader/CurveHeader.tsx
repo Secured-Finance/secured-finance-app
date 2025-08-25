@@ -44,8 +44,8 @@ const CurveHeaderNotes = ({
             <CurveHeaderTotal
                 header='Total Volume (USD)'
                 footer={PriceFormatter.formatUSD(
-                    Number(totalVolume.volumePerCurrency[asset]) *
-                        priceList[asset]
+                    Number(totalVolume.volumePerCurrency[asset]),
+                    priceList[asset]
                 )}
             />
         </div>
