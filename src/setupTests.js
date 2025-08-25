@@ -33,4 +33,5 @@ afterAll(() => {
 
 afterEach(() => {
     cleanup();
+    jest.restoreAllMocks();
 });

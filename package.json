@@ -62,6 +62,7 @@
     "typecheck": "tsc  -p ./tsconfig.json",
     "codegen:wagmi": "wagmi generate -c src/wagmi.config.ts",
     "check:generated": "npm run codegen:wagmi && git diff --exit-code",
+    "ci:local": "npm run typecheck && npm run lint:check && npm run prettier:check && npm run test:cov && npm run check:generated",
     "prettier:check": "prettier --check 'src/**/*.{ts,tsx,js,jsx,json}' '*.{ts,tsx,js,jsx,json}' '!package.json'",
     "prettier:write": "prettier --write 'src/**/*.{ts,tsx,js,jsx,json}' '*.{ts,tsx,js,jsx,json}' '!package.json'",
     "lint:check": "eslint . --max-warnings=0",

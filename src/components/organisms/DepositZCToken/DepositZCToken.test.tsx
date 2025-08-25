@@ -15,6 +15,11 @@ const { Default } = composeStories(stories);
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
+beforeEach(() => {
+    // Suppress console errors from wagmi network calls
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+});
+
 describe('DepositZCToken component', () => {
     beforeEach(() => {
         mockSecuredFinance.getERC20TokenBalance.mockResolvedValueOnce(

@@ -9,6 +9,16 @@ const { Default, GlobalItayose } = composeStories(stories);
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
+beforeEach(() => {
+    // Suppress console errors from wagmi network calls
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+});
+
+afterEach(() => {
+    // Restore console.error after each test
+    jest.restoreAllMocks();
+});
+
 describe('MarketLoanWidget Component', () => {
     it('should filter by currency', async () => {
         render(<Default />);
