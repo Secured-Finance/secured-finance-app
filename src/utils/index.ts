@@ -14,6 +14,7 @@ export * from './links';
 export * from './markets';
 export * from './mobileTableDefinitions';
 export * from './networks';
+export * from './orderTypeConverter';
 export * from './portfolio';
 export * from './protocol';
 export * from './rate';

@@ -1,15 +1,28 @@
 import { OrderSide } from '@secured-finance/sf-client';
 
 export class OrderTypeConverter {
-    static from(value: number | string): OrderSide {
-        return value === 1 || value === '1' ? OrderSide.BORROW : OrderSide.LEND;
-    }
+    static from(value: number | string | null | undefined): OrderSide {
+        if (value === null || value === undefined) {
+            return OrderSide.LEND; // Default to LEND
+        }
 
-    static toNumber(side: OrderSide): number {
-        return side === OrderSide.BORROW ? 1 : 0;
+        const normalizedValue =
+            typeof value === 'string' ? value.trim() : value;
+
+        if (normalizedValue === 1 || normalizedValue === '1') {
+            return OrderSide.BORROW;
+        }
+
+        // Default to LEND for any other case (0, '0', empty string, or invalid values)
+        return OrderSide.LEND;
     }
 
     static toDisplayString(side: OrderSide): string {
-        return side === OrderSide.BORROW ? 'Borrow' : 'Lend';
+        if (side === OrderSide.BORROW) {
+            return 'Borrow';
+        }
+
+        // Default to 'Lend' for any other case (including null/undefined)
+        return 'Lend';
     }
 }
