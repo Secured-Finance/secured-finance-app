@@ -3,21 +3,19 @@ import { LiquidationCalculator } from './liquidation';
 describe('LiquidationCalculator', () => {
     describe('calculateLiquidationThreshold', () => {
         it('should calculate liquidation threshold correctly', () => {
+            expect(LiquidationCalculator.getLiquidationThreshold(12500)).toBe(
+                80
+            );
             expect(
-                LiquidationCalculator.calculateLiquidationThreshold(12500)
-            ).toBe(80);
-            expect(
-                LiquidationCalculator.calculateLiquidationThreshold(8333)
+                LiquidationCalculator.getLiquidationThreshold(8333)
             ).toBeCloseTo(120.01, 1);
-            expect(
-                LiquidationCalculator.calculateLiquidationThreshold(20000)
-            ).toBe(50);
+            expect(LiquidationCalculator.getLiquidationThreshold(20000)).toBe(
+                50
+            );
         });
 
         it('should return 0 when liquidationThresholdRate is 0', () => {
-            expect(LiquidationCalculator.calculateLiquidationThreshold(0)).toBe(
-                0
-            );
+            expect(LiquidationCalculator.getLiquidationThreshold(0)).toBe(0);
         });
     });
 

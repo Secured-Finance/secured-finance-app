@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 import Tick from 'src/assets/icons/tick.svg';
-import { percentFormat, usdFormat } from 'src/utils';
-import { LiquidationCalculator } from 'src/utils/liquidation';
+import { LiquidationCalculator, percentFormat, usdFormat } from 'src/utils';
 
 interface CollateralManagementConciseTabProps {
     collateralCoverage: number;
