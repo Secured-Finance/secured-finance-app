@@ -1,22 +1,19 @@
 import { Maturity } from './entities';
+const MS_PER_SEC = 1000;
 
 export class MaturityConverter {
-    // Parse raw input and create Maturity object
     static fromInput(input: string | number | bigint): Maturity {
         return new Maturity(input);
     }
 
-    // Convert Maturity to number
     static toNumber(maturity: Maturity): number {
         return maturity.toNumber();
     }
 
-    // Convert Maturity to string
     static toString(maturity: Maturity): string {
         return maturity.toString();
     }
 
-    // Internal helper to get timestamp from any input type
     private static getTimestamp(
         input: string | number | bigint | Maturity
     ): number {
@@ -32,7 +29,7 @@ export class MaturityConverter {
         numeric?: boolean
     ): string {
         const timestamp = this.getTimestamp(input);
-        const date = new Date(timestamp * 1000);
+        const date = new Date(timestamp * MS_PER_SEC);
         const month = date.toLocaleString('en-US', {
             month: 'short',
             timeZone: 'UTC',
@@ -43,10 +40,9 @@ export class MaturityConverter {
         return `${month.toUpperCase()}${year}`;
     }
 
-    // Format as date string (e.g., "Jan 1, 2025")
     static toDateString(input: string | number | bigint | Maturity): string {
         const timestamp = this.getTimestamp(input);
-        const date = new Date(timestamp * 1000);
+        const date = new Date(timestamp * MS_PER_SEC);
         return date.toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'short',
