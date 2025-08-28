@@ -1,11 +1,14 @@
 import * as dayjs from 'dayjs';
 import { percentFormat } from 'src/utils';
+import { Maturity } from './entities';
 
 const SECONDS_IN_YEAR = 365 * 24 * 60 * 60;
+const PERCENTAGE_BASE = 100;
+const BASIS_POINTS_BASE = 10000;
 
 export class FeeCalculator {
     static calculateTransactionFees(
-        maturity: number | { toNumber(): number },
+        maturity: number | Maturity,
         annualFee: number
     ): string {
         const normalizedMaturity =
@@ -18,7 +21,7 @@ export class FeeCalculator {
     static calculateProtocolFee(feeRate: number | bigint): number {
         const normalizedFee =
             typeof feeRate === 'bigint' ? Number(feeRate) : feeRate;
-        return normalizedFee / 100;
+        return normalizedFee / PERCENTAGE_BASE;
     }
 
     static calculateFutureValueWithFee(
@@ -47,18 +50,20 @@ export class FeeCalculator {
             typeof maturity === 'object' ? maturity.toNumber() : maturity;
         const diff = dayjs.unix(normalizedMaturity).diff(Date.now(), 'second');
         const timeBasedFee = Math.max((diff * feeRate) / SECONDS_IN_YEAR, 0);
-        const futureValue = (amount * BigInt(10000)) / unitPrice;
+        const futureValue = (amount * BigInt(BASIS_POINTS_BASE)) / unitPrice;
+        const timeBasedFeePercent = Math.floor(timeBasedFee * PERCENTAGE_BASE);
         return (
-            (futureValue * BigInt(Math.floor(timeBasedFee * 100))) /
-            BigInt(10000)
+            (futureValue * BigInt(timeBasedFeePercent)) /
+            BigInt(BASIS_POINTS_BASE)
         );
     }
 
     static applyDiscountRate(feeAmount: bigint, discountRate: number): bigint {
         if (discountRate <= 0) return feeAmount;
+        const discountRateBpsInt = Math.floor(discountRate * BASIS_POINTS_BASE);
         const discount =
-            (feeAmount * BigInt(Math.floor(discountRate * 10000))) /
-            BigInt(10000);
+            (feeAmount * BigInt(discountRateBpsInt)) /
+            BigInt(BASIS_POINTS_BASE);
         return feeAmount - discount;
     }
 }
