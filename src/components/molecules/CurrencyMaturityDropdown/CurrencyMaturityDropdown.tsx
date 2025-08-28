@@ -52,10 +52,10 @@ export const CurrencyMaturityDropdown = ({
     >(undefined);
     const [isItayose, setIsItayose] = useState<boolean>(false);
     const [sortState, setSortState] = useState<{
-        column?: Key;
-        direction?: SortDescriptor['direction'];
+        column: Key;
+        direction: SortDescriptor['direction'];
     }>({
-        column: undefined,
+        column: 'unitPrice',
         direction: 'ascending',
     });
 
