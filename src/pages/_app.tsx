@@ -139,10 +139,10 @@ const config = createConfig({
                 projectId: projectId,
                 qrModalOptions: {
                     themeVariables: {
-                        '--w3m-font-family':
+                        '--wcm-font-family':
                             "'Suisse International', sans-serif",
-                        '--w3m-accent-color': '#002133',
-                        '--w3m-background-color': '#5162FF',
+                        '--wcm-accent-color': '#002133',
+                        '--wcm-background-color': '#5162FF',
                     },
                 },
             },
