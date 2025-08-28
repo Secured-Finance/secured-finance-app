@@ -1,8 +1,10 @@
 import * as dayjs from 'dayjs';
 
+const MILLISECONDS_PER_SECOND = 1000;
+
 export class TimestampConverter {
     static toDate(timestamp: number): Date {
-        return new Date(timestamp * 1000);
+        return new Date(timestamp * MILLISECONDS_PER_SECOND);
     }
 
     static toNumber(value: string | number | bigint): number {
@@ -65,6 +67,14 @@ export class TimestampConverter {
     }
 
     static getCurrentTimestamp(): number {
-        return Math.floor(Date.now() / 1000);
+        return Math.floor(Date.now() / MILLISECONDS_PER_SECOND);
+    }
+
+    static calculateIntervalTimestamp(
+        timestamp: number,
+        interval: string | number
+    ): number {
+        const intervalNum = Number(interval);
+        return Math.ceil(timestamp / intervalNum) * intervalNum;
     }
 }

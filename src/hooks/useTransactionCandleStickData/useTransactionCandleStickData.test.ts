@@ -10,6 +10,12 @@ jest.mock('src/utils', () => ({
     amountFormatterFromBase: {
         ETH: jest.fn((value: bigint) => Number(value) / 1e18),
     },
+    TimestampConverter: {
+        getCurrentTimestamp: jest.fn(() => 1625101200),
+        calculateIntervalTimestamp: jest.fn(
+            (timestamp, interval) => Math.ceil(timestamp / interval) * interval
+        ),
+    },
 }));
 
 describe('useTransactionCandleStickData', () => {
