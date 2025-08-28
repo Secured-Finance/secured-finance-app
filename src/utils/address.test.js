@@ -1,4 +1,4 @@
-import { AddressConverter, AddressUtils } from './address';
+import { AddressConverter } from './address';
 
 const VALID_ADDRESS = '0x1234567890123456789012345678901234567890';
 const ANOTHER_VALID_ADDRESS = '0x1234567890123456789012345678901234567891';
@@ -134,28 +134,5 @@ describe('AddressConverter.formatByContext', () => {
         expect(AddressConverter.formatByContext(VALID_ADDRESS, 'long')).toEqual(
             '0x12345678...7890'
         );
-    });
-});
-
-// Backward compatibility tests
-describe('AddressUtils (backward compatibility)', () => {
-    it('should maintain format functionality', () => {
-        expect(AddressUtils.format(VALID_ADDRESS, 10)).toEqual(
-            '0x12345678...7890'
-        );
-        expect(AddressUtils.format()).toEqual('...');
-    });
-
-    it('should maintain equals functionality', () => {
-        expect(AddressUtils.equals(VALID_ADDRESS, VALID_ADDRESS)).toBeTruthy();
-        expect(
-            AddressUtils.equals(VALID_ADDRESS, ANOTHER_VALID_ADDRESS)
-        ).toBeFalsy();
-        expect(
-            AddressUtils.equals(
-                '0x1234567890123456789012345678901234567890',
-                '0X1234567890123456789012345678901234567890'
-            )
-        ).toBeTruthy();
     });
 });

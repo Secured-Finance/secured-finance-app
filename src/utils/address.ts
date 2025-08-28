@@ -1,3 +1,12 @@
+const DISPLAY_LENGTHS = {
+    SHORT: 4,
+    MEDIUM: 6,
+    LONG: 10,
+    DEFAULT_SUFFIX: 4,
+} as const;
+
+const CHECKSUM_POSITION_MODIFIER = 2;
+
 export class AddressConverter {
     /**
      * Formats an address for display with truncation
@@ -5,10 +14,18 @@ export class AddressConverter {
      * @param length - Number of characters to show from start (default: 6)
      * @returns Formatted address string
      */
-    static format(address: string, length = 6): string {
+    static format(
+        address: string,
+        length: number = DISPLAY_LENGTHS.MEDIUM
+    ): string {
         if (!address) return '...';
-        if (address.length <= length + 4) return address;
-        return address.slice(0, length) + '...' + address.slice(-4);
+        if (address.length <= length + DISPLAY_LENGTHS.DEFAULT_SUFFIX)
+            return address;
+        return (
+            address.slice(0, length) +
+            '...' +
+            address.slice(-DISPLAY_LENGTHS.DEFAULT_SUFFIX)
+        );
     }
 
     /**
@@ -45,7 +62,10 @@ export class AddressConverter {
         for (let i = 0; i < cleanAddress.length; i++) {
             const char = cleanAddress[i];
             // Simple checksum logic - alternating case based on position
-            checksum += i % 2 === 0 ? char.toUpperCase() : char.toLowerCase();
+            checksum +=
+                i % CHECKSUM_POSITION_MODIFIER === 0
+                    ? char.toUpperCase()
+                    : char.toLowerCase();
         }
 
         return checksum;
@@ -70,13 +90,11 @@ export class AddressConverter {
         address: string,
         context: 'short' | 'medium' | 'long' = 'medium'
     ): string {
-        const lengths = { short: 4, medium: 6, long: 10 };
+        const lengths = {
+            short: DISPLAY_LENGTHS.SHORT,
+            medium: DISPLAY_LENGTHS.MEDIUM,
+            long: DISPLAY_LENGTHS.LONG,
+        };
         return this.format(address, lengths[context]);
     }
 }
-
-// Backward compatibility
-export const AddressUtils = {
-    equals: AddressConverter.equals,
-    format: AddressConverter.format,
-};
