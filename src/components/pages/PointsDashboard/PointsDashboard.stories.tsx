@@ -14,6 +14,7 @@ import {
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import { PointsDashboard } from './PointsDashboard';
+import { HexConverter } from 'src/utils';
 
 const quests = [
     {
@@ -87,8 +88,14 @@ const users = [
                     ...Array.from({ length: 30 }).map((_, index) => ({
                         id: `${index}`,
                         walletAddress: utils.hexlify(
-                            BigInt((index + 1).toString().padEnd(40, '0')) +
-                                BigInt(index)
+                            BigInt(
+                                HexConverter.padString(
+                                    (index + 1).toString(),
+                                    40,
+                                    '0',
+                                    'end'
+                                )
+                            ) + BigInt(index)
                         ),
                         point: 100 - index,
                         rank: index + 1,
