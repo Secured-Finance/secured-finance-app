@@ -6,9 +6,6 @@ import * as stories from './WalletDialog.stories';
 const { Primary } = composeStories(stories);
 
 const preloadedState = {
-    interactions: {
-        walletDialogOpen: true,
-    },
     blockchain: {
         chainError: false,
     },

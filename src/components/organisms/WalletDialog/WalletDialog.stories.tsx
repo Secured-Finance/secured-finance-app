@@ -2,8 +2,7 @@ import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import { withWalletProvider } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { setWalletDialogOpen } from 'src/store/interactions';
+import { useUIStore } from 'src/stores';
 import { WalletDialog } from './WalletDialog';
 
 export default {
@@ -19,14 +18,11 @@ export default {
 } as Meta<typeof WalletDialog>;
 
 const Template: StoryFn<typeof WalletDialog> = () => {
-    const dispatch = useDispatch();
+    const { setWalletDialogOpen } = useUIStore();
     useEffect(() => {
-        const timerId = setTimeout(() => {
-            dispatch(setWalletDialogOpen(true));
-        }, 200);
-
-        return () => clearTimeout(timerId);
-    }, [dispatch]);
+        setWalletDialogOpen(true);
+        return () => setWalletDialogOpen(false);
+    }, [setWalletDialogOpen]);
     return <WalletDialog />;
 };
 

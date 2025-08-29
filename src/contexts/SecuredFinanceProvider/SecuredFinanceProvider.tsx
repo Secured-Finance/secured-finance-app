@@ -13,7 +13,7 @@ import {
     updateIsChainIdDetected,
     updateLatestBlock,
 } from 'src/store/blockchain';
-import { setWalletDialogOpen } from 'src/store/interactions';
+import { useUIStore } from 'src/stores';
 import { RootState } from 'src/store/types';
 import {
     getSupportedChainIds,
@@ -71,6 +71,7 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
     const [securedFinance, setSecuredFinance] =
         useState<SecuredFinanceClient>();
     const dispatch = useDispatch();
+    const { setWalletDialogOpen } = useUIStore();
 
     useWalletStore();
 
@@ -266,10 +267,10 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
             if (connector) {
                 connector.switchChain?.(selectedChainId);
             } else {
-                dispatch(setWalletDialogOpen(true));
+                setWalletDialogOpen(true);
             }
         }
-    }, [searchParams, chainId, connectors, router, dispatch]);
+    }, [searchParams, chainId, connectors, router, setWalletDialogOpen]);
 
     return (
         <Context.Provider value={{ securedFinance }}>
