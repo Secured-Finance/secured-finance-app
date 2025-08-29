@@ -38,11 +38,13 @@ describe('PriceFormatter', () => {
     describe('formatPercentage', () => {
         it('should format percentage with default settings', () => {
             expect(PriceFormatter.formatPercentage(50)).toBe('50%');
-            expect(PriceFormatter.formatPercentage(25, 100)).toBe('25%');
+            expect(PriceFormatter.formatPercentage(25, 'percentage')).toBe(
+                '25%'
+            );
         });
 
-        it('should handle custom divisor', () => {
-            expect(PriceFormatter.formatPercentage(1000, 10000, 2, 2)).toBe(
+        it('should handle raw unit', () => {
+            expect(PriceFormatter.formatPercentage(0.1, 'raw', 2, 2)).toBe(
                 '10.00%'
             );
         });
@@ -91,8 +93,12 @@ describe('PriceFormatter', () => {
 
     describe('formatPrice', () => {
         it('should format price by dividing by 100', () => {
-            expect(PriceFormatter.formatPrice(9850, 2)).toBe('98.50');
-            expect(PriceFormatter.formatPrice(10000, 4)).toBe('100.0000');
+            expect(PriceFormatter.formatPrice(9850, 'percentage', 2)).toBe(
+                '98.50'
+            );
+            expect(PriceFormatter.formatPrice(10000, 'percentage', 4)).toBe(
+                '100.0000'
+            );
         });
     });
 

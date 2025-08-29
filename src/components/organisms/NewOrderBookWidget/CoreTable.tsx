@@ -180,9 +180,7 @@ export const CoreTable = <T,>({
             avgPrice: PriceFormatter.formatToFixed(avgPrice * 100, 2),
             avgApr: PriceFormatter.formatPercentage(
                 Math.min(avgApr, 1000),
-                100,
-                2,
-                2
+                'percentage'
             ),
             totalUsd: PriceFormatter.formatUSDValue(
                 Number(totalUsd),

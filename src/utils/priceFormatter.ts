@@ -1,3 +1,7 @@
+const PRICE_FORMAT_CONSTANTS = {
+    PERCENTAGE_DIVISOR: 100,
+    PRICE_PERCENTAGE_DIVISOR: 100,
+} as const;
 export class PriceFormatter {
     static formatUSD(
         number: number | bigint,
@@ -33,11 +37,15 @@ export class PriceFormatter {
 
     static formatPercentage(
         number: number,
-        dividedBy = 100,
+        unit: 'raw' | 'percentage' = 'percentage',
         minimumFractionDigits = 0,
         maximumFractionDigits = 2
     ): string {
-        const value = dividedBy === 0 ? 0 : number / dividedBy;
+        const divisor =
+            unit === 'percentage'
+                ? PRICE_FORMAT_CONSTANTS.PERCENTAGE_DIVISOR
+                : 1;
+        const value = number / divisor;
         return Intl.NumberFormat('en-US', {
             style: 'percent',
             minimumFractionDigits,
@@ -79,8 +87,16 @@ export class PriceFormatter {
         return num.toFixed(decimals);
     }
 
-    static formatPrice(price: number, decimals = 2): string {
-        return (price / 100).toFixed(decimals);
+    static formatPrice(
+        price: number,
+        unit: 'raw' | 'percentage' = 'percentage',
+        decimals = 2
+    ): string {
+        const divisor =
+            unit === 'percentage'
+                ? PRICE_FORMAT_CONSTANTS.PRICE_PERCENTAGE_DIVISOR
+                : 1;
+        return (price / divisor).toFixed(decimals);
     }
 
     static formatRate(rate: number, decimals = 2): string {

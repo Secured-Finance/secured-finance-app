@@ -70,7 +70,7 @@ export const CollateralProgressBar = ({
                     Collateral Utilization
                 </span>
                 <span className='typography-body-1 text-white'>
-                    {PriceFormatter.formatPercentage(collateralCoverage, 1)}
+                    {PriceFormatter.formatPercentage(collateralCoverage, 'raw')}
                 </span>
             </div>
             <div className='flex flex-col gap-[6px]'>

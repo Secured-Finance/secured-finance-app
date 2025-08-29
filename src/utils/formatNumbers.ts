@@ -15,7 +15,7 @@ export const formatLoanValue = (
         if (!value) return '--.--%';
         return PriceFormatter.formatPercentage(
             value.apr.toNormalizedNumber(),
-            100,
+            'percentage',
             decimal,
             decimal
         );
@@ -23,7 +23,7 @@ export const formatLoanValue = (
 };
 
 export function formatCollateralRatio(collateral: number) {
-    return PriceFormatter.formatPercentage(collateral, MAX_COVERAGE, 0);
+    return PriceFormatter.formatPercentage(collateral / MAX_COVERAGE, 'raw', 0);
 }
 
 export const formatTimestamp = (timestamp: number) => {

@@ -242,8 +242,8 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
                                 <div className='typography-body-1 h-8 text-center text-md text-white'>
                                     +{' '}
                                     {PriceFormatter.formatPercentage(
-                                        userData?.user.boostPercentage,
-                                        10000
+                                        userData?.user.boostPercentage / 100,
+                                        'percentage'
                                     )}
                                 </div>
                             </div>

@@ -92,9 +92,7 @@ export const multiLineChartOptions: ChartOptions<'line'> = {
                 callback: function (value: string | number) {
                     return PriceFormatter.formatPercentage(
                         Number(value),
-                        100,
-                        1,
-                        1
+                        'percentage'
                     );
                 },
                 color: 'rgba(255, 255, 255, 0.6)',

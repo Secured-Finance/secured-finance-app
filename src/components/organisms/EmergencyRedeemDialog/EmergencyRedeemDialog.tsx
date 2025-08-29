@@ -111,7 +111,10 @@ export const EmergencyRedeemDialog = ({
             }),
             columnHelper.accessor('ratio', {
                 cell: info =>
-                    PriceFormatter.formatPercentage(info.getValue() / 100),
+                    PriceFormatter.formatPercentage(
+                        info.getValue(),
+                        'percentage'
+                    ),
                 header: 'Ratio of Collateral',
             }),
             columnHelper.accessor('price', {

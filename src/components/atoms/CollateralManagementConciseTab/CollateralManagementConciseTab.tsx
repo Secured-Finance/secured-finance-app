@@ -65,7 +65,7 @@ export const CollateralManagementConciseTab = ({
                         <span className='font-semibold text-secondary-500'>
                             {PriceFormatter.formatPercentage(
                                 collateralCoverage,
-                                100
+                                'percentage'
                             )}
                         </span>
                     )}
