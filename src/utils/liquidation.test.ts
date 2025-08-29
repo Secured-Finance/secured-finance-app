@@ -19,32 +19,6 @@ describe('LiquidationCalculator', () => {
         });
     });
 
-    describe('calculateLiquidationPrice', () => {
-        it('should calculate liquidation price correctly', () => {
-            expect(
-                LiquidationCalculator.calculateLiquidationPrice(1000, 500, 80)
-            ).toBe(0.4);
-            expect(
-                LiquidationCalculator.calculateLiquidationPrice(2000, 1000, 120)
-            ).toBe(0.6);
-            expect(
-                LiquidationCalculator.calculateLiquidationPrice(500, 400, 100)
-            ).toBe(0.8);
-        });
-
-        it('should return 0 when collateral value is 0', () => {
-            expect(
-                LiquidationCalculator.calculateLiquidationPrice(0, 500, 80)
-            ).toBe(0);
-        });
-
-        it('should handle zero borrowed value', () => {
-            expect(
-                LiquidationCalculator.calculateLiquidationPrice(1000, 0, 80)
-            ).toBe(0);
-        });
-    });
-
     describe('getLiquidationRiskInfo', () => {
         it('should return Low risk for percentage <= 40', () => {
             const result = LiquidationCalculator.getLiquidationRiskInfo(30);

@@ -25,9 +25,9 @@ const LIQUIDATION_CONSTANTS = {
     },
 } as const;
 
-export type LiquidationRiskLevel = 'Low' | 'Medium' | 'High' | 'Very High';
+type LiquidationRiskLevel = 'Low' | 'Medium' | 'High' | 'Very High';
 
-export interface LiquidationRiskInfo {
+interface LiquidationRiskInfo {
     color: string;
     risk: LiquidationRiskLevel;
 }
@@ -43,26 +43,6 @@ export class LiquidationCalculator {
             ? 0
             : LIQUIDATION_CONSTANTS.THRESHOLD_RATE_DIVISOR /
                   liquidationThresholdRate;
-    }
-
-    /**
-     * Calculates liquidation price based on collateral and borrowed values
-     * @param collateralValue - Total collateral value
-     * @param borrowedValue - Total borrowed value
-     * @param liquidationThreshold - Liquidation threshold percentage
-     * @returns Liquidation price ratio
-     */
-    static calculateLiquidationPrice(
-        collateralValue: number,
-        borrowedValue: number,
-        liquidationThreshold: number
-    ): number {
-        if (collateralValue === 0) return 0;
-        return (
-            (borrowedValue * liquidationThreshold) /
-            LIQUIDATION_CONSTANTS.PERCENTAGE_BASE /
-            collateralValue
-        );
     }
 
     /**
