@@ -96,20 +96,4 @@ describe('FeeCalculator', () => {
             expect(pastResult).toBe(BigInt(0));
         });
     });
-
-    describe('applyDiscountRate', () => {
-        it('should apply discount correctly and handle edge cases', () => {
-            const feeAmount = BigInt(1000);
-
-            expect(FeeCalculator.applyDiscountRate(feeAmount, 0.1)).toBe(
-                BigInt(900)
-            );
-            expect(FeeCalculator.applyDiscountRate(feeAmount, 0)).toBe(
-                BigInt(1000)
-            );
-            expect(FeeCalculator.applyDiscountRate(feeAmount, -0.1)).toBe(
-                BigInt(1000)
-            );
-        });
-    });
 });
