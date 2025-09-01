@@ -17,7 +17,12 @@ import {
     useOrders,
 } from 'src/hooks';
 import { setLastMessage } from 'src/store/lastError';
-import { AddressConverter, ButtonEvents, ButtonProperties } from 'src/utils';
+import {
+    AddressConverter,
+    ButtonEvents,
+    ButtonProperties,
+    DisplayLengths,
+} from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 import { trackButtonEvent } from 'src/utils/events';
 
@@ -221,7 +226,10 @@ export const RemoveOrderDialog = ({
                             ['Status', 'Complete'],
                             [
                                 'Transaction Hash',
-                                AddressConverter.format(txHash ?? '', 8),
+                                AddressConverter.format(
+                                    txHash,
+                                    DisplayLengths.LONG
+                                ),
                             ],
                         ]}
                         txHash={txHash}

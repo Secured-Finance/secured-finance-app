@@ -19,6 +19,7 @@ import {
 import {
     AddressConverter,
     CurrencySymbol,
+    DisplayLengths,
     convertToZcTokenName,
     convertZCTokenFromBaseAmount,
     formatAmount,
@@ -373,8 +374,8 @@ export const WithdrawZCToken = ({
                                     [
                                         'Ethereum Address',
                                         AddressConverter.format(
-                                            address ?? '',
-                                            8
+                                            address,
+                                            DisplayLengths.LONG
                                         ),
                                     ],
                                     [

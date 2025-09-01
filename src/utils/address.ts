@@ -1,11 +1,9 @@
-const DISPLAY_LENGTHS = {
+export const DisplayLengths = {
     SHORT: 4,
     MEDIUM: 6,
-    LONG: 10,
+    LONG: 8,
     DEFAULT_SUFFIX: 4,
-} as const;
-
-const CHECKSUM_POSITION_MODIFIER = 2;
+};
 
 export class AddressConverter {
     /**
@@ -15,16 +13,19 @@ export class AddressConverter {
      * @returns Formatted address string
      */
     static format(
-        address: string,
-        length: number = DISPLAY_LENGTHS.MEDIUM
+        address: string | undefined,
+        length: number = DisplayLengths.MEDIUM
     ): string {
-        if (!address) return '...';
-        if (address.length <= length + DISPLAY_LENGTHS.DEFAULT_SUFFIX)
+        if (!address || address.trim() === '') return '...';
+
+        if (address.length <= length + DisplayLengths.DEFAULT_SUFFIX) {
             return address;
+        }
+
         return (
             address.slice(0, length) +
             '...' +
-            address.slice(-DISPLAY_LENGTHS.DEFAULT_SUFFIX)
+            address.slice(-DisplayLengths.DEFAULT_SUFFIX)
         );
     }
 
@@ -46,55 +47,5 @@ export class AddressConverter {
     static isValidFormat(address: string): boolean {
         if (!address) return false;
         return /^0x[a-fA-F0-9]{40}$/.test(address);
-    }
-
-    /**
-     * Converts address to checksum format (EIP-55)
-     * @param address - The address to convert
-     * @returns Checksummed address
-     */
-    static toChecksum(address: string): string {
-        if (!this.isValidFormat(address)) return address;
-
-        const cleanAddress = address.toLowerCase().replace('0x', '');
-        let checksum = '0x';
-
-        for (let i = 0; i < cleanAddress.length; i++) {
-            const char = cleanAddress[i];
-            // Simple checksum logic - alternating case based on position
-            checksum +=
-                i % CHECKSUM_POSITION_MODIFIER === 0
-                    ? char.toUpperCase()
-                    : char.toLowerCase();
-        }
-
-        return checksum;
-    }
-
-    /**
-     * Checks if address supports ENS resolution (.eth domains)
-     * @param address - The address or ENS name to check
-     * @returns True if it's an ENS name
-     */
-    static isENS(address: string): boolean {
-        return address?.endsWith('.eth') || false;
-    }
-
-    /**
-     * Formats address for different display contexts
-     * @param address - The address to format
-     * @param context - Display context ('short' | 'medium' | 'long')
-     * @returns Formatted address
-     */
-    static formatByContext(
-        address: string,
-        context: 'short' | 'medium' | 'long' = 'medium'
-    ): string {
-        const lengths = {
-            short: DISPLAY_LENGTHS.SHORT,
-            medium: DISPLAY_LENGTHS.MEDIUM,
-            long: DISPLAY_LENGTHS.LONG,
-        };
-        return this.format(address, lengths[context]);
     }
 }

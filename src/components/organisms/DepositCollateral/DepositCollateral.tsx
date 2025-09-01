@@ -18,6 +18,7 @@ import {
     CollateralEvents,
     CollateralInfo,
     CurrencySymbol,
+    DisplayLengths,
     ZERO_BI,
     amountFormatterFromBase,
     amountFormatterToBase,
@@ -286,8 +287,8 @@ export const DepositCollateral = ({
                                     [
                                         'Transaction hash',
                                         AddressConverter.format(
-                                            txHash ?? '',
-                                            8
+                                            txHash,
+                                            DisplayLengths.LONG
                                         ),
                                     ],
                                     [

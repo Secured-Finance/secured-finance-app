@@ -22,6 +22,7 @@ import {
 import {
     AddressConverter,
     CurrencySymbol,
+    DisplayLengths,
     ZCTokenEvents,
     convertToZcTokenName,
     convertZCTokenFromBaseAmount,
@@ -366,8 +367,8 @@ export const DepositZCToken = ({
                                     [
                                         'Transaction hash',
                                         AddressConverter.format(
-                                            txHash ?? '',
-                                            8
+                                            txHash,
+                                            DisplayLengths.LONG
                                         ),
                                     ],
                                     [

@@ -34,6 +34,7 @@ import { RootState } from 'src/store/types';
 import {
     AddressConverter,
     CurrencySymbol,
+    DisplayLengths,
     currencyMap,
     toCurrency,
     toOptions,
@@ -50,7 +51,9 @@ const MenuAddToken = ({
     return (
         <Menu as='div' className='relative inline tablet:hidden'>
             <Menu.Button className='flex flex-row items-center justify-between gap-2'>
-                <span>{AddressConverter.format(address, 6)}</span>
+                <span>
+                    {AddressConverter.format(address, DisplayLengths.MEDIUM)}
+                </span>
                 <EllipsisHorizontalIcon className='h-6 w-6' />
             </Menu.Button>
             <Menu.Items className='typography-caption-2 absolute -left-4 -top-20 z-50 w-fit min-w-[150px] whitespace-nowrap rounded-md bg-gunMetal text-neutral-8 shadow-dropdown focus:outline-none'>
@@ -283,7 +286,7 @@ export const Faucet = () => {
                                             {account
                                                 ? AddressConverter.format(
                                                       account,
-                                                      6
+                                                      DisplayLengths.MEDIUM
                                                   )
                                                 : ''}
                                         </span>
@@ -377,7 +380,10 @@ export const Faucet = () => {
                         ['Status', 'Success'],
                         [
                             'Ethereum Address',
-                            AddressConverter.format(account ?? '', 8),
+                            AddressConverter.format(
+                                account,
+                                DisplayLengths.LONG
+                            ),
                         ],
                     ]}
                     txHash={txHash}

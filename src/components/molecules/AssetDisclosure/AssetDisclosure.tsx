@@ -9,7 +9,7 @@ import {
     CollateralInformationTable,
     ExpandIndicator,
 } from 'src/components/atoms';
-import { AddressConverter, WalletSource } from 'src/utils';
+import { AddressConverter, DisplayLengths, WalletSource } from 'src/utils';
 
 export interface AssetDisclosureProps {
     data: CollateralInformationProps[];
@@ -65,6 +65,6 @@ export const AssetDisclosure = ({
 
 const accountFormatter = (account: string, walletSource: WalletSource) => {
     return walletSource === WalletSource.METAMASK
-        ? AddressConverter.format(account, 6)
+        ? AddressConverter.format(account, DisplayLengths.MEDIUM)
         : AddressConverter.format(account, 12);
 };

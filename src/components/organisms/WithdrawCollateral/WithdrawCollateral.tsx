@@ -17,6 +17,7 @@ import {
     AddressConverter,
     CollateralInfo,
     CurrencySymbol,
+    DisplayLengths,
     ZERO_BI,
     amountFormatterFromBase,
     amountFormatterToBase,
@@ -285,8 +286,8 @@ export const WithdrawCollateral = ({
                                     [
                                         'Ethereum Address',
                                         AddressConverter.format(
-                                            address ?? '',
-                                            8
+                                            address,
+                                            DisplayLengths.LONG
                                         ),
                                     ],
                                     [

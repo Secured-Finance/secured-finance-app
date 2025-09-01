@@ -8,6 +8,7 @@ import {
     AddressConverter,
     currencyMap,
     CurrencySymbol,
+    DisplayLengths,
     ordinaryFormat,
 } from 'src/utils';
 import { AMOUNT_PRECISION } from 'src/utils/entities';
@@ -42,7 +43,7 @@ const formatOption = (
 
 const formatSource = (walletSource: WalletSource, account: string) => {
     return walletSource === WalletSource.METAMASK
-        ? AddressConverter.format(account, 6)
+        ? AddressConverter.format(account, DisplayLengths.MEDIUM)
         : walletSource;
 };
 

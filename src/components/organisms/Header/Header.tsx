@@ -24,6 +24,7 @@ import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
 import {
+    DisplayLengths,
     getShowStablecoinAppUrl,
     getStablecoinAppUrl,
     getSupportedNetworks,
@@ -162,7 +163,10 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                                     }
                                 />
                                 <WalletPopover
-                                    wallet={AddressConverter.format(address, 6)}
+                                    wallet={AddressConverter.format(
+                                        address,
+                                        DisplayLengths.MEDIUM
+                                    )}
                                     networkName={
                                         securedFinance?.config?.network ??
                                         'Unknown'

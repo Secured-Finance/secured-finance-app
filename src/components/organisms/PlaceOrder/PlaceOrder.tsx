@@ -20,6 +20,7 @@ import { OrderType, PlaceOrderFunction } from 'src/types';
 import {
     AddressConverter,
     CurrencySymbol,
+    DisplayLengths,
     OrderEvents,
     OrderProperties,
     formatAmount,
@@ -312,8 +313,8 @@ export const PlaceOrder = ({
                                     [
                                         'Transaction hash',
                                         AddressConverter.format(
-                                            txHash ?? '',
-                                            8
+                                            txHash,
+                                            DisplayLengths.LONG
                                         ),
                                     ],
                                     [
