@@ -2,6 +2,7 @@ export const DisplayLengths = {
     SHORT: 4,
     MEDIUM: 6,
     LONG: 8,
+    EXTENDED: 12,
     DEFAULT_SUFFIX: 4,
 };
 

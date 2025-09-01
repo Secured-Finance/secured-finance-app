@@ -22,9 +22,11 @@ import {
     ButtonEvents,
     ButtonProperties,
     DisplayLengths,
+    trackButtonEvent,
+    Amount,
+    LoanValue,
+    Maturity,
 } from 'src/utils';
-import { Amount, LoanValue, Maturity } from 'src/utils/entities';
-import { trackButtonEvent } from 'src/utils/events';
 
 enum Step {
     remove = 1,

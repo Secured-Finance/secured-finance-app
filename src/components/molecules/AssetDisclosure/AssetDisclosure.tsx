@@ -66,5 +66,5 @@ export const AssetDisclosure = ({
 const accountFormatter = (account: string, walletSource: WalletSource) => {
     return walletSource === WalletSource.METAMASK
         ? AddressConverter.format(account, DisplayLengths.MEDIUM)
-        : AddressConverter.format(account, 12);
+        : AddressConverter.format(account, DisplayLengths.EXTENDED);
 };
