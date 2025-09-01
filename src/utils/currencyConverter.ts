@@ -3,16 +3,17 @@ import { fromBytes32 } from '@secured-finance/sf-graph-client';
 import { hexToString } from 'viem';
 import { CurrencySymbol, currencyMap } from './currencyList';
 
-let ALLOWED_SYMBOLS: Set<string> | null = null;
-
-function getAllowedSymbols(): Set<string> {
-    if (!ALLOWED_SYMBOLS) {
-        ALLOWED_SYMBOLS = new Set(
-            Object.values(CurrencySymbol) as CurrencySymbol[]
-        );
-    }
-    return ALLOWED_SYMBOLS;
-}
+const getAllowedSymbols = (() => {
+    let symbols: Set<string> | null = null;
+    return (): Set<string> => {
+        if (!symbols) {
+            symbols = new Set(
+                Object.values(CurrencySymbol) as CurrencySymbol[]
+            );
+        }
+        return symbols;
+    };
+})();
 
 export class CurrencyConverter {
     static hexToSymbol(hex: string): CurrencySymbol | undefined {

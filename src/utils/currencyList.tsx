@@ -357,8 +357,6 @@ export type CurrencyInfo = {
     hasOrderBook: boolean;
 };
 
-export { CurrencyConverter } from './currencyConverter';
-
 // Unified conversion functions - using CurrencyConverter internally
 export const toCurrency = (ccy: CurrencySymbol) => {
     return CurrencyConverter.symbolToContract(ccy);
