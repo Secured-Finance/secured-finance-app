@@ -395,7 +395,7 @@ export function toCurrencySymbol(ccy: string) {
 }
 
 export function hexToCurrencySymbol(hex: string) {
-    return toCurrencySymbol(HexConverter.hexToString(hex, 32));
+    return toCurrencySymbol(HexConverter.hexToString(hex));
 }
 
 const convertToBlockchainUnit = (amount: number | string, ccy: Currency) => {

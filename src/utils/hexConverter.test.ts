@@ -24,9 +24,7 @@ describe('HexConverter', () => {
 
     describe('toHex', () => {
         it('should convert string to hex', () => {
-            expect(HexConverter.toHex('ETH')).toBe(
-                '0x4554480000000000000000000000000000000000000000000000000000000000'
-            );
+            expect(HexConverter.toHex('ETH')).toBe('0x455448');
         });
 
         it('should convert number to hex', () => {
@@ -34,19 +32,9 @@ describe('HexConverter', () => {
         });
     });
 
-    describe('bigIntToHex', () => {
-        it('should convert BigInt to hex', () => {
-            expect(HexConverter.bigIntToHex(BigInt(255))).toBe('0xff');
-        });
-    });
-
     describe('hexToString', () => {
         it('should convert hex to string', () => {
-            expect(
-                HexConverter.hexToString(
-                    '0x4554480000000000000000000000000000000000000000000000000000000000'
-                )
-            ).toBe('ETH');
+            expect(HexConverter.hexToString('0x455448')).toBe('ETH');
         });
     });
 });

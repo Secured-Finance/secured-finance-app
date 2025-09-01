@@ -101,9 +101,7 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const handleChainChanged = useCallback(
         (chainId: string) => {
-            dispatchChainError(
-                HexConverter.hexToNumber(chainId as `0x${string}`)
-            );
+            dispatchChainError(HexConverter.hexToNumber(chainId));
             track(InterfaceEvents.CHAIN_CONNECTED, {
                 [InterfaceProperties.CHAIN]: chainName,
             });
