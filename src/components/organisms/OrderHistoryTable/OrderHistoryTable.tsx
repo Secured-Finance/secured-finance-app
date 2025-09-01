@@ -22,8 +22,8 @@ import {
     inputPriceYieldColumnDefinition,
     loanTypeColumnDefinition,
     tableHeaderDefinition,
+    OrderTypeConverter,
 } from 'src/utils';
-import { OrderTypeConverter } from 'src/utils/orderTypeConverter';
 import { Maturity } from 'src/utils/entities';
 
 const columnHelper = createColumnHelper<Order>();

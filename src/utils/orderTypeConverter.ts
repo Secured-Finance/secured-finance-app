@@ -1,15 +1,11 @@
 import { OrderSide } from '@secured-finance/sf-client';
-
 export class OrderTypeConverter {
     static from(value: number | string | null | undefined): OrderSide {
         if (value === null || value === undefined) {
             return OrderSide.LEND; // Default to LEND
         }
-
-        const normalizedValue =
-            typeof value === 'string' ? value.trim() : value;
-
-        if (normalizedValue === 1 || normalizedValue === '1') {
+        const normalizedValue = Number(value);
+        if (normalizedValue === 1) {
             return OrderSide.BORROW;
         }
 

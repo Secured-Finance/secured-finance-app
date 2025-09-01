@@ -20,6 +20,7 @@ import {
     AmountCell,
     MobileTableWrapper,
     OrderTimeCell,
+    OrderTypeConverter,
     amountColumnDefinition,
     contractColumnDefinition,
     dateAndTimeColumnDefinition,
@@ -28,7 +29,6 @@ import {
     priceYieldColumnDefinition,
 } from 'src/utils';
 import { Amount, Maturity } from 'src/utils/entities';
-import { OrderTypeConverter } from 'src/utils/orderTypeConverter';
 
 export type OpenOrder = Order & { calculationDate?: number };
 

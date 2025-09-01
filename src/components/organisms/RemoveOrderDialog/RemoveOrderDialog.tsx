@@ -17,8 +17,12 @@ import {
     useOrders,
 } from 'src/hooks';
 import { setLastMessage } from 'src/store/lastError';
-import { AddressUtils, ButtonEvents, ButtonProperties } from 'src/utils';
-import { OrderTypeConverter } from 'src/utils/orderTypeConverter';
+import {
+    AddressUtils,
+    ButtonEvents,
+    ButtonProperties,
+    OrderTypeConverter,
+} from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 import { trackButtonEvent } from 'src/utils/events';
 

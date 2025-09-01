@@ -24,8 +24,8 @@ import {
     OrderProperties,
     formatAmount,
     handleContractError,
+    OrderTypeConverter,
 } from 'src/utils';
-import { OrderTypeConverter } from 'src/utils/orderTypeConverter';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 import {
     ButtonEvents,
