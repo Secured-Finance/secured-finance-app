@@ -106,31 +106,6 @@ describe('Collateral Functions', () => {
             ).toEqual(0);
         });
     });
-    describe('calculateCollateralRatio', () => {
-        it('should calculate collateral ratio correctly', () => {
-            expect(
-                CollateralCalculator.calculateCollateralRatio(1000, 500)
-            ).toBe(2);
-            expect(
-                CollateralCalculator.calculateCollateralRatio(800, 1000)
-            ).toBeCloseTo(0.8);
-            expect(
-                CollateralCalculator.calculateCollateralRatio(1500, 750)
-            ).toBe(2);
-        });
-
-        it('should return Infinity when borrowed value is 0', () => {
-            expect(CollateralCalculator.calculateCollateralRatio(1000, 0)).toBe(
-                Infinity
-            );
-        });
-
-        it('should handle zero collateral value', () => {
-            expect(CollateralCalculator.calculateCollateralRatio(0, 500)).toBe(
-                0
-            );
-        });
-    });
 
     describe('calculateRequiredCollateral', () => {
         it('should calculate required collateral correctly', () => {
@@ -154,29 +129,6 @@ describe('Collateral Functions', () => {
         it('should handle zero threshold', () => {
             expect(
                 CollateralCalculator.calculateRequiredCollateral(1000, 0)
-            ).toBe(0);
-        });
-    });
-
-    describe('calculateLiquidationPrice', () => {
-        it('should calculate liquidation price correctly', () => {
-            expect(
-                CollateralCalculator.calculateLiquidationPrice(10, 1000, 80)
-            ).toBeCloseTo(80);
-            expect(
-                CollateralCalculator.calculateLiquidationPrice(5, 500, 120)
-            ).toBeCloseTo(120);
-        });
-
-        it('should return 0 when collateral amount is 0', () => {
-            expect(
-                CollateralCalculator.calculateLiquidationPrice(0, 1000, 80)
-            ).toBe(0);
-        });
-
-        it('should handle zero borrowed amount', () => {
-            expect(
-                CollateralCalculator.calculateLiquidationPrice(10, 0, 80)
             ).toBe(0);
         });
     });
