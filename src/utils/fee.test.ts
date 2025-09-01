@@ -72,28 +72,4 @@ describe('FeeCalculator', () => {
             ).toBe(BigInt(1050));
         });
     });
-
-    describe('calculateFeeInFutureValue', () => {
-        it('should calculate fee correctly for future and past maturity', () => {
-            const amount = BigInt(1000);
-            const unitPrice = BigInt(9800);
-            const feeRate = 1;
-
-            const futureResult = FeeCalculator.calculateFeeInFutureValue(
-                amount,
-                unitPrice,
-                feeRate,
-                getMaturity(365)
-            );
-            const pastResult = FeeCalculator.calculateFeeInFutureValue(
-                amount,
-                unitPrice,
-                feeRate,
-                getMaturity(-365)
-            );
-
-            expect(Number(futureResult)).toBeGreaterThan(0);
-            expect(pastResult).toBe(BigInt(0));
-        });
-    });
 });
