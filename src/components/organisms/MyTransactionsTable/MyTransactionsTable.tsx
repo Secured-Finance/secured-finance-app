@@ -13,6 +13,7 @@ import { Transaction, TransactionHistoryList } from 'src/types';
 import {
     AmountCell,
     MobileTableWrapper,
+    OrderTypeConverter,
     amountColumnDefinition,
     contractColumnDefinition,
     formatLoanValue,
@@ -20,7 +21,6 @@ import {
     loanTypeColumnDefinition,
     tableHeaderDefinition,
 } from 'src/utils';
-import { OrderTypeConverter } from 'src/utils/orderTypeConverter';
 import { LoanValue, Maturity } from 'src/utils/entities';
 
 const columnHelper = createColumnHelper<Transaction>();
