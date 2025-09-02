@@ -67,6 +67,18 @@ export class CollateralCalculator {
             : divide(multiply(amountNum, FUTURE_VALUE_MULTIPLIER), priceNum);
     }
 
+    static calculateBarWidth(
+        value: InputValue,
+        total: InputValue,
+        maxWidth: number,
+        minWidth: number
+    ): number {
+        const percentage = this.calculatePercentage(value, total);
+        const ratio = divide(percentage, PERCENTAGE_BASE);
+        const targetWidth = multiply(ratio, maxWidth);
+        return Math.min(Math.max(targetWidth, minWidth), maxWidth);
+    }
+
     static transformCollateralBookData(
         totalCollateralAmount: InputValue,
         totalUnusedCollateralAmount: InputValue,

@@ -18,10 +18,11 @@ export const ColorBar = ({
     const isTablet = useBreakpoint('laptop');
     const maxWidth = isTablet ? COLORBAR_MAX_WIDTH_MOBILE : COLORBAR_MAX_WIDTH;
 
-    const percentage = CollateralCalculator.calculatePercentage(value, total);
-    const width = Math.min(
-        Math.max((percentage / 100) * maxWidth, COLORBAR_MIN_WIDTH),
-        maxWidth
+    const width = CollateralCalculator.calculateBarWidth(
+        value,
+        total,
+        maxWidth,
+        COLORBAR_MIN_WIDTH
     );
 
     return (

@@ -14,10 +14,11 @@ export const ColorBar = ({
     total: bigint;
     align: 'left' | 'right';
 } & Required<ColorFormat>) => {
-    const percentage = CollateralCalculator.calculatePercentage(value, total);
-    const width = Math.min(
-        Math.max((percentage / 100) * COLORBAR_MAX_WIDTH, COLORBAR_MIN_WIDTH),
-        COLORBAR_MAX_WIDTH
+    const width = CollateralCalculator.calculateBarWidth(
+        value,
+        total,
+        COLORBAR_MAX_WIDTH,
+        COLORBAR_MIN_WIDTH
     );
     return (
         <div

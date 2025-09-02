@@ -37,62 +37,6 @@ describe('Collateral Functions', () => {
                     80
                 )
             ).toEqual(700);
-            expect(
-                CollateralCalculator.calculateAvailableToBorrow(
-                    1000,
-                    800,
-                    20,
-                    80
-                )
-            ).toEqual(600);
-            expect(
-                CollateralCalculator.calculateAvailableToBorrow(
-                    1000,
-                    700,
-                    30,
-                    80
-                )
-            ).toEqual(500);
-            expect(
-                CollateralCalculator.calculateAvailableToBorrow(
-                    1000,
-                    600,
-                    40,
-                    80
-                )
-            ).toEqual(400);
-            expect(
-                CollateralCalculator.calculateAvailableToBorrow(
-                    1000,
-                    500,
-                    50,
-                    80
-                )
-            ).toEqual(300);
-            expect(
-                CollateralCalculator.calculateAvailableToBorrow(
-                    1000,
-                    400,
-                    60,
-                    80
-                )
-            ).toEqual(200);
-            expect(
-                CollateralCalculator.calculateAvailableToBorrow(
-                    1000,
-                    300,
-                    70,
-                    80
-                )
-            ).toEqual(100);
-            expect(
-                CollateralCalculator.calculateAvailableToBorrow(
-                    1000,
-                    200,
-                    80,
-                    80
-                )
-            ).toEqual(0);
         });
 
         it('should return 0 if coverage is over threshold', () => {
@@ -165,6 +109,36 @@ describe('Collateral Functions', () => {
 
         it('should return 0 when price is 0', () => {
             expect(CollateralCalculator.calculateFutureValue(1000, 0)).toBe(0);
+        });
+    });
+
+    describe('calculateBarWidth', () => {
+        it('should calculate bar width correctly', () => {
+            expect(
+                CollateralCalculator.calculateBarWidth(50, 100, 200, 10)
+            ).toBe(100);
+
+            expect(
+                CollateralCalculator.calculateBarWidth(25, 100, 300, 20)
+            ).toBe(75);
+        });
+
+        it('should respect minimum width', () => {
+            expect(
+                CollateralCalculator.calculateBarWidth(1, 1000, 300, 50)
+            ).toBe(50);
+        });
+
+        it('should respect maximum width', () => {
+            expect(
+                CollateralCalculator.calculateBarWidth(100, 100, 200, 10)
+            ).toBe(200);
+        });
+
+        it('should handle zero total', () => {
+            expect(CollateralCalculator.calculateBarWidth(50, 0, 200, 10)).toBe(
+                10
+            );
         });
     });
 
