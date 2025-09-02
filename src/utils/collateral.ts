@@ -1,6 +1,11 @@
+import { divide, multiply } from './currencyList';
+
 const PERCENTAGE_BASE = 100;
 const LIQUIDATION_RATE_DIVISOR = 1000000;
 const ZERO = 0;
+const FUTURE_VALUE_MULTIPLIER = 10000;
+const DIVIDER_CONSTANT = 100000000;
+const DEFAULT_PRECISION = 8;
 
 export const MAX_COVERAGE = 10000;
 export const ZERO_BI = BigInt(0);
@@ -15,7 +20,7 @@ export class CollateralCalculator {
     static calculatePercentage(value: InputValue, total: InputValue): number {
         const v = this.toNumber(value);
         const t = this.toNumber(total);
-        return t === ZERO ? ZERO : (v / t) * PERCENTAGE_BASE;
+        return t === ZERO ? ZERO : multiply(divide(v, t), PERCENTAGE_BASE);
     }
 
     static calculateRequiredCollateral(
@@ -24,7 +29,7 @@ export class CollateralCalculator {
     ): number {
         const borrow = this.toNumber(borrowAmount);
         const threshold = this.toNumber(collateralThreshold);
-        return (borrow * threshold) / PERCENTAGE_BASE;
+        return divide(multiply(borrow, threshold), PERCENTAGE_BASE);
     }
 
     static calculateAvailableToBorrow(
@@ -38,11 +43,12 @@ export class CollateralCalculator {
         const cov = this.toNumber(coverage);
         const threshold = this.toNumber(collateralThreshold);
 
-        const coverageAsPercentage = cov / PERCENTAGE_BASE;
+        const coverageAsPercentage = divide(cov, PERCENTAGE_BASE);
         if (threshold <= coverageAsPercentage) return ZERO;
 
         const used = total - unused;
-        const result = total * (threshold / PERCENTAGE_BASE) - used;
+        const thresholdRatio = divide(threshold, PERCENTAGE_BASE);
+        const result = multiply(total, thresholdRatio) - used;
         return Math.max(ZERO, result);
     }
 
@@ -50,6 +56,53 @@ export class CollateralCalculator {
         liquidationThresholdRate: InputValue
     ): number {
         const rate = this.toNumber(liquidationThresholdRate);
-        return rate === ZERO ? ZERO : LIQUIDATION_RATE_DIVISOR / rate;
+        return rate === ZERO ? ZERO : divide(LIQUIDATION_RATE_DIVISOR, rate);
+    }
+
+    static calculateFutureValue(amount: InputValue, price: InputValue): number {
+        const amountNum = this.toNumber(amount);
+        const priceNum = this.toNumber(price);
+        return priceNum === ZERO
+            ? ZERO
+            : divide(multiply(amountNum, FUTURE_VALUE_MULTIPLIER), priceNum);
+    }
+
+    static transformCollateralBookData(
+        totalCollateralAmount: InputValue,
+        totalUnusedCollateralAmount: InputValue,
+        collateralCoverage: InputValue,
+        totalPresentValue: InputValue,
+        dividerAmount: number = DIVIDER_CONSTANT,
+        precision: number = DEFAULT_PRECISION
+    ): {
+        usdCollateral: number;
+        usdUnusedCollateral: number;
+        coverage: number;
+        totalPresentValue: number;
+    } {
+        // Use the same divide function as original code with exact same parameters
+        const usdCollateral = divide(
+            this.toNumber(totalCollateralAmount),
+            dividerAmount,
+            precision
+        );
+        const usdUnusedCollateral = divide(
+            this.toNumber(totalUnusedCollateralAmount),
+            dividerAmount,
+            precision
+        );
+        const coverage = this.toNumber(collateralCoverage);
+        const totalPV = divide(
+            this.toNumber(totalPresentValue),
+            dividerAmount,
+            precision
+        );
+
+        return {
+            usdCollateral,
+            usdUnusedCollateral,
+            coverage,
+            totalPresentValue: totalPV,
+        };
     }
 }

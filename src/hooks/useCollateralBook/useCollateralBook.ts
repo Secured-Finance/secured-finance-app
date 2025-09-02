@@ -9,7 +9,6 @@ import {
     ZERO_BI,
     amountFormatterFromBase,
     currencyMap,
-    divide,
     toCurrency,
 } from 'src/utils';
 
@@ -125,34 +124,33 @@ export const useCollateralBook = (account: string | undefined) => {
                     ...acc,
                     ...obj,
                 }));
-            const usdCollateral = divide(
-                data.collateralValues.totalCollateralAmount,
-                DIVIDER,
-                8
-            );
-            const usdUnusedCollateral = divide(
-                data.collateralValues.totalUnusedCollateralAmount,
-                DIVIDER,
-                8
-            );
-            const coverage = data.collateralValues.collateralCoverage;
+
+            const transformedData =
+                CollateralCalculator.transformCollateralBookData(
+                    data.collateralValues.totalCollateralAmount,
+                    data.collateralValues.totalUnusedCollateralAmount,
+                    data.collateralValues.collateralCoverage,
+                    data.totalPresentValue,
+                    DIVIDER,
+                    8
+                );
 
             const colBook: CollateralBook = {
                 collateral: collateralBook,
                 nonCollateral: nonCollateralBook,
-                usdCollateral: usdCollateral,
+                usdCollateral: transformedData.usdCollateral,
                 usdAvailableToBorrow:
                     CollateralCalculator.calculateAvailableToBorrow(
-                        usdCollateral,
-                        usdUnusedCollateral,
-                        coverage,
+                        transformedData.usdCollateral,
+                        transformedData.usdUnusedCollateral,
+                        transformedData.coverage,
                         collateralThreshold
                     ),
                 usdNonCollateral: usdNonCollateral,
-                coverage: CollateralCalculator.toNumber(coverage),
+                coverage: transformedData.coverage,
                 collateralThreshold: collateralThreshold,
                 withdrawableCollateral: withdrawableCollateral,
-                totalPresentValue: divide(data.totalPresentValue, DIVIDER, 8),
+                totalPresentValue: transformedData.totalPresentValue,
             };
 
             return colBook;

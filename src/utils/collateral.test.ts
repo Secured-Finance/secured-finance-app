@@ -149,4 +149,40 @@ describe('Collateral Functions', () => {
             );
         });
     });
+
+    describe('calculateFutureValue', () => {
+        it('should calculate future value correctly', () => {
+            // Original: (amount * 10000) / price
+            // 1000 * 10000 / 100 = 100000
+            expect(CollateralCalculator.calculateFutureValue(1000, 100)).toBe(
+                100000
+            );
+            // 2000 * 10000 / 200 = 100000
+            expect(CollateralCalculator.calculateFutureValue(2000, 200)).toBe(
+                100000
+            );
+        });
+
+        it('should return 0 when price is 0', () => {
+            expect(CollateralCalculator.calculateFutureValue(1000, 0)).toBe(0);
+        });
+    });
+
+    describe('transformCollateralBookData', () => {
+        it('should transform collateral book data correctly', () => {
+            const result = CollateralCalculator.transformCollateralBookData(
+                100000000, // 1.0 in divider units
+                50000000, // 0.5 in divider units
+                7500, // 75.00%
+                200000000, // 2.0 in divider units
+                100000000,
+                2
+            );
+
+            expect(result.usdCollateral).toBe(1.0);
+            expect(result.usdUnusedCollateral).toBe(0.5);
+            expect(result.coverage).toBe(7500);
+            expect(result.totalPresentValue).toBe(2.0);
+        });
+    });
 });
