@@ -18,8 +18,9 @@ import {
 } from 'src/hooks';
 import { OrderType, PlaceOrderFunction } from 'src/types';
 import {
-    AddressUtils,
+    AddressConverter,
     CurrencySymbol,
+    DisplayLengths,
     OrderEvents,
     OrderProperties,
     formatAmount,
@@ -311,7 +312,10 @@ export const PlaceOrder = ({
                                     ['Status', 'Complete'],
                                     [
                                         'Transaction hash',
-                                        AddressUtils.format(txHash ?? '', 8),
+                                        AddressConverter.format(
+                                            txHash,
+                                            DisplayLengths.LONG
+                                        ),
                                     ],
                                     [
                                         'Amount',

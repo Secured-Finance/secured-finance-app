@@ -18,13 +18,16 @@ import {
 } from 'src/hooks';
 import { setLastMessage } from 'src/store/lastError';
 import {
-    AddressUtils,
+    AddressConverter,
     ButtonEvents,
     ButtonProperties,
+    DisplayLengths,
+    trackButtonEvent,
+    Amount,
+    LoanValue,
+    Maturity,
     OrderTypeConverter,
 } from 'src/utils';
-import { Amount, LoanValue, Maturity } from 'src/utils/entities';
-import { trackButtonEvent } from 'src/utils/events';
 
 enum Step {
     remove = 1,
@@ -227,7 +230,10 @@ export const RemoveOrderDialog = ({
                             ['Status', 'Complete'],
                             [
                                 'Transaction Hash',
-                                AddressUtils.format(txHash ?? '', 8),
+                                AddressConverter.format(
+                                    txHash,
+                                    DisplayLengths.LONG
+                                ),
                             ],
                         ]}
                         txHash={txHash}

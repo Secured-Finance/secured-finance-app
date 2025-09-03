@@ -1,4 +1,3 @@
-import { OrderSide } from '@secured-finance/sf-client';
 import { createColumnHelper } from '@tanstack/react-table';
 import clsx from 'clsx';
 import { useMemo } from 'react';
@@ -20,6 +19,7 @@ import {
     hexToCurrencySymbol,
     loanTypeColumnDefinition,
     tableHeaderDefinition,
+    FeeCalculator,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 
@@ -49,13 +49,6 @@ const priceYieldColumnDef = (
         },
         header: tableHeaderDefinition(headerTitle),
     });
-};
-
-const getFVWithFee = (futureValue: bigint, fee: bigint, side: number) => {
-    if (OrderTypeConverter.from(side) === OrderSide.LEND) {
-        return futureValue - fee;
-    }
-    return futureValue + fee;
 };
 
 const MyTransactionsTableMobile = ({
@@ -104,9 +97,9 @@ const MyTransactionsTableMobile = ({
                                     value={
                                         <AmountCell
                                             ccy={ccy}
-                                            amount={getFVWithFee(
-                                                BigInt(futureValue),
-                                                BigInt(feeInFV),
+                                            amount={FeeCalculator.calculateFutureValueWithFee(
+                                                futureValue,
+                                                feeInFV,
                                                 side
                                             )}
                                         />
@@ -165,9 +158,9 @@ export const MyTransactionsTable = ({
                 'Future Value (FV)',
                 'futureValue',
                 row =>
-                    getFVWithFee(
-                        BigInt(row.futureValue),
-                        BigInt(row.feeInFV),
+                    FeeCalculator.calculateFutureValueWithFee(
+                        row.futureValue,
+                        row.feeInFV,
                         row.side
                     ),
                 {
