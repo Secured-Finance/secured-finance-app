@@ -1,4 +1,5 @@
 import { composeStories } from '@storybook/react';
+import { useLandingOrderFormStore } from 'src/store';
 import { fireEvent, render, screen, within } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
 import * as stories from './NewOrderBookWidget.stories';
@@ -56,13 +57,13 @@ describe.skip('NewOrderBookWidget Component', () => {
     });
 
     it('should update store when Sell order row is clicked', () => {
-        const { store } = render(<Default />);
+        render(<Default />);
+        const store = useLandingOrderFormStore;
         const row = screen.getAllByTestId('sellOrders-row')[0];
+
         fireEvent.click(row);
-        expect(store.getState().landingOrderForm.orderType).toEqual(
-            OrderType.LIMIT
-        );
-        expect(store.getState().landingOrderForm.unitPrice).toEqual('92');
+        expect(store.getState().orderType).toEqual(OrderType.LIMIT);
+        expect(store.getState().unitPrice).toEqual('92');
     });
 
     it('should update store when Lend order row is clicked', async () => {
@@ -70,10 +71,8 @@ describe.skip('NewOrderBookWidget Component', () => {
         const row = screen.getAllByTestId('buyOrders-row')[5];
         fireEvent.click(row);
 
-        expect(store.getState().landingOrderForm.orderType).toEqual(
-            OrderType.LIMIT
-        );
-        expect(store.getState().landingOrderForm.unitPrice).toEqual('94');
+        expect(store.getState().orderType).toEqual(OrderType.LIMIT);
+        expect(store.getState().unitPrice).toEqual('94');
     });
 
     it('should display the spinner when loading', () => {

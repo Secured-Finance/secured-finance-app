@@ -1,9 +1,9 @@
-export interface WalletsStore {
+export interface WalletStore {
     address: string;
     balance: string;
 }
 
-export const defaultWallet: WalletsStore = {
+export const defaultWalletStore: WalletStore = {
     address: '',
     balance: '0',
 };

@@ -8,7 +8,6 @@ import {
 import { Token } from '@secured-finance/sf-core';
 import clsx from 'clsx';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
 import MetaMaskIcon from 'src/assets/img/metamask-fox.svg';
 import {
     Button,
@@ -30,7 +29,7 @@ import {
     useHandleContractTransaction,
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
-import { RootState } from 'src/store/types';
+import { useBlockchainStore } from 'src/store';
 import {
     AddressUtils,
     CurrencySymbol,
@@ -93,9 +92,7 @@ const MenuAddToken = ({
     );
 };
 export const Faucet = () => {
-    const chainError = useSelector(
-        (state: RootState) => state.blockchain.chainError
-    );
+    const { chainError } = useBlockchainStore();
 
     const { blockExplorerUrl } = useBlockExplorerUrl();
     const handleContractTransaction = useHandleContractTransaction();

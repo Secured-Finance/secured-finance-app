@@ -1,6 +1,5 @@
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { useCallback, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { ErrorInfo, WalletSourceSelector } from 'src/components/atoms';
 import {
     AssetSelector,
@@ -17,14 +16,9 @@ import {
     useLastPrices,
 } from 'src/hooks';
 import {
-    selectLandingOrderForm,
-    setAmount,
-    setCurrency,
-    setMaturity,
-    setSide,
-    setSourceAccount,
+    useLandingOrderFormSelector,
+    useLandingOrderFormStore,
 } from 'src/store/landingOrderForm';
-import { RootState } from 'src/store/types';
 import { MaturityOptionList, OrderSideMap } from 'src/types';
 import {
     ButtonEvents,
@@ -55,12 +49,11 @@ export const LendingCard = ({
     marketPrice: number | undefined;
     delistedCurrencySet: Set<CurrencySymbol>;
 }) => {
-    const { currency, maturity, side, sourceAccount, amount, amountExists } =
-        useSelector((state: RootState) =>
-            selectLandingOrderForm(state.landingOrderForm)
-        );
+    const { currency, amount, amountExists, maturity, side, sourceAccount } =
+        useLandingOrderFormSelector();
 
-    const dispatch = useDispatch();
+    const { setCurrency, setMaturity, setSide, setAmount, setSourceAccount } =
+        useLandingOrderFormStore();
     const { address } = useAccount();
 
     const { data: assetPriceMap } = useLastPrices();
@@ -123,13 +116,13 @@ export const LendingCard = ({
 
     const handleCurrencyChange = useCallback(
         (v: CurrencySymbol) => {
-            dispatch(setCurrency(v));
+            setCurrency(v);
         },
-        [dispatch]
+        [setCurrency]
     );
 
     const handleWalletSourceChange = (source: WalletSource) => {
-        dispatch(setSourceAccount(source));
+        setSourceAccount(source);
         const available =
             source === WalletSource.METAMASK
                 ? balanceRecord[currency]
@@ -137,7 +130,7 @@ export const LendingCard = ({
                   collateralBook.withdrawableCollateral[currency] ||
                   ZERO_BI;
         const inputAmount = amount > available ? available : amount;
-        dispatch(setAmount(inputAmount.toString()));
+        setAmount(inputAmount.toString());
     };
 
     const { data: availableToBorrow } = useBorrowableAmount(address, currency);
@@ -156,14 +149,10 @@ export const LendingCard = ({
                 options={orderSideOptions}
                 selectedOption={OrderSideMap[side]}
                 handleClick={option => {
-                    dispatch(
-                        setSide(
-                            option === 'Borrow'
-                                ? OrderSide.BORROW
-                                : OrderSide.LEND
-                        )
+                    setSide(
+                        option === 'Borrow' ? OrderSide.BORROW : OrderSide.LEND
                     );
-                    dispatch(setSourceAccount(WalletSource.METAMASK));
+                    setSourceAccount(WalletSource.METAMASK);
                     trackButtonEvent(
                         ButtonEvents.ORDER_SIDE,
                         ButtonProperties.ORDER_SIDE,
@@ -192,14 +181,12 @@ export const LendingCard = ({
                             selected={selectedAsset}
                             priceList={assetPriceMap}
                             onAmountChange={v =>
-                                dispatch(
-                                    setAmount(
-                                        v === ''
-                                            ? ''
-                                            : amountFormatterToBase[currency](
-                                                  Number(v)
-                                              ).toString()
-                                    )
+                                setAmount(
+                                    v === ''
+                                        ? ''
+                                        : amountFormatterToBase[currency](
+                                              Number(v)
+                                          ).toString()
                                 )
                             }
                             initialValue={
@@ -240,7 +227,7 @@ export const LendingCard = ({
                             value: selectedTerm.value.toString(),
                         }}
                         onTermChange={v => {
-                            dispatch(setMaturity(Number(v)));
+                            setMaturity(Number(v));
                             trackButtonEvent(
                                 ButtonEvents.TERM_CHANGE,
                                 ButtonProperties.TERM,

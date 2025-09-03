@@ -2,10 +2,8 @@ import { useQuery } from '@apollo/client';
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import { TRANSACTIONS_BY_TIMESTAMP_AND_MATURITY_QUERY } from '@secured-finance/sf-graph-client/dist/queries';
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import { MaturityListItem } from 'src/components/organisms';
-import { selectLandingOrderForm } from 'src/store/landingOrderForm';
-import { RootState } from 'src/store/types';
+import { useLandingOrderFormSelector } from 'src/store/landingOrderForm';
 import { HistoricalYieldIntervals } from 'src/types';
 import { Rate } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
@@ -40,11 +38,9 @@ const useHistoricalRates = (maturityList: number[], currency: string) => {
 };
 
 export const useYieldCurveMarketRatesHistorical = () => {
-    const { currency, maturity } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
-    );
+    const { currency, maturity } = useLandingOrderFormSelector();
     const { data: lendingMarkets = baseContracts } = useLendingMarkets();
-    const lendingContracts = lendingMarkets[currency];
+    const lendingContracts = lendingMarkets?.[currency] ?? {};
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const maturityList: MaturityListItem[] = [];

@@ -2,14 +2,8 @@ import { withBalance, withWalletProvider } from '.storybook/decorators';
 import { OrderSide } from '@secured-finance/sf-client';
 import type { Meta, StoryFn } from '@storybook/react';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { emptyCollateralBook } from 'src/hooks';
-import {
-    setAmount,
-    setCurrency,
-    setMaturity,
-    setSide,
-} from 'src/store/landingOrderForm';
+import { useLandingOrderFormStore } from 'src/store/landingOrderForm';
 import {
     collateralBook37,
     collateralBook80,
@@ -46,32 +40,38 @@ export default {
 } as Meta<typeof OrderAction>;
 
 const Template: StoryFn<typeof OrderAction> = args => {
-    const dispatch = useDispatch();
     useEffect(() => {
         const timerId = setTimeout(() => {
-            dispatch(setCurrency(CurrencySymbol.USDC));
-            dispatch(setAmount('500000000'));
-            dispatch(setSide(OrderSide.BORROW));
-            dispatch(setMaturity(dec22Fixture.toNumber()));
+            useLandingOrderFormStore
+                .getState()
+                .setCurrency(CurrencySymbol.USDC);
+            useLandingOrderFormStore.getState().setAmount('500000000');
+            useLandingOrderFormStore.getState().setSide(OrderSide.BORROW);
+            useLandingOrderFormStore
+                .getState()
+                .setMaturity(dec22Fixture.toNumber());
         }, 200);
 
         return () => clearTimeout(timerId);
-    }, [dispatch]);
+    }, []);
     return <OrderAction {...args} />;
 };
 
 const NotEnoughCollateralTemplate: StoryFn<typeof OrderAction> = args => {
-    const dispatch = useDispatch();
     useEffect(() => {
         const timerId = setTimeout(() => {
-            dispatch(setCurrency(CurrencySymbol.USDC));
-            dispatch(setAmount('6000000000'));
-            dispatch(setSide(OrderSide.BORROW));
-            dispatch(setMaturity(dec22Fixture.toNumber()));
+            useLandingOrderFormStore
+                .getState()
+                .setCurrency(CurrencySymbol.USDC);
+            useLandingOrderFormStore.getState().setAmount('6000000000');
+            useLandingOrderFormStore.getState().setSide(OrderSide.BORROW);
+            useLandingOrderFormStore
+                .getState()
+                .setMaturity(dec22Fixture.toNumber());
         }, 200);
 
         return () => clearTimeout(timerId);
-    }, [dispatch]);
+    }, []);
     return <OrderAction {...args} />;
 };
 

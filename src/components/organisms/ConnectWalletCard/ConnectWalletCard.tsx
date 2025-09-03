@@ -1,7 +1,7 @@
 import SFLogo from 'src/assets/img/logo.svg';
 import SFSphere from 'src/assets/img/sf-sphere.png';
 import { Button, GradientBox } from 'src/components/atoms';
-import { useUIStore } from 'src/stores';
+import { useUIStore } from 'src/store';
 
 export const ConnectWalletCard = () => {
     const { setWalletDialogOpen } = useUIStore();

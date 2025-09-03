@@ -1,13 +1,11 @@
 import { ChartOptions, ChartTypeRegistry, TooltipItem } from 'chart.js';
 import { useRouter } from 'next/router';
-import { useDispatch, useSelector } from 'react-redux';
 import { LineChart, getData, options } from 'src/components/molecules';
 import { useIsGlobalItayose } from 'src/hooks';
 import {
-    selectLandingOrderForm,
-    setMaturity,
+    useLandingOrderFormSelector,
+    useLandingOrderFormStore,
 } from 'src/store/landingOrderForm';
-import { RootState } from 'src/store/types';
 import {
     ButtonEvents,
     ButtonProperties,
@@ -32,14 +30,12 @@ export const LineChartTab = ({
     maximumRate: number;
     marketCloseToMaturityOriginalRate: number;
 }) => {
-    const dispatch = useDispatch();
+    const { setMaturity } = useLandingOrderFormStore();
     const router = useRouter();
 
     const { data: isGlobalItayose } = useIsGlobalItayose();
 
-    const { currency, maturity } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
-    );
+    const { currency, maturity } = useLandingOrderFormSelector();
 
     const chartOptions: ChartOptions<'line'> = {
         ...options,
@@ -102,7 +98,7 @@ export const LineChartTab = ({
                     options={chartOptions}
                     handleChartClick={maturityIndex => {
                         const { maturity, label } = maturityList[maturityIndex];
-                        dispatch(setMaturity(maturity));
+                        setMaturity(maturity);
                         trackButtonEvent(
                             ButtonEvents.TERM_CHANGE,
                             ButtonProperties.TERM,

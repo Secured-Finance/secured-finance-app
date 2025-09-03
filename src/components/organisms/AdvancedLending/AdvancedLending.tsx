@@ -14,7 +14,6 @@ import {
     useRef,
     useState,
 } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import {
     AdvancedLendingTopBar,
     HorizontalTabTable,
@@ -61,13 +60,9 @@ import {
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import useSF from 'src/hooks/useSecuredFinance';
 import {
-    resetAmount,
-    resetUnitPrice,
-    selectLandingOrderForm,
-    setCurrency,
-    setMaturity,
+    useLandingOrderFormSelector,
+    useLandingOrderFormStore,
 } from 'src/store/landingOrderForm';
-import { RootState } from 'src/store/types';
 import {
     DailyMarketInfo,
     MaturityOptionList,
@@ -148,13 +143,12 @@ export const AdvancedLending = ({
     setPreOrderDays: (value: number | undefined) => void;
 }) => {
     const isTablet = useBreakpoint('laptop');
-    const { currency, maturity } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
-    );
+    const { currency, maturity } = useLandingOrderFormSelector();
     const [timestamp, setTimestamp] = useState<number>(1643713200);
     const [isChecked, setIsChecked] = useState(false);
 
-    const dispatch = useDispatch();
+    const { setCurrency, resetUnitPrice, resetAmount, setMaturity } =
+        useLandingOrderFormStore();
     const { address } = useAccount();
     const { data: priceList } = useLastPrices();
     const { data: usedCurrencies = [] } = useCurrenciesForOrders(address);
@@ -483,29 +477,29 @@ export const AdvancedLending = ({
 
     const handleCurrencyChange = useCallback(
         (v: CurrencySymbol) => {
-            dispatch(setCurrency(v));
-            dispatch(resetUnitPrice());
-            dispatch(resetAmount());
+            setCurrency(v);
+            resetUnitPrice();
+            resetAmount();
             trackButtonEvent(
                 ButtonEvents.CURRENCY_CHANGE,
                 ButtonProperties.CURRENCY,
                 v
             );
         },
-        [dispatch]
+        [setCurrency, resetUnitPrice, resetAmount]
     );
 
     const handleTermChange = useCallback(
         (v: Maturity) => {
-            dispatch(setMaturity(Number(v)));
-            dispatch(resetUnitPrice());
+            setMaturity(Number(v));
+            resetUnitPrice();
             trackButtonEvent(
                 ButtonEvents.TERM_CHANGE,
                 ButtonProperties.TERM,
                 selectedTerm.label
             );
         },
-        [dispatch, selectedTerm.label]
+        [setMaturity, resetUnitPrice, selectedTerm.label]
     );
 
     const handleFilterChange = useCallback(

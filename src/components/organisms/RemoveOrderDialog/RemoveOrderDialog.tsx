@@ -1,6 +1,5 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { useCallback, useEffect, useReducer, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Spinner } from 'src/components/atoms';
 import {
     Dialog,
@@ -16,7 +15,7 @@ import {
     useLastPrices,
     useOrders,
 } from 'src/hooks';
-import { setLastMessage } from 'src/store/lastError';
+import { useLastErrorStore } from 'src/store/lastError';
 import { AddressUtils, ButtonEvents, ButtonProperties } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 import { trackButtonEvent } from 'src/utils/events';
@@ -118,7 +117,7 @@ export const RemoveOrderDialog = ({
     const [errorMessage, setErrorMessage] = useState(
         'Your order could not be removed.'
     );
-    const globalDispatch = useDispatch();
+    const { setMessage } = useLastErrorStore();
 
     const { data: priceList } = useLastPrices();
     const price = priceList[amount.currency];
@@ -161,7 +160,7 @@ export const RemoveOrderDialog = ({
         } catch (e) {
             if (e instanceof Error) {
                 setErrorMessage(e.message);
-                globalDispatch(setLastMessage(e.message));
+                setMessage(e.message);
             }
             dispatch({ type: 'error' });
         }
@@ -171,7 +170,7 @@ export const RemoveOrderDialog = ({
         amount.currency,
         maturity,
         handleContractTransaction,
-        globalDispatch,
+        setMessage,
     ]);
 
     const onClick = useCallback(

@@ -9,7 +9,6 @@ import {
     useLastPrices,
     useValueLockedByCurrency,
 } from 'src/hooks';
-// import { RootState } from 'src/store/types';
 import { CurrencySymbol } from 'src/utils';
 import { isProdEnv } from 'src/utils/displayUtils';
 import { Banner, CampaignStatus, DepositCard, StageBanner } from './components';
@@ -22,10 +21,6 @@ import {
 
 export const Campaign = () => {
     const [openModal, setOpenModal] = useState(false);
-    // const { connectors } = useConnect();
-    // const provider = readWalletFromStore();
-    // const chainId = useSelector((state: RootState) => state.blockchain.chainId);
-    // const connector = connectors.find(connect => connect.name === provider);
 
     const collateralBalances = useCollateralBalances();
     const questChainId = isProdEnv() ? prodQuestChainId : devQuestChainId;
@@ -47,18 +42,6 @@ export const Campaign = () => {
             ),
         [collateralBalances, collateralCurrencies]
     );
-
-    // const handleDepositClick = useCallback(() => {
-    //     if (questChainId !== chainId) {
-    //         connector?.switchChain?.(Number(questChainId)).then(() => {
-    //             setTimeout(() => {
-    //                 setOpenModal(true);
-    //             }, 500);
-    //         });
-    //     } else {
-    //         setOpenModal(true);
-    //     }
-    // }, [chainId, connector, questChainId]);
 
     return (
         <div className='campaign'>

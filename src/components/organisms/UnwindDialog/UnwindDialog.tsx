@@ -1,6 +1,5 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { useCallback, useMemo, useReducer, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Spinner } from 'src/components/atoms';
 import {
     Dialog,
@@ -18,7 +17,7 @@ import {
     useMarket,
     useOrders,
 } from 'src/hooks';
-import { setLastMessage } from 'src/store/lastError';
+import { useLastErrorStore } from 'src/store/lastError';
 import {
     AddressUtils,
     ButtonEvents,
@@ -64,7 +63,7 @@ export const UnwindDialog = ({
     const handleContractTransaction = useHandleContractTransaction();
     const { address } = useAccount();
     const [txHash, setTxHash] = useState<string | undefined>();
-    const globalDispatch = useDispatch();
+    const { setMessage } = useLastErrorStore();
 
     const { data: collateralBook = emptyCollateralBook } =
         useCollateralBook(address);
@@ -194,16 +193,10 @@ export const UnwindDialog = ({
                     dispatch({ type: 'next' });
                 }
             } catch (e) {
-                handleContractError(
-                    e,
-                    setErrorMessage,
-                    dispatch,
-                    globalDispatch,
-                    setLastMessage
-                );
+                handleContractError(e, setErrorMessage, dispatch, setMessage);
             }
         },
-        [stateMap, type, handleContractTransaction, globalDispatch]
+        [stateMap, type, handleContractTransaction, setMessage]
     );
 
     const onClick = useCallback(

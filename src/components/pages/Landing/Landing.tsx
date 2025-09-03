@@ -3,7 +3,6 @@ import { getUTCMonthYear } from '@secured-finance/sf-core';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { TextLink, ViewType } from 'src/components/atoms';
 import {
     Alert,
@@ -32,11 +31,9 @@ import {
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import {
-    resetUnitPrice,
-    selectLandingOrderForm,
-    setOrderType,
+    useLandingOrderFormSelector,
+    useLandingOrderFormStore,
 } from 'src/store/landingOrderForm';
-import { RootState } from 'src/store/types';
 import { OrderType } from 'src/types';
 import { CurrencySymbol, ZERO_BI } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
@@ -52,13 +49,11 @@ export const emptyOptionList = [
 const ITAYOSE_PERIOD = 60 * 60 * 1000; // 1 hour in milli-seconds
 
 export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
-    const dispatch = useDispatch();
+    const { setOrderType, resetUnitPrice } = useLandingOrderFormStore();
     const { address, isConnected } = useAccount();
     const balance = useBalances();
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
-    const { currency, side, maturity } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
-    );
+    const { currency, side, maturity } = useLandingOrderFormSelector();
     const { data: lendingMarkets = baseContracts } = useLendingMarkets();
     const lendingContracts = lendingMarkets[currency];
 
@@ -112,13 +107,13 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
 
     useEffect(() => {
         if (view === 'Simple') {
-            dispatch(setOrderType(OrderType.MARKET));
-            dispatch(resetUnitPrice());
+            setOrderType(OrderType.MARKET);
+            resetUnitPrice();
         } else if (view === 'Advanced') {
-            dispatch(setOrderType(OrderType.LIMIT));
-            dispatch(resetUnitPrice());
+            setOrderType(OrderType.LIMIT);
+            resetUnitPrice();
         }
-    }, [view, dispatch]);
+    }, [view, setOrderType, resetUnitPrice]);
 
     const isShowWelcomeAlert =
         Object.values(balance).every(v => v === ZERO_BI) || !isConnected;

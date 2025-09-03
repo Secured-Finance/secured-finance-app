@@ -2,7 +2,7 @@ import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import { withWalletProvider } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
 import { useEffect } from 'react';
-import { useUIStore } from 'src/stores';
+import { useUIStore } from 'src/store';
 import { WalletDialog } from './WalletDialog';
 
 export default {

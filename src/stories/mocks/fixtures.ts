@@ -42,7 +42,7 @@ assetPriceMap.axlFIL = 6.0;
 
 export const preloadedBalance = {
     wallet: {
-        balance: 10,
+        balance: '10',
         address: '',
     },
 };
@@ -968,7 +968,7 @@ export const collateralBook37: CollateralBook = {
         WBTC: BigInt('20000000'),
     },
     nonCollateral: {
-        WFIL: BigInt('100000000000000000000'),
+        WFIL: BigInt('10000000000000000000000'),
     },
     usdCollateral: 12100.34,
     usdAvailableToBorrow: 5203.1462,

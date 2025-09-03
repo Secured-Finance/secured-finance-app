@@ -1,7 +1,10 @@
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
+import { LandingOrderFormStore } from 'src/store/landingOrderForm';
 import { dec22Fixture } from 'src/stories/mocks/fixtures';
+import { initialStore } from 'src/stories/mocks/mockStore';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook, waitFor } from 'src/test-utils';
+import { OrderType } from 'src/types';
 import { CurrencySymbol, ZERO_BI, toCurrency } from 'src/utils';
 import { useOrderEstimation } from './useOrderEstimation';
 
@@ -9,17 +12,20 @@ const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
 beforeEach(() => mock.getOrderEstimation.mockClear());
-
+const landingOrderForm: LandingOrderFormStore = {
+    currency: CurrencySymbol.USDC,
+    side: OrderSide.BORROW,
+    maturity: dec22Fixture.toNumber(),
+    amount: '5000000',
+    unitPrice: '98',
+    orderType: OrderType.LIMIT,
+    lastView: 'Simple' as const,
+    isBorrowedCollateral: false,
+    sourceAccount: WalletSource.METAMASK,
+};
 const preloadedState = {
-    landingOrderForm: {
-        currency: CurrencySymbol.USDC,
-        side: OrderSide.BORROW,
-        maturity: dec22Fixture.toNumber(),
-        amount: '5000000',
-        unitPrice: '98',
-        isBorrowedCollateral: false,
-        sourceAccount: WalletSource.METAMASK,
-    },
+    ...initialStore,
+    landingOrderForm,
 };
 
 describe('useOrderEstimation', () => {

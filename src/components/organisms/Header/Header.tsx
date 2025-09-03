@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
 import ArrowUpSquare from 'src/assets/icons/arrow-up-square.svg';
 import Badge from 'src/assets/icons/badge.svg';
 import SFLogo from 'src/assets/img/logo.svg';
@@ -21,8 +20,7 @@ import {
 import { WalletDialog, WalletPopover } from 'src/components/organisms';
 import { useBreakpoint, usePoints } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
-import { useUIStore } from 'src/stores';
-import { RootState } from 'src/store/types';
+import { useBlockchainStore, useUIStore } from 'src/store';
 import {
     getShowStablecoinAppUrl,
     getStablecoinAppUrl,
@@ -84,15 +82,11 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     const userPoints = userData?.user.point;
 
     const securedFinance = useSF();
-    const chainError = useSelector(
-        (state: RootState) => state.blockchain.chainError
-    );
-    const currentChainId = useSelector(
-        (state: RootState) => state.blockchain.chainId
-    );
-    const isChainIdDetected = useSelector(
-        (state: RootState) => state.blockchain.isChainIdDetected
-    );
+    const {
+        chainError,
+        chainId: currentChainId,
+        isChainIdDetected,
+    } = useBlockchainStore();
     const isProduction = isProdEnv();
 
     const LINKS = isProduction ? PRODUCTION_LINKS : DEV_LINKS;

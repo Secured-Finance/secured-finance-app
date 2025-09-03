@@ -1,13 +1,12 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
 import { QUERIES_TO_INVALIDATE } from 'src/hooks/queries';
-import { updateLastActionTimestamp } from 'src/store/blockchain';
+import { useBlockchainStore } from 'src/store';
 import { Hex } from 'viem';
 import { usePublicClient } from 'wagmi';
 
 export const useHandleContractTransaction = () => {
-    const dispatch = useDispatch();
+    const { updateLastActionTimestamp } = useBlockchainStore();
     const queryClient = useQueryClient();
     const publicClient = usePublicClient();
 
@@ -20,7 +19,7 @@ export const useHandleContractTransaction = () => {
                 await publicClient.waitForTransactionReceipt({
                     hash: tx,
                 });
-            dispatch(updateLastActionTimestamp());
+            updateLastActionTimestamp();
 
             // Invalidate all queries
             await Promise.all(
@@ -33,7 +32,7 @@ export const useHandleContractTransaction = () => {
             }
             return false;
         },
-        [dispatch, publicClient, queryClient]
+        [updateLastActionTimestamp, publicClient, queryClient]
     );
     return handleContractTransaction;
 };

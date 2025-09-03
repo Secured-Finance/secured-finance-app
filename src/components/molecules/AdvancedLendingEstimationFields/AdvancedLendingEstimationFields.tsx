@@ -1,10 +1,8 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { useCallback, useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import { OrderDisplayBox } from 'src/components/atoms';
 import { useBreakpoint, useOrderEstimation } from 'src/hooks';
-import { selectLandingOrderForm } from 'src/store/landingOrderForm';
-import { RootState } from 'src/store/types';
+import { useLandingOrderFormSelector } from 'src/store/landingOrderForm';
 import { OrderType } from 'src/types';
 import {
     amountFormatterFromBase,
@@ -40,12 +38,10 @@ export const AdvancedLendingEstimationFields = ({
         amount,
         orderType,
         unitPrice,
-        maturity,
         unitPriceExists,
+        maturity,
         side,
-    } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
-    );
+    } = useLandingOrderFormSelector();
 
     const isMobile = useBreakpoint('tablet');
 

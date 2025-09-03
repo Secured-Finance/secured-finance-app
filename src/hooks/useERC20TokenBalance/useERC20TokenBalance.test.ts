@@ -1,15 +1,10 @@
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook, waitFor } from 'src/test-utils';
 import { useERC20TokenBalance } from './useERC20TokenBalance';
+import { initialStore } from 'src/stories/mocks/mockStore';
 
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
-
-const preloadedState = {
-    wallet: {
-        address: '0x1',
-    },
-};
 
 describe('useERC20TokenBalance', () => {
     it('should return the ZC Token address', async () => {
@@ -21,7 +16,7 @@ describe('useERC20TokenBalance', () => {
         const { result } = renderHook(
             () => useERC20TokenBalance(TOKEN_ADDRESS),
             {
-                preloadedState,
+                preloadedState: initialStore,
             }
         );
 

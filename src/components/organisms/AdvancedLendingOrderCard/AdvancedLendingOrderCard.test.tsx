@@ -1,8 +1,11 @@
 import * as analytics from '@amplitude/analytics-browser';
-import { OrderSide } from '@secured-finance/sf-client';
+import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
+import { ViewType } from 'src/components/atoms';
 import { CollateralBook } from 'src/hooks';
+import { LandingOrderFormStore } from 'src/store/landingOrderForm';
 import { dec22Fixture } from 'src/stories/mocks/fixtures';
+import { initialStore } from 'src/stories/mocks/mockStore';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
@@ -18,22 +21,20 @@ import * as stories from './AdvancedLendingOrderCard.stories';
 
 const { Default, WalletNotConnected } = composeStories(stories);
 
+const landingOrderForm: LandingOrderFormStore = {
+    currency: CurrencySymbol.USDC,
+    side: OrderSide.BORROW,
+    maturity: dec22Fixture.toNumber(),
+    amount: '500000000',
+    unitPrice: '95',
+    orderType: OrderType.LIMIT,
+    lastView: 'Simple' as ViewType,
+    isBorrowedCollateral: false,
+    sourceAccount: WalletSource.METAMASK,
+};
 const preloadedState = {
-    landingOrderForm: {
-        currency: CurrencySymbol.USDC,
-        maturity: dec22Fixture,
-        side: OrderSide.BORROW,
-        amount: '500000000',
-        unitPrice: '95',
-        orderType: OrderType.LIMIT,
-    },
-    wallet: {
-        address: '0x1',
-        balance: '0',
-    },
-    blockchain: {
-        chainError: false,
-    },
+    ...initialStore,
+    landingOrderForm,
 };
 
 const collateralBook0: CollateralBook = {

@@ -12,6 +12,7 @@ import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { ButtonEvents, ButtonProperties } from 'src/utils';
 
+import { useLandingOrderFormStore } from 'src/store';
 import * as stories from './AdvancedLending.stories';
 
 const { Default, ConnectedToWallet, Delisted, OpenOrdersConnectedToWallet } =
@@ -23,18 +24,20 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 describe.skip('Advanced Lending Component', () => {
     it.skip('should convert the amount to new currency and track CURRENCY_CHANGE when the user change the currency', async () => {
         const track = jest.spyOn(analytics, 'track');
-        const { store } = await waitFor(() =>
+        await waitFor(() =>
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
             })
         );
-        expect(store.getState().landingOrderForm.amount).toEqual('');
+
+        const store = useLandingOrderFormStore;
+        expect(store.getState().amount).toEqual('');
         await waitFor(() =>
             fireEvent.input(screen.getByRole('textbox', { name: 'Size' }), {
                 target: { value: '1' },
             })
         );
-        expect(store.getState().landingOrderForm.amount).toEqual('1');
+        expect(store.getState().amount).toEqual('1');
 
         fireEvent.click(screen.getByRole('button', { name: 'WFIL-DEC2022' }));
         fireEvent.click(screen.getByRole('row', { name: 'WFIL-SEP2023' }));
@@ -42,7 +45,7 @@ describe.skip('Advanced Lending Component', () => {
             [ButtonProperties.CURRENCY]: 'WFIL',
         });
         await waitFor(() => {
-            expect(store.getState().landingOrderForm.amount).toEqual('1');
+            expect(store.getState().amount).toEqual('1');
             expect(screen.getByRole('textbox', { name: 'Size' })).toHaveValue(
                 '1'
             );
@@ -51,25 +54,26 @@ describe.skip('Advanced Lending Component', () => {
 
     it.skip('should not reset the amount and emit TERM_CHANGE event when the user change the maturity', async () => {
         const track = jest.spyOn(analytics, 'track');
-        const { store } = await waitFor(() =>
+        await waitFor(() =>
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
             })
         );
-        expect(store.getState().landingOrderForm.amount).toEqual('');
+        const store = useLandingOrderFormStore;
+        expect(store.getState().amount).toEqual('');
         await waitFor(() =>
             fireEvent.input(screen.getByRole('textbox', { name: 'Size' }), {
                 target: { value: '1' },
             })
         );
-        expect(store.getState().landingOrderForm.amount).toEqual('1');
+        expect(store.getState().amount).toEqual('1');
         fireEvent.click(screen.getByRole('button', { name: 'WFIL-DEC2022' }));
         fireEvent.click(screen.getByText('WFIL-MAR2023'));
         expect(track).toHaveBeenCalledWith(ButtonEvents.TERM_CHANGE, {
             [ButtonProperties.TERM]: 'MAR2023',
         });
         await waitFor(() => {
-            expect(store.getState().landingOrderForm.amount).toEqual('1');
+            expect(store.getState().amount).toEqual('1');
             expect(screen.getByRole('textbox', { name: 'Size' })).toHaveValue(
                 '1'
             );

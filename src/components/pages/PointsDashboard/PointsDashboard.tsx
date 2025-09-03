@@ -16,7 +16,6 @@ import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
 import CountUp from 'react-countup';
-import { useSelector } from 'react-redux';
 import { SiweMessage } from 'siwe';
 import {
     Button,
@@ -42,8 +41,7 @@ import {
     useCollateralCurrencies,
     usePoints,
 } from 'src/hooks';
-import { useUIStore } from 'src/stores';
-import { RootState } from 'src/store/types';
+import { useBlockchainStore, useUIStore } from 'src/store';
 import {
     CurrencySymbol,
     SupportedChainsList,
@@ -636,7 +634,7 @@ const Leaderboard = () => {
 };
 
 export const PointsDashboard = () => {
-    const chainId = useSelector((state: RootState) => state.blockchain.chainId);
+    const { chainId } = useBlockchainStore();
     return (
         <>
             <Page title='Points' name='point-dashboard'>

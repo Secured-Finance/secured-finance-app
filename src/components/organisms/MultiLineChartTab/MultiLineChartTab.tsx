@@ -8,7 +8,6 @@ import clsx from 'clsx';
 import domtoimage from 'dom-to-image';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Spinner } from 'src/components/atoms';
 import BarChart from 'src/components/molecules/BarChart/BarChart';
 import {
@@ -19,10 +18,10 @@ import {
 import TimeScaleSelector from 'src/components/molecules/TimeScaleSelector/TimeScaleSelector';
 import { useIsGlobalItayose } from 'src/hooks';
 import {
-    selectLandingOrderForm,
-    setMaturity,
-} from 'src/store/landingOrderForm';
-import { RootState } from 'src/store/types';
+    useBlockchainStore,
+    useLandingOrderFormSelector,
+    useLandingOrderFormStore,
+} from 'src/store';
 import { HistoricalYieldIntervals } from 'src/types';
 import { ButtonEvents, ButtonProperties, currencyMap, Rate } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
@@ -57,15 +56,11 @@ export const MultiLineChartTab = ({
     const componentRef = useRef<HTMLDivElement>(null);
     const [isMaximized, setIsMaximized] = useState(false);
     const [historicalRates, setHistoricalRates] = useState<Rate[][]>([rates]);
-    const dispatch = useDispatch();
     const router = useRouter();
     const { data: isGlobalItayose } = useIsGlobalItayose();
-    const { currency, maturity } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
-    );
-    const currentChainId = useSelector(
-        (state: RootState) => state.blockchain.chainId
-    );
+    const { currency, maturity } = useLandingOrderFormSelector();
+    const { setMaturity } = useLandingOrderFormStore();
+    const { chainId: currentChainId } = useBlockchainStore();
 
     useEffect(() => {
         setSelectedTimeScales([{ label: 'Current Yield', value: '0' }]);
@@ -105,7 +100,7 @@ export const MultiLineChartTab = ({
 
     const itayoseBorderColor = !isGlobalItayose
         ? '#B9BDEA'
-        : currencyMap[currency].chartColor;
+        : currencyMap[currency as keyof typeof currencyMap].chartColor;
 
     const data = getMultiLineChartData(
         historicalRates,
@@ -260,7 +255,7 @@ export const MultiLineChartTab = ({
     const handleChartClick = useCallback(
         (maturityIndex: number) => {
             const { maturity, label } = maturityList[maturityIndex];
-            dispatch(setMaturity(maturity));
+            setMaturity(maturity);
             trackButtonEvent(
                 ButtonEvents.TERM_CHANGE,
                 ButtonProperties.TERM,
@@ -274,7 +269,7 @@ export const MultiLineChartTab = ({
                 },
             });
         },
-        [currency, dispatch, maturityList, router]
+        [currency, setMaturity, maturityList, router]
     );
 
     return loading ? (

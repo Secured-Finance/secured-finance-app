@@ -1,4 +1,5 @@
-import { renderHook } from 'src/test-utils';
+import { useBlockchainStore } from 'src/store';
+import { act, renderHook } from 'src/test-utils';
 import { useHandleContractTransaction } from './useHandleContractTransaction';
 
 describe('useHandleContractTransaction', () => {
@@ -11,7 +12,13 @@ describe('useHandleContractTransaction', () => {
 
     it('should return true if the contract receipt has a block number', async () => {
         const { result } = renderHook(() => useHandleContractTransaction());
-        const resultValue = await result.current(txHash);
+
+        let resultValue = false;
+
+        await act(async () => {
+            resultValue = await result.current(txHash);
+        });
+
         expect(resultValue).toBe(true);
     });
 
@@ -28,11 +35,12 @@ describe('useHandleContractTransaction', () => {
     });
 
     it('should dispatch updateLastActionTimestamp', async () => {
-        const { result, store } = renderHook(() =>
-            useHandleContractTransaction()
-        );
-        expect(store.getState().blockchain.lastActionTimestamp).toBeFalsy();
-        await result.current(txHash);
-        expect(store.getState().blockchain.lastActionTimestamp).toBeTruthy();
+        const { result } = renderHook(() => useHandleContractTransaction());
+        const store = useBlockchainStore;
+        expect(store.getState().lastActionTimestamp).toBeFalsy();
+        await act(async () => {
+            await result.current(txHash);
+        });
+        expect(store.getState().lastActionTimestamp).toBeTruthy();
     });
 });

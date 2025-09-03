@@ -5,7 +5,6 @@ import { VisibilityState } from '@tanstack/table-core';
 import clsx from 'clsx';
 import * as dayjs from 'dayjs';
 import { useCallback, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { MarketTab, Option, TextLink, Timer } from 'src/components/atoms';
 import {
     Alert,
@@ -47,12 +46,9 @@ import {
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import {
-    resetAmount,
-    selectLandingOrderForm,
-    setCurrency,
-    setMaturity,
+    useLandingOrderFormSelector,
+    useLandingOrderFormStore,
 } from 'src/store/landingOrderForm';
-import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
     ZERO_BI,
@@ -169,9 +165,7 @@ export const Itayose = () => {
     const { address } = useAccount();
     const isTablet = useBreakpoint('laptop');
 
-    const { currency, maturity } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
-    );
+    const { currency, maturity } = useLandingOrderFormSelector();
     const [selectedTable, setSelectedTable] = useState(TableType.OPEN_ORDERS);
 
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
@@ -301,14 +295,15 @@ export const Itayose = () => {
         };
     });
 
-    const dispatch = useDispatch();
+    const { resetAmount, setCurrency, setMaturity } =
+        useLandingOrderFormStore();
 
     const handleAssetChange = useCallback(
         (v: CurrencySymbol) => {
-            dispatch(resetAmount());
-            dispatch(setCurrency(v));
+            resetAmount();
+            setCurrency(v);
         },
-        [dispatch]
+        [resetAmount, setCurrency]
     );
 
     const isLoadingMap = {
@@ -376,7 +371,7 @@ export const Itayose = () => {
                         currency={currency}
                         handleAssetChange={handleAssetChange}
                         handleTermChange={v => {
-                            dispatch(setMaturity(Number(v)));
+                            setMaturity(Number(v));
                         }}
                     />
                 }

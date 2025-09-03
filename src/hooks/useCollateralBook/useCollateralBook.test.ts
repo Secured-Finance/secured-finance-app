@@ -34,7 +34,7 @@ describe('useCollateralBook hook', () => {
         expect(colBook.collateral.USDC).toEqual(BigInt('100000000'));
         expect(colBook.collateral.WBTC).toEqual(BigInt('20000000'));
         expect(colBook.nonCollateral.WFIL).toEqual(
-            BigInt('100000000000000000000')
+            BigInt('10000000000000000000000')
         );
         expect(colBook.coverage).toEqual(3700);
         expect(colBook.collateralThreshold).toEqual(80);

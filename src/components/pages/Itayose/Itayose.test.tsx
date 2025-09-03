@@ -1,6 +1,7 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
 import { zeroRates } from 'src/hooks/useYieldCurveHistoricalRates/constant';
+import { useLandingOrderFormStore } from 'src/store';
 import { dec22Fixture } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
@@ -37,7 +38,7 @@ const preloadedState = {
         maturity: dec22Fixture,
         side: OrderSide.BORROW,
         amount: '0',
-        unitPrice: 0,
+        unitPrice: '0',
     },
 };
 
@@ -54,26 +55,28 @@ describe('Itayose Component', () => {
     });
 
     it.skip('should convert the amount to changed currency when the user change the currency', async () => {
-        const { store } = await waitFor(() =>
+        await waitFor(() =>
             render(<Default />, {
                 preloadedState,
                 apolloMocks: Default.parameters?.apolloClient.mocks,
             })
         );
-        expect(store.getState().landingOrderForm.amount).toEqual('0');
+
+        const store = useLandingOrderFormStore;
+        expect(store.getState().amount).toEqual('0');
         const ele = await screen.findByRole('textbox', { name: 'Size' });
         await waitFor(() => {
             fireEvent.change(ele, {
                 target: { value: '1' },
             });
         });
-        expect(store.getState().landingOrderForm.amount).toEqual('1');
+        expect(store.getState().amount).toEqual('1');
 
         fireEvent.click(screen.getByRole('button', { name: 'WBTC-DEC2024' }));
         fireEvent.click(screen.getByRole('row', { name: 'WFIL-DEC2024' }));
 
         await waitFor(() => {
-            expect(store.getState().landingOrderForm.amount).toEqual('1');
+            expect(store.getState().amount).toEqual('1');
             expect(screen.getByRole('textbox', { name: 'Size' })).toHaveValue(
                 '1'
             );

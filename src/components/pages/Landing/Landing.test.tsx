@@ -81,7 +81,7 @@ describe('Landing Component', () => {
                     maturity: 1669852800,
                     side: OrderSide.BORROW,
                     amount: '500000000',
-                    unitPrice: 9500,
+                    unitPrice: '9500',
                     orderType: OrderType.LIMIT,
                     marketPhase: 'Open',
                 },

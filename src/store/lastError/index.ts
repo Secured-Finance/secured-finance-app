@@ -1,4 +1,2 @@
-import { errorSlice } from './reducer';
-
-export const { setLastMessage, clearLastMessage } = errorSlice.actions;
-export default errorSlice.reducer;
+export { useLastErrorStore } from './store';
+export type { LastErrorStore } from './types';

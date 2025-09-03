@@ -1,7 +1,6 @@
 import { track } from '@amplitude/analytics-browser';
 import { useSearchParams } from 'next/navigation';
 import { useCallback, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
 import MetaMaskIcon from 'src/assets/img/metamask-fox.svg';
 import WalletConnectIcon from 'src/assets/img/wallet-connect.svg';
 import { Spinner } from 'src/components/atoms';
@@ -12,8 +11,7 @@ import {
     WalletRadioGroup,
 } from 'src/components/molecules';
 import { useBlockExplorerUrl } from 'src/hooks';
-import { useUIStore } from 'src/stores';
-import { RootState } from 'src/store/types';
+import { useBlockchainStore, useUIStore } from 'src/store';
 import { Wallet } from 'src/types';
 import {
     AddressUtils,
@@ -35,7 +33,7 @@ function hasMetaMask() {
 }
 
 export const WalletDialog = () => {
-    const chainId = useSelector((state: RootState) => state.blockchain.chainId);
+    const { chainId } = useBlockchainStore();
     const searchParams = useSearchParams();
 
     const chainName = getSupportedNetworks().find(n => n.id === chainId)?.name;
