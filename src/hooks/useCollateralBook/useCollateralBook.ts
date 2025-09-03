@@ -5,6 +5,7 @@ import useSF from 'src/hooks/useSecuredFinance';
 import { AssetPriceMap } from 'src/types';
 import {
     CurrencySymbol,
+    LiquidationCalculator,
     ZERO_BI,
     amountFormatterFromBase,
     computeAvailableToBorrow,
@@ -118,10 +119,10 @@ export const useCollateralBook = (account: string | undefined) => {
             const liquidationThresholdRate = Number(
                 data.collateralParameters.liquidationThresholdRate
             );
-            const collateralThreshold =
-                liquidationThresholdRate === 0
-                    ? 0
-                    : 1000000 / liquidationThresholdRate;
+            const liquidationThreshold =
+                LiquidationCalculator.getLiquidationThreshold(
+                    liquidationThresholdRate
+                );
 
             const withdrawableCollateral: CollateralBook['withdrawableCollateral'] =
                 data.withdrawableCollateral.reduce((acc, obj) => ({
@@ -148,11 +149,11 @@ export const useCollateralBook = (account: string | undefined) => {
                     usdCollateral,
                     usdUnusedCollateral,
                     divide(coverage, 100),
-                    collateralThreshold
+                    liquidationThreshold
                 ),
                 usdNonCollateral: usdNonCollateral,
                 coverage: coverage,
-                collateralThreshold: collateralThreshold,
+                collateralThreshold: liquidationThreshold,
                 withdrawableCollateral: withdrawableCollateral,
                 totalPresentValue: divide(data.totalPresentValue, DIVIDER, 8),
             };

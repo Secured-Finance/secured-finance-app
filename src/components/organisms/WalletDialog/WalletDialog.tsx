@@ -16,7 +16,8 @@ import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
 import { Wallet } from 'src/types';
 import {
-    AddressUtils,
+    AddressConverter,
+    DisplayLengths,
     InterfaceEvents,
     InterfaceProperties,
     WalletConnectionResult,
@@ -208,7 +209,10 @@ export const WalletDialog = () => {
                             ['Status', 'Connected'],
                             [
                                 'Ethereum Address',
-                                AddressUtils.format(address ?? '', 8),
+                                AddressConverter.format(
+                                    address,
+                                    DisplayLengths.LONG
+                                ),
                             ],
                         ]}
                         blockExplorerUrl={blockExplorerUrl}
