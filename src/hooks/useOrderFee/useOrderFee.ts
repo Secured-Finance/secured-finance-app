@@ -1,7 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
-import { CurrencySymbol, ZERO_BI, divide, CurrencyConverter } from 'src/utils';
+import {
+    CurrencySymbol,
+    ZERO_BI,
+    FeeCalculator,
+    CurrencyConverter,
+} from 'src/utils';
 
 export const useOrderFee = (ccy: CurrencySymbol) => {
     const securedFinance = useSF();
@@ -14,7 +19,7 @@ export const useOrderFee = (ccy: CurrencySymbol) => {
             );
             return orderFee ?? ZERO_BI;
         },
-        select: fee => divide(Number(fee), 100),
+        select: fee => FeeCalculator.calculateProtocolFee(fee),
         enabled: !!securedFinance,
     });
 };

@@ -24,11 +24,12 @@ import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
 import {
+    DisplayLengths,
     getShowStablecoinAppUrl,
     getStablecoinAppUrl,
     getSupportedNetworks,
 } from 'src/utils';
-import { AddressUtils } from 'src/utils/address';
+import { AddressConverter } from 'src/utils';
 import { isProdEnv } from 'src/utils/displayUtils';
 import { useAccount } from 'wagmi';
 import { DEV_LINKS, PRODUCTION_LINKS } from './constants';
@@ -162,7 +163,10 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                                     }
                                 />
                                 <WalletPopover
-                                    wallet={AddressUtils.format(address, 6)}
+                                    wallet={AddressConverter.format(
+                                        address,
+                                        DisplayLengths.MEDIUM
+                                    )}
                                     networkName={
                                         securedFinance?.config?.network ??
                                         'Unknown'
