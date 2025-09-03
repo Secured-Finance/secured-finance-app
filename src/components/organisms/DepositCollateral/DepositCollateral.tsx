@@ -14,10 +14,11 @@ import {
 } from 'src/hooks';
 import { useDepositCollateral } from 'src/hooks/useDepositCollateral';
 import {
-    AddressUtils,
+    AddressConverter,
     CollateralEvents,
     CollateralInfo,
     CurrencySymbol,
+    DisplayLengths,
     ZERO_BI,
     amountFormatterFromBase,
     amountFormatterToBase,
@@ -285,7 +286,10 @@ export const DepositCollateral = ({
                                     ['Status', 'Complete'],
                                     [
                                         'Transaction hash',
-                                        AddressUtils.format(txHash ?? '', 8),
+                                        AddressConverter.format(
+                                            txHash,
+                                            DisplayLengths.LONG
+                                        ),
                                     ],
                                     [
                                         'Amount',
