@@ -1,4 +1,3 @@
-import { OrderSide } from '@secured-finance/sf-client';
 import { createColumnHelper } from '@tanstack/react-table';
 import clsx from 'clsx';
 import { useMemo } from 'react';
@@ -23,6 +22,7 @@ import {
     inputPriceYieldColumnDefinition,
     loanTypeColumnDefinition,
     tableHeaderDefinition,
+    OrderTypeConverter,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
@@ -40,10 +40,7 @@ const OrderHistoryTableMobile = ({
             {data.map((row, index) => {
                 const ccy = hexToCurrencySymbol(row.currency);
                 const maturity = new Maturity(row.maturity);
-                const side =
-                    row.side.toString() === '1'
-                        ? OrderSide.BORROW
-                        : OrderSide.LEND;
+                const side = OrderTypeConverter.from(row.side);
                 const inputAmount = row.inputAmount;
                 const filledAmount = row.filledAmount;
                 const unitPrice = row.inputUnitPrice;

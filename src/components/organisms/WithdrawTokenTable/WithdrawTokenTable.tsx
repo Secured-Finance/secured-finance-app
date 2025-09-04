@@ -17,9 +17,10 @@ import {
     tableHeaderDefinition,
     withdrawableAssetColumnDefinition,
 } from 'src/utils/tableDefinitions';
+import { Hex } from 'viem';
 
 type TokenPosition = {
-    currency: `0x${string}`;
+    currency: Hex;
     amount: bigint;
 };
 

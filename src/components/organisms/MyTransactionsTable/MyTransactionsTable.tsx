@@ -1,4 +1,3 @@
-import { OrderSide } from '@secured-finance/sf-client';
 import { createColumnHelper } from '@tanstack/react-table';
 import clsx from 'clsx';
 import { useMemo } from 'react';
@@ -13,12 +12,14 @@ import { Transaction, TransactionHistoryList } from 'src/types';
 import {
     AmountCell,
     MobileTableWrapper,
+    OrderTypeConverter,
     amountColumnDefinition,
     contractColumnDefinition,
     formatLoanValue,
     hexToCurrencySymbol,
     loanTypeColumnDefinition,
     tableHeaderDefinition,
+    FeeCalculator,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 
@@ -50,13 +51,6 @@ const priceYieldColumnDef = (
     });
 };
 
-const getFVWithFee = (futureValue: bigint, fee: bigint, side: number) => {
-    if (side === 0) {
-        return futureValue - fee;
-    }
-    return futureValue + fee;
-};
-
 const MyTransactionsTableMobile = ({
     data,
 }: {
@@ -67,10 +61,7 @@ const MyTransactionsTableMobile = ({
             {data.map((row, index) => {
                 const ccy = hexToCurrencySymbol(row.currency);
                 const maturity = new Maturity(row.maturity);
-                const side =
-                    row.side.toString() === '1'
-                        ? OrderSide.BORROW
-                        : OrderSide.LEND;
+                const side = OrderTypeConverter.from(row.side);
                 const amount = row.amount;
                 const averagePrice = row.averagePrice;
                 const futureValue = row.futureValue;
@@ -106,9 +97,9 @@ const MyTransactionsTableMobile = ({
                                     value={
                                         <AmountCell
                                             ccy={ccy}
-                                            amount={getFVWithFee(
-                                                BigInt(futureValue),
-                                                BigInt(feeInFV),
+                                            amount={FeeCalculator.calculateFutureValueWithFee(
+                                                futureValue,
+                                                feeInFV,
                                                 side
                                             )}
                                         />
@@ -167,9 +158,9 @@ export const MyTransactionsTable = ({
                 'Future Value (FV)',
                 'futureValue',
                 row =>
-                    getFVWithFee(
-                        BigInt(row.futureValue),
-                        BigInt(row.feeInFV),
+                    FeeCalculator.calculateFutureValueWithFee(
+                        row.futureValue,
+                        row.feeInFV,
                         row.side
                     ),
                 {

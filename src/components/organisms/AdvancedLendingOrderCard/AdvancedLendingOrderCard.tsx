@@ -42,12 +42,12 @@ import {
     ButtonProperties,
     CurrencySymbol,
     ZERO_BI,
-    calculateFee,
+    FeeCalculator,
     divide,
     generateWalletSourceInformation,
     ordinaryFormat,
+    AmountConverter,
 } from 'src/utils';
-import { AmountConverter } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import {
     InteractionEvents,
@@ -450,7 +450,10 @@ export function AdvancedLendingOrderCard({
                     <div className='flex flex-col gap-1 py-1'>
                         <OrderDisplayBox
                             field='Fees'
-                            value={calculateFee(maturity, orderFee)}
+                            value={FeeCalculator.calculateTransactionFees(
+                                maturity,
+                                orderFee
+                            )}
                             informationText='A duration-based transaction fee only for market takers,
                                     factored into the bond price, and deducted from its future value'
                         />
