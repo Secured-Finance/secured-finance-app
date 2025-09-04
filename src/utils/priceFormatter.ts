@@ -1,7 +1,4 @@
-const PRICE_FORMAT_CONSTANTS = {
-    PERCENTAGE_DIVISOR: 100,
-    PRICE_PERCENTAGE_DIVISOR: 100,
-} as const;
+const PERCENTAGE_BASE = 100;
 export class PriceFormatter {
     static formatUSD(
         number: number | bigint,
@@ -41,10 +38,7 @@ export class PriceFormatter {
         minimumFractionDigits = 0,
         maximumFractionDigits = 2
     ): string {
-        const divisor =
-            unit === 'percentage'
-                ? PRICE_FORMAT_CONSTANTS.PERCENTAGE_DIVISOR
-                : 1;
+        const divisor = unit === 'percentage' ? PERCENTAGE_BASE : 1;
         const value = number / divisor;
         return Intl.NumberFormat('en-US', {
             style: 'percent',
@@ -92,10 +86,7 @@ export class PriceFormatter {
         unit: 'raw' | 'percentage' = 'percentage',
         decimals = 2
     ): string {
-        const divisor =
-            unit === 'percentage'
-                ? PRICE_FORMAT_CONSTANTS.PRICE_PERCENTAGE_DIVISOR
-                : 1;
+        const divisor = unit === 'percentage' ? PERCENTAGE_BASE : 1;
         return (price / divisor).toFixed(decimals);
     }
 

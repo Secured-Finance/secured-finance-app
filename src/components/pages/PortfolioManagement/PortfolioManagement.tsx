@@ -343,8 +343,7 @@ export const PortfolioManagement = () => {
                             {
                                 name: 'Net Asset Value',
                                 value: PriceFormatter.formatUSDValue(
-                                    portfolioAnalytics.netAssetValue,
-                                    2
+                                    portfolioAnalytics.netAssetValue
                                 ),
                             },
                             {
@@ -356,15 +355,13 @@ export const PortfolioManagement = () => {
                             {
                                 name: 'Lending PV',
                                 value: PriceFormatter.formatUSDValue(
-                                    portfolioAnalytics.lentPV,
-                                    2
+                                    portfolioAnalytics.lentPV
                                 ),
                             },
                             {
                                 name: 'Borrowing PV',
                                 value: PriceFormatter.formatUSDValue(
-                                    portfolioAnalytics.borrowedPV,
-                                    2
+                                    portfolioAnalytics.borrowedPV
                                 ),
                             },
                         ]}
