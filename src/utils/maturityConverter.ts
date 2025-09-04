@@ -1,9 +1,12 @@
+import { formatDate, getUTCMonthYear } from '@secured-finance/sf-core';
+import dayjs from 'dayjs';
 import { Maturity } from './entities';
-const MS_PER_SEC = 1000;
+
+export type MaturityInput = string | number | bigint | Maturity;
 
 export class MaturityConverter {
-    static fromInput(input: string | number | bigint): Maturity {
-        return new Maturity(input);
+    static fromInput(input: MaturityInput): Maturity {
+        return input instanceof Maturity ? input : new Maturity(input);
     }
 
     static toNumber(maturity: Maturity): number {
@@ -14,40 +17,25 @@ export class MaturityConverter {
         return maturity.toString();
     }
 
-    private static getTimestamp(
-        input: string | number | bigint | Maturity
-    ): number {
-        if (input instanceof Maturity) {
-            return input.toNumber();
-        }
-        return this.fromInput(input).toNumber();
+    static toUTCMonthYear(input: MaturityInput, numeric?: boolean): string {
+        const maturity = this.fromInput(input);
+        return getUTCMonthYear(maturity.toNumber(), numeric);
     }
 
-    // Format as UTC month/year (e.g., "JAN25" or "JAN2025")
-    static toUTCMonthYear(
-        input: string | number | bigint | Maturity,
-        numeric?: boolean
-    ): string {
-        const timestamp = this.getTimestamp(input);
-        const date = new Date(timestamp * MS_PER_SEC);
-        const month = date.toLocaleString('en-US', {
-            month: 'short',
-            timeZone: 'UTC',
-        });
-        const year = numeric
-            ? String(date.getUTCFullYear())
-            : String(date.getUTCFullYear()).slice(-2);
-        return `${month.toUpperCase()}${year}`;
+    /**
+     * Format maturities (already in seconds)
+     */
+    static toDateString(input: MaturityInput): string {
+        const maturity = this.fromInput(input);
+        const seconds = maturity.toNumber();
+        return formatDate(seconds);
     }
 
-    static toDateString(input: string | number | bigint | Maturity): string {
-        const timestamp = this.getTimestamp(input);
-        const date = new Date(timestamp * MS_PER_SEC);
-        return date.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-            timeZone: 'UTC',
-        });
+    /**
+     * Format raw JS timestamps (ms, ISO string, Date)
+     */
+    static toDateStringFromRaw(input: string | number | Date): string {
+        const seconds = dayjs(input).unix();
+        return formatDate(seconds);
     }
 }

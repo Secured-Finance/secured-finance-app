@@ -571,10 +571,10 @@ const QuestList = ({ chainId }: { chainId: number }) => {
                             )}
                             {(item.startAt || item.endAt) && (
                                 <div className='pl-2'>
-                                    {`${MaturityConverter.toDateString(
-                                        dayjs(item.startAt).unix()
-                                    )} ~ ${MaturityConverter.toDateString(
-                                        dayjs(item.endAt).unix()
+                                    {`${MaturityConverter.toDateStringFromRaw(
+                                        item.startAt
+                                    )} ~ ${MaturityConverter.toDateStringFromRaw(
+                                        item.endAt
                                     )}`}
                                 </div>
                             )}

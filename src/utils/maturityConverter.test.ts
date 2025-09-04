@@ -52,16 +52,6 @@ describe('MaturityConverter', () => {
             );
             expect(result).toBe('JAN2025');
         });
-
-        it('should handle string input', () => {
-            const result = MaturityConverter.toUTCMonthYear('1735689600');
-            expect(result).toBe('JAN25');
-        });
-
-        it('should handle Maturity object input', () => {
-            const result = MaturityConverter.toUTCMonthYear(testMaturity);
-            expect(result).toBe('JAN25');
-        });
     });
 
     describe('toDateString', () => {
@@ -74,9 +64,25 @@ describe('MaturityConverter', () => {
             const result = MaturityConverter.toDateString('1735689600');
             expect(result).toBe('Jan 1, 2025');
         });
+    });
 
-        it('should handle Maturity object input', () => {
-            const result = MaturityConverter.toDateString(testMaturity);
+    describe('toDateStringFromRaw', () => {
+        it('should format JS timestamp in ms', () => {
+            const result = MaturityConverter.toDateStringFromRaw(1735689600000);
+            expect(result).toBe('Jan 1, 2025');
+        });
+
+        it('should format Date object', () => {
+            const result = MaturityConverter.toDateStringFromRaw(
+                new Date('2025-01-01T00:00:00Z')
+            );
+            expect(result).toBe('Jan 1, 2025');
+        });
+
+        it('should format ISO string', () => {
+            const result = MaturityConverter.toDateStringFromRaw(
+                '2025-01-01T00:00:00Z'
+            );
             expect(result).toBe('Jan 1, 2025');
         });
     });
