@@ -20,6 +20,7 @@ import {
     AmountCell,
     MobileTableWrapper,
     OrderTimeCell,
+    OrderTypeConverter,
     amountColumnDefinition,
     contractColumnDefinition,
     dateAndTimeColumnDefinition,
@@ -55,10 +56,7 @@ const OrderTableMobile = ({
             {data.map((row, index) => {
                 const ccy = hexToCurrencySymbol(row.currency);
                 const maturity = new Maturity(row.maturity);
-                const side =
-                    row.side.toString() === '1'
-                        ? OrderSide.BORROW
-                        : OrderSide.LEND;
+                const side = OrderTypeConverter.from(row.side);
                 const amount = row.amount;
                 const unitPrice = row.unitPrice;
                 const orderId = row.orderId;
@@ -185,10 +183,9 @@ export const OrderTable = ({
                     const ccy = hexToCurrencySymbol(info.row.original.currency);
                     if (!ccy) return null;
 
-                    const side =
-                        info.row.original.side === 0
-                            ? OrderSide.LEND
-                            : OrderSide.BORROW;
+                    const side = OrderTypeConverter.from(
+                        info.row.original.side
+                    );
 
                     const amount = BigInt(info.row.original.amount);
                     const removeOrder = () => {
