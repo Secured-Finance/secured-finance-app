@@ -12,6 +12,7 @@ export * from './fee';
 export * from './liquidation';
 export * from './formatNumbers';
 export * from './handleContractError';
+export * from './hexConverter';
 export * from './links';
 export * from './markets';
 export * from './mobileTableDefinitions';
