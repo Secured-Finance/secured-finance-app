@@ -156,8 +156,7 @@ export const Toolbar = ({
                             <MarketTab
                                 name={`${currency} Price`}
                                 value={PriceFormatter.formatUSDValue(
-                                    priceList[currency],
-                                    2
+                                    priceList[currency]
                                 )}
                             />
                         </div>

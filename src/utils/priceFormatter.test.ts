@@ -17,9 +17,7 @@ describe('PriceFormatter', () => {
     describe('formatUSDValue', () => {
         it('should format pre-calculated USD values', () => {
             expect(PriceFormatter.formatUSDValue(1000)).toBe('$1,000.00');
-            expect(PriceFormatter.formatUSDValue(1000.567, 2)).toBe(
-                '$1,000.57'
-            );
+            expect(PriceFormatter.formatUSDValue(1000.567)).toBe('$1,000.57');
         });
 
         it('should handle compact notation for USD values', () => {

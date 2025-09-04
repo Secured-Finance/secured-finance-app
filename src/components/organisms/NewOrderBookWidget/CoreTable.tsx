@@ -18,6 +18,7 @@ import { RootState } from 'src/store/types';
 import {
     amountFormatterFromBase,
     calculateFutureValue,
+    FORMAT_DIGITS,
     PriceFormatter,
 } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
@@ -182,15 +183,11 @@ export const CoreTable = <T,>({
                 Math.min(avgApr, 1000),
                 'percentage'
             ),
-            totalUsd: PriceFormatter.formatUSDValue(
-                Number(totalUsd),
-                2,
-                'compact'
-            ),
+            totalUsd: PriceFormatter.formatUSDValue(totalUsd, 2, 'compact'),
             totalAmount: PriceFormatter.formatOrdinary(
                 totalAmount,
-                0,
-                2,
+                FORMAT_DIGITS.NONE,
+                FORMAT_DIGITS.PRICE,
                 'compact'
             ),
             position,

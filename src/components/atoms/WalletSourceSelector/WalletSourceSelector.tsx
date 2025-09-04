@@ -10,6 +10,7 @@ import {
     CurrencySymbol,
     PriceFormatter,
     DisplayLengths,
+    FORMAT_DIGITS,
 } from 'src/utils';
 import { AMOUNT_PRECISION } from 'src/utils/entities';
 
@@ -32,12 +33,14 @@ const formatOption = (
     asset: CurrencySymbol,
     showAssetName = false
 ) => {
-    return `${PriceFormatter.formatOrdinary(
+    const amount =
         Math.floor(
             currencyMap[asset].fromBaseUnit(available) * AMOUNT_PRECISION
-        ) / AMOUNT_PRECISION,
-        0,
-        6
+        ) / AMOUNT_PRECISION;
+    return `${PriceFormatter.formatOrdinary(
+        amount,
+        FORMAT_DIGITS.NONE,
+        FORMAT_DIGITS.ASSET_DECIMALS
     )} ${showAssetName ? ` ${asset}` : ''}`;
 };
 

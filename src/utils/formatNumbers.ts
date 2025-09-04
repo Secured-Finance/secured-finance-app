@@ -1,7 +1,7 @@
 import { MAX_COVERAGE } from './collateral';
 import { divide } from './currencyList';
 import { LoanValue } from './entities';
-import { PriceFormatter } from './priceFormatter';
+import { FORMAT_DIGITS, PriceFormatter } from './priceFormatter';
 
 export const formatLoanValue = (
     value: LoanValue | undefined,
@@ -23,7 +23,11 @@ export const formatLoanValue = (
 };
 
 export function formatCollateralRatio(collateral: number) {
-    return PriceFormatter.formatPercentage(collateral / MAX_COVERAGE, 'raw', 0);
+    return PriceFormatter.formatPercentage(
+        collateral / MAX_COVERAGE,
+        'raw',
+        FORMAT_DIGITS.NONE
+    );
 }
 
 export const formatTimestamp = (timestamp: number) => {
@@ -81,7 +85,7 @@ export const formatDuration = (durationMs: number) => {
     // Format the fraction of year to two decimal places
     const fractionOfYearFormatted = PriceFormatter.formatToFixed(
         fractionOfYear,
-        2
+        FORMAT_DIGITS.PRICE
     );
 
     const daysLeft = Math.round(durationInDays);

@@ -32,13 +32,12 @@ const getInformationText = (
             <div>
                 <span>Your current borrow limit is at </span>
                 <span className='text-nebulaTeal'>
-                    {PriceFormatter.formatUSDValue(availableToBorrow, 2)}
+                    {PriceFormatter.formatUSDValue(availableToBorrow)}
                 </span>
                 <span>{` which is ${PriceFormatter.formatPercentage(
                     collateralThreshold - collateralCoverage * 100
                 )} of your ${PriceFormatter.formatUSDValue(
-                    totalCollateralInUSD,
-                    2
+                    totalCollateralInUSD
                 )} collateral deposit.`}</span>
             </div>
             <div>
@@ -101,13 +100,11 @@ export const CollateralProgressBar = ({
                         <div className='typography-caption flex flex-row text-planetaryPurple'>
                             <span className='whitespace-pre font-semibold text-nebulaTeal'>
                                 {`${PriceFormatter.formatUSDValue(
-                                    availableToBorrow,
-                                    2
+                                    availableToBorrow
                                 )} `}
                             </span>
                             <span>{`of ${PriceFormatter.formatUSDValue(
-                                totalCollateralInUSD,
-                                2
+                                totalCollateralInUSD
                             )} available`}</span>
                         </div>
                         <InfoToolTip placement='bottom-start'>

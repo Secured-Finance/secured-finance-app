@@ -22,6 +22,7 @@ import { RootState } from 'src/store/types';
 import {
     calculateTimeDifference,
     currencyMap,
+    FORMAT_DIGITS,
     formatDuration,
     PriceFormatter,
 } from 'src/utils';
@@ -110,7 +111,7 @@ export const CurrencyMaturityTable = ({
                     return option.volume
                         ? PriceFormatter.formatUSDValue(
                               option.volume,
-                              2,
+                              FORMAT_DIGITS.PRICE,
                               'compact'
                           )
                         : '-';

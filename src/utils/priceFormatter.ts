@@ -1,21 +1,30 @@
+export const FORMAT_DIGITS = {
+    PRICE: 2,
+    AMOUNT: 4,
+    NONE: 0,
+    ONE: 1,
+    ASSET_DECIMALS: 6,
+    PERCENTAGE_MIN: 0,
+    PERCENTAGE_MAX: 2,
+};
+
 const PERCENTAGE_BASE = 100;
 export class PriceFormatter {
     static formatUSD(
-        number: number | bigint,
-        price: number | bigint,
+        amount: string | number | bigint,
+        price: string | number | bigint,
         digits = 0,
         notation: 'standard' | 'compact' = 'standard'
     ): string {
-        const num = typeof number === 'bigint' ? Number(number) : number;
-        const priceNum = typeof price === 'bigint' ? Number(price) : price;
+        const total = Number(amount) * Number(price);
 
         return Intl.NumberFormat('en-US', {
             style: 'currency',
             currency: 'USD',
             currencySign: 'accounting',
             maximumFractionDigits: digits,
-            notation: notation,
-        }).format(num * priceNum);
+            notation,
+        }).format(total);
     }
 
     static formatUSDValue(
@@ -28,18 +37,18 @@ export class PriceFormatter {
             currency: 'USD',
             currencySign: 'accounting',
             maximumFractionDigits: digits,
-            notation: notation,
+            notation,
         }).format(value);
     }
 
     static formatPercentage(
-        number: number,
+        number: number | string,
         unit: 'raw' | 'percentage' = 'percentage',
         minimumFractionDigits = 0,
         maximumFractionDigits = 2
     ): string {
         const divisor = unit === 'percentage' ? PERCENTAGE_BASE : 1;
-        const value = number / divisor;
+        const value = Number(number) / divisor;
         return Intl.NumberFormat('en-US', {
             style: 'percent',
             minimumFractionDigits,

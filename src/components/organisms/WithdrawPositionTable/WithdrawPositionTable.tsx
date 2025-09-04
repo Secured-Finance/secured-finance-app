@@ -5,7 +5,7 @@ import { Button, ButtonSizes } from 'src/components/atoms';
 import { CoreTable } from 'src/components/molecules';
 import { EmergencySettlementStep } from 'src/components/templates';
 import { Position, useTerminationPrices } from 'src/hooks';
-import { PriceFormatter } from 'src/utils';
+import { FORMAT_DIGITS, PriceFormatter } from 'src/utils';
 import {
     amountColumnDefinition,
     loanTypeFromFVColumnDefinition,
@@ -94,7 +94,10 @@ export const WithdrawPositionTable = ({
                                 Net Value
                             </span>
                             <span className='typography-body-2 font-semibold leading-4 text-neutral-8'>
-                                {PriceFormatter.formatUSDValue(netValue, 0)}
+                                {PriceFormatter.formatUSDValue(
+                                    netValue,
+                                    FORMAT_DIGITS.NONE
+                                )}
                             </span>
                         </span>
                         <Button

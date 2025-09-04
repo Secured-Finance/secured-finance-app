@@ -1,7 +1,12 @@
 import { useCallback } from 'react';
 import { InputBase, SizeDependentStylesConfig } from 'src/components/atoms';
 import { PercentageSelector } from 'src/components/molecules';
-import { CurrencySymbol, PriceFormatter } from 'src/utils';
+import {
+    CurrencySymbol,
+    FORMAT_DIGITS,
+    PriceFormatter,
+    ZERO_BI,
+} from 'src/utils';
 
 interface CollateralInputProps {
     price: number;
@@ -76,9 +81,9 @@ export const CollateralInput = ({
                 <div className='typography-body-2'>
                     <span className='text-center text-neutral-8'>
                         {PriceFormatter.formatUSD(
-                            Number(amount ?? ''),
+                            amount ?? ZERO_BI,
                             price,
-                            2
+                            FORMAT_DIGITS.PRICE
                         )}
                     </span>
                     <span className='pl-2 text-center text-neutral-4'>USD</span>

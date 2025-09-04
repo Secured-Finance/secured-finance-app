@@ -49,6 +49,7 @@ import {
     SupportedChainsList,
     readWalletFromStore,
     PriceFormatter,
+    FORMAT_DIGITS,
 } from 'src/utils';
 import { useAccount, useConnect, useSignMessage } from 'wagmi';
 import { getShareMessage, quoteTweetUrl } from './constants';
@@ -413,7 +414,7 @@ const QuestList = ({ chainId }: { chainId: number }) => {
                                     PriceFormatter.formatToFixed(
                                         (questPoint + bonusPoints['lend']) /
                                             questPoint,
-                                        1
+                                        FORMAT_DIGITS.ONE
                                     )
                                 )}x`}
                                 color={ChipColors.Teal}
@@ -429,7 +430,7 @@ const QuestList = ({ chainId }: { chainId: number }) => {
                                     PriceFormatter.formatToFixed(
                                         (questPoint + bonusPoints['borrow']) /
                                             questPoint,
-                                        1
+                                        FORMAT_DIGITS.ONE
                                     )
                                 )}x`}
                                 color={ChipColors.Red}
@@ -629,8 +630,8 @@ const Leaderboard = () => {
                         <div className='float-right flex-1 text-right text-neutral-6'>
                             {PriceFormatter.formatOrdinary(
                                 item.point,
-                                0,
-                                2,
+                                FORMAT_DIGITS.NONE,
+                                FORMAT_DIGITS.PRICE,
                                 'standard'
                             )}
                         </div>

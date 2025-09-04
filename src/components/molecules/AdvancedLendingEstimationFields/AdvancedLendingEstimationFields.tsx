@@ -10,6 +10,7 @@ import {
     amountFormatterFromBase,
     currencyMap,
     divide,
+    FORMAT_DIGITS,
     formatLoanValue,
     multiply,
     PriceFormatter,
@@ -197,18 +198,18 @@ export const AdvancedLendingEstimationFields = ({
         if (isMobile) {
             return `${PriceFormatter.formatOrdinary(
                 amount,
-                0,
+                FORMAT_DIGITS.NONE,
                 currencyMap[currency].roundingDecimal
             )} ${currency}`;
         } else {
             return `${PriceFormatter.formatOrdinary(
                 amount,
-                0,
+                FORMAT_DIGITS.NONE,
                 currencyMap[currency].roundingDecimal
             )} ${currency} (${PriceFormatter.formatUSD(
                 amount,
                 assetPrice,
-                2
+                FORMAT_DIGITS.PRICE
             )})`;
         }
     }, [
@@ -234,15 +235,15 @@ export const AdvancedLendingEstimationFields = ({
         if (isMobile) {
             return `${PriceFormatter.formatOrdinary(
                 fv,
-                0,
+                FORMAT_DIGITS.NONE,
                 currencyMap[currency].roundingDecimal
             )} ${currency}`;
         } else {
             return `${PriceFormatter.formatOrdinary(
                 fv,
-                0,
+                FORMAT_DIGITS.NONE,
                 currencyMap[currency].roundingDecimal
-            )} ${currency} (${PriceFormatter.formatUSDValue(totalValue, 2)})`;
+            )} ${currency} (${PriceFormatter.formatUSDValue(totalValue)})`;
         }
     }, [
         showDashes,

@@ -37,6 +37,7 @@ import {
     formatLoanValue,
     getMaxAmount,
     PriceFormatter,
+    FORMAT_DIGITS,
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import { ColorBar } from './ColorBar';
@@ -275,8 +276,7 @@ export const NewOrderBookWidget = ({
                       borrowOrders[borrowOrders.length - 1].value.price -
                           lendOrders[0].value.price
                   ) / 100.0,
-                  2,
-                  2
+                  FORMAT_DIGITS.PRICE
               )
             : '0.00';
 

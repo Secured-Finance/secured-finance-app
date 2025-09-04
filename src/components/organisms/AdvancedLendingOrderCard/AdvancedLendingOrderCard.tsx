@@ -48,6 +48,7 @@ import {
     divide,
     generateWalletSourceInformation,
     PriceFormatter,
+    FORMAT_DIGITS,
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import {
@@ -346,8 +347,8 @@ export function AdvancedLendingOrderCard({
                                             ? availableToBorrow
                                             : availableToLend
                                     ),
-                                    0,
-                                    2
+                                    FORMAT_DIGITS.NONE,
+                                    FORMAT_DIGITS.PRICE
                                 )} ${isMobile ? '' : currency}`}
                             </span>
                         </div>

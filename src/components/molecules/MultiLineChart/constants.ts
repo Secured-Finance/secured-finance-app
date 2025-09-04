@@ -90,10 +90,7 @@ export const multiLineChartOptions: ChartOptions<'line'> = {
             display: true,
             ticks: {
                 callback: function (value: string | number) {
-                    return PriceFormatter.formatPercentage(
-                        Number(value),
-                        'percentage'
-                    );
+                    return PriceFormatter.formatPercentage(value, 'percentage');
                 },
                 color: 'rgba(255, 255, 255, 0.6)',
                 font: {

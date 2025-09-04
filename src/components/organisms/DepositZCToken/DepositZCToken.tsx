@@ -28,6 +28,8 @@ import {
     convertZCTokenFromBaseAmount,
     handleContractError,
     PriceFormatter,
+    FORMAT_DIGITS,
+    ZERO_BI,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import {
@@ -331,8 +333,8 @@ export const DepositZCToken = ({
                                                 availableTokenAmount,
                                                 maturity
                                             ) || 0,
-                                            0,
-                                            4
+                                            FORMAT_DIGITS.NONE,
+                                            FORMAT_DIGITS.AMOUNT
                                         )} Available`}
                                     </div>
                                 </div>
@@ -375,7 +377,7 @@ export const DepositZCToken = ({
                                         `${PriceFormatter.formatAmount(
                                             convertZCTokenFromBaseAmount(
                                                 currencySymbol,
-                                                collateral || BigInt(0),
+                                                collateral || ZERO_BI,
                                                 maturity
                                             )
                                         )}`,

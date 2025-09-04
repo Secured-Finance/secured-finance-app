@@ -24,6 +24,7 @@ import {
     convertZCTokenFromBaseAmount,
     handleContractError,
     PriceFormatter,
+    ZERO_BI,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import {
@@ -383,7 +384,7 @@ export const WithdrawZCToken = ({
                                         `${PriceFormatter.formatAmount(
                                             convertZCTokenFromBaseAmount(
                                                 currencySymbol,
-                                                collateral || BigInt(0),
+                                                collateral || ZERO_BI,
                                                 asset
                                                     ? zcBondList[asset]
                                                           ?.maturity

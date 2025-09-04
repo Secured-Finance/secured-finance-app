@@ -1,7 +1,12 @@
 import clsx from 'clsx';
 import { InfoToolTip } from 'src/components/molecules';
 import { Alignment, ColorFormat } from 'src/types';
-import { CurrencySymbol, currencyMap, PriceFormatter } from 'src/utils';
+import {
+    CurrencySymbol,
+    currencyMap,
+    PriceFormatter,
+    FORMAT_DIGITS,
+} from 'src/utils';
 
 export const CurrencyItem = ({
     amount,
@@ -35,10 +40,10 @@ export const CurrencyItem = ({
         secondLine = PriceFormatter.formatUSD(
             currency.fromBaseUnit(amount),
             price,
-            2
+            FORMAT_DIGITS.PRICE
         );
     } else if (price) {
-        secondLine = PriceFormatter.formatUSDValue(price, 2);
+        secondLine = PriceFormatter.formatUSDValue(price);
     } else {
         secondLine = currency.name;
     }

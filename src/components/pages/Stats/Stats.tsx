@@ -36,6 +36,8 @@ import {
     computeTotalProtocolVolumeInUSD,
     getEnvironment,
     PriceFormatter,
+    FORMAT_DIGITS,
+    ZERO_BI,
 } from 'src/utils';
 import { useAccount } from 'wagmi';
 
@@ -47,7 +49,12 @@ const computeTotalUsers = (users: string) => {
         getEnvironment().toLowerCase() === Environment.STAGING
             ? +users + PREVIOUS_TOTAL_USERS
             : +users;
-    return PriceFormatter.formatOrdinary(totalUsers ?? 0, 0, 2, 'compact');
+    return PriceFormatter.formatOrdinary(
+        totalUsers ?? ZERO_BI,
+        FORMAT_DIGITS.NONE,
+        FORMAT_DIGITS.PRICE,
+        'compact'
+    );
 };
 
 export const Stats = () => {
@@ -96,7 +103,7 @@ export const Stats = () => {
                 userCountAndVolume.data?.volumesByCurrency ?? [],
                 priceList
             ).totalVolumeUSD,
-            2,
+            FORMAT_DIGITS.PRICE,
             'compact'
         );
     }, [userCountAndVolume.data?.volumesByCurrency, priceList]);
@@ -130,7 +137,7 @@ export const Stats = () => {
                                 name: 'Total Value Locked',
                                 value: PriceFormatter.formatUSDValue(
                                     totalValueLockedInUSD,
-                                    2,
+                                    FORMAT_DIGITS.PRICE,
                                     'compact'
                                 ),
                             },

@@ -13,6 +13,7 @@ import {
     ZERO_BI,
     amountFormatterFromBase,
     PriceFormatter,
+    FORMAT_DIGITS,
 } from 'src/utils';
 import { stages } from './constants';
 
@@ -168,16 +169,15 @@ export const CampaignStatus = ({
                                             amountFormatterFromBase[ccy](
                                                 valueLocked[ccy] ?? ZERO_BI
                                             ),
-                                            0,
-                                            1
+                                            FORMAT_DIGITS.NONE,
+                                            FORMAT_DIGITS.ONE
                                         )} ${ccy}`}
                                     </span>
                                 );
                             })}
                             <span className='typography-mobile-body-4 laptop:typography-desktop-body-4 block text-center text-white/40 tablet:text-left desktop:text-4 desktop:leading-8'>
                                 {`≈ ${PriceFormatter.formatUSDValue(
-                                    totalUSDValue,
-                                    2
+                                    totalUSDValue
                                 )}`}
                             </span>
                         </div>
