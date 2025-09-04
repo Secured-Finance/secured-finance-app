@@ -26,6 +26,7 @@ import {
     Amount,
     LoanValue,
     Maturity,
+    OrderTypeConverter,
 } from 'src/utils';
 
 enum Step {
@@ -62,7 +63,7 @@ export const RemoveOrderDialog = ({
         [Step.remove]: {
             currentStep: Step.remove,
             nextStep: Step.processing,
-            title: side === OrderSide.BORROW ? 'Remove Borrow' : 'Remove Lend',
+            title: `Remove ${OrderTypeConverter.toDisplayString(side)}`,
             description: '',
             buttonText: 'OK',
         },
@@ -105,8 +106,9 @@ export const RemoveOrderDialog = ({
                     ...stateRecord[Step.error],
                 };
             case 'updateSide':
-                const title =
-                    side === OrderSide.BORROW ? 'Remove Borrow' : 'Remove Lend';
+                const title = `Remove ${OrderTypeConverter.toDisplayString(
+                    side
+                )}`;
                 return {
                     ...stateRecord[Step.remove],
                     title: title,

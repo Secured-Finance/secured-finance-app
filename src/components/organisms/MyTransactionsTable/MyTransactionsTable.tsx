@@ -1,4 +1,3 @@
-import { OrderSide } from '@secured-finance/sf-client';
 import { createColumnHelper } from '@tanstack/react-table';
 import clsx from 'clsx';
 import { useMemo } from 'react';
@@ -13,6 +12,7 @@ import { Transaction, TransactionHistoryList } from 'src/types';
 import {
     AmountCell,
     MobileTableWrapper,
+    OrderTypeConverter,
     amountColumnDefinition,
     contractColumnDefinition,
     formatLoanValue,
@@ -61,10 +61,7 @@ const MyTransactionsTableMobile = ({
             {data.map((row, index) => {
                 const ccy = hexToCurrencySymbol(row.currency);
                 const maturity = new Maturity(row.maturity);
-                const side =
-                    row.side.toString() === '1'
-                        ? OrderSide.BORROW
-                        : OrderSide.LEND;
+                const side = OrderTypeConverter.from(row.side);
                 const amount = row.amount;
                 const averagePrice = row.averagePrice;
                 const futureValue = row.futureValue;
