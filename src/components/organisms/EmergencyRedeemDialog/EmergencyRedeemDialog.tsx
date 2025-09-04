@@ -12,7 +12,8 @@ import {
 import { useBlockExplorerUrl, useHandleContractTransaction } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import {
-    AddressUtils,
+    AddressConverter,
+    DisplayLengths,
     formatTimestamp,
     handleContractError,
     PriceFormatter,
@@ -228,7 +229,10 @@ export const EmergencyRedeemDialog = ({
                                     ['Status', 'Complete'],
                                     [
                                         'Transaction hash',
-                                        AddressUtils.format(txHash ?? '', 8),
+                                        AddressConverter.format(
+                                            txHash,
+                                            DisplayLengths.LONG
+                                        ),
                                     ],
                                     ['Amount (USD)', netValue],
                                 ]}

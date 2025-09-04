@@ -135,7 +135,7 @@ export type CurrentMarket = {
 };
 export interface SavedMarket {
     market: string;
-    address: `0x${string}` | undefined;
+    address: Hex | undefined;
     chainId?: number;
 }
 

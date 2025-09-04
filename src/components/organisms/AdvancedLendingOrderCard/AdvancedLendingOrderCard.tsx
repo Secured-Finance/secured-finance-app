@@ -44,7 +44,7 @@ import {
     ZERO_BI,
     amountFormatterFromBase,
     amountFormatterToBase,
-    calculateFee,
+    FeeCalculator,
     divide,
     generateWalletSourceInformation,
     PriceFormatter,
@@ -449,7 +449,10 @@ export function AdvancedLendingOrderCard({
                     <div className='flex flex-col gap-1 py-1'>
                         <OrderDisplayBox
                             field='Fees'
-                            value={calculateFee(maturity, orderFee)}
+                            value={FeeCalculator.calculateTransactionFees(
+                                maturity,
+                                orderFee
+                            )}
                             informationText='A duration-based transaction fee only for market takers,
                                     factored into the bond price, and deducted from its future value'
                         />

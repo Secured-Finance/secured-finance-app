@@ -17,8 +17,9 @@ import {
     useZCToken,
 } from 'src/hooks';
 import {
-    AddressUtils,
+    AddressConverter,
     CurrencySymbol,
+    DisplayLengths,
     convertToZcTokenName,
     convertZCTokenFromBaseAmount,
     handleContractError,
@@ -372,7 +373,10 @@ export const WithdrawZCToken = ({
                                     ['Status', 'Complete'],
                                     [
                                         'Ethereum Address',
-                                        AddressUtils.format(address ?? '', 8),
+                                        AddressConverter.format(
+                                            address,
+                                            DisplayLengths.LONG
+                                        ),
                                     ],
                                     [
                                         'Amount',

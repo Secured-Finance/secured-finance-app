@@ -5,10 +5,11 @@ import { Fragment, useMemo } from 'react';
 import { ExpandIndicator, Separator } from 'src/components/atoms';
 import { SvgIcon } from 'src/types';
 import {
-    AddressUtils,
+    AddressConverter,
     currencyMap,
     CurrencySymbol,
     PriceFormatter,
+    DisplayLengths,
 } from 'src/utils';
 import { AMOUNT_PRECISION } from 'src/utils/entities';
 
@@ -42,7 +43,7 @@ const formatOption = (
 
 const formatSource = (walletSource: WalletSource, account: string) => {
     return walletSource === WalletSource.METAMASK
-        ? AddressUtils.format(account, 6)
+        ? AddressConverter.format(account, DisplayLengths.MEDIUM)
         : walletSource;
 };
 

@@ -21,8 +21,12 @@ import {
     usePositions,
     useTerminationPrices,
 } from 'src/hooks';
-import { ZERO_BI, computeNetValue, PriceFormatter } from 'src/utils';
-import { toHex } from 'viem';
+import {
+    ZERO_BI,
+    computeNetValue,
+    PriceFormatter,
+    HexConverter,
+} from 'src/utils';
 import { useAccount } from 'wagmi';
 
 export const EmergencyGlobalSettlement = () => {
@@ -70,7 +74,7 @@ export const EmergencyGlobalSettlement = () => {
                 .filter(v => v[1] && v[1] !== ZERO_BI)
                 .map(([key, value]) => ({
                     amount: value,
-                    currency: toHex(key),
+                    currency: HexConverter.toHex(key),
                     futureValue: ZERO_BI,
                     maturity: '0',
                     type: 'collateral' as const,
@@ -83,13 +87,13 @@ export const EmergencyGlobalSettlement = () => {
             .filter(v => v[1] && v[1] !== ZERO_BI)
             .map(([key, value]) => ({
                 amount: value,
-                currency: toHex(key),
+                currency: HexConverter.toHex(key),
             })),
         ...Object.entries(collateralBook.withdrawableCollateral)
             .filter(v => v[1] && v[1] !== ZERO_BI)
             .map(([key, value]) => ({
                 amount: value,
-                currency: toHex(key),
+                currency: HexConverter.toHex(key),
             })),
     ];
 

@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import Tick from 'src/assets/icons/tick.svg';
-import { PriceFormatter } from 'src/utils';
+import { PriceFormatter, LiquidationCalculator } from 'src/utils';
 
 interface CollateralManagementConciseTabProps {
     collateralCoverage: number;
@@ -147,28 +147,7 @@ export const CollateralManagementConciseTab = ({
 };
 
 export const getLiquidationInformation = (liquidationPercentage: number) => {
-    let color: string;
-    let risk: string;
-
-    switch (true) {
-        case liquidationPercentage <= 40:
-            color = 'text-secondary-500';
-            risk = 'Low';
-            break;
-        case liquidationPercentage <= 60:
-            color = 'text-warning-500';
-            risk = 'Medium';
-            break;
-        case liquidationPercentage <= 80:
-            color = 'text-error-300';
-            risk = 'High';
-            break;
-        default:
-            color = 'text-error-500';
-            risk = 'Very High';
-            break;
-    }
-    return { color, risk };
+    return LiquidationCalculator.getLiquidationRiskInfo(liquidationPercentage);
 };
 
 const Notification = ({ percentage }: { percentage: number }) => {
