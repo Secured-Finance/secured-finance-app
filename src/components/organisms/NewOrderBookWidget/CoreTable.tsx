@@ -178,12 +178,19 @@ export const CoreTable = <T,>({
         const totalUsd = new Amount(totalPVAmount, currency)?.toUSD(price);
 
         setOrderBookInfoData({
-            avgPrice: PriceFormatter.formatToFixed(avgPrice * 100, 2),
+            avgPrice: PriceFormatter.formatToFixed(
+                avgPrice * 100,
+                FORMAT_DIGITS.PRICE
+            ),
             avgApr: PriceFormatter.formatPercentage(
                 Math.min(avgApr, 1000),
                 'percentage'
             ),
-            totalUsd: PriceFormatter.formatUSDValue(totalUsd, 2, 'compact'),
+            totalUsd: PriceFormatter.formatUSDValue(
+                totalUsd,
+                FORMAT_DIGITS.PRICE,
+                'compact'
+            ),
             totalAmount: PriceFormatter.formatOrdinary(
                 totalAmount,
                 FORMAT_DIGITS.NONE,

@@ -13,6 +13,10 @@ const getInformationText = (
     liquidationPercentage: number,
     collateralThreshold: number
 ) => {
+    const collateralThresholdValue =
+        collateralThreshold > liquidationPercentage
+            ? collateralThreshold - liquidationPercentage
+            : 0;
     return (
         <div className='flex flex-col gap-4'>
             <div>
@@ -22,11 +26,7 @@ const getInformationText = (
             <div>
                 <span>You are currently </span>
                 <span className='text-nebulaTeal'>
-                    {PriceFormatter.formatPercentage(
-                        collateralThreshold > liquidationPercentage
-                            ? collateralThreshold - liquidationPercentage
-                            : 0
-                    )}
+                    {PriceFormatter.formatPercentage(collateralThresholdValue)}
                 </span>
                 <span>{` under the liquidation threshold (${collateralThreshold}% of deposit balance).`}</span>
             </div>
@@ -48,6 +48,10 @@ export const LiquidationProgressBar = ({
     }
 
     const info = getLiquidationInformation(liquidationPercentage);
+    const collateralThresholdValue =
+        collateralThreshold > liquidationPercentage
+            ? collateralThreshold - liquidationPercentage
+            : 0;
 
     return (
         <div
@@ -82,10 +86,7 @@ export const LiquidationProgressBar = ({
                                 className={`whitespace-pre font-semibold ${info.color}`}
                             >
                                 {PriceFormatter.formatPercentage(
-                                    collateralThreshold > liquidationPercentage
-                                        ? collateralThreshold -
-                                              liquidationPercentage
-                                        : 0
+                                    collateralThresholdValue
                                 )}
                             </span>
                             <span className='text-planetaryPurple'>

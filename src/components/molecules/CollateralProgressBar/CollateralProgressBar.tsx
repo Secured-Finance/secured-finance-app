@@ -27,6 +27,8 @@ const getInformationText = (
             </div>
         );
     }
+    const amount = collateralThreshold - collateralCoverage * 100;
+
     return (
         <div className='flex flex-col gap-4'>
             <div>
@@ -35,7 +37,7 @@ const getInformationText = (
                     {PriceFormatter.formatUSDValue(availableToBorrow)}
                 </span>
                 <span>{` which is ${PriceFormatter.formatPercentage(
-                    collateralThreshold - collateralCoverage * 100
+                    amount
                 )} of your ${PriceFormatter.formatUSDValue(
                     totalCollateralInUSD
                 )} collateral deposit.`}</span>
@@ -58,7 +60,6 @@ export const CollateralProgressBar = ({
     collateralCoverage /= 100.0;
 
     const barWidth = Math.min(1, collateralCoverage);
-
     return (
         <div
             className='pointer-events-none flex flex-col gap-3 rounded-lg px-5 pb-12 pt-6 hover:bg-black-20'
