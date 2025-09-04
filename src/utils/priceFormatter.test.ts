@@ -90,13 +90,27 @@ describe('PriceFormatter', () => {
     });
 
     describe('formatPrice', () => {
-        it('should format price by dividing by 100', () => {
-            expect(PriceFormatter.formatPrice(9850, 'percentage', 2)).toBe(
+        it('should format bond prices by dividing by 100', () => {
+            expect(PriceFormatter.formatPrice(9850, 'bondPrice', 2)).toBe(
                 '98.50'
             );
-            expect(PriceFormatter.formatPrice(10000, 'percentage', 4)).toBe(
+            expect(PriceFormatter.formatPrice(10000, 'bondPrice', 4)).toBe(
                 '100.0000'
             );
+        });
+
+        it('should format percentage values as-is', () => {
+            expect(PriceFormatter.formatPrice(98.5, 'percentage', 2)).toBe(
+                '98.50'
+            );
+            expect(PriceFormatter.formatPrice(100, 'percentage', 4)).toBe(
+                '100.0000'
+            );
+        });
+
+        it('should format raw decimal values by multiplying by 100', () => {
+            expect(PriceFormatter.formatPrice(0.985, 'raw', 2)).toBe('98.50');
+            expect(PriceFormatter.formatPrice(1.0, 'raw', 4)).toBe('100.0000');
         });
     });
 

@@ -6,9 +6,11 @@ export const FORMAT_DIGITS = {
     ASSET_DECIMALS: 6,
     PERCENTAGE_MIN: 0,
     PERCENTAGE_MAX: 2,
+    PERCENTAGE_BASE: 100,
+    BOND_PRICE_MULTIPLIER: 10000,
+    MAX_APR_DISPLAY: 1000,
 };
 
-const PERCENTAGE_BASE = 100;
 export class PriceFormatter {
     static formatUSD(
         amount: string | number | bigint,
@@ -47,7 +49,8 @@ export class PriceFormatter {
         minimumFractionDigits = 0,
         maximumFractionDigits = 2
     ): string {
-        const divisor = unit === 'percentage' ? PERCENTAGE_BASE : 1;
+        const divisor =
+            unit === 'percentage' ? FORMAT_DIGITS.PERCENTAGE_BASE : 1;
         const value = Number(number) / divisor;
         return Intl.NumberFormat('en-US', {
             style: 'percent',
@@ -90,16 +93,38 @@ export class PriceFormatter {
         return num.toFixed(decimals);
     }
 
-    static formatPrice(
-        price: number,
-        unit: 'raw' | 'percentage' = 'percentage',
-        decimals = 2
-    ): string {
-        const divisor = unit === 'percentage' ? PERCENTAGE_BASE : 1;
-        return (price / divisor).toFixed(decimals);
-    }
-
     static formatRate(rate: number, decimals = 2): string {
         return rate.toFixed(decimals) + '%';
+    }
+
+    /**
+     * Format prices from different data sources
+     * @param value - Raw price value
+     * @param inputType - Source format: 'raw' (0.96), 'percentage' (95.90), 'bondPrice' (9626)
+     * @param decimals - Decimal places for output
+     * @returns Formatted price string
+     */
+    static formatPrice(
+        value: number,
+        inputType: 'raw' | 'percentage' | 'bondPrice' = 'bondPrice',
+        decimals = 2
+    ): string {
+        let normalizedValue: number;
+
+        switch (inputType) {
+            case 'raw':
+                normalizedValue = value * 100;
+                break;
+            case 'percentage':
+                normalizedValue = value;
+                break;
+            case 'bondPrice':
+                normalizedValue = value / 100;
+                break;
+            default:
+                normalizedValue = value;
+        }
+
+        return normalizedValue.toFixed(decimals);
     }
 }

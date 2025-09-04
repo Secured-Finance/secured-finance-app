@@ -1,6 +1,6 @@
 import Tick from 'src/assets/icons/tick.svg';
 import { InfoToolTip } from 'src/components/molecules';
-import { PriceFormatter } from 'src/utils';
+import { PriceFormatter, PriceUtils } from 'src/utils';
 
 interface CollateralProgressBarProps {
     collateralCoverage: number;
@@ -27,8 +27,6 @@ const getInformationText = (
             </div>
         );
     }
-    const amount = collateralThreshold - collateralCoverage * 100;
-
     return (
         <div className='flex flex-col gap-4'>
             <div>
@@ -37,7 +35,10 @@ const getInformationText = (
                     {PriceFormatter.formatUSDValue(availableToBorrow)}
                 </span>
                 <span>{` which is ${PriceFormatter.formatPercentage(
-                    amount
+                    PriceUtils.toPercentage(
+                        availableToBorrow,
+                        totalCollateralInUSD
+                    )
                 )} of your ${PriceFormatter.formatUSDValue(
                     totalCollateralInUSD
                 )} collateral deposit.`}</span>
@@ -57,9 +58,8 @@ export const CollateralProgressBar = ({
     availableToBorrow,
     account,
 }: CollateralProgressBarProps) => {
-    collateralCoverage /= 100.0;
-
-    const barWidth = Math.min(1, collateralCoverage);
+    const coverageDecimal = PriceUtils.toDecimal(collateralCoverage);
+    const barWidth = PriceUtils.capProgressWidth(coverageDecimal);
     return (
         <div
             className='pointer-events-none flex flex-col gap-3 rounded-lg px-5 pb-12 pt-6 hover:bg-black-20'
@@ -70,7 +70,7 @@ export const CollateralProgressBar = ({
                     Collateral Utilization
                 </span>
                 <span className='typography-body-1 text-white'>
-                    {PriceFormatter.formatPercentage(collateralCoverage, 'raw')}
+                    {PriceFormatter.formatPercentage(coverageDecimal, 'raw')}
                 </span>
             </div>
             <div className='flex flex-col gap-[6px]'>
