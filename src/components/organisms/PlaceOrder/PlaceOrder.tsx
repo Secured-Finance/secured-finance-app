@@ -25,6 +25,7 @@ import {
     OrderProperties,
     formatAmount,
     handleContractError,
+    OrderTypeConverter,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 import {
@@ -78,8 +79,7 @@ export const PlaceOrder = ({
         [Step.orderConfirm]: {
             currentStep: Step.orderConfirm,
             nextStep: Step.orderProcessing,
-            title:
-                side === OrderSide.BORROW ? 'Confirm Borrow' : 'Confirm Lend',
+            title: `Confirm ${OrderTypeConverter.toDisplayString(side)}`,
             description: '',
             buttonText: 'OK',
         },
@@ -203,7 +203,7 @@ export const PlaceOrder = ({
 
                     track(OrderEvents.ORDER_PLACED, {
                         [OrderProperties.ORDER_SIDE]:
-                            side === OrderSide.BORROW ? 'Borrow' : 'Lend',
+                            OrderTypeConverter.toDisplayString(side),
                         [OrderProperties.ORDER_TYPE]: orderType,
                         [OrderProperties.ASSET_TYPE]: ccy,
                         [OrderProperties.ORDER_MATURITY]: getUTCMonthYear(

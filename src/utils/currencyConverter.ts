@@ -1,7 +1,7 @@
 import { Currency } from '@secured-finance/sf-core';
 import { fromBytes32 } from '@secured-finance/sf-graph-client';
-import { hexToString } from 'viem';
 import { CurrencySymbol, currencyMap } from './currencyList';
+import { HexConverter } from './hexConverter';
 
 const getAllowedSymbols = (() => {
     let symbols: Set<string> | null = null;
@@ -17,7 +17,7 @@ const getAllowedSymbols = (() => {
 
 export class CurrencyConverter {
     static hexToSymbol(hex: string): CurrencySymbol | undefined {
-        const symbolString = hexToString(hex as `0x${string}`, { size: 32 });
+        const symbolString = HexConverter.hexToString(hex);
         return this.parseSymbol(symbolString);
     }
 
