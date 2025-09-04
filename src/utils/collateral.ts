@@ -92,7 +92,6 @@ export class CollateralCalculator {
         coverage: number;
         totalPresentValue: number;
     } {
-        // Use the same divide function as original code with exact same parameters
         const usdCollateral = divide(
             this.toNumber(totalCollateralAmount),
             dividerAmount,
