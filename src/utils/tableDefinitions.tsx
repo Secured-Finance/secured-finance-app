@@ -16,7 +16,7 @@ import {
     PriceYieldItem,
 } from 'src/components/atoms';
 import { TableContractCell, TableHeader } from 'src/components/molecules';
-import { Alignment, AssetPriceMap, ColorFormat } from 'src/types';
+import { Alignment, AssetPriceMap } from 'src/types';
 import { ZERO_BI, formatTimestampDDMMYY } from 'src/utils';
 import {
     CurrencySymbol,
@@ -24,6 +24,8 @@ import {
     hexToCurrencySymbol,
 } from './currencyList';
 import { LoanValue, Maturity } from './entities';
+import { OrderTypeConverter } from './orderTypeConverter';
+import { getOrderColor } from './orderColor';
 
 export const tableHeaderDefinition =
     <TData,>(title: string, titleHint?: string, align: Alignment = 'center') =>
@@ -79,23 +81,6 @@ type InputAmountColumnType = InputAmountProperty &
     TypeProperty &
     StatusProperty;
 
-function hasAmountProperty<T extends AmountColumnType>(
-    obj: T
-): obj is T & AmountProperty {
-    return (obj as AmountProperty).amount !== undefined;
-}
-
-function hasFutureValueProperty<T extends AmountColumnType>(
-    obj: T
-): obj is T & FutureValueProperty {
-    return (obj as FutureValueProperty).futureValue !== undefined;
-}
-
-function hasSideProperty<T extends AmountColumnType>(
-    obj: T
-): obj is T & SideProperty {
-    return (obj as SideProperty).side !== undefined;
-}
 export const amountColumnDefinition = <T extends AmountColumnType>(
     columnHelper: ColumnHelper<T>,
     title: string,
@@ -121,14 +106,7 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
             const ccy = hexToCurrencySymbol(info.row.original.currency);
             if (!ccy) return null;
 
-            let color: ColorFormat['color'];
-            if (hasSideProperty(info.row.original)) {
-                color = info.row.original.side === 1 ? 'negative' : 'positive';
-            } else if (hasAmountProperty(info.row.original)) {
-                color = info.row.original.amount < 0 ? 'negative' : 'positive';
-            } else {
-                // do nothing
-            }
+            const color = getOrderColor(info.row.original);
 
             const Component = (
                 <div className='flex items-start justify-end gap-2'>
@@ -185,8 +163,7 @@ export const inputAmountColumnDefinition = <T extends InputAmountColumnType>(
             const ccy = hexToCurrencySymbol(info.row.original.currency);
             if (!ccy) return null;
 
-            const color: ColorFormat['color'] =
-                info.row.original.side === 1 ? 'negative' : 'positive';
+            const color = getOrderColor(info.row.original);
 
             const inputAmount =
                 info.row.original.type === 'Market' &&
@@ -234,15 +211,7 @@ export const futureValueColumnDefinition = <T extends AmountColumnType>(
             const ccy = hexToCurrencySymbol(info.row.original.currency);
             if (!ccy) return null;
 
-            let color: ColorFormat['color'];
-            if (hasSideProperty(info.row.original)) {
-                color = info.row.original.side === 1 ? 'negative' : 'positive';
-            } else if (hasFutureValueProperty(info.row.original)) {
-                color =
-                    info.row.original.futureValue < 0 ? 'negative' : 'positive';
-            } else {
-                // do nothing
-            }
+            const color = getOrderColor(info.row.original);
 
             return (
                 <div className='flex w-full items-center justify-end whitespace-nowrap'>
@@ -284,11 +253,13 @@ export const loanTypeColumnDefinition = <T extends SideProperty>(
                         isFullWidth
                         size={ChipSizes.md}
                         color={
-                            value.toString() === '1'
+                            OrderTypeConverter.from(value) === OrderSide.BORROW
                                 ? ChipColors.Red
                                 : ChipColors.Teal
                         }
-                        label={value.toString() === '1' ? 'Borrow' : 'Lend'}
+                        label={OrderTypeConverter.toDisplayString(
+                            OrderTypeConverter.from(value)
+                        )}
                     />
                 </div>
             );
