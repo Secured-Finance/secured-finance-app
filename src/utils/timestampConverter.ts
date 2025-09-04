@@ -11,16 +11,16 @@ export class TimestampConverter {
         return Number(value);
     }
 
-    static formatTimestamp(timestamp: number): string {
-        const date = this.toDate(timestamp);
+    static formatTimestamp(timestamp: number | undefined): string {
+        const date = this.toDate(timestamp ?? 0);
         return new Intl.DateTimeFormat(undefined, {
             dateStyle: 'short',
             timeStyle: 'short',
         }).format(date);
     }
 
-    static formatTimestampDDMMYY(timestamp: number): string {
-        const date = this.toDate(timestamp);
+    static formatTimestampDDMMYY(timestamp: number | undefined): string {
+        const date = this.toDate(timestamp ?? 0);
         const formattedDate = new Intl.DateTimeFormat('en-GB', {
             day: '2-digit',
             month: '2-digit',
@@ -33,8 +33,8 @@ export class TimestampConverter {
         return `${formattedDate}, ${hours}:${minutes}`;
     }
 
-    static formatTimestampWithMonth(timestamp: number): string {
-        const date = this.toDate(timestamp);
+    static formatTimestampWithMonth(timestamp: number | undefined): string {
+        const date = this.toDate(timestamp ?? 0);
         const month = new Intl.DateTimeFormat('en-US', {
             month: 'short',
         }).format(date);
@@ -45,8 +45,8 @@ export class TimestampConverter {
         return `${month} ${day}, ${year} ${time}`;
     }
 
-    static formatTimeStampWithTimezone(timestamp: number): string {
-        const date = this.toDate(timestamp);
+    static formatTimeStampWithTimezone(timestamp: number | undefined): string {
+        const date = this.toDate(timestamp ?? 0);
         return new Intl.DateTimeFormat('en-GB', {
             timeStyle: 'long',
         }).format(date);

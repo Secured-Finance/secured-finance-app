@@ -4,7 +4,6 @@ import { formatDate } from '@secured-finance/sf-core';
 import {
     CurrencySymbol,
     currencyMap,
-    formatTimestampDDMMYY,
     isMaturityPastDays,
     isPastDate,
     ordinaryFormat,
@@ -47,7 +46,7 @@ export const OrderTimeCell = ({
     return (
         <div className='flex items-center gap-1'>
             <span className='font-numerical text-3 leading-4 text-white'>
-                {formatTimestampDDMMYY(timestamp)}
+                {TimestampConverter.formatTimestampDDMMYY(timestamp)}
             </span>
             {blockExplorerLink && (
                 <ArrowTopRightOnSquareIcon

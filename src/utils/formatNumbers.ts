@@ -1,6 +1,5 @@
 import { MAX_COVERAGE } from './collateral';
 import { divide } from './currencyList';
-import { TimestampConverter } from './timestampConverter';
 import { LoanValue } from './entities';
 
 export const usdFormat = (
@@ -78,22 +77,6 @@ export const formatLoanValue = (
 export function formatCollateralRatio(collateral: number) {
     return percentFormat(collateral, MAX_COVERAGE, 0);
 }
-
-export const formatTimestamp = (timestamp: number) => {
-    return TimestampConverter.formatTimestamp(timestamp);
-};
-
-export const formatTimestampDDMMYY = (timestamp: number) => {
-    return TimestampConverter.formatTimestampDDMMYY(timestamp);
-};
-
-export const formatTimestampWithMonth = (timestamp: number) => {
-    return TimestampConverter.formatTimestampWithMonth(timestamp);
-};
-
-export const formatTimeStampWithTimezone = (timestamp: number) => {
-    return TimestampConverter.formatTimeStampWithTimezone(timestamp);
-};
 
 export const formatDuration = (durationMs: number) => {
     const msPerDay = 24 * 60 * 60 * 1000; // Milliseconds in a day

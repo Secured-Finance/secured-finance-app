@@ -3,14 +3,11 @@ import {
     formatAmount,
     formatCollateralRatio,
     formatLoanValue,
-    formatTimeStampWithTimezone,
-    formatTimestamp,
-    formatTimestampDDMMYY,
-    formatTimestampWithMonth,
     formatWithCurrency,
     ordinaryFormat,
     usdFormat,
 } from './formatNumbers';
+import { TimestampConverter } from './timestampConverter';
 import { Rate } from './rate';
 
 describe('formatWithCurrency', () => {
@@ -130,7 +127,9 @@ describe('formatTimestamp', () => {
                 dateStyle: 'short',
                 timeStyle: 'short',
             }).format(date);
-            expect(formatTimestamp(timestamp)).toEqual(formattedDate);
+            expect(TimestampConverter.formatTimestamp(timestamp)).toEqual(
+                formattedDate
+            );
         });
     }
 });
@@ -144,15 +143,21 @@ describe('formatTimestampDDMMYY', () => {
     ];
 
     testCases.forEach(({ unixTimestamp, expected }) => {
-        expect(formatTimestampDDMMYY(unixTimestamp)).toBe(expected);
+        expect(TimestampConverter.formatTimestampDDMMYY(unixTimestamp)).toBe(
+            expected
+        );
     });
 });
 
 describe('formatTimestampWithMonth', () => {
     it('should format a timestamp in utc timezone with month details', () => {
-        expect(formatTimestampWithMonth(0)).toEqual('Jan 1, 1970 00:00:00');
-        expect(formatTimestampWithMonth(86400)).toEqual('Jan 2, 1970 00:00:00');
-        expect(formatTimestampWithMonth(1671859344)).toEqual(
+        expect(TimestampConverter.formatTimestampWithMonth(0)).toEqual(
+            'Jan 1, 1970 00:00:00'
+        );
+        expect(TimestampConverter.formatTimestampWithMonth(86400)).toEqual(
+            'Jan 2, 1970 00:00:00'
+        );
+        expect(TimestampConverter.formatTimestampWithMonth(1671859344)).toEqual(
             'Dec 24, 2022 05:22:24'
         );
     });
@@ -210,6 +215,8 @@ describe('formatTimeStampWithTimezone', () => {
     it('should format timestamp with correct time and timezone', () => {
         const timestamp = 1678643696;
         const expectedOutput = '17:54:56 GMT';
-        expect(formatTimeStampWithTimezone(timestamp)).toBe(expectedOutput);
+        expect(TimestampConverter.formatTimeStampWithTimezone(timestamp)).toBe(
+            expectedOutput
+        );
     });
 });
