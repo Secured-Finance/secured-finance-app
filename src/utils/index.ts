@@ -3,6 +3,7 @@ export * from './assets';
 export * from './bridge';
 export * from './collateral';
 export * from './currencies';
+export * from './currencyConverter';
 export * from './currencyList';
 export * from './date';
 export * from './env';
