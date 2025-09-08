@@ -58,9 +58,6 @@ const collateralBook0: CollateralBook = {
 };
 
 beforeEach(() => {
-    // Suppress console errors from wagmi network calls
-    jest.spyOn(console, 'error').mockImplementation(() => {});
-
     timemachine.reset();
     timemachine.config({
         dateString: '2022-02-01T11:00:00.00Z',

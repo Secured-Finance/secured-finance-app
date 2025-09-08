@@ -22,15 +22,13 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 const DEFAULT_CHOICE = currencyMap[CurrencySymbol.WFIL];
 
 beforeAll(() => {
-    jest.spyOn(console, 'error').mockImplementation(() => {});
-
     timemachine.reset();
     timemachine.config({
         dateString: '2022-02-01T11:00:00.00Z',
     });
 });
 
-describe.skip('LendingCard Component', () => {
+describe('LendingCard Component', () => {
     const preloadedState = {
         ...initialStore,
         wallet: {
@@ -208,7 +206,7 @@ describe.skip('LendingCard Component', () => {
         expect(screen.getByText('100')).toBeInTheDocument();
     });
 
-    it.skip('should show Collateral Usage and Available to Borrow only in Borrow order', async () => {
+    it('should show Collateral Usage and Available to Borrow only in Borrow order', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
         expect(screen.queryByText('Available to borrow')).toBeInTheDocument();
         expect(screen.queryByText('Collateral Usage')).toBeInTheDocument();

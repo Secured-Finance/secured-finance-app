@@ -26,8 +26,11 @@ export const useHookSwitcher = <T>(
 ): T => {
     const useWagmi = getWagmiHookFlag(hookName);
 
-    // Development logging to track feature flag usage
-    if (getEnvironment() === Environment.DEVELOPMENT) {
+    // Development logging to track feature flag usage (controlled by env var)
+    if (
+        getEnvironment() === Environment.DEVELOPMENT &&
+        process.env.NEXT_PUBLIC_DEBUG_FEATURE_FLAGS === 'true'
+    ) {
         // eslint-disable-next-line no-console
         console.log(
             `🔄 Hook ${hookName}: using ${

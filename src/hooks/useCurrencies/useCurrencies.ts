@@ -47,6 +47,7 @@ const useCurrenciesWagmi = (showAll = false, chainId?: number) => {
         functionName: 'getCurrencies',
         chainId:
             chainId as keyof typeof import('src/generated/wagmi').currencyControllerAddress,
+        staleTime: Infinity,
     });
 
     const currencies = useMemo(() => {

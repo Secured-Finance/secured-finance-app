@@ -7,8 +7,14 @@ import { cleanup } from '@testing-library/react';
 import 'jest-canvas-mock';
 import failOnConsole from 'jest-fail-on-console';
 import timemachine from 'timemachine';
+import { mockUseCurrencyControllerRead } from './stories/mocks/wagmiMocks';
 
 jest.mock('next/router', () => jest.requireActual('next-router-mock'));
+
+// Mock wagmi generated hooks
+jest.mock('src/generated/wagmi', () => ({
+    useCurrencyControllerRead: mockUseCurrencyControllerRead,
+}));
 
 failOnConsole({
     silenceMessage: errorMessage => {
