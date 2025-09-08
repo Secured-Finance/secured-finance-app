@@ -20,8 +20,9 @@ import {
     useZCToken,
 } from 'src/hooks';
 import {
-    AddressUtils,
+    AddressConverter,
     CurrencySymbol,
+    DisplayLengths,
     ZCTokenEvents,
     convertToZcTokenName,
     convertZCTokenFromBaseAmount,
@@ -365,7 +366,10 @@ export const DepositZCToken = ({
                                     ['Status', 'Complete'],
                                     [
                                         'Transaction hash',
-                                        AddressUtils.format(txHash ?? '', 8),
+                                        AddressConverter.format(
+                                            txHash,
+                                            DisplayLengths.LONG
+                                        ),
                                     ],
                                     [
                                         'Amount',
