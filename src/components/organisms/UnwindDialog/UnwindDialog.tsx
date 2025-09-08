@@ -20,10 +20,11 @@ import {
 } from 'src/hooks';
 import { setLastMessage } from 'src/store/lastError';
 import {
-    AddressUtils,
+    AddressConverter,
     ButtonEvents,
     ButtonProperties,
     CurrencySymbol,
+    DisplayLengths,
     handleContractError,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
@@ -253,7 +254,10 @@ export const UnwindDialog = ({
                             ['Status', 'Complete'],
                             [
                                 'Transaction Hash',
-                                AddressUtils.format(txHash ?? '', 8),
+                                AddressConverter.format(
+                                    txHash,
+                                    DisplayLengths.LONG
+                                ),
                             ],
                         ]}
                         txHash={txHash}
