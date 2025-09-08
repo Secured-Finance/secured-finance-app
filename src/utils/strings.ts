@@ -1,6 +1,7 @@
+import { formatDate } from '@secured-finance/sf-core';
 import { Option } from 'src/components/atoms';
 import { getEnvironment } from './env';
-import { formatDate } from '@secured-finance/sf-core';
+
 export enum Environment {
     DEVELOPMENT = 'development',
     STAGING = 'staging',
