@@ -16,7 +16,7 @@ import {
 import { CollateralBook, useMarket, useOrderFee } from 'src/hooks';
 import { OrderType } from 'src/types';
 import {
-    calculateFee,
+    FeeCalculator,
     divide,
     formatLoanValue,
     formatWithCurrency,
@@ -161,7 +161,10 @@ export const OrderDetails = ({
                             [
                                 <FeeItem key={maturity.toString()} />,
                                 prefixTilde(
-                                    calculateFee(maturity.toNumber(), orderFee)
+                                    FeeCalculator.calculateTransactionFees(
+                                        maturity,
+                                        orderFee
+                                    )
                                 ),
                             ],
                         ]}
