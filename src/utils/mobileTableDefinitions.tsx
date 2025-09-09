@@ -8,7 +8,7 @@ import {
     formatTimestampDDMMYY,
     isMaturityPastDays,
     isPastDate,
-    ordinaryFormat,
+    formatter,
 } from 'src/utils';
 
 export const AmountCell = ({
@@ -24,11 +24,10 @@ export const AmountCell = ({
     }
     return (
         <span className='font-numerical text-3 leading-4 text-white'>
-            {ordinaryFormat(
-                currency.fromBaseUnit(amount),
+            {formatter.ordinary(
                 currency.roundingDecimal,
                 currency.roundingDecimal
-            )}
+            )(currency.fromBaseUnit(amount))}
         </span>
     );
 };

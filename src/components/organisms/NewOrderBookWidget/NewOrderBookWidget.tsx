@@ -34,7 +34,7 @@ import {
     ZERO_BI,
     currencyMap,
     divide,
-    formatLoanValue,
+    formatter,
     getMaxAmount,
     ordinaryFormat,
     percentFormat,
@@ -137,11 +137,7 @@ const PriceCell = ({
             return '';
         }
 
-        return formatLoanValue(
-            value,
-            'price',
-            Math.abs(Math.log10(Math.min(aggregationFactor, 100) / 100)) // get the power of 10 of the aggregation factor for the number of decimals, but never more than 2
-        );
+        return formatter.priceWithAggregation(aggregationFactor, 'price')(value);
     }, [aggregationFactor, amount, value]);
 
     return (
@@ -161,7 +157,7 @@ const AprCell = ({
     return (
         <div className='flex items-center justify-center'>
             {display ? (
-                <OrderBookCell value={formatLoanValue(value, 'rate')} />
+                <OrderBookCell value={formatter.loanValue('rate')(value)} />
             ) : (
                 <OrderBookCell />
             )}
@@ -513,7 +509,7 @@ export const NewOrderBookWidget = ({
                                 className='flex w-full items-center gap-2 text-base font-semibold leading-6 text-neutral-50'
                                 data-testid='current-market-price'
                             >
-                                <p>{formatLoanValue(marketPrice, 'price')}</p>
+                                <p>{formatter.loanValue('price')(marketPrice)}</p>
                                 {isItayose && (
                                     <InfoToolTip
                                         iconColor='white'
@@ -526,7 +522,7 @@ export const NewOrderBookWidget = ({
                                 )}
                             </span>
                             <span className='flex w-full justify-end text-xs font-semibold leading-5 text-neutral-200 laptop:justify-center laptop:text-sm laptop:leading-[22px]'>
-                                {formatLoanValue(marketPrice, 'rate')}
+                                {formatter.loanValue('rate')(marketPrice)}
                             </span>
                             <div className='typography-desktop-body-6 hidden w-full flex-col justify-end text-right text-neutral-200 laptop:flex'>
                                 <span>Spread</span>

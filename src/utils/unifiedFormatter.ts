@@ -1,4 +1,7 @@
-import { LoanValue } from './entities';
+import { LoanValue, Maturity } from './entities';
+import { Currency } from '@secured-finance/sf-core';
+import { CurrencySymbol, currencyMap } from './currencyList';
+import { HexConverter } from './hexConverter';
 
 export type FormatType = 'display' | 'compact' | 'iso' | 'relative';
 
@@ -232,6 +235,87 @@ export class UnifiedFormatter {
         return (value: T) =>
             formatter.call(UnifiedFormatter, value, format, options);
     }
+
+    // ===== UNIFIED FORMATTING & CONVERSION UTILITIES =====
+
+    // LoanValue formatting (clean, simple name)
+    static formatLoanValue(
+        value: LoanValue | undefined,
+        type: 'price' | 'rate',
+        format: FormatType = 'display',
+        decimals = 2
+    ): string {
+        if (!value) return type === 'price' ? '--.--' : '--.--%';
+
+        if (type === 'price') {
+            return this.formatPrice(value.price / 100, format, {
+                decimals,
+                type: 'currency',
+            });
+        }
+        return this.formatPrice(value.apr.toNormalizedNumber(), format, {
+            decimals,
+            type: 'percentage',
+        });
+    }
+
+    // Maturity conversion (clean, simple name)
+    static formatMaturity(maturity: Maturity): number {
+        const num = maturity.toNumber();
+        if (num > Number.MAX_SAFE_INTEGER) {
+            console.warn('Maturity precision loss detected', maturity);
+        }
+        return num;
+    }
+
+    // Amount with currency (clean, simple name)
+    static formatAmountWithCurrency(
+        amount: number | bigint,
+        currency: string,
+        format: FormatType = 'display',
+        decimals = 2
+    ): string {
+        const formatted = this.formatAmount(amount, format, {
+            maxDecimals: decimals,
+            minDecimals: 0,
+        });
+        return `${formatted} ${currency}`;
+    }
+
+    // Price with aggregation (no complex inline math)
+    static formatPriceWithAggregation(
+        value: LoanValue | undefined,
+        aggregationFactor: number,
+        type: 'price' | 'rate' = 'price'
+    ): string {
+        const decimals = Math.abs(
+            Math.log10(Math.min(aggregationFactor, 100) / 100)
+        );
+        return this.formatLoanValue(value, type, 'display', decimals);
+    }
+
+    // Currency conversions (consolidated here)
+    static toCurrency(symbol: CurrencySymbol): Currency {
+        return currencyMap[symbol].toCurrency();
+    }
+
+    static parseCurrency(hex: string): CurrencySymbol | undefined {
+        const symbolString = HexConverter.hexToString(hex);
+        return Object.values(CurrencySymbol).includes(
+            symbolString as CurrencySymbol
+        )
+            ? (symbolString as CurrencySymbol)
+            : undefined;
+    }
+
+    static fromBytes32(bytes32: string): CurrencySymbol | undefined {
+        const symbolString = bytes32.replace(/\0/g, '').trim();
+        return Object.values(CurrencySymbol).includes(
+            symbolString as CurrencySymbol
+        )
+            ? (symbolString as CurrencySymbol)
+            : undefined;
+    }
 }
 
 export const formatters = {
@@ -239,6 +323,68 @@ export const formatters = {
     amount: UnifiedFormatter.formatAmount,
     price: UnifiedFormatter.formatPrice,
 } as const;
+
+// Clean, simple API - all in one place
+export const formatter = {
+    // LoanValue formatting
+    loanValue:
+        (type: 'price' | 'rate', decimals = 2) =>
+        (value: LoanValue | undefined) =>
+            UnifiedFormatter.formatLoanValue(value, type, 'display', decimals),
+
+    // Amount with currency
+    withCurrency:
+        (currency: string, decimals = 2) =>
+        (amount: number | bigint) =>
+            UnifiedFormatter.formatAmountWithCurrency(
+                amount,
+                currency,
+                'display',
+                decimals
+            ),
+
+    // Legacy ordinary format
+    ordinary:
+        (
+            minDecimals = 0,
+            maxDecimals = 2,
+            notation: 'standard' | 'compact' = 'standard'
+        ) =>
+        (amount: number | bigint) =>
+            UnifiedFormatter.formatAmount(
+                amount,
+                notation === 'compact' ? 'compact' : 'display',
+                { minDecimals, maxDecimals }
+            ),
+
+    // USD formatting
+    usd:
+        (digits = 0, notation: 'standard' | 'compact' = 'standard') =>
+        (amount: number | bigint) =>
+            UnifiedFormatter.formatPrice(
+                amount,
+                notation === 'compact' ? 'compact' : 'display',
+                { decimals: digits, currency: 'USD', type: 'currency' }
+            ),
+
+    // Price with aggregation
+    priceWithAggregation:
+        (aggregationFactor: number, type: 'price' | 'rate' = 'price') =>
+        (value: LoanValue | undefined) =>
+            UnifiedFormatter.formatPriceWithAggregation(
+                value,
+                aggregationFactor,
+                type
+            ),
+};
+
+// Conversion utilities - all in one place
+export const convert = {
+    maturity: (maturity: Maturity) => UnifiedFormatter.formatMaturity(maturity),
+    toCurrency: (symbol: CurrencySymbol) => UnifiedFormatter.toCurrency(symbol),
+    fromHex: (hex: string) => UnifiedFormatter.parseCurrency(hex),
+    fromBytes32: (bytes32: string) => UnifiedFormatter.fromBytes32(bytes32),
+};
 
 export const selectors = {
     displayTimestamp: (options?: TimestampFormatterOptions) =>
