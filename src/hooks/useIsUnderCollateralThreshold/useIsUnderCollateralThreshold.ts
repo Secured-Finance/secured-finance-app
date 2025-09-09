@@ -63,7 +63,7 @@ export const useIsUnderCollateralThresholdForBorrowOrders = (
             const currentMinDebtUnitPrice = market.currentMinDebtUnitPrice;
             const fv = CollateralCalculator.calculateFutureValue(amount, price);
             const requiredCollateral =
-                CollateralCalculator.calculateRequiredCollateral(
+                CollateralCalculator.calculateRequiredCollateralFromFV(
                     fv,
                     currentMinDebtUnitPrice
                 );

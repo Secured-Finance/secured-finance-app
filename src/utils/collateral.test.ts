@@ -94,50 +94,66 @@ describe('Collateral Functions', () => {
         });
     });
 
+    describe('calculateRequiredCollateralFromFV', () => {
+        it('should calculate required collateral from FV correctly', () => {
+            // Manual inline: (fv * debtUnitPrice) / 10000
+            // 100000 * 8000 / 10000 = 80000
+            expect(
+                CollateralCalculator.calculateRequiredCollateralFromFV(
+                    100000,
+                    8000
+                )
+            ).toBe(BigInt(80000));
+            // 50000 * 6000 / 10000 = 30000
+            expect(
+                CollateralCalculator.calculateRequiredCollateralFromFV(
+                    50000,
+                    6000
+                )
+            ).toBe(BigInt(30000));
+        });
+
+        it('should return 0n when FV is 0', () => {
+            expect(
+                CollateralCalculator.calculateRequiredCollateralFromFV(0, 8000)
+            ).toBe(BigInt(0));
+        });
+
+        it('should return 0n when debt unit price is 0', () => {
+            expect(
+                CollateralCalculator.calculateRequiredCollateralFromFV(
+                    100000,
+                    0
+                )
+            ).toBe(BigInt(0));
+        });
+
+        it('should handle BigInt inputs', () => {
+            expect(
+                CollateralCalculator.calculateRequiredCollateralFromFV(
+                    BigInt(100000),
+                    BigInt(8000)
+                )
+            ).toBe(BigInt(80000));
+        });
+    });
+
     describe('calculateFutureValue', () => {
         it('should calculate future value correctly', () => {
             // Original: (amount * 10000) / price
             // 1000 * 10000 / 100 = 100000
             expect(CollateralCalculator.calculateFutureValue(1000, 100)).toBe(
-                100000
+                BigInt(100000)
             );
             // 2000 * 10000 / 200 = 100000
             expect(CollateralCalculator.calculateFutureValue(2000, 200)).toBe(
-                100000
+                BigInt(100000)
             );
         });
 
-        it('should return 0 when price is 0', () => {
-            expect(CollateralCalculator.calculateFutureValue(1000, 0)).toBe(0);
-        });
-    });
-
-    describe('calculateBarWidth', () => {
-        it('should calculate bar width correctly', () => {
-            expect(
-                CollateralCalculator.calculateBarWidth(50, 100, 200, 10)
-            ).toBe(100);
-
-            expect(
-                CollateralCalculator.calculateBarWidth(25, 100, 300, 20)
-            ).toBe(75);
-        });
-
-        it('should respect minimum width', () => {
-            expect(
-                CollateralCalculator.calculateBarWidth(1, 1000, 300, 50)
-            ).toBe(50);
-        });
-
-        it('should respect maximum width', () => {
-            expect(
-                CollateralCalculator.calculateBarWidth(100, 100, 200, 10)
-            ).toBe(200);
-        });
-
-        it('should handle zero total', () => {
-            expect(CollateralCalculator.calculateBarWidth(50, 0, 200, 10)).toBe(
-                10
+        it('should return 0n when price is 0', () => {
+            expect(CollateralCalculator.calculateFutureValue(1000, 0)).toBe(
+                BigInt(0)
             );
         });
     });
@@ -149,7 +165,7 @@ describe('Collateral Functions', () => {
                 50000000, // 0.5 in divider units
                 7500, // 75.00%
                 200000000, // 2.0 in divider units
-                100000000,
+                100_000_000n,
                 2
             );
 

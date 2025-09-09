@@ -1,13 +1,13 @@
 import { divide, multiply } from './currencyList';
 
 const PERCENTAGE_BASE = 100;
-const LIQUIDATION_RATE_DIVISOR = 1000000;
+const LIQUIDATION_RATE_DIVISOR = 1_000_000;
 const ZERO = 0;
-const FUTURE_VALUE_MULTIPLIER = 10000;
-const DIVIDER_CONSTANT = 100000000;
+const FUTURE_VALUE_MULTIPLIER = 10_000;
+const DIVIDER_CONSTANT = 100_000_000n;
 const DEFAULT_PRECISION = 8;
 
-export const MAX_COVERAGE = 10000;
+export const MAX_COVERAGE = 10_000;
 export const ZERO_BI = BigInt(0);
 
 type InputValue = bigint | number | string;
@@ -18,30 +18,41 @@ export class CollateralCalculator {
     }
 
     static calculatePercentage(value: InputValue, total: InputValue): number {
-        const v = this.toNumber(value);
-        const t = this.toNumber(total);
-        return t === ZERO ? ZERO : multiply(divide(v, t), PERCENTAGE_BASE);
+        const vBig = BigInt(value || ZERO);
+        const tBig = BigInt(total || ZERO);
+        return tBig === ZERO_BI
+            ? ZERO
+            : multiply(divide(vBig, tBig), PERCENTAGE_BASE);
     }
 
     static calculateRequiredCollateral(
         borrowAmount: InputValue,
-        collateralThreshold: InputValue
+        liquidationThreshold: InputValue
     ): number {
         const borrow = this.toNumber(borrowAmount);
-        const threshold = this.toNumber(collateralThreshold);
+        const threshold = this.toNumber(liquidationThreshold);
         return divide(multiply(borrow, threshold), PERCENTAGE_BASE);
+    }
+
+    static calculateRequiredCollateralFromFV(
+        futureValue: InputValue,
+        debtUnitPrice: InputValue
+    ): bigint {
+        const fvBig = BigInt(futureValue || ZERO);
+        const debtPriceBig = BigInt(debtUnitPrice || ZERO);
+        return (fvBig * debtPriceBig) / BigInt(FUTURE_VALUE_MULTIPLIER);
     }
 
     static calculateAvailableToBorrow(
         totalCollateral: InputValue,
         totalUnusedCollateral: InputValue,
         coverage: InputValue,
-        collateralThreshold: InputValue
+        liquidationThreshold: InputValue
     ): number {
         const total = this.toNumber(totalCollateral);
         const unused = this.toNumber(totalUnusedCollateral);
         const cov = this.toNumber(coverage);
-        const threshold = this.toNumber(collateralThreshold);
+        const threshold = this.toNumber(liquidationThreshold);
 
         const coverageAsPercentage = divide(cov, PERCENTAGE_BASE);
         if (threshold <= coverageAsPercentage) return ZERO;
@@ -59,24 +70,12 @@ export class CollateralCalculator {
         return rate === ZERO ? ZERO : divide(LIQUIDATION_RATE_DIVISOR, rate);
     }
 
-    static calculateFutureValue(amount: InputValue, price: InputValue): number {
-        const amountNum = this.toNumber(amount);
-        const priceNum = this.toNumber(price);
-        return priceNum === ZERO
-            ? ZERO
-            : divide(multiply(amountNum, FUTURE_VALUE_MULTIPLIER), priceNum);
-    }
-
-    static calculateBarWidth(
-        value: InputValue,
-        total: InputValue,
-        maxWidth: number,
-        minWidth: number
-    ): number {
-        const percentage = this.calculatePercentage(value, total);
-        const ratio = divide(percentage, PERCENTAGE_BASE);
-        const targetWidth = multiply(ratio, maxWidth);
-        return Math.min(Math.max(targetWidth, minWidth), maxWidth);
+    static calculateFutureValue(amount: InputValue, price: InputValue): bigint {
+        const amountValue = BigInt(amount || ZERO);
+        const priceValue = BigInt(price || ZERO);
+        return priceValue === ZERO_BI
+            ? ZERO_BI
+            : (amountValue * BigInt(FUTURE_VALUE_MULTIPLIER)) / priceValue;
     }
 
     static transformCollateralBookData(
@@ -84,7 +83,7 @@ export class CollateralCalculator {
         totalUnusedCollateralAmount: InputValue,
         collateralCoverage: InputValue,
         totalPresentValue: InputValue,
-        dividerAmount: number = DIVIDER_CONSTANT,
+        dividerAmount: bigint = DIVIDER_CONSTANT,
         precision: number = DEFAULT_PRECISION
     ): {
         usdCollateral: number;
@@ -93,18 +92,18 @@ export class CollateralCalculator {
         totalPresentValue: number;
     } {
         const usdCollateral = divide(
-            this.toNumber(totalCollateralAmount),
+            BigInt(totalCollateralAmount || ZERO),
             dividerAmount,
             precision
         );
         const usdUnusedCollateral = divide(
-            this.toNumber(totalUnusedCollateralAmount),
+            BigInt(totalUnusedCollateralAmount || ZERO),
             dividerAmount,
             precision
         );
         const coverage = this.toNumber(collateralCoverage);
         const totalPV = divide(
-            this.toNumber(totalPresentValue),
+            BigInt(totalPresentValue || ZERO),
             dividerAmount,
             precision
         );

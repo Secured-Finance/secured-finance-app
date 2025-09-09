@@ -20,11 +20,11 @@ export interface CollateralBook {
     usdAvailableToBorrow: number;
     usdNonCollateral: number;
     coverage: number;
-    collateralThreshold: number;
+    liquidationThreshold: number;
     totalPresentValue: number;
 }
 
-const DIVIDER = 100000000;
+const DIVIDER = 100_000_000n;
 
 export const emptyCollateralBook: CollateralBook = {
     collateral: {
@@ -45,7 +45,7 @@ export const emptyCollateralBook: CollateralBook = {
     usdAvailableToBorrow: 0,
     usdNonCollateral: 0,
     coverage: 0,
-    collateralThreshold: 0,
+    liquidationThreshold: 0,
     totalPresentValue: 0,
 };
 
@@ -114,7 +114,7 @@ export const useCollateralBook = (account: string | undefined) => {
             const { collateralBook, nonCollateralBook, usdNonCollateral } =
                 formatCollateral(data.collateralValues.collateral, priceList);
 
-            const collateralThreshold =
+            const liquidationThreshold =
                 CollateralCalculator.calculateCollateralThreshold(
                     data.collateralParameters.liquidationThresholdRate
                 );
@@ -144,11 +144,11 @@ export const useCollateralBook = (account: string | undefined) => {
                         transformedData.usdCollateral,
                         transformedData.usdUnusedCollateral,
                         transformedData.coverage,
-                        collateralThreshold
+                        liquidationThreshold
                     ),
                 usdNonCollateral: usdNonCollateral,
                 coverage: transformedData.coverage,
-                collateralThreshold: collateralThreshold,
+                liquidationThreshold: liquidationThreshold,
                 withdrawableCollateral: withdrawableCollateral,
                 totalPresentValue: transformedData.totalPresentValue,
             };

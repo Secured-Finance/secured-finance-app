@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { ColorFormat } from 'src/types';
-import { ZERO_BI, CollateralCalculator } from 'src/utils';
+import { ZERO_BI, calculateBarWidth } from 'src/utils';
 
 const COLORBAR_MIN_WIDTH = 5;
 const COLORBAR_MAX_WIDTH = 308;
@@ -14,7 +14,7 @@ export const ColorBar = ({
     total: bigint;
     align: 'left' | 'right';
 } & Required<ColorFormat>) => {
-    const width = CollateralCalculator.calculateBarWidth(
+    const width = calculateBarWidth(
         value,
         total,
         COLORBAR_MAX_WIDTH,
