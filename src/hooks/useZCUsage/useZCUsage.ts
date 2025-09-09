@@ -68,7 +68,7 @@ export const useZCUsage = (address: UserAccount, side: OrderSide) => {
             );
 
             return AmountConverter.fromBase(
-                positionInMaturity?.amount ?? BigInt(0),
+                positionInMaturity?.amount,
                 currency
             );
         },

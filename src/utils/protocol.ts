@@ -28,7 +28,7 @@ export function computeTotalDailyVolumeInUSD(
             return;
         }
 
-        const volumeInBaseUnit = AmountConverter.fromBase(BigInt(volume), ccy);
+        const volumeInBaseUnit = AmountConverter.fromBase(volume, ccy);
 
         const valueInUSD = volumeInBaseUnit * priceMap[ccy];
 
@@ -60,10 +60,7 @@ export function computeTotalProtocolVolumeInUSD(
             return;
         }
 
-        const volumeInBaseUnit = AmountConverter.fromBase(
-            BigInt(totalVolume),
-            ccy
-        );
+        const volumeInBaseUnit = AmountConverter.fromBase(totalVolume, ccy);
 
         const valueInUSD = volumeInBaseUnit * priceMap[ccy];
         totalVolumeUSD += valueInUSD;

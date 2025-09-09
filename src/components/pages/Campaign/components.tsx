@@ -11,7 +11,6 @@ import { useBreakpoint, useGetCountdown } from 'src/hooks';
 import {
     AmountConverter,
     CurrencySymbol,
-    ZERO_BI,
     ordinaryFormat,
     usdFormat,
 } from 'src/utils';
@@ -110,7 +109,7 @@ export const CampaignStatus = ({
     collateralCurrencies.forEach(ccy => {
         totalUSDValue +=
             (priceList[ccy] ?? 0) *
-            AmountConverter.fromBase(valueLocked[ccy] ?? ZERO_BI, ccy);
+            AmountConverter.fromBase(valueLocked[ccy], ccy);
     });
 
     const campaignStartCopy = isStageOn
@@ -167,7 +166,7 @@ export const CampaignStatus = ({
                                     >
                                         {`${ordinaryFormat(
                                             AmountConverter.fromBase(
-                                                valueLocked[ccy] ?? ZERO_BI,
+                                                valueLocked[ccy],
                                                 ccy
                                             ),
                                             0,

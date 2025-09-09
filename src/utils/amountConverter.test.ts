@@ -3,75 +3,84 @@ import { CurrencySymbol } from './currencyList';
 
 describe('AmountConverter', () => {
     describe('fromBase', () => {
-        it('should convert ETH from base to display', () => {
-            const baseAmount = BigInt('1000000000000000000'); // 1 ETH in wei
+        it('should convert valid base amounts', () => {
             expect(
-                AmountConverter.fromBase(baseAmount, CurrencySymbol.ETH)
+                AmountConverter.fromBase(
+                    BigInt('1000000000000000000'),
+                    CurrencySymbol.ETH
+                )
+            ).toBe(1);
+            expect(
+                AmountConverter.fromBase(BigInt('1000000'), CurrencySymbol.USDC)
+            ).toBe(1);
+            expect(
+                AmountConverter.fromBase(
+                    BigInt('100000000'),
+                    CurrencySymbol.WBTC
+                )
+            ).toBe(1);
+            expect(AmountConverter.fromBase(1000000, CurrencySymbol.USDC)).toBe(
+                1
+            );
+            expect(
+                AmountConverter.fromBase(
+                    '1000000000000000000',
+                    CurrencySymbol.ETH
+                )
             ).toBe(1);
         });
 
-        it('should convert USDC from base to display', () => {
-            const baseAmount = BigInt('1000000'); // 1 USDC in base units
+        it('should handle undefined or empty/invalid strings as 0', () => {
             expect(
-                AmountConverter.fromBase(baseAmount, CurrencySymbol.USDC)
-            ).toBe(1);
-        });
-
-        it('should convert WBTC from base to display', () => {
-            const baseAmount = BigInt('100000000'); // 1 WBTC in satoshi
-            expect(
-                AmountConverter.fromBase(baseAmount, CurrencySymbol.WBTC)
-            ).toBe(1);
+                AmountConverter.fromBase(undefined, CurrencySymbol.ETH)
+            ).toBe(0);
+            expect(AmountConverter.fromBase('', CurrencySymbol.ETH)).toBe(0);
+            expect(AmountConverter.fromBase('   ', CurrencySymbol.ETH)).toBe(0);
+            expect(AmountConverter.fromBase('abc', CurrencySymbol.ETH)).toBe(0);
         });
     });
 
     describe('toBase', () => {
-        it('should convert ETH from display to base', () => {
-            const result = AmountConverter.toBase(1, CurrencySymbol.ETH);
-            expect(result.toString()).toBe('1000000000000000000');
+        it('should convert valid display amounts', () => {
+            expect(
+                AmountConverter.toBase(1, CurrencySymbol.ETH).toString()
+            ).toBe('1000000000000000000');
+            expect(
+                AmountConverter.toBase(1, CurrencySymbol.USDC).toString()
+            ).toBe('1000000');
+            expect(
+                AmountConverter.toBase(1, CurrencySymbol.WBTC).toString()
+            ).toBe('100000000');
+            expect(
+                AmountConverter.toBase(1.5, CurrencySymbol.ETH).toString()
+            ).toBe('1500000000000000000');
+            expect(
+                AmountConverter.toBase('1.5', CurrencySymbol.ETH).toString()
+            ).toBe('1500000000000000000');
+            expect(
+                AmountConverter.toBase(
+                    BigInt(1),
+                    CurrencySymbol.WBTC
+                ).toString()
+            ).toBe('100000000');
         });
 
-        it('should convert USDC from display to base', () => {
-            const result = AmountConverter.toBase(1, CurrencySymbol.USDC);
-            expect(result.toString()).toBe('1000000');
-        });
-
-        it('should convert WBTC from display to base', () => {
-            const result = AmountConverter.toBase(1, CurrencySymbol.WBTC);
-            expect(result.toString()).toBe('100000000');
-        });
-
-        it('should handle decimal amounts', () => {
-            const result = AmountConverter.toBase(1.5, CurrencySymbol.ETH);
-            expect(result.toString()).toBe('1500000000000000000');
-        });
-
-        it('should handle string input', () => {
-            const result = AmountConverter.toBase('1.5', CurrencySymbol.ETH);
-            expect(result.toString()).toBe('1500000000000000000');
-        });
-
-        it('should handle empty string input', () => {
-            const result = AmountConverter.toBase('', CurrencySymbol.ETH);
-            expect(result.toString()).toBe('0');
-        });
-
-        it('should handle dot-only input', () => {
-            const result = AmountConverter.toBase('.', CurrencySymbol.ETH);
-            expect(result.toString()).toBe('0');
-        });
-
-        it('should handle invalid string input', () => {
-            const result = AmountConverter.toBase(
-                'invalid',
-                CurrencySymbol.ETH
-            );
-            expect(result.toString()).toBe('0');
-        });
-
-        it('should handle partial decimal input', () => {
-            const result = AmountConverter.toBase('0.5', CurrencySymbol.ETH);
-            expect(result.toString()).toBe('500000000000000000');
+        it('should handle edge-case strings as 0', () => {
+            expect(
+                AmountConverter.toBase('', CurrencySymbol.ETH).toString()
+            ).toBe('0');
+            expect(
+                AmountConverter.toBase('.', CurrencySymbol.ETH).toString()
+            ).toBe('0');
+            expect(
+                AmountConverter.toBase('invalid', CurrencySymbol.ETH).toString()
+            ).toBe('0');
+            expect(
+                AmountConverter.toBase(undefined, CurrencySymbol.ETH).toString()
+            ).toBe('0');
+            expect(
+                AmountConverter.toBase('0.5', CurrencySymbol.ETH).toString()
+            ).toBe('500000000000000000');
         });
     });
 

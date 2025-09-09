@@ -20,8 +20,8 @@ import {
     DisplayLengths,
     ZERO_BI,
     formatAmount,
+    AmountConverter,
 } from 'src/utils';
-import { AmountConverter } from 'src/utils';
 import {
     ButtonEvents,
     ButtonProperties,
@@ -125,9 +125,7 @@ export const WithdrawCollateral = ({
 
     useEffect(() => {
         if (!isFullCoverage) {
-            setCollateralBigInt(
-                AmountConverter.toBase(collateral ?? '', asset)
-            );
+            setCollateralBigInt(AmountConverter.toBase(collateral, asset));
         } else {
             setCollateralBigInt(
                 collateralList[asset]?.availableFullValue ?? ZERO_BI

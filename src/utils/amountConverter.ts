@@ -1,27 +1,42 @@
 import { CurrencySymbol, currencyMap } from './currencyList';
 
 export class AmountConverter {
-    static fromBase(amount: bigint, currency: CurrencySymbol): number {
-        return currencyMap[currency].fromBaseUnit(amount);
-    }
+    static fromBase(
+        amount: string | number | bigint | undefined,
+        currency: CurrencySymbol
+    ): number {
+        if (amount === undefined) return 0;
 
-    static toBase(input: string | number, currency: CurrencySymbol): bigint {
-        if (typeof input === 'string') {
-            // Handle edge cases for user input
-            if (!input || input === '.' || input === '') {
-                return BigInt(0);
-            }
-
-            // Parse string to number, handling precision
-            const parsed = parseFloat(input);
-            if (isNaN(parsed)) {
-                return BigInt(0);
-            }
-
-            return currencyMap[currency].toBaseUnit(parsed);
+        if (
+            typeof amount === 'string' &&
+            (!amount.trim() || isNaN(Number(amount)))
+        ) {
+            return 0;
         }
 
-        return currencyMap[currency].toBaseUnit(input);
+        return currencyMap[currency].fromBaseUnit(BigInt(amount));
+    }
+
+    static toBase(
+        input: string | number | bigint | undefined,
+        currency: CurrencySymbol
+    ): bigint {
+        if (input === undefined) {
+            return BigInt(0);
+        }
+
+        if (typeof input === 'string') {
+            const trimmed = input.trim();
+            if (!trimmed || trimmed === '.' || isNaN(Number(trimmed))) {
+                return BigInt(0);
+            }
+
+            return currencyMap[currency].toBaseUnit(parseFloat(trimmed));
+        }
+
+        return currencyMap[currency].toBaseUnit(
+            typeof input === 'bigint' ? Number(input) : input
+        );
     }
 
     static formatWithPrecision(
