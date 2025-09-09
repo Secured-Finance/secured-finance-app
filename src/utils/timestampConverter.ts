@@ -19,8 +19,20 @@ export class TimestampConverter {
         }).format(date);
     }
 
-    static formatTimestampDDMMYY(timestamp: number | undefined): string {
-        const date = this.toDate(timestamp ?? 0);
+    static formatTimestampDDMMYY(timestamp?: number | string | bigint): string {
+        if (timestamp === undefined || timestamp === null) return '';
+
+        const ts =
+            typeof timestamp === 'string'
+                ? parseInt(timestamp, 10)
+                : typeof timestamp === 'bigint'
+                ? Number(timestamp)
+                : timestamp;
+
+        if (isNaN(ts) || ts === 0) return '--';
+
+        const date = this.toDate(ts);
+
         const formattedDate = new Intl.DateTimeFormat('en-GB', {
             day: '2-digit',
             month: '2-digit',
