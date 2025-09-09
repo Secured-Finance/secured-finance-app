@@ -27,9 +27,9 @@ import {
     hexToCurrencySymbol,
     loanTypeColumnDefinition,
     priceYieldColumnDefinition,
+    TimestampConverter,
 } from 'src/utils';
 import { Amount, Maturity } from 'src/utils/entities';
-import { TimestampConverter } from 'src/utils/timestampConverter';
 
 export type OpenOrder = Order & { calculationDate?: number };
 

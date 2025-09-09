@@ -34,8 +34,8 @@ import {
     loanTypeFromFVColumnDefinition,
     priceYieldColumnDefinition,
     tableHeaderDefinition,
+    TimestampConverter,
 } from 'src/utils';
-import { TimestampConverter } from 'src/utils/timestampConverter';
 import { Amount, Maturity } from 'src/utils/entities';
 
 const columnHelper = createColumnHelper<
