@@ -73,7 +73,7 @@ export const RecentTradesTable = ({
         return transactionHistory
             ?.map(transaction => {
                 const sizeActual = AmountConverter.fromBase(
-                    +transaction.amount,
+                    transaction.amount,
                     currency
                 );
                 const size = ordinaryFormat(

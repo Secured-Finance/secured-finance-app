@@ -31,12 +31,10 @@ export class AmountConverter {
                 return BigInt(0);
             }
 
-            return currencyMap[currency].toBaseUnit(parseFloat(trimmed));
+            return currencyMap[currency].toBaseUnit(Number(trimmed));
         }
 
-        return currencyMap[currency].toBaseUnit(
-            typeof input === 'bigint' ? Number(input) : input
-        );
+        return currencyMap[currency].toBaseUnit(Number(input));
     }
 
     static formatWithPrecision(
