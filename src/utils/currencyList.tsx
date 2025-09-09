@@ -447,5 +447,5 @@ export const convertToZcTokenName = (
     `ZC ${symbol}${
         !maturity || maturity.isZero()
             ? ''
-            : ` ${MaturityConverter.toUTCMonthYear(maturity.toNumber(), true)}`
+            : ` ${MaturityConverter.toUTCMonthYear(maturity, true)}`
     }`;
