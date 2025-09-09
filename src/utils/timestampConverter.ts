@@ -20,16 +20,15 @@ export class TimestampConverter {
     }
 
     static formatTimestampDDMMYY(timestamp?: number | string | bigint): string {
-        if (timestamp === undefined || timestamp === null) return '';
+        const ts = Number(timestamp);
 
-        const ts =
-            typeof timestamp === 'string'
-                ? parseInt(timestamp, 10)
-                : typeof timestamp === 'bigint'
-                ? Number(timestamp)
-                : timestamp;
-
-        if (isNaN(ts) || ts === 0) return '--';
+        if (
+            isNaN(ts) ||
+            ts === 0 ||
+            timestamp === undefined ||
+            timestamp === null
+        )
+            return '--';
 
         const date = this.toDate(ts);
 

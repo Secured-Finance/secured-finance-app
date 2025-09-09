@@ -51,7 +51,9 @@ describe('TimestampConverter', () => {
         });
 
         it('should handle BigInt string', () => {
-            expect(TimestampConverter.toNumber(1672531200n)).toBe(1672531200);
+            expect(TimestampConverter.toNumber(TEST_TIMESTAMP)).toBe(
+                TEST_TIMESTAMP
+            );
         });
     });
 
@@ -79,9 +81,9 @@ describe('TimestampConverter', () => {
             });
         });
 
-        it('should return empty string for undefined or null', () => {
+        it('should return dashes for undefined or null', () => {
             expect(TimestampConverter.formatTimestampDDMMYY(undefined)).toBe(
-                ''
+                '--'
             );
         });
 
@@ -157,12 +159,12 @@ describe('TimestampConverter', () => {
     describe('getCurrentTimestamp', () => {
         it('should return frozen current Unix timestamp', () => {
             const result = TimestampConverter.getCurrentTimestamp();
-            expect(result).toBe(1672531200);
+            expect(result).toBe(TEST_TIMESTAMP);
         });
     });
 
     describe('calculateIntervalTimestamp', () => {
-        it('should calculate the next interval timestamp', () => {
+        it('should round up timestamp to next interval boundary for candlestick chart alignment', () => {
             expect(TimestampConverter.calculateIntervalTimestamp(105, 10)).toBe(
                 110
             );
