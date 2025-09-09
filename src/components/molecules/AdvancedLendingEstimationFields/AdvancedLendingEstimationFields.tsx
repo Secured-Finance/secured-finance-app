@@ -6,14 +6,13 @@ import { useBreakpoint, useOrderEstimation } from 'src/hooks';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { OrderType } from 'src/types';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     amountFormatterFromBase,
     currencyMap,
     divide,
-    formatLoanValue,
     multiply,
-    ordinaryFormat,
-    usdFormat,
+    formatter,
 } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
@@ -79,7 +78,7 @@ export const AdvancedLendingEstimationFields = ({
             return divide(
                 multiply(
                     amountFormatterFromBase[currency](amount),
-                    100,
+                    FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
                     currencyMap[currency].roundingDecimal
                 ),
                 unitPrice,
@@ -93,7 +92,7 @@ export const AdvancedLendingEstimationFields = ({
         if (!maturity) return LoanValue.ZERO;
         if (unitPrice !== undefined && unitPriceExists) {
             return LoanValue.fromPrice(
-                unitPrice * 100.0,
+                unitPrice * FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
                 maturity,
                 calculationDate
             );
@@ -114,7 +113,7 @@ export const AdvancedLendingEstimationFields = ({
             divide(
                 multiply(
                     orderEstimationInfo.filledAmount,
-                    10000.0,
+                    FINANCIAL_CONSTANTS.BPS_DIVISOR,
                     currencyMap[currency].roundingDecimal
                 ),
                 orderEstimationInfo.filledAmountInFV,
@@ -134,7 +133,9 @@ export const AdvancedLendingEstimationFields = ({
         }
         if (!marketPrice) return undefined;
         if (!isConnected) return undefined;
-        return (marketPrice / 100.0).toString();
+        return (
+            marketPrice / FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
+        ).toString();
     }, [maturity, marketPrice, unitPrice, isConnected, unitPriceExists]);
 
     const showDashes = useMemo(() => {
@@ -172,18 +173,16 @@ export const AdvancedLendingEstimationFields = ({
     const orderPrice = useMemo(() => {
         if (showDashes.price) return '--';
 
-        return formatLoanValue(
-            orderType === OrderType.LIMIT ? loanValue : estimatedLoanValue,
-            'price'
+        return formatter.loanValue('price')(
+            orderType === OrderType.LIMIT ? loanValue : estimatedLoanValue
         );
     }, [showDashes, orderType, loanValue, estimatedLoanValue]);
 
     const orderApr = useMemo(() => {
         if (showDashes.apr) return '--';
 
-        return formatLoanValue(
-            orderType === OrderType.LIMIT ? loanValue : estimatedLoanValue,
-            'rate'
+        return formatter.loanValue('rate')(
+            orderType === OrderType.LIMIT ? loanValue : estimatedLoanValue
         );
     }, [showDashes, orderType, loanValue, estimatedLoanValue]);
 
@@ -196,17 +195,15 @@ export const AdvancedLendingEstimationFields = ({
                 : orderEstimationAmount;
 
         if (isMobile) {
-            return `${ordinaryFormat(
-                amount,
+            return `${formatter.ordinary(
                 0,
                 currencyMap[currency].roundingDecimal
-            )} ${currency}`;
+            )(amount)} ${currency}`;
         } else {
-            return `${ordinaryFormat(
-                amount,
+            return `${formatter.ordinary(
                 0,
                 currencyMap[currency].roundingDecimal
-            )} ${currency} (${usdFormat(amount * assetPrice, 2)})`;
+            )(amount)} ${currency} (${formatter.usd(amount * assetPrice, 2)})`;
         }
     }, [
         showDashes,
@@ -229,17 +226,15 @@ export const AdvancedLendingEstimationFields = ({
         const totalValue = assetPrice ? fv * assetPrice : 0;
 
         if (isMobile) {
-            return `${ordinaryFormat(
-                fv,
+            return `${formatter.ordinary(
                 0,
                 currencyMap[currency].roundingDecimal
-            )} ${currency}`;
+            )(fv)} ${currency}`;
         } else {
-            return `${ordinaryFormat(
-                fv,
+            return `${formatter.ordinary(
                 0,
                 currencyMap[currency].roundingDecimal
-            )} ${currency} (${usdFormat(totalValue, 2)})`;
+            )(fv)} ${currency} (${formatter.usd(totalValue, 2)})`;
         }
     }, [
         showDashes,

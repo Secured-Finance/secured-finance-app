@@ -2,6 +2,7 @@ import { track } from '@amplitude/analytics-browser';
 import clsx from 'clsx';
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     AssetInformation,
     AssetInformationValue,
@@ -22,9 +23,9 @@ import {
     amountFormatterFromBase,
     convertFromGvUnit,
     convertToZcTokenName,
-    usdFormat,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
+import { formatter } from 'src/utils';
 
 export interface ZCBond {
     currency: CurrencySymbol;
@@ -202,7 +203,7 @@ export const CollateralTabLeftPane = ({
                             }
                         )}
                     >
-                        {usdFormat(netAssetValue, 2)}
+                        {formatter.usd(netAssetValue, 2)}
                     </span>
                 </div>
                 {!account ? (
@@ -215,7 +216,8 @@ export const CollateralTabLeftPane = ({
                         <div className='flex flex-col gap-3 border-b border-white-10 px-3 py-6 tablet:hidden'>
                             <CollateralManagementConciseTab
                                 collateralCoverage={
-                                    collateralBook.coverage / 100
+                                    collateralBook.coverage /
+                                    FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
                                 }
                                 availableToBorrow={
                                     collateralBook.usdAvailableToBorrow

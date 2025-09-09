@@ -17,13 +17,14 @@ import ShowFirstIcon from 'src/assets/icons/orderbook-first.svg';
 import ShowAllIcon from 'src/assets/icons/orderbook-full.svg';
 import ShowLastIcon from 'src/assets/icons/orderbook-last.svg';
 import { OrderBookIcon, Spinner } from 'src/components/atoms';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     useBlockExplorerUrl,
     useGraphClientHook,
     useIsSubgraphSupported,
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
-import { currencyMap, formatLoanValue, ordinaryFormat } from 'src/utils';
+import { formatter, calculate, currencyMap } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import { columns } from './constants';
 import { RecentTradesTableProps, TradeMetadata } from './types';
@@ -33,13 +34,17 @@ export const RecentTradesTable = ({
     maturity,
 }: RecentTradesTableProps) => {
     const [timestamp, setTimestamp] = useState<number>(() =>
-        Math.round(Date.now() / 1000)
+        calculate.round(Date.now() / FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD)
     );
     const { blockExplorerUrl } = useBlockExplorerUrl();
     const [showSide, setShowSide] = useState<OrderSide | null>(null);
 
     useEffect(() => {
-        setTimestamp(Math.round(new Date().getTime() / 1000));
+        setTimestamp(
+            calculate.round(
+                new Date().getTime() / FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD
+            )
+        );
     }, []);
 
     const securedFinance = useSF();
@@ -53,7 +58,7 @@ export const RecentTradesTable = ({
             maturity: maturity,
             from: -1,
             to: timestamp,
-            first: 100,
+            first: FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
             sides:
                 showSide === null
                     ? [OrderSide.LEND, OrderSide.BORROW]
@@ -70,13 +75,12 @@ export const RecentTradesTable = ({
                 const sizeActual = currencyMap[currency].fromBaseUnit(
                     BigInt(+transaction.amount)
                 );
-                const size = ordinaryFormat(
-                    sizeActual,
+                const size = formatter.ordinary(
                     currencyMap[currency].roundingDecimal,
                     currencyMap[currency].roundingDecimal
-                );
+                )(sizeActual);
 
-                if (Math.abs(Number(sizeActual)) > 0) {
+                if (calculate.abs(Number(sizeActual)) > 0) {
                     return {
                         ...transaction,
                         size,
@@ -129,7 +133,8 @@ export const RecentTradesTable = ({
                     !loading &&
                     !!data?.length && (
                         <div className='relative -top-2.5 text-center text-neutral-50'>
-                            Only the last 100 trades are shown.
+                            Only the last FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
+                            trades are shown.
                         </div>
                     )
                 }
@@ -181,7 +186,7 @@ export const RecentTradesTable = ({
                                         }
                                     )}
                                 >
-                                    {formatLoanValue(loanValue, 'price')}
+                                    {formatter.loanValue('price')(loanValue)}
                                 </TableCell>
                                 <TableCell className='border-b border-neutral-600 py-0 laptop:h-6'>
                                     {item.size}

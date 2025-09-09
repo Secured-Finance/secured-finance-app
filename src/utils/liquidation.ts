@@ -1,8 +1,10 @@
+import { FINANCIAL_CONSTANTS } from '../config/constants';
+
 const LIQUIDATION_CONSTANTS = {
     // Used for threshold rate conversion (1M basis points)
     THRESHOLD_RATE_DIVISOR: 1_000_000,
     // Percentage base for liquidation price calculation
-    PERCENTAGE_BASE: 100,
+    PERCENTAGE_BASE: FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
     // Risk thresholds in percentage
     RISK_THRESHOLDS: {
         LOW_MAX: 40,

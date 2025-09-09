@@ -1,4 +1,5 @@
 import { LoanValue } from './entities';
+import { formatter } from './unifiedFormatter';
 import {
     formatAmount,
     formatCollateralRatio,
@@ -9,7 +10,6 @@ import {
     formatTimestampWithMonth,
     formatWithCurrency,
     ordinaryFormat,
-    usdFormat,
 } from './formatNumbers';
 import { Rate } from './rate';
 
@@ -31,27 +31,27 @@ describe('formatWithCurrency', () => {
 describe('usdFormat', () => {
     it('formats a number as USD currency with the default parameters', () => {
         const number = 123456.789;
-        const result = usdFormat(number);
+        const result = formatter.usd(number);
         expect(result).toBe('$123,457');
     });
 
     it('formats a number as USD currency with specified number of fraction digits', () => {
         const number = 123456.789;
         const digits = 2;
-        const result = usdFormat(number, digits);
+        const result = formatter.usd(number, digits);
         expect(result).toBe('$123,456.79');
     });
 
     it('formats a number as USD currency with specified notation', () => {
         const number = 123456.789;
         const notation = 'compact';
-        const result = usdFormat(number, 0, notation);
+        const result = formatter.usd(number, 0, notation);
         expect(result).toBe('$123K');
     });
 
     it('formats a bigint as USD currency with the default parameters', () => {
         const number = BigInt('123456789123456789');
-        const result = usdFormat(number);
+        const result = formatter.usd(number);
         expect(result).toBe('$123,456,789,123,456,789');
     });
 
@@ -59,7 +59,7 @@ describe('usdFormat', () => {
         const number = BigInt('123456789123');
         const digits = 0;
         const notation = 'compact';
-        const result = usdFormat(number, digits, notation);
+        const result = formatter.usd(number, digits, notation);
         expect(result).toBe('$123B');
     });
 });
@@ -70,11 +70,11 @@ describe('ordinaryFormat', () => {
     });
 
     it('should format a regular number with custom decimals and standard notation', () => {
-        expect(ordinaryFormat(1234.567, 0, 3)).toEqual('1,234.567');
+        expect(formatter.ordinary(0, 3)(1234.567)).toEqual('1,234.567');
     });
 
     it('should format a regular number with custom decimals and compact notation', () => {
-        expect(ordinaryFormat(1234.567, 0, 2, 'compact')).toEqual('1.23K');
+        expect(formatter.ordinary(0, 2, 'compact')(1234.567)).toEqual('1.23K');
     });
 
     it('should format a BigInt with default decimals and notation', () => {
@@ -86,14 +86,14 @@ describe('ordinaryFormat', () => {
     });
 
     it('should format a regular number with min and max decimals', () => {
-        expect(ordinaryFormat(1234.567, 0, 2)).toEqual('1,234.57');
-        expect(ordinaryFormat(1234.567, 0, 4)).toEqual('1,234.567');
-        expect(ordinaryFormat(1234.567, 4, 4)).toEqual('1,234.5670');
-        expect(ordinaryFormat(1234.567, 6, 6)).toEqual('1,234.567000');
+        expect(formatter.ordinary(0, 2)(1234.567)).toEqual('1,234.57');
+        expect(formatter.ordinary(0, 4)(1234.567)).toEqual('1,234.567');
+        expect(formatter.ordinary(4, 4)(1234.567)).toEqual('1,234.5670');
+        expect(formatter.ordinary(6, 6)(1234.567)).toEqual('1,234.567000');
     });
 
     it('should throw an error if the min decimals is greater than the max decimals', () => {
-        expect(() => ordinaryFormat(1234.567, 4, 2)).toThrow();
+        expect(() => formatter.ordinary(4, 2)(1234.567)).toThrow();
     });
 });
 

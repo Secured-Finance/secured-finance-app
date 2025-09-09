@@ -1,12 +1,13 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import { CollateralManagementConciseTab } from '.';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 export default {
     title: 'Atoms/CollateralManagementConciseTab',
     component: CollateralManagementConciseTab,
     args: {
         collateralCoverage: 0,
-        totalCollateralInUSD: 100,
+        totalCollateralInUSD: FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
         collateralThreshold: 0,
         account: undefined,
     },

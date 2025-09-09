@@ -4,6 +4,7 @@ import type { Meta } from '@storybook/react';
 import { StoryFn } from '@storybook/react';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     setAmount,
     setCurrency,
@@ -29,7 +30,7 @@ export default {
         hasLendOpenOrders: true,
         hasBorrowOpenOrders: true,
     },
-    chromatic: { delay: 1000 },
+    chromatic: { delay: FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD },
     parameters: {
         viewport: {
             disable: true,

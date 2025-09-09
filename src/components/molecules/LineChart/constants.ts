@@ -8,7 +8,8 @@ import {
     ScriptableContext,
     TooltipItem,
 } from 'chart.js';
-import { Rate, percentFormat } from 'src/utils';
+import { Rate } from 'src/utils/rate';
+import { formatter } from 'src/utils';
 
 export const defaultDatasets = {
     borderWidth: 3,
@@ -154,7 +155,7 @@ export const options: ChartOptions<'line'> = {
             display: true,
             ticks: {
                 callback: function (value: string | number) {
-                    return percentFormat(Number(value), 100, 1, 1);
+                    return formatter.percentage(Number(value), 2);
                 },
                 color: 'rgba(255, 255, 255, 0.6)',
                 font: {

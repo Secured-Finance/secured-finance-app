@@ -4,6 +4,7 @@ import {
     TrophyIcon,
 } from '@heroicons/react/24/outline';
 import { formatDate } from '@secured-finance/sf-core';
+import { formatter } from 'src/utils';
 import {
     QuestType,
     useGetQuestsQuery,
@@ -47,8 +48,6 @@ import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
     SupportedChainsList,
-    ordinaryFormat,
-    percentFormat,
     readWalletFromStore,
 } from 'src/utils';
 import { useAccount, useConnect, useSignMessage } from 'wagmi';
@@ -242,9 +241,9 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
                                 </span>
                                 <div className='typography-body-1 h-8 text-center text-md text-white'>
                                     +{' '}
-                                    {percentFormat(
+                                    {formatter.percentage(
                                         userData?.user.boostPercentage,
-                                        10000
+                                        2
                                     )}
                                 </div>
                             </div>
@@ -626,7 +625,7 @@ const Leaderboard = () => {
                             {item.walletAddress}
                         </div>
                         <div className='float-right flex-1 text-right text-neutral-6'>
-                            {ordinaryFormat(item.point, 0, 2, 'standard')}
+                            {formatter.ordinary(0, 2, 'standard')(item.point)}
                         </div>
                     </div>
                 ))}

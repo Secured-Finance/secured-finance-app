@@ -3,6 +3,7 @@ import { screen, userEvent } from '@storybook/testing-library';
 import { withWalletProvider } from 'src/../.storybook/decorators';
 import { CurrencySymbol } from 'src/utils';
 import { WithdrawCollateral } from './WithdrawCollateral';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 export default {
     title: 'Organism/WithdrawCollateral',
@@ -19,7 +20,7 @@ export default {
             },
             [CurrencySymbol.WFIL]: {
                 symbol: CurrencySymbol.WFIL,
-                available: 100,
+                available: FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
                 availableFullValue: BigInt('100000000000000000000'),
                 name: 'filecoin',
             },
@@ -51,6 +52,6 @@ export const LongInput = Template.bind({});
 LongInput.play = async () => {
     const input = await screen.findByRole('textbox');
     await userEvent.type(input, '123456789.123', {
-        delay: 100,
+        delay: FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
     });
 };

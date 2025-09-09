@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { OrderBookEntry, sortOrders, useOrderbook } from 'src/hooks';
-import { ZERO_BI } from 'src/utils';
+import { ZERO_BI, calculate } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 
 export type AggregationFactorType = 1 | 10 | 100 | 1000;
@@ -28,8 +28,8 @@ export const usePrepareOrderbookData = <
                     Number(order.value.price) / aggregationFactor;
                 const price =
                     orderbookType === 'borrowOrderbook'
-                        ? Math.ceil(priceFactor) * aggregationFactor
-                        : Math.floor(priceFactor) * aggregationFactor;
+                        ? calculate.ceil(priceFactor) * aggregationFactor
+                        : calculate.floor(priceFactor) * aggregationFactor;
                 if (!result[price]) {
                     result[price] = {
                         amount: order.amount,

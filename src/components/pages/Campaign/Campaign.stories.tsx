@@ -1,6 +1,7 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import { GetUserDocument } from '@secured-finance/sf-point-client';
 import type { Meta, StoryFn } from '@storybook/react';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     withAppLayout,
     withBalance,
@@ -23,7 +24,7 @@ const user = [
                     joindAt: '2024-05-30T13:39:49.165Z',
                     referralCode: 'ABCDEFG123',
                     pointDetails: {
-                        deposit: 100,
+                        deposit: FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
                         referral: 50,
                     },
                 },

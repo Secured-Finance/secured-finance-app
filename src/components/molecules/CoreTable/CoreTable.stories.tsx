@@ -3,6 +3,7 @@ import type { Meta, StoryFn } from '@storybook/react';
 import { createColumnHelper } from '@tanstack/react-table';
 import { useState } from 'react';
 import { CoreTable } from './CoreTable';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 const columnHelper = createColumnHelper<{
     name: string;
@@ -82,7 +83,7 @@ const PaginationTemplate: StoryFn<typeof CoreTable> = args => {
                 data={data}
                 options={{
                     pagination: {
-                        totalData: 100,
+                        totalData: FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
                         getMoreData: () => {
                             const newData = Array(20)
                                 .fill(null)

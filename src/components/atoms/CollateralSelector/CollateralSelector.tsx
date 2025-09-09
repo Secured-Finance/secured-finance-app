@@ -1,6 +1,7 @@
 import { Listbox, Transition } from '@headlessui/react';
 import { Fragment, useEffect, useState } from 'react';
-import { CollateralInfo, ordinaryFormat } from 'src/utils';
+import { formatter } from 'src/utils';
+import { CollateralInfo } from 'src/utils/currencies';
 import { ExpandIndicator } from '../ExpandIndicator';
 
 interface CollateralSelectorProps {
@@ -11,7 +12,7 @@ interface CollateralSelectorProps {
 }
 
 const formatOption = (availableAmount: number, name: string) => {
-    return `${ordinaryFormat(availableAmount, 0, 4)} ${name} Available`;
+    return `${formatter.ordinary(0, 4)(availableAmount)} ${name} Available`;
 };
 
 export const CollateralSelector = ({

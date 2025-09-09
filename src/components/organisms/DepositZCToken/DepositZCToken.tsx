@@ -26,9 +26,8 @@ import {
     ZCTokenEvents,
     convertToZcTokenName,
     convertZCTokenFromBaseAmount,
-    formatAmount,
+    formatter,
     handleContractError,
-    ordinaryFormat,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import {
@@ -326,14 +325,15 @@ export const DepositZCToken = ({
                                         )}
                                     </div>
                                     <div className='w-full text-right text-neutral-300'>
-                                        {`${ordinaryFormat(
+                                        {`${formatter.ordinary(
+                                            0,
+                                            4
+                                        )(
                                             convertZCTokenFromBaseAmount(
                                                 currencySymbol,
                                                 availableTokenAmount,
                                                 maturity
-                                            ) || 0,
-                                            0,
-                                            4
+                                            ) || 0
                                         )} Available`}
                                     </div>
                                 </div>
@@ -373,7 +373,10 @@ export const DepositZCToken = ({
                                     ],
                                     [
                                         'Amount',
-                                        `${formatAmount(
+                                        `${formatter.ordinary(
+                                            0,
+                                            4
+                                        )(
                                             convertZCTokenFromBaseAmount(
                                                 currencySymbol,
                                                 collateral || BigInt(0),

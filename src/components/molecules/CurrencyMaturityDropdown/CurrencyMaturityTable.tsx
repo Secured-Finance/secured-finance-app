@@ -23,7 +23,8 @@ import {
     calculateTimeDifference,
     currencyMap,
     formatDuration,
-    usdFormat,
+    calculate,
+    formatter,
 } from 'src/utils';
 import { useAccount } from 'wagmi';
 import { desktopColumns, mobileColumns } from './constants';
@@ -103,12 +104,12 @@ export const CurrencyMaturityTable = ({
                 case 'maturity-mobile':
                     return (
                         <div className='flex justify-end whitespace-nowrap laptop:pr-3'>
-                            {formatDuration(Math.abs(timestampDifference))}
+                            {formatDuration(calculate.abs(timestampDifference))}
                         </div>
                     );
                 case 'volume':
                     return option.volume
-                        ? usdFormat(option.volume, 2, 'compact')
+                        ? formatter.usd(option.volume, 2, 'compact')
                         : '-';
                 default:
                     return null;

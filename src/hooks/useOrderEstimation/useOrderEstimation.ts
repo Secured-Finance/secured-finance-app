@@ -7,6 +7,7 @@ import useSF from 'src/hooks/useSecuredFinance';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { ZERO_BI, toCurrency } from 'src/utils';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 export const useOrderEstimation = (
     account: string | undefined,
@@ -55,7 +56,7 @@ export const useOrderEstimation = (
                 account ?? '',
                 side,
                 amount,
-                (unitPrice ?? 0) * 100.0,
+                (unitPrice ?? 0) * FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
                 additionalDepositAmount,
                 ignoreBorrowedAmount
             );

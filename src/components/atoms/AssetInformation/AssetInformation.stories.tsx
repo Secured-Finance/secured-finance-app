@@ -1,6 +1,7 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import { CurrencySymbol } from 'src/utils';
 import { AssetInformation } from '.';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 export default {
     title: 'Atoms/AssetInformation',
@@ -18,7 +19,7 @@ export default {
             {
                 currency: CurrencySymbol.USDC,
                 label: CurrencySymbol.USDC,
-                amount: 1000,
+                amount: FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD,
                 price: 1.01,
                 totalPrice: 1010,
             },

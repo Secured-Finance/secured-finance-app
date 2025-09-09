@@ -1,6 +1,8 @@
 import * as dayjs from 'dayjs';
 import { divide } from '../currencyList';
 import { Rate } from '../rate';
+import { calculate } from '../unifiedFormatter';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 export class LoanValue {
     private _price!: number;
@@ -9,7 +11,7 @@ export class LoanValue {
     protected _maturity!: number;
     protected _calculationDate!: number;
 
-    private static PAR_VALUE = 10000;
+    private static PAR_VALUE = FINANCIAL_CONSTANTS.BPS_DIVISOR;
     private PAR_VALUE_RATE = 1000000;
     private SECONDS_IN_YEAR = 365 * 24 * 60 * 60;
 
@@ -53,12 +55,12 @@ export class LoanValue {
         if (this._price === undefined) {
             const yearFraction = this.yearFraction();
             if (yearFraction <= 1) {
-                this._price = Math.floor(
+                this._price = calculate.floor(
                     LoanValue.PAR_VALUE /
                         (1 + this._apr.toAbsoluteNumber() * yearFraction)
                 );
             } else {
-                this._price = Math.floor(
+                this._price = calculate.floor(
                     LoanValue.PAR_VALUE /
                         Math.pow(1 + this._apr.toAbsoluteNumber(), yearFraction)
                 );
@@ -74,7 +76,10 @@ export class LoanValue {
         }
         if (this._apr === undefined) {
             if (this.price !== undefined) {
-                if (this.price === 10000 || this.price === 0) {
+                if (
+                    this.price === FINANCIAL_CONSTANTS.BPS_DIVISOR ||
+                    this.price === 0
+                ) {
                     this._apr = new Rate(0);
                     return this._apr;
                 }
@@ -134,7 +139,8 @@ export class LoanValue {
             .diff(
                 this._calculationDate !== undefined &&
                     this._calculationDate !== 0
-                    ? this._calculationDate * 1000
+                    ? this._calculationDate *
+                          FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD
                     : Date.now(),
                 'second'
             );

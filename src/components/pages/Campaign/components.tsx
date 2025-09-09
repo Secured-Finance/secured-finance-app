@@ -8,13 +8,8 @@ import LockOpen from 'src/assets/icons/lock-open.svg';
 import Coins from 'src/assets/img/2d coins.svg';
 import { CurrencyIcon } from 'src/components/atoms';
 import { useBreakpoint, useGetCountdown } from 'src/hooks';
-import {
-    CurrencySymbol,
-    ZERO_BI,
-    amountFormatterFromBase,
-    ordinaryFormat,
-    usdFormat,
-} from 'src/utils';
+import { formatter } from 'src/utils';
+import { CurrencySymbol, ZERO_BI, amountFormatterFromBase } from 'src/utils';
 import { stages } from './constants';
 
 export const Banner = ({ text }: { text: string }) => {
@@ -165,18 +160,19 @@ export const CampaignStatus = ({
                                         className='typography-mobile-body-3 block text-center text-white tablet:text-left tablet:text-[22px] tablet:font-semibold desktop:text-7 desktop:leading-8'
                                         key={ccy}
                                     >
-                                        {`${ordinaryFormat(
-                                            amountFormatterFromBase[ccy](
-                                                valueLocked[ccy] ?? ZERO_BI
-                                            ),
+                                        {`${formatter.ordinary(
                                             0,
                                             1
+                                        )(
+                                            amountFormatterFromBase[ccy](
+                                                valueLocked[ccy] ?? ZERO_BI
+                                            )
                                         )} ${ccy}`}
                                     </span>
                                 );
                             })}
                             <span className='typography-mobile-body-4 laptop:typography-desktop-body-4 block text-center text-white/40 tablet:text-left desktop:text-4 desktop:leading-8'>
-                                {`≈ ${usdFormat(totalUSDValue, 2)}`}
+                                {`≈ ${formatter.usd(totalUSDValue, 2)}`}
                             </span>
                         </div>
                     </div>

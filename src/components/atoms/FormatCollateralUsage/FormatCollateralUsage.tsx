@@ -1,5 +1,6 @@
 import { getLiquidationInformation } from 'src/components/atoms';
 import { formatCollateralRatio } from 'src/utils';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 export const FormatCollateralUsage = ({
     initialValue,
@@ -10,9 +11,11 @@ export const FormatCollateralUsage = ({
     finalValue: number;
     maxValue?: number;
 }) => {
-    const initialColor = getLiquidationInformation(initialValue / 100).color;
+    const initialColor = getLiquidationInformation(
+        initialValue / FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
+    ).color;
     const finalColor = getLiquidationInformation(
-        Math.min(finalValue, maxValue) / 100
+        Math.min(finalValue, maxValue) / FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
     ).color;
 
     return (

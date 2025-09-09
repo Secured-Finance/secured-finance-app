@@ -4,6 +4,7 @@ import { withWalletProvider } from 'src/../.storybook/decorators';
 import { defaultDelistedStatusSet } from 'src/hooks';
 import { collateralBook37, maturityOptions } from 'src/stories/mocks/fixtures';
 import { LendingCard } from './LendingCard';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 export default {
     title: 'Organism/LendingCard',
@@ -40,6 +41,6 @@ FailedAmountValidation.play = async ({ canvasElement }) => {
     lendTab.click();
     const input = canvas.getByRole('textbox');
     await userEvent.type(input, '999999999', {
-        delay: 100,
+        delay: FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
     });
 };

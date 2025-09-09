@@ -1,6 +1,7 @@
 import { CurrencyIcon, CurrencyItem, ZCTokenIcon } from 'src/components/atoms';
 import { InfoToolTip } from 'src/components/molecules';
-import { CurrencySymbol, currencyMap, ordinaryFormat } from 'src/utils';
+import { formatter } from 'src/utils';
+import { CurrencySymbol, currencyMap } from 'src/utils';
 
 export interface AssetInformationValue {
     currency: CurrencySymbol;
@@ -54,11 +55,10 @@ export const AssetInformation = ({
                                     price={price}
                                 />
                                 <CurrencyItem
-                                    label={ordinaryFormat(
-                                        amount,
+                                    label={formatter.ordinary(
                                         currencyMap[currency].roundingDecimal,
                                         currencyMap[currency].roundingDecimal
-                                    )}
+                                    )(amount)}
                                     ccy={currency}
                                     price={totalPrice}
                                     align='right'

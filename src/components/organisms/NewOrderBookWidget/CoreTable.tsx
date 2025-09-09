@@ -15,12 +15,11 @@ import { OrderBookInfoTooltip } from 'src/components/atoms';
 import { useLastPrices } from 'src/hooks';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     amountFormatterFromBase,
     calculateFutureValue,
-    ordinaryFormat,
-    percentFormat,
-    usdFormat,
+    formatter,
 } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
 
@@ -171,7 +170,7 @@ export const CoreTable = <T,>({
                 : 0;
 
         const avgApr = LoanValue.fromPrice(
-            avgPrice * 10000,
+            avgPrice * FINANCIAL_CONSTANTS.BPS_DIVISOR,
             maturity
         ).apr.toNormalizedNumber();
 
@@ -179,10 +178,16 @@ export const CoreTable = <T,>({
         const totalUsd = new Amount(totalPVAmount, currency)?.toUSD(price);
 
         setOrderBookInfoData({
-            avgPrice: (avgPrice * 100).toFixed(2),
-            avgApr: percentFormat(Math.min(avgApr, 1000), 100, 2, 2),
-            totalUsd: usdFormat(Number(totalUsd), 2, 'compact'),
-            totalAmount: ordinaryFormat(totalAmount, 0, 2, 'compact'),
+            avgPrice: (
+                avgPrice * FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
+            ).toFixed(2),
+            avgApr: formatter.percentage(
+                Math.min(avgApr, FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD) /
+                    FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
+                2
+            ),
+            totalUsd: formatter.usd(Number(totalUsd), 2, 'compact'),
+            totalAmount: formatter.ordinary(0, 2, 'compact')(totalAmount),
             position,
         });
     };

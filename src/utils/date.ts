@@ -1,5 +1,7 @@
+import { FINANCIAL_CONSTANTS } from '../config/constants';
+
 export function isPastDate(utcTimestamp: number): boolean {
-    return utcTimestamp <= Date.now() / 1000;
+    return utcTimestamp <= Date.now() / FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD;
 }
 
 export interface CountdownFormat {
@@ -43,7 +45,9 @@ export const getCountdown = (targetTimestamp: number) => {
     const days = Math.floor(difference / 86400000);
     const hours = Math.floor((difference % 86400000) / 3600000);
     const minutes = Math.floor((difference % 3600000) / 60000);
-    const seconds = Math.floor((difference % 60000) / 1000);
+    const seconds = Math.floor(
+        (difference % 60000) / FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD
+    );
 
     return {
         days: days.toString().padStart(2, '0'),
@@ -57,13 +61,18 @@ export const getTimestampRelativeToNow = (hours: number, isFuture = false) => {
     const now = new Date();
     const offset = isFuture ? 1 : -1;
     const adjustedTimestamp = new Date(
-        now.getTime() + offset * hours * 60 * 60 * 1000
+        now.getTime() +
+            offset * hours * 60 * 60 * FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD
     );
-    return Math.floor(adjustedTimestamp.getTime() / 1000);
+    return Math.floor(
+        adjustedTimestamp.getTime() / FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD
+    );
 };
 
 export const calculateTimeDifference = (timestamp: number) => {
-    const targetDate = new Date(timestamp * 1000);
+    const targetDate = new Date(
+        timestamp * FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD
+    );
     const currentDate = new Date();
     return currentDate.getTime() - targetDate.getTime();
 };
@@ -74,7 +83,8 @@ export const isMaturityPastDays = (
     inFuture = false
 ) => {
     const timeDiff = calculateTimeDifference(maturity);
-    const millisecondsInDays = days * 24 * 60 * 60 * 1000;
+    const millisecondsInDays =
+        days * 24 * 60 * 60 * FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD;
 
     return inFuture
         ? Math.abs(timeDiff) > millisecondsInDays

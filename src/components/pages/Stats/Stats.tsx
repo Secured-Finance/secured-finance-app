@@ -1,5 +1,7 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useMemo } from 'react';
+import { formatter } from 'src/utils';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     CollateralManagementConciseTab,
     GradientBox,
@@ -35,8 +37,6 @@ import {
     Rate,
     computeTotalProtocolVolumeInUSD,
     getEnvironment,
-    ordinaryFormat,
-    usdFormat,
 } from 'src/utils';
 import { useAccount } from 'wagmi';
 
@@ -48,7 +48,7 @@ const computeTotalUsers = (users: string) => {
         getEnvironment().toLowerCase() === Environment.STAGING
             ? +users + PREVIOUS_TOTAL_USERS
             : +users;
-    return ordinaryFormat(totalUsers ?? 0, 0, 2, 'compact');
+    return formatter.ordinary(0, 2, 'compact')(totalUsers ?? 0);
 };
 
 export const Stats = () => {
@@ -92,7 +92,7 @@ export const Stats = () => {
     const { data: priceList } = useLastPrices();
 
     const totalVolume = useMemo(() => {
-        return usdFormat(
+        return formatter.usd(
             computeTotalProtocolVolumeInUSD(
                 userCountAndVolume.data?.volumesByCurrency ?? [],
                 priceList
@@ -129,7 +129,7 @@ export const Stats = () => {
                             },
                             {
                                 name: 'Total Value Locked',
-                                value: usdFormat(
+                                value: formatter.usd(
                                     totalValueLockedInUSD,
                                     2,
                                     'compact'
@@ -175,7 +175,8 @@ export const Stats = () => {
                             <div className='px-3 py-6'>
                                 <CollateralManagementConciseTab
                                     collateralCoverage={
-                                        collateralBook.coverage / 100
+                                        collateralBook.coverage /
+                                        FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
                                     }
                                     availableToBorrow={
                                         collateralBook.usdAvailableToBorrow

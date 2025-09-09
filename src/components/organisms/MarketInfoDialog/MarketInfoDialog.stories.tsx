@@ -2,7 +2,7 @@ import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import type { Meta } from '@storybook/react';
 import { StoryFn } from '@storybook/react';
 import { dailyMarketStats, maturityOptions } from 'src/stories/mocks/fixtures';
-import { CurrencySymbol, usdFormat } from 'src/utils';
+import { CurrencySymbol, formatter } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import { MarketInfoDialog } from './MarketInfoDialog';
 
@@ -31,7 +31,7 @@ export default {
         ),
         volumeInfo: {
             volume24H: '520 WFIL',
-            volumeInUSD: usdFormat(1851),
+            volumeInUSD: formatter.usd(1851, 2),
         },
     },
     parameters: {

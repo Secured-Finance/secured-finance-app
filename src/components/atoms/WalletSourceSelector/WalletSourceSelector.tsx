@@ -4,12 +4,13 @@ import clsx from 'clsx';
 import { Fragment, useMemo } from 'react';
 import { ExpandIndicator, Separator } from 'src/components/atoms';
 import { SvgIcon } from 'src/types';
+import { formatter } from 'src/utils';
+import { calculate } from 'src/utils';
 import {
     AddressConverter,
     currencyMap,
     CurrencySymbol,
     DisplayLengths,
-    ordinaryFormat,
 } from 'src/utils';
 import { AMOUNT_PRECISION } from 'src/utils/entities';
 
@@ -32,12 +33,13 @@ const formatOption = (
     asset: CurrencySymbol,
     showAssetName = false
 ) => {
-    return `${ordinaryFormat(
-        Math.floor(
-            currencyMap[asset].fromBaseUnit(available) * AMOUNT_PRECISION
-        ) / AMOUNT_PRECISION,
+    return `${formatter.ordinary(
         0,
         6
+    )(
+        calculate.floor(
+            currencyMap[asset].fromBaseUnit(available) * AMOUNT_PRECISION
+        ) / AMOUNT_PRECISION
     )} ${showAssetName ? ` ${asset}` : ''}`;
 };
 

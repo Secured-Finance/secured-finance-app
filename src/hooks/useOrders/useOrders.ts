@@ -1,6 +1,6 @@
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { useCallback } from 'react';
-import { CurrencySymbol, convert } from 'src/utils';
+import { CurrencySymbol, convert, toCurrency } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import useSF from '../useSecuredFinance';
 
@@ -12,7 +12,7 @@ export const useOrders = () => {
             try {
                 if (!securedFinance) return;
                 const tx = await securedFinance.cancelLendingOrder(
-                    convert.toCurrency(ccy),
+                    toCurrency(ccy),
                     convert.maturity(maturity),
                     Number(orderId)
                 );
@@ -37,7 +37,7 @@ export const useOrders = () => {
                 if (!securedFinance) return;
 
                 const tx = await securedFinance.placeOrder(
-                    convert.toCurrency(ccy),
+                    toCurrency(ccy),
                     convert.maturity(maturity),
                     side,
                     amount,
@@ -60,7 +60,7 @@ export const useOrders = () => {
                 if (!securedFinance) return;
 
                 const tx = await securedFinance.unwindPosition(
-                    convert.toCurrency(ccy),
+                    toCurrency(ccy),
                     convert.maturity(maturity)
                 );
 
@@ -86,7 +86,7 @@ export const useOrders = () => {
                 if (!securedFinance) return;
 
                 const tx = await securedFinance.placePreOrder(
-                    convert.toCurrency(ccy),
+                    toCurrency(ccy),
                     convert.maturity(maturity),
                     side,
                     amount,
@@ -109,7 +109,7 @@ export const useOrders = () => {
                 if (!securedFinance) return;
 
                 const tx = await securedFinance.executeRepayment(
-                    convert.toCurrency(ccy),
+                    toCurrency(ccy),
                     convert.maturity(maturity)
                 );
 
@@ -128,7 +128,7 @@ export const useOrders = () => {
                 if (!securedFinance) return;
 
                 const tx = await securedFinance.executeRedemption(
-                    convert.toCurrency(ccy),
+                    toCurrency(ccy),
                     convert.maturity(maturity)
                 );
 

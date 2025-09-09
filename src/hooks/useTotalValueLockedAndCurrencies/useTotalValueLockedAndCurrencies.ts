@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { calculate } from 'src/utils';
 import {
     emptyValueLockedBook,
     useCollateralCurrencies,
@@ -28,7 +29,7 @@ export const useTotalValueLockedAndCurrencies = () => {
         for (const ccy of currenciesInvolved ?? []) {
             if (!valueLockedByCurrency[ccy]) continue;
             val += BigInt(
-                Math.floor(
+                calculate.floor(
                     currencyMap[ccy].fromBaseUnit(valueLockedByCurrency[ccy]) *
                         (priceList[ccy] ?? 0)
                 )

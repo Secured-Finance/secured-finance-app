@@ -3,6 +3,7 @@ import {
     CollateralProgressBar,
     LiquidationProgressBar,
 } from 'src/components/molecules';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import { CollateralBook } from 'src/hooks';
 
 interface CollateralTabRightPaneProps {
@@ -17,7 +18,7 @@ export const CollateralTabRightPane = ({
     const balance = account ? collateralBook.usdCollateral : 0;
 
     const collateralUsagePercent = useMemo(() => {
-        return collateralBook.coverage / 100.0;
+        return collateralBook.coverage / FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR;
     }, [collateralBook]);
 
     return (
@@ -27,7 +28,7 @@ export const CollateralTabRightPane = ({
         >
             <CollateralProgressBar
                 totalCollateralInUSD={balance}
-                collateralCoverage={collateralUsagePercent}
+                collateralCoverage={collateralBook.coverage}
                 collateralThreshold={collateralBook.collateralThreshold}
                 availableToBorrow={collateralBook.usdAvailableToBorrow}
                 account={account}

@@ -1,12 +1,13 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import { CurrencySymbol } from 'src/utils';
 import { CollateralSelector } from './CollateralSelector';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 const assetList = [
     {
         symbol: CurrencySymbol.USDC,
         availableFullValue: BigInt('1000000000'),
-        available: 1000,
+        available: FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD,
         name: 'USDC',
     },
     {

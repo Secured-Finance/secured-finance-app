@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import Tick from 'src/assets/icons/tick.svg';
-import { LiquidationCalculator, percentFormat, usdFormat } from 'src/utils';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
+import { formatter, LiquidationCalculator } from 'src/utils';
 
 interface CollateralManagementConciseTabProps {
     collateralCoverage: number;
@@ -39,7 +40,7 @@ export const CollateralManagementConciseTab = ({
     account,
     totalCollateralInUSD,
 }: CollateralManagementConciseTabProps) => {
-    let padding = collateralCoverage / 100.0;
+    let padding = collateralCoverage / FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR;
 
     if (padding > 1) {
         padding = 1;
@@ -63,7 +64,11 @@ export const CollateralManagementConciseTab = ({
                     <span>Collateral Utilization</span>
                     {account && (
                         <span className='font-semibold text-secondary-500'>
-                            {percentFormat(collateralCoverage, 100)}
+                            {formatter.percentage(
+                                collateralCoverage *
+                                    FINANCIAL_CONSTANTS.AGGREGATION_DIVISOR,
+                                0
+                            )}
                         </span>
                     )}
                 </div>
@@ -82,9 +87,9 @@ export const CollateralManagementConciseTab = ({
                     ) : (
                         <>
                             <span className='font-semibold text-secondary-300'>
-                                {`${usdFormat(availableToBorrow, 2)} `}
+                                {`${formatter.usd(availableToBorrow, 2)} `}
                             </span>
-                            <span>{`of ${usdFormat(
+                            <span>{`of ${formatter.usd(
                                 totalCollateralInUSD,
                                 2
                             )} available`}</span>
@@ -127,7 +132,7 @@ export const CollateralManagementConciseTab = ({
                         <>
                             Threshold:{' '}
                             <span className='font-semibold'>
-                                {percentFormat(threshold)}
+                                {formatter.percentage(threshold, 2, 1)}
                             </span>
                         </>
                     ) : (

@@ -1,4 +1,5 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     GetQuestsDocument,
     GetUserDocument,
@@ -26,7 +27,7 @@ const quests = [
                         title: 'Daily Login Quest',
                         description: 'Description 1',
                         questType: 'DailyLogin',
-                        point: 100,
+                        point: FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
                         isHighlight: false,
                         chainId: null,
                         network: null,
@@ -90,7 +91,7 @@ const users = [
                             BigInt((index + 1).toString().padEnd(40, '0')) +
                                 BigInt(index)
                         ),
-                        point: 100 - index,
+                        point: FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR - index,
                         rank: index + 1,
                     })),
                 ],
@@ -114,7 +115,7 @@ const user = [
                     joindAt: '2024-05-30T13:39:49.165Z',
                     referralCode: 'ABCDEFG123',
                     pointDetails: {
-                        deposit: 100,
+                        deposit: FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
                         referral: 50,
                     },
                     boostPercentage: 500,

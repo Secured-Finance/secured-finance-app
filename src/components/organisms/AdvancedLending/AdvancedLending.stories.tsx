@@ -3,6 +3,7 @@ import { WithGraphClient, withWalletProvider } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
 import { screen, userEvent, within } from '@storybook/testing-library';
 import { defaultDelistedStatusSet, emptyCollateralBook } from 'src/hooks';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     collateralBook37,
     maturityOptions,
@@ -48,7 +49,7 @@ export default {
         ...RESPONSIVE_PARAMETERS,
         chromatic: {
             ...RESPONSIVE_PARAMETERS.chromatic,
-            delay: 10000,
+            delay: FINANCIAL_CONSTANTS.BPS_DIVISOR,
         },
     },
     decorators: [withWalletProvider, WithGraphClient],

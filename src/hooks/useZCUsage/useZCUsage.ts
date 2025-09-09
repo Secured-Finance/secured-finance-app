@@ -2,6 +2,8 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { useCallback } from 'react';
 import { useCurrenciesForOrders, usePositions } from 'src/hooks';
 import { UserAccount } from 'src/types';
+import { calculate } from 'src/utils';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     CurrencySymbol,
     amountFormatterFromBase,
@@ -36,7 +38,7 @@ export const useZCUsage = (address: UserAccount, side: OrderSide) => {
                 side === OrderSide.BORROW) ||
             (pvOfActivePositionsInOrderMaturity < 0 && side === OrderSide.LEND)
                 ? Math.min(
-                      Math.abs(pvOfActivePositionsInOrderMaturity),
+                      calculate.abs(pvOfActivePositionsInOrderMaturity),
                       filledAmount
                   )
                 : 0;
@@ -56,7 +58,7 @@ export const useZCUsage = (address: UserAccount, side: OrderSide) => {
                 offsetPV) /
             denominator;
 
-        return Math.min(usage * 10000, 8000);
+        return Math.min(usage * FINANCIAL_CONSTANTS.BPS_DIVISOR, 8000);
     };
 
     const getPVInMaturity = useCallback(

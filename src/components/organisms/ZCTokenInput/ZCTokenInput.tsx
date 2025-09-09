@@ -1,12 +1,14 @@
 import { useCallback, useMemo, useState } from 'react';
 import { InputBase, SizeDependentStylesConfig } from 'src/components/atoms';
 import { PercentageSelector } from 'src/components/molecules';
+import { calculate } from 'src/utils';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     CurrencySymbol,
     amountFormatterFromBase,
     convertZCTokenFromBaseAmount,
     convertZCTokenToBaseAmount,
-    usdFormat,
+    formatter,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
@@ -37,11 +39,11 @@ export const ZCTokenInput = ({
                 amount !== undefined &&
                 amount !== BigInt(0) &&
                 Number(inputAmount) ===
-                    Math.round(
+                    calculate.round(
                         convertZCTokenFromBaseAmount(symbol, amount, maturity) *
-                            10000
+                            FINANCIAL_CONSTANTS.BPS_DIVISOR
                     ) /
-                        10000.0
+                        FINANCIAL_CONSTANTS.BPS_DIVISOR
             ) {
                 return;
             }
@@ -112,7 +114,7 @@ export const ZCTokenInput = ({
                 {!!availableAmount && (
                     <div className='typography-body-2'>
                         <span className='text-center text-neutral-8'>
-                            {usdFormat(totalPrice, 2)}
+                            {formatter.usd(totalPrice, 2)}
                         </span>
                         <span className='pl-2 text-center text-neutral-4'>
                             USD
@@ -121,7 +123,13 @@ export const ZCTokenInput = ({
                 )}
             </div>
             <PercentageSelector
-                onClick={percentage => handleClick(BigInt(percentage * 100))}
+                onClick={percentage =>
+                    handleClick(
+                        BigInt(
+                            percentage * FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
+                        )
+                    )
+                }
             ></PercentageSelector>
         </div>
     );

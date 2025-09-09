@@ -5,7 +5,7 @@ import {
     CurrencySymbol,
     computeTotalDailyVolumeInUSD,
     formatWithCurrency,
-    usdFormat,
+    formatter,
 } from 'src/utils';
 
 interface CurveHeaderProps {
@@ -44,7 +44,7 @@ const CurveHeaderNotes = ({
 
             <CurveHeaderTotal
                 header='Total Volume (USD)'
-                footer={usdFormat(
+                footer={formatter.usd(
                     Number(totalVolume.volumePerCurrency[asset]) *
                         priceList[asset]
                 )}

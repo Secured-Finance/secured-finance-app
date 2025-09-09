@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { countdown } from 'src/utils';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 export const Timer = ({
     targetTime,
@@ -13,7 +14,7 @@ export const Timer = ({
     useEffect(() => {
         const interval = setInterval(() => {
             setTime(countdown(targetTime));
-        }, 1000);
+        }, FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD);
 
         return () => {
             clearInterval(interval);

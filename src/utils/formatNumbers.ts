@@ -1,6 +1,9 @@
 import { MAX_COVERAGE } from './collateral';
 import { divide } from './currencyList';
 import { LoanValue } from './entities';
+import { formatter } from 'src/utils';
+import { calculate } from 'src/utils';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 export const usdFormat = (
     number: number | bigint,
@@ -18,11 +21,11 @@ export const usdFormat = (
 
 export const percentFormat = (
     number: number,
-    dividedBy = 100,
+    dividedBy: number = FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
     minimumFractionDigits = 0,
     maximumFractionDigits = 2
 ) => {
-    const value = dividedBy === 0 ? 0 : number / dividedBy;
+    const value = dividedBy !== 0 ? number / dividedBy : 0;
     return Intl.NumberFormat('en-US', {
         style: 'percent',
         minimumFractionDigits,
@@ -44,7 +47,7 @@ export const ordinaryFormat = (
 };
 
 export const formatAmount = (number: number | bigint) => {
-    return ordinaryFormat(number, 0, 4);
+    return formatter.ordinary(0, 4)(number);
 };
 
 export const formatWithCurrency = (
@@ -52,7 +55,7 @@ export const formatWithCurrency = (
     currency: string,
     decimals = 2
 ) => {
-    return `${ordinaryFormat(number, 0, decimals)} ${currency}`;
+    return `${formatter.ordinary(0, decimals)(number)} ${currency}`;
 };
 
 export const formatLoanValue = (
@@ -62,24 +65,28 @@ export const formatLoanValue = (
 ) => {
     if (type === 'price') {
         if (!value) return '--.--';
-        return divide(value.price, 100).toFixed(decimal).toString();
+        return divide(value.price, FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR)
+            .toFixed(decimal)
+            .toString();
     } else {
         if (!value) return '--.--%';
-        return percentFormat(
-            value.apr.toNormalizedNumber(),
-            100,
-            decimal,
-            decimal
-        );
+        return Intl.NumberFormat('en-US', {
+            style: 'percent',
+            minimumFractionDigits: decimal,
+            maximumFractionDigits: decimal,
+        }).format(value.apr.toNormalizedNumber() / 100);
     }
 };
 
 export function formatCollateralRatio(collateral: number) {
-    return percentFormat(collateral, MAX_COVERAGE, 0);
+    return Intl.NumberFormat('en-US', {
+        style: 'percent',
+        maximumFractionDigits: 2,
+    }).format(collateral / MAX_COVERAGE);
 }
 
 export const formatTimestamp = (timestamp: number) => {
-    const date = new Date(timestamp * 1000);
+    const date = new Date(timestamp * FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD);
     return new Intl.DateTimeFormat(undefined, {
         dateStyle: 'short',
         timeStyle: 'short',
@@ -87,7 +94,7 @@ export const formatTimestamp = (timestamp: number) => {
 };
 
 export const formatTimestampDDMMYY = (timestamp: number) => {
-    const date = new Date(timestamp * 1000);
+    const date = new Date(timestamp * FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD);
     const formattedDate = new Intl.DateTimeFormat('en-GB', {
         day: '2-digit',
         month: '2-digit',
@@ -101,7 +108,7 @@ export const formatTimestampDDMMYY = (timestamp: number) => {
 };
 
 export const formatTimestampWithMonth = (timestamp: number) => {
-    const date = new Date(timestamp * 1000);
+    const date = new Date(timestamp * FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD);
 
     const month = new Intl.DateTimeFormat('en-US', {
         month: 'short',
@@ -114,14 +121,14 @@ export const formatTimestampWithMonth = (timestamp: number) => {
 };
 
 export const formatTimeStampWithTimezone = (timestamp: number) => {
-    const date = new Date(timestamp * 1000);
+    const date = new Date(timestamp * FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD);
     return new Intl.DateTimeFormat('en-GB', {
         timeStyle: 'long',
     }).format(date);
 };
 
 export const formatDuration = (durationMs: number) => {
-    const msPerDay = 24 * 60 * 60 * 1000; // Milliseconds in a day
+    const msPerDay = 24 * 60 * 60 * FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD; // Milliseconds in a day
     const daysInYear = 365.25; // Average number of days in a year accounting for leap years
 
     // Calculate the duration in days
@@ -133,7 +140,7 @@ export const formatDuration = (durationMs: number) => {
     // Format the fraction of year to two decimal places
     const fractionOfYearFormatted = fractionOfYear.toFixed(2);
 
-    const daysLeft = Math.round(durationInDays);
+    const daysLeft = calculate.round(durationInDays);
 
     // Return the formatted string
     return `${fractionOfYearFormatted}Y (${daysLeft} ${

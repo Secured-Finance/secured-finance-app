@@ -3,6 +3,7 @@ import { useCollateralCurrencies, useLastPrices } from 'src/hooks';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
 import { AssetPriceMap } from 'src/types';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     CurrencySymbol,
     LiquidationCalculator,
@@ -148,7 +149,7 @@ export const useCollateralBook = (account: string | undefined) => {
                 usdAvailableToBorrow: computeAvailableToBorrow(
                     usdCollateral,
                     usdUnusedCollateral,
-                    divide(coverage, 100),
+                    divide(coverage, FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR),
                     liquidationThreshold
                 ),
                 usdNonCollateral: usdNonCollateral,

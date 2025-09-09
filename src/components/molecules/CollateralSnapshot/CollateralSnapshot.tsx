@@ -1,4 +1,5 @@
 import { createColumnHelper } from '@tanstack/react-table';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     ArcElement,
     Chart as ChartJS,
@@ -15,8 +16,7 @@ import {
     CurrencySymbol,
     currencyMap,
     formatTimestamp,
-    percentFormat,
-    usdFormat,
+    formatter,
 } from 'src/utils';
 ChartJS.register(ArcElement, Tooltip);
 
@@ -72,7 +72,9 @@ export const CollateralSnapshot = ({
         labels: data.map(item => item.currency),
         datasets: [
             {
-                data: data.map(item => item.ratio / 100),
+                data: data.map(
+                    item => item.ratio / FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
+                ),
                 backgroundColor: data.map(
                     item => currencyMap[item.currency].chartColor
                 ),
@@ -92,13 +94,16 @@ export const CollateralSnapshot = ({
                 header: 'Asset',
             }),
             columnHelper.accessor('ratio', {
-                cell: info => percentFormat(info.getValue() / 100),
+                cell: info =>
+                    formatter.percentage(
+                        info.getValue() / FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
+                    ),
                 header: 'Ratio of Collateral',
             }),
             columnHelper.accessor('price', {
                 cell: info => (
                     <div className='text-right'>
-                        {usdFormat(info.getValue(), 2)}
+                        {formatter.usd(info.getValue(), 2)}
                     </div>
                 ),
                 header: 'Snapshot Rate',

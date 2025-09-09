@@ -1,6 +1,7 @@
 import Tick from 'src/assets/icons/tick.svg';
 import { InfoToolTip } from 'src/components/molecules';
-import { percentFormat, usdFormat } from 'src/utils';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
+import { formatter } from 'src/utils';
 
 interface CollateralProgressBarProps {
     collateralCoverage: number;
@@ -32,18 +33,18 @@ const getInformationText = (
             <div>
                 <span>Your current borrow limit is at </span>
                 <span className='text-nebulaTeal'>
-                    {usdFormat(availableToBorrow, 2)}
+                    {formatter.usd(availableToBorrow, 2)}
                 </span>
-                <span>{` which is ${percentFormat(
-                    collateralThreshold - collateralCoverage * 100
-                )} of your ${usdFormat(
+                <span>{` which is ${formatter.percentage(
+                    collateralThreshold - collateralCoverage
+                )} of your ${formatter.usd(
                     totalCollateralInUSD,
                     2
                 )} collateral deposit.`}</span>
             </div>
             <div>
                 {`Increasing collateral deposit will increase your borrow limit by
-                ${collateralThreshold}% of its value.`}
+                ${formatter.percentage(collateralThreshold)} of its value.`}
             </div>
         </div>
     );
@@ -56,9 +57,9 @@ export const CollateralProgressBar = ({
     availableToBorrow,
     account,
 }: CollateralProgressBarProps) => {
-    collateralCoverage /= 100.0;
-
-    const barWidth = Math.min(1, collateralCoverage);
+    const coverageAsDecimal =
+        collateralCoverage / FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR;
+    const barWidth = Math.min(1, coverageAsDecimal);
 
     return (
         <div
@@ -70,7 +71,7 @@ export const CollateralProgressBar = ({
                     Collateral Utilization
                 </span>
                 <span className='typography-body-1 text-white'>
-                    {percentFormat(collateralCoverage, 1)}
+                    {formatter.percentage(collateralCoverage)}
                 </span>
             </div>
             <div className='flex flex-col gap-[6px]'>
@@ -100,9 +101,9 @@ export const CollateralProgressBar = ({
                     <div className='mt-1 flex w-full flex-row items-center gap-1'>
                         <div className='typography-caption flex flex-row text-planetaryPurple'>
                             <span className='whitespace-pre font-semibold text-nebulaTeal'>
-                                {`${usdFormat(availableToBorrow, 2)} `}
+                                {`${formatter.usd(availableToBorrow, 2)} `}
                             </span>
-                            <span>{`of ${usdFormat(
+                            <span>{`of ${formatter.usd(
                                 totalCollateralInUSD,
                                 2
                             )} available`}</span>

@@ -4,6 +4,7 @@ import { userEvent, within } from '@storybook/testing-library';
 import { defaultDelistedStatusSet } from 'src/hooks';
 import { collateralBook37 } from 'src/stories/mocks/fixtures';
 import { AdvancedLendingOrderCard } from './AdvancedLendingOrderCard';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 export default {
     title: 'Organism/AdvancedLendingOrderCard',
@@ -50,7 +51,7 @@ FailedAmountValidation.play = async ({ canvasElement }) => {
     await userEvent.click(lendTab);
     const input = await canvas.findByRole('textbox', { name: 'Size' });
     await userEvent.type(input, '999999999', {
-        delay: 100,
+        delay: FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
     });
 };
 
@@ -65,7 +66,7 @@ BondPriceFailedValidation.play = async ({ canvasElement }) => {
     const input = await canvas.findByRole('textbox', { name: 'Price' });
     await userEvent.clear(input);
     await userEvent.type(input, '0', {
-        delay: 100,
+        delay: FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
     });
 };
 BondPriceFailedValidation.parameters = {

@@ -1,12 +1,13 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import { MarketTab } from '.';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 export default {
     title: 'Atoms/MarketTab',
     component: MarketTab,
     args: {
         name: '24h Volume',
-        value: 10000,
+        value: FINANCIAL_CONSTANTS.BPS_DIVISOR,
     },
 } as Meta<typeof MarketTab>;
 

@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { LineChart, getData, options } from 'src/components/molecules';
 import { useIsGlobalItayose } from 'src/hooks';
+import { calculate } from 'src/utils';
 import {
     selectLandingOrderForm,
     setMaturity,
@@ -51,7 +52,7 @@ export const LineChartTab = ({
                 max:
                     marketCloseToMaturityOriginalRate > maximumRate &&
                     maximumRate > 0
-                        ? Math.floor((maximumRate * 1.2) / ONE_PERCENT)
+                        ? calculate.floor((maximumRate * 1.2) / ONE_PERCENT)
                         : undefined,
             },
         },

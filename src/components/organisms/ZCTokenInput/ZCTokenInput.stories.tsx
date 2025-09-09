@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { jun23Fixture } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
 import { ZCTokenInput } from './ZCTokenInput';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 const asset = CurrencySymbol.ETH;
 
@@ -11,7 +12,7 @@ export default {
     title: 'Organism/ZCTokenInput',
     component: ZCTokenInput,
     args: {
-        price: 100,
+        price: FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
         availableTokenAmount: BigInt('10000000000000000000'),
         availableAmount: BigInt('10000000000000000000'),
         symbol: asset,
@@ -44,6 +45,6 @@ LongInput.args = {
 LongInput.play = async () => {
     const input = screen.getByRole('textbox');
     await userEvent.type(input, '123456789.123', {
-        delay: 100,
+        delay: FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
     });
 };

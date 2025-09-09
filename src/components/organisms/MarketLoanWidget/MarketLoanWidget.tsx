@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { useCallback, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Button, DropdownSelector, Timer } from 'src/components/atoms';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     CoreTable,
     TabHighlight,
@@ -21,11 +22,10 @@ import {
 import { setCurrency, setMaturity } from 'src/store/landingOrderForm';
 import {
     CurrencySymbol,
-    formatLoanValue,
     toCurrencySymbol,
     toOptions,
+    formatter,
 } from 'src/utils';
-import { LoanValue } from 'src/utils/entities';
 import {
     contractColumnDefinition,
     tableHeaderDefinition,
@@ -133,12 +133,9 @@ export const MarketLoanWidget = ({
                     return (
                         <div className='typography-caption flex justify-center text-neutral-8'>
                             {info.getValue() && info.row.original.maturity
-                                ? formatLoanValue(
-                                      LoanValue.fromPrice(
-                                          info.getValue(),
-                                          info.row.original.maturity
-                                      ),
-                                      'rate'
+                                ? formatter.loanValueFromPrice('rate')(
+                                      info.getValue(),
+                                      info.row.original.maturity
                                   )
                                 : 'N/A'}
                         </div>
@@ -153,7 +150,10 @@ export const MarketLoanWidget = ({
                         <div className='flex justify-center'>
                             <div className='flex w-48 justify-center font-secondary text-xs leading-[14px] text-nebulaTeal'>
                                 <Timer
-                                    targetTime={info.getValue() * 1000}
+                                    targetTime={
+                                        info.getValue() *
+                                        FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD
+                                    }
                                     text='Ends in'
                                 />
                             </div>

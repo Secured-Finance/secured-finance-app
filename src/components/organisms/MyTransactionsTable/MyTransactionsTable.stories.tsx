@@ -1,6 +1,7 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import type { Meta, StoryFn } from '@storybook/react';
 import { useState } from 'react';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     jun23Fixture,
     transactions,
@@ -54,7 +55,7 @@ const PaginationTemplate: StoryFn<typeof MyTransactionsTable> = args => {
                 {...args}
                 data={data}
                 pagination={{
-                    totalData: 100,
+                    totalData: FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
                     getMoreData: () => {
                         const newData = Array(20)
                             .fill(null)

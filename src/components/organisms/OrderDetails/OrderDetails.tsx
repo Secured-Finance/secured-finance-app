@@ -2,6 +2,7 @@ import { Disclosure, Transition } from '@headlessui/react';
 import { OrderSide } from '@secured-finance/sf-client';
 import { formatDate } from '@secured-finance/sf-core';
 import { useMemo } from 'react';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     ExpandIndicator,
     Section,
@@ -19,10 +20,11 @@ import { OrderType } from 'src/types';
 import {
     FeeCalculator,
     divide,
-    formatLoanValue,
     formatWithCurrency,
     multiply,
     prefixTilde,
+    formatter,
+    calculate,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 
@@ -90,12 +92,11 @@ export const OrderDetails = ({
                         Warning: Your order price is currently lower than
                         minimum collateral base price of{' '}
                         <span className='font-bold'>
-                            {formatLoanValue(
-                                LoanValue.fromPrice(
+                            {formatter.loanValue('price')(
+                                calculate.loanValueFromPrice(
                                     market.currentMinDebtUnitPrice,
                                     market.maturity
-                                ),
-                                'price'
+                                )
                             )}
                         </span>
                         . Your adjusted PV will be{' '}
@@ -131,16 +132,17 @@ export const OrderDetails = ({
                         orderType === OrderType.MARKET
                             ? 'Market'
                             : prefixTilde(
-                                  formatLoanValue(
-                                      loanValue ?? LoanValue.ZERO,
-                                      'price'
+                                  formatter.loanValue('price')(
+                                      loanValue ?? LoanValue.ZERO
                                   )
                               ),
                     ],
                     [
                         'APR',
                         prefixTilde(
-                            formatLoanValue(loanValue ?? LoanValue.ZERO, 'rate')
+                            formatter.loanValue('rate')(
+                                loanValue ?? LoanValue.ZERO
+                            )
                         ),
                     ],
                     ['Maturity Date', formatDate(maturity.toNumber())],
@@ -195,7 +197,10 @@ export const OrderDetails = ({
                                                 at over
                                             </span>
                                             <span className='font-semibold text-white'>
-                                                {` ${divide(slippage, 100)} `}
+                                                {` ${divide(
+                                                    slippage,
+                                                    FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
+                                                )} `}
                                             </span>
                                             <span>
                                                 which is the max slippage level
