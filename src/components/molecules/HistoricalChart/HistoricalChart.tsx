@@ -63,7 +63,7 @@ export function HistoricalChart({
     );
     const { data: prices } = useLastPrices();
     const usdPrice = prices[currency];
-    const prettyMaturity = MaturityConverter.toUTCMonthYear(+maturity);
+    const prettyMaturity = MaturityConverter.toUTCMonthYear(maturity);
     const VOLUME_KEY_NAME = `Vol(${currency} ${prettyMaturity})`;
     const isMobile = useBreakpoint('tablet');
     const legendArray = isMobile

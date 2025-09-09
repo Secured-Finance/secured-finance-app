@@ -1,4 +1,3 @@
-import { getUTCMonthYear } from '@secured-finance/sf-core';
 import { useMemo, useState } from 'react';
 import {
     CollateralTabLeftPane,
@@ -15,6 +14,7 @@ import { CollateralBook, useBalances, useCurrencies } from 'src/hooks';
 import {
     CollateralInfo,
     CurrencySymbol,
+    MaturityConverter,
     ZERO_BI,
     amountFormatterFromBase,
     currencyMap,
@@ -93,7 +93,7 @@ export const CollateralTab = ({
             const key =
                 bond.currency +
                 (bond.maturity
-                    ? `-${getUTCMonthYear(bond.maturity.toNumber())}`
+                    ? `-${MaturityConverter.toUTCMonthYear(bond.maturity)}`
                     : '');
 
             acc[key] = {

@@ -1,6 +1,5 @@
 import { track } from '@amplitude/analytics-browser';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
-import { getUTCMonthYear } from '@secured-finance/sf-core';
 import { useCallback, useEffect, useReducer, useState } from 'react';
 import { Spinner } from 'src/components/atoms';
 import {
@@ -20,6 +19,7 @@ import { OrderType, PlaceOrderFunction } from 'src/types';
 import {
     AddressUtils,
     CurrencySymbol,
+    MaturityConverter,
     OrderEvents,
     OrderProperties,
     formatAmount,
@@ -205,10 +205,8 @@ export const PlaceOrder = ({
                             side === OrderSide.BORROW ? 'Borrow' : 'Lend',
                         [OrderProperties.ORDER_TYPE]: orderType,
                         [OrderProperties.ASSET_TYPE]: ccy,
-                        [OrderProperties.ORDER_MATURITY]: getUTCMonthYear(
-                            maturity.toNumber(),
-                            true
-                        ),
+                        [OrderProperties.ORDER_MATURITY]:
+                            MaturityConverter.toUTCMonthYear(maturity, true),
                         [OrderProperties.ORDER_AMOUNT]: orderAmount.value,
                         [OrderProperties.ORDER_PRICE]: unitPrice ?? 0,
                     });
