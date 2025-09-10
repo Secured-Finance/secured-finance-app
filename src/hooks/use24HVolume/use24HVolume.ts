@@ -2,7 +2,11 @@ import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useEffect, useState } from 'react';
 import { useGraphClientHook } from 'src/hooks';
 import { Transaction24HVolume } from 'src/types';
-import { CurrencyConverter, TimestampConverter } from 'src/utils';
+import {
+    CurrencyConverter,
+    AmountConverter,
+    TimestampConverter,
+} from 'src/utils';
 
 const TRANSACTIONS_LIMIT = 1000;
 
