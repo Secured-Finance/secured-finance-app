@@ -3,7 +3,6 @@ import {
     Currency,
     Currency as CurrencyInterface,
     Ether,
-    getUTCMonthYear,
 } from '@secured-finance/sf-core';
 import { BigNumber as BigNumberJS } from 'bignumber.js';
 import tailwindConfig from 'src/../tailwind.config';
@@ -37,6 +36,7 @@ import { WETHE } from './currencies/wethe';
 import { WPFIL } from './currencies/wpfil';
 import { CurrencyConverter } from './currencyConverter';
 import { Maturity } from './entities';
+import { MaturityConverter } from './maturityConverter';
 
 BigNumberJS.set({ EXPONENTIAL_AT: 30 }); // setting to a decent limit
 
@@ -450,5 +450,5 @@ export const convertToZcTokenName = (
     `ZC ${symbol}${
         !maturity || maturity.isZero()
             ? ''
-            : ` ${getUTCMonthYear(maturity.toNumber(), true)}`
+            : ` ${MaturityConverter.toUTCMonthYear(maturity, true)}`
     }`;
