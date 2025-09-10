@@ -1,5 +1,4 @@
 import { OrderSide } from '@secured-finance/sf-client';
-import { formatDate, getUTCMonthYear } from '@secured-finance/sf-core';
 import { createColumnHelper } from '@tanstack/react-table';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
@@ -24,6 +23,7 @@ import {
     AmountCell,
     CurrencySymbol,
     MaturityCell,
+    MaturityConverter,
     MobileTableWrapper,
     amountColumnDefinition,
     contractColumnDefinition,
@@ -203,7 +203,10 @@ export const ActiveTradeTable = ({
                         dispatch(setMaturity(maturity));
                         handleCurrencyChange(ccy);
 
-                        const prettyMaturity = getUTCMonthYear(maturity, true);
+                        const prettyMaturity = MaturityConverter.toUTCMonthYear(
+                            maturity,
+                            true
+                        );
 
                         const market = `${ccy}-${prettyMaturity}`;
 
@@ -378,7 +381,9 @@ export const ActiveTradeTable = ({
                                 </div>
                             )}
                             <span className='w-full text-2.5 leading-3 text-neutral-400'>
-                                {formatDate(maturityTimestamp)}
+                                {MaturityConverter.toDateString(
+                                    maturityTimestamp
+                                )}
                             </span>
                         </div>
                     );

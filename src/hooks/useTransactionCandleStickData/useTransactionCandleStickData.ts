@@ -2,8 +2,8 @@ import { useMemo } from 'react';
 import { Transaction } from 'src/components/organisms';
 import { HistoricalDataIntervals } from 'src/types';
 import {
+    AmountConverter,
     CurrencySymbol,
-    amountFormatterFromBase,
     hexToCurrencySymbol,
     TimestampConverter,
 } from 'src/utils';
@@ -53,8 +53,9 @@ export const useTransactionCandleStickData = (
 
         for (const item of editableTransactions) {
             const ccy = hexToCurrencySymbol(item.currency);
-            const volAdjusted = amountFormatterFromBase[ccy as CurrencySymbol](
-                BigInt(item.volume)
+            const volAdjusted = AmountConverter.fromBase(
+                BigInt(item.volume),
+                ccy as CurrencySymbol
             );
 
             // Fill missing timestamps data

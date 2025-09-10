@@ -127,3 +127,40 @@ export const getGoogleAnalyticsTag = () => {
 
     return NEXT_PUBLIC_GOOGLE_ANALYTICS_TAG;
 };
+
+// Feature flags for wagmi hook migration
+export const getUseWagmiHooks = (): boolean => {
+    const NEXT_PUBLIC_USE_WAGMI_HOOKS = process.env.NEXT_PUBLIC_USE_WAGMI_HOOKS;
+
+    if (!NEXT_PUBLIC_USE_WAGMI_HOOKS) {
+        return false;
+    }
+
+    return NEXT_PUBLIC_USE_WAGMI_HOOKS === 'true';
+};
+
+export const getWagmiHookFlag = (hookName: string): boolean => {
+    // Check master flag first
+    const masterFlag = getUseWagmiHooks();
+
+    // Static mapping to work with Next.js webpack bundling
+    // Webpack needs to see static property access to include env vars in bundle
+    const envVarMap: Record<string, string | undefined> = {
+        currencies: process.env.NEXT_PUBLIC_WAGMI_HOOK_CURRENCIES,
+        balances: process.env.NEXT_PUBLIC_WAGMI_HOOK_BALANCES,
+        orderbook: process.env.NEXT_PUBLIC_WAGMI_HOOK_ORDERBOOK,
+        orders: process.env.NEXT_PUBLIC_WAGMI_HOOK_ORDERS,
+        positions: process.env.NEXT_PUBLIC_WAGMI_HOOK_POSITIONS,
+        markets: process.env.NEXT_PUBLIC_WAGMI_HOOK_MARKETS,
+        collateral: process.env.NEXT_PUBLIC_WAGMI_HOOK_COLLATERAL,
+        genesis: process.env.NEXT_PUBLIC_WAGMI_HOOK_GENESIS,
+        decimals: process.env.NEXT_PUBLIC_WAGMI_HOOK_DECIMALS,
+        lastprices: process.env.NEXT_PUBLIC_WAGMI_HOOK_LASTPRICES,
+    };
+
+    // Check specific hook flag
+    const specificFlag = envVarMap[hookName.toLowerCase()] === 'true';
+
+    // Return true if either master flag is enabled OR specific hook flag is enabled
+    return masterFlag || specificFlag;
+};
