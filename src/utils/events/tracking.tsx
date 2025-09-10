@@ -4,7 +4,7 @@ import {
     setUserId,
     track,
 } from '@amplitude/analytics-browser';
-import { amountFormatterFromBase, CurrencySymbol } from '../currencyList';
+import { AmountConverter, CurrencySymbol } from '../';
 import {
     ButtonEvents,
     ButtonProperties,
@@ -43,8 +43,10 @@ export function trackCollateralEvent(
 ) {
     track(event, {
         [CollateralProperties.ASSET_TYPE]: assetType,
-        [CollateralProperties.AMOUNT]:
-            amountFormatterFromBase[assetType](amount).toString(),
+        [CollateralProperties.AMOUNT]: AmountConverter.fromBase(
+            amount,
+            assetType
+        ).toString(),
         [CollateralProperties.SOURCE]: source,
     });
 }
@@ -59,8 +61,10 @@ export function trackZCTokenEvent(
     track(event, {
         [ZCTokenProperties.ASSET_TYPE]: assetType,
         [ZCTokenProperties.MATURITY]: maturity,
-        [ZCTokenProperties.AMOUNT]:
-            amountFormatterFromBase[assetType](amount).toString(),
+        [ZCTokenProperties.AMOUNT]: AmountConverter.fromBase(
+            amount,
+            assetType
+        ).toString(),
         [ZCTokenProperties.SOURCE]: source,
     });
 }

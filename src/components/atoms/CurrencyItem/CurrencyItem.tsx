@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import { InfoToolTip } from 'src/components/molecules';
 import { Alignment, ColorFormat } from 'src/types';
 import {
+    AmountConverter,
     CurrencySymbol,
     currencyMap,
     ordinaryFormat,
@@ -37,7 +38,10 @@ export const CurrencyItem = ({
     let secondLine: string;
     const currency = currencyMap[ccy];
     if (amount !== undefined && price !== undefined) {
-        secondLine = usdFormat(currency.fromBaseUnit(amount) * price, 2);
+        secondLine = usdFormat(
+            AmountConverter.fromBase(amount, ccy) * price,
+            2
+        );
     } else if (price) {
         secondLine = usdFormat(price, 2);
     } else {
@@ -49,7 +53,7 @@ export const CurrencyItem = ({
         firstLine = label;
     } else if (amount !== undefined) {
         firstLine = ordinaryFormat(
-            currency.fromBaseUnit(amount),
+            AmountConverter.fromBase(amount, ccy),
             minDecimals,
             maxDecimals
         );

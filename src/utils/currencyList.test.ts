@@ -375,11 +375,9 @@ describe('ZC Tokens', () => {
         });
 
         it('should return correct name with maturity', () => {
+            const mockMaturity = new Maturity(1623456789);
             expect(
-                convertToZcTokenName(CurrencySymbol.USDC, {
-                    isZero: () => false,
-                    toNumber: () => 1623456789,
-                } as Maturity)
+                convertToZcTokenName(CurrencySymbol.USDC, mockMaturity)
             ).toBe('ZC USDC JUN2021');
         });
     });
