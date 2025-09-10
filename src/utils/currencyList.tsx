@@ -22,6 +22,7 @@ import ZcFilIcon from 'src/assets/coins/zc-fil.svg';
 import ZcUsdcIcon from 'src/assets/coins/zc-usdc.svg';
 import { SvgIcon } from 'src/types';
 import { ZERO_BI } from './collateral';
+import { AmountConverter } from './amountConverter';
 import { AUSDC } from './currencies/ausdc';
 import { AXLFIL } from './currencies/axlfil';
 import { BTCB } from './currencies/btcb';
@@ -320,13 +321,14 @@ const getCurrencyMapAsList = () => {
 };
 
 export const amountFormatterToBase = getCurrencyMapAsList().reduce<
-    Record<CurrencySymbol, (value: number) => bigint>
+    Record<CurrencySymbol, (value: string | number) => bigint>
 >(
     (acc, ccy) => ({
         ...acc,
-        [ccy.symbol]: ccy.toBaseUnit,
+        [ccy.symbol]: (value: string | number) =>
+            AmountConverter.toBase(value, ccy.symbol),
     }),
-    {} as Record<CurrencySymbol, (value: number) => bigint>
+    {} as Record<CurrencySymbol, (value: string | number) => bigint>
 );
 
 export const amountFormatterFromBase = getCurrencyMapAsList().reduce<
@@ -334,7 +336,8 @@ export const amountFormatterFromBase = getCurrencyMapAsList().reduce<
 >(
     (acc, ccy) => ({
         ...acc,
-        [ccy.symbol]: ccy.fromBaseUnit,
+        [ccy.symbol]: (value: bigint) =>
+            AmountConverter.fromBase(value, ccy.symbol),
     }),
     {} as Record<CurrencySymbol, (value: bigint) => number>
 );
@@ -430,7 +433,7 @@ export const convertZCTokenFromBaseAmount = (
 ) =>
     !maturity || maturity.isZero()
         ? convertFromGvUnit(amount)
-        : amountFormatterFromBase[symbol](amount);
+        : AmountConverter.fromBase(amount, symbol);
 export const convertZCTokenToBaseAmount = (
     symbol: CurrencySymbol,
     amount: number,
@@ -438,7 +441,7 @@ export const convertZCTokenToBaseAmount = (
 ) =>
     !maturity || maturity.isZero()
         ? convertToGvUnit(amount)
-        : amountFormatterToBase[symbol](amount);
+        : AmountConverter.toBase(amount, symbol);
 
 export const convertToZcTokenName = (
     symbol: CurrencySymbol,

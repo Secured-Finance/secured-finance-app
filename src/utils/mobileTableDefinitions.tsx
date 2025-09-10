@@ -3,6 +3,7 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { formatDate } from '@secured-finance/sf-core';
 import * as dayjs from 'dayjs';
 import {
+    AmountConverter,
     CurrencySymbol,
     currencyMap,
     formatTimestampDDMMYY,
@@ -25,7 +26,7 @@ export const AmountCell = ({
     return (
         <span className='font-numerical text-3 leading-4 text-white'>
             {ordinaryFormat(
-                currency.fromBaseUnit(amount),
+                AmountConverter.fromBase(amount, ccy),
                 currency.roundingDecimal,
                 currency.roundingDecimal
             )}

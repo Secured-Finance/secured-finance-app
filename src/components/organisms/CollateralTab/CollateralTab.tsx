@@ -16,9 +16,9 @@ import {
     CollateralInfo,
     CurrencySymbol,
     ZERO_BI,
-    amountFormatterFromBase,
     currencyMap,
 } from 'src/utils';
+import { AmountConverter } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
@@ -38,7 +38,7 @@ export const generateCollateralList = (
                     symbol: ccy,
                     name: ccy,
                     available: balance[ccy]
-                        ? amountFormatterFromBase[ccy](balance[ccy] as bigint)
+                        ? AmountConverter.fromBase(balance[ccy] as bigint, ccy)
                         : 0,
                     availableFullValue: balance[ccy] ?? ZERO_BI,
                 },

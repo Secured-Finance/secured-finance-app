@@ -3,11 +3,11 @@ import { InputBase, SizeDependentStylesConfig } from 'src/components/atoms';
 import { PercentageSelector } from 'src/components/molecules';
 import {
     CurrencySymbol,
-    amountFormatterFromBase,
     convertZCTokenFromBaseAmount,
     convertZCTokenToBaseAmount,
     usdFormat,
 } from 'src/utils';
+import { AmountConverter } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
 interface ZCTokenInputProps {
@@ -91,7 +91,7 @@ export const ZCTokenInput = ({
         if (amount && availableAmount && availableTokenAmount) {
             const baseAmount =
                 (amount * availableAmount) / availableTokenAmount;
-            return price * amountFormatterFromBase[symbol](baseAmount);
+            return price * AmountConverter.fromBase(baseAmount, symbol);
         } else {
             return 0;
         }

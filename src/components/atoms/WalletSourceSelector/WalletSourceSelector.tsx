@@ -5,8 +5,8 @@ import { Fragment, useMemo } from 'react';
 import { ExpandIndicator, Separator } from 'src/components/atoms';
 import { SvgIcon } from 'src/types';
 import {
+    AmountConverter,
     AddressConverter,
-    currencyMap,
     CurrencySymbol,
     DisplayLengths,
     ordinaryFormat,
@@ -34,7 +34,7 @@ const formatOption = (
 ) => {
     return `${ordinaryFormat(
         Math.floor(
-            currencyMap[asset].fromBaseUnit(available) * AMOUNT_PRECISION
+            AmountConverter.fromBase(available, asset) * AMOUNT_PRECISION
         ) / AMOUNT_PRECISION,
         0,
         6

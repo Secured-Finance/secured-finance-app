@@ -7,10 +7,10 @@ import {
     CurrencySymbol,
     LiquidationCalculator,
     ZERO_BI,
-    amountFormatterFromBase,
     computeAvailableToBorrow,
     currencyMap,
     divide,
+    AmountConverter,
     CurrencyConverter,
 } from 'src/utils';
 
@@ -183,7 +183,8 @@ const formatCollateral = (
             const currency = ccy as CurrencySymbol;
             const amount = collateral[ccy];
             const usdValue =
-                amountFormatterFromBase[currency](amount) * priceList[currency];
+                AmountConverter.fromBase(amount, currency) *
+                priceList[currency];
 
             if (currencyMap[currency].isCollateral) {
                 collateralBook = {
