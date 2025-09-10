@@ -1,7 +1,6 @@
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
 import { OrderSide } from '@secured-finance/sf-client';
 import { MaturityConverter } from './maturityConverter';
-import * as dayjs from 'dayjs';
 import {
     AmountConverter,
     CurrencySymbol,
