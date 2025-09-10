@@ -14,7 +14,7 @@ describe('TimestampConverter', () => {
 
     const TEST_TIMESTAMP = 1672531200;
     const TEST_DATE = new Date('2023-01-01T00:00:00.000Z');
-    const OLD_TIMESTAMPS = [0, 86400, 1671859344];
+    const OLD_TIMESTAMPS = [86400, 1671859344];
     const OLD_DDMMYY_CASES = [
         { unixTimestamp: 1609459200, expected: '01/01/21, 00:00' },
         { unixTimestamp: 1612137600, expected: '01/02/21, 00:00' },
@@ -22,7 +22,6 @@ describe('TimestampConverter', () => {
         { unixTimestamp: 1657964207, expected: '16/07/22, 09:36' },
     ];
     const OLD_WITH_MONTH_CASES = [
-        { timestamp: 0, expected: 'Jan 1, 1970 00:00:00' },
         { timestamp: 86400, expected: 'Jan 2, 1970 00:00:00' },
         { timestamp: 1671859344, expected: 'Dec 24, 2022 05:22:24' },
     ];
@@ -70,6 +69,10 @@ describe('TimestampConverter', () => {
                 );
             });
         });
+
+        it('should return "--" for zero timestamp', () => {
+            expect(TimestampConverter.formatTimestamp(0)).toBe('--');
+        });
     });
 
     describe('formatTimestampDDMMYY', () => {
@@ -100,6 +103,10 @@ describe('TimestampConverter', () => {
                     TimestampConverter.formatTimestampWithMonth(timestamp)
                 ).toBe(expected);
             });
+        });
+
+        it('should return "--" for zero timestamp', () => {
+            expect(TimestampConverter.formatTimestampWithMonth(0)).toBe('--');
         });
     });
 

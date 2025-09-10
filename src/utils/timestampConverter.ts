@@ -11,8 +11,22 @@ export class TimestampConverter {
         return Number(value);
     }
 
-    static formatTimestamp(timestamp: number | undefined): string {
-        const date = this.toDate(timestamp ?? 0);
+    private static isValidTimestamp(
+        timestamp?: number | string | bigint
+    ): boolean {
+        const ts = Number(timestamp);
+        return (
+            !isNaN(ts) &&
+            ts !== 0 &&
+            timestamp !== undefined &&
+            timestamp !== null
+        );
+    }
+
+    static formatTimestamp(timestamp?: number | string | bigint): string {
+        if (!this.isValidTimestamp(timestamp)) return '--';
+
+        const date = this.toDate(Number(timestamp));
         return new Intl.DateTimeFormat(undefined, {
             dateStyle: 'short',
             timeStyle: 'short',
@@ -20,17 +34,9 @@ export class TimestampConverter {
     }
 
     static formatTimestampDDMMYY(timestamp?: number | string | bigint): string {
-        const ts = Number(timestamp);
+        if (!this.isValidTimestamp(timestamp)) return '--';
 
-        if (
-            isNaN(ts) ||
-            ts === 0 ||
-            timestamp === undefined ||
-            timestamp === null
-        )
-            return '--';
-
-        const date = this.toDate(ts);
+        const date = this.toDate(Number(timestamp));
 
         const formattedDate = new Intl.DateTimeFormat('en-GB', {
             day: '2-digit',
@@ -44,8 +50,12 @@ export class TimestampConverter {
         return `${formattedDate}, ${hours}:${minutes}`;
     }
 
-    static formatTimestampWithMonth(timestamp: number | undefined): string {
-        const date = this.toDate(timestamp ?? 0);
+    static formatTimestampWithMonth(
+        timestamp?: number | string | bigint
+    ): string {
+        if (!this.isValidTimestamp(timestamp)) return '--';
+
+        const date = this.toDate(Number(timestamp));
         const month = new Intl.DateTimeFormat('en-US', {
             month: 'short',
         }).format(date);
@@ -56,8 +66,12 @@ export class TimestampConverter {
         return `${month} ${day}, ${year} ${time}`;
     }
 
-    static formatTimeStampWithTimezone(timestamp: number | undefined): string {
-        const date = this.toDate(timestamp ?? 0);
+    static formatTimeStampWithTimezone(
+        timestamp?: number | string | bigint
+    ): string {
+        if (!this.isValidTimestamp(timestamp)) return '--';
+
+        const date = this.toDate(Number(timestamp));
         return new Intl.DateTimeFormat('en-GB', {
             timeStyle: 'long',
         }).format(date);

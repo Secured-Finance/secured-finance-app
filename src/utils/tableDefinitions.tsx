@@ -530,7 +530,7 @@ export const dateTimeViewColumnDefinition = <
                     <div className='flex flex-col text-right'>
                         <span className='typography-desktop-body-5 text-white'>
                             {TimestampConverter.formatTimestampDDMMYY(
-                                +info.getValue().toString()
+                                info.getValue()
                             )}
                         </span>
                     </div>
