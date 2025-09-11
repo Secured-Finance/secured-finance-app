@@ -1,16 +1,18 @@
 import { create } from 'zustand';
+import { subscribeWithSelector } from 'zustand/middleware';
+import { DEFAULT_UI_STATE, UIState } from './types';
 
-type UIState = {
-    walletDialogOpen: boolean;
-};
-
-type UIActions = {
+interface UIActions {
     setWalletDialogOpen: (open: boolean) => void;
-};
+    resetStore: () => void;
+}
 
-type UIStore = UIState & UIActions;
+type UIStoreWithActions = UIState & UIActions;
 
-export const useUIStore = create<UIStore>(set => ({
-    walletDialogOpen: false,
-    setWalletDialogOpen: open => set({ walletDialogOpen: open }),
-}));
+export const useUIStore = create<UIStoreWithActions>()(
+    subscribeWithSelector((set, _get) => ({
+        ...DEFAULT_UI_STATE,
+        setWalletDialogOpen: (open: boolean) => set({ walletDialogOpen: open }),
+        resetStore: () => set(DEFAULT_UI_STATE),
+    }))
+);

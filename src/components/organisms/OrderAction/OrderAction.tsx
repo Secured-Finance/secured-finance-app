@@ -20,6 +20,7 @@ import { useBalances } from 'src/hooks/useBalances';
 import {
     useBlockchainStore,
     useLandingOrderFormSelector,
+    useLandingOrderFormStore,
     useUIStore,
 } from 'src/store';
 import { ButtonEvents } from 'src/utils';
@@ -55,6 +56,7 @@ export const OrderAction = ({
 
     const { currency, amount, side, maturity, orderType, sourceAccount } =
         useLandingOrderFormSelector();
+    const { resetForm } = useLandingOrderFormStore();
 
     const marketPhase = useMarketPhase(currency, maturity);
 
@@ -143,6 +145,7 @@ export const OrderAction = ({
                 }
                 isOpen={openPlaceOrderDialog}
                 onClose={() => setOpenPlaceOrderDialog(false)}
+                onSuccess={resetForm}
                 loanValue={loanValue}
                 collateral={collateralBook}
                 assetPrice={price}

@@ -98,6 +98,7 @@ export function AdvancedLendingOrderCard({
     const { address, isConnected } = useAccount();
 
     const [sliderValue, setSliderValue] = useState(0.0);
+    const [hasTouchedUnitPrice, setHasTouchedUnitPrice] = useState(false);
 
     const balanceRecord = useBalances();
     const isTablet = useBreakpoint('laptop');
@@ -116,32 +117,52 @@ export function AdvancedLendingOrderCard({
         return undefined;
     }, [orderBook.data]);
 
+    const unitPriceNumber: number | undefined =
+        typeof unitPrice === 'number'
+            ? unitPrice
+            : unitPrice !== undefined && unitPrice !== ''
+            ? Number(unitPrice as unknown as string)
+            : undefined;
+
     const loanValue = useMemo(() => {
         if (!maturity) return LoanValue.ZERO;
-        if (unitPrice !== undefined && unitPriceExists) {
+        if (unitPriceNumber !== undefined && unitPriceExists) {
             return LoanValue.fromPrice(
-                unitPrice * 100.0,
+                unitPriceNumber * 100.0,
                 maturity,
                 calculationDate
             );
         }
         if (!marketPrice) return LoanValue.ZERO;
         return LoanValue.fromPrice(marketPrice, maturity, calculationDate);
-    }, [maturity, unitPrice, unitPriceExists, marketPrice, calculationDate]);
+    }, [
+        maturity,
+        unitPriceNumber,
+        unitPriceExists,
+        marketPrice,
+        calculationDate,
+    ]);
 
     const unitPriceValue = useMemo(() => {
         if (!maturity) return undefined;
 
-        if (unitPriceExists && unitPrice !== undefined) {
-            return unitPrice.toString();
+        if (unitPriceExists && unitPriceNumber !== undefined) {
+            return unitPriceNumber.toString();
         }
 
-        if (marketPrice && isConnected) {
+        if (marketPrice && isConnected && !hasTouchedUnitPrice) {
             return (marketPrice / 100.0).toString();
         }
 
         return undefined;
-    }, [maturity, marketPrice, unitPrice, isConnected, unitPriceExists]);
+    }, [
+        maturity,
+        marketPrice,
+        unitPriceNumber,
+        isConnected,
+        unitPriceExists,
+        hasTouchedUnitPrice,
+    ]);
 
     const collateralUsagePercent = useMemo(() => {
         return collateralBook.coverage / 100.0;
@@ -225,13 +246,26 @@ export function AdvancedLendingOrderCard({
         setSliderValue(percentage);
     };
 
+    const normalizedAmount: bigint =
+        typeof amount === 'bigint'
+            ? amount
+            : (amount as unknown as string)
+            ? BigInt(amount as unknown as string)
+            : BigInt(0);
+
     const canPlaceOrder = useMemo(() => {
         if (side === OrderSide.BORROW) {
-            return availableToBorrow > 0 && availableToBorrow >= amount;
+            return (
+                availableToBorrow > BigInt(0) &&
+                availableToBorrow >= normalizedAmount
+            );
         } else {
-            return availableToLend > 0 && availableToLend >= amount;
+            return (
+                availableToLend > BigInt(0) &&
+                availableToLend >= normalizedAmount
+            );
         }
-    }, [amount, availableToBorrow, availableToLend, side]);
+    }, [normalizedAmount, availableToBorrow, availableToLend, side]);
 
     const handleInputChange = (v: string) => {
         const inputValue = amountFormatterToBase[currency](Number(v));
@@ -240,7 +274,7 @@ export function AdvancedLendingOrderCard({
         const available =
             side === OrderSide.BORROW ? availableToBorrow : availableToLend;
 
-        if (available > 0) {
+        if (available > BigInt(0)) {
             const percentage = (inputValue * BigInt(100)) / available;
             setSliderValue(
                 Number(percentage > BigInt(100) ? BigInt(100) : percentage)
@@ -256,7 +290,8 @@ export function AdvancedLendingOrderCard({
         }
     }, [setOrderType, isItayose]);
 
-    const isInvalidBondPrice = unitPrice === 0 && orderType === OrderType.LIMIT;
+    const isInvalidBondPrice =
+        unitPriceNumber === 0 && orderType === OrderType.LIMIT;
     const isLendingSide = side === OrderSide.LEND;
 
     const showPreOrderError =
@@ -313,6 +348,7 @@ export function AdvancedLendingOrderCard({
                             handleClick={option => {
                                 setOrderType(option as OrderType);
                                 resetUnitPrice();
+                                setHasTouchedUnitPrice(false);
                                 trackButtonEvent(
                                     ButtonEvents.ORDER_TYPE,
                                     ButtonProperties.ORDER_TYPE,
@@ -347,9 +383,10 @@ export function AdvancedLendingOrderCard({
                                 isMarketOrderType ? 'Market' : unitPriceValue
                             }
                             onValueChange={v => {
-                                v !== undefined
+                                setHasTouchedUnitPrice(true);
+                                v !== undefined && v !== ''
                                     ? setUnitPrice(v.toString())
-                                    : setUnitPrice('');
+                                    : setUnitPrice(undefined);
                                 track(InteractionEvents.BOND_PRICE, {
                                     [InteractionProperties.BOND_PRICE]:
                                         v?.toString(),
@@ -368,9 +405,10 @@ export function AdvancedLendingOrderCard({
                                 <button
                                     className='typography-desktop-body-4 font-semibold text-primary-500'
                                     disabled={!midPrice}
-                                    onClick={() =>
-                                        setUnitPrice(midPrice?.toString())
-                                    }
+                                    onClick={() => {
+                                        setHasTouchedUnitPrice(true);
+                                        setUnitPrice(midPrice?.toString());
+                                    }}
                                 >
                                     Mid
                                 </button>
@@ -386,7 +424,7 @@ export function AdvancedLendingOrderCard({
                             initialValue={
                                 amountExists
                                     ? amountFormatterFromBase[currency](
-                                          amount
+                                          normalizedAmount
                                       ).toString()
                                     : ''
                             }

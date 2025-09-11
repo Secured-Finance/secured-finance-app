@@ -1,5 +1,28 @@
-import { useLandingOrderFormStore } from './store';
 import { useMemo } from 'react';
+import { useLandingOrderFormStore } from './store';
+import type { LandingOrderFormState } from './types';
+
+const selectValidatedAmount = (state: LandingOrderFormState) => {
+    return {
+        value: state.amount,
+        bigIntValue:
+            state.amount !== '' && !isNaN(Number(state.amount))
+                ? BigInt(state.amount)
+                : BigInt(0),
+    };
+};
+
+const selectValidatedUnitPrice = (state: LandingOrderFormState) => {
+    return {
+        value: state.unitPrice,
+        numberValue:
+            state.unitPrice !== undefined &&
+            state.unitPrice !== '' &&
+            !isNaN(Number(state.unitPrice))
+                ? Number(state.unitPrice)
+                : undefined,
+    };
+};
 
 export const useLandingOrderFormSelector = () => {
     const state = useLandingOrderFormStore();
@@ -13,26 +36,16 @@ export const useLandingOrderFormSelector = () => {
             sourceAccount: state.sourceAccount,
             isBorrowedCollateral: state.isBorrowedCollateral,
             lastView: state.lastView,
-            amount: state.amount !== '' ? BigInt(state.amount) : BigInt(0),
-            unitPrice:
-                state.unitPrice !== undefined && state.unitPrice !== ''
-                    ? Number(state.unitPrice)
-                    : undefined,
+            unitPriceRaw: state.unitPrice,
+
+            amount: selectValidatedAmount(state).bigIntValue,
+            unitPrice: selectValidatedUnitPrice(state).numberValue,
+
             amountExists: state.amount !== '',
             unitPriceExists:
                 state.unitPrice !== undefined && state.unitPrice !== '',
         }),
-        [
-            state.currency,
-            state.maturity,
-            state.side,
-            state.orderType,
-            state.sourceAccount,
-            state.isBorrowedCollateral,
-            state.lastView,
-            state.amount,
-            state.unitPrice,
-        ]
+        [state]
     );
 };
 
@@ -46,11 +59,8 @@ export const selectLandingOrderForm = (
     sourceAccount: state.sourceAccount,
     isBorrowedCollateral: state.isBorrowedCollateral,
     lastView: state.lastView,
-    amount: state.amount !== '' ? BigInt(state.amount) : BigInt(0),
-    unitPrice:
-        state.unitPrice !== undefined && state.unitPrice !== ''
-            ? Number(state.unitPrice)
-            : undefined,
+    amount: selectValidatedAmount(state).bigIntValue,
+    unitPrice: selectValidatedUnitPrice(state).numberValue,
     amountExists: state.amount !== '',
     unitPriceExists: state.unitPrice !== undefined && state.unitPrice !== '',
 });

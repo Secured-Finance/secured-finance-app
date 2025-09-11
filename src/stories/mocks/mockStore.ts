@@ -28,7 +28,7 @@ export const initialStore = {
         address: '0x1',
         balance: '0',
     },
-    lastError: { lastMessage: null },
+    lastError: { lastMessage: null, message: null, timestamp: undefined },
     ui: { walletDialogOpen: false },
 };
 

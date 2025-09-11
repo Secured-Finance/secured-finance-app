@@ -3,7 +3,7 @@ import { ViewType } from 'src/components/atoms';
 import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
 
-export interface LandingOrderFormStore {
+export interface LandingOrderFormState {
     currency: CurrencySymbol;
     maturity: number;
     side: OrderSide;
@@ -15,7 +15,7 @@ export interface LandingOrderFormStore {
     isBorrowedCollateral: boolean;
 }
 
-export const defaultLandingOrderFormStore: LandingOrderFormStore = {
+export const DEFAULT_LANDING_ORDER_FORM_STATE: LandingOrderFormState = {
     currency: CurrencySymbol.USDC,
     maturity: 0,
     side: OrderSide.LEND,
@@ -26,3 +26,7 @@ export const defaultLandingOrderFormStore: LandingOrderFormStore = {
     sourceAccount: WalletSource.SF_VAULT,
     isBorrowedCollateral: false,
 };
+
+// Legacy export for backward compatibility - will be removed in future version
+export type LandingOrderFormStore = LandingOrderFormState;
+export const defaultLandingOrderFormStore = DEFAULT_LANDING_ORDER_FORM_STATE;
