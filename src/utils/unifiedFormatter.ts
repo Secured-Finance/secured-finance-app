@@ -1,5 +1,6 @@
 import { LoanValue, Maturity } from './entities';
 import { FINANCIAL_CONSTANTS } from '../config/constants';
+import { TransactionList } from 'src/types';
 
 export const calculate = {
     floor: (value: number) => Math.floor(value),
@@ -18,14 +19,24 @@ export const calculate = {
             calculationDate
         ),
     tradeHistoryDetails: (
-        _transactions: unknown[],
-        _currency: unknown,
-        _maturity: unknown
+        _transactions: TransactionList,
+        _currency: string,
+        _maturity: number | Maturity
     ) => ({ max: undefined, min: undefined }),
     currentTimestamp: () => Math.floor(Date.now() / 1000),
-    preOrderDays: (_date1: unknown, _date2: unknown) => 7,
+    preOrderDays: (_date1: Date | number, _date2: Date | number) => 7,
     priceSpread: (price1: number, price2: number) => Math.abs(price1 - price2),
     aprSpread: (apr1: number, apr2: number) => Math.abs(apr1 - apr2),
+};
+
+export const calculateBigInt = {
+    abs: (value: bigint) => (value < 0n ? -value : value),
+    max: (a: bigint, b: bigint) => (a > b ? a : b),
+    min: (a: bigint, b: bigint) => (a < b ? a : b),
+    currentTimestamp: () => BigInt(Math.floor(Date.now() / 1000)),
+    priceSpread: (price1: bigint, price2: bigint) =>
+        calculateBigInt.abs(price1 - price2),
+    aprSpread: (apr1: bigint, apr2: bigint) => calculateBigInt.abs(apr1 - apr2),
 };
 
 export const convert = {
@@ -33,13 +44,45 @@ export const convert = {
         value / Math.pow(10, decimals),
     fromUSDToBase: (value: number, decimals: number) =>
         value * Math.pow(10, decimals),
-    maturity: (maturity: unknown) =>
+    maturity: (maturity: Maturity | number | bigint): number =>
         maturity &&
         typeof maturity === 'object' &&
         'toNumber' in maturity &&
         typeof maturity.toNumber === 'function'
             ? maturity.toNumber()
-            : maturity,
+            : Number(maturity),
+};
+
+export const convertBigInt = {
+    fromBaseToUSD: (value: bigint, decimals: number): bigint => {
+        const divisor = BigInt(Math.pow(10, decimals));
+        return value / divisor;
+    },
+    fromUSDToBase: (value: bigint, decimals: number): bigint => {
+        const multiplier = BigInt(Math.pow(10, decimals));
+        return value * multiplier;
+    },
+    toBigInt: (value: number | bigint | string | Maturity): bigint => {
+        if (typeof value === 'bigint') return value;
+        if (typeof value === 'string') return BigInt(value);
+        if (
+            typeof value === 'object' &&
+            value &&
+            'toNumber' in value &&
+            typeof value.toNumber === 'function'
+        ) {
+            return BigInt(value.toNumber());
+        }
+        return BigInt(Math.floor(Number(value)));
+    },
+    toNumber: (value: bigint): number => Number(value),
+    maturity: (maturity: Maturity | number | bigint): bigint =>
+        maturity &&
+        typeof maturity === 'object' &&
+        'toNumber' in maturity &&
+        typeof maturity.toNumber === 'function'
+            ? BigInt(maturity.toNumber())
+            : convertBigInt.toBigInt(maturity),
 };
 
 export class UnifiedFormatter {

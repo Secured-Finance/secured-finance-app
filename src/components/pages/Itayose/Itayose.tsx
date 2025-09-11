@@ -56,7 +56,6 @@ import {
 import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
-    ZERO_BI,
     getMappedOrderStatus,
     getTransformMaturityOption,
     sortOrders,
@@ -269,7 +268,7 @@ export const Itayose = () => {
     } = useBorrowOrderBook(
         currency,
         maturity,
-        Number(itayoseEstimation?.lastBorrowUnitPrice ?? ZERO_BI)
+        Number(itayoseEstimation?.lastBorrowUnitPrice ?? 0n)
     );
 
     const {
@@ -279,7 +278,7 @@ export const Itayose = () => {
     } = useLendOrderBook(
         currency,
         maturity,
-        Number(itayoseEstimation?.lastLendUnitPrice ?? ZERO_BI)
+        Number(itayoseEstimation?.lastLendUnitPrice ?? 0n)
     );
 
     const [orderBook, setMultiplier, setIsShowingAll] = useOrderbook(

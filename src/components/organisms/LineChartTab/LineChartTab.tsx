@@ -52,7 +52,9 @@ export const LineChartTab = ({
                 max:
                     marketCloseToMaturityOriginalRate > maximumRate &&
                     maximumRate > 0
-                        ? calculate.floor((maximumRate * 1.2) / ONE_PERCENT)
+                        ? calculate.floor(
+                              (maximumRate * 1.2) / Number(ONE_PERCENT)
+                          )
                         : undefined,
             },
         },
@@ -69,7 +71,7 @@ export const LineChartTab = ({
                             return (
                                 (
                                     marketCloseToMaturityOriginalRate /
-                                    ONE_PERCENT
+                                    Number(ONE_PERCENT)
                                 ).toFixed(3) + '%'
                             );
                         } else {

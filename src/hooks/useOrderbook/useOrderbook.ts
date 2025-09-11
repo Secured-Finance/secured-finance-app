@@ -91,13 +91,13 @@ export const useOrderbook = (
                     securedFinance?.getBorrowOrderBook(
                         currency,
                         maturity,
-                        Number(borrowStartPrice ?? ZERO_BI),
+                        Number(borrowStartPrice ?? 0n),
                         depth
                     ),
                     securedFinance?.getLendOrderBook(
                         currency,
                         maturity,
-                        Number(lendStartPrice ?? ZERO_BI),
+                        Number(lendStartPrice ?? 0n),
                         depth
                     ),
                 ]);

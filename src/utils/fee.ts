@@ -2,8 +2,8 @@ import * as dayjs from 'dayjs';
 import { Maturity } from './entities';
 import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
-const SECONDS_IN_YEAR = 365 * 24 * 60 * 60;
-const PERCENTAGE_BASE = FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR;
+const SECONDS_IN_YEAR = BigInt(365 * 24 * 60 * 60);
+const PERCENTAGE_BASE = BigInt(FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR);
 
 export class FeeCalculator {
     static calculateTransactionFees(
@@ -12,10 +12,12 @@ export class FeeCalculator {
     ): string {
         const maturityNumber = Number(maturity);
         const diff = dayjs.unix(maturityNumber).diff(Date.now(), 'second');
-        // annualFee is in percentage (1 = 1%), convert to decimal for calculation
         const annualFeeDecimal = annualFee / 100;
-        const fee = Math.max((diff * annualFeeDecimal) / SECONDS_IN_YEAR, 0);
-        // Format as percentage (fee is already a decimal)
+        const fee = Math.max(
+            (diff * annualFeeDecimal) / Number(SECONDS_IN_YEAR),
+            0
+        );
+
         return new Intl.NumberFormat('en-US', {
             style: 'percent',
             minimumFractionDigits: 0,
@@ -24,7 +26,15 @@ export class FeeCalculator {
     }
 
     static calculateProtocolFee(feeRate: number | bigint): number {
-        return Number(feeRate) / PERCENTAGE_BASE;
+        const feeRateBigInt =
+            typeof feeRate === 'number' ? BigInt(Math.floor(feeRate)) : feeRate;
+        return Number(feeRateBigInt) / Number(PERCENTAGE_BASE);
+    }
+
+    static calculateProtocolFeeBigInt(feeRate: number | bigint): bigint {
+        const feeRateBigInt =
+            typeof feeRate === 'number' ? BigInt(Math.floor(feeRate)) : feeRate;
+        return feeRateBigInt / PERCENTAGE_BASE;
     }
 
     static calculateFutureValueWithFee(

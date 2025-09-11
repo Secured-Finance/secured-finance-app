@@ -8,7 +8,7 @@ import {
     CurrencySymbol,
     LiquidationCalculator,
     ZERO_BI,
-    computeAvailableToBorrow,
+    computeAvailableToBorrowNumber,
     currencyMap,
     divide,
     AmountConverter,
@@ -121,7 +121,7 @@ export const useCollateralBook = (account: string | undefined) => {
                 data.collateralParameters.liquidationThresholdRate
             );
             const liquidationThreshold =
-                LiquidationCalculator.getLiquidationThreshold(
+                LiquidationCalculator.getLiquidationThresholdNumber(
                     liquidationThresholdRate
                 );
 
@@ -146,7 +146,7 @@ export const useCollateralBook = (account: string | undefined) => {
                 collateral: collateralBook,
                 nonCollateral: nonCollateralBook,
                 usdCollateral: usdCollateral,
-                usdAvailableToBorrow: computeAvailableToBorrow(
+                usdAvailableToBorrow: computeAvailableToBorrowNumber(
                     usdCollateral,
                     usdUnusedCollateral,
                     divide(coverage, FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR),

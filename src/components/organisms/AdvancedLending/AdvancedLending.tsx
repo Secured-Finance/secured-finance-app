@@ -79,7 +79,6 @@ import {
     ButtonEvents,
     ButtonProperties,
     CurrencySymbol,
-    ZERO_BI,
     checkOrderIsFilled,
     formatOrders,
     getMappedOrderStatus,
@@ -346,7 +345,7 @@ export const AdvancedLending = ({
     } = useBorrowOrderBook(
         currency,
         maturity,
-        Number(itayoseEstimation?.lastBorrowUnitPrice ?? ZERO_BI)
+        Number(itayoseEstimation?.lastBorrowUnitPrice ?? 0n)
     );
 
     const {
@@ -356,7 +355,7 @@ export const AdvancedLending = ({
     } = useLendOrderBook(
         currency,
         maturity,
-        Number(itayoseEstimation?.lastLendUnitPrice ?? ZERO_BI)
+        Number(itayoseEstimation?.lastLendUnitPrice ?? 0n)
     );
 
     const isLoadingMap = {

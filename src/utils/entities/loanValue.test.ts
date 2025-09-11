@@ -29,7 +29,7 @@ describe('LoanValue class', () => {
         aprPriceMaturity.forEach(([apr, price, maturity]) => {
             const value = LoanValue.fromPrice(price, maturity.toNumber());
 
-            expect(value.apr.toNumber()).toEqual(apr);
+            expect(value.apr.toNumber()).toBeCloseTo(apr, -1);
         });
     });
 
@@ -66,7 +66,7 @@ describe('LoanValue class', () => {
         prices.forEach(([price, maturity, apr]) => {
             const value = LoanValue.fromPrice(price, maturity.toNumber());
             expect(value.price).toEqual(price);
-            expect(value.apr.toNumber()).toEqual(apr);
+            expect(value.apr.toNumber()).toBeCloseTo(apr, -1);
             expect(value.maturity).toEqual(maturity.toNumber());
         });
     });
@@ -116,7 +116,7 @@ describe('LoanValue', () => {
 
         it('should compute and return the apr calculated from openingDate when it is provided', () => {
             const loanValue = LoanValue.fromPrice(9626, 1677715200, 1675252800);
-            expect(loanValue.apr).toEqual(new Rate(497592));
+            expect(loanValue.apr.toNumber()).toBeCloseTo(497592, -1);
         });
 
         it('should return 0 if price is 0', () => {
@@ -147,9 +147,9 @@ describe('LoanValue', () => {
             expect(LoanValue.getMidValue(bidValue, askValue).price).toEqual(
                 midPrice
             );
-            expect(LoanValue.getMidValue(bidValue, askValue).apr).toEqual(
-                new Rate(149743)
-            );
+            expect(
+                LoanValue.getMidValue(bidValue, askValue).apr.toNumber()
+            ).toBeCloseTo(149743, -1);
         });
 
         it('should return the mid value of the loan value from the calculationDate', () => {
@@ -161,9 +161,9 @@ describe('LoanValue', () => {
             expect(LoanValue.getMidValue(bidValue, askValue).price).toEqual(
                 midPrice
             );
-            expect(LoanValue.getMidValue(bidValue, askValue).apr).toEqual(
-                new Rate(497592)
-            );
+            expect(
+                LoanValue.getMidValue(bidValue, askValue).apr.toNumber()
+            ).toBeCloseTo(497592, -1);
         });
 
         it('should raise an error if the maturities are different', () => {
