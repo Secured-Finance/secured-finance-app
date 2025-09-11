@@ -42,13 +42,12 @@ import {
     ButtonProperties,
     CurrencySymbol,
     ZERO_BI,
-    amountFormatterFromBase,
-    amountFormatterToBase,
     FeeCalculator,
     divide,
     generateWalletSourceInformation,
     PriceFormatter,
     FORMAT_DIGITS,
+    AmountConverter,
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import {
@@ -244,7 +243,7 @@ export function AdvancedLendingOrderCard({
     }, [amount, availableToBorrow, availableToLend, side]);
 
     const handleInputChange = (v: string) => {
-        const inputValue = amountFormatterToBase[currency](Number(v));
+        const inputValue = AmountConverter.toBase(v, currency);
 
         dispatch(setAmount(v === '' ? '' : inputValue.toString()));
         const available =
@@ -342,10 +341,11 @@ export function AdvancedLendingOrderCard({
                             }`}</span>
                             <span className='text-right text-primary-300'>
                                 {`${PriceFormatter.formatOrdinary(
-                                    amountFormatterFromBase[currency](
+                                    AmountConverter.fromBase(
                                         side === OrderSide.BORROW
                                             ? availableToBorrow
-                                            : availableToLend
+                                            : availableToLend,
+                                        currency
                                     ),
                                     FORMAT_DIGITS.NONE,
                                     FORMAT_DIGITS.PRICE
@@ -399,8 +399,9 @@ export function AdvancedLendingOrderCard({
                             unit={currency}
                             initialValue={
                                 amountExists
-                                    ? amountFormatterFromBase[currency](
-                                          amount
+                                    ? AmountConverter.fromBase(
+                                          amount,
+                                          currency
                                       ).toString()
                                     : ''
                             }

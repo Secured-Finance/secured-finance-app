@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
-import { CurrencySymbol, ZERO_BI, toCurrency } from 'src/utils';
+import { CurrencySymbol, ZERO_BI, CurrencyConverter } from 'src/utils';
 
 export const useBorrowableAmount = (
     address: string | undefined,
@@ -14,7 +14,7 @@ export const useBorrowableAmount = (
         queryFn: async () => {
             const amount = await securedFinance?.tokenVault.getBorrowableAmount(
                 address ?? '',
-                toCurrency(ccy)
+                CurrencyConverter.symbolToContract(ccy)
             );
             return amount ?? ZERO_BI;
         },

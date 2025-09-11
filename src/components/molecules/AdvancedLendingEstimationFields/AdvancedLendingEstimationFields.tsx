@@ -7,7 +7,7 @@ import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { OrderType } from 'src/types';
 import {
-    amountFormatterFromBase,
+    AmountConverter,
     currencyMap,
     divide,
     FORMAT_DIGITS,
@@ -56,16 +56,18 @@ export const AdvancedLendingEstimationFields = ({
 
     const orderEstimationAmount = useMemo(() => {
         if (!orderEstimationInfo || !orderEstimationInfo.filledAmount) return 0;
-        return amountFormatterFromBase[currency](
-            orderEstimationInfo.filledAmount
+        return AmountConverter.fromBase(
+            orderEstimationInfo.filledAmount,
+            currency
         );
     }, [currency, orderEstimationInfo]);
 
     const orderEstimationAmountInFV = useMemo(() => {
         if (!orderEstimationInfo || !orderEstimationInfo.filledAmountInFV)
             return 0;
-        return amountFormatterFromBase[currency](
-            orderEstimationInfo.filledAmountInFV
+        return AmountConverter.fromBase(
+            orderEstimationInfo.filledAmountInFV,
+            currency
         );
     }, [currency, orderEstimationInfo]);
 
@@ -78,7 +80,7 @@ export const AdvancedLendingEstimationFields = ({
             }
             return divide(
                 multiply(
-                    amountFormatterFromBase[currency](amount),
+                    AmountConverter.fromBase(amount, currency),
                     100,
                     currencyMap[currency].roundingDecimal
                 ),

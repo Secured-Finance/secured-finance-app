@@ -1,10 +1,6 @@
 import { useMemo } from 'react';
 import { getLiquidationInformation } from 'src/components/atoms';
-import {
-    amountFormatterFromBase,
-    CurrencySymbol,
-    PriceFormatter,
-} from 'src/utils';
+import { AmountConverter, CurrencySymbol, PriceFormatter } from 'src/utils';
 
 export const CollateralUsageSection = ({
     collateralCoverage,
@@ -31,7 +27,7 @@ export const CollateralUsageSection = ({
                 </h3>
                 <p className='typography-caption font-bold text-white'>
                     {PriceFormatter.formatWithCurrency(
-                        amountFormatterFromBase[currency](availableToBorrow),
+                        AmountConverter.fromBase(availableToBorrow, currency),
                         currency
                     )}
                 </p>

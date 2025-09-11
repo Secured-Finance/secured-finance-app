@@ -7,11 +7,7 @@ import {
     useOrderEstimation,
     useZCUsage,
 } from 'src/hooks';
-import {
-    amountFormatterFromBase,
-    FORMAT_DIGITS,
-    PriceFormatter,
-} from 'src/utils';
+import { FORMAT_DIGITS, PriceFormatter, AmountConverter } from 'src/utils';
 import { Amount, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
@@ -55,8 +51,9 @@ export const CollateralSimulationSection = ({
 
     const getZCUsage = useZCUsage(address, side);
 
-    const filledAmount = amountFormatterFromBase[tradeAmount.currency](
-        orderEstimationInfo?.filledAmount ?? BigInt(0)
+    const filledAmount = AmountConverter.fromBase(
+        orderEstimationInfo?.filledAmount ?? BigInt(0),
+        tradeAmount.currency
     );
 
     const zcUsage = getZCUsage(
@@ -80,7 +77,7 @@ export const CollateralSimulationSection = ({
 
     const remainingToBorrow = Math.max(
         0,
-        amountFormatterFromBase[tradeAmount.currency](remainingToBorrowBitInt)
+        AmountConverter.fromBase(remainingToBorrowBitInt, tradeAmount.currency)
     );
 
     const items: [string | React.ReactNode, string | React.ReactNode][] = [

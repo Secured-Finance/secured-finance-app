@@ -7,11 +7,11 @@ import {
     CurrencySymbol,
     LiquidationCalculator,
     ZERO_BI,
-    amountFormatterFromBase,
     computeAvailableToBorrow,
     currencyMap,
     divide,
-    toCurrency,
+    AmountConverter,
+    CurrencyConverter,
 } from 'src/utils';
 
 export interface CollateralBook {
@@ -94,7 +94,7 @@ export const useCollateralBook = (account: string | undefined) => {
                     collateralCurrencyList.map(async ccy => {
                         const withdrawableCollateral =
                             await securedFinance?.tokenVault.getWithdrawableCollateral(
-                                toCurrency(ccy),
+                                CurrencyConverter.symbolToContract(ccy),
                                 account ?? ''
                             );
                         return {
@@ -183,7 +183,8 @@ const formatCollateral = (
             const currency = ccy as CurrencySymbol;
             const amount = collateral[ccy];
             const usdValue =
-                amountFormatterFromBase[currency](amount) * priceList[currency];
+                AmountConverter.fromBase(amount, currency) *
+                priceList[currency];
 
             if (currencyMap[currency].isCollateral) {
                 collateralBook = {

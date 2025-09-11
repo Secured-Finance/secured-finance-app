@@ -16,12 +16,12 @@ import { useLastPrices } from 'src/hooks';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import {
-    amountFormatterFromBase,
     calculateFutureValue,
     FORMAT_DIGITS,
     PriceFormatter,
     PriceUtils,
 } from 'src/utils';
+import { AmountConverter } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
 
 type CoreTableOptions = {
@@ -177,7 +177,7 @@ export const CoreTable = <T,>({
         ).apr.toNormalizedNumber();
         const limitedApr = PriceUtils.capApr(avgApr);
 
-        const totalAmount = amountFormatterFromBase[currency](totalPVAmount);
+        const totalAmount = AmountConverter.fromBase(totalPVAmount, currency);
         const totalUsd = new Amount(totalPVAmount, currency)?.toUSD(price);
 
         setOrderBookInfoData({

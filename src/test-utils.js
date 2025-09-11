@@ -40,7 +40,14 @@ function render(
         const component = (
             <Provider store={store}>
                 <QueryClientProvider client={queryClient}>
-                    {children}
+                    <WagmiConfig
+                        config={createConfig({
+                            publicClient: publicClient,
+                            connectors: [connector],
+                        })}
+                    >
+                        {children}
+                    </WagmiConfig>
                 </QueryClientProvider>
             </Provider>
         );

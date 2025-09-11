@@ -39,6 +39,7 @@ import {
     PriceFormatter,
     FORMAT_DIGITS,
 } from 'src/utils';
+import { AmountConverter } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import { ColorBar } from './ColorBar';
 import { CoreTable } from './CoreTable';
@@ -99,7 +100,7 @@ const AmountCell = ({
         val = undefined;
     } else {
         val = PriceFormatter.formatOrdinary(
-            currencyMap[currency].fromBaseUnit(value),
+            AmountConverter.fromBase(value, currency),
             currencyMap[currency].roundingDecimal,
             currencyMap[currency].roundingDecimal
         );

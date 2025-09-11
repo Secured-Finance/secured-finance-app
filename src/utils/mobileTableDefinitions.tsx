@@ -1,8 +1,9 @@
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
 import { OrderSide } from '@secured-finance/sf-client';
-import { formatDate } from '@secured-finance/sf-core';
+import { MaturityConverter } from './maturityConverter';
 import * as dayjs from 'dayjs';
 import {
+    AmountConverter,
     CurrencySymbol,
     currencyMap,
     formatTimestampDDMMYY,
@@ -25,7 +26,7 @@ export const AmountCell = ({
     return (
         <span className='font-numerical text-3 leading-4 text-white'>
             {PriceFormatter.formatOrdinary(
-                currency.fromBaseUnit(amount),
+                AmountConverter.fromBase(amount, ccy),
                 currency.roundingDecimal,
                 currency.roundingDecimal
             )}
@@ -81,7 +82,7 @@ export const MaturityCell = ({
     const currentTime = Date.now();
     const dayToMaturity = formatMaturity(timestamp, 'day', currentTime);
 
-    const firstLine = formatDate(timestamp);
+    const firstLine = MaturityConverter.toDateString(timestamp);
     let secondLine = '';
 
     if (!isPastDate(timestamp)) {
