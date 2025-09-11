@@ -5,8 +5,8 @@ import useSF from 'src/hooks/useSecuredFinance';
 import { calculate } from 'src/utils';
 import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
+    AmountConverter,
     CurrencySymbol,
-    amountFormatterFromBase,
     hexToCurrencySymbol,
     toCurrency,
 } from 'src/utils';
@@ -63,8 +63,9 @@ export const usePositions = (
                 } as Position);
                 const ccy = hexToCurrencySymbol(position.ccy);
                 if (!ccy) return;
-                const presentValue = amountFormatterFromBase[ccy](
-                    position.presentValue
+                const presentValue = AmountConverter.fromBase(
+                    position.presentValue,
+                    ccy
                 );
                 if (presentValue >= 0) {
                     lendCurrencies.add(ccy);

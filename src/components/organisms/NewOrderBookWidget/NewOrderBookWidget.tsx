@@ -37,6 +37,7 @@ import {
     formatter,
     getMaxAmount,
     calculate,
+    AmountConverter,
 } from 'src/utils';
 import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import { LoanValue } from 'src/utils/entities';
@@ -109,7 +110,7 @@ const AmountCell = ({
         val = formatter.ordinary(
             currencyMap[currency].roundingDecimal,
             currencyMap[currency].roundingDecimal
-        )(currencyMap[currency].fromBaseUnit(value));
+        )(AmountConverter.fromBase(value, currency));
         if (cbLimit) {
             val += '(CB)';
         }

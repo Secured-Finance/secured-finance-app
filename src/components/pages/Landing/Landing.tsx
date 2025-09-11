@@ -1,5 +1,4 @@
 import { OrderSide } from '@secured-finance/sf-client';
-import { getUTCMonthYear } from '@secured-finance/sf-core';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
@@ -39,7 +38,7 @@ import {
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { OrderType } from 'src/types';
-import { CurrencySymbol, ZERO_BI } from 'src/utils';
+import { CurrencySymbol, MaturityConverter, ZERO_BI } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
@@ -244,7 +243,7 @@ export const WithBanner = ({
                 severity: AlertSeverity.Info,
                 title: (
                     <>
-                        {`Market ${ccy}-${getUTCMonthYear(
+                        {`Market ${ccy}-${MaturityConverter.toUTCMonthYear(
                             market.maturity,
                             true
                         )} is open for pre-orders now until ${Intl.DateTimeFormat(
@@ -266,7 +265,7 @@ export const WithBanner = ({
 
                         <span className='pl-4'>
                             <Link
-                                href={`/?market=${ccy}-${getUTCMonthYear(
+                                href={`/?market=${ccy}-${MaturityConverter.toUTCMonthYear(
                                     market.maturity,
                                     true
                                 )}`}

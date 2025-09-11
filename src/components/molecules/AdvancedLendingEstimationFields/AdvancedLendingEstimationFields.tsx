@@ -8,7 +8,7 @@ import { RootState } from 'src/store/types';
 import { OrderType } from 'src/types';
 import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
-    amountFormatterFromBase,
+    AmountConverter,
     currencyMap,
     divide,
     multiply,
@@ -55,16 +55,18 @@ export const AdvancedLendingEstimationFields = ({
 
     const orderEstimationAmount = useMemo(() => {
         if (!orderEstimationInfo || !orderEstimationInfo.filledAmount) return 0;
-        return amountFormatterFromBase[currency](
-            orderEstimationInfo.filledAmount
+        return AmountConverter.fromBase(
+            orderEstimationInfo.filledAmount,
+            currency
         );
     }, [currency, orderEstimationInfo]);
 
     const orderEstimationAmountInFV = useMemo(() => {
         if (!orderEstimationInfo || !orderEstimationInfo.filledAmountInFV)
             return 0;
-        return amountFormatterFromBase[currency](
-            orderEstimationInfo.filledAmountInFV
+        return AmountConverter.fromBase(
+            orderEstimationInfo.filledAmountInFV,
+            currency
         );
     }, [currency, orderEstimationInfo]);
 
@@ -77,7 +79,7 @@ export const AdvancedLendingEstimationFields = ({
             }
             return divide(
                 multiply(
-                    amountFormatterFromBase[currency](amount),
+                    AmountConverter.fromBase(amount, currency),
                     FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
                     currencyMap[currency].roundingDecimal
                 ),

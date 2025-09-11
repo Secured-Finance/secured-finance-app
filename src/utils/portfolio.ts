@@ -7,7 +7,8 @@ import {
     TransactionHistoryList,
 } from 'src/types';
 import { ZERO_BI } from './collateral';
-import { currencyMap, hexToCurrencySymbol } from './currencyList';
+import { hexToCurrencySymbol } from './currencyList';
+import { AmountConverter } from './amountConverter';
 import { LoanValue } from './entities';
 import { Rate } from './rate';
 
@@ -42,7 +43,7 @@ export const computeNetValue = (
         if (!ccy) return acc;
         return (
             acc +
-            currencyMap[ccy].fromBaseUnit(amount) * (priceList?.[ccy] ?? 0)
+            AmountConverter.fromBase(amount, ccy) * (priceList?.[ccy] ?? 0)
         );
     }, 0);
 };

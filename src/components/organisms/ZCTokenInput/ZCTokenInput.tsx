@@ -5,11 +5,11 @@ import { calculate } from 'src/utils';
 import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     CurrencySymbol,
-    amountFormatterFromBase,
     convertZCTokenFromBaseAmount,
     convertZCTokenToBaseAmount,
     formatter,
 } from 'src/utils';
+import { AmountConverter } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
 interface ZCTokenInputProps {
@@ -93,7 +93,7 @@ export const ZCTokenInput = ({
         if (amount && availableAmount && availableTokenAmount) {
             const baseAmount =
                 (amount * availableAmount) / availableTokenAmount;
-            return price * amountFormatterFromBase[symbol](baseAmount);
+            return price * AmountConverter.fromBase(baseAmount, symbol);
         } else {
             return 0;
         }

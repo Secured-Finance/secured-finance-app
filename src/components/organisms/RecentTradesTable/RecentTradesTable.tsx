@@ -24,7 +24,7 @@ import {
     useIsSubgraphSupported,
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
-import { formatter, calculate, currencyMap } from 'src/utils';
+import { formatter, calculate, currencyMap, AmountConverter } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import { columns } from './constants';
 import { RecentTradesTableProps, TradeMetadata } from './types';
@@ -72,8 +72,9 @@ export const RecentTradesTable = ({
     const data = useMemo(() => {
         return transactionHistory
             ?.map(transaction => {
-                const sizeActual = currencyMap[currency].fromBaseUnit(
-                    BigInt(+transaction.amount)
+                const sizeActual = AmountConverter.fromBase(
+                    transaction.amount,
+                    currency
                 );
                 const size = formatter.ordinary(
                     currencyMap[currency].roundingDecimal,

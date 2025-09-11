@@ -8,9 +8,9 @@ import LockOpen from 'src/assets/icons/lock-open.svg';
 import Coins from 'src/assets/img/2d coins.svg';
 import { CurrencyIcon } from 'src/components/atoms';
 import { useBreakpoint, useGetCountdown } from 'src/hooks';
-import { formatter } from 'src/utils';
-import { CurrencySymbol, ZERO_BI, amountFormatterFromBase } from 'src/utils';
+import { AmountConverter, CurrencySymbol, formatter } from 'src/utils';
 import { stages } from './constants';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 export const Banner = ({ text }: { text: string }) => {
     return (
@@ -105,7 +105,7 @@ export const CampaignStatus = ({
     collateralCurrencies.forEach(ccy => {
         totalUSDValue +=
             (priceList[ccy] ?? 0) *
-            amountFormatterFromBase[ccy](valueLocked[ccy] ?? ZERO_BI);
+            AmountConverter.fromBase(valueLocked[ccy], ccy);
     });
 
     const campaignStartCopy = isStageOn
@@ -160,12 +160,14 @@ export const CampaignStatus = ({
                                         className='typography-mobile-body-3 block text-center text-white tablet:text-left tablet:text-[22px] tablet:font-semibold desktop:text-7 desktop:leading-8'
                                         key={ccy}
                                     >
+                                        X
                                         {`${formatter.ordinary(
-                                            0,
-                                            1
+                                            FINANCIAL_CONSTANTS.DEFAULT_MIN_DECIMALS,
+                                            FINANCIAL_CONSTANTS.DEFAULT_ONE_DECIMALS
                                         )(
-                                            amountFormatterFromBase[ccy](
-                                                valueLocked[ccy] ?? ZERO_BI
+                                            AmountConverter.fromBase(
+                                                valueLocked[ccy],
+                                                ccy
                                             )
                                         )} ${ccy}`}
                                     </span>

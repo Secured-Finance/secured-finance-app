@@ -7,7 +7,7 @@ import {
     useLastPrices,
     useValueLockedByCurrency,
 } from 'src/hooks';
-import { ZERO_BI, currencyMap } from 'src/utils';
+import { ZERO_BI, AmountConverter } from 'src/utils';
 
 export const useTotalValueLockedAndCurrencies = () => {
     const { data: currencies = [] } = useCurrencies();
@@ -30,7 +30,7 @@ export const useTotalValueLockedAndCurrencies = () => {
             if (!valueLockedByCurrency[ccy]) continue;
             val += BigInt(
                 calculate.floor(
-                    currencyMap[ccy].fromBaseUnit(valueLockedByCurrency[ccy]) *
+                    AmountConverter.fromBase(valueLockedByCurrency[ccy], ccy) *
                         (priceList[ccy] ?? 0)
                 )
             );

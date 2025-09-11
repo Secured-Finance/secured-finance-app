@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { getLiquidationInformation } from 'src/components/atoms';
 import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
-    amountFormatterFromBase,
+    AmountConverter,
     CurrencySymbol,
     formatWithCurrency,
     formatter,
@@ -34,7 +34,7 @@ export const CollateralUsageSection = ({
                 </h3>
                 <p className='typography-caption font-bold text-white'>
                     {formatWithCurrency(
-                        amountFormatterFromBase[currency](availableToBorrow),
+                        AmountConverter.fromBase(availableToBorrow, currency),
                         currency
                     )}
                 </p>

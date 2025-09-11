@@ -1,6 +1,5 @@
 import { Disclosure, Transition } from '@headlessui/react';
 import { OrderSide } from '@secured-finance/sf-client';
-import { formatDate } from '@secured-finance/sf-core';
 import { useMemo } from 'react';
 import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
@@ -21,6 +20,7 @@ import {
     FeeCalculator,
     divide,
     formatWithCurrency,
+    MaturityConverter,
     multiply,
     prefixTilde,
     formatter,
@@ -145,7 +145,7 @@ export const OrderDetails = ({
                             )
                         ),
                     ],
-                    ['Maturity Date', formatDate(maturity.toNumber())],
+                    ['Maturity Date', MaturityConverter.toDateString(maturity)],
                 ]}
             />
             {!isRemoveOrder && (

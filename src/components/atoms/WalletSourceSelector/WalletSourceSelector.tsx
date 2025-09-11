@@ -7,8 +7,8 @@ import { SvgIcon } from 'src/types';
 import { formatter } from 'src/utils';
 import { calculate } from 'src/utils';
 import {
+    AmountConverter,
     AddressConverter,
-    currencyMap,
     CurrencySymbol,
     DisplayLengths,
 } from 'src/utils';
@@ -38,7 +38,7 @@ const formatOption = (
         6
     )(
         calculate.floor(
-            currencyMap[asset].fromBaseUnit(available) * AMOUNT_PRECISION
+            AmountConverter.fromBase(available, asset) * AMOUNT_PRECISION
         ) / AMOUNT_PRECISION
     )} ${showAssetName ? ` ${asset}` : ''}`;
 };

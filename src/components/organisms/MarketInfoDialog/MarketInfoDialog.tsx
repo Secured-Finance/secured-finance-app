@@ -1,13 +1,18 @@
 import { Dialog } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/20/solid';
-import { formatDate } from '@secured-finance/sf-core';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import ArrowUpSquare from 'src/assets/icons/arrow-up-square.svg';
 import DocumentTextIcon from 'src/assets/icons/document-text.svg';
 import { Tooltip } from 'src/components/molecules';
 import { useGetCountdown } from 'src/hooks';
-import { formatter, currencyMap, handlePriceSource } from 'src/utils';
+import {
+    formatter,
+    currencyMap,
+    handlePriceSource,
+    MaturityConverter,
+} from 'src/utils';
+
 import { MarketInfoDialogProps } from './types';
 import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
@@ -62,7 +67,9 @@ export const MarketInfoDialog = ({
                                             {currency}
                                         </h3>
                                         <span className='typography-mobile-body-6'>
-                                            {formatDate(maturity)}
+                                            {MaturityConverter.toDateString(
+                                                maturity
+                                            )}
                                         </span>
                                     </div>
                                 </div>

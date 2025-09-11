@@ -5,8 +5,8 @@ import { UserAccount } from 'src/types';
 import { calculate } from 'src/utils';
 import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
+    AmountConverter,
     CurrencySymbol,
-    amountFormatterFromBase,
     hexToCurrencySymbol,
 } from 'src/utils';
 
@@ -69,8 +69,9 @@ export const useZCUsage = (address: UserAccount, side: OrderSide) => {
                     hexToCurrencySymbol(pos.currency) === currency
             );
 
-            return amountFormatterFromBase[currency](
-                positionInMaturity?.amount ?? BigInt(0)
+            return AmountConverter.fromBase(
+                positionInMaturity?.amount,
+                currency
             );
         },
         [position?.positions]

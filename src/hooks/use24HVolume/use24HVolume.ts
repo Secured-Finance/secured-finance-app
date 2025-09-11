@@ -2,9 +2,8 @@ import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useEffect, useState } from 'react';
 import { useGraphClientHook } from 'src/hooks';
 import { Transaction24HVolume } from 'src/types';
-import { CurrencyConverter, currencyMap } from 'src/utils';
-import { calculate } from 'src/utils';
 import { FINANCIAL_CONSTANTS } from 'src/config/constants';
+import { AmountConverter, CurrencyConverter, calculate } from 'src/utils';
 
 const TRANSACTIONS_LIMIT = FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD;
 
@@ -50,7 +49,7 @@ export const use24HVolume = (): { data: Record<string, number> } => {
             const key = `${symbol}-${tx.maturity}`;
             result[key] =
                 (result[key] || 0) +
-                currencyMap[symbol].fromBaseUnit(tx.amount);
+                AmountConverter.fromBase(tx.amount, symbol);
         }
     }
 
