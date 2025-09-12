@@ -1,0 +1,29 @@
+overwrite: true
+# Schema source - using development Sepolia endpoint from sf-graph-client
+# ISSUE-059 will add environment-specific endpoint configuration
+# ISSUE-067 will add full multi-chain subgraph endpoint management  
+schema: https://api.studio.thegraph.com/query/30564/sf-protocol-dev-sepolia/0.1.6
+documents:
+  - src/graphql/**/*.graphql
+generates:
+  src/generated/subgraph.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-query
+    config:
+      # Critical: Map The Graph's special types
+      scalars:
+        BigInt: string          # BigInt → string in TypeScript
+        BigDecimal: string      # BigDecimal → string for precision
+        Bytes: string          # Ethereum addresses → string
+        Int8: number
+      # React Query v5 configuration
+      reactQueryVersion: 5
+      # Expose additional utilities
+      exposeQueryKeys: true
+      exposeFetcher: true
+      # Add request options for The Graph
+      requestOptions:
+        headers:
+          'Content-Type': 'application/json'
