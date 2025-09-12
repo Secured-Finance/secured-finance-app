@@ -4,13 +4,11 @@ import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
 import { AssetPriceMap } from 'src/types';
 import {
+    CollateralCalculator,
     CurrencySymbol,
-    LiquidationCalculator,
     ZERO_BI,
-    amountFormatterFromBase,
-    computeAvailableToBorrow,
     currencyMap,
-    divide,
+    AmountConverter,
     CurrencyConverter,
 } from 'src/utils';
 
@@ -22,11 +20,11 @@ export interface CollateralBook {
     usdAvailableToBorrow: number;
     usdNonCollateral: number;
     coverage: number;
-    collateralThreshold: number;
+    liquidationThreshold: number;
     totalPresentValue: number;
 }
 
-const DIVIDER = 100000000;
+const DIVIDER = 100_000_000n;
 
 export const emptyCollateralBook: CollateralBook = {
     collateral: {
@@ -47,7 +45,7 @@ export const emptyCollateralBook: CollateralBook = {
     usdAvailableToBorrow: 0,
     usdNonCollateral: 0,
     coverage: 0,
-    collateralThreshold: 0,
+    liquidationThreshold: 0,
     totalPresentValue: 0,
 };
 
@@ -116,12 +114,9 @@ export const useCollateralBook = (account: string | undefined) => {
             const { collateralBook, nonCollateralBook, usdNonCollateral } =
                 formatCollateral(data.collateralValues.collateral, priceList);
 
-            const liquidationThresholdRate = Number(
-                data.collateralParameters.liquidationThresholdRate
-            );
             const liquidationThreshold =
-                LiquidationCalculator.getLiquidationThreshold(
-                    liquidationThresholdRate
+                CollateralCalculator.calculateCollateralThreshold(
+                    data.collateralParameters.liquidationThresholdRate
                 );
 
             const withdrawableCollateral: CollateralBook['withdrawableCollateral'] =
@@ -129,33 +124,33 @@ export const useCollateralBook = (account: string | undefined) => {
                     ...acc,
                     ...obj,
                 }));
-            const usdCollateral = divide(
-                data.collateralValues.totalCollateralAmount,
-                DIVIDER,
-                8
-            );
-            const usdUnusedCollateral = divide(
-                data.collateralValues.totalUnusedCollateralAmount,
-                DIVIDER,
-                8
-            );
-            const coverage = Number(data.collateralValues.collateralCoverage);
+
+            const transformedData =
+                CollateralCalculator.transformCollateralBookData(
+                    data.collateralValues.totalCollateralAmount,
+                    data.collateralValues.totalUnusedCollateralAmount,
+                    data.collateralValues.collateralCoverage,
+                    data.totalPresentValue,
+                    DIVIDER,
+                    8
+                );
 
             const colBook: CollateralBook = {
                 collateral: collateralBook,
                 nonCollateral: nonCollateralBook,
-                usdCollateral: usdCollateral,
-                usdAvailableToBorrow: computeAvailableToBorrow(
-                    usdCollateral,
-                    usdUnusedCollateral,
-                    divide(coverage, 100),
-                    liquidationThreshold
-                ),
+                usdCollateral: transformedData.usdCollateral,
+                usdAvailableToBorrow:
+                    CollateralCalculator.calculateAvailableToBorrow(
+                        transformedData.usdCollateral,
+                        transformedData.usdUnusedCollateral,
+                        transformedData.coverage,
+                        liquidationThreshold
+                    ),
                 usdNonCollateral: usdNonCollateral,
-                coverage: coverage,
-                collateralThreshold: liquidationThreshold,
+                coverage: transformedData.coverage,
+                liquidationThreshold: liquidationThreshold,
                 withdrawableCollateral: withdrawableCollateral,
-                totalPresentValue: divide(data.totalPresentValue, DIVIDER, 8),
+                totalPresentValue: transformedData.totalPresentValue,
             };
 
             return colBook;
@@ -183,7 +178,8 @@ const formatCollateral = (
             const currency = ccy as CurrencySymbol;
             const amount = collateral[ccy];
             const usdValue =
-                amountFormatterFromBase[currency](amount) * priceList[currency];
+                AmountConverter.fromBase(amount, currency) *
+                priceList[currency];
 
             if (currencyMap[currency].isCollateral) {
                 collateralBook = {

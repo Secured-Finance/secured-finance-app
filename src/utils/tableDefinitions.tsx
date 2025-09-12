@@ -17,7 +17,7 @@ import {
 } from 'src/components/atoms';
 import { TableContractCell, TableHeader } from 'src/components/molecules';
 import { Alignment, AssetPriceMap } from 'src/types';
-import { ZERO_BI, formatTimestampDDMMYY } from 'src/utils';
+import { ZERO_BI, TimestampConverter } from 'src/utils';
 import {
     CurrencySymbol,
     currencyMap,
@@ -496,7 +496,9 @@ export const dateAndTimeColumnDefinition = <T extends { createdAt: bigint }>(
                 <div className='flex justify-end'>
                     <div className='flex flex-col text-right'>
                         <span className='typography-desktop-body-5 font-numerical text-white'>
-                            {formatTimestampDDMMYY(+info.getValue().toString())}
+                            {TimestampConverter.formatTimestampDDMMYY(
+                                info.getValue()
+                            )}
                         </span>
                     </div>
                 </div>
@@ -527,7 +529,9 @@ export const dateTimeViewColumnDefinition = <
                 <div className='flex items-center justify-start gap-0.5'>
                     <div className='flex flex-col text-right'>
                         <span className='typography-desktop-body-5 text-white'>
-                            {formatTimestampDDMMYY(+info.getValue().toString())}
+                            {TimestampConverter.formatTimestampDDMMYY(
+                                info.getValue()
+                            )}
                         </span>
                     </div>
                     {blockExplorerLink && (

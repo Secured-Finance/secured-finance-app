@@ -2,9 +2,10 @@ import { useMemo } from 'react';
 import { Transaction } from 'src/components/organisms';
 import { HistoricalDataIntervals } from 'src/types';
 import {
+    AmountConverter,
     CurrencySymbol,
-    amountFormatterFromBase,
     hexToCurrencySymbol,
+    TimestampConverter,
 } from 'src/utils';
 
 const safeDivide = (value: string | number, divisor: number): number => {
@@ -32,10 +33,11 @@ export const useTransactionCandleStickData = (
             historicalTradeData.data?.transactionCandleSticks || [];
 
         const editableTransactions = [...transactions];
-        const timestamp = Math.floor(Date.now() / 1000);
-        const intervalTimestamp =
-            Math.ceil(timestamp / Number(selectedTimeScale)) *
-            Number(selectedTimeScale);
+        const timestamp = TimestampConverter.getCurrentTimestamp();
+        const intervalTimestamp = TimestampConverter.calculateIntervalTimestamp(
+            timestamp,
+            selectedTimeScale
+        );
 
         if (
             transactions.length > 0 &&
@@ -51,8 +53,9 @@ export const useTransactionCandleStickData = (
 
         for (const item of editableTransactions) {
             const ccy = hexToCurrencySymbol(item.currency);
-            const volAdjusted = amountFormatterFromBase[ccy as CurrencySymbol](
-                BigInt(item.volume)
+            const volAdjusted = AmountConverter.fromBase(
+                BigInt(item.volume),
+                ccy as CurrencySymbol
             );
 
             // Fill missing timestamps data

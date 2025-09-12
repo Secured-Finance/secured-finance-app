@@ -1,15 +1,15 @@
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
 import { OrderSide } from '@secured-finance/sf-client';
-import { formatDate } from '@secured-finance/sf-core';
-import * as dayjs from 'dayjs';
+import { MaturityConverter } from './maturityConverter';
 import {
+    AmountConverter,
     CurrencySymbol,
     currencyMap,
-    formatTimestampDDMMYY,
     isMaturityPastDays,
     isPastDate,
     ordinaryFormat,
 } from 'src/utils';
+import { TimestampConverter } from './timestampConverter';
 
 export const AmountCell = ({
     ccy,
@@ -25,7 +25,7 @@ export const AmountCell = ({
     return (
         <span className='font-numerical text-3 leading-4 text-white'>
             {ordinaryFormat(
-                currency.fromBaseUnit(amount),
+                AmountConverter.fromBase(amount, ccy),
                 currency.roundingDecimal,
                 currency.roundingDecimal
             )}
@@ -47,7 +47,7 @@ export const OrderTimeCell = ({
     return (
         <div className='flex items-center gap-1'>
             <span className='font-numerical text-3 leading-4 text-white'>
-                {formatTimestampDDMMYY(timestamp)}
+                {TimestampConverter.formatTimestampDDMMYY(timestamp)}
             </span>
             {blockExplorerLink && (
                 <ArrowTopRightOnSquareIcon
@@ -65,7 +65,8 @@ const formatMaturity = (
     maturityTimeStamp: number,
     timeUnit: 'day' | 'hours' | 'minutes',
     currentTime: number
-) => dayjs.unix(maturityTimeStamp).diff(currentTime, timeUnit);
+) =>
+    TimestampConverter.formatMaturity(maturityTimeStamp, timeUnit, currentTime);
 
 export const MaturityCell = ({
     timestamp,
@@ -81,7 +82,7 @@ export const MaturityCell = ({
     const currentTime = Date.now();
     const dayToMaturity = formatMaturity(timestamp, 'day', currentTime);
 
-    const firstLine = formatDate(timestamp);
+    const firstLine = MaturityConverter.toDateString(timestamp);
     let secondLine = '';
 
     if (!isPastDate(timestamp)) {

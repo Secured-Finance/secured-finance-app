@@ -3,9 +3,9 @@ import { ZERO_BI } from './collateral';
 import {
     CurrencySymbol,
     createCurrencyMap,
-    currencyMap,
     hexToCurrencySymbol,
 } from './currencyList';
+import { AmountConverter } from './amountConverter';
 
 export function computeTotalDailyVolumeInUSD(
     dailyVolumes: DailyVolumes,
@@ -28,7 +28,7 @@ export function computeTotalDailyVolumeInUSD(
             return;
         }
 
-        const volumeInBaseUnit = currencyMap[ccy].fromBaseUnit(BigInt(volume));
+        const volumeInBaseUnit = AmountConverter.fromBase(volume, ccy);
 
         const valueInUSD = volumeInBaseUnit * priceMap[ccy];
 
@@ -60,9 +60,7 @@ export function computeTotalProtocolVolumeInUSD(
             return;
         }
 
-        const volumeInBaseUnit = currencyMap[ccy].fromBaseUnit(
-            BigInt(totalVolume)
-        );
+        const volumeInBaseUnit = AmountConverter.fromBase(totalVolume, ccy);
 
         const valueInUSD = volumeInBaseUnit * priceMap[ccy];
         totalVolumeUSD += valueInUSD;

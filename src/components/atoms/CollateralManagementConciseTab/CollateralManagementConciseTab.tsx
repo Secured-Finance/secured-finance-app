@@ -5,7 +5,7 @@ import { LiquidationCalculator, percentFormat, usdFormat } from 'src/utils';
 interface CollateralManagementConciseTabProps {
     collateralCoverage: number;
     availableToBorrow: number;
-    collateralThreshold: number;
+    liquidationThreshold: number;
     account: string | undefined;
     totalCollateralInUSD: number;
 }
@@ -35,7 +35,7 @@ const getRiskLevel = (percentage: number) => {
 export const CollateralManagementConciseTab = ({
     collateralCoverage,
     availableToBorrow,
-    collateralThreshold,
+    liquidationThreshold,
     account,
     totalCollateralInUSD,
 }: CollateralManagementConciseTabProps) => {
@@ -50,8 +50,8 @@ export const CollateralManagementConciseTab = ({
     }
 
     const threshold =
-        collateralThreshold && collateralThreshold > collateralCoverage
-            ? collateralThreshold - collateralCoverage
+        liquidationThreshold && liquidationThreshold > collateralCoverage
+            ? liquidationThreshold - collateralCoverage
             : 0;
 
     const info = getLiquidationInformation(collateralCoverage);

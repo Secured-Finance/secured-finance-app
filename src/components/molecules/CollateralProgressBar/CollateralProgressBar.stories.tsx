@@ -8,7 +8,7 @@ export default {
     args: {
         collateralCoverage: 0,
         totalCollateralInUSD: 0,
-        collateralThreshold: 0,
+        liquidationThreshold: 0,
         availableToBorrow: 0,
         account: undefined,
     },
@@ -31,7 +31,7 @@ ZeroCollateral.args = {
     collateralCoverage: 0,
     totalCollateralInUSD: 0,
     availableToBorrow: 0,
-    collateralThreshold: 80,
+    liquidationThreshold: 80,
     account: '0x123',
 };
 
@@ -40,7 +40,7 @@ CollateralDepositedZeroCoverage.args = {
     collateralCoverage: 0,
     totalCollateralInUSD: 100,
     availableToBorrow: 80,
-    collateralThreshold: 80,
+    liquidationThreshold: 80,
     account: '0x123',
 };
 
@@ -49,6 +49,6 @@ CollateralDepositedWithCoverage.args = {
     collateralCoverage: 37,
     totalCollateralInUSD: 100,
     availableToBorrow: 43,
-    collateralThreshold: 80,
+    liquidationThreshold: 80,
     account: '0x123',
 };

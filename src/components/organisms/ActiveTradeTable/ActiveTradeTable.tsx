@@ -1,8 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
-import { formatDate, getUTCMonthYear } from '@secured-finance/sf-core';
 import { createColumnHelper } from '@tanstack/react-table';
 import clsx from 'clsx';
-import * as dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { useCallback, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -25,6 +23,7 @@ import {
     AmountCell,
     CurrencySymbol,
     MaturityCell,
+    MaturityConverter,
     MobileTableWrapper,
     amountColumnDefinition,
     contractColumnDefinition,
@@ -35,6 +34,7 @@ import {
     loanTypeFromFVColumnDefinition,
     priceYieldColumnDefinition,
     tableHeaderDefinition,
+    TimestampConverter,
 } from 'src/utils';
 import { Amount, Maturity } from 'src/utils/entities';
 
@@ -203,7 +203,10 @@ export const ActiveTradeTable = ({
                         dispatch(setMaturity(maturity));
                         handleCurrencyChange(ccy);
 
-                        const prettyMaturity = getUTCMonthYear(maturity, true);
+                        const prettyMaturity = MaturityConverter.toUTCMonthYear(
+                            maturity,
+                            true
+                        );
 
                         const market = `${ccy}-${prettyMaturity}`;
 
@@ -378,7 +381,9 @@ export const ActiveTradeTable = ({
                                 </div>
                             )}
                             <span className='w-full text-2.5 leading-3 text-neutral-400'>
-                                {formatDate(maturityTimestamp)}
+                                {MaturityConverter.toDateString(
+                                    maturityTimestamp
+                                )}
                             </span>
                         </div>
                     );
@@ -520,4 +525,5 @@ const formatMaturity = (
     maturityTimeStamp: number,
     timeUnit: 'day' | 'hours' | 'minutes',
     currentTime: number
-) => dayjs.unix(maturityTimeStamp).diff(currentTime, timeUnit);
+) =>
+    TimestampConverter.formatMaturity(maturityTimeStamp, timeUnit, currentTime);

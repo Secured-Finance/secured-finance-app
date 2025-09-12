@@ -8,10 +8,10 @@ import { useTerminationPrices } from 'src/hooks';
 import {
     CollateralInfo,
     CurrencySymbol,
-    amountFormatterFromBase,
     currencyMap,
     hexToCurrencySymbol,
 } from 'src/utils';
+import { AmountConverter } from 'src/utils';
 import {
     amountColumnDefinition,
     tableHeaderDefinition,
@@ -45,7 +45,7 @@ export const WithdrawTokenTable = ({ data }: { data: TokenPosition[] }) => {
                     symbol: ccy,
                     name: currencyMap[ccy].name,
                     availableFullValue: amount,
-                    available: amountFormatterFromBase[ccy](amount),
+                    available: AmountConverter.fromBase(amount, ccy),
                 },
             };
         },

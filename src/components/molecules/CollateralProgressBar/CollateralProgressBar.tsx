@@ -5,7 +5,7 @@ import { percentFormat, usdFormat } from 'src/utils';
 interface CollateralProgressBarProps {
     collateralCoverage: number;
     totalCollateralInUSD: number;
-    collateralThreshold: number;
+    liquidationThreshold: number;
     availableToBorrow: number;
     account: string | undefined;
 }
@@ -14,7 +14,7 @@ const getInformationText = (
     totalCollateralInUSD: number,
     collateralCoverage: number,
     availableToBorrow: number,
-    collateralThreshold: number
+    liquidationThreshold: number
 ) => {
     if (totalCollateralInUSD === 0) {
         return (
@@ -35,7 +35,7 @@ const getInformationText = (
                     {usdFormat(availableToBorrow, 2)}
                 </span>
                 <span>{` which is ${percentFormat(
-                    collateralThreshold - collateralCoverage * 100
+                    liquidationThreshold - collateralCoverage * 100
                 )} of your ${usdFormat(
                     totalCollateralInUSD,
                     2
@@ -43,7 +43,7 @@ const getInformationText = (
             </div>
             <div>
                 {`Increasing collateral deposit will increase your borrow limit by
-                ${collateralThreshold}% of its value.`}
+                ${liquidationThreshold}% of its value.`}
             </div>
         </div>
     );
@@ -52,7 +52,7 @@ const getInformationText = (
 export const CollateralProgressBar = ({
     collateralCoverage = 0,
     totalCollateralInUSD = 0,
-    collateralThreshold = 0,
+    liquidationThreshold = 0,
     availableToBorrow,
     account,
 }: CollateralProgressBarProps) => {
@@ -112,7 +112,7 @@ export const CollateralProgressBar = ({
                                 totalCollateralInUSD,
                                 collateralCoverage,
                                 availableToBorrow,
-                                collateralThreshold
+                                liquidationThreshold
                             )}
                         </InfoToolTip>
                     </div>

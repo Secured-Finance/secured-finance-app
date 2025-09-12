@@ -9,9 +9,8 @@ import Coins from 'src/assets/img/2d coins.svg';
 import { CurrencyIcon } from 'src/components/atoms';
 import { useBreakpoint, useGetCountdown } from 'src/hooks';
 import {
+    AmountConverter,
     CurrencySymbol,
-    ZERO_BI,
-    amountFormatterFromBase,
     ordinaryFormat,
     usdFormat,
 } from 'src/utils';
@@ -110,7 +109,7 @@ export const CampaignStatus = ({
     collateralCurrencies.forEach(ccy => {
         totalUSDValue +=
             (priceList[ccy] ?? 0) *
-            amountFormatterFromBase[ccy](valueLocked[ccy] ?? ZERO_BI);
+            AmountConverter.fromBase(valueLocked[ccy], ccy);
     });
 
     const campaignStartCopy = isStageOn
@@ -166,8 +165,9 @@ export const CampaignStatus = ({
                                         key={ccy}
                                     >
                                         {`${ordinaryFormat(
-                                            amountFormatterFromBase[ccy](
-                                                valueLocked[ccy] ?? ZERO_BI
+                                            AmountConverter.fromBase(
+                                                valueLocked[ccy],
+                                                ccy
                                             ),
                                             0,
                                             1
