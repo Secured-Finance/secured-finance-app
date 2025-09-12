@@ -5,17 +5,17 @@ import { PriceFormatter } from 'src/utils';
 
 interface LiquidationProgressBarProps {
     liquidationPercentage: number;
-    collateralThreshold: number;
+    liquidationThreshold: number;
     account: string | undefined;
 }
 
 const getInformationText = (
     liquidationPercentage: number,
-    collateralThreshold: number
+    liquidationThreshold: number
 ) => {
-    const collateralThresholdValue =
-        collateralThreshold > liquidationPercentage
-            ? collateralThreshold - liquidationPercentage
+    const liquidationThresholdValue =
+        liquidationThreshold > liquidationPercentage
+            ? liquidationThreshold - liquidationPercentage
             : 0;
     return (
         <div className='flex flex-col gap-4'>
@@ -26,9 +26,9 @@ const getInformationText = (
             <div>
                 <span>You are currently </span>
                 <span className='text-nebulaTeal'>
-                    {PriceFormatter.formatPercentage(collateralThresholdValue)}
+                    {PriceFormatter.formatPercentage(liquidationThresholdValue)}
                 </span>
-                <span>{` under the liquidation threshold (${collateralThreshold}% of deposit balance).`}</span>
+                <span>{` under the liquidation threshold (${liquidationThreshold}% of deposit balance).`}</span>
             </div>
         </div>
     );
@@ -36,21 +36,21 @@ const getInformationText = (
 
 export const LiquidationProgressBar = ({
     liquidationPercentage = 0,
-    collateralThreshold,
+    liquidationThreshold,
     account,
 }: LiquidationProgressBarProps) => {
     let padding =
-        collateralThreshold !== 0
-            ? liquidationPercentage / collateralThreshold
+        liquidationThreshold !== 0
+            ? liquidationPercentage / liquidationThreshold
             : 0;
     if (padding > 1) {
         padding = 1;
     }
 
     const info = getLiquidationInformation(liquidationPercentage);
-    const collateralThresholdValue =
-        collateralThreshold > liquidationPercentage
-            ? collateralThreshold - liquidationPercentage
+    const liquidationThresholdValue =
+        liquidationThreshold > liquidationPercentage
+            ? liquidationThreshold - liquidationPercentage
             : 0;
 
     return (
@@ -86,7 +86,7 @@ export const LiquidationProgressBar = ({
                                 className={`whitespace-pre font-semibold ${info.color}`}
                             >
                                 {PriceFormatter.formatPercentage(
-                                    collateralThresholdValue
+                                    liquidationThresholdValue
                                 )}
                             </span>
                             <span className='text-planetaryPurple'>
@@ -96,7 +96,7 @@ export const LiquidationProgressBar = ({
                         <InfoToolTip>
                             {getInformationText(
                                 liquidationPercentage,
-                                collateralThreshold
+                                liquidationThreshold
                             )}
                         </InfoToolTip>
                     </div>

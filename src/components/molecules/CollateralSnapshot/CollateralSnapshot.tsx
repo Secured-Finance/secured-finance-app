@@ -14,8 +14,8 @@ import { CoreTable } from 'src/components/molecules';
 import {
     CurrencySymbol,
     currencyMap,
-    formatTimestamp,
     PriceFormatter,
+    TimestampConverter,
 } from 'src/utils';
 ChartJS.register(ArcElement, Tooltip);
 
@@ -135,7 +135,9 @@ export const CollateralSnapshot = ({
                     />
                 </section>
                 <section className='typography-caption-2 text-center leading-6 text-slateGray'>
-                    {`Snapshot as of ${formatTimestamp(snapshotDate ?? 0)}`}
+                    {`Snapshot as of ${TimestampConverter.formatTimestamp(
+                        snapshotDate
+                    )}`}
                 </section>
             </div>
         </GradientBox>

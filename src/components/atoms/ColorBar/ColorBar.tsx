@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 import { ColorFormat } from 'src/types';
-import { divide, multiply } from 'src/utils';
-import { ZERO_BI, calculatePercentage } from 'src/utils/collateral';
+import { ZERO_BI, calculateBarWidth } from 'src/utils';
 
 const COLORBAR_MIN_WIDTH = 5;
 const COLORBAR_MAX_WIDTH = 308;
@@ -15,15 +14,11 @@ export const ColorBar = ({
     total: bigint;
     align: 'left' | 'right';
 } & Required<ColorFormat>) => {
-    const width = Math.min(
-        Math.max(
-            multiply(
-                divide(Number(calculatePercentage(value, total)), 100),
-                COLORBAR_MAX_WIDTH
-            ),
-            COLORBAR_MIN_WIDTH
-        ),
-        COLORBAR_MAX_WIDTH
+    const width = calculateBarWidth(
+        value,
+        total,
+        COLORBAR_MAX_WIDTH,
+        COLORBAR_MIN_WIDTH
     );
     return (
         <div

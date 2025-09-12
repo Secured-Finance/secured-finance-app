@@ -1,12 +1,6 @@
 import { LoanValue } from './entities';
-import {
-    formatCollateralRatio,
-    formatLoanValue,
-    formatTimeStampWithTimezone,
-    formatTimestamp,
-    formatTimestampDDMMYY,
-    formatTimestampWithMonth,
-} from './formatNumbers';
+import { formatCollateralRatio, formatLoanValue } from './formatNumbers';
+import { TimestampConverter } from './timestampConverter';
 import { Rate } from './rate';
 import { PriceFormatter } from './priceFormatter';
 
@@ -132,47 +126,6 @@ describe('formatCollateralRatio', () => {
     });
 });
 
-describe('formatTimestamp', () => {
-    const timestamps = [0, 86400, 1671859344];
-    for (let i = 0; i < timestamps.length; i++) {
-        const timestamp = timestamps[i];
-        it(`should format ${timestamp} in user timezone`, () => {
-            const date = new Date(timestamp * 1000);
-            const userTimezone =
-                Intl.DateTimeFormat().resolvedOptions().timeZone;
-            const formattedDate = new Intl.DateTimeFormat(undefined, {
-                timeZone: userTimezone,
-                dateStyle: 'short',
-                timeStyle: 'short',
-            }).format(date);
-            expect(formatTimestamp(timestamp)).toEqual(formattedDate);
-        });
-    }
-});
-
-describe('formatTimestampDDMMYY', () => {
-    const testCases = [
-        { unixTimestamp: 1609459200, expected: '01/01/21, 00:00' },
-        { unixTimestamp: 1612137600, expected: '01/02/21, 00:00' },
-        { unixTimestamp: 1625097600, expected: '01/07/21, 00:00' },
-        { unixTimestamp: 1657964207, expected: '16/07/22, 09:36' },
-    ];
-
-    testCases.forEach(({ unixTimestamp, expected }) => {
-        expect(formatTimestampDDMMYY(unixTimestamp)).toBe(expected);
-    });
-});
-
-describe('formatTimestampWithMonth', () => {
-    it('should format a timestamp in utc timezone with month details', () => {
-        expect(formatTimestampWithMonth(0)).toEqual('Jan 1, 1970 00:00:00');
-        expect(formatTimestampWithMonth(86400)).toEqual('Jan 2, 1970 00:00:00');
-        expect(formatTimestampWithMonth(1671859344)).toEqual(
-            'Dec 24, 2022 05:22:24'
-        );
-    });
-});
-
 describe('formatLoanValue', () => {
     it('should format the price correctly with default max decimals', () => {
         expect(
@@ -225,6 +178,8 @@ describe('formatTimeStampWithTimezone', () => {
     it('should format timestamp with correct time and timezone', () => {
         const timestamp = 1678643696;
         const expectedOutput = '17:54:56 GMT';
-        expect(formatTimeStampWithTimezone(timestamp)).toBe(expectedOutput);
+        expect(TimestampConverter.formatTimeStampWithTimezone(timestamp)).toBe(
+            expectedOutput
+        );
     });
 });

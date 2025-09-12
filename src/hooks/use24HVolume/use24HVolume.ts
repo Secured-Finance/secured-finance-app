@@ -2,12 +2,18 @@ import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useEffect, useState } from 'react';
 import { useGraphClientHook } from 'src/hooks';
 import { Transaction24HVolume } from 'src/types';
-import { AmountConverter, CurrencyConverter } from 'src/utils';
+import {
+    CurrencyConverter,
+    AmountConverter,
+    TimestampConverter,
+} from 'src/utils';
 
 const TRANSACTIONS_LIMIT = 1000;
 
 export const use24HVolume = (): { data: Record<string, number> } => {
-    const [timestamp] = useState(() => Math.round(Date.now() / 1000));
+    const [timestamp] = useState(() =>
+        TimestampConverter.getCurrentTimestamp()
+    );
     const [allTransactions, setAllTransactions] = useState<
         Transaction24HVolume[]
     >([]);

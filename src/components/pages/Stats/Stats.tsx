@@ -186,8 +186,8 @@ export const Stats = () => {
                                     availableToBorrow={
                                         collateralBook.usdAvailableToBorrow
                                     }
-                                    collateralThreshold={
-                                        collateralBook.collateralThreshold
+                                    liquidationThreshold={
+                                        collateralBook.liquidationThreshold
                                     }
                                     account={address}
                                     totalCollateralInUSD={totalCollateralInUSD}

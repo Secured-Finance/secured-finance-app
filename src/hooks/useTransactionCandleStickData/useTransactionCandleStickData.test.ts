@@ -1,6 +1,7 @@
 import { Transaction } from 'src/components/organisms';
 import { renderHook } from 'src/test-utils';
 import { HistoricalDataIntervals } from 'src/types';
+import timemachine from 'timemachine';
 import { useTransactionCandleStickData } from './useTransactionCandleStickData';
 
 // Mock the specific functions we need
@@ -10,15 +11,20 @@ jest.mock('src/utils', () => ({
     amountFormatterFromBase: {
         ETH: jest.fn((value: bigint) => Number(value) / 1e18),
     },
+    TimestampConverter: {
+        getCurrentTimestamp: jest.fn(() => 1625101200),
+        calculateIntervalTimestamp: jest.fn(() => 1625101200),
+    },
 }));
 
 describe('useTransactionCandleStickData', () => {
     afterEach(() => {
         jest.restoreAllMocks();
+        timemachine.reset();
     });
 
     it('should process transaction data and fill missing hour gap', () => {
-        jest.spyOn(Date, 'now').mockReturnValue(1625101200000);
+        timemachine.config({ timestamp: 1625101200000 });
         const mockTransactions: Transaction[] = [
             {
                 timestamp: '1625097600',
@@ -86,7 +92,5 @@ describe('useTransactionCandleStickData', () => {
                 vol: 1,
             },
         ]);
-
-        jest.spyOn(Date, 'now').mockRestore();
     });
 });

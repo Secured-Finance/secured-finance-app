@@ -225,8 +225,8 @@ export const CollateralTabLeftPane = ({
                                 availableToBorrow={
                                     collateralBook.usdAvailableToBorrow
                                 }
-                                collateralThreshold={
-                                    collateralBook.collateralThreshold
+                                liquidationThreshold={
+                                    collateralBook.liquidationThreshold
                                 }
                                 account={account}
                                 totalCollateralInUSD={totalCollateralInUSD}
