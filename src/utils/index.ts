@@ -27,5 +27,6 @@ export * from './protocol';
 export * from './rate';
 export * from './strings';
 export * from './tableDefinitions';
+export * from './timestampConverter';
 export * from './validation';
 export * from './wallet';

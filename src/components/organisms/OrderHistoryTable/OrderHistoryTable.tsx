@@ -25,6 +25,7 @@ import {
     OrderTypeConverter,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
+import { TimestampConverter } from 'src/utils/timestampConverter';
 
 const columnHelper = createColumnHelper<Order>();
 
@@ -45,7 +46,7 @@ const OrderHistoryTableMobile = ({
                 const filledAmount = row.filledAmount;
                 const unitPrice = row.inputUnitPrice;
                 const status = row.status;
-                const timestamp = Number(row.createdAt);
+                const timestamp = TimestampConverter.toNumber(row.createdAt);
                 const txHash = row.txHash;
                 const blockExplorerLink = blockExplorerUrl
                     ? `${blockExplorerUrl}/tx/${txHash}`
