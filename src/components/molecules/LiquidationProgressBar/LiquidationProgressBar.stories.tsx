@@ -7,7 +7,7 @@ export default {
     component: LiquidationProgressBar,
     args: {
         liquidationPercentage: 0,
-        collateralThreshold: 0,
+        liquidationThreshold: 0,
         account: undefined,
     },
     parameters: {
@@ -27,6 +27,6 @@ export const NotConnectedToWallet = Template.bind({});
 export const CollateralDepositedWithCoverage = Template.bind({});
 CollateralDepositedWithCoverage.args = {
     liquidationPercentage: 45,
-    collateralThreshold: 80,
+    liquidationThreshold: 80,
     account: '0x123',
 };

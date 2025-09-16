@@ -9,7 +9,7 @@ export default {
     args: {
         collateralCoverage: 0,
         totalCollateralInUSD: 0,
-        collateralThreshold: 0,
+        liquidationThreshold: 0,
         availableToBorrow: 0,
         account: undefined,
     },
@@ -32,7 +32,7 @@ ZeroCollateral.args = {
     collateralCoverage: 0,
     totalCollateralInUSD: 0,
     availableToBorrow: 0,
-    collateralThreshold: 8000,
+    liquidationThreshold: 80,
     account: '0x123',
 };
 
@@ -41,15 +41,15 @@ CollateralDepositedZeroCoverage.args = {
     collateralCoverage: 0,
     totalCollateralInUSD: FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
     availableToBorrow: 80,
-    collateralThreshold: 8000,
+    liquidationThreshold: 80,
     account: '0x123',
 };
 
 export const CollateralDepositedWithCoverage = Template.bind({});
 CollateralDepositedWithCoverage.args = {
-    collateralCoverage: 3700,
+    collateralCoverage: 3700, // Raw basis points, will be converted to 37%
     totalCollateralInUSD: FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
     availableToBorrow: 43,
-    collateralThreshold: 8000,
+    liquidationThreshold: 80,
     account: '0x123',
 };

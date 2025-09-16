@@ -6,6 +6,7 @@ import {
     AmountConverter,
     CurrencySymbol,
     hexToCurrencySymbol,
+    TimestampConverter,
 } from 'src/utils';
 
 const safeDivide = (value: string | number, divisor: number): number => {
@@ -33,12 +34,11 @@ export const useTransactionCandleStickData = (
             historicalTradeData.data?.transactionCandleSticks || [];
 
         const editableTransactions = [...transactions];
-        const timestamp = Math.floor(
-            Date.now() / FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD
+        const timestamp = TimestampConverter.getCurrentTimestamp();
+        const intervalTimestamp = TimestampConverter.calculateIntervalTimestamp(
+            timestamp,
+            selectedTimeScale
         );
-        const intervalTimestamp =
-            Math.ceil(timestamp / Number(selectedTimeScale)) *
-            Number(selectedTimeScale);
 
         if (
             transactions.length > 0 &&

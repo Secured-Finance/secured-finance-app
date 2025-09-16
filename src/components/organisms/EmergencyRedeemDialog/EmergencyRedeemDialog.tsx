@@ -15,9 +15,9 @@ import useSF from 'src/hooks/useSecuredFinance';
 import {
     AddressConverter,
     DisplayLengths,
-    formatTimestamp,
     handleContractError,
     formatter,
+    TimestampConverter,
 } from 'src/utils';
 
 enum Step {
@@ -210,8 +210,8 @@ export const EmergencyRedeemDialog = ({
                                             columns={columns}
                                             options={{ stickyHeader: false }}
                                         />
-                                        <div className='typography-caption-2 text-center leading-6 text-slateGray'>{`Snapshot as of ${formatTimestamp(
-                                            snapshotDate ?? 0
+                                        <div className='typography-caption-2 text-center leading-6 text-slateGray'>{`Snapshot as of ${TimestampConverter.formatTimestamp(
+                                            snapshotDate
                                         )}`}</div>
                                     </div>
                                 </Section>

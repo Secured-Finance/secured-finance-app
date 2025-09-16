@@ -1,9 +1,7 @@
 import clsx from 'clsx';
 import { useBreakpoint } from 'src/hooks';
 import { ColorFormat } from 'src/types';
-import { divide, multiply } from 'src/utils';
-import { ZERO_BI, calculatePercentage } from 'src/utils/collateral';
-import { FINANCIAL_CONSTANTS } from 'src/config/constants';
+import { ZERO_BI, calculateBarWidth } from 'src/utils';
 
 const COLORBAR_MIN_WIDTH = 5;
 const COLORBAR_MAX_WIDTH = 302;
@@ -20,19 +18,7 @@ export const ColorBar = ({
     const isTablet = useBreakpoint('laptop');
     const maxWidth = isTablet ? COLORBAR_MAX_WIDTH_MOBILE : COLORBAR_MAX_WIDTH;
 
-    const width = Math.min(
-        Math.max(
-            multiply(
-                divide(
-                    Number(calculatePercentage(value, total)),
-                    FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
-                ),
-                maxWidth
-            ),
-            COLORBAR_MIN_WIDTH
-        ),
-        maxWidth
-    );
+    const width = calculateBarWidth(value, total, maxWidth, COLORBAR_MIN_WIDTH);
 
     return (
         <div

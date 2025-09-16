@@ -7,18 +7,14 @@ import { MaturityListItem } from 'src/components/organisms';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { HistoricalYieldIntervals } from 'src/types';
-import { Rate } from 'src/utils';
+import { Rate, TimestampConverter } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import { baseContracts, useLendingMarkets } from '../useLendingMarkets';
 import { zeroRates } from './constant';
-import { calculate } from 'src/utils';
-import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 const useHistoricalRates = (maturityList: number[], currency: string) => {
     const intervals = useMemo(() => {
-        const now = calculate.floor(
-            Date.now() / FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD
-        );
+        const now = TimestampConverter.getCurrentTimestamp();
         return Object.values(HistoricalYieldIntervals).map(
             offset => now - Number(offset)
         );

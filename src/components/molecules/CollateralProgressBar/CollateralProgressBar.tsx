@@ -6,7 +6,7 @@ import { formatter } from 'src/utils';
 interface CollateralProgressBarProps {
     collateralCoverage: number;
     totalCollateralInUSD: number;
-    collateralThreshold: number;
+    liquidationThreshold: number;
     availableToBorrow: number;
     account: string | undefined;
 }
@@ -15,7 +15,7 @@ const getInformationText = (
     totalCollateralInUSD: number,
     collateralCoverage: number,
     availableToBorrow: number,
-    collateralThreshold: number
+    liquidationThreshold: number
 ) => {
     if (totalCollateralInUSD === 0) {
         return (
@@ -33,18 +33,29 @@ const getInformationText = (
             <div>
                 <span>Your current borrow limit is at </span>
                 <span className='text-nebulaTeal'>
-                    {formatter.usd(availableToBorrow, 2)}
+                    {formatter.usd(
+                        availableToBorrow,
+                        FINANCIAL_CONSTANTS.DEFAULT_DECIMALS
+                    )}
                 </span>
                 <span>{` which is ${formatter.percentage(
-                    collateralThreshold - collateralCoverage
+                    liquidationThreshold -
+                        collateralCoverage /
+                            FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
+                    FINANCIAL_CONSTANTS.DEFAULT_DECIMALS,
+                    FINANCIAL_CONSTANTS.DEFAULT_ONE_DECIMALS
                 )} of your ${formatter.usd(
                     totalCollateralInUSD,
-                    2
+                    FINANCIAL_CONSTANTS.DEFAULT_DECIMALS
                 )} collateral deposit.`}</span>
             </div>
             <div>
                 {`Increasing collateral deposit will increase your borrow limit by
-                ${formatter.percentage(collateralThreshold)} of its value.`}
+                ${formatter.percentage(
+                    liquidationThreshold,
+                    FINANCIAL_CONSTANTS.DEFAULT_DECIMALS,
+                    FINANCIAL_CONSTANTS.DEFAULT_ONE_DECIMALS
+                )} of its value.`}
             </div>
         </div>
     );
@@ -53,7 +64,7 @@ const getInformationText = (
 export const CollateralProgressBar = ({
     collateralCoverage = 0,
     totalCollateralInUSD = 0,
-    collateralThreshold = 0,
+    liquidationThreshold = 0,
     availableToBorrow,
     account,
 }: CollateralProgressBarProps) => {
@@ -101,11 +112,14 @@ export const CollateralProgressBar = ({
                     <div className='mt-1 flex w-full flex-row items-center gap-1'>
                         <div className='typography-caption flex flex-row text-planetaryPurple'>
                             <span className='whitespace-pre font-semibold text-nebulaTeal'>
-                                {`${formatter.usd(availableToBorrow, 2)} `}
+                                {`${formatter.usd(
+                                    availableToBorrow,
+                                    FINANCIAL_CONSTANTS.DEFAULT_DECIMALS
+                                )} `}
                             </span>
                             <span>{`of ${formatter.usd(
                                 totalCollateralInUSD,
-                                2
+                                FINANCIAL_CONSTANTS.DEFAULT_DECIMALS
                             )} available`}</span>
                         </div>
                         <InfoToolTip placement='bottom-start'>
@@ -113,7 +127,7 @@ export const CollateralProgressBar = ({
                                 totalCollateralInUSD,
                                 collateralCoverage,
                                 availableToBorrow,
-                                collateralThreshold
+                                liquidationThreshold
                             )}
                         </InfoToolTip>
                     </div>

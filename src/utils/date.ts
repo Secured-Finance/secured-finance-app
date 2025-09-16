@@ -1,4 +1,5 @@
 import { FINANCIAL_CONSTANTS } from '../config/constants';
+import { TimestampConverter } from './timestampConverter';
 
 export function isPastDate(utcTimestamp: number): boolean {
     return utcTimestamp <= Date.now() / FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD;
@@ -70,11 +71,7 @@ export const getTimestampRelativeToNow = (hours: number, isFuture = false) => {
 };
 
 export const calculateTimeDifference = (timestamp: number) => {
-    const targetDate = new Date(
-        timestamp * FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD
-    );
-    const currentDate = new Date();
-    return currentDate.getTime() - targetDate.getTime();
+    return TimestampConverter.calculateTimeDifference(timestamp);
 };
 
 export const isMaturityPastDays = (

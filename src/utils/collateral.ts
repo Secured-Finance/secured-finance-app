@@ -1,65 +1,121 @@
-import { divide } from './currencyList';
 import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 export const MAX_COVERAGE = FINANCIAL_CONSTANTS.BPS_DIVISOR;
+import { divide, multiply } from './currencyList';
+
+const PERCENTAGE_BASE = 100;
+const LIQUIDATION_RATE_DIVISOR = 1_000_000;
+const ZERO = 0;
+const FUTURE_VALUE_MULTIPLIER = 10_000;
+const DIVIDER_CONSTANT = 100_000_000n;
+const DEFAULT_PRECISION = 8;
+
 export const ZERO_BI = BigInt(0);
 export const HUNDRED_BI = BigInt(100);
 
-export const computeAvailableToBorrow = (
-    totalCollateral: number | bigint,
-    totalUnusedCollateralAmount: number | bigint,
-    coverage: number | bigint,
-    collateralThreshold: number | bigint
-) => {
-    const totalCollateralBi =
-        typeof totalCollateral === 'bigint'
-            ? totalCollateral
-            : BigInt(Math.floor(totalCollateral));
-    const totalUnusedBi =
-        typeof totalUnusedCollateralAmount === 'bigint'
-            ? totalUnusedCollateralAmount
-            : BigInt(Math.floor(totalUnusedCollateralAmount));
-    const coverageBi =
-        typeof coverage === 'bigint' ? coverage : BigInt(Math.floor(coverage));
-    const thresholdBi =
-        typeof collateralThreshold === 'bigint'
-            ? collateralThreshold
-            : BigInt(Math.floor(collateralThreshold));
+type InputValue = bigint | number | string;
 
-    if (thresholdBi <= coverageBi) return ZERO_BI;
+export class CollateralCalculator {
+    static toNumber(value: InputValue): number {
+        return Number(value || ZERO);
+    }
 
-    const usedAmount = totalCollateralBi - totalUnusedBi;
-    const result =
-        (totalCollateralBi * thresholdBi) /
-            BigInt(FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR) -
-        usedAmount;
+    static calculatePercentage(value: InputValue, total: InputValue): number {
+        const vBig = BigInt(value || ZERO);
+        const tBig = BigInt(total || ZERO);
+        return tBig === ZERO_BI
+            ? ZERO
+            : multiply(divide(vBig, tBig), PERCENTAGE_BASE);
+    }
 
-    return result;
-};
+    static calculateRequiredCollateral(
+        borrowAmount: InputValue,
+        liquidationThreshold: InputValue
+    ): number {
+        const borrow = this.toNumber(borrowAmount);
+        const threshold = this.toNumber(liquidationThreshold);
+        return divide(multiply(borrow, threshold), PERCENTAGE_BASE);
+    }
 
-// Backward compatibility
-export const computeAvailableToBorrowNumber = (
-    totalCollateral: number,
-    totalUnusedCollateralAmount: number,
-    coverage: number,
-    collateralThreshold: number
-): number => {
-    if (collateralThreshold <= coverage) return 0;
-    const threshold = divide(
-        collateralThreshold,
-        FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
-    );
-    const usedAmount = totalCollateral - totalUnusedCollateralAmount;
-    return totalCollateral * threshold - usedAmount;
-};
+    static calculateRequiredCollateralFromFV(
+        futureValue: InputValue,
+        debtUnitPrice: InputValue
+    ): bigint {
+        const fvBig = BigInt(futureValue || ZERO);
+        const debtPriceBig = BigInt(debtUnitPrice || ZERO);
+        return (fvBig * debtPriceBig) / BigInt(FUTURE_VALUE_MULTIPLIER);
+    }
 
-export const calculatePercentage = (value: bigint, total: bigint): bigint => {
-    return total === ZERO_BI ? ZERO_BI : (value * HUNDRED_BI) / total;
-};
+    static calculateAvailableToBorrow(
+        totalCollateral: InputValue,
+        totalUnusedCollateral: InputValue,
+        coverage: InputValue,
+        liquidationThreshold: InputValue
+    ): number {
+        const total = this.toNumber(totalCollateral);
+        const unused = this.toNumber(totalUnusedCollateral);
+        const cov = this.toNumber(coverage);
+        const threshold = this.toNumber(liquidationThreshold);
 
-export const calculatePercentageNumber = (
-    value: bigint,
-    total: bigint
-): number => {
-    return Number(calculatePercentage(value, total));
-};
+        const coverageAsPercentage = divide(cov, PERCENTAGE_BASE);
+        if (threshold <= coverageAsPercentage) return ZERO;
+
+        const used = total - unused;
+        const thresholdRatio = divide(threshold, PERCENTAGE_BASE);
+        const result = multiply(total, thresholdRatio) - used;
+        return Math.max(ZERO, result);
+    }
+
+    static calculateCollateralThreshold(
+        liquidationThresholdRate: InputValue
+    ): number {
+        const rate = this.toNumber(liquidationThresholdRate);
+        return rate === ZERO ? ZERO : divide(LIQUIDATION_RATE_DIVISOR, rate);
+    }
+
+    static calculateFutureValue(amount: InputValue, price: InputValue): bigint {
+        const amountValue = BigInt(amount || ZERO);
+        const priceValue = BigInt(price || ZERO);
+        return priceValue === ZERO_BI
+            ? ZERO_BI
+            : (amountValue * BigInt(FUTURE_VALUE_MULTIPLIER)) / priceValue;
+    }
+
+    static transformCollateralBookData(
+        totalCollateralAmount: InputValue,
+        totalUnusedCollateralAmount: InputValue,
+        collateralCoverage: InputValue,
+        totalPresentValue: InputValue,
+        dividerAmount: bigint = DIVIDER_CONSTANT,
+        precision: number = DEFAULT_PRECISION
+    ): {
+        usdCollateral: number;
+        usdUnusedCollateral: number;
+        coverage: number;
+        totalPresentValue: number;
+    } {
+        const usdCollateral = divide(
+            BigInt(totalCollateralAmount || ZERO),
+            dividerAmount,
+            precision
+        );
+        const usdUnusedCollateral = divide(
+            BigInt(totalUnusedCollateralAmount || ZERO),
+            dividerAmount,
+            precision
+        );
+        const coverage = this.toNumber(collateralCoverage);
+        const totalPV = divide(
+            BigInt(totalPresentValue || ZERO),
+            dividerAmount,
+            precision
+        );
+
+        return {
+            usdCollateral,
+            usdUnusedCollateral,
+            coverage,
+            totalPresentValue: totalPV,
+        };
+    }
+}

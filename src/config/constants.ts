@@ -4,7 +4,7 @@
 export const FINANCIAL_CONSTANTS = {
     // Conversion factors
     PERCENTAGE_DIVISOR: 100,
-    BPS_DIVISOR: 10000,
+    BPS_DIVISOR: 10_000,
     WEI_DIVISOR: 1e18,
 
     // Price conversions
@@ -14,9 +14,9 @@ export const FINANCIAL_CONSTANTS = {
 
     // Points system
     POINTS_K_THRESHOLD: 1000,
-    POINTS_M_THRESHOLD: 1000000,
+    POINTS_M_THRESHOLD: 1_000_000,
     POINTS_K_DIVISOR: 100,
-    POINTS_M_DIVISOR: 100000,
+    POINTS_M_DIVISOR: 100_000,
     POINTS_DECIMAL_PLACES: 10,
 
     // Time conversions
@@ -32,13 +32,14 @@ export const FINANCIAL_CONSTANTS = {
     DEFAULT_ONE_DECIMALS: 1,
 
     // Precision
-    CALCULATION_PRECISION: 1000000,
+    CALCULATION_PRECISION: 1_000_000,
 
     // Order limits
     MAX_OPEN_ORDERS: 20,
 
     // Time periods
     REDEMPTION_GRACE_PERIOD_DAYS: 7,
+    ZERO: 0,
 } as const;
 
 export const UI_CONSTANTS = {

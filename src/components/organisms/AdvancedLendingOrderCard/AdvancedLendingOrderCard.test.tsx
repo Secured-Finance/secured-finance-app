@@ -49,7 +49,7 @@ const collateralBook0: CollateralBook = {
     usdAvailableToBorrow: 9680.27,
     usdNonCollateral: 600,
     coverage: 0,
-    collateralThreshold: 80,
+    liquidationThreshold: 80,
     withdrawableCollateral: {
         [CurrencySymbol.USDC]: BigInt(100000),
         [CurrencySymbol.ETH]: BigInt(100000),

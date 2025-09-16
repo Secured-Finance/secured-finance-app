@@ -18,7 +18,7 @@ export const CollateralTabRightPane = ({
     const balance = account ? collateralBook.usdCollateral : 0;
 
     const collateralUsagePercent = useMemo(() => {
-        return collateralBook.coverage / FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR;
+        return collateralBook.coverage;
     }, [collateralBook]);
 
     return (
@@ -28,14 +28,17 @@ export const CollateralTabRightPane = ({
         >
             <CollateralProgressBar
                 totalCollateralInUSD={balance}
-                collateralCoverage={collateralBook.coverage}
-                collateralThreshold={collateralBook.collateralThreshold}
+                collateralCoverage={collateralUsagePercent}
+                liquidationThreshold={collateralBook.liquidationThreshold}
                 availableToBorrow={collateralBook.usdAvailableToBorrow}
                 account={account}
             />
             <LiquidationProgressBar
-                liquidationPercentage={collateralUsagePercent}
-                collateralThreshold={collateralBook.collateralThreshold}
+                liquidationPercentage={
+                    collateralUsagePercent /
+                    FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
+                }
+                liquidationThreshold={collateralBook.liquidationThreshold}
                 account={account}
             />
         </div>

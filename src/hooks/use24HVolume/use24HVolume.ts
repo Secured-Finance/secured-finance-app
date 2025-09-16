@@ -3,13 +3,17 @@ import { useEffect, useState } from 'react';
 import { useGraphClientHook } from 'src/hooks';
 import { Transaction24HVolume } from 'src/types';
 import { FINANCIAL_CONSTANTS } from 'src/config/constants';
-import { AmountConverter, CurrencyConverter, calculate } from 'src/utils';
+import {
+    AmountConverter,
+    CurrencyConverter,
+    TimestampConverter,
+} from 'src/utils';
 
 const TRANSACTIONS_LIMIT = FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD;
 
 export const use24HVolume = (): { data: Record<string, number> } => {
     const [timestamp] = useState(() =>
-        calculate.round(Date.now() / FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD)
+        TimestampConverter.getCurrentTimestamp()
     );
     const [allTransactions, setAllTransactions] = useState<
         Transaction24HVolume[]

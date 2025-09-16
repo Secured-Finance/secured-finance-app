@@ -952,7 +952,7 @@ export const collateralBook80: CollateralBook = {
     usdAvailableToBorrow: 0,
     usdNonCollateral: 600,
     coverage: 8000, // 80%,
-    collateralThreshold: 80,
+    liquidationThreshold: 80,
     withdrawableCollateral: {
         [CurrencySymbol.USDC]: BigInt(100000),
         [CurrencySymbol.ETH]: BigInt(100000),
@@ -974,7 +974,7 @@ export const collateralBook37: CollateralBook = {
     usdAvailableToBorrow: 5203.1462,
     usdNonCollateral: 600,
     coverage: 3700, // 37%
-    collateralThreshold: 80,
+    liquidationThreshold: 80,
     withdrawableCollateral: {
         [CurrencySymbol.USDC]: BigInt(100000),
         [CurrencySymbol.ETH]: BigInt(100000),
@@ -996,7 +996,7 @@ export const emptyUSDCollateral: CollateralBook = {
     usdAvailableToBorrow: 0,
     usdNonCollateral: 600,
     coverage: 0, // 0%
-    collateralThreshold: 80,
+    liquidationThreshold: 80,
     withdrawableCollateral: {
         [CurrencySymbol.USDC]: BigInt(0),
         [CurrencySymbol.ETH]: BigInt(0),
