@@ -1,4 +1,8 @@
-import { ValidationResult, composeValidators, createValidator } from '../utils';
+import {
+    ValidationResult,
+    composeValidators,
+    createValidator,
+} from 'src/store/utils';
 
 const isValidNumber = createValidator<string>(
     (value: string) => !isNaN(parseFloat(value)) && isFinite(parseFloat(value)),

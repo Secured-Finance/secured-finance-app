@@ -68,3 +68,28 @@ export const composeValidators = <T>(
         };
     };
 };
+
+/**
+ * Retry a function with backoff. Intended for critical store actions that can fail transiently.
+ */
+export async function retryWithBackoff<T>(
+    fn: () => Promise<T>,
+    options?: { retries?: number; initialDelayMs?: number; factor?: number }
+): Promise<T> {
+    const retries = options?.retries ?? 3;
+    const factor = options?.factor ?? 2;
+    let delay = options?.initialDelayMs ?? 200;
+
+    let attempt = 0;
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+        try {
+            return await fn();
+        } catch (err) {
+            attempt += 1;
+            if (attempt > retries) throw err;
+            await new Promise(res => setTimeout(res, delay));
+            delay *= factor;
+        }
+    }
+}

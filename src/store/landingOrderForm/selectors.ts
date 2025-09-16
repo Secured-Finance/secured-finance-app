@@ -25,27 +25,56 @@ const selectValidatedUnitPrice = (state: LandingOrderFormState) => {
 };
 
 export const useLandingOrderFormSelector = () => {
-    const state = useLandingOrderFormStore();
+    const currency = useLandingOrderFormStore(state => state.currency);
+    const maturity = useLandingOrderFormStore(state => state.maturity);
+    const side = useLandingOrderFormStore(state => state.side);
+    const orderType = useLandingOrderFormStore(state => state.orderType);
+    const sourceAccount = useLandingOrderFormStore(
+        state => state.sourceAccount
+    );
+    const isBorrowedCollateral = useLandingOrderFormStore(
+        state => state.isBorrowedCollateral
+    );
+    const lastView = useLandingOrderFormStore(state => state.lastView);
+    const unitPriceRaw = useLandingOrderFormStore(state => state.unitPrice);
+    const amountRaw = useLandingOrderFormStore(state => state.amount);
 
     return useMemo(
         () => ({
-            currency: state.currency,
-            maturity: state.maturity,
-            side: state.side,
-            orderType: state.orderType,
-            sourceAccount: state.sourceAccount,
-            isBorrowedCollateral: state.isBorrowedCollateral,
-            lastView: state.lastView,
-            unitPriceRaw: state.unitPrice,
+            currency,
+            maturity,
+            side,
+            orderType,
+            sourceAccount,
+            isBorrowedCollateral,
+            lastView,
+            unitPriceRaw,
 
-            amount: selectValidatedAmount(state).bigIntValue,
-            unitPrice: selectValidatedUnitPrice(state).numberValue,
+            amount:
+                amountRaw !== '' && !isNaN(Number(amountRaw))
+                    ? BigInt(amountRaw)
+                    : BigInt(0),
+            unitPrice:
+                unitPriceRaw !== undefined &&
+                unitPriceRaw !== '' &&
+                !isNaN(Number(unitPriceRaw))
+                    ? Number(unitPriceRaw)
+                    : undefined,
 
-            amountExists: state.amount !== '',
-            unitPriceExists:
-                state.unitPrice !== undefined && state.unitPrice !== '',
+            amountExists: amountRaw !== '',
+            unitPriceExists: unitPriceRaw !== undefined && unitPriceRaw !== '',
         }),
-        [state]
+        [
+            currency,
+            maturity,
+            side,
+            orderType,
+            sourceAccount,
+            isBorrowedCollateral,
+            lastView,
+            unitPriceRaw,
+            amountRaw,
+        ]
     );
 };
 

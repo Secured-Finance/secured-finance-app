@@ -52,13 +52,17 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
     const router = useRouter();
     const { address, isConnected } = useAccount();
     const { chain } = useNetwork();
-    const {
-        chainId,
-        updateChainId,
-        updateChainError,
-        updateLatestBlock,
-        updateIsChainIdDetected,
-    } = useBlockchainStore();
+    const chainId = useBlockchainStore(state => state.chainId);
+    const updateChainId = useBlockchainStore(state => state.updateChainId);
+    const updateChainError = useBlockchainStore(
+        state => state.updateChainError
+    );
+    const updateLatestBlock = useBlockchainStore(
+        state => state.updateLatestBlock
+    );
+    const updateIsChainIdDetected = useBlockchainStore(
+        state => state.updateIsChainIdDetected
+    );
     const { connect, connectors } = useConnect();
     const { data: client } = useWalletClient();
     const publicClient = usePublicClient({

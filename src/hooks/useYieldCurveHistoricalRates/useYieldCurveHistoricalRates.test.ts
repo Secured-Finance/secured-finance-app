@@ -16,10 +16,6 @@ jest.mock('src/utils/entities', () => ({
     },
 }));
 
-jest.mock('react-redux', () => ({
-    useSelector: jest.fn().mockImplementation(() => ({ currency: 'ETH' })),
-}));
-
 jest.mock('../useLendingMarkets', () => ({
     useLendingMarkets: jest.fn(),
 }));
