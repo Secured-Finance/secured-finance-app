@@ -1,11 +1,11 @@
 import clsx from 'clsx';
 import Tick from 'src/assets/icons/tick.svg';
-import { percentFormat, usdFormat } from 'src/utils';
+import { LiquidationCalculator, percentFormat, usdFormat } from 'src/utils';
 
 interface CollateralManagementConciseTabProps {
     collateralCoverage: number;
     availableToBorrow: number;
-    collateralThreshold: number;
+    liquidationThreshold: number;
     account: string | undefined;
     totalCollateralInUSD: number;
 }
@@ -35,7 +35,7 @@ const getRiskLevel = (percentage: number) => {
 export const CollateralManagementConciseTab = ({
     collateralCoverage,
     availableToBorrow,
-    collateralThreshold,
+    liquidationThreshold,
     account,
     totalCollateralInUSD,
 }: CollateralManagementConciseTabProps) => {
@@ -50,8 +50,8 @@ export const CollateralManagementConciseTab = ({
     }
 
     const threshold =
-        collateralThreshold && collateralThreshold > collateralCoverage
-            ? collateralThreshold - collateralCoverage
+        liquidationThreshold && liquidationThreshold > collateralCoverage
+            ? liquidationThreshold - collateralCoverage
             : 0;
 
     const info = getLiquidationInformation(collateralCoverage);
@@ -141,28 +141,7 @@ export const CollateralManagementConciseTab = ({
 };
 
 export const getLiquidationInformation = (liquidationPercentage: number) => {
-    let color: string;
-    let risk: string;
-
-    switch (true) {
-        case liquidationPercentage <= 40:
-            color = 'text-secondary-500';
-            risk = 'Low';
-            break;
-        case liquidationPercentage <= 60:
-            color = 'text-warning-500';
-            risk = 'Medium';
-            break;
-        case liquidationPercentage <= 80:
-            color = 'text-error-300';
-            risk = 'High';
-            break;
-        default:
-            color = 'text-error-500';
-            risk = 'Very High';
-            break;
-    }
-    return { color, risk };
+    return LiquidationCalculator.getLiquidationRiskInfo(liquidationPercentage);
 };
 
 const Notification = ({ percentage }: { percentage: number }) => {

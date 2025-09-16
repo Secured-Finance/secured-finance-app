@@ -17,7 +17,7 @@ import {
     InterfaceProperties,
     associateWallet,
 } from 'src/utils/events';
-import { hexToNumber } from 'viem';
+import { HexConverter } from 'src/utils';
 import {
     PublicClient,
     WalletClient,
@@ -97,7 +97,7 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const handleChainChanged = useCallback(
         (chainId: string) => {
-            dispatchChainError(hexToNumber(chainId as `0x${string}`));
+            dispatchChainError(HexConverter.hexToNumber(chainId));
             track(InterfaceEvents.CHAIN_CONNECTED, {
                 [InterfaceProperties.CHAIN]: chainName,
             });
@@ -113,7 +113,7 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
                     method: 'eth_chainId',
                 });
                 updateIsChainIdDetected(true);
-                dispatchChainError(hexToNumber(chainId));
+                dispatchChainError(HexConverter.hexToNumber(chainId));
             }
         };
         fetchChainId();

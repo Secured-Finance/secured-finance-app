@@ -4,8 +4,8 @@ import { useMemo } from 'react';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
 import {
+    AmountConverter,
     CurrencySymbol,
-    amountFormatterFromBase,
     hexToCurrencySymbol,
     toCurrency,
 } from 'src/utils';
@@ -96,7 +96,7 @@ export const useOrderList = (
                         }
 
                         const assetPrice = assetPriceMap[currency];
-                        const amt = amountFormatterFromBase[currency](amount);
+                        const amt = AmountConverter.fromBase(amount, currency);
 
                         if (side === OrderSide.LEND) {
                             result.totalPVOfOpenOrdersInUSD += assetPrice * amt;

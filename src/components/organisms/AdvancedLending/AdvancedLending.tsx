@@ -75,7 +75,6 @@ import {
     CurrencySymbol,
     ZERO_BI,
     checkOrderIsFilled,
-    currencyMap,
     formatLoanValue,
     formatOrders,
     getMappedOrderStatus,
@@ -87,6 +86,7 @@ import {
     toOptions,
     writeMarketInStore,
 } from 'src/utils';
+import { AmountConverter } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { trackButtonEvent } from 'src/utils/events';
 import { useAccount } from 'wagmi';
@@ -120,7 +120,7 @@ const useTradeHistoryDetails = (
         return {
             min: LoanValue.fromPrice(min, maturity.toNumber()),
             max: LoanValue.fromPrice(max, maturity.toNumber()),
-            sum: currencyMap[currency].fromBaseUnit(sum),
+            sum: AmountConverter.fromBase(sum, currency),
         };
     }, [currency, maturity, transactions]);
 };

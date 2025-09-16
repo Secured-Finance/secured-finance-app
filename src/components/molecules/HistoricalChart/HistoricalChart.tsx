@@ -1,4 +1,3 @@
-import { getUTCMonthYear } from '@secured-finance/sf-core';
 import clsx from 'clsx';
 import {
     CandlestickData,
@@ -16,6 +15,7 @@ import TradingViewLogo from 'src/assets/img/tradingview-black-logo.svg';
 import { useBreakpoint, useLastPrices } from 'src/hooks';
 import { useLandingOrderFormSelector } from 'src/store/landingOrderForm';
 import { HistoricalDataIntervals } from 'src/types';
+import { MaturityConverter } from 'src/utils';
 import { createCandlestickChart, createVolumeChart } from 'src/utils/charts';
 import tailwindConfig from 'tailwind.config';
 import { HistoricalChartProps, ITradingData, TSeries } from './types';
@@ -59,7 +59,7 @@ export function HistoricalChart({
     const { currency, maturity } = useLandingOrderFormSelector();
     const { data: prices } = useLastPrices();
     const usdPrice = prices[currency];
-    const prettyMaturity = getUTCMonthYear(+maturity);
+    const prettyMaturity = MaturityConverter.toUTCMonthYear(maturity);
     const VOLUME_KEY_NAME = `Vol(${currency} ${prettyMaturity})`;
     const isMobile = useBreakpoint('tablet');
     const legendArray = isMobile

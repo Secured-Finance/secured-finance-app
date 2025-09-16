@@ -37,7 +37,7 @@ describe('useCollateralBook hook', () => {
             BigInt('10000000000000000000000')
         );
         expect(colBook.coverage).toEqual(3700);
-        expect(colBook.collateralThreshold).toEqual(80);
+        expect(colBook.liquidationThreshold).toEqual(80);
         expect(colBook.withdrawableCollateral).toEqual({
             [CurrencySymbol.USDC]: BigInt('1000000000000'),
             [CurrencySymbol.ETH]: BigInt('1000000000000'),

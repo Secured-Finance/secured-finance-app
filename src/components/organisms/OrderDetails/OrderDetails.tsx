@@ -1,6 +1,5 @@
 import { Disclosure, Transition } from '@headlessui/react';
 import { OrderSide } from '@secured-finance/sf-client';
-import { formatDate } from '@secured-finance/sf-core';
 import { useMemo } from 'react';
 import {
     ExpandIndicator,
@@ -17,10 +16,11 @@ import {
 import { CollateralBook, useMarket, useOrderFee } from 'src/hooks';
 import { OrderType } from 'src/types';
 import {
-    calculateFee,
+    FeeCalculator,
     divide,
     formatLoanValue,
     formatWithCurrency,
+    MaturityConverter,
     multiply,
     prefixTilde,
 } from 'src/utils';
@@ -143,7 +143,7 @@ export const OrderDetails = ({
                             formatLoanValue(loanValue ?? LoanValue.ZERO, 'rate')
                         ),
                     ],
-                    ['Maturity Date', formatDate(maturity.toNumber())],
+                    ['Maturity Date', MaturityConverter.toDateString(maturity)],
                 ]}
             />
             {!isRemoveOrder && (
@@ -161,7 +161,10 @@ export const OrderDetails = ({
                             [
                                 <FeeItem key={maturity.toString()} />,
                                 prefixTilde(
-                                    calculateFee(maturity.toNumber(), orderFee)
+                                    FeeCalculator.calculateTransactionFees(
+                                        maturity,
+                                        orderFee
+                                    )
                                 ),
                             ],
                         ]}

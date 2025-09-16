@@ -14,14 +14,14 @@ import {
 } from 'src/hooks';
 import { useDepositCollateral } from 'src/hooks/useDepositCollateral';
 import {
-    AddressUtils,
+    AddressConverter,
     CollateralEvents,
     CollateralInfo,
     CurrencySymbol,
+    DisplayLengths,
     ZERO_BI,
-    amountFormatterFromBase,
-    amountFormatterToBase,
     formatAmount,
+    AmountConverter,
 } from 'src/utils';
 import {
     ButtonEvents,
@@ -123,9 +123,7 @@ export const DepositCollateral = ({
 
     useEffect(() => {
         if (!isFullCoverage) {
-            setCollateralBigInt(
-                amountFormatterToBase[asset](Number(collateral ?? ''))
-            );
+            setCollateralBigInt(AmountConverter.toBase(collateral, asset));
         } else {
             setCollateralBigInt(
                 collateralList[asset]?.availableFullValue ?? ZERO_BI
@@ -285,13 +283,17 @@ export const DepositCollateral = ({
                                     ['Status', 'Complete'],
                                     [
                                         'Transaction hash',
-                                        AddressUtils.format(txHash ?? '', 8),
+                                        AddressConverter.format(
+                                            txHash,
+                                            DisplayLengths.LONG
+                                        ),
                                     ],
                                     [
                                         'Amount',
                                         `${formatAmount(
-                                            amountFormatterFromBase[asset](
-                                                collateralBigInt
+                                            AmountConverter.fromBase(
+                                                collateralBigInt,
+                                                asset
                                             )
                                         )} ${asset}`,
                                     ],

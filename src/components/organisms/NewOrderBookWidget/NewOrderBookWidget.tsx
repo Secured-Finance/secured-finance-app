@@ -38,6 +38,7 @@ import {
     ordinaryFormat,
     percentFormat,
 } from 'src/utils';
+import { AmountConverter } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import { ColorBar } from './ColorBar';
 import { CoreTable } from './CoreTable';
@@ -98,7 +99,7 @@ const AmountCell = ({
         val = undefined;
     } else {
         val = ordinaryFormat(
-            currencyMap[currency].fromBaseUnit(value),
+            AmountConverter.fromBase(value, currency),
             currencyMap[currency].roundingDecimal,
             currencyMap[currency].roundingDecimal
         );

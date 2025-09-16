@@ -12,10 +12,11 @@ import {
 import { useBlockExplorerUrl, useHandleContractTransaction } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import {
-    AddressUtils,
-    formatTimestamp,
+    AddressConverter,
+    DisplayLengths,
     handleContractError,
     percentFormat,
+    TimestampConverter,
     usdFormat,
 } from 'src/utils';
 
@@ -204,8 +205,8 @@ export const EmergencyRedeemDialog = ({
                                             columns={columns}
                                             options={{ stickyHeader: false }}
                                         />
-                                        <div className='typography-caption-2 text-center leading-6 text-slateGray'>{`Snapshot as of ${formatTimestamp(
-                                            snapshotDate ?? 0
+                                        <div className='typography-caption-2 text-center leading-6 text-slateGray'>{`Snapshot as of ${TimestampConverter.formatTimestamp(
+                                            snapshotDate
                                         )}`}</div>
                                     </div>
                                 </Section>
@@ -225,7 +226,10 @@ export const EmergencyRedeemDialog = ({
                                     ['Status', 'Complete'],
                                     [
                                         'Transaction hash',
-                                        AddressUtils.format(txHash ?? '', 8),
+                                        AddressConverter.format(
+                                            txHash,
+                                            DisplayLengths.LONG
+                                        ),
                                     ],
                                     ['Amount (USD)', netValue],
                                 ]}

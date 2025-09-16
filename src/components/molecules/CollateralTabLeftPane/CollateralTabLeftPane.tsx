@@ -18,10 +18,10 @@ import {
     ButtonEvents,
     CurrencySymbol,
     ZERO_BI,
-    amountFormatterFromBase,
     convertFromGvUnit,
     convertToZcTokenName,
     usdFormat,
+    AmountConverter,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
@@ -122,8 +122,10 @@ export const CollateralTabLeftPane = ({
                 Object.entries(collateral).reduce<AssetInformationValue[]>(
                     (acc, [key, quantity]) => {
                         const symbol = key as CurrencySymbol;
-                        const amount =
-                            amountFormatterFromBase[symbol](quantity);
+                        const amount = AmountConverter.fromBase(
+                            quantity,
+                            symbol
+                        );
                         const price = priceList[symbol];
                         acc.push({
                             currency: symbol,
@@ -151,13 +153,15 @@ export const CollateralTabLeftPane = ({
                         zcBond.currency,
                         zcBond.maturity
                     ),
-                    amount: amountFormatterFromBase[zcBond.currency](
-                        zcBond.tokenAmount
+                    amount: AmountConverter.fromBase(
+                        zcBond.tokenAmount,
+                        zcBond.currency
                     ),
                     price: priceList[zcBond.currency],
                     totalPrice:
-                        amountFormatterFromBase[zcBond.currency](
-                            zcBond.amount
+                        AmountConverter.fromBase(
+                            zcBond.amount,
+                            zcBond.currency
                         ) * priceList[zcBond.currency],
                 });
             } else {
@@ -167,8 +171,9 @@ export const CollateralTabLeftPane = ({
                     amount: convertFromGvUnit(zcBond.tokenAmount),
                     price: priceList[zcBond.currency],
                     totalPrice:
-                        amountFormatterFromBase[zcBond.currency](
-                            zcBond.amount
+                        AmountConverter.fromBase(
+                            zcBond.amount,
+                            zcBond.currency
                         ) * priceList[zcBond.currency],
                 });
             }
@@ -217,8 +222,8 @@ export const CollateralTabLeftPane = ({
                                 availableToBorrow={
                                     collateralBook.usdAvailableToBorrow
                                 }
-                                collateralThreshold={
-                                    collateralBook.collateralThreshold
+                                liquidationThreshold={
+                                    collateralBook.liquidationThreshold
                                 }
                                 account={account}
                                 totalCollateralInUSD={totalCollateralInUSD}

@@ -3,7 +3,6 @@ import {
     ShareIcon,
     TrophyIcon,
 } from '@heroicons/react/24/outline';
-import { formatDate } from '@secured-finance/sf-core';
 import {
     QuestType,
     useGetQuestsQuery,
@@ -44,6 +43,7 @@ import {
 import { useBlockchainStore, useUIStore } from 'src/store';
 import {
     CurrencySymbol,
+    MaturityConverter,
     SupportedChainsList,
     ordinaryFormat,
     percentFormat,
@@ -569,10 +569,10 @@ const QuestList = ({ chainId }: { chainId: number }) => {
                             )}
                             {(item.startAt || item.endAt) && (
                                 <div className='pl-2'>
-                                    {`${formatDate(
-                                        dayjs(item.startAt).unix()
-                                    )} ~ ${formatDate(
-                                        dayjs(item.endAt).unix()
+                                    {`${MaturityConverter.toDateStringFromRaw(
+                                        item.startAt
+                                    )} ~ ${MaturityConverter.toDateStringFromRaw(
+                                        item.endAt
                                     )}`}
                                 </div>
                             )}

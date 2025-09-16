@@ -25,14 +25,13 @@ import {
     ButtonProperties,
     CurrencySymbol,
     ZERO_BI,
-    amountFormatterFromBase,
-    amountFormatterToBase,
     formatLoanValue,
     generateWalletSourceInformation,
     getAmountValidation,
     getTransformMaturityOption,
     toOptions,
 } from 'src/utils';
+import { AmountConverter } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { trackButtonEvent } from 'src/utils/events';
 import { useAccount } from 'wagmi';
@@ -184,15 +183,17 @@ export const LendingCard = ({
                                 setAmount(
                                     v === ''
                                         ? ''
-                                        : amountFormatterToBase[currency](
-                                              Number(v)
+                                        : AmountConverter.toBase(
+                                              v,
+                                              currency
                                           ).toString()
                                 )
                             }
                             initialValue={
                                 amountExists
-                                    ? amountFormatterFromBase[currency](
-                                          amount
+                                    ? AmountConverter.fromBase(
+                                          amount,
+                                          currency
                                       ).toString()
                                     : ''
                             }

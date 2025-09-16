@@ -36,12 +36,11 @@ import {
     ButtonProperties,
     CurrencySymbol,
     ZERO_BI,
-    amountFormatterFromBase,
-    amountFormatterToBase,
-    calculateFee,
+    FeeCalculator,
     divide,
     generateWalletSourceInformation,
     ordinaryFormat,
+    AmountConverter,
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import {
@@ -268,7 +267,7 @@ export function AdvancedLendingOrderCard({
     }, [normalizedAmount, availableToBorrow, availableToLend, side]);
 
     const handleInputChange = (v: string) => {
-        const inputValue = amountFormatterToBase[currency](Number(v));
+        const inputValue = AmountConverter.toBase(v, currency);
 
         setAmount(v === '' ? '' : inputValue.toString());
         const available =
@@ -366,10 +365,11 @@ export function AdvancedLendingOrderCard({
                             }`}</span>
                             <span className='text-right text-primary-300'>
                                 {`${ordinaryFormat(
-                                    amountFormatterFromBase[currency](
+                                    AmountConverter.fromBase(
                                         side === OrderSide.BORROW
                                             ? availableToBorrow
-                                            : availableToLend
+                                            : availableToLend,
+                                        currency
                                     ),
                                     0,
                                     2
@@ -423,8 +423,9 @@ export function AdvancedLendingOrderCard({
                             unit={currency}
                             initialValue={
                                 amountExists
-                                    ? amountFormatterFromBase[currency](
-                                          normalizedAmount
+                                    ? AmountConverter.fromBase(
+                                          amount,
+                                          currency
                                       ).toString()
                                     : ''
                             }
@@ -474,7 +475,10 @@ export function AdvancedLendingOrderCard({
                     <div className='flex flex-col gap-1 py-1'>
                         <OrderDisplayBox
                             field='Fees'
-                            value={calculateFee(maturity, orderFee)}
+                            value={FeeCalculator.calculateTransactionFees(
+                                maturity,
+                                orderFee
+                            )}
                             informationText='A duration-based transaction fee only for market takers,
                                     factored into the bond price, and deducted from its future value'
                         />
@@ -501,7 +505,9 @@ export function AdvancedLendingOrderCard({
                     <CollateralManagementConciseTab
                         collateralCoverage={collateralUsagePercent}
                         availableToBorrow={collateralBook.usdAvailableToBorrow}
-                        collateralThreshold={collateralBook.collateralThreshold}
+                        liquidationThreshold={
+                            collateralBook.liquidationThreshold
+                        }
                         account={address}
                         totalCollateralInUSD={totalCollateralInUSD}
                     />

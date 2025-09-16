@@ -1,14 +1,19 @@
-import { fromBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useEffect, useState } from 'react';
 import { useGraphClientHook } from 'src/hooks';
 import { Transaction24HVolume } from 'src/types';
-import { currencyMap, CurrencySymbol } from 'src/utils';
+import {
+    CurrencyConverter,
+    AmountConverter,
+    TimestampConverter,
+} from 'src/utils';
 
 const TRANSACTIONS_LIMIT = 1000;
 
 export const use24HVolume = (): { data: Record<string, number> } => {
-    const [timestamp] = useState(() => Math.round(Date.now() / 1000));
+    const [timestamp] = useState(() =>
+        TimestampConverter.getCurrentTimestamp()
+    );
     const [allTransactions, setAllTransactions] = useState<
         Transaction24HVolume[]
     >([]);
@@ -42,11 +47,12 @@ export const use24HVolume = (): { data: Record<string, number> } => {
 
     if (!hasMore && allTransactions.length > 0) {
         for (const tx of allTransactions) {
-            const symbol = fromBytes32(tx.currency) as CurrencySymbol;
+            const symbol = CurrencyConverter.bytes32ToSymbol(tx.currency);
+            if (!symbol) continue;
             const key = `${symbol}-${tx.maturity}`;
             result[key] =
                 (result[key] || 0) +
-                currencyMap[symbol].fromBaseUnit(tx.amount);
+                AmountConverter.fromBase(tx.amount, symbol);
         }
     }
 

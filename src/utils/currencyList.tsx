@@ -3,7 +3,6 @@ import {
     Currency,
     Currency as CurrencyInterface,
     Ether,
-    getUTCMonthYear,
 } from '@secured-finance/sf-core';
 import { BigNumber as BigNumberJS } from 'bignumber.js';
 import tailwindConfig from 'src/../tailwind.config';
@@ -21,8 +20,8 @@ import ZcEthIcon from 'src/assets/coins/zc-eth.svg';
 import ZcFilIcon from 'src/assets/coins/zc-fil.svg';
 import ZcUsdcIcon from 'src/assets/coins/zc-usdc.svg';
 import { SvgIcon } from 'src/types';
-import { hexToString } from 'viem';
 import { ZERO_BI } from './collateral';
+import { AmountConverter } from './amountConverter';
 import { AUSDC } from './currencies/ausdc';
 import { AXLFIL } from './currencies/axlfil';
 import { BTCB } from './currencies/btcb';
@@ -35,7 +34,9 @@ import { USDFC } from './currencies/usdfc';
 import { WBTC } from './currencies/wbtc';
 import { WETHE } from './currencies/wethe';
 import { WPFIL } from './currencies/wpfil';
+import { CurrencyConverter } from './currencyConverter';
 import { Maturity } from './entities';
+import { MaturityConverter } from './maturityConverter';
 
 BigNumberJS.set({ EXPONENTIAL_AT: 30 }); // setting to a decent limit
 
@@ -320,13 +321,14 @@ const getCurrencyMapAsList = () => {
 };
 
 export const amountFormatterToBase = getCurrencyMapAsList().reduce<
-    Record<CurrencySymbol, (value: number) => bigint>
+    Record<CurrencySymbol, (value: string | number) => bigint>
 >(
     (acc, ccy) => ({
         ...acc,
-        [ccy.symbol]: ccy.toBaseUnit,
+        [ccy.symbol]: (value: string | number) =>
+            AmountConverter.toBase(value, ccy.symbol),
     }),
-    {} as Record<CurrencySymbol, (value: number) => bigint>
+    {} as Record<CurrencySymbol, (value: string | number) => bigint>
 );
 
 export const amountFormatterFromBase = getCurrencyMapAsList().reduce<
@@ -334,7 +336,8 @@ export const amountFormatterFromBase = getCurrencyMapAsList().reduce<
 >(
     (acc, ccy) => ({
         ...acc,
-        [ccy.symbol]: ccy.fromBaseUnit,
+        [ccy.symbol]: (value: bigint) =>
+            AmountConverter.fromBase(value, ccy.symbol),
     }),
     {} as Record<CurrencySymbol, (value: bigint) => number>
 );
@@ -357,46 +360,18 @@ export type CurrencyInfo = {
     hasOrderBook: boolean;
 };
 
+// Unified conversion functions - using CurrencyConverter internally
 export const toCurrency = (ccy: CurrencySymbol) => {
-    return currencyMap[ccy].toCurrency();
+    return CurrencyConverter.symbolToContract(ccy);
 };
 
-export function toCurrencySymbol(ccy: string) {
-    switch (ccy) {
-        case CurrencySymbol.ETH:
-            return CurrencySymbol.ETH;
-        case CurrencySymbol.FIL:
-            return CurrencySymbol.FIL;
-        case CurrencySymbol.tFIL:
-            return CurrencySymbol.tFIL;
-        case CurrencySymbol.WETHe:
-            return CurrencySymbol.WETHe;
-        case CurrencySymbol.WFIL:
-            return CurrencySymbol.WFIL;
-        case CurrencySymbol.USDC:
-            return CurrencySymbol.USDC;
-        case CurrencySymbol.USDFC:
-            return CurrencySymbol.USDFC;
-        case CurrencySymbol.WBTC:
-            return CurrencySymbol.WBTC;
-        case CurrencySymbol.BTCb:
-            return CurrencySymbol.BTCb;
-        case CurrencySymbol.aUSDC:
-            return CurrencySymbol.aUSDC;
-        case CurrencySymbol.axlFIL:
-            return CurrencySymbol.axlFIL;
-        case CurrencySymbol.iFIL:
-            return CurrencySymbol.iFIL;
-        case CurrencySymbol.wpFIL:
-            return CurrencySymbol.wpFIL;
-        default:
-            return undefined;
-    }
-}
+export const toCurrencySymbol = (ccy: string) => {
+    return CurrencyConverter.parseSymbol(ccy);
+};
 
-export function hexToCurrencySymbol(hex: string) {
-    return toCurrencySymbol(hexToString(hex as `0x${string}`, { size: 32 }));
-}
+export const hexToCurrencySymbol = (hex: string) => {
+    return CurrencyConverter.hexToSymbol(hex);
+};
 
 const convertToBlockchainUnit = (amount: number | string, ccy: Currency) => {
     const value = new BigNumberJS(amount).multipliedBy(10 ** ccy.decimals);
@@ -458,7 +433,7 @@ export const convertZCTokenFromBaseAmount = (
 ) =>
     !maturity || maturity.isZero()
         ? convertFromGvUnit(amount)
-        : amountFormatterFromBase[symbol](amount);
+        : AmountConverter.fromBase(amount, symbol);
 export const convertZCTokenToBaseAmount = (
     symbol: CurrencySymbol,
     amount: number,
@@ -466,7 +441,7 @@ export const convertZCTokenToBaseAmount = (
 ) =>
     !maturity || maturity.isZero()
         ? convertToGvUnit(amount)
-        : amountFormatterToBase[symbol](amount);
+        : AmountConverter.toBase(amount, symbol);
 
 export const convertToZcTokenName = (
     symbol: CurrencySymbol,
@@ -475,5 +450,5 @@ export const convertToZcTokenName = (
     `ZC ${symbol}${
         !maturity || maturity.isZero()
             ? ''
-            : ` ${getUTCMonthYear(maturity.toNumber(), true)}`
+            : ` ${MaturityConverter.toUTCMonthYear(maturity, true)}`
     }`;

@@ -14,13 +14,13 @@ import {
 } from 'src/hooks';
 import { useWithdrawCollateral } from 'src/hooks/useDepositCollateral';
 import {
-    AddressUtils,
+    AddressConverter,
     CollateralInfo,
     CurrencySymbol,
+    DisplayLengths,
     ZERO_BI,
-    amountFormatterFromBase,
-    amountFormatterToBase,
     formatAmount,
+    AmountConverter,
 } from 'src/utils';
 import {
     ButtonEvents,
@@ -125,9 +125,7 @@ export const WithdrawCollateral = ({
 
     useEffect(() => {
         if (!isFullCoverage) {
-            setCollateralBigInt(
-                amountFormatterToBase[asset](Number(collateral ?? ''))
-            );
+            setCollateralBigInt(AmountConverter.toBase(collateral, asset));
         } else {
             setCollateralBigInt(
                 collateralList[asset]?.availableFullValue ?? ZERO_BI
@@ -284,13 +282,17 @@ export const WithdrawCollateral = ({
                                     ['Status', 'Complete'],
                                     [
                                         'Ethereum Address',
-                                        AddressUtils.format(address ?? '', 8),
+                                        AddressConverter.format(
+                                            address,
+                                            DisplayLengths.LONG
+                                        ),
                                     ],
                                     [
                                         'Amount',
                                         `${formatAmount(
-                                            amountFormatterFromBase[asset](
-                                                collateralBigInt
+                                            AmountConverter.fromBase(
+                                                collateralBigInt,
+                                                asset
                                             )
                                         )} ${asset}`,
                                     ],

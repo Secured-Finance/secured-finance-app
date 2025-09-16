@@ -8,18 +8,19 @@ import { useTerminationPrices } from 'src/hooks';
 import {
     CollateralInfo,
     CurrencySymbol,
-    amountFormatterFromBase,
     currencyMap,
     hexToCurrencySymbol,
 } from 'src/utils';
+import { AmountConverter } from 'src/utils';
 import {
     amountColumnDefinition,
     tableHeaderDefinition,
     withdrawableAssetColumnDefinition,
 } from 'src/utils/tableDefinitions';
+import { Hex } from 'viem';
 
 type TokenPosition = {
-    currency: `0x${string}`;
+    currency: Hex;
     amount: bigint;
 };
 
@@ -44,7 +45,7 @@ export const WithdrawTokenTable = ({ data }: { data: TokenPosition[] }) => {
                     symbol: ccy,
                     name: currencyMap[ccy].name,
                     availableFullValue: amount,
-                    available: amountFormatterFromBase[ccy](amount),
+                    available: AmountConverter.fromBase(amount, ccy),
                 },
             };
         },

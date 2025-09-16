@@ -1,7 +1,11 @@
 import { OrderSide } from '@secured-finance/sf-client';
-import { getUTCMonthYear } from '@secured-finance/sf-core';
 import { Chip, ChipColors, CurrencyIcon } from 'src/components/atoms';
-import { CurrencySymbol, formatLoanValue } from 'src/utils';
+import {
+    CurrencySymbol,
+    formatLoanValue,
+    MaturityConverter,
+    OrderTypeConverter,
+} from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 
 export const TableCardHeader = ({
@@ -25,8 +29,8 @@ export const TableCardHeader = ({
             <div className='flex w-full flex-col gap-1'>
                 <div className='flex w-full flex-row justify-between'>
                     <span className='typography-mobile-sh-9 text-neutral-50'>
-                        {`${currency}-${getUTCMonthYear(
-                            maturity.toNumber(),
+                        {`${currency}-${MaturityConverter.toUTCMonthYear(
+                            maturity,
                             true
                         )}`}
                     </span>
@@ -49,7 +53,7 @@ export const TableCardHeader = ({
                 </div>
                 <div className='flex w-full flex-row justify-between'>
                     <Chip
-                        label={side === OrderSide.BORROW ? 'Borrow' : 'Lend'}
+                        label={OrderTypeConverter.toDisplayString(side)}
                         color={
                             side === OrderSide.BORROW
                                 ? ChipColors.Red

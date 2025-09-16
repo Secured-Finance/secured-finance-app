@@ -1,5 +1,4 @@
 import { ClipboardDocumentIcon } from '@heroicons/react/24/outline';
-import { getUTCMonthYear } from '@secured-finance/sf-core';
 import { useCallback, useMemo, useReducer, useState } from 'react';
 import { Selector, Spinner } from 'src/components/atoms';
 import {
@@ -20,8 +19,10 @@ import {
     useZCToken,
 } from 'src/hooks';
 import {
-    AddressUtils,
+    AddressConverter,
     CurrencySymbol,
+    MaturityConverter,
+    DisplayLengths,
     ZCTokenEvents,
     convertToZcTokenName,
     convertZCTokenFromBaseAmount,
@@ -185,7 +186,7 @@ export const DepositZCToken = ({
                 value: 0,
             },
             ...maturities.map(maturity => ({
-                label: getUTCMonthYear(maturity, true),
+                label: MaturityConverter.toUTCMonthYear(maturity, true),
                 value: maturity,
             })),
         ];
@@ -365,7 +366,10 @@ export const DepositZCToken = ({
                                     ['Status', 'Complete'],
                                     [
                                         'Transaction hash',
-                                        AddressUtils.format(txHash ?? '', 8),
+                                        AddressConverter.format(
+                                            txHash,
+                                            DisplayLengths.LONG
+                                        ),
                                     ],
                                     [
                                         'Amount',

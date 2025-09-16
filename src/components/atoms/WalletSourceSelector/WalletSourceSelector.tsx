@@ -5,9 +5,10 @@ import { Fragment, useMemo } from 'react';
 import { ExpandIndicator, Separator } from 'src/components/atoms';
 import { SvgIcon } from 'src/types';
 import {
-    AddressUtils,
-    currencyMap,
+    AmountConverter,
+    AddressConverter,
     CurrencySymbol,
+    DisplayLengths,
     ordinaryFormat,
 } from 'src/utils';
 import { AMOUNT_PRECISION } from 'src/utils/entities';
@@ -33,7 +34,7 @@ const formatOption = (
 ) => {
     return `${ordinaryFormat(
         Math.floor(
-            currencyMap[asset].fromBaseUnit(available) * AMOUNT_PRECISION
+            AmountConverter.fromBase(available, asset) * AMOUNT_PRECISION
         ) / AMOUNT_PRECISION,
         0,
         6
@@ -42,7 +43,7 @@ const formatOption = (
 
 const formatSource = (walletSource: WalletSource, account: string) => {
     return walletSource === WalletSource.METAMASK
-        ? AddressUtils.format(account, 6)
+        ? AddressConverter.format(account, DisplayLengths.MEDIUM)
         : walletSource;
 };
 
