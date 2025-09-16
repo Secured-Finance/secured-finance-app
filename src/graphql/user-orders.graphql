@@ -1,6 +1,3 @@
-# User Order History Queries  
-# Source: sf-graph-client/src/queries/lending-market.ts
-
 query UserOrderHistory($address: ID!, $skip: Int!, $count: Int!) {
   user(id: $address) {
     orderCount
@@ -10,26 +7,7 @@ query UserOrderHistory($address: ID!, $skip: Int!, $count: Int!) {
       skip: $skip
       first: $count
     ) {
-      id
-      orderId
-      currency
-      side
-      maturity
-      inputUnitPrice
-      inputAmount
-      filledAmount
-      status
-      lendingMarket {
-        id
-        isActive
-      }
-      type
-      isCircuitBreakerTriggered
-      createdAt
-      txHash
-      user {
-        id
-      }
+      ...OrderInfo
     }
   }
 }
@@ -45,26 +23,7 @@ query FilteredUserOrderHistory(
       orderDirection: desc
       where: { currency: $currency, maturity: $maturity }
     ) {
-      id
-      orderId
-      currency
-      side
-      maturity
-      inputUnitPrice
-      inputAmount
-      filledAmount
-      status
-      lendingMarket {
-        id
-        isActive
-      }
-      type
-      isCircuitBreakerTriggered
-      createdAt
-      txHash
-      user {
-        id
-      }
+      ...OrderInfo
     }
   }
 }
@@ -72,26 +31,7 @@ query FilteredUserOrderHistory(
 query FullUserOrderHistory($address: ID!) {
   user(id: $address) {
     orders(orderBy: createdAt, orderDirection: desc) {
-      id
-      orderId
-      currency
-      side
-      maturity
-      inputUnitPrice
-      inputAmount
-      filledAmount
-      status
-      lendingMarket {
-        id
-        isActive
-      }
-      type
-      isCircuitBreakerTriggered
-      createdAt
-      txHash
-      user {
-        id
-      }
+      ...OrderInfo
     }
   }
 }

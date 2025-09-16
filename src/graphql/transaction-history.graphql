@@ -1,6 +1,3 @@
-# Transaction History and Analytics Queries
-# Source: sf-graph-client/src/queries/lending-market.ts
-
 query TransactionHistory(
   $currency: Bytes!
   $maturity: BigInt!
@@ -24,14 +21,7 @@ query TransactionHistory(
     first: $first
     skip: $skip
   ) {
-    amount
-    maturity
-    side
-    createdAt
-    currency
-    averagePrice
-    executionPrice
-    txHash
+    ...TransactionHistoryInfo
   }
   lastTransaction: transactions(
     where: {
@@ -43,14 +33,7 @@ query TransactionHistory(
     orderDirection: desc
     first: 1
   ) {
-    amount
-    maturity
-    side
-    createdAt
-    currency
-    averagePrice
-    executionPrice
-    txHash
+    ...TransactionHistoryInfo
   }
 }
 
@@ -69,17 +52,7 @@ query TransactionCandleStick(
     orderDirection: desc
     orderBy: timestamp
   ) {
-    currency
-    maturity
-    interval
-    timestamp
-    open
-    close
-    high
-    low
-    average
-    volume
-    volumeInFV
+    ...CandleStickInfo
   }
 }
 

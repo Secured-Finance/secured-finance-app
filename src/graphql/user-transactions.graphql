@@ -1,6 +1,3 @@
-# User Transaction History Queries
-# Source: sf-graph-client/src/queries/lending-market.ts
-
 query UserTransactionHistory($address: ID!, $skip: Int!, $count: Int!) {
   user(id: $address) {
     transactionCount
@@ -10,19 +7,7 @@ query UserTransactionHistory($address: ID!, $skip: Int!, $count: Int!) {
       skip: $skip
       first: $count
     ) {
-      id
-      currency
-      maturity
-      side
-      executionPrice
-      futureValue
-      amount
-      averagePrice
-      createdAt
-      feeInFV
-      user {
-        id
-      }
+      ...TransactionInfo
     }
   }
 }
@@ -38,19 +23,7 @@ query FilteredUserTransactionHistory(
       orderDirection: desc
       where: { currency: $currency, maturity: $maturity }
     ) {
-      id
-      currency
-      maturity
-      side
-      executionPrice
-      futureValue
-      amount
-      averagePrice
-      createdAt
-      feeInFV
-      user {
-        id
-      }
+      ...TransactionInfo
     }
   }
 }
@@ -58,19 +31,7 @@ query FilteredUserTransactionHistory(
 query FullUserTransactionHistory($address: ID!) {
   user(id: $address) {
     transactions(orderBy: createdAt, orderDirection: desc) {
-      id
-      currency
-      maturity
-      side
-      executionPrice
-      futureValue
-      amount
-      averagePrice
-      createdAt
-      feeInFV
-      user {
-        id
-      }
+      ...TransactionInfo
     }
   }
 }
