@@ -1,8 +1,8 @@
-import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useEffect, useState } from 'react';
-import { useGraphClientHook } from 'src/hooks';
+import { useTransactionsHistory24HQuery } from 'src/generated/subgraph';
 import { Transaction24HVolume } from 'src/types';
 import { AmountConverter, CurrencyConverter } from 'src/utils';
+import { getGraphQLConfig } from 'src/utils/graphql';
 
 const TRANSACTIONS_LIMIT = 1000;
 
@@ -14,14 +14,14 @@ export const use24HVolume = (): { data: Record<string, number> } => {
     const [transactionSkip, setTransactionSkip] = useState(0);
     const [hasMore, setHasMore] = useState(true);
 
-    const { data: transactionData } = useGraphClientHook(
+    const { data: transactionData } = useTransactionsHistory24HQuery(
+        getGraphQLConfig(),
         {
-            from: timestamp - 24 * 3600,
-            to: timestamp,
+            from: String(timestamp - 24 * 3600),
+            to: String(timestamp),
             first: TRANSACTIONS_LIMIT,
             skip: transactionSkip,
-        },
-        queries.TransactionsHistory24HDocument
+        }
     );
 
     useEffect(() => {
