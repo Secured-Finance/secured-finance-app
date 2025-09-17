@@ -61,10 +61,12 @@ export const decorators = [
     Story => (
         <Provider store={mockStore}>
             <QueryClientProvider client={queryClient}>
-                <WagmiConfig config={createConfig({
-                    publicClient: publicClient,
-                    connectors: [connector],
-                })}>
+                <WagmiConfig
+                    config={createConfig({
+                        publicClient: publicClient,
+                        connectors: [connector],
+                    })}
+                >
                     <MockSecuredFinanceProvider>
                         <Story />
                     </MockSecuredFinanceProvider>
