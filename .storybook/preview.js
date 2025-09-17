@@ -4,6 +4,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import isChromatic from 'chromatic/isChromatic';
 import { Provider } from 'react-redux';
 import 'src/assets/css/index.css';
+import { connector, publicClient } from 'src/stories/mocks/mockWallet';
+import { WagmiConfig, createConfig } from 'wagmi';
 import { MockSecuredFinanceProvider } from './../src/stories/mocks/MockSecuredFinanceProvider';
 import { mockStore } from './../src/stories/mocks/mockStore';
 import { withMockDate } from './decorators';
@@ -59,9 +61,14 @@ export const decorators = [
     Story => (
         <Provider store={mockStore}>
             <QueryClientProvider client={queryClient}>
-                <MockSecuredFinanceProvider>
-                    <Story />
-                </MockSecuredFinanceProvider>
+                <WagmiConfig config={createConfig({
+                    publicClient: publicClient,
+                    connectors: [connector],
+                })}>
+                    <MockSecuredFinanceProvider>
+                        <Story />
+                    </MockSecuredFinanceProvider>
+                </WagmiConfig>
             </QueryClientProvider>
         </Provider>
     ),
