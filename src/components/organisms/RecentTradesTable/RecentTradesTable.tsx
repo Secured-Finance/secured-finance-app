@@ -8,7 +8,7 @@ import {
 } from '@nextui-org/table';
 import { OrderSide } from '@secured-finance/sf-client';
 import { toBytes32 } from '@secured-finance/sf-graph-client';
-import queries from '@secured-finance/sf-graph-client/dist/graphclients';
+import { useTransactionHistoryQuery } from 'src/generated/subgraph';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { useEffect, useMemo, useState } from 'react';
@@ -17,11 +17,7 @@ import ShowFirstIcon from 'src/assets/icons/orderbook-first.svg';
 import ShowAllIcon from 'src/assets/icons/orderbook-full.svg';
 import ShowLastIcon from 'src/assets/icons/orderbook-last.svg';
 import { OrderBookIcon, Spinner } from 'src/components/atoms';
-import {
-    useBlockExplorerUrl,
-    useGraphClientHook,
-    useIsSubgraphSupported,
-} from 'src/hooks';
+import { useBlockExplorerUrl, useIsSubgraphSupported } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import {
     currencyMap,
@@ -29,6 +25,7 @@ import {
     ordinaryFormat,
     AmountConverter,
 } from 'src/utils';
+import { getGraphQLConfig } from 'src/utils/graphql';
 import { LoanValue } from 'src/utils/entities';
 import { columns } from './constants';
 import { RecentTradesTableProps, TradeMetadata } from './types';
@@ -52,22 +49,26 @@ export const RecentTradesTable = ({
 
     const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
 
-    const { data: transactionHistory, loading } = useGraphClientHook(
-        {
-            currency: toBytes32(currency),
-            maturity: maturity,
-            from: -1,
-            to: timestamp,
-            first: 100,
-            sides:
-                showSide === null
-                    ? [OrderSide.LEND, OrderSide.BORROW]
-                    : [showSide],
-        },
-        queries.TransactionHistoryDocument,
-        'transactionHistory',
-        !isSubgraphSupported
-    );
+    const { data: transactionHistoryData, isLoading: loading } =
+        useTransactionHistoryQuery(
+            getGraphQLConfig(),
+            {
+                currency: toBytes32(currency),
+                maturity: maturity.toString(),
+                from: String(-1),
+                to: String(timestamp),
+                first: 100,
+                sides:
+                    showSide === null
+                        ? [OrderSide.LEND, OrderSide.BORROW]
+                        : [showSide],
+            },
+            {
+                enabled: !!isSubgraphSupported,
+            }
+        );
+
+    const transactionHistory = transactionHistoryData?.transactionHistory;
 
     const data = useMemo(() => {
         return transactionHistory
@@ -85,6 +86,7 @@ export const RecentTradesTable = ({
                 if (Math.abs(Number(sizeActual)) > 0) {
                     return {
                         ...transaction,
+                        maturity: Number(transaction.maturity),
                         size,
                     } as TradeMetadata;
                 }
