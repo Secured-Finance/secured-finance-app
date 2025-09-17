@@ -1,16 +1,15 @@
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
 import { OrderSide } from '@secured-finance/sf-client';
 import { MaturityConverter } from './maturityConverter';
-import * as dayjs from 'dayjs';
 import {
     AmountConverter,
     CurrencySymbol,
     currencyMap,
-    formatTimestampDDMMYY,
     isMaturityPastDays,
     isPastDate,
     ordinaryFormat,
 } from 'src/utils';
+import { TimestampConverter } from './timestampConverter';
 
 export const AmountCell = ({
     ccy,
@@ -48,7 +47,7 @@ export const OrderTimeCell = ({
     return (
         <div className='flex items-center gap-1'>
             <span className='font-numerical text-3 leading-4 text-white'>
-                {formatTimestampDDMMYY(timestamp)}
+                {TimestampConverter.formatTimestampDDMMYY(timestamp)}
             </span>
             {blockExplorerLink && (
                 <ArrowTopRightOnSquareIcon
@@ -66,7 +65,8 @@ const formatMaturity = (
     maturityTimeStamp: number,
     timeUnit: 'day' | 'hours' | 'minutes',
     currentTime: number
-) => dayjs.unix(maturityTimeStamp).diff(currentTime, timeUnit);
+) =>
+    TimestampConverter.formatMaturity(maturityTimeStamp, timeUnit, currentTime);
 
 export const MaturityCell = ({
     timestamp,
