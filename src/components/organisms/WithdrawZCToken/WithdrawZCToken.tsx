@@ -22,8 +22,10 @@ import {
     DisplayLengths,
     convertToZcTokenName,
     convertZCTokenFromBaseAmount,
-    formatAmount,
     handleContractError,
+    PriceFormatter,
+    PriceUtils,
+    ZERO_BI,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import {
@@ -194,7 +196,7 @@ export const WithdrawZCToken = ({
         return {
             label: convertToZcTokenName(option.symbol, option.maturity),
             value: option.key,
-            note: `${formatAmount(available)} Available`,
+            note: `${PriceFormatter.formatAmount(available)} Available`,
             icon: (
                 <CopyTokenAddressButton
                     symbol={option.symbol}
@@ -380,16 +382,13 @@ export const WithdrawZCToken = ({
                                     ],
                                     [
                                         'Amount',
-                                        `${formatAmount(
-                                            convertZCTokenFromBaseAmount(
-                                                currencySymbol,
-                                                collateral || BigInt(0),
-                                                asset
-                                                    ? zcBondList[asset]
-                                                          ?.maturity
-                                                    : undefined
-                                            )
-                                        )}`,
+                                        PriceUtils.formatZCToken(
+                                            currencySymbol,
+                                            collateral || ZERO_BI,
+                                            asset
+                                                ? zcBondList[asset]?.maturity
+                                                : undefined
+                                        ),
                                     ],
                                 ]}
                                 txHash={txHash}

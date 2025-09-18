@@ -8,8 +8,9 @@ import {
     AmountConverter,
     AddressConverter,
     CurrencySymbol,
+    PriceFormatter,
     DisplayLengths,
-    ordinaryFormat,
+    FORMAT_DIGITS,
 } from 'src/utils';
 import { AMOUNT_PRECISION } from 'src/utils/entities';
 
@@ -32,12 +33,14 @@ const formatOption = (
     asset: CurrencySymbol,
     showAssetName = false
 ) => {
-    return `${ordinaryFormat(
+    const amount =
         Math.floor(
             AmountConverter.fromBase(available, asset) * AMOUNT_PRECISION
-        ) / AMOUNT_PRECISION,
-        0,
-        6
+        ) / AMOUNT_PRECISION;
+    return `${PriceFormatter.formatOrdinary(
+        amount,
+        FORMAT_DIGITS.NONE,
+        FORMAT_DIGITS.ASSET_DECIMALS
     )} ${showAssetName ? ` ${asset}` : ''}`;
 };
 

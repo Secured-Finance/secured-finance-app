@@ -5,8 +5,8 @@ import {
     AmountConverter,
     CurrencySymbol,
     currencyMap,
-    ordinaryFormat,
-    usdFormat,
+    PriceFormatter,
+    FORMAT_DIGITS,
 } from 'src/utils';
 
 export const CurrencyItem = ({
@@ -38,12 +38,13 @@ export const CurrencyItem = ({
     let secondLine: string;
     const currency = currencyMap[ccy];
     if (amount !== undefined && price !== undefined) {
-        secondLine = usdFormat(
-            AmountConverter.fromBase(amount, ccy) * price,
-            2
+        secondLine = PriceFormatter.formatUSD(
+            AmountConverter.fromBase(amount, ccy),
+            price,
+            FORMAT_DIGITS.PRICE
         );
     } else if (price) {
-        secondLine = usdFormat(price, 2);
+        secondLine = PriceFormatter.formatUSDValue(price);
     } else {
         secondLine = currency.name;
     }
@@ -52,7 +53,7 @@ export const CurrencyItem = ({
     if (label !== undefined) {
         firstLine = label;
     } else if (amount !== undefined) {
-        firstLine = ordinaryFormat(
+        firstLine = PriceFormatter.formatOrdinary(
             AmountConverter.fromBase(amount, ccy),
             minDecimals,
             maxDecimals

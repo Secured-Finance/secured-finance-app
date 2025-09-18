@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import Tick from 'src/assets/icons/tick.svg';
-import { LiquidationCalculator, percentFormat, usdFormat } from 'src/utils';
+import { PriceFormatter, LiquidationCalculator } from 'src/utils';
 
 interface CollateralManagementConciseTabProps {
     collateralCoverage: number;
@@ -63,7 +63,10 @@ export const CollateralManagementConciseTab = ({
                     <span>Collateral Utilization</span>
                     {account && (
                         <span className='font-semibold text-secondary-500'>
-                            {percentFormat(collateralCoverage, 100)}
+                            {PriceFormatter.formatPercentage(
+                                collateralCoverage,
+                                'percentage'
+                            )}
                         </span>
                     )}
                 </div>
@@ -82,11 +85,12 @@ export const CollateralManagementConciseTab = ({
                     ) : (
                         <>
                             <span className='font-semibold text-secondary-300'>
-                                {`${usdFormat(availableToBorrow, 2)} `}
+                                {`${PriceFormatter.formatUSDValue(
+                                    availableToBorrow
+                                )} `}
                             </span>
-                            <span>{`of ${usdFormat(
-                                totalCollateralInUSD,
-                                2
+                            <span>{`of ${PriceFormatter.formatUSDValue(
+                                totalCollateralInUSD
                             )} available`}</span>
                         </>
                     )}
@@ -127,7 +131,7 @@ export const CollateralManagementConciseTab = ({
                         <>
                             Threshold:{' '}
                             <span className='font-semibold'>
-                                {percentFormat(threshold)}
+                                {PriceFormatter.formatPercentage(threshold)}
                             </span>
                         </>
                     ) : (
