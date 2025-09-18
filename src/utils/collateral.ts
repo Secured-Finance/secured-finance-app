@@ -32,8 +32,8 @@ export class CollateralCalculator {
         borrowAmount: InputValue,
         liquidationThreshold: InputValue
     ): number {
-        const borrow = this.toNumber(borrowAmount);
-        const threshold = this.toNumber(liquidationThreshold);
+        const borrow = BigInt(borrowAmount || ZERO);
+        const threshold = BigInt(liquidationThreshold || ZERO);
         return divide(multiply(borrow, threshold), PERCENTAGE_BASE);
     }
 
@@ -41,9 +41,14 @@ export class CollateralCalculator {
         futureValue: InputValue,
         debtUnitPrice: InputValue
     ): bigint {
-        const fvBig = BigInt(futureValue || ZERO);
-        const debtPriceBig = BigInt(debtUnitPrice || ZERO);
-        return (fvBig * debtPriceBig) / BigInt(FUTURE_VALUE_MULTIPLIER);
+        const fv = BigInt(futureValue || ZERO);
+        const debtPrice = BigInt(debtUnitPrice || ZERO);
+        const result = divide(
+            multiply(fv, debtPrice),
+            FUTURE_VALUE_MULTIPLIER,
+            0
+        );
+        return BigInt(Math.floor(result));
     }
 
     static calculateAvailableToBorrow(
@@ -69,16 +74,21 @@ export class CollateralCalculator {
     static calculateCollateralThreshold(
         liquidationThresholdRate: InputValue
     ): number {
-        const rate = this.toNumber(liquidationThresholdRate);
-        return rate === ZERO ? ZERO : divide(LIQUIDATION_RATE_DIVISOR, rate);
+        const rate = BigInt(liquidationThresholdRate || ZERO);
+        return rate === ZERO_BI ? ZERO : divide(LIQUIDATION_RATE_DIVISOR, rate);
     }
 
     static calculateFutureValue(amount: InputValue, price: InputValue): bigint {
         const amountValue = BigInt(amount || ZERO);
         const priceValue = BigInt(price || ZERO);
-        return priceValue === ZERO_BI
-            ? ZERO_BI
-            : (amountValue * BigInt(FUTURE_VALUE_MULTIPLIER)) / priceValue;
+        if (priceValue === ZERO_BI) return ZERO_BI;
+
+        const result = divide(
+            multiply(amountValue, FUTURE_VALUE_MULTIPLIER),
+            priceValue,
+            0
+        );
+        return BigInt(Math.floor(result));
     }
 
     static transformCollateralBookData(
