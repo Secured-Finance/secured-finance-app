@@ -11,6 +11,7 @@ import {
     mockTransaction24HQuery,
 } from 'src/stories/mocks/queries';
 import { CurrencyMaturityDropdown } from './CurrencyMaturityDropdown';
+import { LoanValue } from 'src/utils/entities';
 
 export default {
     title: 'Molecules/CurrencyMaturityDropdown',
@@ -23,8 +24,19 @@ export default {
         maturity: maturityOptions[0],
         onChange: () => {},
         isItayosePage: false,
-        volumePerMarket: {
-            [`${currencyList[0].value}-${dec22Fixture}`]: 1,
+        marketStats: {
+            'WBTC-1669852800': {
+                high: LoanValue.fromPrice(9899, dec22Fixture.toNumber()),
+                lastPrice: 9900,
+                low: LoanValue.fromPrice(9457, dec22Fixture.toNumber()),
+                volume: 1,
+            },
+            'USDC-1669852800': {
+                high: LoanValue.fromPrice(9800, dec22Fixture.toNumber()),
+                lastPrice: 9420,
+                low: LoanValue.fromPrice(9600, dec22Fixture.toNumber()),
+                volume: 11,
+            },
         },
     },
     parameters: {
