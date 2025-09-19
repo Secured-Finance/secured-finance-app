@@ -290,7 +290,9 @@ export const NewOrderBookWidget = ({
                       ].value.apr.toNormalizedNumber() -
                           lendOrders[0].value.apr.toNormalizedNumber()
                   ),
-                  'percentage'
+                  'percentage',
+                  0,
+                  2
               )
             : '0.00%';
 

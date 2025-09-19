@@ -30,6 +30,14 @@ export function formatCollateralRatio(collateral: number) {
     );
 }
 
+export function formatCollateralSnapshotRatio(ratio: number) {
+    return PriceFormatter.formatPercentage(ratio / 100, 'percentage');
+}
+
+export function formatLiquidationThreshold(thresholdValue: number) {
+    return PriceFormatter.formatPercentage(thresholdValue, 'percentage');
+}
+
 export const formatDuration = (durationMs: number) => {
     const msPerDay = 24 * 60 * 60 * 1000; // Milliseconds in a day
     const daysInYear = 365.25; // Average number of days in a year accounting for leap years

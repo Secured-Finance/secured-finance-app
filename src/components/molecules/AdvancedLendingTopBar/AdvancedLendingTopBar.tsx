@@ -81,7 +81,7 @@ export const AdvancedLendingTopBar = ({
         FORMAT_DIGITS.PRICE
     );
     const volume24H = PriceFormatter.formatWithCurrency(
-        volumePerMarket[marketKey] ?? FORMAT_DIGITS.NONE,
+        volumePerMarket[marketKey] ?? 0,
         selectedAsset?.value,
         currencyMap[selectedAsset?.value]?.roundingDecimal
     );
@@ -195,7 +195,7 @@ export const AdvancedLendingTopBar = ({
                                 <div>
                                     <MarketTab
                                         name={`${currency} Price`}
-                                        value={PriceFormatter.formatUSD(
+                                        value={PriceFormatter.formatUSDValue(
                                             currencyPrice,
                                             FORMAT_DIGITS.PRICE
                                         )}
@@ -267,7 +267,7 @@ export const AdvancedLendingTopBar = ({
                                     <MarketTab
                                         name={`${selectedAsset?.value} Price`}
                                         value={
-                                            PriceFormatter.formatUSD(
+                                            PriceFormatter.formatUSDValue(
                                                 currencyPrice,
                                                 FORMAT_DIGITS.PRICE
                                             ) || '$0'
@@ -295,12 +295,10 @@ export const AdvancedLendingTopBar = ({
                 onClose={() => setIsMarketInfoDialogOpen(false)}
                 currency={selectedAsset.value}
                 currentMarket={currentMarket}
-                currencyPrice={
-                    PriceFormatter.formatUSD(
-                        currencyPrice,
-                        FORMAT_DIGITS.PRICE
-                    ) || '$0'
-                }
+                currencyPrice={PriceFormatter.formatUSDValue(
+                    currencyPrice,
+                    FORMAT_DIGITS.PRICE
+                )}
                 marketInfo={marketInfo}
                 volumeInfo={{
                     volume24H,

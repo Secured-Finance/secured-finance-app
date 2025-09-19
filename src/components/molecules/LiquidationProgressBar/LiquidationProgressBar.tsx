@@ -1,7 +1,7 @@
 import Tick from 'src/assets/icons/tick.svg';
 import { getLiquidationInformation } from 'src/components/atoms';
 import { InfoToolTip } from 'src/components/molecules';
-import { PriceFormatter } from 'src/utils';
+import { formatLiquidationThreshold } from 'src/utils';
 
 interface LiquidationProgressBarProps {
     liquidationPercentage: number;
@@ -26,7 +26,7 @@ const getInformationText = (
             <div>
                 <span>You are currently </span>
                 <span className='text-nebulaTeal'>
-                    {PriceFormatter.formatPercentage(liquidationThresholdValue)}
+                    {formatLiquidationThreshold(liquidationThresholdValue)}
                 </span>
                 <span>{` under the liquidation threshold (${liquidationThreshold}% of deposit balance).`}</span>
             </div>
@@ -85,7 +85,7 @@ export const LiquidationProgressBar = ({
                             <span
                                 className={`whitespace-pre font-semibold ${info.color}`}
                             >
-                                {PriceFormatter.formatPercentage(
+                                {formatLiquidationThreshold(
                                     liquidationThresholdValue
                                 )}
                             </span>
