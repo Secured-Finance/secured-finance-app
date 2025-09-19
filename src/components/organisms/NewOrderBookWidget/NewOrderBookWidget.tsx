@@ -277,6 +277,7 @@ export const NewOrderBookWidget = ({
                       borrowOrders[borrowOrders.length - 1].value.price -
                           lendOrders[0].value.price
                   ) / 100.0,
+                  FORMAT_DIGITS.PRICE,
                   FORMAT_DIGITS.PRICE
               )
             : '0.00';
@@ -291,7 +292,7 @@ export const NewOrderBookWidget = ({
                           lendOrders[0].value.apr.toNormalizedNumber()
                   ),
                   'percentage',
-                  0,
+                  2,
                   2
               )
             : '0.00%';
