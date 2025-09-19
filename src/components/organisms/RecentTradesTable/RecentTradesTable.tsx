@@ -25,7 +25,7 @@ import {
     ordinaryFormat,
     AmountConverter,
 } from 'src/utils';
-import { getGraphQLConfig } from 'src/utils/graphql';
+import { useGraphQLConfig } from 'src/utils/graphql';
 import { LoanValue } from 'src/utils/entities';
 import { columns } from './constants';
 import { RecentTradesTableProps, TradeMetadata } from './types';
@@ -48,10 +48,11 @@ export const RecentTradesTable = ({
     const currentChainId = securedFinance?.config.chain.id;
 
     const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
+    const graphQLConfig = useGraphQLConfig();
 
     const { data: transactionHistoryData, isLoading: loading } =
         useTransactionHistoryQuery(
-            getGraphQLConfig(),
+            graphQLConfig,
             {
                 currency: toBytes32(currency),
                 maturity: maturity.toString(),

@@ -19,7 +19,9 @@ import {
     Settings,
 } from 'src/components/molecules';
 import { WalletDialog, WalletPopover } from 'src/components/organisms';
-import { useBreakpoint, usePoints } from 'src/hooks';
+import { useBreakpoint } from 'src/hooks';
+// COMMENTED OUT: Points client temporarily disabled
+// import { usePoints } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
@@ -77,12 +79,16 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     const isMobile = useBreakpoint('tablet');
     const { address, isConnected } = useAccount();
 
-    const {
-        user: { data: userData },
-        verification: { data: verifiedData },
-    } = usePoints();
+    // COMMENTED OUT: Points client temporarily disabled
+    // const {
+    //     user: { data: userData },
+    //     verification: { data: verifiedData },
+    // } = usePoints();
 
-    const userPoints = userData?.user.point;
+    // Mock data for points functionality (temporarily disabled)
+    const userData = undefined;
+    const verifiedData = undefined;
+    const userPoints = undefined;
 
     const securedFinance = useSF();
     const chainError = useSelector(
@@ -148,9 +154,9 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                         {isShowStablecoinLink && <StablecoinExternalLink />}
                         {isShowPointsTag && (
                             <PointsTag
-                                isConnected={
+                                isConnected={Boolean(
                                     verifiedData && address && userData
-                                }
+                                )}
                                 points={userPoints}
                             />
                         )}

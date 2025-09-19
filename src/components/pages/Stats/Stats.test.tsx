@@ -1,10 +1,42 @@
 import { composeStories } from '@storybook/react';
 import { preloadedBalance } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { render, screen, waitFor } from 'src/test-utils.js';
+import {
+    render,
+    screen,
+    waitFor,
+    cleanupGraphQLMocks,
+} from 'src/test-utils.js';
+import graphqlMocks from 'src/test-utils/mockData';
 import * as stories from './Stats.stories';
 
 const { Default, ConnectedToWallet } = composeStories(stories);
+
+// Mock the UserCountAndVolume hook to avoid GraphQL query issues
+jest.mock('src/generated/subgraph', () => ({
+    ...jest.requireActual('src/generated/subgraph'),
+    useUserCountAndVolumeQuery: jest.fn(() => ({
+        data: {
+            protocol: {
+                totalUsers: '12150',
+                volumesByCurrency: [
+                    {
+                        currency:
+                            '0x555344430000000000000000000000000000000000000000000000000000000', // USDC
+                        totalVolume: '1000000000000000000000',
+                    },
+                    {
+                        currency:
+                            '0x5746494c00000000000000000000000000000000000000000000000000000000', // WFIL
+                        totalVolume: '500000000000000000000',
+                    },
+                ],
+            },
+        },
+        isLoading: false,
+        error: null,
+    })),
+}));
 
 jest.mock('next/router', () => ({
     useRouter: jest.fn(() => ({
@@ -26,7 +58,7 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 const renderDefault = async () => {
     await waitFor(() =>
         render(<Default />, {
-            apolloMocks: Default.parameters?.apolloClient.mocks,
+            graphqlMocks: graphqlMocks.withTransactions,
             preloadedState: {
                 ...preloadedBalance,
             },
@@ -37,7 +69,7 @@ const renderDefault = async () => {
 const renderConnected = async () => {
     await waitFor(() =>
         render(<ConnectedToWallet />, {
-            apolloMocks: ConnectedToWallet.parameters?.apolloClient.mocks,
+            graphqlMocks: graphqlMocks.withTransactions,
             preloadedState: {
                 ...preloadedBalance,
             },
@@ -46,6 +78,9 @@ const renderConnected = async () => {
 };
 
 describe('MarketDashboard Component', () => {
+    afterEach(() => {
+        cleanupGraphQLMocks();
+    });
     it('should render MarketDashboard', async () => {
         await renderDefault();
     });

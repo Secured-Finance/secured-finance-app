@@ -1,6 +1,13 @@
 import { composeStories } from '@storybook/react';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
+import {
+    fireEvent,
+    render,
+    screen,
+    waitFor,
+    cleanupGraphQLMocks,
+} from 'src/test-utils.js';
+import graphqlMocks from 'src/test-utils/mockData';
 import * as stories from './CurrencyMaturityDropdown.stories';
 
 const mockSecuredFinance = mockUseSF();
@@ -14,9 +21,13 @@ const openDropdown = () => {
 };
 
 describe('CurrencyMaturityDropdown', () => {
+    afterEach(() => {
+        cleanupGraphQLMocks();
+    });
+
     it('should render a selected market', () => {
         render(<Default />, {
-            apolloMocks: Default.parameters?.apolloClient.mocks,
+            graphqlMocks: graphqlMocks.withTransactions,
         });
 
         expect(screen.getByText('WBTC-DEC2022')).toBeInTheDocument();
@@ -24,7 +35,7 @@ describe('CurrencyMaturityDropdown', () => {
 
     it('should show the dropdown when the button is clicked', () => {
         render(<Default />, {
-            apolloMocks: Default.parameters?.apolloClient.mocks,
+            graphqlMocks: graphqlMocks.withTransactions,
         });
         openDropdown();
 
@@ -35,7 +46,7 @@ describe('CurrencyMaturityDropdown', () => {
 
     it('should only show associated markets when user selects on currency filter', async () => {
         render(<Default />, {
-            apolloMocks: Default.parameters?.apolloClient.mocks,
+            graphqlMocks: graphqlMocks.withTransactions,
         });
         openDropdown();
 
@@ -49,7 +60,7 @@ describe('CurrencyMaturityDropdown', () => {
 
     it('should filter markets based on search input', async () => {
         render(<Default />, {
-            apolloMocks: Default.parameters?.apolloClient.mocks,
+            graphqlMocks: graphqlMocks.withTransactions,
         });
 
         openDropdown();
@@ -70,7 +81,7 @@ describe('CurrencyMaturityDropdown', () => {
 
     it('should render relevant message when no products are found', () => {
         render(<Default />, {
-            apolloMocks: Default.parameters?.apolloClient.mocks,
+            graphqlMocks: graphqlMocks.withTransactions,
         });
 
         const button = screen.getByRole('button', { name: 'WBTC-DEC2022' });
@@ -85,7 +96,7 @@ describe('CurrencyMaturityDropdown', () => {
 
     it.skip('should toggle favourite button when clicked', async () => {
         render(<Default />, {
-            apolloMocks: Default.parameters?.apolloClient.mocks,
+            graphqlMocks: graphqlMocks.withTransactions,
         });
 
         openDropdown();
@@ -105,7 +116,7 @@ describe('CurrencyMaturityDropdown', () => {
 
     it.skip('should sort the markets by APR', async () => {
         render(<Default />, {
-            apolloMocks: Default.parameters?.apolloClient.mocks,
+            graphqlMocks: graphqlMocks.withTransactions,
         });
 
         openDropdown();
@@ -138,7 +149,7 @@ describe('CurrencyMaturityDropdown', () => {
 
     it.skip('should sort the markets by volume', async () => {
         render(<Default />, {
-            apolloMocks: Default.parameters?.apolloClient.mocks,
+            graphqlMocks: graphqlMocks.withTransactions,
         });
 
         openDropdown();

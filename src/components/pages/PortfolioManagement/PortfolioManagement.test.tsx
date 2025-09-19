@@ -2,7 +2,13 @@ import { Currency } from '@secured-finance/sf-core';
 import { composeStories } from '@storybook/react';
 import { preloadedBalance } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { render, screen, waitFor } from 'src/test-utils.js';
+import {
+    render,
+    screen,
+    waitFor,
+    cleanupGraphQLMocks,
+} from 'src/test-utils.js';
+import graphqlMocks from 'src/test-utils/mockData';
 import { CurrencySymbol } from 'src/utils';
 import * as stories from './PortfolioManagement.stories';
 
@@ -26,10 +32,14 @@ const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
 describe('PortfolioManagement component', () => {
+    afterEach(() => {
+        cleanupGraphQLMocks();
+    });
+
     it('should render PortfolioManagement', async () => {
         await waitFor(() =>
             render(<Default />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
+                graphqlMocks: graphqlMocks.withTransactions,
                 preloadedState: preloadedBalance,
             })
         );
@@ -38,7 +48,7 @@ describe('PortfolioManagement component', () => {
     it('should show delisting disclaimer if a user has active contracts in currency being delisted', async () => {
         await waitFor(() =>
             render(<ConnectedToWallet />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
+                graphqlMocks: graphqlMocks.withTransactions,
                 preloadedState: preloadedBalance,
             })
         );
@@ -55,7 +65,7 @@ describe('PortfolioManagement component', () => {
         localStorage.setItem('DELISTED_CURRENCIES_KEY', 'USDC');
         await waitFor(() =>
             render(<ConnectedToWallet />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
+                graphqlMocks: graphqlMocks.withTransactions,
                 preloadedState: preloadedBalance,
             })
         );
@@ -72,7 +82,7 @@ describe('PortfolioManagement component', () => {
         jest.spyOn(mock, 'currencyExists').mockResolvedValue(true);
         await waitFor(() =>
             render(<ConnectedToWallet />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
+                graphqlMocks: graphqlMocks.withTransactions,
                 preloadedState: preloadedBalance,
             })
         );
@@ -98,7 +108,7 @@ describe('PortfolioManagement component', () => {
         );
         await waitFor(() =>
             render(<ConnectedToWallet />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
+                graphqlMocks: graphqlMocks.withTransactions,
                 preloadedState: preloadedBalance,
             })
         );

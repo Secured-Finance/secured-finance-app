@@ -1,5 +1,5 @@
 import { OrderSide } from '@secured-finance/sf-client';
-import { toBytes32 } from '@secured-finance/sf-graph-client';
+import { toBytes32 } from 'src/utils/bytes32';
 import { useFilteredUserOrderHistoryQuery } from 'src/generated/subgraph';
 import { VisibilityState } from '@tanstack/table-core';
 import clsx from 'clsx';

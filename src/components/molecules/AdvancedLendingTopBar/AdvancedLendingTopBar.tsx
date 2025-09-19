@@ -25,7 +25,7 @@ import {
     handlePriceSource,
     usdFormat,
 } from 'src/utils';
-import { getGraphQLConfig } from 'src/utils/graphql';
+import { useGraphQLConfig } from 'src/utils/graphql';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { AdvancedLendingTopBarProp } from './types';
 
@@ -59,8 +59,9 @@ export const AdvancedLendingTopBar = ({
     const [isMarketInfoDialogOpen, setIsMarketInfoDialogOpen] =
         useState<boolean>(false);
 
+    const graphQLConfig = useGraphQLConfig();
     const { data: transactionHistoryData } = useTransactionHistoryQuery(
-        getGraphQLConfig(),
+        graphQLConfig,
         {
             currency: toBytes32(selectedAsset?.value as CurrencySymbol),
             maturity: String(maturity),

@@ -1,4 +1,3 @@
-import { MockedProvider } from '@apollo/client/testing';
 import { configureStore } from '@reduxjs/toolkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {
@@ -10,6 +9,11 @@ import { rootReducers } from 'src/store';
 import { connector, publicClient } from 'src/stories/mocks/mockWallet';
 import { WagmiConfig, createConfig } from 'wagmi';
 import { initialStore } from './stories/mocks/mockStore';
+import {
+    setupGraphQLMocks,
+    cleanupGraphQLMocks,
+} from './test-utils/graphqlMocks';
+import './test-utils/mockPointsClient'; // Import points client mocks
 
 const defaultOptions = { defaultOptions: { queries: { retry: false } } };
 
@@ -31,13 +35,18 @@ function render(
                     serializableCheck: false,
                 }),
         }),
-        apolloMocks = null,
+        graphqlMocks = null,
         ...renderOptions
     } = {}
 ) {
+    // Setup GraphQL mocks if provided
+    if (graphqlMocks) {
+        setupGraphQLMocks(graphqlMocks);
+    }
+
     function Wrapper({ children }) {
         const queryClient = new QueryClient(defaultOptions);
-        const component = (
+        return (
             <Provider store={store}>
                 <QueryClientProvider client={queryClient}>
                     <WagmiConfig
@@ -51,13 +60,6 @@ function render(
                 </QueryClientProvider>
             </Provider>
         );
-
-        if (apolloMocks) {
-            return (
-                <MockedProvider mocks={apolloMocks}>{component}</MockedProvider>
-            );
-        }
-        return component;
     }
     return { store, ...rtlRender(ui, { wrapper: Wrapper, ...renderOptions }) };
 }
@@ -80,26 +82,29 @@ function renderHook(
                     serializableCheck: false,
                 }),
         }),
-        apolloMocks = null,
+        graphqlMocks = null,
         ...renderOptions
     } = {}
 ) {
+    // Setup GraphQL mocks if provided
+    if (graphqlMocks) {
+        setupGraphQLMocks(graphqlMocks);
+    }
+
     function Wrapper({ children }) {
         const queryClient = new QueryClient(defaultOptions);
         return (
             <Provider store={store}>
-                <MockedProvider mocks={apolloMocks}>
-                    <QueryClientProvider client={queryClient}>
-                        <WagmiConfig
-                            config={createConfig({
-                                publicClient: publicClient,
-                                connectors: [connector],
-                            })}
-                        >
-                            {children}
-                        </WagmiConfig>
-                    </QueryClientProvider>
-                </MockedProvider>
+                <QueryClientProvider client={queryClient}>
+                    <WagmiConfig
+                        config={createConfig({
+                            publicClient: publicClient,
+                            connectors: [connector],
+                        })}
+                    >
+                        {children}
+                    </WagmiConfig>
+                </QueryClientProvider>
             </Provider>
         );
     }
@@ -110,4 +115,4 @@ function renderHook(
 }
 
 export * from '@testing-library/react';
-export { render, renderHook };
+export { render, renderHook, setupGraphQLMocks, cleanupGraphQLMocks };

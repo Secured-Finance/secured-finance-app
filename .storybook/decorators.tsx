@@ -1,4 +1,4 @@
-import { GraphClientProvider } from '@secured-finance/sf-graph-client';
+// Removed GraphClientProvider - using React Query + generated hooks instead
 import type { StoryContext, StoryFn } from '@storybook/react';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
@@ -43,11 +43,8 @@ export const withWalletProvider = (Story: StoryFn, Context: StoryContext) => {
     );
 };
 
-export const WithGraphClient = (Story: StoryFn) => (
-    <GraphClientProvider network='sepolia'>
-        <Story />
-    </GraphClientProvider>
-);
+// No longer needed - components use generated hooks + React Query
+export const WithGraphClient = (Story: StoryFn) => <Story />;
 
 export const withMockDate = (Story: StoryFn, context: StoryContext) => {
     if (context?.parameters?.date?.value instanceof Date) {
