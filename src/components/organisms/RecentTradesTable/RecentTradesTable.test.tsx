@@ -5,21 +5,23 @@ import {
     screen,
     cleanupGraphQLMocks,
 } from 'src/test-utils.js';
+import { useTransactionHistoryQuery } from 'src/generated/subgraph';
 import graphqlMocks from 'src/test-utils/mockData';
 import * as stories from './RecentTradesTable.stories';
 
 const { Default, Empty } = composeStories(stories);
-
-// Mock the TransactionHistory hook to avoid GraphQL query issues
-const mockUseTransactionHistoryQuery = jest.fn();
 jest.mock('src/generated/subgraph', () => ({
     ...jest.requireActual('src/generated/subgraph'),
-    useTransactionHistoryQuery: mockUseTransactionHistoryQuery,
+    useTransactionHistoryQuery: jest.fn(),
 }));
 
 const getButton = (name: string) => screen.getByRole('button', { name });
 
 describe('RecentTradesTable component', () => {
+    const mockUseTransactionHistoryQuery = jest.mocked(
+        useTransactionHistoryQuery
+    );
+
     beforeEach(() => {
         // Default mock with transaction data
         mockUseTransactionHistoryQuery.mockReturnValue({
@@ -57,7 +59,7 @@ describe('RecentTradesTable component', () => {
             },
             isLoading: false,
             error: null,
-        });
+        } as ReturnType<typeof useTransactionHistoryQuery>);
     });
 
     afterEach(() => {
@@ -93,7 +95,7 @@ describe('RecentTradesTable component', () => {
             },
             isLoading: false,
             error: null,
-        });
+        } as ReturnType<typeof useTransactionHistoryQuery>);
 
         render(<Empty />, {
             graphqlMocks: graphqlMocks.empty,
