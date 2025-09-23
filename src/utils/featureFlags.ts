@@ -5,26 +5,12 @@
 
 import { Environment, getEnvironment, getWagmiHookFlag } from 'src/utils';
 
-// Supported hook names for feature flags
-export type WagmiHookName =
-    | 'currencies'
-    | 'balances'
-    | 'orderbook'
-    | 'orders'
-    | 'positions'
-    | 'markets'
-    | 'collateral'
-    | 'genesis'
-    | 'decimals'
-    | 'lastPrices';
-
 // Hook switcher utility for seamless migration
 export const useHookSwitcher = <T>(
-    hookName: WagmiHookName,
     legacyHook: () => T,
     wagmiHook: () => T
 ): T => {
-    const useWagmi = getWagmiHookFlag(hookName);
+    const useWagmi = getWagmiHookFlag();
 
     // Development logging to track feature flag usage (controlled by env var)
     if (
@@ -33,9 +19,7 @@ export const useHookSwitcher = <T>(
     ) {
         // eslint-disable-next-line no-console
         console.log(
-            `🔄 Hook ${hookName}: using ${
-                useWagmi ? 'wagmi' : 'legacy'
-            } implementation`
+            `🔄 Using ${useWagmi ? 'wagmi' : 'legacy'} hook implementation`
         );
     }
 

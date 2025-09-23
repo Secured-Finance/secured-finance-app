@@ -97,23 +97,22 @@ describe('useYieldCurveMarketRates', () => {
             ...noItayoseMarkets,
         ]);
         const { result } = renderHook(() => useYieldCurveMarketRates());
-        await waitFor(() =>
-            expect(mock.getOrderBookDetails).toHaveBeenCalled()
-        );
-        expect(result.current.rates).toHaveLength(8);
-        expect(result.current.maturityList).toHaveLength(8);
-        expect(result.current.itayoseMarketIndexSet).toEqual(new Set());
+        await waitFor(() => {
+            expect(mock.getOrderBookDetails).toHaveBeenCalled();
+            expect(result.current.rates).toHaveLength(8);
+            expect(result.current.maturityList).toHaveLength(8);
+            expect(result.current.itayoseMarketIndexSet).toEqual(new Set());
+        });
     });
 
     it('should return correct itayose index for default mocks', async () => {
         const { result } = renderHook(() => useYieldCurveMarketRates());
 
-        await waitFor(() =>
-            expect(mock.getOrderBookDetails).toHaveBeenCalled()
-        );
-
-        expect(result.current.maturityList).toHaveLength(9);
-        expect(result.current.itayoseMarketIndexSet).toEqual(new Set([8]));
+        await waitFor(() => {
+            expect(mock.getOrderBookDetails).toHaveBeenCalled();
+            expect(result.current.maturityList).toHaveLength(9);
+            expect(result.current.itayoseMarketIndexSet).toEqual(new Set([8]));
+        });
     });
 
     it('should return correct index set for more than one itayose markets', async () => {
@@ -121,20 +120,24 @@ describe('useYieldCurveMarketRates', () => {
             ...twoItayoseMarkets,
         ]);
         const { result } = renderHook(() => useYieldCurveMarketRates());
-        await waitFor(() =>
-            expect(mock.getOrderBookDetails).toHaveBeenCalled()
-        );
-        expect(result.current.rates).toHaveLength(10);
-        expect(result.current.maturityList).toHaveLength(10);
-        expect(result.current.itayoseMarketIndexSet).toEqual(new Set([8, 9]));
+        await waitFor(() => {
+            expect(mock.getOrderBookDetails).toHaveBeenCalled();
+            expect(result.current.rates).toHaveLength(10);
+            expect(result.current.maturityList).toHaveLength(10);
+            expect(result.current.itayoseMarketIndexSet).toEqual(
+                new Set([8, 9])
+            );
+        });
     });
 
     it('should return empty lists for no markets', async () => {
         jest.spyOn(mock, 'getOrderBookDetails').mockResolvedValue([]);
         const { result } = renderHook(() => useYieldCurveMarketRates());
-        await waitFor(() => expect(result.current.rates).toHaveLength(0));
-        expect(result.current.maturityList).toHaveLength(0);
-        expect(result.current.itayoseMarketIndexSet).toEqual(new Set());
+        await waitFor(() => {
+            expect(result.current.rates).toHaveLength(0);
+            expect(result.current.maturityList).toHaveLength(0);
+            expect(result.current.itayoseMarketIndexSet).toEqual(new Set());
+        });
     });
 
     it('should not return matured or markets not in pre-open or itayose mode', async () => {
@@ -142,12 +145,12 @@ describe('useYieldCurveMarketRates', () => {
             ...closedMarkets,
         ]);
         const { result } = renderHook(() => useYieldCurveMarketRates());
-        await waitFor(() =>
-            expect(mock.getOrderBookDetails).toHaveBeenCalled()
-        );
-        expect(result.current.rates).toHaveLength(9);
-        expect(result.current.maturityList).toHaveLength(9);
-        expect(result.current.itayoseMarketIndexSet).toEqual(new Set([8]));
+        await waitFor(() => {
+            expect(mock.getOrderBookDetails).toHaveBeenCalled();
+            expect(result.current.rates).toHaveLength(9);
+            expect(result.current.maturityList).toHaveLength(9);
+            expect(result.current.itayoseMarketIndexSet).toEqual(new Set([8]));
+        });
     });
 
     it('should return ZC rates for open markets and FWD rates for pre-open markets', async () => {
@@ -155,30 +158,34 @@ describe('useYieldCurveMarketRates', () => {
             ...twoItayoseMarkets,
         ]);
         const { result } = renderHook(() => useYieldCurveMarketRates());
-        await waitFor(() =>
-            expect(mock.getOrderBookDetails).toHaveBeenCalled()
-        );
-        expect(result.current.rates).toHaveLength(10);
-        expect(result.current.maturityList).toHaveLength(10);
-        expect(result.current.itayoseMarketIndexSet).toEqual(new Set([8, 9]));
+        await waitFor(() => {
+            expect(mock.getOrderBookDetails).toHaveBeenCalled();
+            expect(result.current.rates).toHaveLength(10);
+            expect(result.current.maturityList).toHaveLength(10);
+            expect(result.current.itayoseMarketIndexSet).toEqual(
+                new Set([8, 9])
+            );
 
-        const fwdRate = LoanValue.fromPrice(
-            Number(preOrderMarket.openingUnitPrice),
-            Number(preOrderMarket.maturity),
-            Number(preOrderMarket.openingDate)
-        ).apr;
-        expect(result.current.rates[8].toNormalizedNumber()).toEqual(1.9758);
-        expect(result.current.rates[9].toNormalizedNumber()).toEqual(
-            fwdRate.toNormalizedNumber()
-        );
+            const fwdRate = LoanValue.fromPrice(
+                Number(preOrderMarket.openingUnitPrice),
+                Number(preOrderMarket.maturity),
+                Number(preOrderMarket.openingDate)
+            ).apr;
+            expect(result.current.rates[8].toNormalizedNumber()).toEqual(
+                1.9758
+            );
+            expect(result.current.rates[9].toNormalizedNumber()).toEqual(
+                fwdRate.toNormalizedNumber()
+            );
+        });
     });
 
     it('should return MAX_VALUE for maximumRate if no market is near maturity', async () => {
         const { result } = renderHook(() => useYieldCurveMarketRates());
-        await waitFor(() =>
-            expect(mock.getOrderBookDetails).toHaveBeenCalled()
-        );
-        expect(result.current.maximumRate).toEqual(Number.MAX_VALUE);
+        await waitFor(() => {
+            expect(mock.getOrderBookDetails).toHaveBeenCalled();
+            expect(result.current.maximumRate).toEqual(Number.MAX_VALUE);
+        });
     });
 
     it('should return 0 marketCloseToMaturityOriginalRate if no market is near maturity', async () => {
@@ -190,10 +197,10 @@ describe('useYieldCurveMarketRates', () => {
 
     it('should not change first market yield chart rate if its not close to maturity', async () => {
         const { result } = renderHook(() => useYieldCurveMarketRates());
-        await waitFor(() =>
-            expect(mock.getOrderBookDetails).toHaveBeenCalled()
-        );
-        expect(result.current.rates[0]).toEqual(new Rate(20329));
+        await waitFor(() => {
+            expect(mock.getOrderBookDetails).toHaveBeenCalled();
+            expect(result.current.rates[0]).toEqual(new Rate(20329));
+        });
     });
 
     it('should return correct maximumRate when a market is near maturity', async () => {
@@ -201,10 +208,10 @@ describe('useYieldCurveMarketRates', () => {
             ...closeToMaturity,
         ]);
         const { result } = renderHook(() => useYieldCurveMarketRates());
-        await waitFor(() =>
-            expect(mock.getOrderBookDetails).toHaveBeenCalled()
-        );
-        expect(result.current.maximumRate).toEqual(34820);
+        await waitFor(() => {
+            expect(mock.getOrderBookDetails).toHaveBeenCalled();
+            expect(result.current.maximumRate).toEqual(34820);
+        });
     });
 
     it('should return correct marketCloseToMaturityOriginalRate when a market is near maturity', async () => {
@@ -212,12 +219,12 @@ describe('useYieldCurveMarketRates', () => {
             ...closeToMaturity,
         ]);
         const { result } = renderHook(() => useYieldCurveMarketRates());
-        await waitFor(() =>
-            expect(mock.getOrderBookDetails).toHaveBeenCalled()
-        );
-        expect(result.current.marketCloseToMaturityOriginalRate).toEqual(
-            10000000
-        );
+        await waitFor(() => {
+            expect(mock.getOrderBookDetails).toHaveBeenCalled();
+            expect(result.current.marketCloseToMaturityOriginalRate).toEqual(
+                10000000
+            );
+        });
     });
 
     it('should change first market yield chart rate if its close to maturity and greater than maximum rate', async () => {
@@ -225,10 +232,10 @@ describe('useYieldCurveMarketRates', () => {
             ...closeToMaturity,
         ]);
         const { result } = renderHook(() => useYieldCurveMarketRates());
-        await waitFor(() =>
-            expect(mock.getOrderBookDetails).toHaveBeenCalled()
-        );
-        expect(result.current.rates[0]).toEqual(new Rate(43525));
+        await waitFor(() => {
+            expect(mock.getOrderBookDetails).toHaveBeenCalled();
+            expect(result.current.rates[0]).toEqual(new Rate(43525));
+        });
     });
 
     it.skip('should return original rate for a market near maturity if maximum rate is 0', async () => {
@@ -236,10 +243,10 @@ describe('useYieldCurveMarketRates', () => {
             ...closeToMaturityWithZeroAprMarkets,
         ]);
         const { result } = renderHook(() => useYieldCurveMarketRates());
-        await waitFor(() =>
-            expect(mock.getOrderBookDetails).toHaveBeenCalled()
-        );
-        expect(result.current.rates[0]).toEqual(new Rate(43525));
+        await waitFor(() => {
+            expect(mock.getOrderBookDetails).toHaveBeenCalled();
+            expect(result.current.rates[0]).toEqual(new Rate(43525));
+        });
     });
 
     it('should not change first market yield chart rate if its close to maturity but lesser than maximum rate', async () => {
@@ -248,9 +255,9 @@ describe('useYieldCurveMarketRates', () => {
             ...closeToMaturity,
         ]);
         const { result } = renderHook(() => useYieldCurveMarketRates());
-        await waitFor(() =>
-            expect(mock.getOrderBookDetails).toHaveBeenCalled()
-        );
-        expect(result.current.rates[0]).toEqual(new Rate(0));
+        await waitFor(() => {
+            expect(mock.getOrderBookDetails).toHaveBeenCalled();
+            expect(result.current.rates[0]).toEqual(new Rate(0));
+        });
     });
 });

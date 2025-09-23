@@ -61,3 +61,26 @@ export const mockUseCurrencyControllerRead = jest.fn(
         };
     }
 );
+
+/**
+ * Mock for useLendingMarketControllerRead wagmi hook
+ * Handles multiple functions within the LendingMarketController contract
+ */
+export const mockUseLendingMarketControllerRead = jest.fn(
+    (params: WagmiHookParams = {}) => {
+        if (params?.functionName === 'getOrderFeeRate') {
+            return {
+                data: BigInt('100'), // Default 1% fee rate (100 basis points)
+                isLoading: false, // Wagmi v1 uses isLoading (TanStack Query v4)
+                error: null,
+            };
+        }
+
+        // Default return for other function calls
+        return {
+            data: undefined,
+            isLoading: false,
+            error: null,
+        };
+    }
+);

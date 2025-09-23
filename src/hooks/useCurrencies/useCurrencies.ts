@@ -62,7 +62,7 @@ const useCurrenciesWagmi = (showAll = false, chainId?: number) => {
             .sort((a, b) => currencyMap[a].index - currencyMap[b].index);
     }, [rawCurrencies, showAll]);
 
-    return { data: currencies, isLoading, error } as UseQueryResult<
+    return { data: currencies, isPending: isLoading, error } as UseQueryResult<
         CurrencySymbol[],
         DefaultError
     >;
@@ -74,7 +74,6 @@ export const useCurrencies = (showAll = false, chainId?: number) => {
     const wagmiResult = useCurrenciesWagmi(showAll, chainId);
 
     return useHookSwitcher(
-        'currencies',
         () => legacyResult,
         () => wagmiResult
     );
