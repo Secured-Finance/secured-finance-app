@@ -14,6 +14,7 @@ import { CoreTable } from 'src/components/molecules';
 import {
     CurrencySymbol,
     currencyMap,
+    formatCollateralSnapshotRatio,
     PriceFormatter,
     TimestampConverter,
 } from 'src/utils';
@@ -91,11 +92,7 @@ export const CollateralSnapshot = ({
                 header: 'Asset',
             }),
             columnHelper.accessor('ratio', {
-                cell: info =>
-                    PriceFormatter.formatPercentage(
-                        info.getValue(),
-                        'percentage'
-                    ),
+                cell: info => formatCollateralSnapshotRatio(info.getValue()),
                 header: 'Ratio of Collateral',
             }),
             columnHelper.accessor('price', {

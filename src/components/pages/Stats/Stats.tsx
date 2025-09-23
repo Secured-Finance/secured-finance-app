@@ -37,7 +37,6 @@ import {
     getEnvironment,
     PriceFormatter,
     FORMAT_DIGITS,
-    ZERO_BI,
 } from 'src/utils';
 import { useAccount } from 'wagmi';
 
@@ -50,7 +49,7 @@ const computeTotalUsers = (users: string) => {
             ? +users + PREVIOUS_TOTAL_USERS
             : +users;
     return PriceFormatter.formatOrdinary(
-        totalUsers ?? ZERO_BI,
+        totalUsers ?? 0,
         FORMAT_DIGITS.NONE,
         FORMAT_DIGITS.PRICE,
         'compact'

@@ -14,6 +14,7 @@ import useSF from 'src/hooks/useSecuredFinance';
 import {
     AddressConverter,
     DisplayLengths,
+    formatCollateralSnapshotRatio,
     handleContractError,
     PriceFormatter,
     TimestampConverter,
@@ -111,11 +112,7 @@ export const EmergencyRedeemDialog = ({
                 header: 'Asset',
             }),
             columnHelper.accessor('ratio', {
-                cell: info =>
-                    PriceFormatter.formatPercentage(
-                        info.getValue(),
-                        'percentage'
-                    ),
+                cell: info => formatCollateralSnapshotRatio(info.getValue()),
                 header: 'Ratio of Collateral',
             }),
             columnHelper.accessor('price', {
