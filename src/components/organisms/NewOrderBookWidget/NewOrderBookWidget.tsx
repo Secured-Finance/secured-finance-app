@@ -36,8 +36,8 @@ import {
     divide,
     formatLoanValue,
     getMaxAmount,
-    ordinaryFormat,
-    percentFormat,
+    PriceFormatter,
+    FORMAT_DIGITS,
 } from 'src/utils';
 import { AmountConverter } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
@@ -99,7 +99,7 @@ const AmountCell = ({
     if (value === ZERO_BI) {
         val = undefined;
     } else {
-        val = ordinaryFormat(
+        val = PriceFormatter.formatOrdinary(
             AmountConverter.fromBase(value, currency),
             currencyMap[currency].roundingDecimal,
             currencyMap[currency].roundingDecimal
@@ -272,26 +272,26 @@ export const NewOrderBookWidget = ({
 
     const spread =
         lendOrders.length > 0 && borrowOrders.length > 0
-            ? ordinaryFormat(
+            ? PriceFormatter.formatOrdinary(
                   Math.abs(
                       borrowOrders[borrowOrders.length - 1].value.price -
                           lendOrders[0].value.price
                   ) / 100.0,
-                  2,
-                  2
+                  FORMAT_DIGITS.PRICE,
+                  FORMAT_DIGITS.PRICE
               )
             : '0.00';
 
     const aprSpread =
         lendOrders.length > 0 && borrowOrders.length > 0
-            ? percentFormat(
+            ? PriceFormatter.formatPercentage(
                   Math.abs(
                       borrowOrders[
                           borrowOrders.length - 1
                       ].value.apr.toNormalizedNumber() -
                           lendOrders[0].value.apr.toNormalizedNumber()
                   ),
-                  100,
+                  'percentage',
                   2,
                   2
               )

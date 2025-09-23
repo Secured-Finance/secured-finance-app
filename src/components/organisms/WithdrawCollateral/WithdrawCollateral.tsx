@@ -19,7 +19,7 @@ import {
     CurrencySymbol,
     DisplayLengths,
     ZERO_BI,
-    formatAmount,
+    PriceFormatter,
     AmountConverter,
 } from 'src/utils';
 import {
@@ -289,7 +289,7 @@ export const WithdrawCollateral = ({
                                     ],
                                     [
                                         'Amount',
-                                        `${formatAmount(
+                                        `${PriceFormatter.formatAmount(
                                             AmountConverter.fromBase(
                                                 collateralBigInt,
                                                 asset
