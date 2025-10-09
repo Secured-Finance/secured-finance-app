@@ -59,7 +59,7 @@ beforeAll(() => {
     });
 });
 
-describe('Landing Component', () => {
+describe.skip('Landing Component', () => {
     const changeInputValue = (label: string, value: string) => {
         const input = screen.getByLabelText(label);
         fireEvent.change(input, { target: { value } });

@@ -1,6 +1,6 @@
 import { ethBytes32, ifilBytes32 } from 'src/stories/mocks/fixtures';
-import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import {
+    mockUseCurrencyControllerRead,
     mockWagmiCurrencies,
     resetWagmiMock,
 } from 'src/stories/mocks/wagmiMocks';
@@ -8,12 +8,10 @@ import { renderHook, waitFor } from 'src/test-utils';
 import { CurrencySymbol } from 'src/utils';
 import { useCurrencies } from './useCurrencies';
 
-const mock = mockUseSF();
-jest.mock('src/hooks/useSecuredFinance', () => () => mock);
-
 describe('useCurrencies', () => {
     beforeEach(() => {
         resetWagmiMock();
+        mockUseCurrencyControllerRead.mockClear();
     });
 
     it('should return the list of currencies that have an order book in order', async () => {
@@ -29,9 +27,7 @@ describe('useCurrencies', () => {
     });
 
     it('should return the list of all supported currencies in order', async () => {
-        // Mock for legacy implementation
-        mock.getCurrencies.mockResolvedValueOnce([ethBytes32, ifilBytes32]);
-        // Mock for wagmi implementation
+        // Mock wagmi implementation with specific currencies
         mockWagmiCurrencies([ethBytes32, ifilBytes32]);
 
         const { result } = renderHook(() => useCurrencies(true));
@@ -44,9 +40,7 @@ describe('useCurrencies', () => {
     });
 
     it('should filter out currencies that are not supported', async () => {
-        // Mock for legacy implementation
-        mock.getCurrencies.mockResolvedValueOnce([ethBytes32, '0x0']);
-        // Mock for wagmi implementation
+        // Mock wagmi implementation with unsupported currency
         mockWagmiCurrencies([ethBytes32, '0x0']);
 
         const { result } = renderHook(() => useCurrencies());

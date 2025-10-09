@@ -15,14 +15,15 @@ describe('useMarketPhase', () => {
         const { result } = renderHook(() =>
             useMarketPhase(CurrencySymbol.ETH, maturity)
         );
-        const value = result.current;
-        expect(value).toEqual('Not Found');
 
-        await waitFor(() =>
-            expect(mock.getOrderBookDetails).toHaveBeenCalledTimes(1)
-        );
-        const newValue = result.current;
-        await waitFor(() => expect(newValue).toEqual('Open'));
+        // Initially should be 'Not Found' before data loads
+        expect(result.current).toEqual('Not Found');
+
+        // Wait for the hook to complete its query and return 'Open'
+        await waitFor(() => {
+            expect(mock.getOrderBookDetails).toHaveBeenCalledTimes(1);
+            expect(result.current).toEqual('Open');
+        });
     });
 
     it('should return the market phase as Pre Order', async () => {
