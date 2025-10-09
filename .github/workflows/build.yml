@@ -103,12 +103,12 @@ jobs:
       - name: Build Web App
         run: npm run build
 
-      # - name: Build Storybook
-      #   uses: chromaui/action@v11
-      #   with:
-      #     projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-      #     exitOnceUploaded: true
-      #     skip: "main"
+      - name: Build Storybook
+        uses: chromaui/action@v11
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          exitOnceUploaded: true
+          skip: "main"
 
       - name: Publish Web App
         uses: actions/upload-artifact@v4
