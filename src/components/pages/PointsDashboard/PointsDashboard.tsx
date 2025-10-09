@@ -49,6 +49,8 @@ import {
     SupportedChainsList,
     readWalletFromStore,
     formatter,
+    PriceFormatter,
+    FORMAT_DIGITS,
 } from 'src/utils';
 import { useAccount, useConnect, useSignMessage } from 'wagmi';
 import { getShareMessage, quoteTweetUrl } from './constants';
@@ -410,10 +412,11 @@ const QuestList = ({ chainId }: { chainId: number }) => {
                         <div className='pl-2' key={'lend'}>
                             <BonusPointTag
                                 label={`LEND ${Number(
-                                    (
+                                    PriceFormatter.formatToFixed(
                                         (questPoint + bonusPoints['lend']) /
-                                        questPoint
-                                    ).toFixed(1)
+                                            questPoint,
+                                        FORMAT_DIGITS.ONE
+                                    )
                                 )}x`}
                                 color={ChipColors.Teal}
                             />
@@ -425,10 +428,11 @@ const QuestList = ({ chainId }: { chainId: number }) => {
                         <div className='pl-2' key={'borrow'}>
                             <BonusPointTag
                                 label={`BORROW ${Number(
-                                    (
+                                    PriceFormatter.formatToFixed(
                                         (questPoint + bonusPoints['borrow']) /
-                                        questPoint
-                                    ).toFixed(1)
+                                            questPoint,
+                                        FORMAT_DIGITS.ONE
+                                    )
                                 )}x`}
                                 color={ChipColors.Red}
                             />
@@ -625,7 +629,12 @@ const Leaderboard = () => {
                             {item.walletAddress}
                         </div>
                         <div className='float-right flex-1 text-right text-neutral-6'>
-                            {formatter.ordinary(0, 2, 'standard')(item.point)}
+                            {PriceFormatter.formatOrdinary(
+                                item.point,
+                                FORMAT_DIGITS.ZERO,
+                                FORMAT_DIGITS.PRICE,
+                                'standard'
+                            )}
                         </div>
                     </div>
                 ))}

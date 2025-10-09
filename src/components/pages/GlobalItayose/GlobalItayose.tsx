@@ -18,7 +18,12 @@ import {
     setCurrency,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { CurrencySymbol, toOptions, formatter } from 'src/utils';
+import {
+    CurrencySymbol,
+    toOptions,
+    PriceFormatter,
+    FORMAT_DIGITS,
+} from 'src/utils';
 
 export const GlobalItayose = () => {
     const dispatch = useDispatch();
@@ -135,9 +140,9 @@ export const GlobalItayose = () => {
                                 },
                                 {
                                     name: 'Total Value Locked',
-                                    value: formatter.usd(
+                                    value: PriceFormatter.formatUSDValue(
                                         totalValueLockedInUSD,
-                                        2,
+                                        FORMAT_DIGITS.PRICE,
                                         'compact'
                                     ),
                                 },

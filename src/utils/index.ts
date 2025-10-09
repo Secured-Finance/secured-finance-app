@@ -25,6 +25,8 @@ export * from './mobileTableDefinitions';
 export * from './networks';
 export * from './orderTypeConverter';
 export * from './portfolio';
+export * from './priceFormatter';
+export * from './priceUtils';
 export * from './protocol';
 export * from './rate';
 export * from './strings';

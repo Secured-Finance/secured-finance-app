@@ -8,9 +8,13 @@ import LockOpen from 'src/assets/icons/lock-open.svg';
 import Coins from 'src/assets/img/2d coins.svg';
 import { CurrencyIcon } from 'src/components/atoms';
 import { useBreakpoint, useGetCountdown } from 'src/hooks';
-import { AmountConverter, CurrencySymbol, formatter } from 'src/utils';
+import {
+    AmountConverter,
+    CurrencySymbol,
+    PriceFormatter,
+    FORMAT_DIGITS,
+} from 'src/utils';
 import { stages } from './constants';
-import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 export const Banner = ({ text }: { text: string }) => {
     return (
@@ -160,21 +164,21 @@ export const CampaignStatus = ({
                                         className='typography-mobile-body-3 block text-center text-white tablet:text-left tablet:text-[22px] tablet:font-semibold desktop:text-7 desktop:leading-8'
                                         key={ccy}
                                     >
-                                        X
-                                        {`${formatter.ordinary(
-                                            FINANCIAL_CONSTANTS.DEFAULT_MIN_DECIMALS,
-                                            FINANCIAL_CONSTANTS.DEFAULT_ONE_DECIMALS
-                                        )(
+                                        {`${PriceFormatter.formatOrdinary(
                                             AmountConverter.fromBase(
                                                 valueLocked[ccy],
                                                 ccy
-                                            )
+                                            ),
+                                            FORMAT_DIGITS.ZERO,
+                                            FORMAT_DIGITS.ONE
                                         )} ${ccy}`}
                                     </span>
                                 );
                             })}
                             <span className='typography-mobile-body-4 laptop:typography-desktop-body-4 block text-center text-white/40 tablet:text-left desktop:text-4 desktop:leading-8'>
-                                {`≈ ${formatter.usd(totalUSDValue, 2)}`}
+                                {`≈ ${PriceFormatter.formatUSDValue(
+                                    totalUSDValue
+                                )}`}
                             </span>
                         </div>
                     </div>

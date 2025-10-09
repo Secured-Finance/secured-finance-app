@@ -1,6 +1,5 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useMemo } from 'react';
-import { formatter } from 'src/utils';
 import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     CollateralManagementConciseTab,
@@ -37,6 +36,8 @@ import {
     Rate,
     computeTotalProtocolVolumeInUSD,
     getEnvironment,
+    FORMAT_DIGITS,
+    formatter,
 } from 'src/utils';
 import { useAccount } from 'wagmi';
 
@@ -97,7 +98,7 @@ export const Stats = () => {
                 userCountAndVolume.data?.volumesByCurrency ?? [],
                 priceList
             ).totalVolumeUSD,
-            2,
+            FORMAT_DIGITS.PRICE,
             'compact'
         );
     }, [userCountAndVolume.data?.volumesByCurrency, priceList]);
@@ -131,7 +132,7 @@ export const Stats = () => {
                                 name: 'Total Value Locked',
                                 value: formatter.usd(
                                     totalValueLockedInUSD,
-                                    2,
+                                    FORMAT_DIGITS.PRICE,
                                     'compact'
                                 ),
                             },

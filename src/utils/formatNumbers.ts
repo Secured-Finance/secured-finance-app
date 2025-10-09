@@ -1,62 +1,9 @@
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import { MAX_COVERAGE } from './collateral';
 import { divide } from './currencyList';
 import { LoanValue } from './entities';
-import { formatter } from 'src/utils';
-import { calculate } from 'src/utils';
-import { FINANCIAL_CONSTANTS } from 'src/config/constants';
-
-export const usdFormat = (
-    number: number | bigint,
-    digits = 0,
-    notation: 'standard' | 'compact' = 'standard'
-) => {
-    return Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        currencySign: 'accounting',
-        maximumFractionDigits: digits,
-        notation: notation,
-    }).format(number);
-};
-
-export const percentFormat = (
-    number: number,
-    dividedBy: number = FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
-    minimumFractionDigits = 0,
-    maximumFractionDigits = 2
-) => {
-    const value = dividedBy !== 0 ? number / dividedBy : 0;
-    return Intl.NumberFormat('en-US', {
-        style: 'percent',
-        minimumFractionDigits,
-        maximumFractionDigits,
-    }).format(value);
-};
-
-export const ordinaryFormat = (
-    number: number | bigint,
-    minDecimals = 0,
-    maxDecimals = 2,
-    notation: 'standard' | 'compact' = 'standard'
-) => {
-    return Intl.NumberFormat('en-US', {
-        minimumFractionDigits: minDecimals,
-        maximumFractionDigits: maxDecimals,
-        notation: notation,
-    }).format(number);
-};
-
-export const formatAmount = (number: number | bigint) => {
-    return formatter.ordinary(0, 4)(number);
-};
-
-export const formatWithCurrency = (
-    number: number | bigint,
-    currency: string,
-    decimals = 2
-) => {
-    return `${formatter.ordinary(0, decimals)(number)} ${currency}`;
-};
+import { FORMAT_DIGITS, PriceFormatter } from './priceFormatter';
+import { calculate } from './unifiedFormatter';
 
 export const formatLoanValue = (
     value: LoanValue | undefined,
@@ -65,24 +12,32 @@ export const formatLoanValue = (
 ) => {
     if (type === 'price') {
         if (!value) return '--.--';
-        return divide(value.price, FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR)
-            .toFixed(decimal)
-            .toString();
+        return PriceFormatter.formatToFixed(divide(value.price, 100), decimal);
     } else {
         if (!value) return '--.--%';
-        return Intl.NumberFormat('en-US', {
-            style: 'percent',
-            minimumFractionDigits: decimal,
-            maximumFractionDigits: decimal,
-        }).format(value.apr.toNormalizedNumber() / 100);
+        return PriceFormatter.formatPercentage(
+            value.apr.toNormalizedNumber(),
+            'percentage',
+            decimal,
+            decimal
+        );
     }
 };
 
 export function formatCollateralRatio(collateral: number) {
-    return Intl.NumberFormat('en-US', {
-        style: 'percent',
-        maximumFractionDigits: 2,
-    }).format(collateral / MAX_COVERAGE);
+    return PriceFormatter.formatPercentage(
+        collateral / MAX_COVERAGE,
+        'raw',
+        FORMAT_DIGITS.ZERO
+    );
+}
+
+export function formatCollateralSnapshotRatio(ratio: number) {
+    return PriceFormatter.formatPercentage(ratio / 100, 'percentage');
+}
+
+export function formatLiquidationThreshold(thresholdValue: number) {
+    return PriceFormatter.formatPercentage(thresholdValue, 'percentage');
 }
 
 export const formatTimestamp = (timestamp: number) => {
@@ -138,7 +93,10 @@ export const formatDuration = (durationMs: number) => {
     const fractionOfYear = durationInDays / daysInYear;
 
     // Format the fraction of year to two decimal places
-    const fractionOfYearFormatted = fractionOfYear.toFixed(2);
+    const fractionOfYearFormatted = PriceFormatter.formatToFixed(
+        fractionOfYear,
+        FORMAT_DIGITS.PRICE
+    );
 
     const daysLeft = calculate.round(durationInDays);
 

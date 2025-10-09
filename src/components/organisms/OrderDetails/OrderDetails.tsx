@@ -19,12 +19,12 @@ import { OrderType } from 'src/types';
 import {
     FeeCalculator,
     divide,
-    formatWithCurrency,
     MaturityConverter,
     multiply,
     prefixTilde,
     formatter,
     calculate,
+    PriceFormatter,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 
@@ -101,7 +101,7 @@ export const OrderDetails = ({
                         </span>
                         . Your adjusted PV will be{' '}
                         <span>
-                            {formatWithCurrency(
+                            {PriceFormatter.formatWithCurrency(
                                 multiply(
                                     divide(
                                         amount.value,

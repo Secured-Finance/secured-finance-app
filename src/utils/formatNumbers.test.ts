@@ -1,27 +1,24 @@
 import { LoanValue } from './entities';
 import { formatter } from './unifiedFormatter';
-import {
-    formatAmount,
-    formatCollateralRatio,
-    formatLoanValue,
-    formatWithCurrency,
-    ordinaryFormat,
-} from './formatNumbers';
+import { formatCollateralRatio, formatLoanValue } from './formatNumbers';
 import { TimestampConverter } from './timestampConverter';
 import { Rate } from './rate';
+import { PriceFormatter } from './priceFormatter';
 
 describe('formatWithCurrency', () => {
     it('should format the number with the given currency and decimals', () => {
-        expect(formatWithCurrency(123456789, 'USD')).toEqual('123,456,789 USD');
-        expect(formatWithCurrency(123456789, 'USD', 0)).toEqual(
+        expect(PriceFormatter.formatWithCurrency(123456789, 'USD')).toEqual(
             '123,456,789 USD'
         );
-        expect(formatWithCurrency(123456789.123, 'EUR', 3)).toEqual(
-            '123,456,789.123 EUR'
+        expect(PriceFormatter.formatWithCurrency(123456789, 'USD', 0)).toEqual(
+            '123,456,789 USD'
         );
-        expect(formatWithCurrency(BigInt(123456789), 'JPY')).toEqual(
-            '123,456,789 JPY'
-        );
+        expect(
+            PriceFormatter.formatWithCurrency(123456789.123, 'EUR', 3)
+        ).toEqual('123,456,789.123 EUR');
+        expect(
+            PriceFormatter.formatWithCurrency(BigInt(123456789), 'JPY')
+        ).toEqual('123,456,789 JPY');
     });
 });
 
@@ -63,7 +60,7 @@ describe('usdFormat', () => {
 
 describe('ordinaryFormat', () => {
     it('should format a regular number with default decimals and notation', () => {
-        expect(ordinaryFormat(1234.567)).toEqual('1,234.57');
+        expect(PriceFormatter.formatOrdinary(1234.567)).toEqual('1,234.57');
     });
 
     it('should format a regular number with custom decimals and standard notation', () => {
@@ -75,11 +72,15 @@ describe('ordinaryFormat', () => {
     });
 
     it('should format a BigInt with default decimals and notation', () => {
-        expect(ordinaryFormat(BigInt(123456789))).toEqual('123,456,789');
+        expect(PriceFormatter.formatOrdinary(BigInt(123456789))).toEqual(
+            '123,456,789'
+        );
     });
 
     it('should format a bigint with default decimals and notation', () => {
-        expect(ordinaryFormat(BigInt(1234567))).toEqual('1,234,567');
+        expect(PriceFormatter.formatOrdinary(BigInt(1234567))).toEqual(
+            '1,234,567'
+        );
     });
 
     it('should format a regular number with min and max decimals', () => {
@@ -96,11 +97,11 @@ describe('ordinaryFormat', () => {
 
 describe('formatAmount', () => {
     it('should format a number with 8 decimal places', () => {
-        expect(formatAmount(1234.56789012)).toBe('1,234.5679');
+        expect(PriceFormatter.formatAmount(1234.56789012)).toBe('1,234.5679');
     });
 
     it('should format a number only with the decimal places that are present', () => {
-        expect(formatAmount(1234.5)).toBe('1,234.5');
+        expect(PriceFormatter.formatAmount(1234.5)).toBe('1,234.5');
     });
 });
 

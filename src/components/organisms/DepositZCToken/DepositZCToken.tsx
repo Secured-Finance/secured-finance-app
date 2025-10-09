@@ -26,8 +26,10 @@ import {
     ZCTokenEvents,
     convertToZcTokenName,
     convertZCTokenFromBaseAmount,
-    formatter,
     handleContractError,
+    PriceFormatter,
+    FORMAT_DIGITS,
+    ZERO_BI,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import {
@@ -325,15 +327,14 @@ export const DepositZCToken = ({
                                         )}
                                     </div>
                                     <div className='w-full text-right text-neutral-300'>
-                                        {`${formatter.ordinary(
-                                            0,
-                                            4
-                                        )(
+                                        {`${PriceFormatter.formatOrdinary(
                                             convertZCTokenFromBaseAmount(
                                                 currencySymbol,
                                                 availableTokenAmount,
                                                 maturity
-                                            ) || 0
+                                            ) || 0,
+                                            FORMAT_DIGITS.ZERO,
+                                            FORMAT_DIGITS.AMOUNT
                                         )} Available`}
                                     </div>
                                 </div>
@@ -373,13 +374,10 @@ export const DepositZCToken = ({
                                     ],
                                     [
                                         'Amount',
-                                        `${formatter.ordinary(
-                                            0,
-                                            4
-                                        )(
+                                        `${PriceFormatter.formatAmount(
                                             convertZCTokenFromBaseAmount(
                                                 currencySymbol,
-                                                collateral || BigInt(0),
+                                                collateral || ZERO_BI,
                                                 maturity
                                             )
                                         )}`,

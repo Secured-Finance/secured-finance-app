@@ -1,7 +1,6 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import { useCallback, useMemo, useReducer, useState } from 'react';
 import { Section, Spinner } from 'src/components/atoms';
-import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     CollateralSnapshot,
     CoreTable,
@@ -15,8 +14,9 @@ import useSF from 'src/hooks/useSecuredFinance';
 import {
     AddressConverter,
     DisplayLengths,
+    formatCollateralSnapshotRatio,
     handleContractError,
-    formatter,
+    PriceFormatter,
     TimestampConverter,
 } from 'src/utils';
 
@@ -112,18 +112,13 @@ export const EmergencyRedeemDialog = ({
                 header: 'Asset',
             }),
             columnHelper.accessor('ratio', {
-                cell: info =>
-                    formatter.percentage(
-                        info.getValue() /
-                            FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
-                        2
-                    ),
+                cell: info => formatCollateralSnapshotRatio(info.getValue()),
                 header: 'Ratio of Collateral',
             }),
             columnHelper.accessor('price', {
                 cell: info => (
                     <div className='text-right'>
-                        {formatter.usd(info.getValue(), 2)}
+                        {PriceFormatter.formatUSDValue(info.getValue())}
                     </div>
                 ),
                 header: 'Snapshot Rate',

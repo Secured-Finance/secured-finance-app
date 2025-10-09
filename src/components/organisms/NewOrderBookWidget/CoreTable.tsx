@@ -15,8 +15,12 @@ import { OrderBookInfoTooltip } from 'src/components/atoms';
 import { useLastPrices } from 'src/hooks';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { FINANCIAL_CONSTANTS } from 'src/config/constants';
-import { calculateFutureValue, formatter } from 'src/utils';
+import {
+    calculateFutureValue,
+    FORMAT_DIGITS,
+    PriceFormatter,
+    PriceUtils,
+} from 'src/utils';
 import { AmountConverter } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
 
@@ -166,25 +170,34 @@ export const CoreTable = <T,>({
                 ? Number(totalPVAmount) / Number(totalFVAmount)
                 : 0;
 
+        const priceInBondFormat = PriceUtils.toBondPrice(avgPrice);
         const avgApr = LoanValue.fromPrice(
-            avgPrice * FINANCIAL_CONSTANTS.BPS_DIVISOR,
+            priceInBondFormat,
             maturity
         ).apr.toNormalizedNumber();
+        const limitedApr = PriceUtils.capApr(avgApr);
 
         const totalAmount = AmountConverter.fromBase(totalPVAmount, currency);
         const totalUsd = new Amount(totalPVAmount, currency)?.toUSD(price);
 
         setOrderBookInfoData({
-            avgPrice: (
-                avgPrice * FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
-            ).toFixed(2),
-            avgApr: formatter.percentage(
-                Math.min(avgApr, FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD) /
-                    FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
-                2
+            avgPrice: PriceFormatter.formatPrice(
+                avgPrice,
+                'raw',
+                FORMAT_DIGITS.PRICE
             ),
-            totalUsd: formatter.usd(Number(totalUsd), 2, 'compact'),
-            totalAmount: formatter.ordinary(0, 2, 'compact')(totalAmount),
+            avgApr: PriceFormatter.formatPercentage(limitedApr, 'percentage'),
+            totalUsd: PriceFormatter.formatUSDValue(
+                totalUsd,
+                FORMAT_DIGITS.PRICE,
+                'compact'
+            ),
+            totalAmount: PriceFormatter.formatOrdinary(
+                totalAmount,
+                FORMAT_DIGITS.ZERO,
+                FORMAT_DIGITS.PRICE,
+                'compact'
+            ),
             position,
         });
     };

@@ -22,10 +22,10 @@ import {
     ZERO_BI,
     convertFromGvUnit,
     convertToZcTokenName,
+    PriceFormatter,
     AmountConverter,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
-import { formatter } from 'src/utils';
 
 export interface ZCBond {
     currency: CurrencySymbol;
@@ -208,7 +208,7 @@ export const CollateralTabLeftPane = ({
                             }
                         )}
                     >
-                        {formatter.usd(netAssetValue, 2)}
+                        {PriceFormatter.formatUSDValue(netAssetValue)}
                     </span>
                 </div>
                 {!account ? (

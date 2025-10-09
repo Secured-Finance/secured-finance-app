@@ -3,7 +3,6 @@ import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { VisibilityState } from '@tanstack/react-table';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { formatter } from 'src/utils';
 import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     CollateralManagementConciseTab,
@@ -47,6 +46,8 @@ import {
     FeeCalculator,
     divide,
     generateWalletSourceInformation,
+    PriceFormatter,
+    FORMAT_DIGITS,
     AmountConverter,
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
@@ -342,16 +343,15 @@ export function AdvancedLendingOrderCard({
                                 side === OrderSide.BORROW ? 'Borrow' : 'Lend'
                             }`}</span>
                             <span className='text-right text-primary-300'>
-                                {`${formatter.ordinary(
-                                    FINANCIAL_CONSTANTS.DEFAULT_MIN_DECIMALS,
-                                    FINANCIAL_CONSTANTS.DEFAULT_DECIMALS
-                                )(
+                                {`${PriceFormatter.formatOrdinary(
                                     AmountConverter.fromBase(
                                         side === OrderSide.BORROW
                                             ? availableToBorrow
                                             : availableToLend,
                                         currency
-                                    )
+                                    ),
+                                    FORMAT_DIGITS.ZERO,
+                                    FORMAT_DIGITS.PRICE
                                 )} ${isMobile ? '' : currency}`}
                             </span>
                         </div>

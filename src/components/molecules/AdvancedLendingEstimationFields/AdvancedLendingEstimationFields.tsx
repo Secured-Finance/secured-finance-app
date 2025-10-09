@@ -11,8 +11,9 @@ import {
     AmountConverter,
     currencyMap,
     divide,
-    multiply,
     formatter,
+    FORMAT_DIGITS,
+    multiply,
 } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
@@ -198,14 +199,17 @@ export const AdvancedLendingEstimationFields = ({
 
         if (isMobile) {
             return `${formatter.ordinary(
-                0,
+                FORMAT_DIGITS.ZERO,
                 currencyMap[currency].roundingDecimal
             )(amount)} ${currency}`;
         } else {
             return `${formatter.ordinary(
-                0,
+                FORMAT_DIGITS.ZERO,
                 currencyMap[currency].roundingDecimal
-            )(amount)} ${currency} (${formatter.usd(amount * assetPrice, 2)})`;
+            )(amount)} ${currency} (${formatter.usd(
+                amount * assetPrice,
+                FORMAT_DIGITS.PRICE
+            )})`;
         }
     }, [
         showDashes,
@@ -229,14 +233,17 @@ export const AdvancedLendingEstimationFields = ({
 
         if (isMobile) {
             return `${formatter.ordinary(
-                0,
+                FORMAT_DIGITS.ZERO,
                 currencyMap[currency].roundingDecimal
             )(fv)} ${currency}`;
         } else {
             return `${formatter.ordinary(
-                0,
+                FORMAT_DIGITS.ZERO,
                 currencyMap[currency].roundingDecimal
-            )(fv)} ${currency} (${formatter.usd(totalValue, 2)})`;
+            )(fv)} ${currency} (${formatter.usd(
+                totalValue,
+                FORMAT_DIGITS.PRICE
+            )})`;
         }
     }, [
         showDashes,
