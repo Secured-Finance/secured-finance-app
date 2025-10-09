@@ -1,10 +1,7 @@
-import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { act, renderHook, waitFor } from 'src/test-utils';
 import { CurrencySymbol } from 'src/utils';
 import { OrderBookEntry, useOrderbook } from './useOrderbook';
 
-const mock = mockUseSF();
-jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 const maturity = 1675252800;
 
 describe('useOrderbook', () => {

@@ -10,6 +10,7 @@ import timemachine from 'timemachine';
 import {
     mockUseCurrencyControllerRead,
     mockUseLendingMarketControllerRead,
+    mockUseLendingMarketReaderRead,
 } from './stories/mocks/wagmiMocks';
 
 jest.mock('next/router', () => jest.requireActual('next-router-mock'));
@@ -18,6 +19,7 @@ jest.mock('next/router', () => jest.requireActual('next-router-mock'));
 jest.mock('src/generated/wagmi', () => ({
     useCurrencyControllerRead: mockUseCurrencyControllerRead,
     useLendingMarketControllerRead: mockUseLendingMarketControllerRead,
+    useLendingMarketReaderRead: mockUseLendingMarketReaderRead,
 }));
 
 failOnConsole({
