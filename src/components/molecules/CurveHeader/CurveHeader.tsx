@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
 import { CurveHeaderAsset, CurveHeaderTotal } from 'src/components/atoms';
 import { AssetPriceMap, DailyVolumes } from 'src/types';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     CurrencySymbol,
     computeTotalDailyVolumeInUSD,
     formatter,
-    FORMAT_DIGITS,
 } from 'src/utils';
 
 interface CurveHeaderProps {
@@ -37,8 +37,8 @@ const CurveHeaderNotes = ({
             <CurveHeaderTotal
                 header='Total Volume (Asset)'
                 footer={`${formatter.ordinary(
-                    FORMAT_DIGITS.ZERO,
-                    FORMAT_DIGITS.PRICE
+                    FINANCIAL_CONSTANTS.ZERO_DECIMALS,
+                    FINANCIAL_CONSTANTS.PRICE_DECIMALS
                 )(totalVolume.volumePerCurrency[asset])} ${asset.toString()}`}
             />
 
@@ -47,7 +47,7 @@ const CurveHeaderNotes = ({
                 footer={formatter.usd(
                     Number(totalVolume.volumePerCurrency[asset]) *
                         priceList[asset],
-                    FORMAT_DIGITS.ZERO
+                    FINANCIAL_CONSTANTS.ZERO_DECIMALS
                 )}
             />
         </div>

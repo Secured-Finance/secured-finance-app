@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { InfoToolTip } from 'src/components/molecules';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import { Alignment, ColorFormat } from 'src/types';
 import {
     AmountConverter,
@@ -39,10 +40,10 @@ export const CurrencyItem = ({
     if (amount !== undefined && price !== undefined) {
         secondLine = formatter.usd(
             AmountConverter.fromBase(amount, ccy) * price,
-            2
+            FINANCIAL_CONSTANTS.PRICE_DECIMALS
         );
     } else if (price) {
-        secondLine = formatter.usd(price, 2);
+        secondLine = formatter.usd(price, FINANCIAL_CONSTANTS.PRICE_DECIMALS);
     } else {
         secondLine = currency.name;
     }

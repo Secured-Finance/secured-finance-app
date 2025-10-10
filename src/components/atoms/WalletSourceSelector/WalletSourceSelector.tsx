@@ -11,9 +11,9 @@ import {
     CurrencySymbol,
     formatter,
     DisplayLengths,
-    FORMAT_DIGITS,
 } from 'src/utils';
 import { AMOUNT_PRECISION } from 'src/utils/entities';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 interface WalletSourceSelectorProps {
     optionList: WalletSourceOption[];
@@ -39,8 +39,8 @@ const formatOption = (
             AmountConverter.fromBase(available, asset) * AMOUNT_PRECISION
         ) / AMOUNT_PRECISION;
     return `${formatter.ordinary(
-        FORMAT_DIGITS.ZERO,
-        FORMAT_DIGITS.ASSET_DECIMALS
+        FINANCIAL_CONSTANTS.ZERO_DECIMALS,
+        FINANCIAL_CONSTANTS.ASSET_DECIMALS
     )(amount)} ${showAssetName ? ` ${asset}` : ''}`;
 };
 

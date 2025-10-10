@@ -1,7 +1,10 @@
 import { LoanValue, Maturity } from './entities';
 import { FINANCIAL_CONSTANTS } from '../config/constants';
+import { PriceFormatter, PERCENTAGE_UNIT } from './priceFormatter';
 import { TransactionList } from 'src/types';
-import { PriceFormatter } from './priceFormatter';
+import { currencyMap, CurrencySymbol } from './currencyList';
+import { ZERO_BI } from './collateral';
+import dayjs from 'dayjs';
 
 /**
  * Math calculation utilities for consistent rounding and math operations
@@ -29,21 +32,68 @@ export const calculate = {
             calculationDate
         ),
     /**
-     * @deprecated Stub function - not implemented
-     * Returns placeholder values for trade history details
+     * Calculate trade history details from transactions
+     * Returns min/max prices and sum of amounts
      */
     tradeHistoryDetails: (
-        _transactions: TransactionList,
-        _currency: string,
-        _maturity: number | Maturity
-    ) => ({ max: undefined, min: undefined }),
+        transactions: TransactionList,
+        currency: CurrencySymbol,
+        maturity: number | Maturity
+    ) => {
+        let min = 10000;
+        let max = 0;
+        let sum = ZERO_BI;
+
+        if (!transactions.length) {
+            min = 0;
+            max = 0;
+        }
+
+        for (const t of transactions) {
+            const price = +t.executionPrice;
+            if (price < min) {
+                min = price;
+            }
+            if (price > max) {
+                max = price;
+            }
+            sum += BigInt(t.amount);
+        }
+
+        const maturityNumber =
+            typeof maturity === 'number' ? maturity : maturity.toNumber();
+
+        return {
+            min: LoanValue.fromPrice(min, maturityNumber),
+            max: LoanValue.fromPrice(max, maturityNumber),
+            sum: currencyMap[
+                currency as keyof typeof currencyMap
+            ]?.fromBaseUnit(sum),
+        };
+    },
     /** Get current timestamp in seconds */
     currentTimestamp: () => Math.floor(Date.now() / 1000),
     /**
-     * @deprecated Stub function - returns hardcoded value
-     * Should calculate actual pre-order days difference
+     * Calculate the difference in days between opening date and pre-opening date
+     * @param openingDate - UTC opening date (in seconds)
+     * @param preOpeningDate - Pre-opening date (in milliseconds)
+     * @returns Number of days difference, or undefined if dates are not provided
      */
-    preOrderDays: (_date1: Date | number, _date2: Date | number) => 7,
+    preOrderDays: (
+        openingDate: Date | number | undefined,
+        preOpeningDate: Date | number | undefined
+    ): number | undefined => {
+        if (!openingDate || !preOpeningDate) return undefined;
+        const openingTimestamp =
+            typeof openingDate === 'number'
+                ? openingDate
+                : openingDate.getTime();
+        const preOpeningTimestamp =
+            typeof preOpeningDate === 'number'
+                ? preOpeningDate
+                : preOpeningDate.getTime();
+        return dayjs.unix(openingTimestamp).diff(preOpeningTimestamp, 'days');
+    },
     /** Calculate absolute price spread */
     priceSpread: (price1: number, price2: number) => Math.abs(price1 - price2),
     /** Calculate absolute APR spread */
@@ -187,7 +237,7 @@ export class UnifiedFormatter {
 
         return PriceFormatter.formatPercentage(
             normalizedValue,
-            'raw',
+            PERCENTAGE_UNIT.RAW,
             decimals,
             decimals
         );
@@ -221,7 +271,7 @@ export class UnifiedFormatter {
                 FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR;
             return PriceFormatter.formatPercentage(
                 aprValue,
-                'raw',
+                PERCENTAGE_UNIT.RAW,
                 decimals,
                 decimals
             );

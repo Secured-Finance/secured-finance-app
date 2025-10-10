@@ -22,7 +22,6 @@ import { RootState } from 'src/store/types';
 import {
     calculateTimeDifference,
     currencyMap,
-    FORMAT_DIGITS,
     formatDuration,
     calculate,
     formatter,
@@ -30,6 +29,7 @@ import {
 import { useAccount } from 'wagmi';
 import { desktopColumns, mobileColumns } from './constants';
 import { ColumnKey, ColumnType, FilteredOption } from './types';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 export const CurrencyMaturityTable = ({
     options,
@@ -112,7 +112,7 @@ export const CurrencyMaturityTable = ({
                     return option.volume
                         ? formatter.usd(
                               option.volume,
-                              FORMAT_DIGITS.PRICE,
+                              FINANCIAL_CONSTANTS.PRICE_DECIMALS,
                               'compact'
                           )
                         : '-';

@@ -22,16 +22,16 @@ export const NotConnectedToWallet = Template.bind({});
 
 export const ZeroCollateral = Template.bind({});
 ZeroCollateral.args = {
-    collateralCoverage: 0,
-    availableToBorrow: 0,
+    collateralCoverage: FINANCIAL_CONSTANTS.ZERO,
+    availableToBorrow: FINANCIAL_CONSTANTS.ZERO,
     liquidationThreshold: 80,
     account: '0x123',
-    totalCollateralInUSD: 0,
+    totalCollateralInUSD: FINANCIAL_CONSTANTS.ZERO,
 };
 
 export const CollateralDepositedZeroCoverage = Template.bind({});
 CollateralDepositedZeroCoverage.args = {
-    collateralCoverage: 0,
+    collateralCoverage: FINANCIAL_CONSTANTS.ZERO,
     availableToBorrow: 80,
     liquidationThreshold: 80,
     account: '0x123',

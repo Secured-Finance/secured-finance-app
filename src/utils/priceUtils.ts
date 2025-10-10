@@ -1,7 +1,6 @@
 import {
     convertZCTokenFromBaseAmount,
     PriceFormatter,
-    FORMAT_DIGITS,
     CurrencySymbol,
 } from 'src/utils';
 import { FINANCIAL_CONSTANTS } from 'src/config/constants';
@@ -24,12 +23,12 @@ export class PriceUtils {
 
     /** Convert price to bond format (0.9626 → 9626) */
     static toBondPrice(price: number): number {
-        return price * FORMAT_DIGITS.BOND_PRICE_MULTIPLIER;
+        return price * FINANCIAL_CONSTANTS.BOND_PRICE_MULTIPLIER;
     }
 
     /** Cap APR at maximum display value */
     static capApr(apr: number): number {
-        return Math.min(apr, FORMAT_DIGITS.MAX_APR_DISPLAY);
+        return Math.min(apr, FINANCIAL_CONSTANTS.MAX_APR_DISPLAY);
     }
 
     /** Cap progress width at 100% */

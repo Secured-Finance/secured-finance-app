@@ -15,14 +15,10 @@ import { OrderBookInfoTooltip } from 'src/components/atoms';
 import { useLastPrices } from 'src/hooks';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import {
-    calculateFutureValue,
-    FORMAT_DIGITS,
-    formatter,
-    PriceUtils,
-} from 'src/utils';
+import { calculateFutureValue, formatter, PriceUtils } from 'src/utils';
 import { AmountConverter } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 type CoreTableOptions = {
     name: string;
@@ -182,14 +178,22 @@ export const CoreTable = <T,>({
 
         setOrderBookInfoData({
             avgPrice: formatter.ordinary(
-                FORMAT_DIGITS.PRICE,
-                FORMAT_DIGITS.PRICE
+                FINANCIAL_CONSTANTS.PRICE_DECIMALS,
+                FINANCIAL_CONSTANTS.PRICE_DECIMALS
             )(avgPrice * 100),
-            avgApr: formatter.percentage(limitedApr, FORMAT_DIGITS.PRICE, 100),
-            totalUsd: formatter.usd(totalUsd, FORMAT_DIGITS.PRICE, 'compact'),
+            avgApr: formatter.percentage(
+                limitedApr,
+                FINANCIAL_CONSTANTS.PRICE_DECIMALS,
+                100
+            ),
+            totalUsd: formatter.usd(
+                totalUsd,
+                FINANCIAL_CONSTANTS.PRICE_DECIMALS,
+                'compact'
+            ),
             totalAmount: formatter.ordinary(
-                FORMAT_DIGITS.ZERO,
-                FORMAT_DIGITS.PRICE,
+                FINANCIAL_CONSTANTS.ZERO_DECIMALS,
+                FINANCIAL_CONSTANTS.PRICE_DECIMALS,
                 'compact'
             )(totalAmount),
             position,

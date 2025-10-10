@@ -31,15 +31,36 @@ export const FINANCIAL_CONSTANTS = {
     DEFAULT_MAX_DECIMALS: 4,
     DEFAULT_ONE_DECIMALS: 1,
 
+    // Format precision (decimal places)
+    PRICE_DECIMALS: 2,
+    AMOUNT_DECIMALS: 4,
+    ZERO_DECIMALS: 0,
+    ONE_DECIMAL: 1,
+    ASSET_DECIMALS: 6,
+    PERCENTAGE_MIN_DECIMALS: 0,
+    PERCENTAGE_MAX_DECIMALS: 2,
+
+    // Price multipliers
+    BOND_PRICE_MULTIPLIER: 10000,
+    MAX_APR_DISPLAY: 1000,
+
     // Precision
     CALCULATION_PRECISION: 1_000_000,
 
     // Order limits
     MAX_OPEN_ORDERS: 20,
+    MAX_RECENT_TRADES_DISPLAY: 100,
+
+    // Bond price limits
+    MAX_BOND_PRICE: 100,
+    MIN_BOND_PRICE: 0.01,
 
     // Time periods
     REDEMPTION_GRACE_PERIOD_DAYS: 7,
+
+    // Common values
     ZERO: 0,
+    ONE: 1,
 } as const;
 
 export const UI_CONSTANTS = {

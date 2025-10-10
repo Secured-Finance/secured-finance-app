@@ -58,7 +58,7 @@ export const RecentTradesTable = ({
             maturity: maturity,
             from: -1,
             to: timestamp,
-            first: FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
+            first: FINANCIAL_CONSTANTS.MAX_RECENT_TRADES_DISPLAY,
             sides:
                 showSide === null
                     ? [OrderSide.LEND, OrderSide.BORROW]
@@ -134,7 +134,8 @@ export const RecentTradesTable = ({
                     !loading &&
                     !!data?.length && (
                         <div className='relative -top-2.5 text-center text-neutral-50'>
-                            Only the last FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
+                            Only the last{' '}
+                            {FINANCIAL_CONSTANTS.MAX_RECENT_TRADES_DISPLAY}{' '}
                             trades are shown.
                         </div>
                     )

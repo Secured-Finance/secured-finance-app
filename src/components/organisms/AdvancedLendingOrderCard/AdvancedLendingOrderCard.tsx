@@ -47,7 +47,6 @@ import {
     divide,
     generateWalletSourceInformation,
     formatter,
-    FORMAT_DIGITS,
     AmountConverter,
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
@@ -344,8 +343,8 @@ export function AdvancedLendingOrderCard({
                             }`}</span>
                             <span className='text-right text-primary-300'>
                                 {`${formatter.ordinary(
-                                    FORMAT_DIGITS.ZERO,
-                                    FORMAT_DIGITS.PRICE
+                                    FINANCIAL_CONSTANTS.ZERO_DECIMALS,
+                                    FINANCIAL_CONSTANTS.PRICE_DECIMALS
                                 )(
                                     AmountConverter.fromBase(
                                         side === OrderSide.BORROW
@@ -371,9 +370,11 @@ export function AdvancedLendingOrderCard({
                                         v?.toString(),
                                 });
                             }}
-                            informationText='Input value greater than or equal to 0.01 and up to and including FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR.'
-                            decimalPlacesAllowed={2}
-                            maxLimit={100}
+                            informationText={`Input value greater than or equal to ${FINANCIAL_CONSTANTS.MIN_BOND_PRICE} and up to and including ${FINANCIAL_CONSTANTS.MAX_BOND_PRICE}.`}
+                            decimalPlacesAllowed={
+                                FINANCIAL_CONSTANTS.PRICE_DECIMALS
+                            }
+                            maxLimit={FINANCIAL_CONSTANTS.MAX_BOND_PRICE}
                             bgClassName={
                                 isBondPriceFieldDisabled
                                     ? 'bg-neutral-700'

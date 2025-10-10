@@ -25,7 +25,6 @@ import {
     currencyMap,
     getTransformMaturityOption,
     handlePriceSource,
-    FORMAT_DIGITS,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { AdvancedLendingTopBarProp } from './types';
@@ -80,12 +79,12 @@ export const AdvancedLendingTopBar = ({
 
     const volumeInUSD = formatter.usd(
         rawVolume * currencyPrice,
-        FORMAT_DIGITS.PRICE
+        FINANCIAL_CONSTANTS.PRICE_DECIMALS
     );
     const volume24H = `${formatter.ordinary(
-        FORMAT_DIGITS.ZERO,
+        FINANCIAL_CONSTANTS.ZERO_DECIMALS,
         currencyMap[selectedAsset?.value]?.roundingDecimal ??
-            FORMAT_DIGITS.PRICE
+            FINANCIAL_CONSTANTS.PRICE_DECIMALS
     )(volumePerMarket[marketKey] ?? 0)} ${selectedAsset?.value}`;
 
     const lastLoanValue = useMemo(() => {
@@ -208,7 +207,7 @@ export const AdvancedLendingTopBar = ({
                                         name={`${currency} Price`}
                                         value={formatter.usd(
                                             currencyPrice,
-                                            FORMAT_DIGITS.PRICE
+                                            FINANCIAL_CONSTANTS.PRICE_DECIMALS
                                         )}
                                     />
                                 </div>
@@ -278,7 +277,7 @@ export const AdvancedLendingTopBar = ({
                                         value={
                                             formatter.usd(
                                                 currencyPrice,
-                                                FORMAT_DIGITS.PRICE
+                                                FINANCIAL_CONSTANTS.PRICE_DECIMALS
                                             ) || '$0'
                                         }
                                         source={handlePriceSource(
@@ -305,7 +304,10 @@ export const AdvancedLendingTopBar = ({
                 currency={selectedAsset.value}
                 currentMarket={currentMarket}
                 currencyPrice={
-                    formatter.usd(currencyPrice, FORMAT_DIGITS.PRICE) || '$0'
+                    formatter.usd(
+                        currencyPrice,
+                        FINANCIAL_CONSTANTS.PRICE_DECIMALS
+                    ) || '$0'
                 }
                 marketInfo={marketInfo}
                 volumeInfo={{

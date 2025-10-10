@@ -1,7 +1,7 @@
 import Tick from 'src/assets/icons/tick.svg';
 import { InfoToolTip } from 'src/components/molecules';
 import { FINANCIAL_CONSTANTS } from 'src/config/constants';
-import { formatter, FORMAT_DIGITS } from 'src/utils';
+import { formatter } from 'src/utils';
 
 interface CollateralProgressBarProps {
     collateralCoverage: number;
@@ -43,7 +43,7 @@ const getInformationText = (
                         collateralCoverage /
                             FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR) /
                         FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
-                    FORMAT_DIGITS.ZERO,
+                    FINANCIAL_CONSTANTS.ZERO_DECIMALS,
                     FINANCIAL_CONSTANTS.DEFAULT_ONE_DECIMALS
                 )} of your ${formatter.usd(
                     totalCollateralInUSD,
@@ -55,7 +55,7 @@ const getInformationText = (
                 ${formatter.percentage(
                     liquidationThreshold /
                         FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
-                    FORMAT_DIGITS.ZERO,
+                    FINANCIAL_CONSTANTS.ZERO_DECIMALS,
                     FINANCIAL_CONSTANTS.DEFAULT_ONE_DECIMALS
                 )} of its value.`}
             </div>
@@ -84,7 +84,10 @@ export const CollateralProgressBar = ({
                     Collateral Utilization
                 </span>
                 <span className='typography-body-1 text-white'>
-                    {formatter.percentage(collateralCoverage, 0)}
+                    {formatter.percentage(
+                        collateralCoverage,
+                        FINANCIAL_CONSTANTS.ZERO_DECIMALS
+                    )}
                 </span>
             </div>
             <div className='flex flex-col gap-[6px]'>

@@ -1,12 +1,7 @@
 import { useMemo } from 'react';
 import { getLiquidationInformation } from 'src/components/atoms';
 import { FINANCIAL_CONSTANTS } from 'src/config/constants';
-import {
-    AmountConverter,
-    CurrencySymbol,
-    formatter,
-    FORMAT_DIGITS,
-} from 'src/utils';
+import { AmountConverter, CurrencySymbol, formatter } from 'src/utils';
 
 export const CollateralUsageSection = ({
     collateralCoverage,
@@ -23,7 +18,7 @@ export const CollateralUsageSection = ({
     const collateralUsagePercent = useMemo(() => {
         return formatter.percentage(
             collateralCoverage / FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
-            FORMAT_DIGITS.ZERO,
+            FINANCIAL_CONSTANTS.ZERO_DECIMALS,
             1
         );
     }, [collateralCoverage]);
@@ -38,8 +33,8 @@ export const CollateralUsageSection = ({
                 </h3>
                 <p className='typography-caption font-bold text-white'>
                     {`${formatter.ordinary(
-                        FORMAT_DIGITS.ZERO,
-                        FORMAT_DIGITS.PRICE
+                        FINANCIAL_CONSTANTS.ZERO_DECIMALS,
+                        FINANCIAL_CONSTANTS.PRICE_DECIMALS
                     )(
                         AmountConverter.fromBase(availableToBorrow, currency)
                     )} ${currency}`}

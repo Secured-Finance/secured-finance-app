@@ -12,7 +12,6 @@ import {
     currencyMap,
     divide,
     formatter,
-    FORMAT_DIGITS,
     multiply,
 } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
@@ -199,16 +198,16 @@ export const AdvancedLendingEstimationFields = ({
 
         if (isMobile) {
             return `${formatter.ordinary(
-                FORMAT_DIGITS.ZERO,
+                FINANCIAL_CONSTANTS.ZERO_DECIMALS,
                 currencyMap[currency].roundingDecimal
             )(amount)} ${currency}`;
         } else {
             return `${formatter.ordinary(
-                FORMAT_DIGITS.ZERO,
+                FINANCIAL_CONSTANTS.ZERO_DECIMALS,
                 currencyMap[currency].roundingDecimal
             )(amount)} ${currency} (${formatter.usd(
                 amount * assetPrice,
-                FORMAT_DIGITS.PRICE
+                FINANCIAL_CONSTANTS.PRICE_DECIMALS
             )})`;
         }
     }, [
@@ -233,16 +232,16 @@ export const AdvancedLendingEstimationFields = ({
 
         if (isMobile) {
             return `${formatter.ordinary(
-                FORMAT_DIGITS.ZERO,
+                FINANCIAL_CONSTANTS.ZERO_DECIMALS,
                 currencyMap[currency].roundingDecimal
             )(fv)} ${currency}`;
         } else {
             return `${formatter.ordinary(
-                FORMAT_DIGITS.ZERO,
+                FINANCIAL_CONSTANTS.ZERO_DECIMALS,
                 currencyMap[currency].roundingDecimal
             )(fv)} ${currency} (${formatter.usd(
                 totalValue,
-                FORMAT_DIGITS.PRICE
+                FINANCIAL_CONSTANTS.PRICE_DECIMALS
             )})`;
         }
     }, [

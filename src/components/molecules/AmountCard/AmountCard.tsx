@@ -1,6 +1,7 @@
 import clsx from 'clsx';
-import { currencyMap, prefixTilde, formatter, FORMAT_DIGITS } from 'src/utils';
+import { currencyMap, prefixTilde, formatter } from 'src/utils';
 import { Amount } from 'src/utils/entities';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 export const AmountCard = ({
     amount,
@@ -10,12 +11,12 @@ export const AmountCard = ({
     price: number;
 }) => {
     const formattedValue = formatter.ordinary(
-        FORMAT_DIGITS.ZERO,
-        FORMAT_DIGITS.AMOUNT
+        FINANCIAL_CONSTANTS.ZERO_DECIMALS,
+        FINANCIAL_CONSTANTS.AMOUNT_DECIMALS
     )(amount.value);
     const formattedValueInUSD = formatter.usd(
         amount.value * price,
-        FORMAT_DIGITS.ZERO
+        FINANCIAL_CONSTANTS.ZERO_DECIMALS
     );
     return (
         <div className='mb-3 grid w-full grid-cols-2 justify-around'>

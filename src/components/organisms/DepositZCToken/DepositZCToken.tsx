@@ -28,10 +28,10 @@ import {
     convertZCTokenFromBaseAmount,
     handleContractError,
     formatter,
-    FORMAT_DIGITS,
     ZERO_BI,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     ButtonEvents,
     ButtonProperties,
@@ -328,8 +328,8 @@ export const DepositZCToken = ({
                                     </div>
                                     <div className='w-full text-right text-neutral-300'>
                                         {`${formatter.ordinary(
-                                            FORMAT_DIGITS.ZERO,
-                                            FORMAT_DIGITS.AMOUNT
+                                            FINANCIAL_CONSTANTS.ZERO_DECIMALS,
+                                            FINANCIAL_CONSTANTS.AMOUNT_DECIMALS
                                         )(
                                             convertZCTokenFromBaseAmount(
                                                 currencySymbol,
@@ -376,8 +376,8 @@ export const DepositZCToken = ({
                                     [
                                         'Amount',
                                         `${formatter.ordinary(
-                                            FORMAT_DIGITS.ZERO,
-                                            FORMAT_DIGITS.AMOUNT
+                                            FINANCIAL_CONSTANTS.ZERO_DECIMALS,
+                                            FINANCIAL_CONSTANTS.AMOUNT_DECIMALS
                                         )(
                                             convertZCTokenFromBaseAmount(
                                                 currencySymbol,

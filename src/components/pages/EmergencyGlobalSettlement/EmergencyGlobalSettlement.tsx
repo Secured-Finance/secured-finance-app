@@ -22,6 +22,7 @@ import {
     useTerminationPrices,
 } from 'src/hooks';
 import { ZERO_BI, computeNetValue, HexConverter, formatter } from 'src/utils';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import { useAccount } from 'wagmi';
 
 export const EmergencyGlobalSettlement = () => {
@@ -180,7 +181,10 @@ export const EmergencyGlobalSettlement = () => {
                 }}
                 data={snapshotWithPrice ?? []}
                 snapshotDate={snapshotDate}
-                netValue={formatter.usd(netValue, 2)}
+                netValue={formatter.usd(
+                    netValue,
+                    FINANCIAL_CONSTANTS.PRICE_DECIMALS
+                )}
             />
         </Page>
     );

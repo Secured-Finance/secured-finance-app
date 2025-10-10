@@ -9,6 +9,7 @@ import {
     FailurePanel,
     SuccessPanel,
 } from 'src/components/molecules';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import { useBlockExplorerUrl, useHandleContractTransaction } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import {
@@ -17,7 +18,6 @@ import {
     formatCollateralSnapshotRatio,
     handleContractError,
     formatter,
-    FORMAT_DIGITS,
     TimestampConverter,
 } from 'src/utils';
 
@@ -119,7 +119,10 @@ export const EmergencyRedeemDialog = ({
             columnHelper.accessor('price', {
                 cell: info => (
                     <div className='text-right'>
-                        {formatter.usd(info.getValue(), FORMAT_DIGITS.PRICE)}
+                        {formatter.usd(
+                            info.getValue(),
+                            FINANCIAL_CONSTANTS.PRICE_DECIMALS
+                        )}
                     </div>
                 ),
                 header: 'Snapshot Rate',

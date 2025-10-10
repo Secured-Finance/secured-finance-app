@@ -1,19 +1,15 @@
 import { FINANCIAL_CONSTANTS } from '../config/constants';
 
 /**
- * Formatting digit constants for consistent decimal places across the application
+ * Percentage unit types for formatting
  */
-export const FORMAT_DIGITS = {
-    PRICE: 2,
-    AMOUNT: 4,
-    ZERO: 0,
-    ONE: 1,
-    ASSET_DECIMALS: 6,
-    PERCENTAGE_MIN: 0,
-    PERCENTAGE_MAX: 2,
-    BOND_PRICE_MULTIPLIER: 10000,
-    MAX_APR_DISPLAY: 1000,
-};
+export const PERCENTAGE_UNIT = {
+    RAW: 'raw',
+    PERCENTAGE: 'percentage',
+} as const;
+
+export type PercentageUnit =
+    (typeof PERCENTAGE_UNIT)[keyof typeof PERCENTAGE_UNIT];
 
 /**
  * Core price and number formatting utility
@@ -85,12 +81,14 @@ export class PriceFormatter {
      */
     static formatPercentage(
         number: number | string,
-        unit: 'raw' | 'percentage' = 'percentage',
+        unit: PercentageUnit = PERCENTAGE_UNIT.PERCENTAGE,
         minimumFractionDigits = 0,
         maximumFractionDigits = 2
     ): string {
         const divisor =
-            unit === 'percentage' ? FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR : 1;
+            unit === PERCENTAGE_UNIT.PERCENTAGE
+                ? FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
+                : 1;
         const value = Number(number) / divisor;
         return Intl.NumberFormat('en-US', {
             style: 'percent',
@@ -195,11 +193,11 @@ export class PriceFormatter {
         let normalizedValue: number;
 
         switch (inputType) {
-            case 'raw':
+            case PERCENTAGE_UNIT.RAW:
                 normalizedValue =
                     value * FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR;
                 break;
-            case 'percentage':
+            case PERCENTAGE_UNIT.PERCENTAGE:
                 normalizedValue = value;
                 break;
             case 'bondPrice':

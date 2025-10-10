@@ -24,7 +24,6 @@ import {
     prefixTilde,
     formatter,
     calculate,
-    FORMAT_DIGITS,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 
@@ -102,8 +101,8 @@ export const OrderDetails = ({
                         . Your adjusted PV will be{' '}
                         <span>
                             {`${formatter.ordinary(
-                                FORMAT_DIGITS.ZERO,
-                                FORMAT_DIGITS.PRICE
+                                FINANCIAL_CONSTANTS.ZERO_DECIMALS,
+                                FINANCIAL_CONSTANTS.PRICE_DECIMALS
                             )(
                                 multiply(
                                     divide(
