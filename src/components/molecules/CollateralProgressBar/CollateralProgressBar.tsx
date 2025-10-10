@@ -1,7 +1,7 @@
 import Tick from 'src/assets/icons/tick.svg';
 import { InfoToolTip } from 'src/components/molecules';
 import { FINANCIAL_CONSTANTS } from 'src/config/constants';
-import { formatter } from 'src/utils';
+import { formatter, FORMAT_DIGITS } from 'src/utils';
 
 interface CollateralProgressBarProps {
     collateralCoverage: number;
@@ -39,10 +39,11 @@ const getInformationText = (
                     )}
                 </span>
                 <span>{` which is ${formatter.percentage(
-                    liquidationThreshold -
+                    (liquidationThreshold -
                         collateralCoverage /
-                            FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
-                    FINANCIAL_CONSTANTS.DEFAULT_DECIMALS,
+                            FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR) /
+                        FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
+                    FORMAT_DIGITS.ZERO,
                     FINANCIAL_CONSTANTS.DEFAULT_ONE_DECIMALS
                 )} of your ${formatter.usd(
                     totalCollateralInUSD,
@@ -52,8 +53,9 @@ const getInformationText = (
             <div>
                 {`Increasing collateral deposit will increase your borrow limit by
                 ${formatter.percentage(
-                    liquidationThreshold,
-                    FINANCIAL_CONSTANTS.DEFAULT_DECIMALS,
+                    liquidationThreshold /
+                        FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
+                    FORMAT_DIGITS.ZERO,
                     FINANCIAL_CONSTANTS.DEFAULT_ONE_DECIMALS
                 )} of its value.`}
             </div>
@@ -82,7 +84,7 @@ export const CollateralProgressBar = ({
                     Collateral Utilization
                 </span>
                 <span className='typography-body-1 text-white'>
-                    {formatter.percentage(collateralCoverage)}
+                    {formatter.percentage(collateralCoverage, 0)}
                 </span>
             </div>
             <div className='flex flex-col gap-[6px]'>

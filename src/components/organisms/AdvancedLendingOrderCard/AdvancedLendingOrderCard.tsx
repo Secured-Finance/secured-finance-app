@@ -46,7 +46,7 @@ import {
     FeeCalculator,
     divide,
     generateWalletSourceInformation,
-    PriceFormatter,
+    formatter,
     FORMAT_DIGITS,
     AmountConverter,
 } from 'src/utils';
@@ -343,15 +343,16 @@ export function AdvancedLendingOrderCard({
                                 side === OrderSide.BORROW ? 'Borrow' : 'Lend'
                             }`}</span>
                             <span className='text-right text-primary-300'>
-                                {`${PriceFormatter.formatOrdinary(
+                                {`${formatter.ordinary(
+                                    FORMAT_DIGITS.ZERO,
+                                    FORMAT_DIGITS.PRICE
+                                )(
                                     AmountConverter.fromBase(
                                         side === OrderSide.BORROW
                                             ? availableToBorrow
                                             : availableToLend,
                                         currency
-                                    ),
-                                    FORMAT_DIGITS.ZERO,
-                                    FORMAT_DIGITS.PRICE
+                                    )
                                 )} ${isMobile ? '' : currency}`}
                             </span>
                         </div>

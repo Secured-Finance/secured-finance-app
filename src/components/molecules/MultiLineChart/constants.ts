@@ -5,7 +5,7 @@ import {
     ChartEvent,
     ChartOptions,
 } from 'chart.js';
-import { PriceFormatter, Rate } from 'src/utils';
+import { formatter, Rate } from 'src/utils';
 import { getColor } from '../TimeScaleSelector/constants';
 
 export const refineArray = (array: Array<Rate>) => {
@@ -90,12 +90,7 @@ export const multiLineChartOptions: ChartOptions<'line'> = {
             display: true,
             ticks: {
                 callback: function (value: string | number) {
-                    return PriceFormatter.formatPercentage(
-                        value,
-                        'percentage',
-                        1,
-                        1
-                    );
+                    return formatter.percentage(Number(value), 1, 100);
                 },
                 color: 'rgba(255, 255, 255, 0.6)',
                 font: {

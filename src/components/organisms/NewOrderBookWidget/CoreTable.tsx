@@ -18,7 +18,7 @@ import { RootState } from 'src/store/types';
 import {
     calculateFutureValue,
     FORMAT_DIGITS,
-    PriceFormatter,
+    formatter,
     PriceUtils,
 } from 'src/utils';
 import { AmountConverter } from 'src/utils';
@@ -181,23 +181,17 @@ export const CoreTable = <T,>({
         const totalUsd = new Amount(totalPVAmount, currency)?.toUSD(price);
 
         setOrderBookInfoData({
-            avgPrice: PriceFormatter.formatPrice(
-                avgPrice,
-                'raw',
-                FORMAT_DIGITS.PRICE
-            ),
-            avgApr: PriceFormatter.formatPercentage(limitedApr, 'percentage'),
-            totalUsd: PriceFormatter.formatUSDValue(
-                totalUsd,
+            avgPrice: formatter.ordinary(
                 FORMAT_DIGITS.PRICE,
-                'compact'
-            ),
-            totalAmount: PriceFormatter.formatOrdinary(
-                totalAmount,
+                FORMAT_DIGITS.PRICE
+            )(avgPrice * 100),
+            avgApr: formatter.percentage(limitedApr, FORMAT_DIGITS.PRICE, 100),
+            totalUsd: formatter.usd(totalUsd, FORMAT_DIGITS.PRICE, 'compact'),
+            totalAmount: formatter.ordinary(
                 FORMAT_DIGITS.ZERO,
                 FORMAT_DIGITS.PRICE,
                 'compact'
-            ),
+            )(totalAmount),
             position,
         });
     };

@@ -132,7 +132,12 @@ export const CollateralManagementConciseTab = ({
                         <>
                             Threshold:{' '}
                             <span className='font-semibold'>
-                                {formatter.percentage(threshold, 2, 1)}
+                                {formatter.percentage(
+                                    threshold /
+                                        FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
+                                    0,
+                                    1
+                                )}
                             </span>
                         </>
                     ) : (

@@ -7,7 +7,7 @@ import {
     CurrencySymbol,
     convertZCTokenFromBaseAmount,
     convertZCTokenToBaseAmount,
-    PriceFormatter,
+    formatter,
     FORMAT_DIGITS,
 } from 'src/utils';
 import { AmountConverter } from 'src/utils';
@@ -74,13 +74,15 @@ export const ZCTokenInput = ({
             setInputValue(
                 amount
                     ? Number(
-                          PriceFormatter.formatToFixed(
+                          formatter.ordinary(
+                              FORMAT_DIGITS.AMOUNT,
+                              FORMAT_DIGITS.AMOUNT
+                          )(
                               convertZCTokenFromBaseAmount(
                                   symbol,
                                   amount,
                                   maturity
-                              ),
-                              FORMAT_DIGITS.AMOUNT
+                              )
                           )
                       ).toString()
                     : undefined
@@ -118,7 +120,7 @@ export const ZCTokenInput = ({
                 {!!availableAmount && (
                     <div className='typography-body-2'>
                         <span className='text-center text-neutral-8'>
-                            {PriceFormatter.formatUSDValue(totalPrice)}
+                            {formatter.usd(totalPrice, FORMAT_DIGITS.PRICE)}
                         </span>
                         <span className='pl-2 text-center text-neutral-4'>
                             USD

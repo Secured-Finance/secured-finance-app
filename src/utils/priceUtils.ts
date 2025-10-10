@@ -4,6 +4,7 @@ import {
     FORMAT_DIGITS,
     CurrencySymbol,
 } from 'src/utils';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import { Maturity } from 'src/utils/entities';
 
 /**
@@ -13,12 +14,12 @@ import { Maturity } from 'src/utils/entities';
 export class PriceUtils {
     /** Convert percentage to decimal (37 → 0.37) */
     static toDecimal(percentage: number): number {
-        return percentage / FORMAT_DIGITS.PERCENTAGE_BASE;
+        return percentage / FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR;
     }
 
     /** Calculate percentage of total (43 of 100 → 43) */
     static toPercentage(part: number, total: number): number {
-        return (part / total) * FORMAT_DIGITS.PERCENTAGE_BASE;
+        return (part / total) * FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR;
     }
 
     /** Convert price to bond format (0.9626 → 9626) */

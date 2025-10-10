@@ -243,7 +243,7 @@ const PointsTag = ({
 }) => {
     const router = useRouter();
     const showPoints = isConnected && points;
-    const pointsDisplay = points ? formatter.points(points) : '';
+    const pointsDisplay = points ? `${formatter.points(points)} Points` : '';
 
     return (
         <button

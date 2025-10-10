@@ -35,6 +35,7 @@ import {
     currencyMap,
     divide,
     formatter,
+    FORMAT_DIGITS,
     getMaxAmount,
     calculate,
     AmountConverter,
@@ -278,21 +279,29 @@ export const NewOrderBookWidget = ({
 
     const spread =
         lendOrders.length > 0 && borrowOrders.length > 0
-            ? calculate.priceSpread(
-                  borrowOrders[borrowOrders.length - 1].value.price,
-                  lendOrders[0].value.price
+            ? formatter.ordinary(
+                  FORMAT_DIGITS.PRICE,
+                  FORMAT_DIGITS.PRICE
+              )(
+                  calculate.priceSpread(
+                      borrowOrders[borrowOrders.length - 1].value.price,
+                      lendOrders[0].value.price
+                  )
               )
-            : '0.00';
+            : formatter.ordinary(FORMAT_DIGITS.PRICE, FORMAT_DIGITS.PRICE)(0);
 
     const aprSpread =
         lendOrders.length > 0 && borrowOrders.length > 0
-            ? calculate.aprSpread(
-                  borrowOrders[
-                      borrowOrders.length - 1
-                  ].value.apr.toNormalizedNumber(),
-                  lendOrders[0].value.apr.toNormalizedNumber()
+            ? formatter.percentage(
+                  calculate.aprSpread(
+                      borrowOrders[
+                          borrowOrders.length - 1
+                      ].value.apr.toNormalizedNumber(),
+                      lendOrders[0].value.apr.toNormalizedNumber()
+                  ),
+                  FORMAT_DIGITS.PRICE
               )
-            : '0.00%';
+            : formatter.percentage(0, FORMAT_DIGITS.PRICE);
 
     const maxLendAmount = useMemo(() => {
         return getMaxAmount(lendOrders);

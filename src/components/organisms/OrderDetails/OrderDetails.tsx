@@ -24,7 +24,7 @@ import {
     prefixTilde,
     formatter,
     calculate,
-    PriceFormatter,
+    FORMAT_DIGITS,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 
@@ -101,7 +101,10 @@ export const OrderDetails = ({
                         </span>
                         . Your adjusted PV will be{' '}
                         <span>
-                            {PriceFormatter.formatWithCurrency(
+                            {`${formatter.ordinary(
+                                FORMAT_DIGITS.ZERO,
+                                FORMAT_DIGITS.PRICE
+                            )(
                                 multiply(
                                     divide(
                                         amount.value,
@@ -111,9 +114,8 @@ export const OrderDetails = ({
                                         ).price
                                     ),
                                     market.currentMinDebtUnitPrice
-                                ),
-                                amount.currency
-                            )}
+                                )
+                            )} ${amount.currency}`}
                         </span>
                         . To place the order you need to deposit sufficient
                         collateral.{' '}

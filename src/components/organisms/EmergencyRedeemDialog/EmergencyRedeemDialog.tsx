@@ -16,7 +16,8 @@ import {
     DisplayLengths,
     formatCollateralSnapshotRatio,
     handleContractError,
-    PriceFormatter,
+    formatter,
+    FORMAT_DIGITS,
     TimestampConverter,
 } from 'src/utils';
 
@@ -118,7 +119,7 @@ export const EmergencyRedeemDialog = ({
             columnHelper.accessor('price', {
                 cell: info => (
                     <div className='text-right'>
-                        {PriceFormatter.formatUSDValue(info.getValue())}
+                        {formatter.usd(info.getValue(), FORMAT_DIGITS.PRICE)}
                     </div>
                 ),
                 header: 'Snapshot Rate',

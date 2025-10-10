@@ -9,7 +9,7 @@ import {
     AddressConverter,
     calculate,
     CurrencySymbol,
-    PriceFormatter,
+    formatter,
     DisplayLengths,
     FORMAT_DIGITS,
 } from 'src/utils';
@@ -38,11 +38,10 @@ const formatOption = (
         calculate.floor(
             AmountConverter.fromBase(available, asset) * AMOUNT_PRECISION
         ) / AMOUNT_PRECISION;
-    return `${PriceFormatter.formatOrdinary(
-        amount,
+    return `${formatter.ordinary(
         FORMAT_DIGITS.ZERO,
         FORMAT_DIGITS.ASSET_DECIMALS
-    )} ${showAssetName ? ` ${asset}` : ''}`;
+    )(amount)} ${showAssetName ? ` ${asset}` : ''}`;
 };
 
 const formatSource = (walletSource: WalletSource, account: string) => {

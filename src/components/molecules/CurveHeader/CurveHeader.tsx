@@ -4,7 +4,8 @@ import { AssetPriceMap, DailyVolumes } from 'src/types';
 import {
     CurrencySymbol,
     computeTotalDailyVolumeInUSD,
-    PriceFormatter,
+    formatter,
+    FORMAT_DIGITS,
 } from 'src/utils';
 
 interface CurveHeaderProps {
@@ -35,17 +36,18 @@ const CurveHeaderNotes = ({
         <div className='flex flex-row gap-2'>
             <CurveHeaderTotal
                 header='Total Volume (Asset)'
-                footer={PriceFormatter.formatWithCurrency(
-                    totalVolume.volumePerCurrency[asset],
-                    asset.toString()
-                )}
+                footer={`${formatter.ordinary(
+                    FORMAT_DIGITS.ZERO,
+                    FORMAT_DIGITS.PRICE
+                )(totalVolume.volumePerCurrency[asset])} ${asset.toString()}`}
             />
 
             <CurveHeaderTotal
                 header='Total Volume (USD)'
-                footer={PriceFormatter.formatUSD(
-                    totalVolume.volumePerCurrency[asset],
-                    priceList[asset]
+                footer={formatter.usd(
+                    Number(totalVolume.volumePerCurrency[asset]) *
+                        priceList[asset],
+                    FORMAT_DIGITS.ZERO
                 )}
             />
         </div>

@@ -26,7 +26,6 @@ import {
     getTransformMaturityOption,
     handlePriceSource,
     FORMAT_DIGITS,
-    PriceFormatter,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { AdvancedLendingTopBarProp } from './types';
@@ -83,11 +82,11 @@ export const AdvancedLendingTopBar = ({
         rawVolume * currencyPrice,
         FORMAT_DIGITS.PRICE
     );
-    const volume24H = PriceFormatter.formatWithCurrency(
-        volumePerMarket[marketKey] ?? 0,
-        selectedAsset?.value,
-        currencyMap[selectedAsset?.value]?.roundingDecimal
-    );
+    const volume24H = `${formatter.ordinary(
+        FORMAT_DIGITS.ZERO,
+        currencyMap[selectedAsset?.value]?.roundingDecimal ??
+            FORMAT_DIGITS.PRICE
+    )(volumePerMarket[marketKey] ?? 0)} ${selectedAsset?.value}`;
 
     const lastLoanValue = useMemo(() => {
         if (!lastTransaction || !lastTransaction.length) return undefined;

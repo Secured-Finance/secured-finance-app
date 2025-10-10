@@ -356,14 +356,14 @@ export const PortfolioManagement = () => {
                                 name: 'Lending PV',
                                 value: formatter.usd(
                                     portfolioAnalytics.lentPV,
-                                    2
+                                    0
                                 ),
                             },
                             {
                                 name: 'Borrowing PV',
                                 value: formatter.usd(
                                     portfolioAnalytics.borrowedPV,
-                                    2
+                                    0
                                 ),
                             },
                         ]}

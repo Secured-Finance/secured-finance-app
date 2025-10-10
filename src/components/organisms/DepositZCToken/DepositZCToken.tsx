@@ -27,7 +27,7 @@ import {
     convertToZcTokenName,
     convertZCTokenFromBaseAmount,
     handleContractError,
-    PriceFormatter,
+    formatter,
     FORMAT_DIGITS,
     ZERO_BI,
 } from 'src/utils';
@@ -327,14 +327,15 @@ export const DepositZCToken = ({
                                         )}
                                     </div>
                                     <div className='w-full text-right text-neutral-300'>
-                                        {`${PriceFormatter.formatOrdinary(
+                                        {`${formatter.ordinary(
+                                            FORMAT_DIGITS.ZERO,
+                                            FORMAT_DIGITS.AMOUNT
+                                        )(
                                             convertZCTokenFromBaseAmount(
                                                 currencySymbol,
                                                 availableTokenAmount,
                                                 maturity
-                                            ) || 0,
-                                            FORMAT_DIGITS.ZERO,
-                                            FORMAT_DIGITS.AMOUNT
+                                            ) || 0
                                         )} Available`}
                                     </div>
                                 </div>
@@ -374,7 +375,10 @@ export const DepositZCToken = ({
                                     ],
                                     [
                                         'Amount',
-                                        `${PriceFormatter.formatAmount(
+                                        `${formatter.ordinary(
+                                            FORMAT_DIGITS.ZERO,
+                                            FORMAT_DIGITS.AMOUNT
+                                        )(
                                             convertZCTokenFromBaseAmount(
                                                 currencySymbol,
                                                 collateral || ZERO_BI,
