@@ -34,12 +34,16 @@ describe('UnifiedFormatter', () => {
 
     describe('formatPercentage', () => {
         it('should format percentages correctly', () => {
-            // dividedBy=100 (basis points): 3700/100/100 = 0.37 = 37%
-            expect(UnifiedFormatter.formatPercentage(3700, 2, 100)).toBe(
+            // dividedBy=10000 (basis points): 3700/10000 = 0.37 = 37%
+            expect(UnifiedFormatter.formatPercentage(3700, 2, 10000)).toBe(
                 '37.00%'
             );
-            expect(UnifiedFormatter.formatPercentage(5000, 2, 100)).toBe(
+            expect(UnifiedFormatter.formatPercentage(5000, 2, 10000)).toBe(
                 '50.00%'
+            );
+            // dividedBy=100 (percentage points): 43/100 = 0.43 = 43%
+            expect(UnifiedFormatter.formatPercentage(43, 2, 100)).toBe(
+                '43.00%'
             );
             // dividedBy=1 (raw decimal): 0.43 = 43%
             expect(UnifiedFormatter.formatPercentage(0.43, 2, 1)).toBe(
@@ -70,7 +74,8 @@ describe('UnifiedFormatter', () => {
         it('should provide working formatter functions', () => {
             expect(formatter.usd(1000, 2)).toBe('$1,000.00');
             expect(formatter.ordinary(0, 2)(1234.567)).toBe('1,234.57');
-            expect(formatter.percentage(3700, 2, 100)).toBe('37.00%');
+            expect(formatter.percentage(3700, 2, 10000)).toBe('37.00%');
+            expect(formatter.percentage(43, 2, 100)).toBe('43.00%');
             expect(formatter.percentage(0.43, 2, 1)).toBe('43.00%');
         });
     });

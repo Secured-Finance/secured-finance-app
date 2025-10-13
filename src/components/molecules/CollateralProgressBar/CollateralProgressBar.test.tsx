@@ -100,10 +100,10 @@ describe('CollateralProgressBar Component', () => {
         expect(screen.queryByText('N/A')).not.toBeInTheDocument();
 
         expect(screen.getByTestId('collateral-progress-bar-tick')).toHaveStyle(
-            'width: calc(100% * 1 + 4px )'
+            'width: calc(100% * 0.37 + 4px )'
         );
         expect(screen.getByTestId('collateral-progress-bar-track')).toHaveStyle(
-            'width: calc(100% * 1)'
+            'width: calc(100% * 0.37)'
         );
 
         const information = screen.getByTestId('information-circle');

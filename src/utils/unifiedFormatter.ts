@@ -210,30 +210,24 @@ export class UnifiedFormatter {
      * @param decimals - Decimal places for the percentage (default: 2)
      * @param dividedBy - Divisor to normalize the value (default: PERCENTAGE_DIVISOR = 100)
      *   - When 1: value is already in raw/decimal form (0.43 → 43%)
-     *   - When 100: value is basis points (3700 → 37%)
+     *   - When 100: value is in percentage points (43 → 43%, 3700 → 3700%)
+     *   - When 10000 (BPS_DIVISOR): value is in basis points (3700 → 37%)
      * @returns Formatted percentage string
      * @example
-     * UnifiedFormatter.formatPercentage(3700, 2, 100) // "37.00%"  (basis points)
+     * UnifiedFormatter.formatPercentage(3700, 2, 10000) // "37.00%"  (basis points)
      * UnifiedFormatter.formatPercentage(0.43, 2, 1) // "43.00%"  (raw decimal)
+     * UnifiedFormatter.formatPercentage(43, 2, 100) // "43.00%"  (percentage points)
      */
     static formatPercentage(
-        value: number,
+        value: number | string,
         decimals = 2,
         dividedBy: number = FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
     ): string {
-        // When dividedBy is 1, value is already in raw/decimal form (e.g., 0.43 for 43%)
-        // When dividedBy is 100, value is in basis points (e.g., 3700 for 37%, 4300 for 43%)
-        // We need to convert to raw form (0.XX) for PriceFormatter
-        let normalizedValue: number;
+        // Convert to number if string
+        const numValue = typeof value === 'string' ? parseFloat(value) : value;
 
-        if (dividedBy === 1) {
-            // Value is already in raw form (0.43) → use as-is
-            normalizedValue = value;
-        } else {
-            // Value is basis points (3700) → convert to raw (3700 / 100 / 100 = 0.37)
-            normalizedValue =
-                value / dividedBy / FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR;
-        }
+        // Normalize to raw decimal form (0.XX) for PriceFormatter
+        const normalizedValue = numValue / dividedBy;
 
         return PriceFormatter.formatPercentage(
             normalizedValue,
@@ -341,11 +335,12 @@ export const formatter = {
      * Format as percentage
      * @param value - The value to format
      * @param decimals - Decimal places (default: 2)
-     * @param dividedBy - When 1: value is raw decimal (0.43), when 100: value is basis points (3700)
-     * @example formatter.percentage(3700, 2, 100) // "37.00%" (basis points)
+     * @param dividedBy - Divisor: 1=raw decimal (0.43→43%), 100=percentage points (43→43%), 10000=basis points (3700→37%)
+     * @example formatter.percentage(3700, 2, 10000) // "37.00%" (basis points)
+     * @example formatter.percentage(43, 2, 100) // "43.00%" (percentage points)
      * @example formatter.percentage(0.43, 2, 1) // "43.00%" (raw decimal)
      */
-    percentage: (value: number, decimals = 2, dividedBy?: number) =>
+    percentage: (value: number | string, decimals = 2, dividedBy?: number) =>
         UnifiedFormatter.formatPercentage(value, decimals, dividedBy),
 
     /**

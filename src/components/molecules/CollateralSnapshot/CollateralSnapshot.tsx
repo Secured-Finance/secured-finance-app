@@ -96,7 +96,9 @@ export const CollateralSnapshot = ({
             columnHelper.accessor('ratio', {
                 cell: info =>
                     formatter.percentage(
-                        info.getValue() / FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
+                        info.getValue() /
+                            FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
+                        0
                     ),
                 header: 'Ratio of Collateral',
             }),

@@ -29,8 +29,8 @@ export const options: ChartOptions<'bar'> = {
             ticks: {
                 callback: function (value: string | number) {
                     return formatter.percentage(
-                        Number(value),
-                        FINANCIAL_CONSTANTS.PRICE_DECIMALS,
+                        value,
+                        1,
                         FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
                     );
                 },

@@ -65,9 +65,9 @@ export const CollateralManagementConciseTab = ({
                     {account && (
                         <span className='font-semibold text-secondary-500'>
                             {formatter.percentage(
-                                collateralCoverage *
-                                    FINANCIAL_CONSTANTS.AGGREGATION_DIVISOR,
-                                0
+                                collateralCoverage,
+                                0,
+                                FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
                             )}
                         </span>
                     )}

@@ -71,7 +71,7 @@ export const CollateralProgressBar = ({
     account,
 }: CollateralProgressBarProps) => {
     const coverageAsDecimal =
-        collateralCoverage / FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR;
+        collateralCoverage / FINANCIAL_CONSTANTS.BPS_DIVISOR;
     const barWidth = Math.min(1, coverageAsDecimal);
 
     return (
@@ -86,7 +86,8 @@ export const CollateralProgressBar = ({
                 <span className='typography-body-1 text-white'>
                     {formatter.percentage(
                         collateralCoverage,
-                        FINANCIAL_CONSTANTS.ZERO_DECIMALS
+                        FINANCIAL_CONSTANTS.ZERO_DECIMALS,
+                        FINANCIAL_CONSTANTS.BPS_DIVISOR
                     )}
                 </span>
             </div>
