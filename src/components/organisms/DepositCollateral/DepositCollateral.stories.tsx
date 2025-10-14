@@ -3,6 +3,7 @@ import { screen, userEvent } from '@storybook/testing-library';
 import { withWalletProvider } from 'src/../.storybook/decorators';
 import { CurrencySymbol } from 'src/utils';
 import { DepositCollateral } from './DepositCollateral';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 export default {
     title: 'Organism/DepositCollateral',
@@ -38,7 +39,7 @@ export const LongInput = Template.bind({});
 LongInput.play = async () => {
     const input = await screen.findByRole('textbox');
     await userEvent.type(input, '123456789.123', {
-        delay: 100,
+        delay: FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
     });
 };
 

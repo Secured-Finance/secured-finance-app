@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, ButtonSizes, TextLink, Timer } from 'src/components/atoms';
 import { CurrencyDropdown, StatsBar } from 'src/components/molecules';
 import { GlobalItayoseMultiCurveChart } from 'src/components/organisms';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     baseContracts,
     useCurrencies,
@@ -17,12 +18,7 @@ import {
     setCurrency,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import {
-    CurrencySymbol,
-    toOptions,
-    PriceFormatter,
-    FORMAT_DIGITS,
-} from 'src/utils';
+import { CurrencySymbol, toOptions, PriceFormatter } from 'src/utils';
 
 export const GlobalItayose = () => {
     const dispatch = useDispatch();
@@ -56,7 +52,10 @@ export const GlobalItayose = () => {
             }
         }
 
-        return { start: startTime * 1000, end: endTime * 1000 };
+        return {
+            start: startTime * FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD,
+            end: endTime * FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD,
+        };
     }, [lendingContracts, currency]);
 
     const handleCurrencyChange = useCallback(
@@ -74,7 +73,8 @@ export const GlobalItayose = () => {
                     Pre-Open&nbsp;Market: Global&nbsp;Itayose
                 </h1>
             </section>
-            {dayjs().unix() > targetTime.start / 1000 ? (
+            {dayjs().unix() >
+            targetTime.start / FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD ? (
                 <>
                     <section className='px-8 text-white-80'>
                         <h2 className='typography-body-2 w-full text-white-80 laptop:w-[600px]'>
@@ -137,7 +137,7 @@ export const GlobalItayose = () => {
                                     name: 'Total Value Locked',
                                     value: PriceFormatter.formatUSDValue(
                                         totalValueLockedInUSD,
-                                        FORMAT_DIGITS.PRICE,
+                                        FINANCIAL_CONSTANTS.PRICE_DECIMALS,
                                         'compact'
                                     ),
                                 },

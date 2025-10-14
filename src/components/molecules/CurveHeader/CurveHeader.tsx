@@ -1,10 +1,11 @@
 import { useMemo } from 'react';
 import { CurveHeaderAsset, CurveHeaderTotal } from 'src/components/atoms';
 import { AssetPriceMap, DailyVolumes } from 'src/types';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     CurrencySymbol,
     computeTotalDailyVolumeInUSD,
-    PriceFormatter,
+    formatter,
 } from 'src/utils';
 
 interface CurveHeaderProps {
@@ -35,17 +36,18 @@ const CurveHeaderNotes = ({
         <div className='flex flex-row gap-2'>
             <CurveHeaderTotal
                 header='Total Volume (Asset)'
-                footer={PriceFormatter.formatWithCurrency(
-                    totalVolume.volumePerCurrency[asset],
-                    asset.toString()
-                )}
+                footer={`${formatter.ordinary(
+                    FINANCIAL_CONSTANTS.ZERO_DECIMALS,
+                    FINANCIAL_CONSTANTS.PRICE_DECIMALS
+                )(totalVolume.volumePerCurrency[asset])} ${asset.toString()}`}
             />
 
             <CurveHeaderTotal
                 header='Total Volume (USD)'
-                footer={PriceFormatter.formatUSD(
-                    totalVolume.volumePerCurrency[asset],
-                    priceList[asset]
+                footer={formatter.usd(
+                    Number(totalVolume.volumePerCurrency[asset]) *
+                        priceList[asset],
+                    FINANCIAL_CONSTANTS.ZERO_DECIMALS
                 )}
             />
         </div>

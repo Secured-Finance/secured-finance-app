@@ -1,23 +1,49 @@
-export const ONE_PERCENT = 10000;
-const MIN_RATE = 0;
-const MAX_RATE = 1000 * ONE_PERCENT;
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
+
+export const ONE_PERCENT = BigInt(FINANCIAL_CONSTANTS.BPS_DIVISOR);
+const MIN_RATE = 0n;
+const MAX_RATE = BigInt(FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD) * ONE_PERCENT;
 
 export class Rate {
-    readonly rate: number;
-    public constructor(value: number) {
-        // cap and floor the value between 0 and 1000%
-        this.rate = Math.min(Math.max(Math.floor(value), MIN_RATE), MAX_RATE);
+    readonly rate: bigint;
+    public constructor(value: number | bigint) {
+        const bigIntValue =
+            typeof value === 'number' ? BigInt(Math.floor(value)) : value;
+        // cap and floor the value between 0 and FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD%
+        this.rate =
+            bigIntValue < MIN_RATE
+                ? MIN_RATE
+                : bigIntValue > MAX_RATE
+                ? MAX_RATE
+                : bigIntValue;
     }
 
     public toNumber(): number {
-        return Math.floor(this.rate);
+        return Number(this.rate);
+    }
+
+    public toBigInt(): bigint {
+        return this.rate;
     }
 
     public toNormalizedNumber(): number {
+        return Number(this.rate) / Number(ONE_PERCENT);
+    }
+
+    public toNormalizedBigInt(): bigint {
         return this.rate / ONE_PERCENT;
     }
 
     public toAbsoluteNumber(): number {
-        return this.toNormalizedNumber() / 100.0;
+        return (
+            this.toNormalizedNumber() / FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
+        );
+    }
+
+    public toAbsoluteBigInt(): bigint {
+        return (
+            this.toNormalizedBigInt() /
+            BigInt(FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR)
+        );
     }
 }

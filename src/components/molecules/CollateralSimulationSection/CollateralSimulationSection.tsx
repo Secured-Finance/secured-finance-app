@@ -7,9 +7,10 @@ import {
     useOrderEstimation,
     useZCUsage,
 } from 'src/hooks';
-import { FORMAT_DIGITS, PriceFormatter, AmountConverter } from 'src/utils';
+import { PriceFormatter, AmountConverter } from 'src/utils';
 import { Amount, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 const CollateralUsageItem = () => {
     return (
@@ -86,7 +87,7 @@ export const CollateralSimulationSection = ({
             PriceFormatter.formatUSD(
                 remainingToBorrow,
                 assetPrice,
-                FORMAT_DIGITS.PRICE
+                FINANCIAL_CONSTANTS.PRICE_DECIMALS
             ),
         ],
         [

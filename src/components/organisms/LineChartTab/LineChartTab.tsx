@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { LineChart, getData, options } from 'src/components/molecules';
 import { useIsGlobalItayose } from 'src/hooks';
+import { calculate } from 'src/utils';
 import {
     selectLandingOrderForm,
     setMaturity,
@@ -14,7 +15,6 @@ import {
     ONE_PERCENT,
     Rate,
     currencyMap,
-    PriceFormatter,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import { trackButtonEvent } from 'src/utils/events';
@@ -52,7 +52,9 @@ export const LineChartTab = ({
                 max:
                     marketCloseToMaturityOriginalRate > maximumRate &&
                     maximumRate > 0
-                        ? Math.floor((maximumRate * 1.2) / ONE_PERCENT)
+                        ? calculate.floor(
+                              (maximumRate * 1.2) / Number(ONE_PERCENT)
+                          )
                         : undefined,
             },
         },
@@ -66,9 +68,11 @@ export const LineChartTab = ({
                             context.dataIndex === 0 &&
                             marketCloseToMaturityOriginalRate > maximumRate
                         ) {
-                            return PriceFormatter.formatRate(
-                                marketCloseToMaturityOriginalRate / ONE_PERCENT,
-                                3
+                            return (
+                                (
+                                    marketCloseToMaturityOriginalRate /
+                                    Number(ONE_PERCENT)
+                                ).toFixed(3) + '%'
                             );
                         } else {
                             return context.formattedValue + '%';

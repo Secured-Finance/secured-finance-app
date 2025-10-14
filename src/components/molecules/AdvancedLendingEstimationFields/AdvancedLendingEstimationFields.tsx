@@ -6,14 +6,13 @@ import { useBreakpoint, useOrderEstimation } from 'src/hooks';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { OrderType } from 'src/types';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     AmountConverter,
     currencyMap,
     divide,
-    FORMAT_DIGITS,
-    formatLoanValue,
+    formatter,
     multiply,
-    PriceFormatter,
 } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
@@ -81,7 +80,7 @@ export const AdvancedLendingEstimationFields = ({
             return divide(
                 multiply(
                     AmountConverter.fromBase(amount, currency),
-                    100,
+                    FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
                     currencyMap[currency].roundingDecimal
                 ),
                 unitPrice,
@@ -95,7 +94,7 @@ export const AdvancedLendingEstimationFields = ({
         if (!maturity) return LoanValue.ZERO;
         if (unitPrice !== undefined && unitPriceExists) {
             return LoanValue.fromPrice(
-                unitPrice * 100.0,
+                unitPrice * FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
                 maturity,
                 calculationDate
             );
@@ -116,7 +115,7 @@ export const AdvancedLendingEstimationFields = ({
             divide(
                 multiply(
                     orderEstimationInfo.filledAmount,
-                    10000.0,
+                    FINANCIAL_CONSTANTS.BPS_DIVISOR,
                     currencyMap[currency].roundingDecimal
                 ),
                 orderEstimationInfo.filledAmountInFV,
@@ -136,7 +135,9 @@ export const AdvancedLendingEstimationFields = ({
         }
         if (!marketPrice) return undefined;
         if (!isConnected) return undefined;
-        return (marketPrice / 100.0).toString();
+        return (
+            marketPrice / FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
+        ).toString();
     }, [maturity, marketPrice, unitPrice, isConnected, unitPriceExists]);
 
     const showDashes = useMemo(() => {
@@ -174,18 +175,16 @@ export const AdvancedLendingEstimationFields = ({
     const orderPrice = useMemo(() => {
         if (showDashes.price) return '--';
 
-        return formatLoanValue(
-            orderType === OrderType.LIMIT ? loanValue : estimatedLoanValue,
-            'price'
+        return formatter.loanValue('price')(
+            orderType === OrderType.LIMIT ? loanValue : estimatedLoanValue
         );
     }, [showDashes, orderType, loanValue, estimatedLoanValue]);
 
     const orderApr = useMemo(() => {
         if (showDashes.apr) return '--';
 
-        return formatLoanValue(
-            orderType === OrderType.LIMIT ? loanValue : estimatedLoanValue,
-            'rate'
+        return formatter.loanValue('rate')(
+            orderType === OrderType.LIMIT ? loanValue : estimatedLoanValue
         );
     }, [showDashes, orderType, loanValue, estimatedLoanValue]);
 
@@ -198,20 +197,17 @@ export const AdvancedLendingEstimationFields = ({
                 : orderEstimationAmount;
 
         if (isMobile) {
-            return `${PriceFormatter.formatOrdinary(
-                amount,
-                FORMAT_DIGITS.NONE,
+            return `${formatter.ordinary(
+                FINANCIAL_CONSTANTS.ZERO_DECIMALS,
                 currencyMap[currency].roundingDecimal
-            )} ${currency}`;
+            )(amount)} ${currency}`;
         } else {
-            return `${PriceFormatter.formatOrdinary(
-                amount,
-                FORMAT_DIGITS.NONE,
+            return `${formatter.ordinary(
+                FINANCIAL_CONSTANTS.ZERO_DECIMALS,
                 currencyMap[currency].roundingDecimal
-            )} ${currency} (${PriceFormatter.formatUSD(
-                amount,
-                assetPrice,
-                FORMAT_DIGITS.PRICE
+            )(amount)} ${currency} (${formatter.usd(
+                amount * assetPrice,
+                FINANCIAL_CONSTANTS.PRICE_DECIMALS
             )})`;
         }
     }, [
@@ -235,17 +231,18 @@ export const AdvancedLendingEstimationFields = ({
         const totalValue = assetPrice ? fv * assetPrice : 0;
 
         if (isMobile) {
-            return `${PriceFormatter.formatOrdinary(
-                fv,
-                FORMAT_DIGITS.NONE,
+            return `${formatter.ordinary(
+                FINANCIAL_CONSTANTS.ZERO_DECIMALS,
                 currencyMap[currency].roundingDecimal
-            )} ${currency}`;
+            )(fv)} ${currency}`;
         } else {
-            return `${PriceFormatter.formatOrdinary(
-                fv,
-                FORMAT_DIGITS.NONE,
+            return `${formatter.ordinary(
+                FINANCIAL_CONSTANTS.ZERO_DECIMALS,
                 currencyMap[currency].roundingDecimal
-            )} ${currency} (${PriceFormatter.formatUSDValue(totalValue)})`;
+            )(fv)} ${currency} (${formatter.usd(
+                totalValue,
+                FINANCIAL_CONSTANTS.PRICE_DECIMALS
+            )})`;
         }
     }, [
         showDashes,

@@ -1,6 +1,7 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import type { Meta, StoryFn } from '@storybook/react';
 import { CollateralProgressBar } from './CollateralProgressBar';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 export default {
     title: 'Molecules/CollateralProgressBar',
@@ -38,7 +39,7 @@ ZeroCollateral.args = {
 export const CollateralDepositedZeroCoverage = Template.bind({});
 CollateralDepositedZeroCoverage.args = {
     collateralCoverage: 0,
-    totalCollateralInUSD: 100,
+    totalCollateralInUSD: FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
     availableToBorrow: 80,
     liquidationThreshold: 80,
     account: '0x123',
@@ -46,8 +47,8 @@ CollateralDepositedZeroCoverage.args = {
 
 export const CollateralDepositedWithCoverage = Template.bind({});
 CollateralDepositedWithCoverage.args = {
-    collateralCoverage: 37,
-    totalCollateralInUSD: 100,
+    collateralCoverage: 3700, // Raw basis points, will be converted to 37%
+    totalCollateralInUSD: FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
     availableToBorrow: 43,
     liquidationThreshold: 80,
     account: '0x123',

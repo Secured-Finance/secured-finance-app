@@ -2,13 +2,14 @@ import SliderUnstyled from '@mui/base/SliderUnstyled';
 import clsx from 'clsx';
 import { useCallback, useRef } from 'react';
 import { usePreventPageScroll } from 'src/hooks';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 const marks = [
     { value: 0 },
     { value: 25 },
     { value: 50 },
     { value: 75 },
-    { value: 100 },
+    { value: FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR },
 ];
 
 export const Slider = ({

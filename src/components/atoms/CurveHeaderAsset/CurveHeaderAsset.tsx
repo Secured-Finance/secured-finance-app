@@ -1,5 +1,6 @@
 import { CurrencyIcon } from 'src/components/atoms';
-import { currencyMap, CurrencySymbol, PriceFormatter } from 'src/utils';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
+import { currencyMap, CurrencySymbol, formatter } from 'src/utils';
 
 interface CurveHeaderAssetProps {
     ccy: CurrencySymbol;
@@ -17,7 +18,7 @@ export const CurveHeaderAsset = ({ ccy, value }: CurveHeaderAssetProps) => {
                     {currencyMap[ccy].name}
                 </span>
                 <span className='typography-caption flex h-full items-center text-neutral-8'>
-                    {PriceFormatter.formatUSDValue(value)}
+                    {formatter.usd(value, FINANCIAL_CONSTANTS.PRICE_DECIMALS)}
                 </span>
             </div>
         </div>

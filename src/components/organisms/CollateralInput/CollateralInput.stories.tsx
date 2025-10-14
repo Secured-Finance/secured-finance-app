@@ -3,6 +3,7 @@ import { screen, userEvent } from '@storybook/testing-library';
 import { useState } from 'react';
 import { CurrencySymbol } from 'src/utils';
 import { CollateralInput } from './CollateralInput';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 const asset = CurrencySymbol.ETH;
 
@@ -10,7 +11,7 @@ export default {
     title: 'Organism/CollateralInput',
     component: CollateralInput,
     args: {
-        price: 100,
+        price: FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
         availableAmount: 10,
         asset: asset,
         setFullCoverage: () => {},
@@ -53,6 +54,6 @@ LongInput.args = {
 LongInput.play = async () => {
     const input = screen.getByRole('textbox');
     await userEvent.type(input, '123456789.123', {
-        delay: 100,
+        delay: FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
     });
 };

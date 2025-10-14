@@ -1,5 +1,6 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import { OrderBookInfoTooltip } from './OrderBookInfoTooltip';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 export default {
     title: 'Atoms/OrderBookInfoTooltip',
@@ -7,7 +8,7 @@ export default {
     args: {
         orderBookInfoData: {
             position: {
-                top: 100,
+                top: FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
                 left: 200,
             },
             avgPrice: '99.57',

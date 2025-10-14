@@ -24,7 +24,13 @@ import {
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { HistoricalYieldIntervals } from 'src/types';
-import { ButtonEvents, ButtonProperties, currencyMap, Rate } from 'src/utils';
+import {
+    ButtonEvents,
+    ButtonProperties,
+    currencyMap,
+    Rate,
+    ZERO_BI,
+} from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import { trackButtonEvent } from 'src/utils/events';
 import {
@@ -82,7 +88,7 @@ export const MultiLineChartTab = ({
         const disabled = new Set<string>();
 
         Object.entries(fetchedRates).forEach(([interval, rates]) => {
-            const allZero = rates.every(rate => rate.rate === 0);
+            const allZero = rates.every(rate => rate.rate === ZERO_BI);
             if (allZero) disabled.add(interval);
         });
         return disabled;

@@ -46,7 +46,7 @@ import {
     getMappedOrderStatus,
     hexToCurrencySymbol,
     sortOrders,
-    PriceFormatter,
+    formatter,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
@@ -342,7 +342,7 @@ export const PortfolioManagement = () => {
                         values={[
                             {
                                 name: 'Net Asset Value',
-                                value: PriceFormatter.formatUSDValue(
+                                value: formatter.usd(
                                     portfolioAnalytics.netAssetValue
                                 ),
                             },
@@ -354,14 +354,16 @@ export const PortfolioManagement = () => {
                             },
                             {
                                 name: 'Lending PV',
-                                value: PriceFormatter.formatUSDValue(
-                                    portfolioAnalytics.lentPV
+                                value: formatter.usd(
+                                    portfolioAnalytics.lentPV,
+                                    0
                                 ),
                             },
                             {
                                 name: 'Borrowing PV',
-                                value: PriceFormatter.formatUSDValue(
-                                    portfolioAnalytics.borrowedPV
+                                value: formatter.usd(
+                                    portfolioAnalytics.borrowedPV,
+                                    0
                                 ),
                             },
                         ]}

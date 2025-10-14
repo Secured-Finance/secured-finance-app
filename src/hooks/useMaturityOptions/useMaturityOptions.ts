@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { ContractMap, LendingMarket } from 'src/hooks/useLendingMarkets';
+import { convert } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
 const passThrough = () => true;
@@ -32,7 +33,7 @@ export const useMaturityOptions = (
                 value: new Maturity(o[1].maturity),
             }));
         return optionList.length
-            ? deduplicate(optionList, o => o.value.toNumber())
+            ? deduplicate(optionList, o => convert.maturity(o.value))
             : [emptyOption];
     }, [filterFn, lendingMarkets]);
 };

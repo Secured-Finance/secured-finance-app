@@ -7,6 +7,7 @@ import * as dayjs from 'dayjs';
 import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MarketTab, Option, TextLink, Timer } from 'src/components/atoms';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     Alert,
     CurrencyMaturityDropdown,
@@ -55,12 +56,11 @@ import {
 import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
-    ZERO_BI,
     getMappedOrderStatus,
     getTransformMaturityOption,
     sortOrders,
     toOptions,
-    PriceFormatter,
+    formatter,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
@@ -150,13 +150,19 @@ export const Toolbar = ({
                             <p className=' typography-caption-2 text-slateGray'>
                                 {nextMarketPhase}
                             </p>
-                            <Timer targetTime={date * 1000} />
+                            <Timer
+                                targetTime={
+                                    date *
+                                    FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD
+                                }
+                            />
                         </div>
                         <div>
                             <MarketTab
                                 name={`${currency} Price`}
-                                value={PriceFormatter.formatUSDValue(
-                                    priceList[currency]
+                                value={formatter.usd(
+                                    priceList[currency],
+                                    FINANCIAL_CONSTANTS.PRICE_DECIMALS
                                 )}
                             />
                         </div>
@@ -265,7 +271,7 @@ export const Itayose = () => {
     } = useBorrowOrderBook(
         currency,
         maturity,
-        Number(itayoseEstimation?.lastBorrowUnitPrice ?? ZERO_BI)
+        Number(itayoseEstimation?.lastBorrowUnitPrice ?? 0n)
     );
 
     const {
@@ -275,7 +281,7 @@ export const Itayose = () => {
     } = useLendOrderBook(
         currency,
         maturity,
-        Number(itayoseEstimation?.lastLendUnitPrice ?? ZERO_BI)
+        Number(itayoseEstimation?.lastLendUnitPrice ?? 0n)
     );
 
     const [orderBook, setMultiplier, setIsShowingAll] = useOrderbook(
@@ -323,7 +329,12 @@ export const Itayose = () => {
         const openingDate = contract?.utcOpeningDate;
         const preOpeningDate = contract?.preOpeningDate;
         return openingDate && preOpeningDate
-            ? dayjs.unix(openingDate).diff(preOpeningDate * 1000, 'days')
+            ? dayjs
+                  .unix(openingDate)
+                  .diff(
+                      preOpeningDate * FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD,
+                      'days'
+                  )
             : undefined;
     }, [lendingContracts, selectedTerm.value]);
 

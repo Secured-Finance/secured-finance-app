@@ -2,6 +2,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import clsx from 'clsx';
 import { useMemo } from 'react';
 import { HorizontalListItemTable } from 'src/components/atoms';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     CompactCoreTable,
     Pagination,
@@ -15,7 +16,7 @@ import {
     OrderTypeConverter,
     amountColumnDefinition,
     contractColumnDefinition,
-    formatLoanValue,
+    formatter,
     hexToCurrencySymbol,
     loanTypeColumnDefinition,
     tableHeaderDefinition,
@@ -28,7 +29,7 @@ const columnHelper = createColumnHelper<Transaction>();
 const priceYieldColumnDef = (
     headerTitle: string,
     id: string,
-    formatType: Parameters<typeof formatLoanValue>[1]
+    formatType: 'price' | 'rate'
 ) => {
     return columnHelper.accessor('averagePrice', {
         id: id,
@@ -36,12 +37,14 @@ const priceYieldColumnDef = (
             return (
                 <div className='flex justify-center'>
                     <span className='typography-caption-2 font-numerical text-white'>
-                        {formatLoanValue(
+                        {formatter.loanValue(formatType)(
                             LoanValue.fromPrice(
-                                Number(info.getValue().toString() * 10000), //TODO: remove this hack
+                                Number(
+                                    info.getValue().toString() *
+                                        FINANCIAL_CONSTANTS.BPS_DIVISOR
+                                ), //TODO: remove this hack
                                 Number(info.row.original.maturity)
-                            ),
-                            formatType
+                            )
                         )}
                     </span>
                 </div>
@@ -83,7 +86,10 @@ const MyTransactionsTableMobile = ({
                                 currency={ccy}
                                 maturity={maturity}
                                 side={side}
-                                price={Number(averagePrice) * 10000}
+                                price={
+                                    Number(averagePrice) *
+                                    FINANCIAL_CONSTANTS.BPS_DIVISOR
+                                }
                             />
                             <div className='flex flex-col'>
                                 <HorizontalListItemTable

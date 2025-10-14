@@ -7,12 +7,14 @@ import DocumentTextIcon from 'src/assets/icons/document-text.svg';
 import { Tooltip } from 'src/components/molecules';
 import { useGetCountdown } from 'src/hooks';
 import {
+    formatter,
     currencyMap,
-    formatLoanValue,
     handlePriceSource,
     MaturityConverter,
 } from 'src/utils';
+
 import { MarketInfoDialogProps } from './types';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 dayjs.extend(duration);
 
@@ -27,12 +29,14 @@ export const MarketInfoDialog = ({
     lastLoanValue,
 }: MarketInfoDialogProps) => {
     const maturity = currentMarket?.value.maturity ?? 0;
-    const lastPrice = formatLoanValue(currentMarket?.value, 'price');
+    const lastPrice = formatter.loanValue('price')(currentMarket?.value);
     const CurrencyIcon = currencyMap[currency]?.icon;
 
     const priceSource = handlePriceSource(currency);
 
-    const time = useGetCountdown(maturity * 1000);
+    const time = useGetCountdown(
+        maturity * FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD
+    );
 
     return (
         <Dialog open={isOpen} onClose={onClose} className='relative z-[31]'>
@@ -79,9 +83,8 @@ export const MarketInfoDialog = ({
                                 <span>Last Price</span>
                                 <div className='flex flex-col items-end'>
                                     <span>
-                                        {formatLoanValue(
-                                            lastLoanValue,
-                                            'price'
+                                        {formatter.loanValue('price')(
+                                            lastLoanValue
                                         )}
                                     </span>
                                 </div>

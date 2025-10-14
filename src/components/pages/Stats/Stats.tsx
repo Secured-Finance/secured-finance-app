@@ -1,5 +1,6 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useMemo } from 'react';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     CollateralManagementConciseTab,
     GradientBox,
@@ -35,8 +36,7 @@ import {
     Rate,
     computeTotalProtocolVolumeInUSD,
     getEnvironment,
-    PriceFormatter,
-    FORMAT_DIGITS,
+    formatter,
 } from 'src/utils';
 import { useAccount } from 'wagmi';
 
@@ -48,12 +48,11 @@ const computeTotalUsers = (users: string) => {
         getEnvironment().toLowerCase() === Environment.STAGING
             ? +users + PREVIOUS_TOTAL_USERS
             : +users;
-    return PriceFormatter.formatOrdinary(
-        totalUsers ?? 0,
-        FORMAT_DIGITS.NONE,
-        FORMAT_DIGITS.PRICE,
+    return formatter.ordinary(
+        FINANCIAL_CONSTANTS.ZERO_DECIMALS,
+        FINANCIAL_CONSTANTS.PRICE_DECIMALS,
         'compact'
-    );
+    )(totalUsers ?? FINANCIAL_CONSTANTS.ZERO);
 };
 
 export const Stats = () => {
@@ -97,12 +96,12 @@ export const Stats = () => {
     const { data: priceList } = useLastPrices();
 
     const totalVolume = useMemo(() => {
-        return PriceFormatter.formatUSDValue(
+        return formatter.usd(
             computeTotalProtocolVolumeInUSD(
                 userCountAndVolume.data?.volumesByCurrency ?? [],
                 priceList
             ).totalVolumeUSD,
-            FORMAT_DIGITS.PRICE,
+            FINANCIAL_CONSTANTS.PRICE_DECIMALS,
             'compact'
         );
     }, [userCountAndVolume.data?.volumesByCurrency, priceList]);
@@ -134,9 +133,9 @@ export const Stats = () => {
                             },
                             {
                                 name: 'Total Value Locked',
-                                value: PriceFormatter.formatUSDValue(
+                                value: formatter.usd(
                                     totalValueLockedInUSD,
-                                    FORMAT_DIGITS.PRICE,
+                                    FINANCIAL_CONSTANTS.PRICE_DECIMALS,
                                     'compact'
                                 ),
                             },
@@ -180,7 +179,8 @@ export const Stats = () => {
                             <div className='px-3 py-6'>
                                 <CollateralManagementConciseTab
                                     collateralCoverage={
-                                        collateralBook.coverage / 100
+                                        collateralBook.coverage /
+                                        FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
                                     }
                                     availableToBorrow={
                                         collateralBook.usdAvailableToBorrow

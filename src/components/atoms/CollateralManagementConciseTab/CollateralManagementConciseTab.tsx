@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import Tick from 'src/assets/icons/tick.svg';
-import { PriceFormatter, LiquidationCalculator } from 'src/utils';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
+import { formatter, LiquidationCalculator } from 'src/utils';
 
 interface CollateralManagementConciseTabProps {
     collateralCoverage: number;
@@ -39,7 +40,7 @@ export const CollateralManagementConciseTab = ({
     account,
     totalCollateralInUSD,
 }: CollateralManagementConciseTabProps) => {
-    let padding = collateralCoverage / 100.0;
+    let padding = collateralCoverage / FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR;
 
     if (padding > 1) {
         padding = 1;
@@ -63,9 +64,10 @@ export const CollateralManagementConciseTab = ({
                     <span>Collateral Utilization</span>
                     {account && (
                         <span className='font-semibold text-secondary-500'>
-                            {PriceFormatter.formatPercentage(
+                            {formatter.percentage(
                                 collateralCoverage,
-                                'percentage'
+                                0,
+                                FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
                             )}
                         </span>
                     )}
@@ -85,12 +87,14 @@ export const CollateralManagementConciseTab = ({
                     ) : (
                         <>
                             <span className='font-semibold text-secondary-300'>
-                                {`${PriceFormatter.formatUSDValue(
-                                    availableToBorrow
+                                {`${formatter.usd(
+                                    availableToBorrow,
+                                    FINANCIAL_CONSTANTS.PRICE_DECIMALS
                                 )} `}
                             </span>
-                            <span>{`of ${PriceFormatter.formatUSDValue(
-                                totalCollateralInUSD
+                            <span>{`of ${formatter.usd(
+                                totalCollateralInUSD,
+                                FINANCIAL_CONSTANTS.PRICE_DECIMALS
                             )} available`}</span>
                         </>
                     )}
@@ -131,7 +135,12 @@ export const CollateralManagementConciseTab = ({
                         <>
                             Threshold:{' '}
                             <span className='font-semibold'>
-                                {PriceFormatter.formatPercentage(threshold)}
+                                {formatter.percentage(
+                                    threshold /
+                                        FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
+                                    0,
+                                    1
+                                )}
                             </span>
                         </>
                     ) : (

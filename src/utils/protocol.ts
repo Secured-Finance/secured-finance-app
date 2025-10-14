@@ -1,5 +1,6 @@
 import { AssetPriceMap, DailyVolumes, ProtocolVolume } from 'src/types';
 import { ZERO_BI } from './collateral';
+import { calculate } from 'src/utils';
 import {
     CurrencySymbol,
     createCurrencyMap,
@@ -32,7 +33,7 @@ export function computeTotalDailyVolumeInUSD(
 
         const valueInUSD = volumeInBaseUnit * priceMap[ccy];
 
-        volumePerCurrency[ccy] += BigInt(Math.floor(volumeInBaseUnit));
+        volumePerCurrency[ccy] += BigInt(calculate.floor(volumeInBaseUnit));
         totalVolumeUSD += valueInUSD;
 
         if (volumePerMarket[marketKey]) {

@@ -2,6 +2,7 @@ import { track } from '@amplitude/analytics-browser';
 import clsx from 'clsx';
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     AssetInformation,
     AssetInformationValue,
@@ -21,7 +22,7 @@ import {
     ZERO_BI,
     convertFromGvUnit,
     convertToZcTokenName,
-    PriceFormatter,
+    formatter,
     AmountConverter,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
@@ -207,7 +208,10 @@ export const CollateralTabLeftPane = ({
                             }
                         )}
                     >
-                        {PriceFormatter.formatUSDValue(netAssetValue)}
+                        {formatter.usd(
+                            netAssetValue,
+                            FINANCIAL_CONSTANTS.PRICE_DECIMALS
+                        )}
                     </span>
                 </div>
                 {!account ? (
@@ -220,7 +224,8 @@ export const CollateralTabLeftPane = ({
                         <div className='flex flex-col gap-3 border-b border-white-10 px-3 py-6 tablet:hidden'>
                             <CollateralManagementConciseTab
                                 collateralCoverage={
-                                    collateralBook.coverage / 100
+                                    collateralBook.coverage /
+                                    FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
                                 }
                                 availableToBorrow={
                                     collateralBook.usdAvailableToBorrow

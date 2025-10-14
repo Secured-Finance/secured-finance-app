@@ -34,12 +34,12 @@ import {
     ZERO_BI,
     currencyMap,
     divide,
-    formatLoanValue,
+    formatter,
     getMaxAmount,
-    PriceFormatter,
-    FORMAT_DIGITS,
+    calculate,
+    AmountConverter,
 } from 'src/utils';
-import { AmountConverter } from 'src/utils';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import { LoanValue } from 'src/utils/entities';
 import { ColorBar } from './ColorBar';
 import { CoreTable } from './CoreTable';
@@ -47,9 +47,17 @@ import { CoreTable } from './CoreTable';
 const AGGREGATION_OPTIONS: (Option<string> & { multiplier: number })[] = [
     { label: '0.01', value: '1', multiplier: 1 },
     { label: '0.1', value: '10', multiplier: 10 },
-    { label: '1', value: '100', multiplier: 100 },
+    {
+        label: '1',
+        value: '100',
+        multiplier: FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
+    },
     { label: '5', value: '500', multiplier: 500 },
-    { label: '10', value: '1000', multiplier: 1000 },
+    {
+        label: '10',
+        value: '1000',
+        multiplier: FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD,
+    },
 ];
 
 const ORDERBOOK_DOUBLE_MAX_LINES = 6;
@@ -99,11 +107,10 @@ const AmountCell = ({
     if (value === ZERO_BI) {
         val = undefined;
     } else {
-        val = PriceFormatter.formatOrdinary(
-            AmountConverter.fromBase(value, currency),
+        val = formatter.ordinary(
             currencyMap[currency].roundingDecimal,
             currencyMap[currency].roundingDecimal
-        );
+        )(AmountConverter.fromBase(value, currency));
         if (cbLimit) {
             val += '(CB)';
         }
@@ -138,11 +145,10 @@ const PriceCell = ({
             return '';
         }
 
-        return formatLoanValue(
-            value,
-            'price',
-            Math.abs(Math.log10(Math.min(aggregationFactor, 100) / 100)) // get the power of 10 of the aggregation factor for the number of decimals, but never more than 2
-        );
+        return formatter.priceWithAggregation(
+            aggregationFactor,
+            'price'
+        )(value);
     }, [aggregationFactor, amount, value]);
 
     return (
@@ -162,7 +168,7 @@ const AprCell = ({
     return (
         <div className='flex items-center justify-center'>
             {display ? (
-                <OrderBookCell value={formatLoanValue(value, 'rate')} />
+                <OrderBookCell value={formatter.loanValue('rate')(value)} />
             ) : (
                 <OrderBookCell />
             )}
@@ -272,30 +278,32 @@ export const NewOrderBookWidget = ({
 
     const spread =
         lendOrders.length > 0 && borrowOrders.length > 0
-            ? PriceFormatter.formatOrdinary(
-                  Math.abs(
-                      borrowOrders[borrowOrders.length - 1].value.price -
-                          lendOrders[0].value.price
-                  ) / 100.0,
-                  FORMAT_DIGITS.PRICE,
-                  FORMAT_DIGITS.PRICE
+            ? formatter.ordinary(
+                  FINANCIAL_CONSTANTS.PRICE_DECIMALS,
+                  FINANCIAL_CONSTANTS.PRICE_DECIMALS
+              )(
+                  calculate.priceSpread(
+                      borrowOrders[borrowOrders.length - 1].value.price,
+                      lendOrders[0].value.price
+                  ) / FINANCIAL_CONSTANTS.PRICE_TO_PERCENTAGE
               )
-            : '0.00';
+            : formatter.ordinary(
+                  FINANCIAL_CONSTANTS.PRICE_DECIMALS,
+                  FINANCIAL_CONSTANTS.PRICE_DECIMALS
+              )(0);
 
     const aprSpread =
         lendOrders.length > 0 && borrowOrders.length > 0
-            ? PriceFormatter.formatPercentage(
-                  Math.abs(
+            ? formatter.percentage(
+                  calculate.aprSpread(
                       borrowOrders[
                           borrowOrders.length - 1
-                      ].value.apr.toNormalizedNumber() -
-                          lendOrders[0].value.apr.toNormalizedNumber()
+                      ].value.apr.toNormalizedNumber(),
+                      lendOrders[0].value.apr.toNormalizedNumber()
                   ),
-                  'percentage',
-                  2,
-                  2
+                  FINANCIAL_CONSTANTS.PRICE_DECIMALS
               )
-            : '0.00%';
+            : formatter.percentage(0, FINANCIAL_CONSTANTS.PRICE_DECIMALS);
 
     const maxLendAmount = useMemo(() => {
         return getMaxAmount(lendOrders);
@@ -438,7 +446,12 @@ export const NewOrderBookWidget = ({
                 : borrowOrders[parseInt(rowId)];
         globalDispatch(setOrderType(OrderType.LIMIT));
         globalDispatch(
-            setUnitPrice(divide(rowData.value.price, 100).toString())
+            setUnitPrice(
+                divide(
+                    rowData.value.price,
+                    FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
+                ).toString()
+            )
         );
     };
 
@@ -514,7 +527,9 @@ export const NewOrderBookWidget = ({
                                 className='flex w-full items-center gap-2 text-base font-semibold leading-6 text-neutral-50'
                                 data-testid='current-market-price'
                             >
-                                <p>{formatLoanValue(marketPrice, 'price')}</p>
+                                <p>
+                                    {formatter.loanValue('price')(marketPrice)}
+                                </p>
                                 {isItayose && (
                                     <InfoToolTip
                                         iconColor='white'
@@ -527,7 +542,7 @@ export const NewOrderBookWidget = ({
                                 )}
                             </span>
                             <span className='flex w-full justify-end text-xs font-semibold leading-5 text-neutral-200 laptop:justify-center laptop:text-sm laptop:leading-[22px]'>
-                                {formatLoanValue(marketPrice, 'rate')}
+                                {formatter.loanValue('rate')(marketPrice)}
                             </span>
                             <div className='typography-desktop-body-6 hidden w-full flex-col justify-end text-right text-neutral-200 laptop:flex'>
                                 <span>Spread</span>

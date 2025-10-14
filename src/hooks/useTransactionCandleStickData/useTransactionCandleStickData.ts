@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { Transaction } from 'src/components/organisms';
 import { HistoricalDataIntervals } from 'src/types';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     AmountConverter,
     CurrencySymbol,
@@ -62,7 +63,10 @@ export const useTransactionCandleStickData = (
             if (previousItem) {
                 let newTimestamp =
                     Number(previousItem.timestamp) - Number(selectedTimeScale);
-                const previousClose = safeDivide(previousItem.close, 100);
+                const previousClose = safeDivide(
+                    previousItem.close,
+                    FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
+                );
 
                 while (newTimestamp > Number(item.timestamp)) {
                     result.push({
@@ -77,10 +81,22 @@ export const useTransactionCandleStickData = (
                     newTimestamp -= Number(selectedTimeScale);
                 }
             }
-            const open = safeDivide(item.open, 100);
-            const high = safeDivide(item.high, 100);
-            const low = safeDivide(item.low, 100);
-            const close = safeDivide(item.close, 100);
+            const open = safeDivide(
+                item.open,
+                FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
+            );
+            const high = safeDivide(
+                item.high,
+                FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
+            );
+            const low = safeDivide(
+                item.low,
+                FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
+            );
+            const close = safeDivide(
+                item.close,
+                FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
+            );
             // Add the actual item
             if (volAdjusted > 0) {
                 result.push({

@@ -1,5 +1,6 @@
 import ArrowUpSquare from 'src/assets/icons/arrow-up-square.svg';
-import { FORMAT_DIGITS, PriceFormatter } from 'src/utils';
+import { formatter } from 'src/utils';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 export interface MarketTabProps {
     name: string;
@@ -19,11 +20,10 @@ export const MarketTab = ({ name, value, source, label }: MarketTabProps) => {
             </span>
             <span className='typography-caption flex items-center whitespace-nowrap leading-4 text-neutral-50 desktop:leading-6'>
                 {typeof value === 'number'
-                    ? PriceFormatter.formatOrdinary(
-                          value,
-                          FORMAT_DIGITS.NONE,
-                          FORMAT_DIGITS.AMOUNT
-                      )
+                    ? formatter.ordinary(
+                          FINANCIAL_CONSTANTS.ZERO_DECIMALS,
+                          FINANCIAL_CONSTANTS.AMOUNT_DECIMALS
+                      )(value)
                     : value}
                 {source && (
                     <a

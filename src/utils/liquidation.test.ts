@@ -2,20 +2,37 @@ import { LiquidationCalculator } from './liquidation';
 
 describe('LiquidationCalculator', () => {
     describe('calculateLiquidationThreshold', () => {
-        it('should calculate liquidation threshold correctly', () => {
-            expect(LiquidationCalculator.getLiquidationThreshold(12500)).toBe(
-                80
-            );
+        it('should calculate liquidation threshold correctly (BigInt version)', () => {
             expect(
-                LiquidationCalculator.getLiquidationThreshold(8333)
+                LiquidationCalculator.getLiquidationThreshold(12500).toString()
+            ).toBe('80');
+            expect(
+                Number(LiquidationCalculator.getLiquidationThreshold(8333))
             ).toBeCloseTo(120.01, 1);
-            expect(LiquidationCalculator.getLiquidationThreshold(20000)).toBe(
-                50
-            );
+            expect(
+                LiquidationCalculator.getLiquidationThreshold(20000).toString()
+            ).toBe('50');
+        });
+
+        it('should calculate liquidation threshold correctly (number version)', () => {
+            expect(
+                LiquidationCalculator.getLiquidationThresholdNumber(12500)
+            ).toBe(80);
+            expect(
+                LiquidationCalculator.getLiquidationThresholdNumber(8333)
+            ).toBeCloseTo(120.01, 1);
+            expect(
+                LiquidationCalculator.getLiquidationThresholdNumber(20000)
+            ).toBe(50);
         });
 
         it('should return 0 when liquidationThresholdRate is 0', () => {
-            expect(LiquidationCalculator.getLiquidationThreshold(0)).toBe(0);
+            expect(
+                LiquidationCalculator.getLiquidationThreshold(0).toString()
+            ).toBe('0');
+            expect(LiquidationCalculator.getLiquidationThresholdNumber(0)).toBe(
+                0
+            );
         });
     });
 

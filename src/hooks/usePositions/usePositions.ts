@@ -2,6 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
+import { calculate } from 'src/utils';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     AmountConverter,
     CurrencySymbol,
@@ -73,7 +75,7 @@ export const usePositions = (
                     borrowCurrencies.add(ccy);
                     totalBorrowPVPerCurrency[ccy] =
                         (totalBorrowPVPerCurrency[ccy] ?? 0) +
-                        Math.abs(presentValue);
+                        calculate.abs(presentValue);
                 }
             });
 
@@ -94,5 +96,9 @@ const calculateMarketPrice = (
     futureValue: bigint
 ): bigint => {
     const marketPrice = (presentValue * BigInt(1000000)) / futureValue;
-    return BigInt(Math.round(Number(marketPrice) / 100));
+    return BigInt(
+        calculate.round(
+            Number(marketPrice) / FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
+        )
+    );
 };

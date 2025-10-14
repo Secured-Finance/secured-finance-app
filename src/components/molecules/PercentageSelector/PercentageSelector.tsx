@@ -1,18 +1,19 @@
 import { useState } from 'react';
 import { PercentageTab } from 'src/components/atoms';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 interface PercentageSelectorProps {
     onClick: (percentage: number) => void;
 }
 
-const percentage = [25, 50, 75, 100];
+const percentage = [25, 50, 75, FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR];
 
 export const PercentageSelector = ({ onClick }: PercentageSelectorProps) => {
     const [activeNumber, setActiveNumber] = useState(0);
 
     const handleClick = (percentage: number) => {
         setActiveNumber(percentage);
-        onClick(percentage / 100.0);
+        onClick(percentage / FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR);
     };
 
     return (

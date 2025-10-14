@@ -1,6 +1,7 @@
 import Tick from 'src/assets/icons/tick.svg';
 import { InfoToolTip } from 'src/components/molecules';
-import { PriceFormatter, PriceUtils } from 'src/utils';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
+import { formatter } from 'src/utils';
 
 interface CollateralProgressBarProps {
     collateralCoverage: number;
@@ -32,20 +33,31 @@ const getInformationText = (
             <div>
                 <span>Your current borrow limit is at </span>
                 <span className='text-nebulaTeal'>
-                    {PriceFormatter.formatUSDValue(availableToBorrow)}
-                </span>
-                <span>{` which is ${PriceFormatter.formatPercentage(
-                    PriceUtils.toPercentage(
+                    {formatter.usd(
                         availableToBorrow,
-                        totalCollateralInUSD
-                    )
-                )} of your ${PriceFormatter.formatUSDValue(
-                    totalCollateralInUSD
+                        FINANCIAL_CONSTANTS.DEFAULT_DECIMALS
+                    )}
+                </span>
+                <span>{` which is ${formatter.percentage(
+                    (liquidationThreshold -
+                        collateralCoverage /
+                            FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR) /
+                        FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
+                    FINANCIAL_CONSTANTS.ZERO_DECIMALS,
+                    FINANCIAL_CONSTANTS.DEFAULT_ONE_DECIMALS
+                )} of your ${formatter.usd(
+                    totalCollateralInUSD,
+                    FINANCIAL_CONSTANTS.DEFAULT_DECIMALS
                 )} collateral deposit.`}</span>
             </div>
             <div>
                 {`Increasing collateral deposit will increase your borrow limit by
-                ${liquidationThreshold}% of its value.`}
+                ${formatter.percentage(
+                    liquidationThreshold /
+                        FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
+                    FINANCIAL_CONSTANTS.ZERO_DECIMALS,
+                    FINANCIAL_CONSTANTS.DEFAULT_ONE_DECIMALS
+                )} of its value.`}
             </div>
         </div>
     );
@@ -58,8 +70,10 @@ export const CollateralProgressBar = ({
     availableToBorrow,
     account,
 }: CollateralProgressBarProps) => {
-    const coverageDecimal = PriceUtils.toDecimal(collateralCoverage);
-    const barWidth = PriceUtils.capProgressWidth(coverageDecimal);
+    const coverageAsDecimal =
+        collateralCoverage / FINANCIAL_CONSTANTS.BPS_DIVISOR;
+    const barWidth = Math.min(1, coverageAsDecimal);
+
     return (
         <div
             className='pointer-events-none flex flex-col gap-3 rounded-lg px-5 pb-12 pt-6 hover:bg-black-20'
@@ -70,7 +84,11 @@ export const CollateralProgressBar = ({
                     Collateral Utilization
                 </span>
                 <span className='typography-body-1 text-white'>
-                    {PriceFormatter.formatPercentage(coverageDecimal, 'raw')}
+                    {formatter.percentage(
+                        collateralCoverage,
+                        FINANCIAL_CONSTANTS.ZERO_DECIMALS,
+                        FINANCIAL_CONSTANTS.BPS_DIVISOR
+                    )}
                 </span>
             </div>
             <div className='flex flex-col gap-[6px]'>
@@ -100,12 +118,14 @@ export const CollateralProgressBar = ({
                     <div className='mt-1 flex w-full flex-row items-center gap-1'>
                         <div className='typography-caption flex flex-row text-planetaryPurple'>
                             <span className='whitespace-pre font-semibold text-nebulaTeal'>
-                                {`${PriceFormatter.formatUSDValue(
-                                    availableToBorrow
+                                {`${formatter.usd(
+                                    availableToBorrow,
+                                    FINANCIAL_CONSTANTS.DEFAULT_DECIMALS
                                 )} `}
                             </span>
-                            <span>{`of ${PriceFormatter.formatUSDValue(
-                                totalCollateralInUSD
+                            <span>{`of ${formatter.usd(
+                                totalCollateralInUSD,
+                                FINANCIAL_CONSTANTS.DEFAULT_DECIMALS
                             )} available`}</span>
                         </div>
                         <InfoToolTip placement='bottom-start'>

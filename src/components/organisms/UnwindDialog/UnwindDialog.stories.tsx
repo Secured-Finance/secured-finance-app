@@ -9,6 +9,7 @@ import { dec22Fixture } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
 import { Amount } from 'src/utils/entities';
 import { UnwindDialog } from './UnwindDialog';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 export default {
     title: 'Organism/UnwindDialog',
@@ -23,7 +24,7 @@ export default {
         ),
         side: OrderSide.BORROW,
     },
-    chromatic: { delay: 1000 },
+    chromatic: { delay: FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD },
     decorators: [withWalletProvider],
     parameters: {
         ...RESPONSIVE_PARAMETERS,

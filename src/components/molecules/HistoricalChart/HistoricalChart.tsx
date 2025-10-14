@@ -1,4 +1,6 @@
 import clsx from 'clsx';
+import { calculate } from 'src/utils';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     CandlestickData,
     HistogramData,
@@ -129,7 +131,7 @@ export function HistoricalChart({
                 VOLUME_KEY_NAME: `${mergeData?.value}`,
                 Change: `${(
                     ((mergeData?.close - mergeData?.open) / mergeData?.open) *
-                    100
+                    FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
                 ).toFixed(2)}%`,
                 usdVol: `${isNegative ? '-' : ''}${usdPrice * mergeData.value}`,
             });
@@ -351,7 +353,9 @@ export function HistoricalChart({
                                     !legendData.usdVol.includes('-'),
                             })}
                         >
-                            {Math.abs(Number(legendData.usdVol)).toFixed(2)}
+                            {calculate
+                                .abs(Number(legendData.usdVol))
+                                .toFixed(2)}
                         </span>
                     )}
                 </div>

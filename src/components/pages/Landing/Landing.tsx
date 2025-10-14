@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { TextLink, ViewType } from 'src/components/atoms';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     Alert,
     AlertSeverity,
@@ -48,7 +49,7 @@ export const emptyOptionList = [
     },
 ];
 
-const ITAYOSE_PERIOD = 60 * 60 * 1000; // 1 hour in milli-seconds
+const ITAYOSE_PERIOD = 60 * 60 * FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD; // 1 hour in milli-seconds
 
 export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
     const dispatch = useDispatch();
@@ -197,7 +198,8 @@ export const WithBanner = ({
     preOrderDays: number | undefined;
 }) => {
     const preOrderTimeLimit = market
-        ? market.utcOpeningDate * 1000 - ITAYOSE_PERIOD
+        ? market.utcOpeningDate * FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD -
+          ITAYOSE_PERIOD
         : 0;
 
     const currencyArray = Array.from(delistedCurrencySet);

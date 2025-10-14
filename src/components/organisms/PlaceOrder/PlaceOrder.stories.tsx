@@ -5,6 +5,7 @@ import type { Meta, StoryFn } from '@storybook/react';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { setAmount, setCurrency } from 'src/store/landingOrderForm';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     collateralBook37,
     dec22Fixture,
@@ -31,7 +32,7 @@ export default {
         walletSource: WalletSource.METAMASK,
         maturitiesOptionList: maturityOptions,
     },
-    chromatic: { delay: 1000 },
+    chromatic: { delay: FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD },
     decorators: [withWalletProvider],
     parameters: {
         ...RESPONSIVE_PARAMETERS,

@@ -1,4 +1,5 @@
 import { OrderList, Position } from 'src/hooks';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     AssetPriceMap,
     Order,
@@ -63,7 +64,7 @@ export const calculateFutureValue = (
 };
 
 export const calculateAveragePrice = (unitPrice: bigint): number => {
-    return Number(unitPrice) / 10000;
+    return Number(unitPrice) / FINANCIAL_CONSTANTS.BPS_DIVISOR;
 };
 
 export const formatOrders = (orders: OrderList): TransactionHistoryList => {

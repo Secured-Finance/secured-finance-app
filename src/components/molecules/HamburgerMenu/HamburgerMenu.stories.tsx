@@ -2,6 +2,7 @@ import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import type { Meta, StoryFn } from '@storybook/react';
 import { within } from '@storybook/testing-library';
 import { HamburgerMenu } from './HamburgerMenu';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 export default {
     title: 'Molecules/HamburgerMenu',
@@ -30,7 +31,7 @@ export default {
         ...RESPONSIVE_PARAMETERS,
         chromatic: {
             viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
-            delay: 1000,
+            delay: FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD,
         },
     },
 } as Meta<typeof HamburgerMenu>;

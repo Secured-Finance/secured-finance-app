@@ -1,6 +1,7 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import { CurrencySymbol } from 'src/utils';
 import { OrderInputBox } from '.';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 export default {
     title: 'Atoms/OrderInputBox',
@@ -37,7 +38,7 @@ Total.args = {
 
 export const WithInformationText = Template.bind({});
 WithInformationText.args = {
-    informationText: 'Input value from 0 to 100',
+    informationText: `Input value from 0 to ${FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR}`,
     disabled: false,
 };
 
@@ -51,5 +52,5 @@ SmallWidth.args = {
     unit: CurrencySymbol.WFIL,
     disabled: false,
     initialValue: `10000000`,
-    informationText: 'Input value from 0 to 100',
+    informationText: `Input value from 0 to ${FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR}`,
 };

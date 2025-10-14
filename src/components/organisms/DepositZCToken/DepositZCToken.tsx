@@ -27,11 +27,11 @@ import {
     convertToZcTokenName,
     convertZCTokenFromBaseAmount,
     handleContractError,
-    PriceFormatter,
-    FORMAT_DIGITS,
+    formatter,
     ZERO_BI,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     ButtonEvents,
     ButtonProperties,
@@ -327,14 +327,15 @@ export const DepositZCToken = ({
                                         )}
                                     </div>
                                     <div className='w-full text-right text-neutral-300'>
-                                        {`${PriceFormatter.formatOrdinary(
+                                        {`${formatter.ordinary(
+                                            FINANCIAL_CONSTANTS.ZERO_DECIMALS,
+                                            FINANCIAL_CONSTANTS.AMOUNT_DECIMALS
+                                        )(
                                             convertZCTokenFromBaseAmount(
                                                 currencySymbol,
                                                 availableTokenAmount,
                                                 maturity
-                                            ) || 0,
-                                            FORMAT_DIGITS.NONE,
-                                            FORMAT_DIGITS.AMOUNT
+                                            ) || 0
                                         )} Available`}
                                     </div>
                                 </div>
@@ -374,7 +375,10 @@ export const DepositZCToken = ({
                                     ],
                                     [
                                         'Amount',
-                                        `${PriceFormatter.formatAmount(
+                                        `${formatter.ordinary(
+                                            FINANCIAL_CONSTANTS.ZERO_DECIMALS,
+                                            FINANCIAL_CONSTANTS.AMOUNT_DECIMALS
+                                        )(
                                             convertZCTokenFromBaseAmount(
                                                 currencySymbol,
                                                 collateral || ZERO_BI,

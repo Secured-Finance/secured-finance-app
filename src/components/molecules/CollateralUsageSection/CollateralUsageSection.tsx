@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { getLiquidationInformation } from 'src/components/atoms';
-import { AmountConverter, CurrencySymbol, PriceFormatter } from 'src/utils';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
+import { AmountConverter, CurrencySymbol, formatter } from 'src/utils';
 
 export const CollateralUsageSection = ({
     collateralCoverage,
@@ -11,10 +12,15 @@ export const CollateralUsageSection = ({
     currency: CurrencySymbol;
     availableToBorrow: bigint;
 }) => {
-    collateralCoverage = collateralCoverage / 100.0;
+    collateralCoverage =
+        collateralCoverage / FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR;
 
     const collateralUsagePercent = useMemo(() => {
-        return PriceFormatter.formatPercentage(collateralCoverage);
+        return formatter.percentage(
+            collateralCoverage / FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
+            FINANCIAL_CONSTANTS.ZERO_DECIMALS,
+            1
+        );
     }, [collateralCoverage]);
 
     const info = getLiquidationInformation(collateralCoverage);
@@ -26,10 +32,12 @@ export const CollateralUsageSection = ({
                     Available to borrow
                 </h3>
                 <p className='typography-caption font-bold text-white'>
-                    {PriceFormatter.formatWithCurrency(
-                        AmountConverter.fromBase(availableToBorrow, currency),
-                        currency
-                    )}
+                    {`${formatter.ordinary(
+                        FINANCIAL_CONSTANTS.ZERO_DECIMALS,
+                        FINANCIAL_CONSTANTS.PRICE_DECIMALS
+                    )(
+                        AmountConverter.fromBase(availableToBorrow, currency)
+                    )} ${currency}`}
                 </p>
             </div>
             <div className='flex-col'>

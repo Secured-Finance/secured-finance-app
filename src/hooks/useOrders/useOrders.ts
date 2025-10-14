@@ -1,6 +1,6 @@
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { useCallback } from 'react';
-import { CurrencySymbol, toCurrency } from 'src/utils';
+import { CurrencySymbol, convert, toCurrency } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import useSF from '../useSecuredFinance';
 
@@ -13,7 +13,7 @@ export const useOrders = () => {
                 if (!securedFinance) return;
                 const tx = await securedFinance.cancelLendingOrder(
                     toCurrency(ccy),
-                    maturity.toNumber(),
+                    convert.maturity(maturity),
                     Number(orderId)
                 );
                 return tx;
@@ -38,7 +38,7 @@ export const useOrders = () => {
 
                 const tx = await securedFinance.placeOrder(
                     toCurrency(ccy),
-                    maturity.toNumber(),
+                    convert.maturity(maturity),
                     side,
                     amount,
                     sourceWallet,
@@ -61,7 +61,7 @@ export const useOrders = () => {
 
                 const tx = await securedFinance.unwindPosition(
                     toCurrency(ccy),
-                    maturity.toNumber()
+                    convert.maturity(maturity)
                 );
 
                 return tx;
@@ -87,7 +87,7 @@ export const useOrders = () => {
 
                 const tx = await securedFinance.placePreOrder(
                     toCurrency(ccy),
-                    maturity.toNumber(),
+                    convert.maturity(maturity),
                     side,
                     amount,
                     sourceWallet,
@@ -110,7 +110,7 @@ export const useOrders = () => {
 
                 const tx = await securedFinance.executeRepayment(
                     toCurrency(ccy),
-                    maturity.toNumber()
+                    convert.maturity(maturity)
                 );
 
                 return tx;
@@ -129,7 +129,7 @@ export const useOrders = () => {
 
                 const tx = await securedFinance.executeRedemption(
                     toCurrency(ccy),
-                    maturity.toNumber()
+                    convert.maturity(maturity)
                 );
 
                 return tx;

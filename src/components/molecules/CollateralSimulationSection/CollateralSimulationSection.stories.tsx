@@ -8,6 +8,7 @@ import { collateralBook37, mar23Fixture } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
 import { Amount } from 'src/utils/entities';
 import { CollateralSimulationSection } from './CollateralSimulationSection';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 export default {
     title: 'Organism/CollateralSimulationSection',
@@ -20,7 +21,7 @@ export default {
         side: OrderSide.BORROW,
         maturity: mar23Fixture,
     },
-    chromatic: { delay: 1000 },
+    chromatic: { delay: FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD },
     parameters: {
         connected: true,
     },

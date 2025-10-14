@@ -1,4 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     ethBytes32,
     jun23Fixture,
@@ -43,7 +44,7 @@ export default {
             },
         ],
         account: '0x0000000000',
-        netValue: 1000,
+        netValue: FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD,
     },
 } as Meta<typeof WithdrawPositionTable>;
 

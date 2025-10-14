@@ -1,13 +1,15 @@
+import { FINANCIAL_CONSTANTS } from '../config/constants';
+
 const LIQUIDATION_CONSTANTS = {
     // Used for threshold rate conversion (1M basis points)
-    THRESHOLD_RATE_DIVISOR: 1_000_000,
+    THRESHOLD_RATE_DIVISOR: 1_000_000n,
     // Percentage base for liquidation price calculation
-    PERCENTAGE_BASE: 100,
+    PERCENTAGE_BASE: BigInt(FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR),
     // Risk thresholds in percentage
     RISK_THRESHOLDS: {
-        LOW_MAX: 40,
-        MEDIUM_MAX: 60,
-        HIGH_MAX: 80,
+        LOW_MAX: 40n,
+        MEDIUM_MAX: 60n,
+        HIGH_MAX: 80n,
     },
     // Risk level colors
     RISK_COLORS: {
@@ -33,41 +35,48 @@ interface LiquidationRiskInfo {
 }
 
 export class LiquidationCalculator {
-    /**
-     * Calculates liquidation threshold from threshold rate
-     * @param liquidationThresholdRate - Rate in basis points (e.g., 12500 = 80%)
-     * @returns Liquidation threshold percentage
-     */
-    static getLiquidationThreshold(liquidationThresholdRate: number): number {
-        return liquidationThresholdRate === 0
-            ? 0
-            : LIQUIDATION_CONSTANTS.THRESHOLD_RATE_DIVISOR /
-                  liquidationThresholdRate;
+    static getLiquidationThreshold(
+        liquidationThresholdRate: number | bigint
+    ): bigint {
+        const rateBigInt =
+            typeof liquidationThresholdRate === 'number'
+                ? BigInt(Math.floor(liquidationThresholdRate))
+                : liquidationThresholdRate;
+
+        return rateBigInt === 0n
+            ? 0n
+            : LIQUIDATION_CONSTANTS.THRESHOLD_RATE_DIVISOR / rateBigInt;
     }
 
-    /**
-     * Determines risk level and color based on liquidation percentage
-     * @param liquidationPercentage - Current liquidation percentage
-     * @returns Risk information with color and level
-     */
+    static getLiquidationThresholdNumber(
+        liquidationThresholdRate: number | bigint
+    ): number {
+        return Number(this.getLiquidationThreshold(liquidationThresholdRate));
+    }
+
     static getLiquidationRiskInfo(
-        liquidationPercentage: number
+        liquidationPercentage: number | bigint
     ): LiquidationRiskInfo {
         const { RISK_THRESHOLDS, RISK_COLORS, RISK_LABELS } =
             LIQUIDATION_CONSTANTS;
 
+        const percentageBigInt =
+            typeof liquidationPercentage === 'number'
+                ? BigInt(Math.floor(liquidationPercentage))
+                : liquidationPercentage;
+
         switch (true) {
-            case liquidationPercentage <= RISK_THRESHOLDS.LOW_MAX:
+            case percentageBigInt <= RISK_THRESHOLDS.LOW_MAX:
                 return {
                     color: RISK_COLORS.LOW,
                     risk: RISK_LABELS.LOW,
                 };
-            case liquidationPercentage <= RISK_THRESHOLDS.MEDIUM_MAX:
+            case percentageBigInt <= RISK_THRESHOLDS.MEDIUM_MAX:
                 return {
                     color: RISK_COLORS.MEDIUM,
                     risk: RISK_LABELS.MEDIUM,
                 };
-            case liquidationPercentage <= RISK_THRESHOLDS.HIGH_MAX:
+            case percentageBigInt <= RISK_THRESHOLDS.HIGH_MAX:
                 return {
                     color: RISK_COLORS.HIGH,
                     risk: RISK_LABELS.HIGH,

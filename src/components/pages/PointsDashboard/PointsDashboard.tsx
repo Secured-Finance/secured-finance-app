@@ -48,11 +48,12 @@ import {
     MaturityConverter,
     SupportedChainsList,
     readWalletFromStore,
+    formatter,
     PriceFormatter,
-    FORMAT_DIGITS,
 } from 'src/utils';
 import { useAccount, useConnect, useSignMessage } from 'wagmi';
 import { getShareMessage, quoteTweetUrl } from './constants';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 const POLL_INTERVAL = 600000; // 10 minutes
 const POINT_API_QUERY_OPTIONS = { context: { type: 'point-dashboard' } };
@@ -242,9 +243,10 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
                                 </span>
                                 <div className='typography-body-1 h-8 text-center text-md text-white'>
                                     +{' '}
-                                    {PriceFormatter.formatPercentage(
-                                        userData?.user.boostPercentage / 100,
-                                        'percentage'
+                                    {formatter.percentage(
+                                        userData?.user.boostPercentage,
+                                        0,
+                                        FINANCIAL_CONSTANTS.BPS_DIVISOR
                                     )}
                                 </div>
                             </div>
@@ -414,7 +416,7 @@ const QuestList = ({ chainId }: { chainId: number }) => {
                                     PriceFormatter.formatToFixed(
                                         (questPoint + bonusPoints['lend']) /
                                             questPoint,
-                                        FORMAT_DIGITS.ONE
+                                        FINANCIAL_CONSTANTS.ONE_DECIMAL
                                     )
                                 )}x`}
                                 color={ChipColors.Teal}
@@ -430,7 +432,7 @@ const QuestList = ({ chainId }: { chainId: number }) => {
                                     PriceFormatter.formatToFixed(
                                         (questPoint + bonusPoints['borrow']) /
                                             questPoint,
-                                        FORMAT_DIGITS.ONE
+                                        FINANCIAL_CONSTANTS.ONE_DECIMAL
                                     )
                                 )}x`}
                                 color={ChipColors.Red}
@@ -630,8 +632,8 @@ const Leaderboard = () => {
                         <div className='float-right flex-1 text-right text-neutral-6'>
                             {PriceFormatter.formatOrdinary(
                                 item.point,
-                                FORMAT_DIGITS.NONE,
-                                FORMAT_DIGITS.PRICE,
+                                FINANCIAL_CONSTANTS.ZERO_DECIMALS,
+                                FINANCIAL_CONSTANTS.PRICE_DECIMALS,
                                 'standard'
                             )}
                         </div>

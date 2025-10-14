@@ -28,6 +28,7 @@ import {
     getShowStablecoinAppUrl,
     getStablecoinAppUrl,
     getSupportedNetworks,
+    formatter,
 } from 'src/utils';
 import { AddressConverter } from 'src/utils';
 import { isProdEnv } from 'src/utils/displayUtils';
@@ -242,18 +243,7 @@ const PointsTag = ({
 }) => {
     const router = useRouter();
     const showPoints = isConnected && points;
-
-    let pointsDisplay = '';
-
-    if (points) {
-        if (points < 1000) {
-            pointsDisplay = `${points} Points`;
-        } else if (points < 1000000) {
-            pointsDisplay = `${Math.floor(points / 100) / 10}K Points`;
-        } else {
-            pointsDisplay = `${Math.floor(points / 100000) / 10}M Points`;
-        }
-    }
+    const pointsDisplay = points ? `${formatter.points(points)} Points` : '';
 
     return (
         <button

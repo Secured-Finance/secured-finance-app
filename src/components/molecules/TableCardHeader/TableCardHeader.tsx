@@ -2,11 +2,12 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { Chip, ChipColors, CurrencyIcon } from 'src/components/atoms';
 import {
     CurrencySymbol,
-    formatLoanValue,
-    MaturityConverter,
     OrderTypeConverter,
+    formatter,
+    calculate,
+    MaturityConverter,
 } from 'src/utils';
-import { LoanValue, Maturity } from 'src/utils/entities';
+import { Maturity } from 'src/utils/entities';
 
 export const TableCardHeader = ({
     currency,
@@ -40,13 +41,12 @@ export const TableCardHeader = ({
                         </span>
                     ) : (
                         <span className='typography-mobile-sh-9 font-numerical text-neutral-50'>
-                            {formatLoanValue(
-                                LoanValue.fromPrice(
+                            {formatter.loanValue('price')(
+                                calculate.loanValueFromPrice(
                                     price,
                                     maturity.toNumber(),
                                     calculationDate
-                                ),
-                                'price'
+                                )
                             )}
                         </span>
                     )}
@@ -66,13 +66,12 @@ export const TableCardHeader = ({
                                 APR
                             </span>
                             <span className='font-numerical text-3.5 font-medium leading-4.5 text-neutral-50'>
-                                {formatLoanValue(
-                                    LoanValue.fromPrice(
+                                {formatter.loanValue('rate')(
+                                    calculate.loanValueFromPrice(
                                         price,
                                         maturity.toNumber(),
                                         calculationDate
-                                    ),
-                                    'rate'
+                                    )
                                 )}
                             </span>
                         </div>

@@ -1,5 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { Timer } from './Timer';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 export default {
     title: 'Atoms/Timer',
@@ -10,7 +11,8 @@ export default {
 } as Meta<typeof Timer>;
 
 const Template: StoryFn<typeof Timer> = args => {
-    args.targetTime = Date.now() + 10 * 60 * 60 * 1000;
+    args.targetTime =
+        Date.now() + 10 * 60 * 60 * FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD;
     return <Timer {...args} />;
 };
 

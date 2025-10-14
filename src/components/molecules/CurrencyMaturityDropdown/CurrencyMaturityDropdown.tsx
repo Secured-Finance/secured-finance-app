@@ -8,6 +8,7 @@ import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { CurrencyMaturityTable, FilterButtons } from 'src/components/molecules';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     baseContracts,
     useCurrencies,
@@ -16,7 +17,7 @@ import {
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { SavedMarket } from 'src/types';
-import { CurrencySymbol, currencyMap, formatLoanValue } from 'src/utils';
+import { formatter, CurrencySymbol, currencyMap } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 import { CurrencyMaturityDropdownProps, FilteredOption } from './types';
@@ -116,7 +117,10 @@ export const CurrencyMaturityDropdown = ({
 
                     const isItayoseOption =
                         data?.isItayosePeriod || data?.isPreOrderPeriod;
-                    const preOpeningDate = dayjs(data?.preOpeningDate * 1000);
+                    const preOpeningDate = dayjs(
+                        data?.preOpeningDate *
+                            FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD
+                    );
                     const now = dayjs();
 
                     if (data?.isMatured || now.isBefore(preOpeningDate)) {
@@ -167,8 +171,8 @@ export const CurrencyMaturityDropdown = ({
                         display: marketLabel,
                         currency: currency.value,
                         maturity: maturity.value,
-                        lastPrice: formatLoanValue(lastPrice, 'price'),
-                        apr: formatLoanValue(lastPrice, 'rate'),
+                        lastPrice: formatter.loanValue('price')(lastPrice),
+                        apr: formatter.loanValue('rate')(lastPrice),
                         volume: volumeInUSD,
                         isItayoseOption,
                         isFavourite,

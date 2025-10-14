@@ -1,8 +1,9 @@
 import { CurrencyInfo, CurrencySymbol, currencyMap } from '../currencyList';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 export type BigNumberish = bigint | string | number;
 
-export const AMOUNT_PRECISION = 10000;
+export const AMOUNT_PRECISION = FINANCIAL_CONSTANTS.BPS_DIVISOR;
 
 export class Amount {
     private readonly _baseValue: bigint;

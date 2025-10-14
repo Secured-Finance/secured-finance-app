@@ -2,6 +2,7 @@ import type { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
 import { useState } from 'react';
 import { InputBase } from '.';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 export default {
     title: 'Atoms/InputBase',
@@ -35,7 +36,7 @@ DecimalPlacesAllowed.args = {
 
 export const MaxLimit = Template.bind({});
 MaxLimit.args = {
-    maxLimit: 1000,
+    maxLimit: FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD,
 };
 
 export const LongInput = Template.bind({});
@@ -50,7 +51,7 @@ LongInput.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const input = canvas.getByRole('textbox');
     await userEvent.type(input, '123456789.123', {
-        delay: 100,
+        delay: FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
     });
 };
 
@@ -59,6 +60,6 @@ DecimalInput.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const input = canvas.getByRole('textbox');
     await userEvent.type(input, '.', {
-        delay: 100,
+        delay: FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
     });
 };

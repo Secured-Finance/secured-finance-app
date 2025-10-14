@@ -4,6 +4,7 @@ import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
 import { CurrencySymbol, ZERO_BI, toCurrency } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 const DEFAULT_ORDERBOOK_DEPTH = 30;
 
@@ -90,13 +91,13 @@ export const useOrderbook = (
                     securedFinance?.getBorrowOrderBook(
                         currency,
                         maturity,
-                        Number(borrowStartPrice ?? ZERO_BI),
+                        Number(borrowStartPrice ?? 0n),
                         depth
                     ),
                     securedFinance?.getLendOrderBook(
                         currency,
                         maturity,
-                        Number(lendStartPrice ?? ZERO_BI),
+                        Number(lendStartPrice ?? 0n),
                         depth
                     ),
                 ]);
@@ -164,7 +165,7 @@ export const useBorrowOrderBook = (
                     currency,
                     maturity,
                     Number(borrowOrderBook.next),
-                    1000
+                    FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD
                 )) as SmartContractOrderbook;
                 borrowOrderBook = {
                     unitPrices: borrowOrderBook.unitPrices.concat(
@@ -215,7 +216,7 @@ export const useLendOrderBook = (
                     currency,
                     maturity,
                     Number(lendOrderBook.next),
-                    1000
+                    FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD
                 )) as SmartContractOrderbook;
                 lendOrderBook = {
                     unitPrices: lendOrderBook.unitPrices.concat(

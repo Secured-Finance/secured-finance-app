@@ -8,13 +8,9 @@ import LockOpen from 'src/assets/icons/lock-open.svg';
 import Coins from 'src/assets/img/2d coins.svg';
 import { CurrencyIcon } from 'src/components/atoms';
 import { useBreakpoint, useGetCountdown } from 'src/hooks';
-import {
-    AmountConverter,
-    CurrencySymbol,
-    PriceFormatter,
-    FORMAT_DIGITS,
-} from 'src/utils';
+import { AmountConverter, CurrencySymbol, PriceFormatter } from 'src/utils';
 import { stages } from './constants';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 export const Banner = ({ text }: { text: string }) => {
     return (
@@ -169,8 +165,8 @@ export const CampaignStatus = ({
                                                 valueLocked[ccy],
                                                 ccy
                                             ),
-                                            FORMAT_DIGITS.NONE,
-                                            FORMAT_DIGITS.ONE
+                                            FINANCIAL_CONSTANTS.ZERO_DECIMALS,
+                                            FINANCIAL_CONSTANTS.ONE_DECIMAL
                                         )} ${ccy}`}
                                     </span>
                                 );

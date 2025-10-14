@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { useCallback, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { HorizontalListItemTable } from 'src/components/atoms';
+import { calculate } from 'src/utils';
 import {
     COMPACT_TABLE_DEFAULT_HEIGHT,
     CompactCoreTable,
@@ -315,13 +316,17 @@ export const ActiveTradeTable = ({
                 if (side === OrderSide.BORROW) {
                     if (isMaturityPastDays(maturityTimestamp, 7))
                         return `Repay`;
-                    else return `${7 - Math.abs(dayToMaturity)}d left to repay`;
+                    else
+                        return `${
+                            7 - calculate.abs(dayToMaturity)
+                        }d left to repay`;
                 } else {
                     if (isMaturityPastDays(maturityTimestamp, 7))
                         return (
                             <span className='text-warning-500'>Redeemable</span>
                         );
-                    else return `${7 - Math.abs(dayToMaturity)}d to redeem`;
+                    else
+                        return `${7 - calculate.abs(dayToMaturity)}d to redeem`;
                 }
             }
         },

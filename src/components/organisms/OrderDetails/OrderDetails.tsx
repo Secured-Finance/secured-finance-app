@@ -1,6 +1,7 @@
 import { Disclosure, Transition } from '@headlessui/react';
 import { OrderSide } from '@secured-finance/sf-client';
 import { useMemo } from 'react';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     ExpandIndicator,
     Section,
@@ -18,11 +19,11 @@ import { OrderType } from 'src/types';
 import {
     FeeCalculator,
     divide,
-    formatLoanValue,
     MaturityConverter,
     multiply,
     prefixTilde,
-    PriceFormatter,
+    formatter,
+    calculate,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 
@@ -90,17 +91,19 @@ export const OrderDetails = ({
                         Warning: Your order price is currently lower than
                         minimum collateral base price of{' '}
                         <span className='font-bold'>
-                            {formatLoanValue(
-                                LoanValue.fromPrice(
+                            {formatter.loanValue('price')(
+                                calculate.loanValueFromPrice(
                                     market.currentMinDebtUnitPrice,
                                     market.maturity
-                                ),
-                                'price'
+                                )
                             )}
                         </span>
                         . Your adjusted PV will be{' '}
                         <span>
-                            {PriceFormatter.formatWithCurrency(
+                            {`${formatter.ordinary(
+                                FINANCIAL_CONSTANTS.ZERO_DECIMALS,
+                                FINANCIAL_CONSTANTS.PRICE_DECIMALS
+                            )(
                                 multiply(
                                     divide(
                                         amount.value,
@@ -110,9 +113,8 @@ export const OrderDetails = ({
                                         ).price
                                     ),
                                     market.currentMinDebtUnitPrice
-                                ),
-                                amount.currency
-                            )}
+                                )
+                            )} ${amount.currency}`}
                         </span>
                         . To place the order you need to deposit sufficient
                         collateral.{' '}
@@ -131,16 +133,17 @@ export const OrderDetails = ({
                         orderType === OrderType.MARKET
                             ? 'Market'
                             : prefixTilde(
-                                  formatLoanValue(
-                                      loanValue ?? LoanValue.ZERO,
-                                      'price'
+                                  formatter.loanValue('price')(
+                                      loanValue ?? LoanValue.ZERO
                                   )
                               ),
                     ],
                     [
                         'APR',
                         prefixTilde(
-                            formatLoanValue(loanValue ?? LoanValue.ZERO, 'rate')
+                            formatter.loanValue('rate')(
+                                loanValue ?? LoanValue.ZERO
+                            )
                         ),
                     ],
                     ['Maturity Date', MaturityConverter.toDateString(maturity)],
@@ -195,7 +198,10 @@ export const OrderDetails = ({
                                                 at over
                                             </span>
                                             <span className='font-semibold text-white'>
-                                                {` ${divide(slippage, 100)} `}
+                                                {` ${divide(
+                                                    slippage,
+                                                    FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
+                                                )} `}
                                             </span>
                                             <span>
                                                 which is the max slippage level

@@ -7,12 +7,13 @@ import { SvgIcon } from 'src/types';
 import {
     AmountConverter,
     AddressConverter,
+    calculate,
     CurrencySymbol,
-    PriceFormatter,
+    formatter,
     DisplayLengths,
-    FORMAT_DIGITS,
 } from 'src/utils';
 import { AMOUNT_PRECISION } from 'src/utils/entities';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 interface WalletSourceSelectorProps {
     optionList: WalletSourceOption[];
@@ -34,14 +35,13 @@ const formatOption = (
     showAssetName = false
 ) => {
     const amount =
-        Math.floor(
+        calculate.floor(
             AmountConverter.fromBase(available, asset) * AMOUNT_PRECISION
         ) / AMOUNT_PRECISION;
-    return `${PriceFormatter.formatOrdinary(
-        amount,
-        FORMAT_DIGITS.NONE,
-        FORMAT_DIGITS.ASSET_DECIMALS
-    )} ${showAssetName ? ` ${asset}` : ''}`;
+    return `${formatter.ordinary(
+        FINANCIAL_CONSTANTS.ZERO_DECIMALS,
+        FINANCIAL_CONSTANTS.ASSET_DECIMALS
+    )(amount)} ${showAssetName ? ` ${asset}` : ''}`;
 };
 
 const formatSource = (walletSource: WalletSource, account: string) => {

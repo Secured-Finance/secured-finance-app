@@ -22,13 +22,14 @@ import { RootState } from 'src/store/types';
 import {
     calculateTimeDifference,
     currencyMap,
-    FORMAT_DIGITS,
     formatDuration,
-    PriceFormatter,
+    calculate,
+    formatter,
 } from 'src/utils';
 import { useAccount } from 'wagmi';
 import { desktopColumns, mobileColumns } from './constants';
 import { ColumnKey, ColumnType, FilteredOption } from './types';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 export const CurrencyMaturityTable = ({
     options,
@@ -104,14 +105,14 @@ export const CurrencyMaturityTable = ({
                 case 'maturity-mobile':
                     return (
                         <div className='flex justify-end whitespace-nowrap laptop:pr-3'>
-                            {formatDuration(Math.abs(timestampDifference))}
+                            {formatDuration(calculate.abs(timestampDifference))}
                         </div>
                     );
                 case 'volume':
                     return option.volume
-                        ? PriceFormatter.formatUSDValue(
+                        ? formatter.usd(
                               option.volume,
-                              FORMAT_DIGITS.PRICE,
+                              FINANCIAL_CONSTANTS.PRICE_DECIMALS,
                               'compact'
                           )
                         : '-';

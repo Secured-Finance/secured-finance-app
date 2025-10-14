@@ -15,14 +15,10 @@ import { OrderBookInfoTooltip } from 'src/components/atoms';
 import { useLastPrices } from 'src/hooks';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import {
-    calculateFutureValue,
-    FORMAT_DIGITS,
-    PriceFormatter,
-    PriceUtils,
-} from 'src/utils';
+import { calculateFutureValue, formatter, PriceUtils } from 'src/utils';
 import { AmountConverter } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 type CoreTableOptions = {
     name: string;
@@ -181,23 +177,25 @@ export const CoreTable = <T,>({
         const totalUsd = new Amount(totalPVAmount, currency)?.toUSD(price);
 
         setOrderBookInfoData({
-            avgPrice: PriceFormatter.formatPrice(
-                avgPrice,
-                'raw',
-                FORMAT_DIGITS.PRICE
+            avgPrice: formatter.ordinary(
+                FINANCIAL_CONSTANTS.PRICE_DECIMALS,
+                FINANCIAL_CONSTANTS.PRICE_DECIMALS
+            )(avgPrice * 100),
+            avgApr: formatter.percentage(
+                limitedApr,
+                FINANCIAL_CONSTANTS.PRICE_DECIMALS,
+                100
             ),
-            avgApr: PriceFormatter.formatPercentage(limitedApr, 'percentage'),
-            totalUsd: PriceFormatter.formatUSDValue(
+            totalUsd: formatter.usd(
                 totalUsd,
-                FORMAT_DIGITS.PRICE,
+                FINANCIAL_CONSTANTS.PRICE_DECIMALS,
                 'compact'
             ),
-            totalAmount: PriceFormatter.formatOrdinary(
-                totalAmount,
-                FORMAT_DIGITS.NONE,
-                FORMAT_DIGITS.PRICE,
+            totalAmount: formatter.ordinary(
+                FINANCIAL_CONSTANTS.ZERO_DECIMALS,
+                FINANCIAL_CONSTANTS.PRICE_DECIMALS,
                 'compact'
-            ),
+            )(totalAmount),
             position,
         });
     };

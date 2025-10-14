@@ -10,6 +10,7 @@ import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
 import { OrderDetails } from './OrderDetails';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 
 export default {
     title: 'Organism/OrderDetails',
@@ -23,7 +24,7 @@ export default {
         loanValue: LoanValue.fromPrice(9610, dec22Fixture.toNumber()),
         isCurrencyDelisted: false,
     },
-    chromatic: { delay: 1000 },
+    chromatic: { delay: FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD },
     decorators: [withWalletProvider],
     parameters: {
         connected: true,

@@ -6,6 +6,7 @@ import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
 import { VisibilityState } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
+import { FINANCIAL_CONSTANTS, DISPLAY_CONSTANTS } from 'src/config/constants';
 import {
     useCallback,
     useEffect,
@@ -78,9 +79,7 @@ import {
     ButtonEvents,
     ButtonProperties,
     CurrencySymbol,
-    ZERO_BI,
     checkOrderIsFilled,
-    formatLoanValue,
     formatOrders,
     getMappedOrderStatus,
     hexToCurrencySymbol,
@@ -90,9 +89,10 @@ import {
     sortOrders,
     toOptions,
     writeMarketInStore,
+    formatter,
+    calculate,
 } from 'src/utils';
-import { AmountConverter } from 'src/utils';
-import { LoanValue, Maturity } from 'src/utils/entities';
+import { Maturity } from 'src/utils/entities';
 import { trackButtonEvent } from 'src/utils/events';
 import { useAccount } from 'wagmi';
 
@@ -102,31 +102,7 @@ const useTradeHistoryDetails = (
     maturity: Maturity
 ) => {
     return useMemo(() => {
-        let min = 10000;
-        let max = 0;
-        let sum = ZERO_BI;
-
-        if (!transactions.length) {
-            min = 0;
-            max = 0;
-        }
-
-        for (const t of transactions) {
-            const price = +t.executionPrice;
-            if (price < min) {
-                min = price;
-            }
-            if (price > max) {
-                max = price;
-            }
-            sum += BigInt(t.amount);
-        }
-
-        return {
-            min: LoanValue.fromPrice(min, maturity.toNumber()),
-            max: LoanValue.fromPrice(max, maturity.toNumber()),
-            sum: AmountConverter.fromBase(sum, currency),
-        };
+        return calculate.tradeHistoryDetails(transactions, currency, maturity);
     }, [currency, maturity, transactions]);
 };
 
@@ -188,7 +164,7 @@ export const AdvancedLending = ({
 
     const estimatedOpeningUnitPrice = lendingMarkets[currency][maturity]
         ?.openingUnitPrice
-        ? LoanValue.fromPrice(
+        ? calculate.loanValueFromPrice(
               lendingMarkets[currency][maturity]?.openingUnitPrice ?? 0,
               maturity,
               lendingContracts[selectedTerm.value.toNumber()]?.utcOpeningDate
@@ -240,7 +216,7 @@ export const AdvancedLending = ({
     const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
 
     useEffect(() => {
-        setTimestamp(Math.round(new Date().getTime() / 1000));
+        setTimestamp(calculate.currentTimestamp());
     }, []);
 
     const handleFavouriteToggle = useCallback(
@@ -369,7 +345,7 @@ export const AdvancedLending = ({
     } = useBorrowOrderBook(
         currency,
         maturity,
-        Number(itayoseEstimation?.lastBorrowUnitPrice ?? ZERO_BI)
+        Number(itayoseEstimation?.lastBorrowUnitPrice ?? 0n)
     );
 
     const {
@@ -379,7 +355,7 @@ export const AdvancedLending = ({
     } = useLendOrderBook(
         currency,
         maturity,
-        Number(itayoseEstimation?.lastLendUnitPrice ?? ZERO_BI)
+        Number(itayoseEstimation?.lastLendUnitPrice ?? 0n)
     );
 
     const isLoadingMap = {
@@ -444,8 +420,8 @@ export const AdvancedLending = ({
     );
 
     const dailyMarketInfo: DailyMarketInfo = {
-        high: formatLoanValue(tradeHistoryDetails.max, 'price'),
-        low: formatLoanValue(tradeHistoryDetails.min, 'price'),
+        high: formatter.loanValue('price')(tradeHistoryDetails.max),
+        low: formatter.loanValue('price')(tradeHistoryDetails.min),
     };
 
     const {
@@ -459,14 +435,14 @@ export const AdvancedLending = ({
     const currentMarket = useMemo(() => {
         if (marketUnitPrice) {
             return {
-                value: LoanValue.fromPrice(marketUnitPrice, maturity),
+                value: calculate.loanValueFromPrice(marketUnitPrice, maturity),
                 time: data?.lastBlockUnitPriceTimestamp ?? 0,
                 type: 'block' as const,
             };
         }
         if (openingUnitPrice) {
             return {
-                value: LoanValue.fromPrice(openingUnitPrice, maturity),
+                value: calculate.loanValueFromPrice(openingUnitPrice, maturity),
                 time: 0,
                 type: 'opening' as const,
             };
@@ -518,13 +494,12 @@ export const AdvancedLending = ({
     const maximumOpenOrderLimit =
         fullOrderList.activeOrderList.filter(
             o => hexToCurrencySymbol(o.currency) === currency
-        ).length >= 20;
+        ).length >= FINANCIAL_CONSTANTS.MAX_OPEN_ORDERS;
 
     const tooltipMap: Record<number, string> = {};
 
     if (maximumOpenOrderLimit)
-        tooltipMap[1] =
-            'You have too many open orders. Please ensure that you have fewer than 20 orders to place more orders.';
+        tooltipMap[1] = `You have too many open orders. Please ensure that you have fewer than ${FINANCIAL_CONSTANTS.MAX_OPEN_ORDERS} orders to place more orders.`;
 
     const tabTitles = isItayosePeriod
         ? isSubgraphSupported
@@ -541,11 +516,10 @@ export const AdvancedLending = ({
 
     const preOrderDays = useMemo(() => {
         const contract = lendingContracts[selectedTerm.value.toNumber()];
-        const openingDate = contract?.utcOpeningDate;
-        const preOpeningDate = contract?.preOpeningDate;
-        return openingDate && preOpeningDate
-            ? dayjs.unix(openingDate).diff(preOpeningDate * 1000, 'days')
-            : undefined;
+        return calculate.preOrderDays(
+            contract?.utcOpeningDate,
+            contract?.preOpeningDate
+        );
     }, [lendingContracts, selectedTerm.value]);
 
     useEffect(() => {
@@ -838,7 +812,10 @@ const MovingTape = ({
         return currencies.flatMap(asset =>
             nonMaturedMarketOptionList.map(maturity => {
                 const data = lendingMarkets[asset]?.[+maturity.value];
-                const preOpeningDate = dayjs(data?.preOpeningDate * 1000);
+                const preOpeningDate = dayjs(
+                    data?.preOpeningDate *
+                        FINANCIAL_CONSTANTS.POINTS_K_THRESHOLD
+                );
                 const now = dayjs();
                 const isNotReady =
                     data?.isMatured || now.isBefore(preOpeningDate);
@@ -847,7 +824,7 @@ const MovingTape = ({
                 const openingUnitPrice = data?.openingUnitPrice;
                 const lastPrice =
                     marketUnitPrice || openingUnitPrice
-                        ? LoanValue.fromPrice(
+                        ? calculate.loanValueFromPrice(
                               marketUnitPrice || openingUnitPrice,
                               +maturity.value
                           )
@@ -855,7 +832,7 @@ const MovingTape = ({
 
                 return {
                     asset: `${asset}-${maturity.label}`,
-                    apr: formatLoanValue(lastPrice, 'rate'),
+                    apr: formatter.loanValue('rate')(lastPrice),
                     isNotReady,
                     isFavourite: favourites.some(
                         (fav: SavedMarket) =>
@@ -929,7 +906,9 @@ const MovingTape = ({
                         {item.asset}
                         <span
                             className={`ml-1 ${
-                                Number(item.apr) < 0 || item.apr === '--.--%'
+                                Number(item.apr.replace('%', '')) < 0 ||
+                                item.apr ===
+                                    DISPLAY_CONSTANTS.EMPTY_RATE_DISPLAY
                                     ? 'text-error-300'
                                     : 'text-success-300'
                             }`}

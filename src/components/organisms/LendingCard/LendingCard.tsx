@@ -2,6 +2,7 @@ import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ErrorInfo, WalletSourceSelector } from 'src/components/atoms';
+import { formatter } from 'src/utils';
 import {
     AssetSelector,
     CollateralUsageSection,
@@ -31,7 +32,6 @@ import {
     ButtonProperties,
     CurrencySymbol,
     ZERO_BI,
-    formatLoanValue,
     generateWalletSourceInformation,
     getAmountValidation,
     getTransformMaturityOption,
@@ -178,7 +178,7 @@ export const LendingCard = ({
                             className='typography-amount-large text-white'
                             data-testid='market-rate'
                         >
-                            {formatLoanValue(marketValue, 'rate')}
+                            {formatter.loanValue('rate')(marketValue)}
                         </span>
                         <span className='typography-caption uppercase text-secondary7'>
                             Fixed Rate APR

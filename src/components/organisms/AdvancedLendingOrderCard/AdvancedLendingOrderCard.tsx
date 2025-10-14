@@ -3,6 +3,7 @@ import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { VisibilityState } from '@tanstack/react-table';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
 import {
     CollateralManagementConciseTab,
     ErrorInfo,
@@ -45,8 +46,7 @@ import {
     FeeCalculator,
     divide,
     generateWalletSourceInformation,
-    PriceFormatter,
-    FORMAT_DIGITS,
+    formatter,
     AmountConverter,
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
@@ -125,7 +125,7 @@ export function AdvancedLendingOrderCard({
         if (!maturity) return LoanValue.ZERO;
         if (unitPrice !== undefined && unitPriceExists) {
             return LoanValue.fromPrice(
-                unitPrice * 100.0,
+                unitPrice * FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR,
                 maturity,
                 calculationDate
             );
@@ -143,13 +143,15 @@ export function AdvancedLendingOrderCard({
         }
         if (!marketPrice) return undefined;
         if (!isConnected) return undefined;
-        return (marketPrice / 100.0).toString();
+        return (
+            marketPrice / FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR
+        ).toString();
     }, [maturity, marketPrice, unitPrice, isConnected, unitPriceExists]);
 
     const dispatch = useDispatch();
 
     const collateralUsagePercent = useMemo(() => {
-        return collateralBook.coverage / 100.0;
+        return collateralBook.coverage / FINANCIAL_CONSTANTS.PERCENTAGE_DIVISOR;
     }, [collateralBook]);
 
     const totalCollateralInUSD = address ? collateralBook.usdCollateral : 0;
@@ -340,15 +342,16 @@ export function AdvancedLendingOrderCard({
                                 side === OrderSide.BORROW ? 'Borrow' : 'Lend'
                             }`}</span>
                             <span className='text-right text-primary-300'>
-                                {`${PriceFormatter.formatOrdinary(
+                                {`${formatter.ordinary(
+                                    FINANCIAL_CONSTANTS.ZERO_DECIMALS,
+                                    FINANCIAL_CONSTANTS.PRICE_DECIMALS
+                                )(
                                     AmountConverter.fromBase(
                                         side === OrderSide.BORROW
                                             ? availableToBorrow
                                             : availableToLend,
                                         currency
-                                    ),
-                                    FORMAT_DIGITS.NONE,
-                                    FORMAT_DIGITS.PRICE
+                                    )
                                 )} ${isMobile ? '' : currency}`}
                             </span>
                         </div>
@@ -367,9 +370,11 @@ export function AdvancedLendingOrderCard({
                                         v?.toString(),
                                 });
                             }}
-                            informationText='Input value greater than or equal to 0.01 and up to and including 100.'
-                            decimalPlacesAllowed={2}
-                            maxLimit={100}
+                            informationText={`Input value greater than or equal to ${FINANCIAL_CONSTANTS.MIN_BOND_PRICE} and up to and including ${FINANCIAL_CONSTANTS.MAX_BOND_PRICE}.`}
+                            decimalPlacesAllowed={
+                                FINANCIAL_CONSTANTS.PRICE_DECIMALS
+                            }
+                            maxLimit={FINANCIAL_CONSTANTS.MAX_BOND_PRICE}
                             bgClassName={
                                 isBondPriceFieldDisabled
                                     ? 'bg-neutral-700'

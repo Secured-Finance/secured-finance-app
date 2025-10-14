@@ -7,9 +7,11 @@ import {
     currencyMap,
     isMaturityPastDays,
     isPastDate,
-    PriceFormatter,
-    TimestampConverter,
+    formatter,
+    calculate,
 } from 'src/utils';
+import { FINANCIAL_CONSTANTS } from 'src/config/constants';
+import { TimestampConverter } from './timestampConverter';
 
 export const AmountCell = ({
     ccy,
@@ -24,11 +26,10 @@ export const AmountCell = ({
     }
     return (
         <span className='font-numerical text-3 leading-4 text-white'>
-            {PriceFormatter.formatOrdinary(
-                AmountConverter.fromBase(amount, ccy),
+            {formatter.ordinary(
                 currency.roundingDecimal,
                 currency.roundingDecimal
-            )}
+            )(AmountConverter.fromBase(amount, ccy))}
         </span>
     );
 };
@@ -102,13 +103,25 @@ export const MaturityCell = ({
             secondLine = '';
         } else {
             if (side === OrderSide.BORROW) {
-                secondLine = isMaturityPastDays(timestamp, 7)
+                secondLine = isMaturityPastDays(
+                    timestamp,
+                    FINANCIAL_CONSTANTS.REDEMPTION_GRACE_PERIOD_DAYS
+                )
                     ? 'Repay'
-                    : `${7 - Math.abs(dayToMaturity)}d left to repay`;
+                    : `${
+                          FINANCIAL_CONSTANTS.REDEMPTION_GRACE_PERIOD_DAYS -
+                          calculate.abs(dayToMaturity)
+                      }d left to repay`;
             } else {
-                secondLine = isMaturityPastDays(timestamp, 7)
+                secondLine = isMaturityPastDays(
+                    timestamp,
+                    FINANCIAL_CONSTANTS.REDEMPTION_GRACE_PERIOD_DAYS
+                )
                     ? 'Redeemable'
-                    : `${7 - Math.abs(dayToMaturity)}d to redeem`;
+                    : `${
+                          FINANCIAL_CONSTANTS.REDEMPTION_GRACE_PERIOD_DAYS -
+                          calculate.abs(dayToMaturity)
+                      }d to redeem`;
             }
         }
     }
