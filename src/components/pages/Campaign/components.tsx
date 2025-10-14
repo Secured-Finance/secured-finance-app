@@ -11,8 +11,8 @@ import { useBreakpoint, useGetCountdown } from 'src/hooks';
 import {
     AmountConverter,
     CurrencySymbol,
-    ordinaryFormat,
-    usdFormat,
+    PriceFormatter,
+    FORMAT_DIGITS,
 } from 'src/utils';
 import { stages } from './constants';
 
@@ -164,19 +164,21 @@ export const CampaignStatus = ({
                                         className='typography-mobile-body-3 block text-center text-white tablet:text-left tablet:text-[22px] tablet:font-semibold desktop:text-7 desktop:leading-8'
                                         key={ccy}
                                     >
-                                        {`${ordinaryFormat(
+                                        {`${PriceFormatter.formatOrdinary(
                                             AmountConverter.fromBase(
                                                 valueLocked[ccy],
                                                 ccy
                                             ),
-                                            0,
-                                            1
+                                            FORMAT_DIGITS.NONE,
+                                            FORMAT_DIGITS.ONE
                                         )} ${ccy}`}
                                     </span>
                                 );
                             })}
                             <span className='typography-mobile-body-4 laptop:typography-desktop-body-4 block text-center text-white/40 tablet:text-left desktop:text-4 desktop:leading-8'>
-                                {`≈ ${usdFormat(totalUSDValue, 2)}`}
+                                {`≈ ${PriceFormatter.formatUSDValue(
+                                    totalUSDValue
+                                )}`}
                             </span>
                         </div>
                     </div>

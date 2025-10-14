@@ -14,7 +14,12 @@ import {
     useLandingOrderFormSelector,
     useLandingOrderFormStore,
 } from 'src/store/landingOrderForm';
-import { CurrencySymbol, toOptions, usdFormat } from 'src/utils';
+import {
+    CurrencySymbol,
+    toOptions,
+    PriceFormatter,
+    FORMAT_DIGITS,
+} from 'src/utils';
 
 export const GlobalItayose = () => {
     const { setCurrency, resetUnitPrice } = useLandingOrderFormStore();
@@ -125,9 +130,9 @@ export const GlobalItayose = () => {
                                 },
                                 {
                                     name: 'Total Value Locked',
-                                    value: usdFormat(
+                                    value: PriceFormatter.formatUSDValue(
                                         totalValueLockedInUSD,
-                                        2,
+                                        FORMAT_DIGITS.PRICE,
                                         'compact'
                                     ),
                                 },

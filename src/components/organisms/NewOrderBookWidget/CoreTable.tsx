@@ -15,9 +15,9 @@ import { useLastPrices } from 'src/hooks';
 import { useLandingOrderFormSelector } from 'src/store/landingOrderForm';
 import {
     calculateFutureValue,
-    ordinaryFormat,
-    percentFormat,
-    usdFormat,
+    FORMAT_DIGITS,
+    PriceFormatter,
+    PriceUtils,
 } from 'src/utils';
 import { AmountConverter } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
@@ -166,19 +166,34 @@ export const CoreTable = <T,>({
                 ? Number(totalPVAmount) / Number(totalFVAmount)
                 : 0;
 
+        const priceInBondFormat = PriceUtils.toBondPrice(avgPrice);
         const avgApr = LoanValue.fromPrice(
-            avgPrice * 10000,
+            priceInBondFormat,
             maturity
         ).apr.toNormalizedNumber();
+        const limitedApr = PriceUtils.capApr(avgApr);
 
         const totalAmount = AmountConverter.fromBase(totalPVAmount, currency);
         const totalUsd = new Amount(totalPVAmount, currency)?.toUSD(price);
 
         setOrderBookInfoData({
-            avgPrice: (avgPrice * 100).toFixed(2),
-            avgApr: percentFormat(Math.min(avgApr, 1000), 100, 2, 2),
-            totalUsd: usdFormat(Number(totalUsd), 2, 'compact'),
-            totalAmount: ordinaryFormat(totalAmount, 0, 2, 'compact'),
+            avgPrice: PriceFormatter.formatPrice(
+                avgPrice,
+                'raw',
+                FORMAT_DIGITS.PRICE
+            ),
+            avgApr: PriceFormatter.formatPercentage(limitedApr, 'percentage'),
+            totalUsd: PriceFormatter.formatUSDValue(
+                totalUsd,
+                FORMAT_DIGITS.PRICE,
+                'compact'
+            ),
+            totalAmount: PriceFormatter.formatOrdinary(
+                totalAmount,
+                FORMAT_DIGITS.NONE,
+                FORMAT_DIGITS.PRICE,
+                'compact'
+            ),
             position,
         });
     };

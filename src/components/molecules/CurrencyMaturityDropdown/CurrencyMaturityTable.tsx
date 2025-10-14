@@ -21,8 +21,9 @@ import { useBlockchainStore } from 'src/store';
 import {
     calculateTimeDifference,
     currencyMap,
+    FORMAT_DIGITS,
     formatDuration,
-    usdFormat,
+    PriceFormatter,
 } from 'src/utils';
 import { useAccount } from 'wagmi';
 import { desktopColumns, mobileColumns } from './constants';
@@ -105,7 +106,11 @@ export const CurrencyMaturityTable = ({
                     );
                 case 'volume':
                     return option.volume
-                        ? usdFormat(option.volume, 2, 'compact')
+                        ? PriceFormatter.formatUSDValue(
+                              option.volume,
+                              FORMAT_DIGITS.PRICE,
+                              'compact'
+                          )
                         : '-';
                 default:
                     return null;

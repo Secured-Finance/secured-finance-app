@@ -8,10 +8,10 @@ import {
     AmountConverter,
     currencyMap,
     divide,
+    FORMAT_DIGITS,
     formatLoanValue,
     multiply,
-    ordinaryFormat,
-    usdFormat,
+    PriceFormatter,
 } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
@@ -194,17 +194,21 @@ export const AdvancedLendingEstimationFields = ({
                 : orderEstimationAmount;
 
         if (isMobile) {
-            return `${ordinaryFormat(
+            return `${PriceFormatter.formatOrdinary(
                 amount,
-                0,
+                FORMAT_DIGITS.NONE,
                 currencyMap[currency].roundingDecimal
             )} ${currency}`;
         } else {
-            return `${ordinaryFormat(
+            return `${PriceFormatter.formatOrdinary(
                 amount,
-                0,
+                FORMAT_DIGITS.NONE,
                 currencyMap[currency].roundingDecimal
-            )} ${currency} (${usdFormat(amount * assetPrice, 2)})`;
+            )} ${currency} (${PriceFormatter.formatUSD(
+                amount,
+                assetPrice,
+                FORMAT_DIGITS.PRICE
+            )})`;
         }
     }, [
         showDashes,
@@ -227,17 +231,17 @@ export const AdvancedLendingEstimationFields = ({
         const totalValue = assetPrice ? fv * assetPrice : 0;
 
         if (isMobile) {
-            return `${ordinaryFormat(
+            return `${PriceFormatter.formatOrdinary(
                 fv,
-                0,
+                FORMAT_DIGITS.NONE,
                 currencyMap[currency].roundingDecimal
             )} ${currency}`;
         } else {
-            return `${ordinaryFormat(
+            return `${PriceFormatter.formatOrdinary(
                 fv,
-                0,
+                FORMAT_DIGITS.NONE,
                 currencyMap[currency].roundingDecimal
-            )} ${currency} (${usdFormat(totalValue, 2)})`;
+            )} ${currency} (${PriceFormatter.formatUSDValue(totalValue)})`;
         }
     }, [
         showDashes,

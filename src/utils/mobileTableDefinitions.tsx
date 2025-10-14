@@ -7,9 +7,9 @@ import {
     currencyMap,
     isMaturityPastDays,
     isPastDate,
-    ordinaryFormat,
+    PriceFormatter,
+    TimestampConverter,
 } from 'src/utils';
-import { TimestampConverter } from './timestampConverter';
 
 export const AmountCell = ({
     ccy,
@@ -24,7 +24,7 @@ export const AmountCell = ({
     }
     return (
         <span className='font-numerical text-3 leading-4 text-white'>
-            {ordinaryFormat(
+            {PriceFormatter.formatOrdinary(
                 AmountConverter.fromBase(amount, ccy),
                 currency.roundingDecimal,
                 currency.roundingDecimal

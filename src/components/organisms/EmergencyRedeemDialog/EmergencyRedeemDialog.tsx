@@ -14,10 +14,10 @@ import useSF from 'src/hooks/useSecuredFinance';
 import {
     AddressConverter,
     DisplayLengths,
+    formatCollateralSnapshotRatio,
     handleContractError,
-    percentFormat,
+    PriceFormatter,
     TimestampConverter,
-    usdFormat,
 } from 'src/utils';
 
 enum Step {
@@ -112,13 +112,13 @@ export const EmergencyRedeemDialog = ({
                 header: 'Asset',
             }),
             columnHelper.accessor('ratio', {
-                cell: info => percentFormat(info.getValue() / 100),
+                cell: info => formatCollateralSnapshotRatio(info.getValue()),
                 header: 'Ratio of Collateral',
             }),
             columnHelper.accessor('price', {
                 cell: info => (
                     <div className='text-right'>
-                        {usdFormat(info.getValue(), 2)}
+                        {PriceFormatter.formatUSDValue(info.getValue())}
                     </div>
                 ),
                 header: 'Snapshot Rate',

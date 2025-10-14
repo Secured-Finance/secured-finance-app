@@ -26,8 +26,8 @@ import useSF from 'src/hooks/useSecuredFinance';
 import {
     currencyMap,
     formatLoanValue,
-    ordinaryFormat,
     AmountConverter,
+    PriceFormatter,
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import { columns } from './constants';
@@ -76,7 +76,7 @@ export const RecentTradesTable = ({
                     transaction.amount,
                     currency
                 );
-                const size = ordinaryFormat(
+                const size = PriceFormatter.formatOrdinary(
                     sizeActual,
                     currencyMap[currency].roundingDecimal,
                     currencyMap[currency].roundingDecimal
