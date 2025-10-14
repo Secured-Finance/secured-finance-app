@@ -285,7 +285,7 @@ export const NewOrderBookWidget = ({
                   calculate.priceSpread(
                       borrowOrders[borrowOrders.length - 1].value.price,
                       lendOrders[0].value.price
-                  )
+                  ) / FINANCIAL_CONSTANTS.PRICE_TO_PERCENTAGE
               )
             : formatter.ordinary(
                   FINANCIAL_CONSTANTS.PRICE_DECIMALS,

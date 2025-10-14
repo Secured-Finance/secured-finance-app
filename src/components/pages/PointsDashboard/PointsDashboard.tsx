@@ -245,7 +245,8 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
                                     +{' '}
                                     {formatter.percentage(
                                         userData?.user.boostPercentage,
-                                        0
+                                        0,
+                                        FINANCIAL_CONSTANTS.BPS_DIVISOR
                                     )}
                                 </div>
                             </div>
