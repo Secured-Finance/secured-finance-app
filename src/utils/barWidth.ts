@@ -5,6 +5,8 @@ type InputValue = bigint | number | string;
 
 const PERCENTAGE_BASE = 100;
 
+const PRECISION = 8;
+
 export const calculateBarWidth = (
     value: InputValue,
     total: InputValue,
@@ -12,8 +14,8 @@ export const calculateBarWidth = (
     minWidth: number
 ): number => {
     const percentage = CollateralCalculator.calculatePercentage(value, total);
-    const ratio = divide(Number(percentage), PERCENTAGE_BASE);
-    const calculatedWidth = multiply(ratio, maxWidth);
+    const ratio = divide(Number(percentage), PERCENTAGE_BASE, PRECISION);
+    const calculatedWidth = multiply(ratio, maxWidth, PRECISION);
 
     return Math.min(Math.max(calculatedWidth, minWidth), maxWidth);
 };

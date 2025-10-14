@@ -25,7 +25,11 @@ export class CollateralCalculator {
         const tBig = BigInt(total || ZERO);
         return tBig === ZERO_BI
             ? ZERO
-            : multiply(divide(vBig, tBig), PERCENTAGE_BASE);
+            : multiply(
+                  divide(vBig, tBig, DEFAULT_PRECISION),
+                  PERCENTAGE_BASE,
+                  DEFAULT_PRECISION
+              );
     }
 
     static calculateRequiredCollateral(
@@ -34,7 +38,11 @@ export class CollateralCalculator {
     ): number {
         const borrow = BigInt(borrowAmount || ZERO);
         const threshold = BigInt(liquidationThreshold || ZERO);
-        return divide(multiply(borrow, threshold), PERCENTAGE_BASE);
+        return divide(
+            multiply(borrow, threshold, DEFAULT_PRECISION),
+            PERCENTAGE_BASE,
+            DEFAULT_PRECISION
+        );
     }
 
     static calculateRequiredCollateralFromFV(
@@ -62,12 +70,21 @@ export class CollateralCalculator {
         const cov = this.toNumber(coverage);
         const threshold = this.toNumber(liquidationThreshold);
 
-        const coverageAsPercentage = divide(cov, PERCENTAGE_BASE);
+        const coverageAsPercentage = divide(
+            cov,
+            PERCENTAGE_BASE,
+            DEFAULT_PRECISION
+        );
         if (threshold <= coverageAsPercentage) return ZERO;
 
         const used = total - unused;
-        const thresholdRatio = divide(threshold, PERCENTAGE_BASE);
-        const result = multiply(total, thresholdRatio) - used;
+        const thresholdRatio = divide(
+            threshold,
+            PERCENTAGE_BASE,
+            DEFAULT_PRECISION
+        );
+        const result =
+            multiply(total, thresholdRatio, DEFAULT_PRECISION) - used;
         return Math.max(ZERO, result);
     }
 
