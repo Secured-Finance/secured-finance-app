@@ -63,6 +63,7 @@ export const PlaceOrder = ({
     assetPrice,
     walletSource,
     isCurrencyDelisted,
+    onSuccess,
 }: {
     collateral: CollateralBook;
     loanValue: LoanValue;
@@ -74,6 +75,7 @@ export const PlaceOrder = ({
     assetPrice: number;
     walletSource: WalletSource;
     isCurrencyDelisted: boolean;
+    onSuccess?: () => void;
 } & DialogState) => {
     const stateRecord: Record<Step, State> = {
         [Step.orderConfirm]: {
@@ -212,12 +214,19 @@ export const PlaceOrder = ({
                         [OrderProperties.ORDER_PRICE]: unitPrice ?? 0,
                     });
                     dispatch({ type: 'next' });
+                    onSuccess?.();
                 }
             } catch (e) {
                 handleContractError(e, setErrorMessage, dispatch);
             }
         },
-        [onPlaceOrder, handleContractTransaction, orderType, orderAmount.value]
+        [
+            onPlaceOrder,
+            handleContractTransaction,
+            orderType,
+            orderAmount.value,
+            onSuccess,
+        ]
     );
 
     const onClick = useCallback(

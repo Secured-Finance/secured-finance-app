@@ -1,12 +1,10 @@
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { DropdownSelector, RadioButton } from 'src/components/atoms';
 import { HistoricalChart } from 'src/components/molecules';
 import { useGraphClientHook, useTransactionCandleStickData } from 'src/hooks';
-import { selectLandingOrderForm } from 'src/store/landingOrderForm';
-import { RootState } from 'src/store/types';
+import { useLandingOrderFormSelector } from 'src/store/landingOrderForm';
 import { HistoricalDataIntervals } from 'src/types';
 import { timeScales } from './constants';
 
@@ -25,9 +23,7 @@ export type Transaction = {
 };
 
 export const HistoricalWidget = () => {
-    const { currency, maturity } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
-    );
+    const { currency, maturity } = useLandingOrderFormSelector();
     const [selectedTimeScale, setSelectedTimeScale] =
         useState<HistoricalDataIntervals>(HistoricalDataIntervals['5M']);
 

@@ -21,7 +21,7 @@ const preloadedState = {
         maturity: dec22Fixture.toNumber(),
         side: OrderSide.BORROW,
         amount: '500000000',
-        unitPrice: 0,
+        unitPrice: '0',
         orderType: OrderType.LIMIT,
         sourceAccount: WalletSource.METAMASK,
     },

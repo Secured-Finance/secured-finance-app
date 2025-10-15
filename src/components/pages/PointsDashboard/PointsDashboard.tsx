@@ -15,7 +15,6 @@ import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
 import CountUp from 'react-countup';
-import { useDispatch, useSelector } from 'react-redux';
 import { SiweMessage } from 'siwe';
 import {
     Button,
@@ -41,8 +40,7 @@ import {
     useCollateralCurrencies,
     usePoints,
 } from 'src/hooks';
-import { setWalletDialogOpen } from 'src/store/interactions';
-import { RootState } from 'src/store/types';
+import { useBlockchainStore, useUIStore } from 'src/store';
 import {
     CurrencySymbol,
     MaturityConverter,
@@ -157,7 +155,7 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
     });
     const { isLoading, signMessageAsync, reset } = useSignMessage();
     const { address, isConnected } = useAccount();
-    const dispatch = useDispatch();
+    const { setWalletDialogOpen } = useUIStore();
 
     return (
         <GradientBox>
@@ -285,7 +283,7 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
                                 size={ButtonSizes.lg}
                                 onClick={async () => {
                                     if (!isConnected) {
-                                        dispatch(setWalletDialogOpen(true));
+                                        setWalletDialogOpen(true);
                                         return;
                                     }
 
@@ -643,7 +641,7 @@ const Leaderboard = () => {
 };
 
 export const PointsDashboard = () => {
-    const chainId = useSelector((state: RootState) => state.blockchain.chainId);
+    const { chainId } = useBlockchainStore();
     return (
         <>
             <Page title='Points' name='point-dashboard'>

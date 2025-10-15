@@ -1,4 +1,5 @@
 import { composeStories } from '@storybook/react';
+import { useLandingOrderFormStore } from 'src/store';
 import { dec22Fixture } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { render, screen, waitFor } from 'src/test-utils.js';
@@ -29,16 +30,15 @@ describe('HistoricalChart component', () => {
     });
 
     it('should call getHistoricalData with correct params when mounted', async () => {
-        const { store } = await waitFor(() =>
+        await waitFor(() =>
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
             })
         );
+        const store = useLandingOrderFormStore;
 
-        expect(store.getState().landingOrderForm.maturity).toEqual(
-            dec22Fixture.toNumber()
-        );
-        expect(store.getState().landingOrderForm.currency).toEqual('WFIL');
+        expect(store.getState().maturity).toEqual(dec22Fixture.toNumber());
+        expect(store.getState().currency).toEqual('WFIL');
     });
 
     it('should match snapshot', () => {

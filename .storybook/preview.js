@@ -2,12 +2,11 @@ import { MockedProvider } from '@apollo/client/testing';
 import '@storybook/addon-console';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import isChromatic from 'chromatic/isChromatic';
-import { Provider } from 'react-redux';
 import 'src/assets/css/index.css';
 import { connector, publicClient } from 'src/stories/mocks/mockWallet';
 import { WagmiConfig, createConfig } from 'wagmi';
 import { MockSecuredFinanceProvider } from './../src/stories/mocks/MockSecuredFinanceProvider';
-import { mockStore } from './../src/stories/mocks/mockStore';
+import { StoreInitializer } from './StoreInitializer';
 import { withMockDate } from './decorators';
 
 const queryClient = new QueryClient();
@@ -59,7 +58,7 @@ export const parameters = {
 
 export const decorators = [
     Story => (
-        <Provider store={mockStore}>
+        <StoreInitializer>
             <QueryClientProvider client={queryClient}>
                 <WagmiConfig
                     config={createConfig({
@@ -72,7 +71,7 @@ export const decorators = [
                     </MockSecuredFinanceProvider>
                 </WagmiConfig>
             </QueryClientProvider>
-        </Provider>
+        </StoreInitializer>
     ),
     withMockDate,
 ];

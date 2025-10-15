@@ -19,14 +19,11 @@ import { useRouter } from 'next/router';
 import Script from 'next/script';
 import { useEffect, useMemo } from 'react';
 import { Cookies, CookiesProvider } from 'react-cookie';
-import { Provider, useSelector } from 'react-redux';
 import 'src/bigIntPatch';
 import { Footer } from 'src/components/atoms';
 import { Layout } from 'src/components/templates';
 import SecuredFinanceProvider from 'src/contexts/SecuredFinanceProvider';
-import store from 'src/store';
-import { selectNetworkName } from 'src/store/blockchain';
-import { RootState } from 'src/store/types';
+import { useBlockchainStore } from 'src/store';
 import {
     getAmplitudeApiKey,
     getGoogleAnalyticsTag,
@@ -195,36 +192,27 @@ function App({ Component, pageProps }: AppProps) {
                 />
             </Head>
             {gaTag && <TrackingCode gaTag={gaTag} />}
-            <Provider store={store}>
-                <Providers>
-                    <Layout
-                        isCampaignPage={router.pathname.includes('campaign')}
-                        navBar={
-                            <Header
-                                showNavigation={
-                                    router.pathname !== '/emergency'
-                                }
-                            />
-                        }
-                        footer={<Footer />}
-                    >
-                        <Component {...pageProps} />
-                    </Layout>
-                </Providers>
-            </Provider>
+            <Providers>
+                <Layout
+                    isCampaignPage={router.pathname.includes('campaign')}
+                    navBar={
+                        <Header
+                            showNavigation={router.pathname !== '/emergency'}
+                        />
+                    }
+                    footer={<Footer />}
+                >
+                    <Component {...pageProps} />
+                </Layout>
+            </Providers>
         </>
     );
 }
 
 const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const { network, chainId } = useSelector(
-        (state: RootState) => ({
-            network: selectNetworkName(state),
-            chainId: state.blockchain.chainId,
-        }),
-        (prev, next) =>
-            prev.network === next.network && prev.chainId === next.chainId
-    );
+    const { chainId } = useBlockchainStore();
+    const networks = getSupportedNetworks();
+    const network = networks.find(n => n.id === chainId)?.name || 'unknown';
 
     const client = useMemo(() => {
         const subgraphUrl = getSubgraphUrl(chainId);

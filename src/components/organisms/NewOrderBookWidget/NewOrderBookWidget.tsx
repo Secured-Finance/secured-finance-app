@@ -9,7 +9,6 @@ import {
     useReducer,
     useState,
 } from 'react';
-import { useDispatch } from 'react-redux';
 import ShowFirstIcon from 'src/assets/icons/orderbook-first.svg';
 import ShowAllIcon from 'src/assets/icons/orderbook-full.svg';
 import ShowLastIcon from 'src/assets/icons/orderbook-last.svg';
@@ -27,7 +26,7 @@ import {
     useOrderbook,
     usePrepareOrderbookData,
 } from 'src/hooks';
-import { setOrderType, setUnitPrice } from 'src/store/landingOrderForm';
+import { useLandingOrderFormStore } from 'src/store/landingOrderForm';
 import { ColorFormat, OrderType } from 'src/types';
 import {
     CurrencySymbol,
@@ -247,7 +246,7 @@ export const NewOrderBookWidget = ({
         onFilterChange?.(state);
     }, [onFilterChange, state]);
 
-    const globalDispatch = useDispatch();
+    const { setOrderType, setUnitPrice } = useLandingOrderFormStore();
 
     const [limit, setLimit] = useState(doubleMaxLines);
     useEffect(() => {
@@ -436,10 +435,8 @@ export const NewOrderBookWidget = ({
             side === OrderSide.BORROW
                 ? lendOrders[parseInt(rowId)]
                 : borrowOrders[parseInt(rowId)];
-        globalDispatch(setOrderType(OrderType.LIMIT));
-        globalDispatch(
-            setUnitPrice(divide(rowData.value.price, 100).toString())
-        );
+        setOrderType(OrderType.LIMIT);
+        setUnitPrice(divide(rowData.value.price, 100).toString());
     };
 
     const handleMobileToggleClick = useCallback(() => {

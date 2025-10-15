@@ -1,7 +1,6 @@
 import { track } from '@amplitude/analytics-browser';
 import clsx from 'clsx';
 import { useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
 import {
     AssetInformation,
     AssetInformationValue,
@@ -14,7 +13,7 @@ import {
     useCollateralCurrencies,
     useLastPrices,
 } from 'src/hooks';
-import { RootState } from 'src/store/types';
+import { useBlockchainStore } from 'src/store';
 import {
     ButtonEvents,
     CurrencySymbol,
@@ -105,9 +104,7 @@ export const CollateralTabLeftPane = ({
     zcBonds,
 }: CollateralTabLeftPaneProps) => {
     const [selectedTable, setSelectedTable] = useState(TableType.TOKENS);
-    const chainError = useSelector(
-        (state: RootState) => state.blockchain.chainError
-    );
+    const { chainError } = useBlockchainStore();
 
     const { data: collateralCurrencies = [] } = useCollateralCurrencies();
     const { data: priceList } = useLastPrices();

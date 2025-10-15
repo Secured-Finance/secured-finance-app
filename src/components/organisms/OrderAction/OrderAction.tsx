@@ -1,7 +1,6 @@
 import { track } from '@amplitude/analytics-browser';
 import { OrderSide } from '@secured-finance/sf-client';
 import { useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Button, ButtonSizes } from 'src/components/atoms';
 import {
     DepositCollateral,
@@ -18,9 +17,12 @@ import {
     useOrders,
 } from 'src/hooks';
 import { useBalances } from 'src/hooks/useBalances';
-import { setWalletDialogOpen } from 'src/store/interactions';
-import { selectLandingOrderForm } from 'src/store/landingOrderForm';
-import { RootState } from 'src/store/types';
+import {
+    useBlockchainStore,
+    useLandingOrderFormSelector,
+    useLandingOrderFormStore,
+    useUIStore,
+} from 'src/store';
 import { ButtonEvents } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
@@ -44,20 +46,17 @@ export const OrderAction = ({
 }: OrderActionProps) => {
     const isTablet = useBreakpoint('laptop');
     const { isConnected } = useAccount();
-    const dispatch = useDispatch();
+    const { setWalletDialogOpen } = useUIStore();
+    const { chainError } = useBlockchainStore();
     const { placeOrder, placePreOrder } = useOrders();
-    const chainError = useSelector(
-        (state: RootState) => state.blockchain.chainError
-    );
 
     const [openDepositCollateralDialog, setOpenDepositCollateralDialog] =
         useState(false);
     const [openPlaceOrderDialog, setOpenPlaceOrderDialog] = useState(false);
 
     const { currency, amount, side, maturity, orderType, sourceAccount } =
-        useSelector((state: RootState) =>
-            selectLandingOrderForm(state.landingOrderForm)
-        );
+        useLandingOrderFormSelector();
+    const { resetForm } = useLandingOrderFormStore();
 
     const marketPhase = useMarketPhase(currency, maturity);
 
@@ -131,7 +130,7 @@ export const OrderAction = ({
             {!isConnected && (
                 <Button
                     fullWidth
-                    onClick={() => dispatch(setWalletDialogOpen(true))}
+                    onClick={() => setWalletDialogOpen(true)}
                     size={buttonSize}
                 >
                     Connect Wallet
@@ -146,6 +145,7 @@ export const OrderAction = ({
                 }
                 isOpen={openPlaceOrderDialog}
                 onClose={() => setOpenPlaceOrderDialog(false)}
+                onSuccess={resetForm}
                 loanValue={loanValue}
                 collateral={collateralBook}
                 assetPrice={price}

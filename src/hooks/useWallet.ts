@@ -1,31 +1,27 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'src/store/types';
-import { connectWallet, resetWallet, updateBalance } from 'src/store/wallet';
+import { useBlockchainStore, useWalletStore } from 'src/store';
 import { useAccount, useBalance } from 'wagmi';
 
-export const useWalletStore = () => {
-    const dispatch = useDispatch();
+export const useWallet = () => {
+    const { connectWallet, resetWallet, updateBalance } = useWalletStore();
     const { address, isConnected } = useAccount();
     const { data: balance } = useBalance({
         address,
         watch: true,
     });
-    const block = useSelector(
-        (state: RootState) => state.blockchain.latestBlock
-    );
+    const { latestBlock: block } = useBlockchainStore();
 
     useEffect(() => {
         if (isConnected && address) {
-            dispatch(connectWallet(address));
+            connectWallet(address);
         } else {
-            dispatch(resetWallet());
+            resetWallet();
         }
-    }, [address, dispatch, isConnected]);
+    }, [address, connectWallet, resetWallet, isConnected]);
 
     useEffect(() => {
         if (isConnected && address) {
-            dispatch(updateBalance(balance?.value.toString() || '0'));
+            updateBalance(balance?.value.toString() || '0');
         }
-    }, [address, dispatch, isConnected, balance, block]);
+    }, [address, updateBalance, isConnected, balance, block]);
 };

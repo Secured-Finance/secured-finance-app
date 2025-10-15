@@ -1,15 +1,11 @@
-import { useSelector } from 'react-redux';
 import { MaturityListItem } from 'src/components/organisms';
-import { selectLandingOrderForm } from 'src/store/landingOrderForm';
-import { RootState } from 'src/store/types';
+import { useLandingOrderFormSelector } from 'src/store/landingOrderForm';
 import { Rate, isMaturityPastDays } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import { baseContracts, useLendingMarkets } from '../useLendingMarkets';
 
 export const useYieldCurveMarketRates = () => {
-    const { currency } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
-    );
+    const { currency } = useLandingOrderFormSelector();
 
     const { data: lendingMarkets = baseContracts } = useLendingMarkets();
     const lendingContracts = lendingMarkets[currency];

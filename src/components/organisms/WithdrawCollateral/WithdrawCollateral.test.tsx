@@ -1,5 +1,6 @@
 import * as analytics from '@amplitude/analytics-browser';
 import { composeStories } from '@storybook/react';
+import { useBlockchainStore } from 'src/store';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import {
@@ -79,14 +80,15 @@ describe('WithdrawCollateral component', () => {
     });
 
     it('should update the lastActionTimestamp in the store when the transaction receipt is received', async () => {
-        const { store } = render(<Default />);
+        render(<Default />);
+        const store = useBlockchainStore;
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
         fireEvent.click(screen.getByTestId('option-2'));
         fireEvent.click(screen.getByTestId(75));
         fireEvent.click(screen.getByTestId('dialog-action-button'));
-        expect(store.getState().blockchain.lastActionTimestamp).toBe(0);
+        expect(store.getState().lastActionTimestamp).toBe(0);
         expect(await screen.findByText('Success!')).toBeInTheDocument();
-        expect(store.getState().blockchain.lastActionTimestamp).toBeTruthy();
+        expect(store.getState().lastActionTimestamp).toBeTruthy();
     }, 8000);
 
     it('should proceed to failure screen and call onclose when block number is undefined', async () => {

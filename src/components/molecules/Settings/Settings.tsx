@@ -1,23 +1,22 @@
 import { Popover, Transition } from '@headlessui/react';
 import { Fragment, useCallback, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import Gear from 'src/assets/icons/gear.svg';
 import { Toggle } from 'src/components/atoms';
-import { updateTestnetEnabled } from 'src/store/blockchain';
+import { useBlockchainStore } from 'src/store';
 
 export const Settings = ({ isProduction }: { isProduction: boolean }) => {
-    const dispatch = useDispatch();
+    const { updateTestnetEnabled } = useBlockchainStore();
     const [testnetsEnabled, setTestnetsEnabled] = useState(!isProduction);
 
     useEffect(() => {
-        dispatch(updateTestnetEnabled(!isProduction));
-    }, [dispatch, isProduction]);
+        updateTestnetEnabled(!isProduction);
+    }, [updateTestnetEnabled, isProduction]);
 
     const handleChange = useCallback(() => {
         const newState = !testnetsEnabled;
         setTestnetsEnabled(newState);
-        dispatch(updateTestnetEnabled(newState));
-    }, [dispatch, testnetsEnabled]);
+        updateTestnetEnabled(newState);
+    }, [updateTestnetEnabled, testnetsEnabled]);
 
     return (
         <Popover className='relative w-fit'>

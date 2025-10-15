@@ -1,7 +1,6 @@
 import { GraphApolloClient, useQuery } from '@secured-finance/sf-graph-client';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from 'src/store/types';
+import { useBlockchainStore } from 'src/store';
 
 type QueryResult<T> = {
     data: T | undefined;
@@ -53,9 +52,7 @@ export function useGraphClientHook<T, TVariables, K extends keyof T>(
         loading: true,
     });
 
-    const block = useSelector(
-        (state: RootState) => state.blockchain.latestBlock
-    );
+    const { latestBlock: block } = useBlockchainStore();
 
     const { refetch, networkStatus, loading } = useQuery<T, TVariables>(
         queryDocument,

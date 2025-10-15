@@ -1,6 +1,7 @@
 import * as analytics from '@amplitude/analytics-browser';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
+import { useBlockchainStore } from 'src/store';
 import { dec22Fixture, dec24Fixture } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
@@ -18,7 +19,7 @@ const preloadedState = {
         maturity: 0,
         side: OrderSide.BORROW,
         amount: '500000000',
-        unitPrice: 0,
+        unitPrice: '0',
         orderType: OrderType.LIMIT,
         sourceAccount: WalletSource.METAMASK,
     },
@@ -109,13 +110,15 @@ describe('PlaceOrder component', () => {
         const onPlaceOrder = jest
             .fn()
             .mockReturnValue(Promise.resolve('0x123'));
-        const { store } = render(<Default onPlaceOrder={onPlaceOrder} />, {
+        render(<Default onPlaceOrder={onPlaceOrder} />, {
             preloadedState,
         });
-        expect(store.getState().blockchain.lastActionTimestamp).toEqual(0);
+
+        const store = useBlockchainStore;
+        expect(store.getState().lastActionTimestamp).toEqual(0);
         fireEvent.click(screen.getByTestId('dialog-action-button'));
         expect(await screen.findByText('Success!')).toBeInTheDocument();
-        expect(store.getState().blockchain.lastActionTimestamp).toBeTruthy();
+        expect(store.getState().lastActionTimestamp).toBeTruthy();
     });
 
     it('should call the onPlaceOrder function in market order mode if the orderType is MARKET', async () => {

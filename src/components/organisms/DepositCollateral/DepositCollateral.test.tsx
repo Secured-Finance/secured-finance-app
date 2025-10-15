@@ -68,14 +68,17 @@ describe('DepositCollateral component', () => {
     });
 
     it('should update the lastActionTimestamp in the store when the transaction receipt is received', async () => {
-        const { store } = render(<Default />);
-        expect(store.getState().blockchain.lastActionTimestamp).toEqual(0);
+        const { useBlockchainStore } = await import('src/store');
+        const initialTimestamp =
+            useBlockchainStore.getState().lastActionTimestamp;
+        expect(initialTimestamp).toEqual(0);
+        render(<Default />);
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
         fireEvent.click(screen.getByTestId('option-0'));
         fireEvent.click(screen.getByTestId(75));
         fireEvent.click(screen.getByTestId('dialog-action-button'));
         expect(await screen.findByText('Success!')).toBeInTheDocument();
-        expect(store.getState().blockchain.lastActionTimestamp).toBeTruthy();
+        expect(useBlockchainStore.getState().lastActionTimestamp).toBeTruthy();
     });
 
     it('should reach success screen when transaction receipt is received', async () => {

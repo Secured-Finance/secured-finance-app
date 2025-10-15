@@ -3,7 +3,6 @@ import { createColumnHelper } from '@tanstack/react-table';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { useCallback, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { HorizontalListItemTable } from 'src/components/atoms';
 import {
     COMPACT_TABLE_DEFAULT_HEIGHT,
@@ -14,11 +13,7 @@ import {
 } from 'src/components/molecules';
 import { UnwindDialog, UnwindDialogType } from 'src/components/organisms';
 import { Position, useBreakpoint, useLastPrices } from 'src/hooks';
-import {
-    resetUnitPrice,
-    setCurrency,
-    setMaturity,
-} from 'src/store/landingOrderForm';
+import { useLandingOrderFormStore } from 'src/store/landingOrderForm';
 import {
     AmountCell,
     CurrencySymbol,
@@ -178,15 +173,16 @@ export const ActiveTradeTable = ({
     }>();
     const { data: priceList } = useLastPrices();
     const router = useRouter();
-    const dispatch = useDispatch();
+    const { setCurrency, resetUnitPrice, setMaturity } =
+        useLandingOrderFormStore();
     const isTablet = useBreakpoint('laptop');
 
     const handleCurrencyChange = useCallback(
         (v: CurrencySymbol) => {
-            dispatch(setCurrency(v));
-            dispatch(resetUnitPrice());
+            setCurrency(v);
+            resetUnitPrice();
         },
-        [dispatch]
+        [setCurrency, resetUnitPrice]
     );
 
     const getTableActionMenu = useCallback(
@@ -200,7 +196,7 @@ export const ActiveTradeTable = ({
                 {
                     text: 'Add/Reduce',
                     onClick: (): void => {
-                        dispatch(setMaturity(maturity));
+                        setMaturity(maturity);
                         handleCurrencyChange(ccy);
 
                         const prettyMaturity = MaturityConverter.toUTCMonthYear(
@@ -269,7 +265,7 @@ export const ActiveTradeTable = ({
                 },
             ];
         },
-        [delistedCurrencySet, dispatch, handleCurrencyChange, router]
+        [delistedCurrencySet, setMaturity, handleCurrencyChange, router]
     );
 
     const getMaturityDisplayValue = useCallback(

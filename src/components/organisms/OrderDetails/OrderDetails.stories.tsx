@@ -3,8 +3,7 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { setAmount, setCurrency } from 'src/store/landingOrderForm';
+import { useLandingOrderFormStore } from 'src/store/landingOrderForm';
 import { collateralBook37, dec22Fixture } from 'src/stories/mocks/fixtures';
 import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
@@ -31,15 +30,16 @@ export default {
 } as Meta<typeof OrderDetails>;
 
 const Template: StoryFn<typeof OrderDetails> = args => {
-    const dispatch = useDispatch();
     useEffect(() => {
         const timerId = setTimeout(() => {
-            dispatch(setCurrency(CurrencySymbol.USDC));
-            dispatch(setAmount('100000000'));
+            useLandingOrderFormStore
+                .getState()
+                .setCurrency(CurrencySymbol.USDC);
+            useLandingOrderFormStore.getState().setAmount('100000000');
         }, 200);
 
         return () => clearTimeout(timerId);
-    }, [dispatch]);
+    }, []);
 
     return <OrderDetails {...args} />;
 };

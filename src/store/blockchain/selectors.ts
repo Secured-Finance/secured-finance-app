@@ -1,5 +1,3 @@
-import { RootState } from '../types';
-
 type Networks =
     | 'mainnet'
     | 'sepolia'
@@ -23,8 +21,5 @@ export const Networks: Record<number, Networks> = {
     314159: 'filecoin-calibration',
 };
 
-export const selectLastUserActionTimestamp = (state: RootState) =>
-    state.blockchain.lastActionTimestamp;
-
-export const selectNetworkName = (state: RootState) =>
-    Networks[state.blockchain.chainId];
+export const getNetworkName = (chainId: number): Networks | undefined =>
+    Networks[chainId];

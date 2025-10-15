@@ -15,10 +15,9 @@ import {
 } from '@nextui-org/table';
 import clsx from 'clsx';
 import { useCallback } from 'react';
-import { useSelector } from 'react-redux';
 import { useBreakpoint, useIsSubgraphSupported } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
-import { RootState } from 'src/store/types';
+import { useBlockchainStore } from 'src/store';
 import {
     calculateTimeDifference,
     currencyMap,
@@ -49,9 +48,7 @@ export const CurrencyMaturityTable = ({
     const currentChainId = securedFinance?.config.chain.id;
 
     const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
-    const chainError = useSelector(
-        (state: RootState) => state.blockchain.chainError
-    );
+    const { chainError } = useBlockchainStore();
     const isTablet = useBreakpoint('laptop');
     const { isConnected } = useAccount();
     const columns: ColumnType[] = isTablet ? mobileColumns : desktopColumns;

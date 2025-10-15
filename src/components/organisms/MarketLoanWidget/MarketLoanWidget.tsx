@@ -2,7 +2,6 @@ import { fromBytes32 } from '@secured-finance/sf-graph-client';
 import { CellContext, createColumnHelper } from '@tanstack/react-table';
 import { useRouter } from 'next/router';
 import { useCallback, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Button, DropdownSelector, Timer } from 'src/components/atoms';
 import {
     CoreTable,
@@ -17,7 +16,7 @@ import {
     useMarketLists,
     useMaturityOptions,
 } from 'src/hooks';
-import { setCurrency, setMaturity } from 'src/store/landingOrderForm';
+import { useLandingOrderFormStore } from 'src/store/landingOrderForm';
 import {
     CurrencySymbol,
     formatLoanValue,
@@ -38,7 +37,7 @@ export const MarketLoanWidget = ({
 }: {
     isGlobalItayose: boolean;
 }) => {
-    const dispatch = useDispatch();
+    const { setCurrency, setMaturity } = useLandingOrderFormStore();
     const router = useRouter();
 
     const { openMarkets, itayoseMarkets } = useMarketLists();
@@ -83,8 +82,8 @@ export const MarketLoanWidget = ({
     const handleClick = useCallback(
         (info: CellContext<Market, string>) => {
             const ccy = fromBytes32(info.getValue()) as CurrencySymbol;
-            dispatch(setMaturity(Number(info.row.original.maturity)));
-            dispatch(setCurrency(ccy));
+            setMaturity(Number(info.row.original.maturity));
+            setCurrency(ccy);
 
             const pathname = '/';
             const market = `${ccy}-${info.row.original.name}`;
@@ -96,7 +95,7 @@ export const MarketLoanWidget = ({
                 },
             });
         },
-        [dispatch, router]
+        [setMaturity, setCurrency, router]
     );
 
     const columns = useMemo(

@@ -3,8 +3,7 @@ import { withWalletProvider } from '.storybook/decorators';
 import { OrderSide } from '@secured-finance/sf-client';
 import type { Meta, StoryFn } from '@storybook/react';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { setAmount, setCurrency } from 'src/store/landingOrderForm';
+import { useLandingOrderFormStore } from 'src/store/landingOrderForm';
 import { dec22Fixture } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
 import { Amount } from 'src/utils/entities';
@@ -35,15 +34,18 @@ export default {
 } as Meta<typeof UnwindDialog>;
 
 const Template: StoryFn<typeof UnwindDialog> = args => {
-    const dispatch = useDispatch();
     useEffect(() => {
         const timerId = setTimeout(() => {
-            dispatch(setCurrency(CurrencySymbol.WFIL));
-            dispatch(setAmount('100000000000000000000'));
+            useLandingOrderFormStore
+                .getState()
+                .setCurrency(CurrencySymbol.WFIL);
+            useLandingOrderFormStore
+                .getState()
+                .setAmount('100000000000000000000');
         }, 200);
 
         return () => clearTimeout(timerId);
-    }, [dispatch]);
+    }, []);
 
     return <UnwindDialog {...args} />;
 };

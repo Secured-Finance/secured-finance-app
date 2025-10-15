@@ -74,6 +74,24 @@ export const MultiLineChart = ({
 
     const updateTooltip = (chart: ChartJS<'line'>, index: number) => {
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        if (
+            !chart ||
+            !chart.data ||
+            !chart.data.datasets ||
+            chart.data.datasets.length === 0
+        ) {
+            return;
+        }
+
+        const dataset = chart.data.datasets[0];
+        if (
+            !dataset ||
+            !dataset.data ||
+            index < 0 ||
+            index >= dataset.data.length
+        ) {
+            return;
+        }
 
         setLastActiveTooltip({ datasetIndex: 0, index });
 
@@ -151,7 +169,11 @@ export const MultiLineChart = ({
         isHovering.current = false;
         timeoutRef.current = setTimeout(
             () => {
-                if (chartRef.current && !isHovering.current) {
+                if (
+                    chartRef.current &&
+                    !isHovering.current &&
+                    defaultIndex >= 0
+                ) {
                     updateTooltip(chartRef.current, defaultIndex);
                     setLastActiveTooltip(null);
                 }
@@ -188,7 +210,10 @@ export const MultiLineChart = ({
         setTimeout(() => {
             if (!chartRef.current) return;
             setLastActiveTooltip(null);
-            if (defaultIndex >= 0) {
+            if (
+                defaultIndex >= 0 &&
+                chartRef.current.data?.datasets?.[0]?.data?.length > 0
+            ) {
                 updateTooltip(chartRef.current, defaultIndex);
             }
         }, 50);

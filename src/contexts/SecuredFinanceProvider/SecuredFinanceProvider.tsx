@@ -4,17 +4,9 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import { createContext, useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { QUERIES_TO_INVALIDATE } from 'src/hooks';
-import { useWalletStore } from 'src/hooks/useWallet';
-import {
-    updateChainError,
-    updateChainId,
-    updateIsChainIdDetected,
-    updateLatestBlock,
-} from 'src/store/blockchain';
-import { setWalletDialogOpen } from 'src/store/interactions';
-import { RootState } from 'src/store/types';
+import { useWallet } from 'src/hooks/useWallet';
+import { useBlockchainStore, useUIStore } from 'src/store';
 import {
     getSupportedChainIds,
     getSupportedNetworks,
@@ -60,7 +52,17 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
     const router = useRouter();
     const { address, isConnected } = useAccount();
     const { chain } = useNetwork();
-    const chainId = useSelector((state: RootState) => state.blockchain.chainId);
+    const chainId = useBlockchainStore(state => state.chainId);
+    const updateChainId = useBlockchainStore(state => state.updateChainId);
+    const updateChainError = useBlockchainStore(
+        state => state.updateChainError
+    );
+    const updateLatestBlock = useBlockchainStore(
+        state => state.updateLatestBlock
+    );
+    const updateIsChainIdDetected = useBlockchainStore(
+        state => state.updateIsChainIdDetected
+    );
     const { connect, connectors } = useConnect();
     const { data: client } = useWalletClient();
     const publicClient = usePublicClient({
@@ -70,9 +72,9 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const [securedFinance, setSecuredFinance] =
         useState<SecuredFinanceClient>();
-    const dispatch = useDispatch();
+    const { setWalletDialogOpen } = useUIStore();
 
-    useWalletStore();
+    useWallet();
 
     const chainName = getSupportedNetworks().find(n => n.id === chainId)?.name;
 
@@ -91,12 +93,10 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const dispatchChainError = useCallback(
         (chainId: number) => {
-            dispatch(
-                updateChainError(!getSupportedChainIds().includes(chainId))
-            );
-            dispatch(updateChainId(chainId));
+            updateChainError(!getSupportedChainIds().includes(chainId));
+            updateChainId(chainId);
         },
-        [dispatch]
+        [updateChainError, updateChainId]
     );
 
     const handleChainChanged = useCallback(
@@ -116,7 +116,7 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
                 const chainId = await window.ethereum.request({
                     method: 'eth_chainId',
                 });
-                dispatch(updateIsChainIdDetected(true));
+                updateIsChainIdDetected(true);
                 dispatchChainError(HexConverter.hexToNumber(chainId));
             }
         };
@@ -125,7 +125,7 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
         return () => {
             window.ethereum?.removeListener('chainChanged', handleChainChanged);
         };
-    }, [dispatchChainError, handleChainChanged, dispatch]);
+    }, [dispatchChainError, handleChainChanged, updateIsChainIdDetected]);
 
     useEffect(() => {
         if (chain) {
@@ -173,7 +173,6 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
             connectSFClient(publicClient);
         }
     }, [
-        dispatch,
         handleAccountChanged,
         client?.transport,
         client,
@@ -205,7 +204,7 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
         const unwatch = publicClient.watchBlockNumber({
             onBlockNumber: blockNumber => {
                 if (blockNumber && typeof blockNumber === 'bigint') {
-                    dispatch(updateLatestBlock(Number(blockNumber)));
+                    updateLatestBlock(Number(blockNumber));
 
                     // Invalidate all queries
                     Promise.all(
@@ -233,12 +232,12 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
         };
     }, [
         chainId,
-        dispatch,
         handleAccountChanged,
         handleChainChanged,
         publicClient,
         queryClient,
         securedFinance,
+        updateLatestBlock,
     ]);
 
     useEffect(() => {
@@ -266,10 +265,10 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
             if (connector) {
                 connector.switchChain?.(selectedChainId);
             } else {
-                dispatch(setWalletDialogOpen(true));
+                setWalletDialogOpen(true);
             }
         }
-    }, [searchParams, chainId, connectors, router, dispatch]);
+    }, [searchParams, chainId, connectors, router, setWalletDialogOpen]);
 
     return (
         <Context.Provider value={{ securedFinance }}>

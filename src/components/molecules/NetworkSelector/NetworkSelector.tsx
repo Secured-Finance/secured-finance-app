@@ -2,11 +2,9 @@ import { Popover, Transition } from '@headlessui/react';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { Fragment, useCallback, useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import ExclamationCircleIcon from 'src/assets/icons/exclamation-circle.svg';
 import { Separator } from 'src/components/atoms';
-import { Networks } from 'src/store/blockchain';
-import { RootState } from 'src/store/types';
+import { Networks, useBlockchainStore } from 'src/store';
 import {
     SupportedChainsList,
     formatDataCy,
@@ -77,9 +75,7 @@ const generateChainList = () => {
 
 export const NetworkSelector = ({ networkName }: { networkName: string }) => {
     const router = useRouter();
-    const testnetEnabled = useSelector(
-        (state: RootState) => state.blockchain.testnetEnabled
-    );
+    const { testnetEnabled } = useBlockchainStore();
     const availableChains = useMemo(() => generateChainList(), []);
     const chainList = testnetEnabled
         ? availableChains.testnetChainsList

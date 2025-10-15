@@ -10,11 +10,9 @@ import {
 } from '@tanstack/react-table';
 import clsx from 'clsx';
 import { MouseEvent, useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { OrderBookInfoTooltip } from 'src/components/atoms';
 import { useLastPrices } from 'src/hooks';
-import { selectLandingOrderForm } from 'src/store/landingOrderForm';
-import { RootState } from 'src/store/types';
+import { useLandingOrderFormSelector } from 'src/store/landingOrderForm';
 import {
     calculateFutureValue,
     FORMAT_DIGITS,
@@ -63,9 +61,7 @@ export const CoreTable = <T,>({
         position: { top: number; left: number };
     } | null>(null);
 
-    const { currency } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
-    );
+    const { currency } = useLandingOrderFormSelector();
     const { data: priceList } = useLastPrices();
     const price = priceList[currency];
     const coreTableOptions: CoreTableOptions = {

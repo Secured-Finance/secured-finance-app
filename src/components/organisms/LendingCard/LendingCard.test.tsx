@@ -35,10 +35,6 @@ describe('LendingCard Component', () => {
             address: '0x1',
             balance: '0',
         },
-        blockchain: {
-            chainId: 11155111,
-            chainError: false,
-        },
     };
 
     const selectEthereum = async () => {
@@ -203,7 +199,7 @@ describe('LendingCard Component', () => {
         expect(screen.getByText('SF Vault')).toBeInTheDocument();
         const option = screen.getByTestId('option-1');
         fireEvent.click(option);
-        expect(screen.getByText('100')).toBeInTheDocument();
+        expect(screen.getByText('10,000')).toBeInTheDocument();
     });
 
     it('should show Collateral Usage and Available to Borrow only in Borrow order', async () => {

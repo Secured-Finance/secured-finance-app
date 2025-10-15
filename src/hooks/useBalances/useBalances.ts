@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from 'src/store/types';
+import { useWalletStore } from 'src/store/wallet';
 import {
     CurrencySymbol,
     ZERO_BI,
@@ -17,9 +16,7 @@ export const useBalances = () => {
         ...zeroBalances,
     };
 
-    const { address, balance } = useSelector(
-        (state: RootState) => state.wallet
-    );
+    const { address, balance } = useWalletStore();
     const { data: currencies } = useCurrencies(true);
 
     const nativeCurrency = useMemo(() => {

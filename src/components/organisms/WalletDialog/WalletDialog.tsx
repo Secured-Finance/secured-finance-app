@@ -1,7 +1,6 @@
 import { track } from '@amplitude/analytics-browser';
 import { useSearchParams } from 'next/navigation';
 import { useCallback, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import MetaMaskIcon from 'src/assets/img/metamask-fox.svg';
 import WalletConnectIcon from 'src/assets/img/wallet-connect.svg';
 import { Spinner } from 'src/components/atoms';
@@ -12,8 +11,7 @@ import {
     WalletRadioGroup,
 } from 'src/components/molecules';
 import { useBlockExplorerUrl } from 'src/hooks';
-import { setWalletDialogOpen } from 'src/store/interactions';
-import { RootState } from 'src/store/types';
+import { useBlockchainStore, useUIStore } from 'src/store';
 import { Wallet } from 'src/types';
 import {
     AddressConverter,
@@ -36,7 +34,7 @@ function hasMetaMask() {
 }
 
 export const WalletDialog = () => {
-    const chainId = useSelector((state: RootState) => state.blockchain.chainId);
+    const { chainId } = useBlockchainStore();
     const searchParams = useSearchParams();
 
     const chainName = getSupportedNetworks().find(n => n.id === chainId)?.name;
@@ -64,10 +62,7 @@ export const WalletDialog = () => {
         'Your wallet could not be connected.'
     );
 
-    const isOpen = useSelector(
-        (state: RootState) => state.interactions.walletDialogOpen
-    );
-    const dispatch = useDispatch();
+    const { walletDialogOpen: isOpen, setWalletDialogOpen } = useUIStore();
 
     const { connect, connectors, isLoading, isSuccess, isError, reset } =
         useConnect({
@@ -97,9 +92,9 @@ export const WalletDialog = () => {
     const { address, isConnected } = useAccount();
 
     const handleClose = useCallback(() => {
-        dispatch(setWalletDialogOpen(false));
+        setWalletDialogOpen(false);
         reset();
-    }, [dispatch, reset]);
+    }, [setWalletDialogOpen, reset]);
 
     const handleConnect = useCallback(
         async (provider: Wallet, account: string | undefined) => {

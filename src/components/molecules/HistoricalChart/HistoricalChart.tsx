@@ -11,11 +11,9 @@ import {
 } from 'lightweight-charts';
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 import TradingViewLogo from 'src/assets/img/tradingview-black-logo.svg';
 import { useBreakpoint, useLastPrices } from 'src/hooks';
-import { selectLandingOrderForm } from 'src/store/landingOrderForm';
-import { RootState } from 'src/store/types';
+import { useLandingOrderFormSelector } from 'src/store/landingOrderForm';
 import { HistoricalDataIntervals } from 'src/types';
 import { MaturityConverter } from 'src/utils';
 import { createCandlestickChart, createVolumeChart } from 'src/utils/charts';
@@ -58,9 +56,7 @@ export function HistoricalChart({
 }: HistoricalChartProps) {
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const secondContainerRef = useRef<HTMLDivElement>(null);
-    const { currency, maturity } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
-    );
+    const { currency, maturity } = useLandingOrderFormSelector();
     const { data: prices } = useLastPrices();
     const usdPrice = prices[currency];
     const prettyMaturity = MaturityConverter.toUTCMonthYear(maturity);
@@ -110,6 +106,12 @@ export function HistoricalChart({
     );
 
     useEffect(() => {
+        // Prevent multiple charts from being created
+        if (!chartContainerRef.current || !secondContainerRef.current) return;
+
+        // Clear any existing content
+        chartContainerRef.current.innerHTML = '';
+        secondContainerRef.current.innerHTML = '';
         const handleDisplayLegend = (
             candleData: WhitespaceData<Time> | CandlestickData<Time> | null,
             volumeData: WhitespaceData<Time> | HistogramData<Time> | null

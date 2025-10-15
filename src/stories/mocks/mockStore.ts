@@ -1,37 +1,35 @@
-import { configureStore } from '@reduxjs/toolkit';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
-import store, { rootReducers } from 'src/store';
+import { ViewType } from 'src/components/atoms';
 import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
 import { dec22Fixture } from './fixtures';
 
 export const initialStore = {
-    ...store.getState(),
     blockchain: {
-        ...store.getState().blockchain,
         chainId: 11155111,
         chainError: false,
         testnetEnabled: true,
         isChainIdDetected: true,
+        latestBlock: 0,
+        lastActionTimestamp: 0,
     },
     landingOrderForm: {
         currency: CurrencySymbol.WFIL,
         maturity: dec22Fixture.toNumber(),
         side: OrderSide.BORROW,
         amount: '',
-        unitPrice: undefined,
+        unitPrice: undefined as string | undefined,
         orderType: OrderType.MARKET,
-        lastView: 'Simple' as const,
+        lastView: 'Simple' as ViewType,
         sourceAccount: WalletSource.SF_VAULT,
         isBorrowedCollateral: false,
     },
+    wallet: {
+        address: '0x1',
+        balance: '0',
+    },
+    lastError: { lastMessage: null, message: null, timestamp: undefined },
+    ui: { walletDialogOpen: false },
 };
 
-export const mockStore = configureStore({
-    reducer: rootReducers,
-    preloadedState: initialStore,
-    middleware: getDefaultMiddleware =>
-        getDefaultMiddleware({
-            serializableCheck: false,
-        }),
-});
+export const mockStore = { getState: () => initialStore };

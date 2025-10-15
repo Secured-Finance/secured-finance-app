@@ -4,13 +4,11 @@ import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Fragment, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import AlertTriangle from 'src/assets/icons/alert-triangle.svg';
 import UserIcon from 'src/assets/icons/user-circle.svg';
 import { Separator, SupportedNetworks } from 'src/components/atoms';
 import { Tooltip } from 'src/components/molecules';
-import { RootState } from 'src/store/types';
-import { resetWallet } from 'src/store/wallet';
+import { useBlockchainStore, useWalletStore } from 'src/store';
 import { formatDataCy, removeWalletFromStore } from 'src/utils';
 import { useAccount, useDisconnect } from 'wagmi';
 
@@ -75,19 +73,17 @@ export const WalletPopover = ({
 }) => {
     const { disconnect, reset } = useDisconnect();
     const { isConnected } = useAccount();
-    const dispatch = useDispatch();
-    const chainError = useSelector(
-        (state: RootState) => state.blockchain.chainError
-    );
+    const { chainError } = useBlockchainStore();
+    const { resetWallet } = useWalletStore();
 
     const handleSignOutClick = useCallback(() => {
         if (!isConnected) return;
         resetTracking();
         reset();
         disconnect();
-        dispatch(resetWallet());
+        resetWallet();
         removeWalletFromStore();
-    }, [disconnect, dispatch, reset, isConnected]);
+    }, [disconnect, resetWallet, reset, isConnected]);
 
     return (
         <Popover className='relative max-w-sm'>

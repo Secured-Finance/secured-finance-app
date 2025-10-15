@@ -1,7 +1,6 @@
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { useCallback, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Button, ButtonSizes, TextLink, Timer } from 'src/components/atoms';
 import { CurrencyDropdown, StatsBar } from 'src/components/molecules';
 import { GlobalItayoseMultiCurveChart } from 'src/components/organisms';
@@ -12,11 +11,9 @@ import {
     useTotalValueLockedAndCurrencies,
 } from 'src/hooks';
 import {
-    resetUnitPrice,
-    selectLandingOrderForm,
-    setCurrency,
+    useLandingOrderFormSelector,
+    useLandingOrderFormStore,
 } from 'src/store/landingOrderForm';
-import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
     toOptions,
@@ -25,16 +22,14 @@ import {
 } from 'src/utils';
 
 export const GlobalItayose = () => {
-    const dispatch = useDispatch();
+    const { setCurrency, resetUnitPrice } = useLandingOrderFormStore();
     const router = useRouter();
     const { data: currencies = [] } = useCurrencies();
     const { totalValueLockedInUSD, currencies: totalValueLockedCurrencies } =
         useTotalValueLockedAndCurrencies();
     const assetList = toOptions(currencies, CurrencySymbol.USDC);
 
-    const { currency } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
-    );
+    const { currency } = useLandingOrderFormSelector();
 
     const { data: lendingContracts = baseContracts } = useLendingMarkets();
 
@@ -61,10 +56,10 @@ export const GlobalItayose = () => {
 
     const handleCurrencyChange = useCallback(
         (v: CurrencySymbol) => {
-            dispatch(setCurrency(v));
-            dispatch(resetUnitPrice());
+            setCurrency(v);
+            resetUnitPrice();
         },
-        [dispatch]
+        [setCurrency, resetUnitPrice]
     );
 
     return (

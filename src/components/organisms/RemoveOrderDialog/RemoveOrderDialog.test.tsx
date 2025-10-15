@@ -1,5 +1,6 @@
 import * as analytics from '@amplitude/analytics-browser';
 import { composeStories } from '@storybook/react';
+import { useBlockchainStore } from 'src/store';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { ButtonEvents, ButtonProperties } from 'src/utils';
@@ -42,11 +43,12 @@ describe('RemoveOrderDialog Component', () => {
     });
 
     it('should update the lastActionTimestamp in the store when the transaction receipt is received', async () => {
-        const { store } = render(<Default />);
-        expect(store.getState().blockchain.lastActionTimestamp).toEqual(0);
+        render(<Default />);
+        const store = useBlockchainStore;
+        expect(store.getState().lastActionTimestamp).toEqual(0);
         fireEvent.click(screen.getByText('OK'));
         expect(await screen.findByText('Removed!')).toBeInTheDocument();
-        expect(store.getState().blockchain.lastActionTimestamp).toBeTruthy();
+        expect(store.getState().lastActionTimestamp).toBeTruthy();
     });
 
     it('should not show collateral usage, transaction fee and circuit breaker disclaimer', async () => {
