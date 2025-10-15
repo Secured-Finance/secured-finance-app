@@ -6,6 +6,7 @@ import 'src/assets/css/index.css';
 import { connector, publicClient } from 'src/stories/mocks/mockWallet';
 import { WagmiConfig, createConfig } from 'wagmi';
 import { MockSecuredFinanceProvider } from './../src/stories/mocks/MockSecuredFinanceProvider';
+import { StoreInitializer } from './StoreInitializer';
 import { withMockDate } from './decorators';
 
 const queryClient = new QueryClient();
@@ -57,18 +58,20 @@ export const parameters = {
 
 export const decorators = [
     Story => (
-        <QueryClientProvider client={queryClient}>
-            <WagmiConfig
-                config={createConfig({
-                    publicClient: publicClient,
-                    connectors: [connector],
-                })}
-            >
-                <MockSecuredFinanceProvider>
-                    <Story />
-                </MockSecuredFinanceProvider>
-            </WagmiConfig>
-        </QueryClientProvider>
+        <StoreInitializer>
+            <QueryClientProvider client={queryClient}>
+                <WagmiConfig
+                    config={createConfig({
+                        publicClient: publicClient,
+                        connectors: [connector],
+                    })}
+                >
+                    <MockSecuredFinanceProvider>
+                        <Story />
+                    </MockSecuredFinanceProvider>
+                </WagmiConfig>
+            </QueryClientProvider>
+        </StoreInitializer>
     ),
     withMockDate,
 ];
