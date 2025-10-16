@@ -20,8 +20,7 @@ import {
 } from 'src/components/molecules';
 import { WalletDialog, WalletPopover } from 'src/components/organisms';
 import { useBreakpoint } from 'src/hooks';
-// COMMENTED OUT: Points client temporarily disabled
-// import { usePoints } from 'src/hooks';
+import { usePoints } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
@@ -79,16 +78,13 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     const isMobile = useBreakpoint('tablet');
     const { address, isConnected } = useAccount();
 
-    // COMMENTED OUT: Points client temporarily disabled
-    // const {
-    //     user: { data: userData },
-    //     verification: { data: verifiedData },
-    // } = usePoints();
+    // Real points client using React Query (replaces Apollo Client)
+    const {
+        user: { data: userData },
+        verification: { data: verifiedData },
+    } = usePoints();
 
-    // Mock data for points functionality (temporarily disabled)
-    const userData = undefined;
-    const verifiedData = undefined;
-    const userPoints = undefined;
+    const userPoints = userData?.user?.point || 0;
 
     const securedFinance = useSF();
     const chainError = useSelector(

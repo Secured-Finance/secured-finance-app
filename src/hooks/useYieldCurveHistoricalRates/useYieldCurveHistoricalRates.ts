@@ -29,11 +29,16 @@ const useHistoricalRates = (maturityList: number[], currency: string) => {
         [intervals, maturityList, currency]
     );
 
-    const queryDocument = TRANSACTIONS_BY_TIMESTAMP_AND_MATURITY_QUERY(
-        variables.intervals,
-        variables.maturityList,
-        variables.currency
-    );
+    // Don't create query if maturityList or intervals are empty
+    const shouldSkip = !maturityList.length || !intervals.length;
+
+    const queryDocument = shouldSkip
+        ? null
+        : TRANSACTIONS_BY_TIMESTAMP_AND_MATURITY_QUERY(
+              variables.intervals,
+              variables.maturityList,
+              variables.currency
+          );
 
     const { data, isLoading } = useDynamicQuery({
         queryDocument,

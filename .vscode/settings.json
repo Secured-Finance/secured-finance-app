@@ -10,7 +10,8 @@
   "[javascriptreact][javascript][typescriptreact][typescript][json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.codeActionsOnSave": {
-      "source.organizeImports": "explicit"
+      "source.organizeImports": "explicit",
+      "source.fixAll.eslint": "explicit"
     }
   },
   "prettier.prettierPath": "node_modules/prettier",

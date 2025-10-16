@@ -4,9 +4,9 @@ import {
     GetUserDocument,
     GetUsersDocument,
     VerifyDocument,
-} from '@secured-finance/sf-point-client';
+} from 'src/generated/points';
 import type { Meta, StoryFn } from '@storybook/react';
-import { utils } from 'ethers';
+import { toHex } from 'viem';
 import { CookiesProvider } from 'react-cookie';
 import {
     withAppLayout,
@@ -86,9 +86,10 @@ const users = [
                 users: [
                     ...Array.from({ length: 30 }).map((_, index) => ({
                         id: `${index}`,
-                        walletAddress: utils.hexlify(
+                        walletAddress: toHex(
                             BigInt((index + 1).toString().padEnd(40, '0')) +
-                                BigInt(index)
+                                BigInt(index),
+                            { size: 20 }
                         ),
                         point: 100 - index,
                         rank: index + 1,

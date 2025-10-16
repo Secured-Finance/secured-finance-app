@@ -1,5 +1,5 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
-import { GetUserDocument } from '@secured-finance/sf-point-client';
+import { GetUserDocument } from 'src/generated/points';
 import type { Meta, StoryFn } from '@storybook/react';
 import {
     withAppLayout,

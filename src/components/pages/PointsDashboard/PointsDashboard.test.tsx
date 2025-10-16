@@ -1,14 +1,5 @@
-import { composeStories } from '@storybook/react';
-import {
-    render,
-    screen,
-    waitFor,
-    cleanupGraphQLMocks,
-} from 'src/test-utils.js';
-import graphqlMocks from 'src/test-utils/mockData';
-import * as stories from './PointsDashboard.stories';
-
-const { Default } = composeStories(stories);
+import { render, screen } from 'src/test-utils.js';
+import { PointsDashboard } from './PointsDashboard';
 
 jest.mock('next/router', () => ({
     useRouter: jest.fn(() => ({
@@ -17,22 +8,15 @@ jest.mock('next/router', () => ({
     })),
 }));
 
-describe.skip('PointsDashboard Component', () => {
-    afterEach(() => {
-        cleanupGraphQLMocks();
-    });
+describe('PointsDashboard Component', () => {
+    it('should render the PointsDashboard', () => {
+        render(<PointsDashboard />);
 
-    it('should render the PointsDashboard', async () => {
-        await waitFor(() =>
-            render(<Default />, {
-                graphqlMocks: graphqlMocks.withTransactions,
-            })
-        );
         expect(
             screen.getByText('Join the Secured Finance Points Program!')
         ).toBeInTheDocument();
         expect(
-            screen.queryAllByRole('button', { name: 'Connect Wallet' })[1]
+            screen.getByRole('button', { name: 'Connect Wallet' })
         ).toBeInTheDocument();
     });
 });

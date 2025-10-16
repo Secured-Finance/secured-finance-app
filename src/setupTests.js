@@ -8,12 +8,43 @@ import 'jest-canvas-mock';
 import failOnConsole from 'jest-fail-on-console';
 import timemachine from 'timemachine';
 import { mockUseCurrencyControllerRead } from './stories/mocks/wagmiMocks';
+import {
+    mockUseGetUserQuery,
+    mockUseVerifyMutation,
+    mockUseNonceQuery,
+    mockUseGetQuestsQuery,
+    mockUseGetUsersQuery,
+} from './test-utils/mockPointsClient';
 
 jest.mock('next/router', () => jest.requireActual('next-router-mock'));
 
 // Mock wagmi generated hooks
 jest.mock('src/generated/wagmi', () => ({
     useCurrencyControllerRead: mockUseCurrencyControllerRead,
+}));
+
+// Mock points client generated hooks
+jest.mock('src/generated/points', () => ({
+    useGetUserQuery: mockUseGetUserQuery,
+    useVerifyMutation: mockUseVerifyMutation,
+    useNonceQuery: mockUseNonceQuery,
+    useGetQuestsQuery: mockUseGetQuestsQuery,
+    useGetUsersQuery: mockUseGetUsersQuery,
+    GetUserDocument: 'GetUserDocument',
+    VerifyDocument: 'VerifyDocument',
+    NonceDocument: 'NonceDocument',
+    GetQuestsDocument: 'GetQuestsDocument',
+    QuestType: {
+        ActivePosition: 'ActivePosition',
+        DailyLogin: 'DailyLogin',
+        Deposit: 'Deposit',
+        LimitOrder: 'LimitOrder',
+        Referral: 'Referral',
+    },
+    Network: {
+        Arbitrum: 'Arbitrum',
+        Sepolia: 'Sepolia',
+    },
 }));
 
 failOnConsole({

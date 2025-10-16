@@ -1,13 +1,5 @@
 import * as amplitude from '@amplitude/analytics-browser';
 import { pageViewTrackingPlugin } from '@amplitude/plugin-page-view-tracking-browser';
-// COMMENTED OUT: Points client temporarily disabled
-// import {
-//     ApolloClient,
-//     ApolloProvider,
-//     InMemoryCache,
-//     createHttpLink,
-// } from '@apollo/client';
-// import { setContext } from '@apollo/client/link/context';
 import { NextUIProvider } from '@nextui-org/system';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -152,21 +144,6 @@ const config = createConfig({
     ],
 });
 
-// COMMENTED OUT: Points client temporarily disabled
-// const httpLink = createHttpLink({
-//     uri: getGraphqlServerUrl(),
-// });
-
-// const authLink = setContext((_, { headers }) => {
-//     const token = new Cookies().get('verified_data')?.token;
-//     return {
-//         headers: {
-//             ...headers,
-//             authorization: token ? `Bearer ${token}` : '',
-//         },
-//     };
-// });
-
 function App({ Component, pageProps }: AppProps) {
     const router = useRouter();
 
@@ -213,26 +190,15 @@ function App({ Component, pageProps }: AppProps) {
 }
 
 const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    // COMMENTED OUT: Points client temporarily disabled
-    // const client = useMemo(() => {
-    //     return new ApolloClient({
-    //         link: authLink.concat(httpLink), // Only points client endpoint
-    //         cache: new InMemoryCache(),
-    //     });
-    // }, []);
-
     return (
         <CookiesProvider>
             <NextUIProvider>
                 <QueryClientProvider client={queryClient}>
-                    {/* COMMENTED OUT: ApolloProvider temporarily disabled */}
-                    {/* <ApolloProvider client={client}> */}
                     <WagmiConfig config={config}>
                         <SecuredFinanceProvider>
                             {children}
                         </SecuredFinanceProvider>
                     </WagmiConfig>
-                    {/* </ApolloProvider> */}
                     <ReactQueryDevtools initialIsOpen={false} />
                 </QueryClientProvider>
             </NextUIProvider>

@@ -30,7 +30,7 @@ async function dynamicGraphqlFetcher<TData>(
 
 interface UseDynamicQueryOptions<TData, TError>
     extends Omit<UseQueryOptions<TData, TError>, 'queryFn' | 'queryKey'> {
-    queryDocument: { loc?: { source?: { body?: string } } };
+    queryDocument: { loc?: { source?: { body?: string } } } | null;
     queryKey: (string | number | boolean | Record<string, unknown>)[];
 }
 
@@ -53,13 +53,18 @@ export function useDynamicQuery<TData = unknown, TError = Error>({
             queryDocument,
             ...queryKey,
         ],
-        queryFn: () =>
-            dynamicGraphqlFetcher<TData>(
+        queryFn: () => {
+            if (!queryDocument) {
+                throw new Error('Query document is null');
+            }
+            return dynamicGraphqlFetcher<TData>(
                 config.endpoint,
                 config.fetchParams?.headers || {},
                 queryDocument
-            ),
-        enabled: !!queryDocument.loc?.source?.body && (options.enabled ?? true),
+            );
+        },
+        enabled:
+            !!queryDocument?.loc?.source?.body && (options.enabled ?? true),
         ...options,
     });
 }

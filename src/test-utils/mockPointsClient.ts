@@ -1,28 +1,37 @@
-// Mock for @secured-finance/sf-point-client hooks
-// This eliminates the need for Apollo Client in tests
+// Mock for generated points client hooks
+// This provides test mocks for the real points API integration
 
-export const mockUseGetUserLazyQuery = jest.fn(() => [
-    jest.fn(), // getUser function
-    {
-        data: null,
-        loading: false,
-        error: null,
-        refetch: jest.fn(),
-    },
-]);
+export const mockUseGetUserQuery = jest.fn(() => ({
+    data: null,
+    isLoading: false,
+    error: null,
+    refetch: jest.fn(),
+}));
 
-export const mockUseVerifyMutation = jest.fn(() => [
-    jest.fn(), // verify function
-    {
-        data: null,
-        loading: false,
-        error: null,
-    },
-]);
+export const mockUseVerifyMutation = jest.fn(() => ({
+    mutate: jest.fn(),
+    data: null,
+    isPending: false,
+    error: null,
+}));
 
-// Mock the entire sf-point-client module
-jest.mock('@secured-finance/sf-point-client', () => ({
-    useGetUserLazyQuery: mockUseGetUserLazyQuery,
-    useVerifyMutation: mockUseVerifyMutation,
-    GetUserDocument: {}, // Mock document
+export const mockUseNonceQuery = jest.fn(() => ({
+    data: null,
+    isLoading: false,
+    error: null,
+}));
+
+// @ts-expect-error - Adding fetcher property to mock function for test compatibility
+mockUseNonceQuery.fetcher = jest.fn(() => jest.fn());
+
+export const mockUseGetQuestsQuery = jest.fn(() => ({
+    data: null,
+    isLoading: false,
+    error: null,
+}));
+
+export const mockUseGetUsersQuery = jest.fn(() => ({
+    data: null,
+    isLoading: false,
+    error: null,
 }));

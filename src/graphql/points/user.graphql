@@ -1,0 +1,17 @@
+query getUser {
+  user {
+    id
+    walletAddress
+    point
+    pointDetails
+    referralCode
+    refereesCount
+    referrer {
+      id
+      walletAddress
+    }
+    joinedAt
+    rank
+    boostPercentage
+  }
+}

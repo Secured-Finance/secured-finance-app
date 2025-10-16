@@ -13,7 +13,6 @@ import {
     setupGraphQLMocks,
     cleanupGraphQLMocks,
 } from './test-utils/graphqlMocks';
-import './test-utils/mockPointsClient'; // Import points client mocks
 
 const defaultOptions = { defaultOptions: { queries: { retry: false } } };
 
@@ -51,6 +50,7 @@ function render(
                 <QueryClientProvider client={queryClient}>
                     <WagmiConfig
                         config={createConfig({
+                            autoConnect: false,
                             publicClient: publicClient,
                             connectors: [connector],
                         })}
@@ -98,6 +98,7 @@ function renderHook(
                 <QueryClientProvider client={queryClient}>
                     <WagmiConfig
                         config={createConfig({
+                            autoConnect: false,
                             publicClient: publicClient,
                             connectors: [connector],
                         })}

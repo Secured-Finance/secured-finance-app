@@ -68,11 +68,15 @@ describe('use24HVolume', () => {
             __typename: 'Transaction',
         }));
 
-        const allTransactions = [...wfilTxs, ...usdcTxs];
-
-        mockedUseTransactionsHistory24HQuery.mockReturnValue({
-            data: { transactions: allTransactions },
-        });
+        // Mock the first call with 1000 WFIL transactions
+        mockedUseTransactionsHistory24HQuery
+            .mockReturnValueOnce({
+                data: { transactions: wfilTxs },
+            })
+            // Second call with 50 USDC transactions (less than 1000, so pagination stops)
+            .mockReturnValue({
+                data: { transactions: usdcTxs },
+            });
 
         const { result } = renderHook(() => use24HVolume());
 
