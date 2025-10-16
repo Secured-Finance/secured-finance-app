@@ -1,7 +1,7 @@
 import Tick from 'src/assets/icons/tick.svg';
 import { getLiquidationInformation } from 'src/components/atoms';
 import { InfoToolTip } from 'src/components/molecules';
-import { percentFormat } from 'src/utils';
+import { formatLiquidationThreshold } from 'src/utils';
 
 interface LiquidationProgressBarProps {
     liquidationPercentage: number;
@@ -13,6 +13,10 @@ const getInformationText = (
     liquidationPercentage: number,
     liquidationThreshold: number
 ) => {
+    const liquidationThresholdValue =
+        liquidationThreshold > liquidationPercentage
+            ? liquidationThreshold - liquidationPercentage
+            : 0;
     return (
         <div className='flex flex-col gap-4'>
             <div>
@@ -22,11 +26,7 @@ const getInformationText = (
             <div>
                 <span>You are currently </span>
                 <span className='text-nebulaTeal'>
-                    {percentFormat(
-                        liquidationThreshold > liquidationPercentage
-                            ? liquidationThreshold - liquidationPercentage
-                            : 0
-                    )}
+                    {formatLiquidationThreshold(liquidationThresholdValue)}
                 </span>
                 <span>{` under the liquidation threshold (${liquidationThreshold}% of deposit balance).`}</span>
             </div>
@@ -48,6 +48,10 @@ export const LiquidationProgressBar = ({
     }
 
     const info = getLiquidationInformation(liquidationPercentage);
+    const liquidationThresholdValue =
+        liquidationThreshold > liquidationPercentage
+            ? liquidationThreshold - liquidationPercentage
+            : 0;
 
     return (
         <div
@@ -81,11 +85,8 @@ export const LiquidationProgressBar = ({
                             <span
                                 className={`whitespace-pre font-semibold ${info.color}`}
                             >
-                                {percentFormat(
-                                    liquidationThreshold > liquidationPercentage
-                                        ? liquidationThreshold -
-                                              liquidationPercentage
-                                        : 0
+                                {formatLiquidationThreshold(
+                                    liquidationThresholdValue
                                 )}
                             </span>
                             <span className='text-planetaryPurple'>

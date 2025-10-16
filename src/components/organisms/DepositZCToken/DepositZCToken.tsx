@@ -26,9 +26,10 @@ import {
     ZCTokenEvents,
     convertToZcTokenName,
     convertZCTokenFromBaseAmount,
-    formatAmount,
     handleContractError,
-    ordinaryFormat,
+    PriceFormatter,
+    FORMAT_DIGITS,
+    ZERO_BI,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import {
@@ -326,14 +327,14 @@ export const DepositZCToken = ({
                                         )}
                                     </div>
                                     <div className='w-full text-right text-neutral-300'>
-                                        {`${ordinaryFormat(
+                                        {`${PriceFormatter.formatOrdinary(
                                             convertZCTokenFromBaseAmount(
                                                 currencySymbol,
                                                 availableTokenAmount,
                                                 maturity
                                             ) || 0,
-                                            0,
-                                            4
+                                            FORMAT_DIGITS.NONE,
+                                            FORMAT_DIGITS.AMOUNT
                                         )} Available`}
                                     </div>
                                 </div>
@@ -373,10 +374,10 @@ export const DepositZCToken = ({
                                     ],
                                     [
                                         'Amount',
-                                        `${formatAmount(
+                                        `${PriceFormatter.formatAmount(
                                             convertZCTokenFromBaseAmount(
                                                 currencySymbol,
-                                                collateral || BigInt(0),
+                                                collateral || ZERO_BI,
                                                 maturity
                                             )
                                         )}`,

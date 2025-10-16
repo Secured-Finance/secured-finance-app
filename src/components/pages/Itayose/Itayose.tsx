@@ -59,7 +59,7 @@ import {
     getTransformMaturityOption,
     sortOrders,
     toOptions,
-    usdFormat,
+    PriceFormatter,
 } from 'src/utils';
 import { getGraphQLConfig } from 'src/utils/graphql';
 import { LoanValue, Maturity } from 'src/utils/entities';
@@ -155,7 +155,9 @@ export const Toolbar = ({
                         <div>
                             <MarketTab
                                 name={`${currency} Price`}
-                                value={usdFormat(priceList[currency], 2)}
+                                value={PriceFormatter.formatUSDValue(
+                                    priceList[currency]
+                                )}
                             />
                         </div>
                     </div>

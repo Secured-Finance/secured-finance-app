@@ -48,7 +48,7 @@ import {
     getMappedOrderStatus,
     hexToCurrencySymbol,
     sortOrders,
-    usdFormat,
+    PriceFormatter,
 } from 'src/utils';
 import { getGraphQLConfig } from 'src/utils/graphql';
 import { Maturity } from 'src/utils/entities';
@@ -361,7 +361,7 @@ export const PortfolioManagement = () => {
                         values={[
                             {
                                 name: 'Net Asset Value',
-                                value: usdFormat(
+                                value: PriceFormatter.formatUSDValue(
                                     portfolioAnalytics.netAssetValue
                                 ),
                             },
@@ -373,11 +373,15 @@ export const PortfolioManagement = () => {
                             },
                             {
                                 name: 'Lending PV',
-                                value: usdFormat(portfolioAnalytics.lentPV),
+                                value: PriceFormatter.formatUSDValue(
+                                    portfolioAnalytics.lentPV
+                                ),
                             },
                             {
                                 name: 'Borrowing PV',
-                                value: usdFormat(portfolioAnalytics.borrowedPV),
+                                value: PriceFormatter.formatUSDValue(
+                                    portfolioAnalytics.borrowedPV
+                                ),
                             },
                         ]}
                     />

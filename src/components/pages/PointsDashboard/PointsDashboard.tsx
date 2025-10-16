@@ -47,9 +47,9 @@ import {
     CurrencySymbol,
     MaturityConverter,
     SupportedChainsList,
-    ordinaryFormat,
-    percentFormat,
     readWalletFromStore,
+    PriceFormatter,
+    FORMAT_DIGITS,
 } from 'src/utils';
 import { useAccount, useConnect, useSignMessage } from 'wagmi';
 import { getShareMessage, quoteTweetUrl } from './constants';
@@ -246,9 +246,9 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
                                 </span>
                                 <div className='typography-body-1 h-8 text-center text-md text-white'>
                                     +{' '}
-                                    {percentFormat(
-                                        userData?.user.boostPercentage,
-                                        10000
+                                    {PriceFormatter.formatPercentage(
+                                        userData?.user.boostPercentage / 100,
+                                        'percentage'
                                     )}
                                 </div>
                             </div>
@@ -412,10 +412,11 @@ const QuestList = ({ chainId }: { chainId: number }) => {
                         <div className='pl-2' key={'lend'}>
                             <BonusPointTag
                                 label={`LEND ${Number(
-                                    (
+                                    PriceFormatter.formatToFixed(
                                         (questPoint + bonusPoints['lend']) /
-                                        questPoint
-                                    ).toFixed(1)
+                                            questPoint,
+                                        FORMAT_DIGITS.ONE
+                                    )
                                 )}x`}
                                 color={ChipColors.Teal}
                             />
@@ -427,10 +428,11 @@ const QuestList = ({ chainId }: { chainId: number }) => {
                         <div className='pl-2' key={'borrow'}>
                             <BonusPointTag
                                 label={`BORROW ${Number(
-                                    (
+                                    PriceFormatter.formatToFixed(
                                         (questPoint + bonusPoints['borrow']) /
-                                        questPoint
-                                    ).toFixed(1)
+                                            questPoint,
+                                        FORMAT_DIGITS.ONE
+                                    )
                                 )}x`}
                                 color={ChipColors.Red}
                             />
@@ -628,7 +630,12 @@ const Leaderboard = () => {
                             {item.walletAddress}
                         </div>
                         <div className='float-right flex-1 text-right text-neutral-6'>
-                            {ordinaryFormat(item.point, 0, 2, 'standard')}
+                            {PriceFormatter.formatOrdinary(
+                                item.point,
+                                FORMAT_DIGITS.NONE,
+                                FORMAT_DIGITS.PRICE,
+                                'standard'
+                            )}
                         </div>
                     </div>
                 ))}
