@@ -1,4 +1,3 @@
-import { useQuery } from '@apollo/client';
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import { TRANSACTIONS_BY_TIMESTAMP_AND_MATURITY_QUERY } from '@secured-finance/sf-graph-client/dist/queries';
 import { useMemo } from 'react';
@@ -9,6 +8,7 @@ import { RootState } from 'src/store/types';
 import { HistoricalYieldIntervals } from 'src/types';
 import { Rate, TimestampConverter } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
+import { useDynamicQuery } from '../useDynamicQuery/useDynamicQuery';
 import { baseContracts, useLendingMarkets } from '../useLendingMarkets';
 import { zeroRates } from './constant';
 
@@ -29,13 +29,23 @@ const useHistoricalRates = (maturityList: number[], currency: string) => {
         [intervals, maturityList, currency]
     );
 
-    const { data, loading } = useQuery(
-        TRANSACTIONS_BY_TIMESTAMP_AND_MATURITY_QUERY(
-            variables.intervals,
-            variables.maturityList,
-            variables.currency
-        )
-    );
+    // Don't create query if maturityList or intervals are empty
+    const shouldSkip = !maturityList.length || !intervals.length;
+
+    const queryDocument = shouldSkip
+        ? null
+        : TRANSACTIONS_BY_TIMESTAMP_AND_MATURITY_QUERY(
+              variables.intervals,
+              variables.maturityList,
+              variables.currency
+          );
+
+    const { data, isLoading } = useDynamicQuery({
+        queryDocument,
+        queryKey: ['transactions-by-timestamp-maturity', variables],
+    });
+
+    const loading = isLoading;
     return { data, loading, intervals };
 };
 
@@ -86,7 +96,8 @@ export const useYieldCurveMarketRatesHistorical = () => {
                 .filter(i => i.isPreOrderPeriod !== true)
                 .forEach((item, j) => {
                     const key = `tx${i}_${j}`;
-                    const tx = data?.[key]?.[0];
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    const tx = (data as any)?.[key]?.[0];
 
                     const executionPrice = tx?.executionPrice;
 

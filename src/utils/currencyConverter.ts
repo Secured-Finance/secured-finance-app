@@ -1,5 +1,5 @@
 import { Currency } from '@secured-finance/sf-core';
-import { fromBytes32 } from '@secured-finance/sf-graph-client';
+import { fromBytes32 } from './bytes32';
 import { CurrencySymbol, currencyMap } from './currencyList';
 import { HexConverter } from './hexConverter';
 

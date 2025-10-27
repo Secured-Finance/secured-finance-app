@@ -1,5 +1,6 @@
 import { composeStories } from '@storybook/react';
-import { render } from 'src/test-utils.js';
+import { render, cleanupGraphQLMocks } from 'src/test-utils.js';
+import graphqlMocks from 'src/test-utils/mockData';
 import * as stories from './Campaign.stories';
 
 const { Default } = composeStories(stories);
@@ -12,9 +13,13 @@ jest.mock('next/router', () => ({
 }));
 
 describe('Campaign Component', () => {
+    afterEach(() => {
+        cleanupGraphQLMocks();
+    });
+
     it('should render the Campaign', async () => {
         render(<Default />, {
-            apolloMocks: Default.parameters?.apolloClient.mocks,
+            graphqlMocks: graphqlMocks.withTransactions,
         });
     });
 });

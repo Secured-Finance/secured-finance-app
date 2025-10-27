@@ -63,8 +63,13 @@ jobs:
         env:
           SF_ENV: ${{ vars.SF_ENV }}
 
+      - name: Generate GraphQL Code
+        run: npm run codegen:graphql
+        env:
+          SF_ENV: ${{ vars.SF_ENV }}
+
       - name: Verify Generated Code is Up-to-Date
-        run: git diff --exit-code || (echo "Generated files out of sync! Run 'npm run codegen:wagmi' and commit the changes." && exit 1)
+        run: git diff --exit-code || (echo "Generated files out of sync! Run 'npm run codegen:wagmi && npm run codegen:graphql' and commit the changes." && exit 1)
 
       - run: |
           cat <<'EOF' > .env.local

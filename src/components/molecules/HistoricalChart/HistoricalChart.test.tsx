@@ -1,7 +1,13 @@
 import { composeStories } from '@storybook/react';
 import { dec22Fixture } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { render, screen, waitFor } from 'src/test-utils.js';
+import {
+    render,
+    screen,
+    waitFor,
+    cleanupGraphQLMocks,
+} from 'src/test-utils.js';
+import graphqlMocks from 'src/test-utils/mockData';
 import * as stories from './HistoricalChart.stories';
 
 const { Default } = composeStories(stories);
@@ -10,6 +16,10 @@ const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('HistoricalChart component', () => {
+    afterEach(() => {
+        cleanupGraphQLMocks();
+    });
+
     it('should render chart containers', () => {
         render(<Default />);
 
@@ -31,7 +41,7 @@ describe('HistoricalChart component', () => {
     it('should call getHistoricalData with correct params when mounted', async () => {
         const { store } = await waitFor(() =>
             render(<Default />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
+                graphqlMocks: graphqlMocks.withTransactions,
             })
         );
 

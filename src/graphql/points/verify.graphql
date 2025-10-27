@@ -1,0 +1,6 @@
+mutation verify($input: VerifyInput!) {
+  verify(input: $input) {
+    token
+    walletAddress
+  }
+}

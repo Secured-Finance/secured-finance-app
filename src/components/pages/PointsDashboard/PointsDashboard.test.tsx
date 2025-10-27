@@ -1,8 +1,5 @@
-import { composeStories } from '@storybook/react';
-import { render, screen, waitFor } from 'src/test-utils.js';
-import * as stories from './PointsDashboard.stories';
-
-const { Default } = composeStories(stories);
+import { render, screen } from 'src/test-utils.js';
+import { PointsDashboard } from './PointsDashboard';
 
 jest.mock('next/router', () => ({
     useRouter: jest.fn(() => ({
@@ -12,17 +9,14 @@ jest.mock('next/router', () => ({
 }));
 
 describe('PointsDashboard Component', () => {
-    it('should render the PointsDashboard', async () => {
-        await waitFor(() =>
-            render(<Default />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
-            })
-        );
+    it('should render the PointsDashboard', () => {
+        render(<PointsDashboard />);
+
         expect(
             screen.getByText('Join the Secured Finance Points Program!')
         ).toBeInTheDocument();
         expect(
-            screen.queryAllByRole('button', { name: 'Connect Wallet' })[1]
+            screen.getByRole('button', { name: 'Connect Wallet' })
         ).toBeInTheDocument();
     });
 });

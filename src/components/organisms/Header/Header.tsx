@@ -19,7 +19,8 @@ import {
     Settings,
 } from 'src/components/molecules';
 import { WalletDialog, WalletPopover } from 'src/components/organisms';
-import { useBreakpoint, usePoints } from 'src/hooks';
+import { useBreakpoint } from 'src/hooks';
+import { usePoints } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
@@ -77,12 +78,13 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     const isMobile = useBreakpoint('tablet');
     const { address, isConnected } = useAccount();
 
+    // Real points client using React Query (replaces Apollo Client)
     const {
         user: { data: userData },
         verification: { data: verifiedData },
     } = usePoints();
 
-    const userPoints = userData?.user.point;
+    const userPoints = userData?.user?.point || 0;
 
     const securedFinance = useSF();
     const chainError = useSelector(
@@ -148,9 +150,9 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                         {isShowStablecoinLink && <StablecoinExternalLink />}
                         {isShowPointsTag && (
                             <PointsTag
-                                isConnected={
+                                isConnected={Boolean(
                                     verifiedData && address && userData
-                                }
+                                )}
                                 points={userPoints}
                             />
                         )}

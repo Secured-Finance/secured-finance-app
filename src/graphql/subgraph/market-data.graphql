@@ -1,0 +1,24 @@
+query LendingMarkets($currency: Bytes!, $skip: Int!) {
+  lendingMarkets(
+    skip: $skip
+    orderBy: maturity
+    where: { currency: $currency }
+  ) {
+    ...LendingMarketInfo
+  }
+}
+
+query UserCountAndVolume {
+  protocol(id: "1") {
+    totalUsers
+    volumesByCurrency {
+      ...ProtocolVolumeInfo
+    }
+  }
+}
+
+query DailyVolumes {
+  dailyVolumes {
+    ...DailyVolumeInfo
+  }
+}

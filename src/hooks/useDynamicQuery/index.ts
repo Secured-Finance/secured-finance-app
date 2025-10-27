@@ -1,0 +1,1 @@
+export { useDynamicQuery } from './useDynamicQuery';

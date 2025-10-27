@@ -1,15 +1,15 @@
 import * as analytics from '@amplitude/analytics-browser';
 import { composeStories } from '@storybook/react';
 import userEvent from '@testing-library/user-event';
-import {
-    emptyTransaction,
-    mockDailyVolumes,
-    mockFilteredUserOrderHistory,
-    mockFilteredUserTransactionHistory,
-    mockTrades,
-} from 'src/stories/mocks/queries';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
+import {
+    fireEvent,
+    render,
+    screen,
+    waitFor,
+    cleanupGraphQLMocks,
+} from 'src/test-utils.js';
+import graphqlMocks from 'src/test-utils/mockData';
 import { ButtonEvents, ButtonProperties } from 'src/utils';
 
 import * as stories from './AdvancedLending.stories';
@@ -21,11 +21,14 @@ const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe.skip('Advanced Lending Component', () => {
+    afterEach(() => {
+        cleanupGraphQLMocks();
+    });
     it.skip('should convert the amount to new currency and track CURRENCY_CHANGE when the user change the currency', async () => {
         const track = jest.spyOn(analytics, 'track');
         const { store } = await waitFor(() =>
             render(<ConnectedToWallet />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
+                graphqlMocks: graphqlMocks.withTransactions,
             })
         );
         expect(store.getState().landingOrderForm.amount).toEqual('');
@@ -53,7 +56,7 @@ describe.skip('Advanced Lending Component', () => {
         const track = jest.spyOn(analytics, 'track');
         const { store } = await waitFor(() =>
             render(<ConnectedToWallet />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
+                graphqlMocks: graphqlMocks.withTransactions,
             })
         );
         expect(store.getState().landingOrderForm.amount).toEqual('');
@@ -78,7 +81,7 @@ describe.skip('Advanced Lending Component', () => {
 
     it('should display the last trades in the top bar', async () => {
         render(<Default />, {
-            apolloMocks: mockTrades,
+            graphqlMocks: graphqlMocks.withTransactions,
         });
 
         expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
@@ -93,12 +96,7 @@ describe.skip('Advanced Lending Component', () => {
     it('should display the opening unit price as the only trade if there is no last trades', async () => {
         await waitFor(() =>
             render(<Default />, {
-                apolloMocks: [
-                    ...(emptyTransaction as never),
-                    ...mockDailyVolumes,
-                    ...mockFilteredUserOrderHistory,
-                    ...mockFilteredUserTransactionHistory,
-                ],
+                graphqlMocks: graphqlMocks.empty,
             })
         );
 
@@ -114,7 +112,7 @@ describe.skip('Advanced Lending Component', () => {
     it('should only show the orders of the user related to orderbook', async () => {
         await waitFor(() =>
             render(<ConnectedToWallet />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
+                graphqlMocks: graphqlMocks.withTransactions,
             })
         );
         fireEvent.click(screen.getByRole('tab', { name: 'Open Orders' }));
@@ -125,7 +123,7 @@ describe.skip('Advanced Lending Component', () => {
 
     it.skip('should display disclaimer if a currency is being delisted', () => {
         render(<Delisted />, {
-            apolloMocks: Default.parameters?.apolloClient.mocks,
+            graphqlMocks: graphqlMocks.withTransactions,
         });
         expect(screen.getByText('WFIL will be delisted')).toBeInTheDocument();
     });
@@ -133,7 +131,7 @@ describe.skip('Advanced Lending Component', () => {
     it('should show disclaimer and tooltip for maximum open order limit if user has 20 open orders', async () => {
         await waitFor(() =>
             render(<OpenOrdersConnectedToWallet />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
+                graphqlMocks: graphqlMocks.withTransactions,
             })
         );
         expect(
@@ -155,7 +153,7 @@ describe.skip('Advanced Lending Component', () => {
         it('should retrieve more data when the user select only one side of the orderbook', async () => {
             await waitFor(() =>
                 render(<Default />, {
-                    apolloMocks: Default.parameters?.apolloClient.mocks,
+                    graphqlMocks: graphqlMocks.withTransactions,
                 })
             );
             expect(
@@ -187,7 +185,7 @@ describe.skip('Advanced Lending Component', () => {
         it.skip('should retrieve more data when the user select a aggregation factor', async () => {
             await waitFor(() =>
                 render(<Default />, {
-                    apolloMocks: Default.parameters?.apolloClient.mocks,
+                    graphqlMocks: graphqlMocks.withTransactions,
                 })
             );
             expect(
@@ -219,7 +217,7 @@ describe.skip('Advanced Lending Component', () => {
 describe.skip('Advance Lending with Itayose', () => {
     it('should show the maturity as a date for the selected maturity', async () => {
         render(<Default />, {
-            apolloMocks: Default.parameters?.apolloClient.mocks,
+            graphqlMocks: graphqlMocks.withTransactions,
         });
         const btn = await screen.findAllByRole('button', {
             name: 'WFIL-DEC2022',
@@ -229,7 +227,7 @@ describe.skip('Advance Lending with Itayose', () => {
 
     it('should not display disclaimer if no currency is being delisted', () => {
         render(<Default />, {
-            apolloMocks: Default.parameters?.apolloClient.mocks,
+            graphqlMocks: graphqlMocks.withTransactions,
         });
         expect(
             screen.queryByText('WFIL will be delisted')
@@ -239,7 +237,7 @@ describe.skip('Advance Lending with Itayose', () => {
     it('should not show disclaimer for maximum open order limit if user has less than 20 open orders', async () => {
         await waitFor(() =>
             render(<OpenOrdersConnectedToWallet />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
+                graphqlMocks: graphqlMocks.withTransactions,
             })
         );
         const btn = screen.getAllByRole('button', { name: 'WFIL-DEC2022' });
@@ -265,7 +263,7 @@ describe.skip('Advance Lending with Itayose', () => {
     it.skip('should retrieve more data when the user select only one side of the orderbook', async () => {
         await waitFor(() =>
             render(<Default />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
+                graphqlMocks: graphqlMocks.withTransactions,
             })
         );
         expect(mockSecuredFinance.getBorrowOrderBook).toHaveBeenLastCalledWith(

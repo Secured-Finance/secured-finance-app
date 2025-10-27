@@ -1,61 +1,77 @@
-import {
-    useGetUserLazyQuery,
-    useVerifyMutation,
-} from '@secured-finance/sf-point-client';
+import { useGetUserQuery, useVerifyMutation } from 'src/generated/points';
 import dayjs from 'dayjs';
 import { useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import { useAccount } from 'wagmi';
 
 const POLL_INTERVAL = 600000; // 10 minutes
-const POINT_API_QUERY_OPTIONS = { context: { type: 'point-dashboard' } };
 
 export const usePoints = () => {
     const { address } = useAccount();
     const [cookies, setCookie, removeCookie] = useCookies();
-    const [getUser, { data: userData, loading: loadingUser, refetch }] =
-        useGetUserLazyQuery({
-            pollInterval: POLL_INTERVAL,
-            ...POINT_API_QUERY_OPTIONS,
-        });
 
-    const [verify, { data: verifyData, loading, error }] = useVerifyMutation(
-        POINT_API_QUERY_OPTIONS
-    );
-    useEffect(() => {
-        if (verifyData) {
-            const expires = dayjs().add(1, 'day').toDate();
-            const verifiedData = {
-                token: verifyData?.verify.token,
-                walletAddress: verifyData?.verify.walletAddress,
-            };
-            setCookie('verified_data', verifiedData, {
-                expires,
-            });
-        }
-    }, [verifyData, setCookie]);
-
-    useEffect(() => {
-        if (cookies.verified_data) {
-            userData?.user.walletAddress &&
-            userData?.user.walletAddress !== address
-                ? refetch()
-                : getUser();
-        }
-    }, [
-        cookies.verified_data,
-        getUser,
-        address,
-        userData?.user.walletAddress,
+    // React Query hook for getting user data with authentication
+    const {
+        data: userData,
+        isLoading: loadingUser,
         refetch,
-    ]);
+    } = useGetUserQuery(
+        undefined, // No variables needed for the user query
+        {
+            refetchInterval: POLL_INTERVAL,
+            enabled: Boolean(cookies.verified_data), // Only fetch if authenticated
+            retry: (failureCount, error: unknown) => {
+                // Don't retry on auth errors
+                const errorMessage =
+                    error instanceof Error ? error.message : String(error);
+                if (
+                    errorMessage.includes('Unauthorized') ||
+                    errorMessage.includes('401')
+                ) {
+                    removeCookie('verified_data');
+                    return false;
+                }
+                return failureCount < 3;
+            },
+        }
+    );
 
+    // React Query mutation for verification
+    const verifyMutation = useVerifyMutation({
+        onSuccess: data => {
+            if (data?.verify) {
+                const expires = dayjs().add(1, 'day').toDate();
+                const verifiedData = {
+                    token: data.verify.token,
+                    walletAddress: data.verify.walletAddress,
+                };
+                setCookie('verified_data', verifiedData, {
+                    expires,
+                });
+            }
+        },
+        onError: error => {
+            console.error('Verification failed:', error);
+            removeCookie('verified_data');
+        },
+    });
+
+    // Handle wallet address changes - refetch if user data doesn't match current address
+    useEffect(() => {
+        if (cookies.verified_data && userData?.user) {
+            if (userData.user.walletAddress !== address) {
+                refetch();
+            }
+        }
+    }, [cookies.verified_data, address, userData?.user, refetch]);
+
+    // Clean up cookies on wallet address mismatch or error
     useEffect(() => {
         const walletAddress = cookies.verified_data?.walletAddress;
-        if (error || (walletAddress && address && walletAddress !== address)) {
+        if (walletAddress && address && walletAddress !== address) {
             removeCookie('verified_data');
         }
-    }, [error, removeCookie, cookies.verified_data, address]);
+    }, [cookies.verified_data, address, removeCookie]);
 
     return {
         user: {
@@ -64,8 +80,8 @@ export const usePoints = () => {
         },
         verification: {
             data: cookies.verified_data,
-            verify,
-            loading,
+            verify: verifyMutation.mutate,
+            loading: verifyMutation.isPending,
         },
     };
 };

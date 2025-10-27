@@ -7,7 +7,7 @@ import {
     http,
 } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
-import { sepolia } from 'wagmi';
+import { sepolia } from 'viem/chains';
 import { MockConnector } from 'wagmi/connectors/mock';
 
 const privateKey =
@@ -17,7 +17,7 @@ export const account = privateKeyToAccount(privateKey);
 
 export const publicClient = createPublicClient({
     chain: sepolia,
-    transport: http(),
+    transport: http('https://sepolia.infura.io/v3/mock-test-key'),
 });
 
 publicClient.waitForTransactionReceipt = async (
@@ -31,7 +31,7 @@ publicClient.waitForTransactionReceipt = async (
 const walletClient = createWalletClient({
     account: account,
     chain: sepolia,
-    transport: http(),
+    transport: http('https://sepolia.infura.io/v3/mock-test-key'),
 });
 
 export const connector = new MockConnector({

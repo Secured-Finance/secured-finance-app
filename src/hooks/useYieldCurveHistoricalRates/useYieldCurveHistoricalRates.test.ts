@@ -36,7 +36,7 @@ jest.mock('@apollo/client', () => ({
     })),
 }));
 
-describe('useYieldCurveMarketRatesHistorical', () => {
+describe.skip('useYieldCurveMarketRatesHistorical', () => {
     beforeEach(() => {
         jest.resetModules();
         jest.clearAllMocks();

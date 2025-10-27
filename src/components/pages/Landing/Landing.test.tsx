@@ -4,7 +4,15 @@ import { zeroRates } from 'src/hooks/useYieldCurveHistoricalRates/constant';
 import { dec22Fixture, maturities } from 'src/stories/mocks/fixtures';
 import { initialStore } from 'src/stories/mocks/mockStore';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { fireEvent, render, screen, waitFor, within } from 'src/test-utils.js';
+import {
+    fireEvent,
+    render,
+    screen,
+    waitFor,
+    within,
+    cleanupGraphQLMocks,
+} from 'src/test-utils.js';
+import graphqlMocks from 'src/test-utils/mockData';
 import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
 import timemachine from 'timemachine';
@@ -37,6 +45,77 @@ jest.mock('src/hooks/useYieldCurveHistoricalRates', () => ({
     })),
 }));
 
+// Mock generated hooks to avoid GraphQL query issues
+jest.mock('src/generated/subgraph', () => ({
+    ...jest.requireActual('src/generated/subgraph'),
+    useDailyVolumesQuery: jest.fn(() => ({
+        data: {
+            dailyVolumes: [
+                {
+                    id: 'daily-volume-1',
+                    currency:
+                        '0x555344430000000000000000000000000000000000000000000000000000000', // USDC
+                    maturity: '1703980800',
+                    day: '2024-01-01',
+                    timestamp: '1704067200',
+                    volume: '500000000000000000000',
+                },
+                {
+                    id: 'daily-volume-2',
+                    currency:
+                        '0x5746494c00000000000000000000000000000000000000000000000000000000', // WFIL
+                    maturity: '1703980800',
+                    day: '2024-01-01',
+                    timestamp: '1704067200',
+                    volume: '300000000000000000000',
+                },
+            ],
+        },
+        isLoading: false,
+        error: null,
+    })),
+    useTransactionHistoryQuery: jest.fn(() => ({
+        data: {
+            transactionHistory: [
+                {
+                    id: 'transaction-1',
+                    amount: '500000000000000000',
+                    executionPrice: '960000000000000000',
+                    side: 0,
+                    currency:
+                        '0x5746494c00000000000000000000000000000000000000000000000000000000',
+                    maturity: '1669852800',
+                    createdAt: '1671080520',
+                    txHash: '0xabc123',
+                    user: { id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D' },
+                },
+            ],
+        },
+        isLoading: false,
+        error: null,
+    })),
+    useTransactionsHistory24HQuery: jest.fn(() => ({
+        data: {
+            transactionHistory: [
+                {
+                    id: 'transaction-1',
+                    amount: '500000000000000000',
+                    executionPrice: '960000000000000000',
+                    side: 0,
+                    currency:
+                        '0x555344430000000000000000000000000000000000000000000000000000000',
+                    maturity: '1703980800',
+                    createdAt: '1671080520',
+                    txHash: '0xabc123',
+                    user: { id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D' },
+                },
+            ],
+        },
+        isLoading: false,
+        error: null,
+    })),
+}));
+
 const preloadedState = {
     ...initialStore,
     wallet: { address: '0x1' },
@@ -60,6 +139,10 @@ beforeAll(() => {
 });
 
 describe('Landing Component', () => {
+    afterEach(() => {
+        cleanupGraphQLMocks();
+    });
+
     const changeInputValue = (label: string, value: string) => {
         const input = screen.getByLabelText(label);
         fireEvent.change(input, { target: { value } });
@@ -73,7 +156,7 @@ describe('Landing Component', () => {
 
     it.skip('should change the rate when the user changes the maturity', async () => {
         render(<Default />, {
-            apolloMocks: Default.parameters?.apolloClient.mocks,
+            graphqlMocks: graphqlMocks.withTransactions,
             preloadedState: {
                 ...preloadedState,
                 landingOrderForm: {
@@ -99,7 +182,7 @@ describe('Landing Component', () => {
     it('should default to limit order type when the user goes to advanced mode', async () => {
         waitFor(() => {
             render(<AdvancedViewConnected />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
+                graphqlMocks: graphqlMocks.withTransactions,
                 preloadedState,
             });
         });
@@ -111,7 +194,7 @@ describe('Landing Component', () => {
     it('should select the market order type when the user clicks on market tab', async () => {
         waitFor(() => {
             render(<AdvancedViewConnected />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
+                graphqlMocks: graphqlMocks.withTransactions,
                 preloadedState,
             });
         });
@@ -126,7 +209,7 @@ describe('Landing Component', () => {
         it.skip('should display the best price as bond price when user gets to advanced mode', async () => {
             await waitFor(() => {
                 render(<Default />, {
-                    apolloMocks: Default.parameters?.apolloClient.mocks,
+                    graphqlMocks: graphqlMocks.withTransactions,
                     preloadedState,
                 });
             });
@@ -141,7 +224,7 @@ describe('Landing Component', () => {
         it.skip('should reset bond price when user changes maturity', async () => {
             await waitFor(() => {
                 render(<Default />, {
-                    apolloMocks: Default.parameters?.apolloClient.mocks,
+                    graphqlMocks: graphqlMocks.withTransactions,
                     preloadedState,
                 });
             });
@@ -164,7 +247,7 @@ describe('Landing Component', () => {
         it.skip('should reset bond price to the best price when user changes currency', async () => {
             await waitFor(() => {
                 render(<Default />, {
-                    apolloMocks: Default.parameters?.apolloClient.mocks,
+                    graphqlMocks: graphqlMocks.withTransactions,
                     preloadedState,
                 });
             });
@@ -196,7 +279,7 @@ describe('Landing Component', () => {
     it.skip('should filter out non ready markets', async () => {
         await waitFor(() => {
             render(<Default />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
+                graphqlMocks: graphqlMocks.withTransactions,
                 preloadedState,
             });
         });
@@ -211,7 +294,7 @@ describe('Landing Component', () => {
     it.skip('should change the amount slider when amount input changes and user has balance', async () => {
         await waitFor(() => {
             render(<AdvancedViewConnected />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
+                graphqlMocks: graphqlMocks.withTransactions,
                 preloadedState,
             });
         });
@@ -237,7 +320,7 @@ describe('Landing Component', () => {
     it.skip('should not change the amount slider when amount input changes and user do not have balance', async () => {
         await waitFor(() => {
             render(<AdvancedViewConnected />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
+                graphqlMocks: graphqlMocks.withTransactions,
                 preloadedState,
             });
         });
@@ -255,7 +338,7 @@ describe('Landing Component', () => {
     it.skip('should show delisting disclaimer if a currency is being delisted', async () => {
         await waitFor(() => {
             render(<Default />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
+                graphqlMocks: graphqlMocks.withTransactions,
                 preloadedState,
             });
         });
@@ -274,7 +357,7 @@ describe('Landing Component', () => {
         jest.spyOn(mock, 'currencyExists').mockResolvedValue(true);
         await waitFor(() => {
             render(<Default />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
+                graphqlMocks: graphqlMocks.withTransactions,
                 preloadedState,
             });
         });
@@ -291,7 +374,7 @@ describe('Landing Component', () => {
     it.skip('should render the itayose banner for opening of a new market', async () => {
         await waitFor(() => {
             render(<Default />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
+                graphqlMocks: graphqlMocks.withTransactions,
                 preloadedState,
             });
         });
@@ -307,7 +390,7 @@ describe('Landing Component', () => {
 
     it('should render the welcome message alert', () => {
         render(<Default />, {
-            apolloMocks: Default.parameters?.apolloClient.mocks,
+            graphqlMocks: graphqlMocks.withTransactions,
             preloadedState,
         });
 

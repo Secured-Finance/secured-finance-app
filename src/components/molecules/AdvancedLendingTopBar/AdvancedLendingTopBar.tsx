@@ -1,6 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { toBytes32 } from '@secured-finance/sf-graph-client';
-import queries from '@secured-finance/sf-graph-client/dist/graphclients';
+import { useTransactionHistoryQuery } from 'src/generated/subgraph';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
@@ -13,7 +13,6 @@ import { MarketInfoDialog } from 'src/components/organisms';
 import {
     MarketPhase,
     useGetCountdown,
-    useGraphClientHook,
     useIsSubgraphSupported,
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
@@ -26,6 +25,7 @@ import {
     PriceFormatter,
     FORMAT_DIGITS,
 } from 'src/utils';
+import { useGraphQLConfig } from 'src/utils/graphql';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { AdvancedLendingTopBarProp } from './types';
 
@@ -59,18 +59,22 @@ export const AdvancedLendingTopBar = ({
     const [isMarketInfoDialogOpen, setIsMarketInfoDialogOpen] =
         useState<boolean>(false);
 
-    const { data: lastTransaction } = useGraphClientHook(
+    const graphQLConfig = useGraphQLConfig();
+    const { data: transactionHistoryData } = useTransactionHistoryQuery(
+        graphQLConfig,
         {
             currency: toBytes32(selectedAsset?.value as CurrencySymbol),
-            maturity: maturity,
-            from: -1,
-            to: timestamp,
+            maturity: String(maturity),
+            from: String(-1),
+            to: String(timestamp),
             sides: [OrderSide.LEND, OrderSide.BORROW],
         },
-        queries.TransactionHistoryDocument,
-        'lastTransaction',
-        !isSubgraphSupported
+        {
+            enabled: !!isSubgraphSupported && !!selectedAsset,
+        }
     );
+
+    const lastTransaction = transactionHistoryData?.transactionHistory;
 
     const marketKey = `${selectedAsset?.value}-${maturity}`;
     const rawVolume = volumePerMarket?.[marketKey] ?? 0;

@@ -44,6 +44,8 @@ function webpackOverride(config) {
     config.resolve.alias = {
         ...config.resolve.alias,
         '.storybook': path.resolve(__dirname, './.storybook/'),
+        // Use mock version of points hooks for Storybook
+        'src/generated/points$': path.resolve(__dirname, './src/generated/points.storybook.ts'),
     };
 
     return config;

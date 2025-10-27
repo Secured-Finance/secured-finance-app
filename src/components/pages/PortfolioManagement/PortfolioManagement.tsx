@@ -1,5 +1,8 @@
 import { OrderSide } from '@secured-finance/sf-client';
-import queries from '@secured-finance/sf-graph-client/dist/graphclients';
+import {
+    useFullUserOrderHistoryQuery,
+    useFullUserTransactionHistoryQuery,
+} from 'src/generated/subgraph';
 import { useMemo, useState } from 'react';
 import { Spinner } from 'src/components/atoms';
 import {
@@ -28,7 +31,6 @@ import {
     useCurrenciesForOrders,
     useCurrencyDelistedStatus,
     useGenesisValues,
-    useGraphClientHook,
     useIsSubgraphSupported,
     useIsUnderCollateralThreshold,
     useLastPrices,
@@ -48,6 +50,7 @@ import {
     sortOrders,
     PriceFormatter,
 } from 'src/utils';
+import { getGraphQLConfig } from 'src/utils/graphql';
 import { Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
@@ -77,23 +80,39 @@ export const PortfolioManagement = () => {
 
     const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
 
-    const userOrderHistory = useGraphClientHook(
+    const { data: userOrderHistoryData, isLoading: userOrderHistoryLoading } =
+        useFullUserOrderHistoryQuery(
+            getGraphQLConfig(),
+            {
+                address: address?.toLowerCase() ?? '',
+            },
+            {
+                enabled: !!address && selectedTable === TableType.ORDER_HISTORY,
+            }
+        );
+
+    const userOrderHistory = {
+        data: userOrderHistoryData?.user,
+        loading: userOrderHistoryLoading,
+    };
+
+    const {
+        data: userTransactionHistoryData,
+        isLoading: userTransactionHistoryLoading,
+    } = useFullUserTransactionHistoryQuery(
+        getGraphQLConfig(),
         {
             address: address?.toLowerCase() ?? '',
         },
-        queries.FullUserOrderHistoryDocument,
-        'user',
-        selectedTable !== TableType.ORDER_HISTORY
+        {
+            enabled: !!address && selectedTable === TableType.MY_TRANSACTIONS,
+        }
     );
 
-    const userTransactionHistory = useGraphClientHook(
-        {
-            address: address?.toLowerCase() ?? '',
-        },
-        queries.FullUserTransactionHistoryDocument,
-        'user',
-        selectedTable !== TableType.MY_TRANSACTIONS
-    );
+    const userTransactionHistory = {
+        data: userTransactionHistoryData?.user,
+        loading: userTransactionHistoryLoading,
+    };
 
     const { data: usedCurrencies = [] } = useCurrenciesForOrders(address);
     const { data: orderList = emptyOrderList } = useOrderList(

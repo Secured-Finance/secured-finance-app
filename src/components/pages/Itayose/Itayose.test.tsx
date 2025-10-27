@@ -3,7 +3,14 @@ import { composeStories } from '@storybook/react';
 import { zeroRates } from 'src/hooks/useYieldCurveHistoricalRates/constant';
 import { dec22Fixture } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
+import {
+    fireEvent,
+    render,
+    screen,
+    waitFor,
+    cleanupGraphQLMocks,
+} from 'src/test-utils.js';
+import graphqlMocks from 'src/test-utils/mockData';
 import { CurrencySymbol } from 'src/utils';
 import * as stories from './Itayose.stories';
 
@@ -31,6 +38,68 @@ jest.mock('src/hooks/useYieldCurveHistoricalRates', () => ({
     })),
 }));
 
+// Mock generated hooks to avoid GraphQL query issues
+jest.mock('src/generated/subgraph', () => ({
+    ...jest.requireActual('src/generated/subgraph'),
+    useFilteredUserOrderHistoryQuery: jest.fn(() => ({
+        data: {
+            user: {
+                id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
+                orders: [
+                    {
+                        id: 'order-1',
+                        currency:
+                            '0x555344430000000000000000000000000000000000000000000000000000000', // USDC
+                        maturity: '1703980800',
+                        side: 0, // OrderSide.LEND
+                        inputUnitPrice: '960000000000000000',
+                        inputAmount: '500000000000000000',
+                        filledAmount: '300000000000000000',
+                        status: 1, // PartiallyFilled
+                        createdAt: '1671080520',
+                        type: 0, // Market
+                    },
+                    {
+                        id: 'order-2',
+                        currency:
+                            '0x555344430000000000000000000000000000000000000000000000000000000', // USDC
+                        maturity: '1703980800',
+                        side: 1, // OrderSide.BORROW
+                        inputUnitPrice: '940000000000000000',
+                        inputAmount: '1000000000000000000',
+                        filledAmount: '0',
+                        status: 0, // Open
+                        createdAt: '1671080521',
+                        type: 1, // Limit
+                    },
+                ],
+            },
+        },
+        isLoading: false,
+        error: null,
+    })),
+    useTransactionsHistory24HQuery: jest.fn(() => ({
+        data: {
+            transactionHistory: [
+                {
+                    id: 'transaction-1',
+                    amount: '500000000000000000',
+                    executionPrice: '960000000000000000',
+                    side: 0,
+                    currency:
+                        '0x555344430000000000000000000000000000000000000000000000000000000',
+                    maturity: '1703980800',
+                    createdAt: '1671080520',
+                    txHash: '0xabc123',
+                    user: { id: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D' },
+                },
+            ],
+        },
+        isLoading: false,
+        error: null,
+    })),
+}));
+
 const preloadedState = {
     landingOrderForm: {
         currency: CurrencySymbol.WBTC,
@@ -45,10 +114,13 @@ const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('Itayose Component', () => {
+    afterEach(() => {
+        cleanupGraphQLMocks();
+    });
     it('should render a Itayose', async () => {
         await waitFor(() =>
             render(<Default />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
+                graphqlMocks: graphqlMocks.withTransactions,
             })
         );
     });
@@ -57,7 +129,7 @@ describe('Itayose Component', () => {
         const { store } = await waitFor(() =>
             render(<Default />, {
                 preloadedState,
-                apolloMocks: Default.parameters?.apolloClient.mocks,
+                graphqlMocks: graphqlMocks.withTransactions,
             })
         );
         expect(store.getState().landingOrderForm.amount).toEqual('0');
@@ -93,7 +165,7 @@ describe('Itayose Component', () => {
     describe.skip('Dynamic orderbook depth', () => {
         it('should retrieve more data when the user select only one side of the orderbook', async () => {
             render(<Default />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
+                graphqlMocks: graphqlMocks.withTransactions,
             });
             expect(
                 mockSecuredFinance.getLendOrderBook
@@ -124,7 +196,7 @@ describe('Itayose Component', () => {
 
         it('should retrieve more data when the user select a aggregation factor', async () => {
             render(<Default />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
+                graphqlMocks: graphqlMocks.withTransactions,
             });
             expect(
                 mockSecuredFinance.getLendOrderBook

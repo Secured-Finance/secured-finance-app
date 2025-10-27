@@ -1,13 +1,31 @@
 import { composeStories } from '@storybook/react';
-import { render, screen } from 'src/test-utils.js';
+import { render, screen, cleanupGraphQLMocks } from 'src/test-utils.js';
+import graphqlMocks from 'src/test-utils/mockData';
 import * as stories from './AdvancedLendingTopBar.stories';
 
 const { Default } = composeStories(stories);
 
+// Mock the TransactionHistory hook to avoid GraphQL query issues
+// Return empty transaction history so the component shows "--" for last price
+jest.mock('src/generated/subgraph', () => ({
+    ...jest.requireActual('src/generated/subgraph'),
+    useTransactionHistoryQuery: jest.fn(() => ({
+        data: {
+            transactionHistory: [], // Empty to show no last price
+        },
+        isLoading: false,
+        error: null,
+    })),
+}));
+
 describe('AdvancedLendingTopBar Component', () => {
+    afterEach(() => {
+        cleanupGraphQLMocks();
+    });
+
     it('should render a AdvancedLendingTopBar with the values', () => {
         render(<Default />, {
-            apolloMocks: Default.parameters?.apolloClient.mocks,
+            graphqlMocks: graphqlMocks.withTransactions,
         });
 
         expect(
@@ -27,7 +45,7 @@ describe('AdvancedLendingTopBar Component', () => {
 
     it('should render source link for the selected asset', () => {
         render(<Default />, {
-            apolloMocks: Default.parameters?.apolloClient.mocks,
+            graphqlMocks: graphqlMocks.withTransactions,
         });
 
         expect(

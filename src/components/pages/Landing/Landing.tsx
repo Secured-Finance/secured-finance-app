@@ -1,5 +1,5 @@
 import { OrderSide } from '@secured-finance/sf-client';
-import queries from '@secured-finance/sf-graph-client/dist/graphclients';
+import { useDailyVolumesQuery } from 'src/generated/subgraph';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,7 +23,6 @@ import {
     useBalances,
     useCollateralBook,
     useCurrencyDelistedStatus,
-    useGraphClientHook,
     useIsSubgraphSupported,
     useLendingMarkets,
     useLoanValues,
@@ -38,6 +37,7 @@ import {
 import { RootState } from 'src/store/types';
 import { OrderType } from 'src/types';
 import { CurrencySymbol, MaturityConverter, ZERO_BI } from 'src/utils';
+import { getGraphQLConfig } from 'src/utils/graphql';
 import { Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
@@ -102,12 +102,17 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
         return undefined;
     }, [unitPrices, maturity]);
 
-    const dailyVolumes = useGraphClientHook(
+    const { data: dailyVolumesData } = useDailyVolumesQuery(
+        getGraphQLConfig(),
         {}, // no variables
-        queries.DailyVolumesDocument,
-        'dailyVolumes',
-        !isSubgraphSupported
+        {
+            enabled: !!isSubgraphSupported,
+        }
     );
+
+    const dailyVolumes = {
+        data: dailyVolumesData?.dailyVolumes,
+    };
 
     useEffect(() => {
         if (view === 'Simple') {

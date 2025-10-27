@@ -1,7 +1,7 @@
 import { mockTransactions24H } from 'src/stories/mocks/queries';
 import { renderHook, waitFor } from 'src/test-utils';
 import { currencyMap } from 'src/utils';
-import { useGraphClientHook } from '../useGraphClientHook';
+import { useTransactionsHistory24HQuery } from 'src/generated/subgraph';
 import { use24HVolume } from './use24HVolume';
 import {
     currencyList,
@@ -9,11 +9,12 @@ import {
     wfilBytes32,
 } from 'src/stories/mocks/fixtures';
 
-jest.mock('../useGraphClientHook', () => ({
-    useGraphClientHook: jest.fn(),
+jest.mock('src/generated/subgraph', () => ({
+    useTransactionsHistory24HQuery: jest.fn(),
 }));
 
-const mockedUseGraphClientHook = useGraphClientHook as jest.Mock;
+const mockedUseTransactionsHistory24HQuery =
+    useTransactionsHistory24HQuery as unknown as jest.Mock;
 
 describe('use24HVolume', () => {
     beforeEach(() => {
@@ -21,7 +22,7 @@ describe('use24HVolume', () => {
     });
 
     it('should return empty data when no transactions', () => {
-        mockedUseGraphClientHook.mockReturnValue({ data: null });
+        mockedUseTransactionsHistory24HQuery.mockReturnValue({ data: null });
 
         const { result } = renderHook(() => use24HVolume());
 
@@ -34,7 +35,7 @@ describe('use24HVolume', () => {
             createdAt: mockTransactions24H[0].createdAt + i,
         }));
 
-        mockedUseGraphClientHook.mockReturnValue({
+        mockedUseTransactionsHistory24HQuery.mockReturnValue({
             data: { transactions: bulkMockTxs },
         });
 
@@ -67,11 +68,15 @@ describe('use24HVolume', () => {
             __typename: 'Transaction',
         }));
 
-        const allTransactions = [...wfilTxs, ...usdcTxs];
-
-        mockedUseGraphClientHook.mockReturnValue({
-            data: { transactions: allTransactions },
-        });
+        // Mock the first call with 1000 WFIL transactions
+        mockedUseTransactionsHistory24HQuery
+            .mockReturnValueOnce({
+                data: { transactions: wfilTxs },
+            })
+            // Second call with 50 USDC transactions (less than 1000, so pagination stops)
+            .mockReturnValue({
+                data: { transactions: usdcTxs },
+            });
 
         const { result } = renderHook(() => use24HVolume());
 

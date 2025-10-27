@@ -7,13 +7,13 @@ import {
     QuestType,
     useGetQuestsQuery,
     useGetUsersQuery,
-    useNonceLazyQuery,
-} from '@secured-finance/sf-point-client';
+    useNonceQuery,
+} from 'src/generated/points';
 import { snakeCase } from 'change-case';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 import CountUp from 'react-countup';
 import { useDispatch, useSelector } from 'react-redux';
 import { SiweMessage } from 'siwe';
@@ -55,7 +55,6 @@ import { useAccount, useConnect, useSignMessage } from 'wagmi';
 import { getShareMessage, quoteTweetUrl } from './constants';
 
 const POLL_INTERVAL = 600000; // 10 minutes
-const POINT_API_QUERY_OPTIONS = { context: { type: 'point-dashboard' } };
 
 const ReferralCode = ({ code }: { code: string }) => {
     const shareMessage = getShareMessage(code);
@@ -133,7 +132,11 @@ const ReferralCode = ({ code }: { code: string }) => {
 const UserPointInfo = ({ chainId }: { chainId: number }) => {
     const {
         user: { loading: loadingUser, data: userData },
-        verification: { verify, loading, data: verifiedData },
+        verification: {
+            verify: verifyUser,
+            loading: verifyLoading,
+            data: verifiedData,
+        },
     } = usePoints();
     const searchParams = new URLSearchParams(document.location.search);
     const referralCode = searchParams.get('ref');
@@ -151,10 +154,11 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
         [QuestType.ActivePosition]: 'Active Position Points',
         [QuestType.Referral]: 'Refer Friend Points',
     };
-    const [getNonce] = useNonceLazyQuery({
-        fetchPolicy: 'no-cache',
-        ...POINT_API_QUERY_OPTIONS,
-    });
+    const fetchNonce = useCallback(async () => {
+        const fetcher = useNonceQuery.fetcher(undefined);
+        const nonceData = await fetcher();
+        return { data: nonceData };
+    }, []);
     const { isLoading, signMessageAsync, reset } = useSignMessage();
     const { address, isConnected } = useAccount();
     const dispatch = useDispatch();
@@ -289,7 +293,8 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
                                         return;
                                     }
 
-                                    const { data } = await getNonce();
+                                    const result = await fetchNonce();
+                                    const { data: nonceData } = result;
 
                                     const message = new SiweMessage({
                                         domain: window.location.host,
@@ -299,27 +304,24 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
                                         uri: window.location.origin,
                                         version: '1',
                                         chainId: chainId,
-                                        nonce: data?.nonce,
+                                        nonce: nonceData.nonce,
                                     });
 
                                     const signature = await signMessageAsync({
                                         message: message.prepareMessage(),
                                     });
 
-                                    await verify({
-                                        variables: {
-                                            input: {
-                                                signature,
-                                                message:
-                                                    JSON.stringify(message),
-                                                referralCode,
-                                            },
+                                    await verifyUser({
+                                        input: {
+                                            signature,
+                                            message: JSON.stringify(message),
+                                            referralCode,
                                         },
                                     });
 
                                     reset();
                                 }}
-                                disabled={isLoading || loading}
+                                disabled={isLoading || verifyLoading}
                             >
                                 {!isConnected ? 'Connect Wallet' : 'Join'}
                             </Button>
@@ -338,9 +340,8 @@ const QuestList = ({ chainId }: { chainId: number }) => {
         string | undefined
     >(undefined);
     const { connectors } = useConnect();
-    const { data, loading } = useGetQuestsQuery({
-        pollInterval: POLL_INTERVAL,
-        ...POINT_API_QUERY_OPTIONS,
+    const { data, isLoading: loading } = useGetQuestsQuery(undefined, {
+        refetchInterval: POLL_INTERVAL,
     });
     const collateralBalances = useCollateralBalances();
     const { data: collateralCurrencies = [] } = useCollateralCurrencies();
@@ -599,11 +600,12 @@ const QuestList = ({ chainId }: { chainId: number }) => {
 };
 
 const Leaderboard = () => {
-    const { data, loading } = useGetUsersQuery({
-        variables: { page: 1, limit: 30 },
-        pollInterval: POLL_INTERVAL,
-        ...POINT_API_QUERY_OPTIONS,
-    });
+    const { data, isLoading: loading } = useGetUsersQuery(
+        { page: 1, limit: 30 },
+        {
+            refetchInterval: POLL_INTERVAL,
+        }
+    );
 
     return (
         <GradientBox header='Leaderboard'>
