@@ -295,6 +295,7 @@ module.exports = {
                 eth: '#B9BDEA',
                 usdc: '#2775CA',
                 usdfc: '#EAAC00',
+                jpyc: '#16449A',
             },
             pill: {
                 fil: 'rgba(0, 144, 255, 0.7)',
@@ -302,6 +303,7 @@ module.exports = {
                 eth: 'rgba(131, 131, 133, 0.7)',
                 usdc: '#2775CA',
                 usdfc: '#EAAC00',
+                jpyc: '#16449A',
             },
         },
     },

@@ -107,7 +107,8 @@ export const Faucet = () => {
     const assetList = toOptions(currencies, CurrencySymbol.USDC).filter(
         ccy =>
             currencyMap[ccy.value].toCurrency().isToken &&
-            ccy.label !== CurrencySymbol.USDFC
+            ccy.label !== CurrencySymbol.USDFC &&
+            ccy.label !== CurrencySymbol.JPYC
     );
 
     const [ccy, setCcy] = useState<CurrencySymbol | null>(null);
