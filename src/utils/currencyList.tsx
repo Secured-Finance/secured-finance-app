@@ -312,7 +312,7 @@ export const currencyMap: Readonly<
     [CurrencySymbol.JPYC]: {
         index: 13,
         symbol: CurrencySymbol.JPYC,
-        name: 'JPYC',
+        name: JPYC.onChain().name,
         icon: JpycIcon,
         coinGeckoId: 'jpycoin',
         isCollateral: true,
