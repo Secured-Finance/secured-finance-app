@@ -11,6 +11,7 @@ import BtcIcon from 'src/assets/coins/btc.svg';
 import EthIcon from 'src/assets/coins/eth2.svg';
 import FilIcon from 'src/assets/coins/fil.svg';
 import IFilIcon from 'src/assets/coins/ifil.svg';
+import JpycIcon from 'src/assets/coins/jpyc.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
 import UsdfcIcon from 'src/assets/coins/usdfc.svg';
 import WBtcIcon from 'src/assets/coins/wbtc.svg';
@@ -29,6 +30,7 @@ import { BTCB } from './currencies/btcb';
 import { FIL } from './currencies/fil';
 import { WFIL } from './currencies/filecoin';
 import { IFIL } from './currencies/ifil';
+import { JPYC } from './currencies/jpyc';
 import { TFIL } from './currencies/tfil';
 import { USDC } from './currencies/usdc';
 import { USDFC } from './currencies/usdfc';
@@ -53,6 +55,7 @@ export enum CurrencySymbol {
     iFIL = 'iFIL',
     wpFIL = 'wpFIL',
     USDFC = 'USDFC',
+    JPYC = 'JPYC',
 }
 
 export const currencyMap: Readonly<
@@ -306,6 +309,24 @@ export const currencyMap: Readonly<
         longName: 'Wrapped PFIL Token',
         hasOrderBook: false,
     },
+    [CurrencySymbol.JPYC]: {
+        index: 13,
+        symbol: CurrencySymbol.JPYC,
+        name: 'JPYC',
+        icon: JpycIcon,
+        coinGeckoId: 'jpycoin',
+        isCollateral: true,
+        toBaseUnit: (amount: number) =>
+            convertToBlockchainUnit(amount, JPYC.onChain()),
+        fromBaseUnit: (amount: bigint) =>
+            convertFromBlockchainUnit(amount, JPYC.onChain()),
+        toCurrency: () => JPYC.onChain(),
+        chartColor: tailwindConfig.theme.colors.chart.jpyc,
+        pillColor: tailwindConfig.theme.colors.pill.jpyc,
+        roundingDecimal: 0,
+        longName: 'JPY Coin',
+        hasOrderBook: true,
+    },
 };
 
 const currencySymbolList = Object.keys(currencyMap) as CurrencySymbol[];
@@ -389,6 +410,8 @@ export function toCurrencySymbol(ccy: string) {
             return CurrencySymbol.iFIL;
         case CurrencySymbol.wpFIL:
             return CurrencySymbol.wpFIL;
+        case CurrencySymbol.JPYC:
+            return CurrencySymbol.JPYC;
         default:
             return undefined;
     }
