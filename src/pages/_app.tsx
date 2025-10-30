@@ -12,6 +12,7 @@ import { NextUIProvider } from '@nextui-org/system';
 import { GraphApolloClient } from '@secured-finance/sf-graph-client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { createWeb3Modal } from '@web3modal/wagmi/react';
 import { AppProps } from 'next/app';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
@@ -129,7 +130,7 @@ const { chains, publicClient } = configureChains(
 );
 
 const config = createConfig({
-    autoConnect: false,
+    autoConnect: true,
     publicClient: publicClient,
     connectors: [
         new MetaMaskConnector({ chains }),
@@ -155,6 +156,28 @@ const config = createConfig({
             },
         }),
     ],
+});
+
+const metadata = {
+    name: 'Secured Finance',
+    description: 'DeFi Lending Platform | Secured Finance',
+    url: 'https://app.secured.finance/', // origin must match your domain & subdomain
+    icons: ['https://avatars.githubusercontent.com/u/37784886'],
+};
+
+createWeb3Modal({
+    wagmiConfig: config,
+    projectId: projectId,
+    chains: chains,
+    metadata: metadata,
+    enableAnalytics: true,
+    featuredWalletIds: ['metamask'],
+    themeMode: 'light',
+    themeVariables: {
+        '--w3m-font-family': "'Suisse International', sans-serif",
+        '--w3m-accent': '#002133',
+        '--w3m-color-mix': '#5162FF',
+    },
 });
 
 const httpLink = createHttpLink({

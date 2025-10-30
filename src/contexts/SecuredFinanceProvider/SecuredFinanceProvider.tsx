@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { reset, track } from '@amplitude/analytics-browser';
 import { SecuredFinanceClient } from '@secured-finance/sf-client';
 import { useQueryClient } from '@tanstack/react-query';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import { createContext, useCallback, useEffect, useState } from 'react';
@@ -13,7 +15,6 @@ import {
     updateIsChainIdDetected,
     updateLatestBlock,
 } from 'src/store/blockchain';
-import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
 import {
     getSupportedChainIds,
@@ -38,13 +39,6 @@ import {
 
 export const CACHED_PROVIDER_KEY = 'CACHED_PROVIDER_KEY';
 
-declare global {
-    interface Window {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ethereum: any;
-    }
-}
-
 export interface SFContext {
     securedFinance?: SecuredFinanceClient;
 }
@@ -58,6 +52,7 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
     const searchParams = useSearchParams();
     const router = useRouter();
+    const { open } = useWeb3Modal();
     const { address, isConnected } = useAccount();
     const { chain } = useNetwork();
     const chainId = useSelector((state: RootState) => state.blockchain.chainId);
@@ -113,7 +108,7 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
         // this is required to get the chainId on initial page load
         const fetchChainId = async () => {
             if (window.ethereum) {
-                const chainId = await window.ethereum.request({
+                const chainId = await (window.ethereum as any).request({
                     method: 'eth_chainId',
                 });
                 dispatch(updateIsChainIdDetected(true));
@@ -121,9 +116,12 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
             }
         };
         fetchChainId();
-        window.ethereum?.on('chainChanged', handleChainChanged);
+        (window.ethereum as any).on('chainChanged', handleChainChanged);
         return () => {
-            window.ethereum?.removeListener('chainChanged', handleChainChanged);
+            (window.ethereum as any).removeListener(
+                'chainChanged',
+                handleChainChanged
+            );
         };
     }, [dispatchChainError, handleChainChanged, dispatch]);
 
@@ -222,11 +220,11 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
                 : 4_000,
         });
 
-        window.ethereum?.on('accountsChanged', handleAccountChanged);
+        (window.ethereum as any)?.on('accountsChanged', handleAccountChanged);
 
         return () => {
             unwatch();
-            window.ethereum?.removeListener(
+            (window.ethereum as any)?.removeListener(
                 'accountsChanged',
                 handleAccountChanged
             );
@@ -266,10 +264,10 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
             if (connector) {
                 connector.switchChain?.(selectedChainId);
             } else {
-                dispatch(setWalletDialogOpen(true));
+                open();
             }
         }
-    }, [searchParams, chainId, connectors, router, dispatch]);
+    }, [searchParams, chainId, connectors, router, dispatch, open]);
 
     return (
         <Context.Provider value={{ securedFinance }}>

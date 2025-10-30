@@ -10,13 +10,14 @@ import {
     useGetUsersQuery,
     useNonceLazyQuery,
 } from '@secured-finance/sf-point-client';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { snakeCase } from 'change-case';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
 import CountUp from 'react-countup';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { SiweMessage } from 'siwe';
 import {
     Button,
@@ -42,7 +43,6 @@ import {
     useCollateralCurrencies,
     usePoints,
 } from 'src/hooks';
-import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
@@ -157,7 +157,7 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
     });
     const { isLoading, signMessageAsync, reset } = useSignMessage();
     const { address, isConnected } = useAccount();
-    const dispatch = useDispatch();
+    const { open } = useWeb3Modal();
 
     return (
         <GradientBox>
@@ -285,7 +285,7 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
                                 size={ButtonSizes.lg}
                                 onClick={async () => {
                                     if (!isConnected) {
-                                        dispatch(setWalletDialogOpen(true));
+                                        open();
                                         return;
                                     }
 
