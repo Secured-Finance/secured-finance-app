@@ -96,6 +96,7 @@ jobs:
         run: npm run build
 
       - name: Build Storybook
+        if: inputs.environment_name == 'development' || inputs.environment_name == 'ci-build'
         uses: chromaui/action@v11
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
