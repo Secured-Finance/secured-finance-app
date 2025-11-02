@@ -25,6 +25,7 @@ import {
     getTransformMaturityOption,
     handlePriceSource,
     usdFormat,
+    usdFormatPrice,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { AdvancedLendingTopBarProp } from './types';
@@ -191,7 +192,11 @@ export const AdvancedLendingTopBar = ({
                                 <div>
                                     <MarketTab
                                         name={`${currency} Price`}
-                                        value={usdFormat(currencyPrice, 2)}
+                                        value={usdFormatPrice(
+                                            currencyPrice,
+                                            selectedAsset?.value,
+                                            2
+                                        )}
                                     />
                                 </div>
                             </div>
@@ -260,7 +265,11 @@ export const AdvancedLendingTopBar = ({
                                     <MarketTab
                                         name={`${selectedAsset?.value} Price`}
                                         value={
-                                            usdFormat(currencyPrice, 2) || '$0'
+                                            usdFormatPrice(
+                                                currencyPrice,
+                                                selectedAsset.value,
+                                                2
+                                            ) || '$0'
                                         }
                                         source={handlePriceSource(
                                             selectedAsset?.value
@@ -285,7 +294,10 @@ export const AdvancedLendingTopBar = ({
                 onClose={() => setIsMarketInfoDialogOpen(false)}
                 currency={selectedAsset.value}
                 currentMarket={currentMarket}
-                currencyPrice={usdFormat(currencyPrice, 2) || '$0'}
+                currencyPrice={
+                    usdFormatPrice(currencyPrice, selectedAsset.value, 2) ||
+                    '$0'
+                }
                 marketInfo={marketInfo}
                 volumeInfo={{
                     volume24H,
