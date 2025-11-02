@@ -11,6 +11,7 @@ import BtcIcon from 'src/assets/coins/btc.svg';
 import EthIcon from 'src/assets/coins/eth2.svg';
 import FilIcon from 'src/assets/coins/fil.svg';
 import IFilIcon from 'src/assets/coins/ifil.svg';
+import JpycIcon from 'src/assets/coins/jpyc.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
 import UsdfcIcon from 'src/assets/coins/usdfc.svg';
 import WBtcIcon from 'src/assets/coins/wbtc.svg';
@@ -29,6 +30,7 @@ import { BTCB } from './currencies/btcb';
 import { FIL } from './currencies/fil';
 import { WFIL } from './currencies/filecoin';
 import { IFIL } from './currencies/ifil';
+import { JPYC } from './currencies/jpyc';
 import { TFIL } from './currencies/tfil';
 import { USDC } from './currencies/usdc';
 import { USDFC } from './currencies/usdfc';
@@ -53,13 +55,32 @@ export enum CurrencySymbol {
     iFIL = 'iFIL',
     wpFIL = 'wpFIL',
     USDFC = 'USDFC',
+    JPYC = 'JPYC',
 }
 
 export const currencyMap: Readonly<
     Record<CurrencySymbol, Readonly<CurrencyInfo>>
 > = {
-    [CurrencySymbol.USDC]: {
+    [CurrencySymbol.JPYC]: {
         index: 0,
+        symbol: CurrencySymbol.JPYC,
+        name: JPYC.onChain().name,
+        icon: JpycIcon,
+        coinGeckoId: 'jpycoin',
+        isCollateral: true,
+        toBaseUnit: (amount: number) =>
+            convertToBlockchainUnit(amount, JPYC.onChain()),
+        fromBaseUnit: (amount: bigint) =>
+            convertFromBlockchainUnit(amount, JPYC.onChain()),
+        toCurrency: () => JPYC.onChain(),
+        chartColor: tailwindConfig.theme.colors.chart.jpyc,
+        pillColor: tailwindConfig.theme.colors.pill.jpyc,
+        roundingDecimal: 0,
+        longName: 'JPY Coin',
+        hasOrderBook: true,
+    },
+    [CurrencySymbol.USDC]: {
+        index: 1,
         symbol: CurrencySymbol.USDC,
         name: USDC.onChain().name,
         icon: UsdcIcon,
@@ -78,7 +99,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.aUSDC]: {
-        index: 1,
+        index: 2,
         symbol: CurrencySymbol.aUSDC,
         name: 'aUSDC',
         icon: UsdcIcon,
@@ -97,7 +118,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.USDFC]: {
-        index: 2,
+        index: 3,
         symbol: CurrencySymbol.USDFC,
         name: USDFC.onChain().name,
         icon: UsdfcIcon,
@@ -116,7 +137,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.ETH]: {
-        index: 3,
+        index: 4,
         symbol: CurrencySymbol.ETH,
         // TODO: update sf-core to use the right name
         name: 'Ether',
@@ -136,7 +157,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.WETHe]: {
-        index: 4,
+        index: 5,
         symbol: CurrencySymbol.WETHe,
         name: WETHE.onChain().name,
         icon: EthIcon,
@@ -155,7 +176,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.WBTC]: {
-        index: 5,
+        index: 6,
         symbol: CurrencySymbol.WBTC,
         name: WBTC.onChain().name,
         icon: WBtcIcon,
@@ -174,7 +195,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.BTCb]: {
-        index: 6,
+        index: 7,
         symbol: CurrencySymbol.BTCb,
         name: BTCB.onChain().name,
         icon: BtcIcon,
@@ -193,7 +214,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.FIL]: {
-        index: 7,
+        index: 8,
         symbol: CurrencySymbol.FIL,
         name: 'Filecoin',
         icon: FilIcon,
@@ -212,7 +233,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.tFIL]: {
-        index: 8,
+        index: 9,
         symbol: CurrencySymbol.tFIL,
         name: 'Filecoin',
         icon: FilIcon,
@@ -231,7 +252,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.WFIL]: {
-        index: 9,
+        index: 10,
         symbol: CurrencySymbol.WFIL,
         name: WFIL.onChain().name,
         icon: WFilIcon,
@@ -252,7 +273,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.axlFIL]: {
-        index: 10,
+        index: 11,
         symbol: CurrencySymbol.axlFIL,
         name: 'Axelar Wrapped FIL',
         icon: WFilIcon,
@@ -271,7 +292,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.iFIL]: {
-        index: 11,
+        index: 12,
         symbol: CurrencySymbol.iFIL,
         name: 'Infinity Pool Staked FIL',
         icon: IFilIcon,
@@ -289,7 +310,7 @@ export const currencyMap: Readonly<
         hasOrderBook: false,
     },
     [CurrencySymbol.wpFIL]: {
-        index: 12,
+        index: 13,
         symbol: CurrencySymbol.wpFIL,
         name: 'Wrapped PFIL Token',
         icon: WPFilIcon,
@@ -389,6 +410,8 @@ export function toCurrencySymbol(ccy: string) {
             return CurrencySymbol.iFIL;
         case CurrencySymbol.wpFIL:
             return CurrencySymbol.wpFIL;
+        case CurrencySymbol.JPYC:
+            return CurrencySymbol.JPYC;
         default:
             return undefined;
     }

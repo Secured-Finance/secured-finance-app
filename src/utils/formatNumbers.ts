@@ -1,5 +1,5 @@
 import { MAX_COVERAGE } from './collateral';
-import { divide } from './currencyList';
+import { CurrencySymbol, divide } from './currencyList';
 import { LoanValue } from './entities';
 
 export const usdFormat = (
@@ -14,6 +14,19 @@ export const usdFormat = (
         maximumFractionDigits: digits,
         notation: notation,
     }).format(number);
+};
+
+export const usdFormatPrice = (
+    number: number | bigint,
+    currency: CurrencySymbol,
+    digits = 0,
+    notation: 'standard' | 'compact' = 'standard'
+) => {
+    if (currency === CurrencySymbol.JPYC) {
+        digits = 4;
+    }
+
+    return usdFormat(number, digits, notation);
 };
 
 export const percentFormat = (
