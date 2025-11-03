@@ -23,43 +23,60 @@ export const getMultiLineChartData = (
     rates: Rate[][],
     label: string,
     labels: string[],
-    itayoseMarketIndex: Set<number>,
-    itayoseBorderColor: string
+    itayoseMarketIndex?: Set<number>,
+    itayoseBorderColor?: string
 ): ChartData<'line'> => {
+    const safeItayoseIndex = itayoseMarketIndex ?? new Set<number>();
+    const safeItayoseBorderColor = itayoseBorderColor ?? '#C58300';
+
     return {
-        labels: labels,
+        labels,
         datasets: rates.map((rate, i) => {
             return i === 0
                 ? {
-                      label: label,
+                      label,
                       data: refineArray(rate),
                       fill: true,
                       backgroundColor: getColor(i, 0.1),
                       segment: {
-                          borderColor: ctx =>
-                              itayoseMarketIndex.has(ctx.p1.parsed.x)
+                          borderColor: ctx => {
+                              const x = ctx?.p1?.parsed?.x as
+                                  | number
+                                  | undefined;
+                              return x !== undefined && safeItayoseIndex.has(x)
                                   ? '#C58300'
-                                  : getColor(i, 1),
-                          borderDash: ctx =>
-                              itayoseMarketIndex.has(ctx.p1.parsed.x)
+                                  : getColor(i, 1);
+                          },
+                          borderDash: ctx => {
+                              const x = ctx?.p1?.parsed?.x as
+                                  | number
+                                  | undefined;
+                              return x !== undefined && safeItayoseIndex.has(x)
                                   ? [5, 6]
-                                  : undefined,
+                                  : undefined;
+                          },
                       },
-                      pointBackgroundColor: ctx =>
-                          itayoseMarketIndex.has(ctx.parsed.x)
+                      pointBackgroundColor: ctx => {
+                          const x = ctx?.parsed?.x as number | undefined;
+                          return x !== undefined && safeItayoseIndex.has(x)
                               ? '#C58300'
-                              : getColor(i, 1),
+                              : getColor(i, 1);
+                      },
                   }
                 : {
-                      label: label,
+                      label,
                       data: refineArray(rate),
                       fill: true,
                       backgroundColor: getColor(i, 0.1),
                       segment: {
-                          borderColor: ctx =>
-                              itayoseMarketIndex.has(ctx.p1.parsed.x)
-                                  ? itayoseBorderColor
-                                  : getColor(i, 1),
+                          borderColor: ctx => {
+                              const x = ctx?.p1?.parsed?.x as
+                                  | number
+                                  | undefined;
+                              return x !== undefined && safeItayoseIndex.has(x)
+                                  ? safeItayoseBorderColor
+                                  : getColor(i, 1);
+                          },
                           borderDash: [10 - i * 3, 10 - i],
                       },
                       pointBackgroundColor: getColor(i, 1),
