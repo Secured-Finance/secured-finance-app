@@ -1,0 +1,22 @@
+overwrite: true
+schema: https://api.studio.thegraph.com/query/30564/sf-protocol-dev-sepolia/0.1.6
+documents:
+  - src/graphql/**/*.graphql
+generates:
+  src/generated/subgraph.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-query
+    config:
+      scalars:
+        BigInt: string
+        BigDecimal: string
+        Bytes: string
+        Int8: number
+      reactQueryVersion: 5
+      exposeQueryKeys: true
+      exposeFetcher: true
+      requestOptions:
+        headers:
+          'Content-Type': 'application/json'

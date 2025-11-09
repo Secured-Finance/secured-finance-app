@@ -1,0 +1,37 @@
+query UserTransactionHistory($address: ID!, $skip: Int!, $count: Int!) {
+  user(id: $address) {
+    transactionCount
+    transactions(
+      orderBy: createdAt
+      orderDirection: desc
+      skip: $skip
+      first: $count
+    ) {
+      ...TransactionInfo
+    }
+  }
+}
+
+query FilteredUserTransactionHistory(
+  $address: ID!
+  $currency: Bytes!
+  $maturity: BigInt!
+) {
+  user(id: $address) {
+    transactions(
+      orderBy: createdAt
+      orderDirection: desc
+      where: { currency: $currency, maturity: $maturity }
+    ) {
+      ...TransactionInfo
+    }
+  }
+}
+
+query FullUserTransactionHistory($address: ID!) {
+  user(id: $address) {
+    transactions(orderBy: createdAt, orderDirection: desc) {
+      ...TransactionInfo
+    }
+  }
+}

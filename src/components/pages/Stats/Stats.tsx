@@ -1,4 +1,5 @@
-import queries from '@secured-finance/sf-graph-client/dist/graphclients';
+import { useUserCountAndVolumeQuery } from 'src/generated/subgraph';
+import { getGraphQLConfig } from 'src/utils/graphql';
 import { useMemo } from 'react';
 import {
     CollateralManagementConciseTab,
@@ -20,7 +21,6 @@ import {
     useCollateralBook,
     useCurrencies,
     useCurrencyDelistedStatus,
-    useGraphClientHook,
     useIsGlobalItayose,
     useIsSubgraphSupported,
     useLastPrices,
@@ -87,12 +87,17 @@ export const Stats = () => {
         }
     });
 
-    const userCountAndVolume = useGraphClientHook(
-        {}, // no variables
-        queries.UserCountAndVolumeDocument,
-        'protocol',
-        !isSubgraphSupported
+    const { data: userCountAndVolumeData } = useUserCountAndVolumeQuery(
+        getGraphQLConfig(),
+        {},
+        {
+            enabled: !!isSubgraphSupported,
+        }
     );
+
+    const userCountAndVolume = {
+        data: userCountAndVolumeData?.protocol,
+    };
 
     const { data: priceList } = useLastPrices();
 
@@ -150,7 +155,7 @@ export const Stats = () => {
                                           name: 'Total Users',
                                           value: computeTotalUsers(
                                               userCountAndVolume.data
-                                                  ?.totalUsers
+                                                  ?.totalUsers || '0'
                                           ),
                                       },
                                   ]

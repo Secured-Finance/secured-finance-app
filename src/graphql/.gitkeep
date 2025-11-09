@@ -1,0 +1,25 @@
+# GraphQL Queries Directory - ORGANIZED (ISSUE-059 Complete)
+# 
+# Collected and organized from @secured-finance/sf-graph-client:
+# 
+# ├── market-data.graphql          # Market and protocol queries
+# │   ├── LendingMarkets           # Get lending markets by currency  
+# │   ├── UserCountAndVolume       # Protocol stats
+# │   └── DailyVolumes             # Volume analytics
+# │
+# ├── user-transactions.graphql   # User transaction history
+# │   ├── UserTransactionHistory        # Paginated user transactions
+# │   ├── FilteredUserTransactionHistory # Filtered by currency/maturity
+# │   └── FullUserTransactionHistory     # All user transactions
+# │
+# ├── user-orders.graphql         # User order history
+# │   ├── UserOrderHistory         # Paginated user orders
+# │   ├── FilteredUserOrderHistory # Filtered by currency/maturity  
+# │   └── FullUserOrderHistory     # All user orders
+# │
+# └── transaction-history.graphql # Transaction analytics
+#     ├── TransactionHistory       # Historical transaction data
+#     ├── TransactionCandleStick   # OHLC candlestick data
+#     └── TransactionsHistory24H   # 24h transaction history
+#
+# All queries validated against subgraph schema and ready for codegen.

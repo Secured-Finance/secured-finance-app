@@ -2,7 +2,8 @@
 . "$(dirname "$0")/_/husky.sh"
 
 npm run codegen:wagmi
+npm run codegen:graphql
 npm run typecheck
 npm run lint:check
 npm run prettier:check
-npm run test -- --watchAll=false --bail 
+npm run test -- --watchAll=false --bail

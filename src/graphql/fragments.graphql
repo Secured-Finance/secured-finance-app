@@ -1,0 +1,96 @@
+fragment UserInfo on User {
+  id
+}
+
+fragment TransactionInfo on Transaction {
+  id
+  currency
+  maturity
+  side
+  executionPrice
+  futureValue
+  amount
+  averagePrice
+  createdAt
+  feeInFV
+  user {
+    ...UserInfo
+  }
+}
+
+fragment OrderInfo on Order {
+  id
+  orderId
+  currency
+  side
+  maturity
+  inputUnitPrice
+  inputAmount
+  filledAmount
+  status
+  lendingMarket {
+    id
+    isActive
+  }
+  type
+  isCircuitBreakerTriggered
+  createdAt
+  txHash
+  user {
+    ...UserInfo
+  }
+}
+
+fragment LendingMarketInfo on LendingMarket {
+  id
+  currency
+  maturity
+}
+
+fragment TransactionHistoryInfo on Transaction {
+  amount
+  maturity
+  side
+  createdAt
+  currency
+  averagePrice
+  executionPrice
+  txHash
+}
+
+fragment CandleStickInfo on TransactionCandleStick {
+  currency
+  maturity
+  interval
+  timestamp
+  open
+  close
+  high
+  low
+  average
+  volume
+  volumeInFV
+}
+
+fragment ProtocolVolumeInfo on ProtocolVolumeByCurrency {
+  currency
+  totalVolume
+}
+
+fragment DailyVolumeInfo on DailyVolume {
+  id
+  currency
+  maturity
+  day
+  timestamp
+  volume
+}
+
+fragment HistoricalTransactionInfo on Transaction {
+  amount
+  averagePrice
+  executionPrice
+  createdAt
+  currency
+  maturity
+}
