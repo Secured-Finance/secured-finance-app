@@ -1,0 +1,110 @@
+# Transaction History and Analytics Queries
+# Source: sf-graph-client/src/queries/lending-market.ts
+
+query TransactionHistory(
+  $currency: Bytes!
+  $maturity: BigInt!
+  $from: BigInt!
+  $to: BigInt!
+  $sides: [Int!]!
+  $first: Int = 1000
+  $skip: Int = 0
+) {
+  transactionHistory: transactions(
+    where: {
+      currency: $currency
+      maturity: $maturity
+      createdAt_gte: $from
+      createdAt_lt: $to
+      executionType: Taker
+      side_in: $sides
+    }
+    orderBy: createdAt
+    orderDirection: desc
+    first: $first
+    skip: $skip
+  ) {
+    amount
+    maturity
+    side
+    createdAt
+    currency
+    averagePrice
+    executionPrice
+    txHash
+  }
+  lastTransaction: transactions(
+    where: {
+      currency: $currency
+      maturity: $maturity
+      executionType: Taker
+    }
+    orderBy: createdAt
+    orderDirection: desc
+    first: 1
+  ) {
+    amount
+    maturity
+    side
+    createdAt
+    currency
+    averagePrice
+    executionPrice
+    txHash
+  }
+}
+
+query TransactionCandleStick(
+  $currency: Bytes!
+  $maturity: BigInt!
+  $interval: BigInt!
+) {
+  transactionCandleSticks(
+    where: {
+      currency: $currency
+      maturity: $maturity
+      interval: $interval
+    }
+    first: 1000
+    orderDirection: desc
+    orderBy: timestamp
+  ) {
+    currency
+    maturity
+    interval
+    timestamp
+    open
+    close
+    high
+    low
+    average
+    volume
+    volumeInFV
+  }
+}
+
+query TransactionsHistory24H(
+  $from: BigInt!
+  $to: BigInt!
+  $first: Int = 1000
+  $skip: Int = 0
+) {
+  transactions(
+    where: {
+      createdAt_gte: $from
+      createdAt_lt: $to
+      executionType: Taker
+    }
+    orderBy: createdAt
+    orderDirection: desc
+    first: $first
+    skip: $skip
+  ) {
+    amount
+    maturity
+    createdAt
+    currency
+    averagePrice
+    executionPrice
+  }
+}

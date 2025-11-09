@@ -1,0 +1,35 @@
+# Market Data Queries
+# Source: sf-graph-client/src/queries/lending-market.ts
+
+query LendingMarkets($currency: Bytes!, $skip: Int!) {
+  lendingMarkets(
+    skip: $skip
+    orderBy: maturity
+    where: { currency: $currency }
+  ) {
+    id
+    currency
+    maturity
+  }
+}
+
+query UserCountAndVolume {
+  protocol(id: "1") {
+    totalUsers
+    volumesByCurrency {
+      currency
+      totalVolume
+    }
+  }
+}
+
+query DailyVolumes {
+  dailyVolumes {
+    id
+    currency
+    maturity
+    day
+    timestamp
+    volume
+  }
+}
