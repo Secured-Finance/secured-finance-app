@@ -1,13 +1,14 @@
 import { toBytes32 } from '@secured-finance/sf-graph-client';
-import queries from '@secured-finance/sf-graph-client/dist/graphclients';
+import { useTransactionCandleStickQuery } from 'src/generated/subgraph';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { DropdownSelector, RadioButton } from 'src/components/atoms';
 import { HistoricalChart } from 'src/components/molecules';
-import { useGraphClientHook, useTransactionCandleStickData } from 'src/hooks';
+import { useTransactionCandleStickData } from 'src/hooks';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { HistoricalDataIntervals } from 'src/types';
+import { getGraphQLConfig } from 'src/utils/graphql';
 import { timeScales } from './constants';
 
 export type Transaction = {
@@ -31,14 +32,21 @@ export const HistoricalWidget = () => {
     const [selectedTimeScale, setSelectedTimeScale] =
         useState<HistoricalDataIntervals>(HistoricalDataIntervals['5M']);
 
-    const historicalTradeData = useGraphClientHook(
+    const { data: transactionCandleStickData } = useTransactionCandleStickQuery(
+        getGraphQLConfig(),
         {
             interval: selectedTimeScale,
             currency: toBytes32(currency),
-            maturity: maturity,
-        },
-        queries.TransactionCandleStickDocument
+            maturity: String(maturity),
+        }
     );
+
+    const historicalTradeData = {
+        data: {
+            transactionCandleSticks:
+                transactionCandleStickData?.transactionCandleSticks,
+        },
+    };
 
     const data = useTransactionCandleStickData(
         historicalTradeData,

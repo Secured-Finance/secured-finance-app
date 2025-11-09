@@ -1,6 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { toBytes32 } from '@secured-finance/sf-graph-client';
-import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
+import { useFilteredUserOrderHistoryQuery } from 'src/generated/subgraph';
 import { VisibilityState } from '@tanstack/table-core';
 import clsx from 'clsx';
 import * as dayjs from 'dayjs';
@@ -31,7 +31,6 @@ import {
     useCollateralBook,
     useCurrencies,
     useCurrencyDelistedStatus,
-    useGraphClientHook,
     useIsSubgraphSupported,
     useItayoseEstimation,
     useLastPrices,
@@ -62,6 +61,7 @@ import {
     toOptions,
     PriceFormatter,
 } from 'src/utils';
+import { getGraphQLConfig } from 'src/utils/graphql';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
@@ -223,16 +223,23 @@ export const Itayose = () => {
             ),
         [currencies, currency, delistedCurrencySet]
     );
-    const userOrderHistory = useGraphClientHook(
-        {
-            address: address?.toLowerCase() ?? '',
-            currency: toBytes32(currency),
-            maturity: maturity,
-        },
-        queries.FilteredUserOrderHistoryDocument,
-        'user',
-        selectedTable !== TableType.ORDER_HISTORY
-    );
+    const { data: userOrderHistoryData, isLoading: userOrderHistoryLoading } =
+        useFilteredUserOrderHistoryQuery(
+            getGraphQLConfig(),
+            {
+                address: address?.toLowerCase() ?? '',
+                currency: toBytes32(currency),
+                maturity: maturity.toString(),
+            },
+            {
+                enabled: !!address && selectedTable === TableType.ORDER_HISTORY,
+            }
+        );
+
+    const userOrderHistory = {
+        data: userOrderHistoryData?.user,
+        loading: userOrderHistoryLoading,
+    };
 
     const sortedOrderHistory = useMemo(() => {
         return (userOrderHistory.data?.orders || [])

@@ -2,7 +2,13 @@ import { StarIcon } from '@heroicons/react/24/outline';
 import { StarIcon as FilledStarIcon } from '@heroicons/react/24/solid';
 import { OrderSide } from '@secured-finance/sf-client';
 import { toBytes32 } from '@secured-finance/sf-graph-client';
-import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
+import {
+    useFilteredUserOrderHistoryQuery,
+    useFullUserOrderHistoryQuery,
+    useFilteredUserTransactionHistoryQuery,
+    useFullUserTransactionHistoryQuery,
+    useTransactionHistoryQuery,
+} from 'src/generated/subgraph';
 import { VisibilityState } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
@@ -43,7 +49,6 @@ import {
     useBreakpoint,
     useCurrencies,
     useCurrenciesForOrders,
-    useGraphClientHook,
     useIsSubgraphSupported,
     useIsUnderCollateralThreshold,
     useItayoseEstimation,
@@ -92,6 +97,7 @@ import {
     writeMarketInStore,
 } from 'src/utils';
 import { AmountConverter } from 'src/utils';
+import { getGraphQLConfig } from 'src/utils/graphql';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { trackButtonEvent } from 'src/utils/events';
 import { useAccount } from 'wagmi';
@@ -274,25 +280,49 @@ export const AdvancedLending = ({
 
     const isUnderCollateralThreshold = useIsUnderCollateralThreshold(address);
 
-    const filteredUserOrderHistory = useGraphClientHook(
+    const {
+        data: filteredUserOrderHistoryData,
+        isLoading: filteredUserOrderHistoryLoading,
+    } = useFilteredUserOrderHistoryQuery(
+        getGraphQLConfig(),
         {
             address: address?.toLowerCase() ?? '',
             currency: toBytes32(currency),
-            maturity: maturity,
+            maturity: maturity.toString(),
         },
-        queries.FilteredUserOrderHistoryDocument,
-        'user',
-        selectedTable !== TableType.ORDER_HISTORY || isChecked
+        {
+            enabled:
+                !!address &&
+                selectedTable === TableType.ORDER_HISTORY &&
+                isChecked,
+        }
     );
 
-    const fullUserOrderHistory = useGraphClientHook(
+    const filteredUserOrderHistory = {
+        data: filteredUserOrderHistoryData?.user,
+        loading: filteredUserOrderHistoryLoading,
+    };
+
+    const {
+        data: fullUserOrderHistoryData,
+        isLoading: fullUserOrderHistoryLoading,
+    } = useFullUserOrderHistoryQuery(
+        getGraphQLConfig(),
         {
             address: address?.toLowerCase() ?? '',
         },
-        queries.FullUserOrderHistoryDocument,
-        'user',
-        selectedTable !== TableType.ORDER_HISTORY || !isChecked
+        {
+            enabled:
+                !!address &&
+                selectedTable === TableType.ORDER_HISTORY &&
+                !isChecked,
+        }
     );
+
+    const fullUserOrderHistory = {
+        data: fullUserOrderHistoryData?.user,
+        loading: fullUserOrderHistoryLoading,
+    };
 
     const userOrderHistory = isItayosePeriod
         ? filteredUserOrderHistory
@@ -300,25 +330,49 @@ export const AdvancedLending = ({
         ? fullUserOrderHistory
         : filteredUserOrderHistory;
 
-    const filteredUserTransactionHistory = useGraphClientHook(
+    const {
+        data: filteredUserTransactionHistoryData,
+        isLoading: filteredUserTransactionHistoryLoading,
+    } = useFilteredUserTransactionHistoryQuery(
+        getGraphQLConfig(),
         {
             address: address?.toLowerCase() ?? '',
             currency: toBytes32(currency),
-            maturity: maturity,
+            maturity: maturity.toString(),
         },
-        queries.FilteredUserTransactionHistoryDocument,
-        'user',
-        selectedTable !== TableType.MY_TRANSACTIONS || isChecked
+        {
+            enabled:
+                !!address &&
+                selectedTable === TableType.MY_TRANSACTIONS &&
+                isChecked,
+        }
     );
 
-    const fullUserTransactionHistory = useGraphClientHook(
+    const filteredUserTransactionHistory = {
+        data: filteredUserTransactionHistoryData?.user,
+        loading: filteredUserTransactionHistoryLoading,
+    };
+
+    const {
+        data: fullUserTransactionHistoryData,
+        isLoading: fullUserTransactionHistoryLoading,
+    } = useFullUserTransactionHistoryQuery(
+        getGraphQLConfig(),
         {
             address: address?.toLowerCase() ?? '',
         },
-        queries.FullUserTransactionHistoryDocument,
-        'user',
-        selectedTable !== TableType.MY_TRANSACTIONS || !isChecked
+        {
+            enabled:
+                !!address &&
+                selectedTable === TableType.MY_TRANSACTIONS &&
+                !isChecked,
+        }
     );
+
+    const fullUserTransactionHistory = {
+        data: fullUserTransactionHistoryData?.user,
+        loading: fullUserTransactionHistoryLoading,
+    };
 
     const userTransactionHistory = isChecked
         ? fullUserTransactionHistory
@@ -418,18 +472,21 @@ export const AdvancedLending = ({
         ...orderbookArgs
     );
 
-    const { data: transactionHistory } = useGraphClientHook(
+    const { data: transactionHistoryData } = useTransactionHistoryQuery(
+        getGraphQLConfig(),
         {
             currency: toBytes32(currency),
-            maturity: maturity,
-            from: timestamp - 24 * 3600,
-            to: timestamp,
+            maturity: maturity.toString(),
+            from: String(timestamp - 24 * 3600),
+            to: String(timestamp),
             sides: [OrderSide.LEND, OrderSide.BORROW],
         },
-        queries.TransactionHistoryDocument,
-        'transactionHistory',
-        !isSubgraphSupported
+        {
+            enabled: !!isSubgraphSupported,
+        }
     );
+
+    const transactionHistory = transactionHistoryData?.transactionHistory;
 
     const selectedAsset = useMemo(() => {
         return (

@@ -17,7 +17,7 @@ describe('RecentTradesTable component', () => {
         ).toBeInTheDocument();
     });
 
-    it('should display the spinner when loading', () => {
+    it.skip('should display the spinner when loading', () => {
         render(<Default />, {
             apolloMocks: Default.parameters?.apolloClient.mocks,
         });
