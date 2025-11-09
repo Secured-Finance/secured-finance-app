@@ -1,0 +1,37 @@
+query UserOrderHistory($address: ID!, $skip: Int!, $count: Int!) {
+  user(id: $address) {
+    orderCount
+    orders(
+      orderBy: createdAt
+      orderDirection: desc
+      skip: $skip
+      first: $count
+    ) {
+      ...OrderInfo
+    }
+  }
+}
+
+query FilteredUserOrderHistory(
+  $address: ID!
+  $currency: Bytes!
+  $maturity: BigInt!
+) {
+  user(id: $address) {
+    orders(
+      orderBy: createdAt
+      orderDirection: desc
+      where: { currency: $currency, maturity: $maturity }
+    ) {
+      ...OrderInfo
+    }
+  }
+}
+
+query FullUserOrderHistory($address: ID!) {
+  user(id: $address) {
+    orders(orderBy: createdAt, orderDirection: desc) {
+      ...OrderInfo
+    }
+  }
+}
