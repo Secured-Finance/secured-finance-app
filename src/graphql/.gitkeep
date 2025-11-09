@@ -1,0 +1,9 @@
+# This file keeps the src/graphql directory in git
+# GraphQL query files (.graphql) should be placed in this directory
+# 
+# Example usage:
+# 1. Create your .graphql files here (e.g., user-transactions.graphql)
+# 2. Run `npm run codegen:graphql` to generate TypeScript hooks
+# 3. Import and use the generated hooks in your components
+#
+# The example.graphql file shows a basic query structure.
