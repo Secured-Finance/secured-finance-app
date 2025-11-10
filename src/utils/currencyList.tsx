@@ -20,6 +20,7 @@ import WPFilIcon from 'src/assets/coins/wpfil.svg';
 import ZcBtcIcon from 'src/assets/coins/zc-btc.svg';
 import ZcEthIcon from 'src/assets/coins/zc-eth.svg';
 import ZcFilIcon from 'src/assets/coins/zc-fil.svg';
+import ZcJpycIcon from 'src/assets/coins/zc-jpyc.svg';
 import ZcUsdcIcon from 'src/assets/coins/zc-usdc.svg';
 import { SvgIcon } from 'src/types';
 import { hexToString } from 'viem';
@@ -66,6 +67,7 @@ export const currencyMap: Readonly<
         symbol: CurrencySymbol.JPYC,
         name: JPYC.onChain().name,
         icon: JpycIcon,
+        zcIcon: ZcJpycIcon,
         coinGeckoId: 'jpycoin',
         isCollateral: true,
         toBaseUnit: (amount: number) =>
