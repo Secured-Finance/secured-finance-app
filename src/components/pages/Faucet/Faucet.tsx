@@ -108,7 +108,9 @@ export const Faucet = () => {
         ccy =>
             currencyMap[ccy.value].toCurrency().isToken &&
             ccy.label !== CurrencySymbol.USDFC &&
-            ccy.label !== CurrencySymbol.JPYC
+            ccy.label !== CurrencySymbol.JPYC &&
+            ccy.label !== CurrencySymbol.UMINT &&
+            ccy.label !== CurrencySymbol.ISNR
     );
 
     const [ccy, setCcy] = useState<CurrencySymbol | null>(null);

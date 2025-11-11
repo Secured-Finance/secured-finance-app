@@ -22,6 +22,8 @@ import ZcEthIcon from 'src/assets/coins/zc-eth.svg';
 import ZcFilIcon from 'src/assets/coins/zc-fil.svg';
 import ZcJpycIcon from 'src/assets/coins/zc-jpyc.svg';
 import ZcUsdcIcon from 'src/assets/coins/zc-usdc.svg';
+import uMINTIcon from 'src/assets/coins/umint.svg';
+import iSNRIcon from 'src/assets/coins/isnr.svg';
 import { SvgIcon } from 'src/types';
 import { hexToString } from 'viem';
 import { ZERO_BI } from './collateral';
@@ -39,6 +41,8 @@ import { WBTC } from './currencies/wbtc';
 import { WETHE } from './currencies/wethe';
 import { WPFIL } from './currencies/wpfil';
 import { Maturity } from './entities';
+import { UMINT } from './currencies/umint';
+import { ISNR } from './currencies/isnr';
 
 BigNumberJS.set({ EXPONENTIAL_AT: 30 }); // setting to a decent limit
 
@@ -57,6 +61,8 @@ export enum CurrencySymbol {
     wpFIL = 'wpFIL',
     USDFC = 'USDFC',
     JPYC = 'JPYC',
+    UMINT = 'uMINT',
+    ISNR = 'iSNR',
 }
 
 export const currencyMap: Readonly<
@@ -329,6 +335,43 @@ export const currencyMap: Readonly<
         longName: 'Wrapped PFIL Token',
         hasOrderBook: false,
     },
+    [CurrencySymbol.UMINT]: {
+        index: 14,
+        symbol: CurrencySymbol.UMINT,
+        name: UMINT.onChain().name,
+        icon: uMINTIcon,
+        coinGeckoId: 'ubs_umint_eth',
+        isCollateral: true,
+        toBaseUnit: (amount: number) =>
+            convertToBlockchainUnit(amount, UMINT.onChain()),
+        fromBaseUnit: (amount: bigint) =>
+            convertFromBlockchainUnit(amount, UMINT.onChain()),
+        toCurrency: () => UMINT.onChain(),
+        chartColor: tailwindConfig.theme.colors.chart.umint,
+        pillColor: tailwindConfig.theme.colors.pill.umint,
+        roundingDecimal: 2,
+        longName: 'DigiFT uMINT',
+        hasOrderBook: false,
+    },
+
+    [CurrencySymbol.ISNR]: {
+        index: 15,
+        symbol: CurrencySymbol.ISNR,
+        name: ISNR.onChain().name,
+        icon: iSNRIcon,
+        coinGeckoId: '',
+        isCollateral: true,
+        toBaseUnit: (amount: number) =>
+            convertToBlockchainUnit(amount, ISNR.onChain()),
+        fromBaseUnit: (amount: bigint) =>
+            convertFromBlockchainUnit(amount, ISNR.onChain()),
+        toCurrency: () => ISNR.onChain(),
+        chartColor: tailwindConfig.theme.colors.chart.isnr,
+        pillColor: tailwindConfig.theme.colors.pill.isnr,
+        roundingDecimal: 2,
+        longName: 'DigiFT iSNR',
+        hasOrderBook: false,
+    },
 };
 
 const currencySymbolList = Object.keys(currencyMap) as CurrencySymbol[];
@@ -414,6 +457,10 @@ export function toCurrencySymbol(ccy: string) {
             return CurrencySymbol.wpFIL;
         case CurrencySymbol.JPYC:
             return CurrencySymbol.JPYC;
+        case CurrencySymbol.UMINT:
+            return CurrencySymbol.UMINT;
+        case CurrencySymbol.ISNR:
+            return CurrencySymbol.ISNR;
         default:
             return undefined;
     }
