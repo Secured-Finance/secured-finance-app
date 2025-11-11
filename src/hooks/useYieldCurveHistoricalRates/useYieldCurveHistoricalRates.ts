@@ -29,12 +29,17 @@ const useHistoricalRates = (maturityList: number[], currency: string) => {
         [intervals, maturityList, currency]
     );
 
+    const shouldSkip = maturityList.length === 0;
+
     const { data, loading } = useQuery(
         TRANSACTIONS_BY_TIMESTAMP_AND_MATURITY_QUERY(
             variables.intervals,
-            variables.maturityList,
+            shouldSkip ? [0] : variables.maturityList,
             variables.currency
-        )
+        ),
+        {
+            skip: shouldSkip,
+        }
     );
     return { data, loading, intervals };
 };

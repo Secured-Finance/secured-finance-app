@@ -83,9 +83,11 @@ jobs:
         run: npm run lint:check
 
       - name: Run Tests
+        if: inputs.environment_name == 'development' || inputs.environment_name == 'ci-build'
         run: npm run test:cov
 
       - name: Upload Code Coverage
+        if: inputs.environment_name == 'development' || inputs.environment_name == 'ci-build'
         uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -96,6 +98,7 @@ jobs:
         run: npm run build
 
       - name: Build Storybook
+        if: inputs.environment_name == 'development' || inputs.environment_name == 'ci-build'
         uses: chromaui/action@v11
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
