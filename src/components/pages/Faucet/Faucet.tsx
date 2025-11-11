@@ -38,6 +38,7 @@ import {
     toCurrency,
     toOptions,
 } from 'src/utils';
+import { getTokenContractAddress, mintTokens } from 'src/utils/faucet';
 import { useAccount, useWalletClient } from 'wagmi';
 
 const MenuAddToken = ({
@@ -107,8 +108,7 @@ export const Faucet = () => {
     const assetList = toOptions(currencies, CurrencySymbol.USDC).filter(
         ccy =>
             currencyMap[ccy.value].toCurrency().isToken &&
-            ccy.label !== CurrencySymbol.USDFC &&
-            ccy.label !== CurrencySymbol.JPYC
+            ccy.label !== CurrencySymbol.USDFC
     );
 
     const [ccy, setCcy] = useState<CurrencySymbol | null>(null);
@@ -128,10 +128,19 @@ export const Faucet = () => {
     }, [ccy]);
 
     const mint = useCallback(async () => {
-        if (!account || !sf || !token || !(token instanceof Token)) return;
+        if (
+            !account ||
+            !sf ||
+            !token ||
+            !(token instanceof Token) ||
+            !client ||
+            !ccy
+        )
+            return;
+
         setIsPending(true);
         try {
-            const tx = await sf.mintERC20Token(token);
+            const tx = await mintTokens(ccy, token, account, sf, client);
             const transactionStatus = await handleContractTransaction(tx);
 
             if (!transactionStatus) {
@@ -149,7 +158,7 @@ export const Faucet = () => {
             }
         }
         setIsPending(false);
-    }, [account, sf, token, handleContractTransaction]);
+    }, [account, sf, token, handleContractTransaction, client, ccy]);
 
     const addToMetamask = useCallback(
         async (token: Token | null) => {
@@ -167,16 +176,15 @@ export const Faucet = () => {
     );
 
     useEffect(() => {
-        const getContractAddress = async () => {
-            if (!sf || !token || !(token instanceof Token)) return '';
-            const address = await sf.getERC20TokenContractAddress(token);
-            return address;
+        const fetchContractAddress = async () => {
+            if (!sf || !token || !(token instanceof Token) || !ccy) return '';
+            return await getTokenContractAddress(ccy, token, sf);
         };
 
-        getContractAddress().then(address => {
+        fetchContractAddress().then(address => {
             setAddress(address);
         });
-    }, [sf, token]);
+    }, [sf, token, ccy]);
 
     return (
         <Page title='Test Pilot Program'>
@@ -298,7 +306,10 @@ export const Faucet = () => {
                                     <Button
                                         onClick={mint}
                                         disabled={
-                                            !account || isPending || chainError
+                                            !account ||
+                                            !client ||
+                                            isPending ||
+                                            chainError
                                         }
                                         size={ButtonSizes.lg}
                                     >
