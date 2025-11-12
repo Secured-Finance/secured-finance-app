@@ -39,7 +39,7 @@ import {
     toOptions,
 } from 'src/utils';
 import { getTokenContractAddress, mintTokens } from 'src/utils/faucet';
-import { useAccount, useWalletClient } from 'wagmi';
+import { useAccount, useChainId, useWalletClient } from 'wagmi';
 
 const MenuAddToken = ({
     address,
@@ -102,14 +102,27 @@ export const Faucet = () => {
     const handleContractTransaction = useHandleContractTransaction();
     const { address: account } = useAccount();
     const { data: client } = useWalletClient();
+    const chainId = useChainId();
     const sf = useSF();
 
     const { data: currencies } = useCurrencies();
-    const assetList = toOptions(currencies, CurrencySymbol.USDC).filter(
-        ccy =>
-            currencyMap[ccy.value].toCurrency().isToken &&
-            ccy.label !== CurrencySymbol.USDFC
-    );
+    const assetList = useMemo(() => {
+        const list = toOptions(currencies, CurrencySymbol.USDC).filter(
+            ccy =>
+                currencyMap[ccy.value].toCurrency().isToken &&
+                ccy.label !== CurrencySymbol.USDFC
+        );
+
+        if (chainId === 11155111) {
+            return list.sort((a, b) => {
+                if (a.value === CurrencySymbol.JPYC) return -1;
+                if (b.value === CurrencySymbol.JPYC) return 1;
+                return 0;
+            });
+        }
+
+        return list;
+    }, [currencies, chainId]);
 
     const [ccy, setCcy] = useState<CurrencySymbol | null>(null);
     const [address, setAddress] = useState<string>('');
@@ -117,14 +130,18 @@ export const Faucet = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [txHash, setTxHash] = useState<string | undefined>();
 
+    const selectedAsset = useMemo(
+        () =>
+            ccy
+                ? assetList.find(item => item.value === ccy) || assetList[0]
+                : assetList[0],
+        [ccy, assetList]
+    );
+
     const token = useMemo(() => {
         if (!ccy) return null;
         const currency = toCurrency(ccy);
-        if (currency instanceof Token) {
-            return currency;
-        }
-
-        return null;
+        return currency instanceof Token ? currency : null;
     }, [ccy]);
 
     const mint = useCallback(async () => {
@@ -176,15 +193,32 @@ export const Faucet = () => {
     );
 
     useEffect(() => {
-        const fetchContractAddress = async () => {
-            if (!sf || !token || !(token instanceof Token) || !ccy) return '';
-            return await getTokenContractAddress(ccy, token, sf);
-        };
+        if (!sf || !token || !(token instanceof Token) || !ccy) {
+            setAddress('');
+            return;
+        }
 
-        fetchContractAddress().then(address => {
-            setAddress(address);
+        let isActive = true;
+        setAddress('');
+
+        getTokenContractAddress(ccy, token, sf).then(address => {
+            if (isActive && address) {
+                setAddress(address);
+            }
         });
-    }, [sf, token, ccy]);
+
+        return () => {
+            isActive = false;
+        };
+    }, [sf, token, ccy, chainId]);
+
+    const firstAssetValue = assetList.length > 0 ? assetList[0].value : null;
+
+    useEffect(() => {
+        if (firstAssetValue) {
+            setCcy(prev => (prev !== firstAssetValue ? firstAssetValue : prev));
+        }
+    }, [firstAssetValue]);
 
     return (
         <Page title='Test Pilot Program'>
@@ -199,18 +233,8 @@ export const Faucet = () => {
                                 <div className='grid h-14 grid-flow-col items-center justify-start gap-x-3 rounded-xl border border-neutral-3 bg-black-20 px-2 tablet:justify-stretch'>
                                     <CurrencyDropdown
                                         currencyOptionList={assetList}
-                                        selected={assetList[0]}
-                                        onChange={ccy => {
-                                            if (
-                                                assetList
-                                                    .map(item => item.label)
-                                                    .includes(ccy)
-                                            ) {
-                                                setCcy(ccy as CurrencySymbol);
-                                            } else {
-                                                setCcy(null);
-                                            }
-                                        }}
+                                        selected={selectedAsset}
+                                        onChange={setCcy}
                                         variant='fixedWidth'
                                     />
 
