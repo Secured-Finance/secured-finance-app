@@ -38,7 +38,11 @@ import {
     toCurrency,
     toOptions,
 } from 'src/utils';
-import { getTokenContractAddress, mintTokens } from 'src/utils/faucet';
+import {
+    formatErrorMessage,
+    getTokenContractAddress,
+    mintTokens,
+} from 'src/utils/faucet';
 import { useAccount, useChainId, useWalletClient } from 'wagmi';
 
 const MenuAddToken = ({
@@ -129,6 +133,7 @@ export const Faucet = () => {
     const [isPending, setIsPending] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [txHash, setTxHash] = useState<string | undefined>();
+    const [error, setError] = useState<string | null>(null);
 
     const selectedAsset = useMemo(
         () =>
@@ -156,12 +161,13 @@ export const Faucet = () => {
             return;
 
         setIsPending(true);
+        setError(null);
         try {
             const tx = await mintTokens(ccy, token, account, sf, client);
             const transactionStatus = await handleContractTransaction(tx);
 
             if (!transactionStatus) {
-                console.error('Some error occurred');
+                setError('Transaction failed. Please try again.');
             } else {
                 setTxHash(tx);
                 track('Mint Tokens', {
@@ -170,9 +176,8 @@ export const Faucet = () => {
                 setIsOpen(true);
             }
         } catch (e) {
-            if (e instanceof Error) {
-                console.error(e.message);
-            }
+            console.error(e);
+            setError(formatErrorMessage(e));
         }
         setIsPending(false);
     }, [account, sf, token, handleContractTransaction, client, ccy]);
@@ -326,7 +331,7 @@ export const Faucet = () => {
                                     </div>
                                     <div></div>
                                 </div>
-                                <div className='flex justify-center'>
+                                <div className='flex flex-col items-center gap-4'>
                                     <Button
                                         onClick={mint}
                                         disabled={
@@ -341,6 +346,16 @@ export const Faucet = () => {
                                             ? 'Minting...'
                                             : 'Mint tokens'}
                                     </Button>
+                                    {error && (
+                                        <div className='typography-caption w-full max-w-md rounded-lg border border-galacticOrange bg-galacticOrange/10 px-4 py-3 text-galacticOrange'>
+                                            <div className='font-semibold'>
+                                                Error
+                                            </div>
+                                            <div className='mt-1 break-words'>
+                                                {error}
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         ) : (
