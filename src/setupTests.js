@@ -9,6 +9,13 @@ import failOnConsole from 'jest-fail-on-console';
 import timemachine from 'timemachine';
 
 jest.mock('next/router', () => jest.requireActual('next-router-mock'));
+jest.mock('@web3modal/wagmi/react', () => ({
+    createWeb3Modal: jest.fn(),
+    useWeb3Modal: () => ({
+        open: jest.fn(),
+        close: jest.fn(),
+    }),
+}));
 
 failOnConsole({
     silenceMessage: errorMessage => {

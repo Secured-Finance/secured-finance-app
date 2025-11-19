@@ -1,11 +1,10 @@
-import { useDispatch } from 'react-redux';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import SFLogo from 'src/assets/img/logo.svg';
 import SFSphere from 'src/assets/img/sf-sphere.png';
 import { Button, GradientBox } from 'src/components/atoms';
-import { setWalletDialogOpen } from 'src/store/interactions';
 
 export const ConnectWalletCard = () => {
-    const dispatch = useDispatch();
+    const { open } = useWeb3Modal();
 
     return (
         <div className='h-fit w-full'>
@@ -25,7 +24,7 @@ export const ConnectWalletCard = () => {
                     <Button
                         className='h-12'
                         fullWidth={true}
-                        onClick={() => dispatch(setWalletDialogOpen(true))}
+                        onClick={() => open()}
                     >
                         Connect Wallet
                     </Button>
