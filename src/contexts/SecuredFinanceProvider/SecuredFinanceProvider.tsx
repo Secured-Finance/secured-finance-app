@@ -245,7 +245,7 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
             if (activeConnector) {
                 activeConnector.switchChain?.(selectedChainId);
             } else {
-                // open();
+                open();
             }
         }
     }, [
