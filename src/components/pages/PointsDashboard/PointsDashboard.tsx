@@ -49,9 +49,8 @@ import {
     SupportedChainsList,
     ordinaryFormat,
     percentFormat,
-    readWalletFromStore,
 } from 'src/utils';
-import { useAccount, useConnect, useSignMessage } from 'wagmi';
+import { useAccount, useSignMessage } from 'wagmi';
 import { getShareMessage, quoteTweetUrl } from './constants';
 
 const POLL_INTERVAL = 600000; // 10 minutes
@@ -337,7 +336,7 @@ const QuestList = ({ chainId }: { chainId: number }) => {
     const [isDefaultDepositCcySymbol, setIsDefaultDepositCcySymbol] = useState<
         string | undefined
     >(undefined);
-    const { connectors } = useConnect();
+    const { connector: activeConnector } = useAccount();
     const { data, loading } = useGetQuestsQuery({
         pollInterval: POLL_INTERVAL,
         ...POINT_API_QUERY_OPTIONS,
@@ -353,9 +352,6 @@ const QuestList = ({ chainId }: { chainId: number }) => {
             ),
         [collateralBalances, collateralCurrencies]
     );
-
-    const provider = readWalletFromStore();
-    const connector = connectors.find(connect => connect.name === provider);
 
     const PointTag = ({
         point,
@@ -490,7 +486,7 @@ const QuestList = ({ chainId }: { chainId: number }) => {
                     }
                     onClick={() => {
                         if (questChainId !== chainId) {
-                            connector
+                            activeConnector
                                 ?.switchChain?.(Number(questChainId))
                                 .then(() => {
                                     setTimeout(() => call(), 500);

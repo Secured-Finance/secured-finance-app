@@ -16,11 +16,7 @@ import {
     updateLatestBlock,
 } from 'src/store/blockchain';
 import { RootState } from 'src/store/types';
-import {
-    getSupportedChainIds,
-    getSupportedNetworks,
-    readWalletFromStore,
-} from 'src/utils';
+import { getSupportedChainIds, getSupportedNetworks } from 'src/utils';
 import {
     InterfaceEvents,
     InterfaceProperties,
@@ -37,8 +33,6 @@ import {
     useWalletClient,
 } from 'wagmi';
 
-export const CACHED_PROVIDER_KEY = 'CACHED_PROVIDER_KEY';
-
 export interface SFContext {
     securedFinance?: SecuredFinanceClient;
 }
@@ -53,7 +47,7 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
     const searchParams = useSearchParams();
     const router = useRouter();
     const { open } = useWeb3Modal();
-    const { address, isConnected } = useAccount();
+    const { address, isConnected, connector: activeConnector } = useAccount();
     const { chain } = useNetwork();
     const chainId = useSelector((state: RootState) => state.blockchain.chainId);
     const { connect, connectors } = useConnect();
@@ -116,9 +110,9 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
             }
         };
         fetchChainId();
-        (window.ethereum as any).on('chainChanged', handleChainChanged);
+        (window.ethereum as any)?.on('chainChanged', handleChainChanged);
         return () => {
-            (window.ethereum as any).removeListener(
+            (window.ethereum as any)?.removeListener(
                 'chainChanged',
                 handleChainChanged
             );
@@ -187,14 +181,6 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
             associateWallet(address, chainName, false);
             return;
         }
-
-        const cachedProvider = readWalletFromStore();
-        if (cachedProvider && cachedProvider === 'MetaMask') {
-            const connector = connectors.find(
-                connector => connector.name === cachedProvider
-            );
-            if (connector) connect({ connector: connector });
-        }
     }, [connect, address, connectors, chainName]);
 
     useEffect(() => {
@@ -256,18 +242,21 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
                     : `?${newSearchParams.toString()}`
             );
         } else if (getSupportedChainIds().includes(selectedChainId)) {
-            const provider = readWalletFromStore();
-            const connector = connectors.find(
-                connect => connect.name === provider
-            );
-
-            if (connector) {
-                connector.switchChain?.(selectedChainId);
+            if (activeConnector) {
+                activeConnector.switchChain?.(selectedChainId);
             } else {
-                open();
+                // open();
             }
         }
-    }, [searchParams, chainId, connectors, router, dispatch, open]);
+    }, [
+        searchParams,
+        chainId,
+        connectors,
+        router,
+        dispatch,
+        open,
+        activeConnector,
+    ]);
 
     return (
         <Context.Provider value={{ securedFinance }}>

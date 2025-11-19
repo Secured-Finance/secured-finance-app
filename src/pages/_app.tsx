@@ -138,14 +138,7 @@ const config = createConfig({
             chains,
             options: {
                 projectId: projectId,
-                qrModalOptions: {
-                    themeVariables: {
-                        '--w3m-font-family':
-                            "'Suisse International', sans-serif",
-                        '--w3m-accent-color': '#002133',
-                        '--w3m-background-color': '#5162FF',
-                    },
-                },
+                showQrModal: false,
             },
         }),
         new InjectedConnector({
@@ -171,7 +164,6 @@ createWeb3Modal({
     chains: chains,
     metadata: metadata,
     enableAnalytics: true,
-    featuredWalletIds: ['metamask'],
     themeMode: 'light',
     themeVariables: {
         '--w3m-font-family': "'Suisse International', sans-serif",

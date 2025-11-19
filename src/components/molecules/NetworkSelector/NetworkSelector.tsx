@@ -11,9 +11,8 @@ import {
     SupportedChainsList,
     formatDataCy,
     getSupportedChainIds,
-    readWalletFromStore,
 } from 'src/utils';
-import { useConnect } from 'wagmi';
+import { useAccount } from 'wagmi';
 
 type ChainInfo = {
     chainName: string;
@@ -88,25 +87,21 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
     const selectedNetwork = chainList.find(
         d => Networks[d.chainId].toLowerCase() === networkName.toLowerCase()
     );
-    const { connectors } = useConnect();
+    const { connector: activeConnector } = useAccount();
 
     const handleNetworkChange = useCallback(
         async (index: number) => {
             const id = chainList[index].chainId;
-            const provider = readWalletFromStore();
-            const connector = connectors.find(
-                connect => connect.name === provider
-            );
-            if (!connector) {
+            if (!activeConnector) {
                 return;
             }
-            await connector.switchChain?.(id);
+            await activeConnector.switchChain?.(id);
             router.push({
                 pathname: router.pathname,
                 query: undefined,
             });
         },
-        [chainList, connectors, router]
+        [activeConnector, chainList, router]
     );
 
     return (

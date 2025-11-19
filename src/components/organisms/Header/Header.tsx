@@ -14,8 +14,14 @@ import {
     SupportedNetworks,
     Tab,
 } from 'src/components/atoms';
-import { HamburgerMenu, MenuPopover, Settings } from 'src/components/molecules';
+import {
+    HamburgerMenu,
+    MenuPopover,
+    NetworkSelector,
+    Settings,
+} from 'src/components/molecules';
 import { useBreakpoint, usePoints } from 'src/hooks';
+import useSF from 'src/hooks/useSecuredFinance';
 import { RootState } from 'src/store/types';
 import {
     getShowStablecoinAppUrl,
@@ -67,6 +73,7 @@ const HeaderMessage = ({
 
 const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     const { open } = useWeb3Modal();
+    const securedFinance = useSF();
     const isMobile = useBreakpoint('tablet');
     const { address, isConnected } = useAccount();
 
@@ -148,6 +155,12 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                         )}
                         {isConnected && address ? (
                             <>
+                                <NetworkSelector
+                                    networkName={
+                                        securedFinance?.config?.network ??
+                                        'Unknown'
+                                    }
+                                />
                                 <div className='relative max-w-sm'>
                                     <button
                                         data-cy='popover-button'
