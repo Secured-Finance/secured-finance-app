@@ -80,6 +80,7 @@ export const currencyMap: Readonly<
         roundingDecimal: 0,
         longName: 'JPY Coin',
         hasOrderBook: true,
+        sortPriority: 1,
     },
     [CurrencySymbol.USDC]: {
         index: 1,
@@ -378,6 +379,7 @@ export type CurrencyInfo = {
     roundingDecimal: number;
     longName: string;
     hasOrderBook: boolean;
+    sortPriority?: number; // Lower numbers appear first in lists (default: 999)
 };
 
 export const toCurrency = (ccy: CurrencySymbol) => {

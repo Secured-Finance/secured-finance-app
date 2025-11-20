@@ -17,6 +17,8 @@ import {
     Separator,
 } from 'src/components/atoms';
 import {
+    Alert,
+    AlertSeverity,
     CurrencyDropdown,
     Dialog,
     SuccessPanel,
@@ -117,16 +119,13 @@ export const Faucet = () => {
                 ccy.label !== CurrencySymbol.USDFC
         );
 
-        if (chainId === 11155111) {
-            return list.sort((a, b) => {
-                if (a.value === CurrencySymbol.JPYC) return -1;
-                if (b.value === CurrencySymbol.JPYC) return 1;
-                return 0;
-            });
-        }
-
-        return list;
-    }, [currencies, chainId]);
+        // Sort by sortPriority (lower numbers first), defaulting to 999 if not set
+        return list.sort((a, b) => {
+            const priorityA = currencyMap[a.value].sortPriority ?? 999;
+            const priorityB = currencyMap[b.value].sortPriority ?? 999;
+            return priorityA - priorityB;
+        });
+    }, [currencies]);
 
     const [ccy, setCcy] = useState<CurrencySymbol | null>(null);
     const [address, setAddress] = useState<string>('');
@@ -134,6 +133,11 @@ export const Faucet = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [txHash, setTxHash] = useState<string | undefined>();
     const [error, setError] = useState<string | null>(null);
+
+    // Clear error when currency changes
+    useEffect(() => {
+        setError(null);
+    }, [ccy]);
 
     const selectedAsset = useMemo(
         () =>
@@ -206,11 +210,18 @@ export const Faucet = () => {
         let isActive = true;
         setAddress('');
 
-        getTokenContractAddress(ccy, token, sf).then(address => {
-            if (isActive && address) {
-                setAddress(address);
-            }
-        });
+        getTokenContractAddress(ccy, token, sf)
+            .then(address => {
+                if (isActive && address) {
+                    setAddress(address);
+                }
+            })
+            .catch(err => {
+                console.error('Failed to fetch token address:', err);
+                if (isActive) {
+                    setAddress('');
+                }
+            });
 
         return () => {
             isActive = false;
@@ -347,13 +358,12 @@ export const Faucet = () => {
                                             : 'Mint tokens'}
                                     </Button>
                                     {error && (
-                                        <div className='typography-caption w-full max-w-md rounded-lg border border-galacticOrange bg-galacticOrange/10 px-4 py-3 text-galacticOrange'>
-                                            <div className='font-semibold'>
-                                                Error
-                                            </div>
-                                            <div className='mt-1 break-words'>
-                                                {error}
-                                            </div>
+                                        <div className='w-full max-w-md'>
+                                            <Alert
+                                                severity={AlertSeverity.Error}
+                                                title='Error'
+                                                subtitle={error}
+                                            />
                                         </div>
                                     )}
                                 </div>
