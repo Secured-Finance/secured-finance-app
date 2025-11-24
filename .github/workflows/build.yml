@@ -99,7 +99,7 @@ jobs:
 
       - name: Build Storybook
         if: inputs.environment_name == 'development' || inputs.environment_name == 'ci-build'
-        uses: chromaui/action@v11
+        uses: chromaui/action@v13
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           exitOnceUploaded: true
