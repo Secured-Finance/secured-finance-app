@@ -1,14 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Environment } from 'src/utils';
-import { filecoin, filecoinCalibration } from 'viem/chains';
+import { mainnet, sepolia } from 'viem/chains';
 import { Blockchain } from './type';
 
 const initialState: Blockchain = {
     latestBlock: 0,
     chainId:
-        process.env.SF_ENV === Environment.PRODUCTION
-            ? filecoin.id
-            : filecoinCalibration.id,
+        process.env.SF_ENV === Environment.PRODUCTION ? mainnet.id : sepolia.id,
     chainError: false,
     lastActionTimestamp: 0,
     testnetEnabled: false,
