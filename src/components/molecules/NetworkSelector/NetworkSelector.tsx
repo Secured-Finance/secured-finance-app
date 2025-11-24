@@ -5,15 +5,15 @@ import { Fragment, useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import ExclamationCircleIcon from 'src/assets/icons/exclamation-circle.svg';
 import { Separator } from 'src/components/atoms';
+import { useBreakpoint } from 'src/hooks';
 import { Networks } from 'src/store/blockchain';
 import { RootState } from 'src/store/types';
 import {
     SupportedChainsList,
     formatDataCy,
     getSupportedChainIds,
-    readWalletFromStore,
 } from 'src/utils';
-import { useConnect } from 'wagmi';
+import { useAccount } from 'wagmi';
 
 type ChainInfo = {
     chainName: string;
@@ -77,6 +77,8 @@ const generateChainList = () => {
 
 export const NetworkSelector = ({ networkName }: { networkName: string }) => {
     const router = useRouter();
+    const isMobile = useBreakpoint('tablet');
+
     const testnetEnabled = useSelector(
         (state: RootState) => state.blockchain.testnetEnabled
     );
@@ -88,25 +90,21 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
     const selectedNetwork = chainList.find(
         d => Networks[d.chainId].toLowerCase() === networkName.toLowerCase()
     );
-    const { connectors } = useConnect();
+    const { connector: activeConnector } = useAccount();
 
     const handleNetworkChange = useCallback(
         async (index: number) => {
             const id = chainList[index].chainId;
-            const provider = readWalletFromStore();
-            const connector = connectors.find(
-                connect => connect.name === provider
-            );
-            if (!connector) {
+            if (!activeConnector) {
                 return;
             }
-            await connector.switchChain?.(id);
+            await activeConnector.switchChain?.(id);
             router.push({
                 pathname: router.pathname,
                 query: undefined,
             });
         },
-        [chainList, connectors, router]
+        [activeConnector, chainList, router]
     );
 
     return (
@@ -139,7 +137,15 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
                 leaveFrom='opacity-100 translate-y-0'
                 leaveTo='opacity-0 translate-y-5'
             >
-                <Popover.Panel className='absolute left-0 z-10 mt-3 w-64 origin-top-right tablet:right-0'>
+                <Popover.Panel
+                    className={clsx(
+                        'absolute z-10 mt-3 w-64 origin-top-right tablet:right-0',
+                        {
+                            'right-0': isMobile,
+                            'left-0': !isMobile,
+                        }
+                    )}
+                >
                     {({ close }) => (
                         <div className='relative flex h-fit flex-col overflow-hidden rounded-xl bg-neutral-900 py-[10px]'>
                             {chainList.map((link, index) => {

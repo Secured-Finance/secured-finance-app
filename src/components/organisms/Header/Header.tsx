@@ -1,9 +1,11 @@
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import ArrowUpSquare from 'src/assets/icons/arrow-up-square.svg';
 import Badge from 'src/assets/icons/badge.svg';
+import UserIcon from 'src/assets/icons/user-circle.svg';
 import SFLogo from 'src/assets/img/logo.svg';
 import SFLogoSmall from 'src/assets/img/small-logo.svg';
 import {
@@ -18,10 +20,8 @@ import {
     NetworkSelector,
     Settings,
 } from 'src/components/molecules';
-import { WalletDialog, WalletPopover } from 'src/components/organisms';
 import { useBreakpoint, usePoints } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
-import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
 import {
     getShowStablecoinAppUrl,
@@ -72,7 +72,8 @@ const HeaderMessage = ({
 };
 
 const Header = ({ showNavigation }: { showNavigation: boolean }) => {
-    const dispatch = useDispatch();
+    const { open } = useWeb3Modal();
+    const securedFinance = useSF();
     const isMobile = useBreakpoint('tablet');
     const { address, isConnected } = useAccount();
 
@@ -83,7 +84,6 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
 
     const userPoints = userData?.user.point;
 
-    const securedFinance = useSF();
     const chainError = useSelector(
         (state: RootState) => state.blockchain.chainError
     );
@@ -161,13 +161,26 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                                         'Unknown'
                                     }
                                 />
-                                <WalletPopover
-                                    wallet={AddressUtils.format(address, 6)}
-                                    networkName={
-                                        securedFinance?.config?.network ??
-                                        'Unknown'
-                                    }
-                                />
+                                <div className='relative max-w-sm'>
+                                    <button
+                                        data-cy='popover-button'
+                                        aria-label='Wallet Popover Button'
+                                        className={clsx(
+                                            'flex h-8 flex-row items-center gap-x-1 rounded-lg bg-neutral-800 px-2 py-2 ring-1 ring-neutral-500 hover:bg-white-10 hover:ring-white-10 focus:outline-none active:bg-white-10 active:ring-white-10 tablet:h-10 tablet:gap-x-1.5 tablet:rounded-xl tablet:px-3 tablet:py-2.5 tablet:ring-[1.5px]'
+                                        )}
+                                        onClick={() => open()}
+                                    >
+                                        <span>
+                                            <UserIcon className='h-4 w-4 tablet:h-5 tablet:w-5' />
+                                        </span>
+                                        <span
+                                            className='tablet:typography-desktop-body-5 hidden text-grayScale tablet:block'
+                                            data-cy='wallet-address'
+                                        >
+                                            {AddressUtils.format(address, 6)}
+                                        </span>
+                                    </button>
+                                </div>
                                 <Settings isProduction={isProduction} />
                             </>
                         ) : (
@@ -175,9 +188,7 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                                 size={btnSize}
                                 data-cy='wallet'
                                 data-testid='connect-wallet'
-                                onClick={() =>
-                                    dispatch(setWalletDialogOpen(true))
-                                }
+                                onClick={() => open()}
                             >
                                 Connect Wallet
                             </Button>
@@ -192,7 +203,6 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                             />
                         </div>
                     </div>
-                    <WalletDialog />
                 </nav>
             </div>
         </>
