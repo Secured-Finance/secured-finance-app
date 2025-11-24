@@ -5,6 +5,7 @@ import { Fragment, useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import ExclamationCircleIcon from 'src/assets/icons/exclamation-circle.svg';
 import { Separator } from 'src/components/atoms';
+import { useBreakpoint } from 'src/hooks';
 import { Networks } from 'src/store/blockchain';
 import { RootState } from 'src/store/types';
 import {
@@ -76,6 +77,8 @@ const generateChainList = () => {
 
 export const NetworkSelector = ({ networkName }: { networkName: string }) => {
     const router = useRouter();
+    const isMobile = useBreakpoint('tablet');
+
     const testnetEnabled = useSelector(
         (state: RootState) => state.blockchain.testnetEnabled
     );
@@ -134,7 +137,15 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
                 leaveFrom='opacity-100 translate-y-0'
                 leaveTo='opacity-0 translate-y-5'
             >
-                <Popover.Panel className='absolute left-0 z-10 mt-3 w-64 origin-top-right tablet:right-0'>
+                <Popover.Panel
+                    className={clsx(
+                        'absolute z-10 mt-3 w-64 origin-top-right tablet:right-0',
+                        {
+                            'right-0': isMobile,
+                            'left-0': !isMobile,
+                        }
+                    )}
+                >
                     {({ close }) => (
                         <div className='relative flex h-fit flex-col overflow-hidden rounded-xl bg-neutral-900 py-[10px]'>
                             {chainList.map((link, index) => {

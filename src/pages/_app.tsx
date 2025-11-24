@@ -29,7 +29,6 @@ import store from 'src/store';
 import { selectNetworkName } from 'src/store/blockchain';
 import { RootState } from 'src/store/types';
 import {
-    Environment,
     getAmplitudeApiKey,
     getGoogleAnalyticsTag,
     getGraphqlServerUrl,
@@ -39,10 +38,8 @@ import {
     getWalletConnectId,
 } from 'src/utils';
 import * as gtag from 'src/utils/gtag';
-import { mainnet, sepolia } from 'viem/chains';
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
-import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
@@ -135,7 +132,6 @@ const config = createConfig({
     autoConnect: true,
     publicClient: publicClient,
     connectors: [
-        new MetaMaskConnector({ chains }),
         new WalletConnectConnector({
             chains,
             options: {
@@ -164,8 +160,6 @@ createWeb3Modal({
     wagmiConfig: config,
     projectId: projectId,
     chains: chains,
-    defaultChain:
-        process.env.SF_ENV === Environment.PRODUCTION ? mainnet : sepolia,
     metadata: metadata,
     enableAnalytics: true,
     themeMode: 'light',
