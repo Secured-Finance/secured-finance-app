@@ -8,6 +8,7 @@ import {
     createHttpLink,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
+import { RetryLink } from 'apollo-link-retry';
 import { NextUIProvider } from '@nextui-org/system';
 import { GraphApolloClient } from '@secured-finance/sf-graph-client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -241,15 +242,61 @@ const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
     const client = useMemo(() => {
         const subgraphUrl = getSubgraphUrl(chainId);
-        return new ApolloClient({
-            link: ApolloLink.split(
+
+        const retryLink = new RetryLink({
+            delay: {
+                initial: 300,
+                max: 10000,
+                jitter: true,
+            },
+            attempts: {
+                max: 3,
+                retryIf: (error, _operation) => {
+                    const statusCode = error?.statusCode;
+                    const is429 =
+                        statusCode === 429 ||
+                        error?.message?.includes('429') ||
+                        error?.message?.includes('Too many requests');
+
+                    if (is429) {
+                        return true;
+                    }
+
+                    return statusCode >= 500;
+                },
+            },
+        });
+
+        const subgraphLink = subgraphUrl
+            ? createHttpLink({ uri: subgraphUrl })
+            : new GraphApolloClient({ network }).link;
+
+        const linkChain = ApolloLink.from([
+            retryLink as unknown as ApolloLink,
+            ApolloLink.split(
                 operation => operation.getContext().type === 'point-dashboard',
                 authLink.concat(httpLink),
-                subgraphUrl
-                    ? createHttpLink({ uri: subgraphUrl })
-                    : new GraphApolloClient({ network }).link
+                subgraphLink
             ),
+        ]);
+
+        return new ApolloClient({
+            link: linkChain,
             cache: new InMemoryCache(),
+            defaultOptions: {
+                watchQuery: {
+                    fetchPolicy: 'cache-first',
+                    errorPolicy: 'all',
+                    notifyOnNetworkStatusChange: true,
+                },
+                query: {
+                    fetchPolicy: 'cache-first',
+                    errorPolicy: 'all',
+                },
+                mutate: {
+                    errorPolicy: 'all',
+                },
+            },
         });
     }, [network, chainId]);
 
