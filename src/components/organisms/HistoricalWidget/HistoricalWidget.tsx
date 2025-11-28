@@ -24,14 +24,30 @@ export type Transaction = {
     volumeInFV: string;
 };
 
-export const HistoricalWidget = () => {
+type HistoricalWidgetProps = {
+    sharedTimeScale?: HistoricalDataIntervals;
+    onTimeScaleChange?: (timeScale: HistoricalDataIntervals) => void;
+    historicalTradeData?: {
+        data?: { transactionCandleSticks?: Transaction[] };
+    };
+};
+
+export const HistoricalWidget = ({
+    sharedTimeScale,
+    onTimeScaleChange: onTimeScaleChangeProp,
+    historicalTradeData: historicalTradeDataProp,
+}: HistoricalWidgetProps) => {
     const { currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
-    const [selectedTimeScale, setSelectedTimeScale] =
+    const [internalTimeScale, setInternalTimeScale] =
         useState<HistoricalDataIntervals>(HistoricalDataIntervals['5M']);
 
-    const historicalTradeData = useGraphClientHook(
+    const selectedTimeScale = sharedTimeScale ?? internalTimeScale;
+
+    const shouldSkipInternalQuery = !!historicalTradeDataProp;
+
+    const internalHistoricalTradeDataRaw = useGraphClientHook(
         {
             interval: selectedTimeScale,
             currency: toBytes32(currency),
@@ -40,13 +56,27 @@ export const HistoricalWidget = () => {
         queries.TransactionCandleStickDocument
     );
 
+    const internalHistoricalTradeData = shouldSkipInternalQuery
+        ? { data: undefined }
+        : internalHistoricalTradeDataRaw;
+
+    const historicalTradeData =
+        historicalTradeDataProp ?? internalHistoricalTradeData;
+
     const data = useTransactionCandleStickData(
-        historicalTradeData,
+        historicalTradeData as {
+            data?: { transactionCandleSticks?: Transaction[] };
+        },
         selectedTimeScale
     );
 
     const onTimeScaleChange = (time: string) => {
-        setSelectedTimeScale(time as HistoricalDataIntervals);
+        const newTimeScale = time as HistoricalDataIntervals;
+        if (onTimeScaleChangeProp) {
+            onTimeScaleChangeProp(newTimeScale);
+        } else {
+            setInternalTimeScale(newTimeScale);
+        }
     };
 
     return (

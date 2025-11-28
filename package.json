@@ -26,6 +26,7 @@
     "@tippyjs/react": "^4.2.6",
     "@wagmi/connectors": "^3.1.5",
     "@web3modal/wagmi": "^3.5.7",
+    "apollo-link-retry": "^2.2.16",
     "axios": "^0.21.1",
     "bignumber.js": "^9.0.1",
     "change-case": "^5.4.4",

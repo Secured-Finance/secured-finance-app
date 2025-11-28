@@ -31,6 +31,7 @@ import {
     OrderTable,
     RecentTradesTable,
 } from 'src/components/organisms';
+import type { Transaction } from 'src/components/organisms/HistoricalWidget/HistoricalWidget';
 import { TableType } from 'src/components/pages';
 import { ThreeColumnsWithTopBar } from 'src/components/templates';
 import {
@@ -70,6 +71,7 @@ import {
 import { RootState } from 'src/store/types';
 import {
     DailyMarketInfo,
+    HistoricalDataIntervals,
     MaturityOptionList,
     SavedMarket,
     TransactionList,
@@ -238,6 +240,22 @@ export const AdvancedLending = ({
     const securedFinance = useSF();
     const currentChainId = securedFinance?.config.chain.id;
     const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
+
+    const [sharedHistoricalTimeScale, setSharedHistoricalTimeScale] =
+        useState<HistoricalDataIntervals>(HistoricalDataIntervals['5M']);
+
+    const sharedHistoricalTradeDataRaw = useGraphClientHook(
+        {
+            interval: sharedHistoricalTimeScale,
+            currency: toBytes32(currency),
+            maturity: maturity,
+        },
+        queries.TransactionCandleStickDocument
+    );
+
+    const sharedHistoricalTradeData = isSubgraphSupported
+        ? sharedHistoricalTradeDataRaw
+        : { data: undefined };
 
     useEffect(() => {
         setTimestamp(Math.round(new Date().getTime() / 1000));
@@ -624,7 +642,19 @@ export const AdvancedLending = ({
                                 loading={ratesLoading}
                             />
                         </div>
-                        {isSubgraphSupported && <HistoricalWidget />}
+                        {isSubgraphSupported && (
+                            <HistoricalWidget
+                                sharedTimeScale={sharedHistoricalTimeScale}
+                                onTimeScaleChange={setSharedHistoricalTimeScale}
+                                historicalTradeData={
+                                    sharedHistoricalTradeData as {
+                                        data?: {
+                                            transactionCandleSticks?: Transaction[];
+                                        };
+                                    }
+                                }
+                            />
+                        )}
                     </TabSelector>
 
                     <>
@@ -661,7 +691,21 @@ export const AdvancedLending = ({
                                         />
                                     </div>
                                     {isSubgraphSupported && (
-                                        <HistoricalWidget />
+                                        <HistoricalWidget
+                                            sharedTimeScale={
+                                                sharedHistoricalTimeScale
+                                            }
+                                            onTimeScaleChange={
+                                                setSharedHistoricalTimeScale
+                                            }
+                                            historicalTradeData={
+                                                sharedHistoricalTradeData as {
+                                                    data?: {
+                                                        transactionCandleSticks?: Transaction[];
+                                                    };
+                                                }
+                                            }
+                                        />
                                     )}
                                 </TabSelector>
                             </div>

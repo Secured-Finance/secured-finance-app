@@ -38,7 +38,8 @@ export function useGraphClientHook<T, TVariables, K extends keyof T>(
     entity?: K,
     skip = false,
     realTime = false,
-    client?: GraphApolloClient
+    client?: GraphApolloClient,
+    cacheFirst = true
 ) {
     const [result, setResult] = useState<
         Omit<QueryResult<T>, 'data' | 'error'> & {
@@ -65,7 +66,8 @@ export function useGraphClientHook<T, TVariables, K extends keyof T>(
                 ...variables,
                 awaitRefetchQueries: true,
             },
-            fetchPolicy: 'network-only',
+            fetchPolicy: cacheFirst ? 'cache-first' : 'network-only',
+            nextFetchPolicy: cacheFirst ? 'cache-first' : 'network-only',
             notifyOnNetworkStatusChange: true,
             pollInterval: undefined,
             skip,
