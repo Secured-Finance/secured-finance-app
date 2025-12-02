@@ -15,10 +15,6 @@ module.exports = withBundleAnalyzer({
     trailingSlash: true,
     staticPageGenerationTimeout: 120,
 
-    experimental: {
-        esmExternals: false,
-    },
-
     webpack: (config, options) => webpack.webpackOverride(config),
 
     async headers() {

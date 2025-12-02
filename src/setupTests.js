@@ -16,6 +16,19 @@ jest.mock('@web3modal/wagmi/react', () => ({
         close: jest.fn(),
     }),
 }));
+jest.mock('wagmi', () => {
+    const actual = jest.requireActual('wagmi');
+    return {
+        ...actual,
+        usePublicClient: jest.fn(() => ({
+            waitForTransactionReceipt: jest.fn(async ({ hash }) => ({
+                blockNumber: hash ? BigInt('123') : BigInt('0'),
+                transactionHash: hash,
+                status: 'success',
+            })),
+        })),
+    };
+});
 
 failOnConsole({
     silenceMessage: errorMessage => {
