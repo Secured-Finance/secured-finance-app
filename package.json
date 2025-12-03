@@ -24,8 +24,8 @@
     "@tanstack/react-query": "^5.56.0",
     "@tanstack/react-table": "^8.17.3",
     "@tippyjs/react": "^4.2.6",
-    "@wagmi/connectors": "^5.11.2",
-    "@web3modal/wagmi": "^5.0.0",
+    "@wagmi/connectors": "5.11.2",
+    "@web3modal/wagmi": "5.1.11",
     "axios": "^0.21.1",
     "bignumber.js": "^9.0.1",
     "change-case": "^5.4.4",
@@ -46,8 +46,8 @@
     "react-redux": "^7.2.2",
     "react-responsive": "^9.0.2",
     "siwe": "^2.3.2",
-    "viem": "^2.21.0",
-    "wagmi": "^2.12.0"
+    "viem": "^2.41.0",
+    "wagmi": "2.19.5"
   },
   "scripts": {
     "start": "next dev",
@@ -159,5 +159,10 @@
   },
   "resolutions": {
     "webpack": "^5"
+  },
+  "overrides": {
+    "@storybook/manager-api": "7.6.20",
+    "@storybook/preview-api": "7.6.20",
+    "@wagmi/core": "2.22.1"
   }
 }
