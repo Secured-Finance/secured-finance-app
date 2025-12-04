@@ -1,3 +1,4 @@
+import { withWalletProvider } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
 import { Settings } from './Settings';
@@ -5,6 +6,7 @@ import { Settings } from './Settings';
 export default {
     title: 'Molecules/Settings',
     component: Settings,
+    decorators: [withWalletProvider],
     args: {
         isProduction: true,
     },

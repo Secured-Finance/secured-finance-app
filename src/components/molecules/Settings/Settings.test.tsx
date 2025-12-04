@@ -13,7 +13,9 @@ describe('Settings component', () => {
     });
 
     it('should render un checked testnet button', async () => {
-        render(<Default />);
+        render(<Default />, {
+            preloadedState: { blockchain: { testnetEnabled: false } },
+        });
         const walletButton = await screen.findByRole('button');
         fireEvent.click(walletButton);
         const button = await screen.findByRole('switch');
