@@ -22,6 +22,7 @@ import ZcEthIcon from 'src/assets/coins/zc-eth.svg';
 import ZcFilIcon from 'src/assets/coins/zc-fil.svg';
 import ZcJpycIcon from 'src/assets/coins/zc-jpyc.svg';
 import ZcUsdcIcon from 'src/assets/coins/zc-usdc.svg';
+import ZcUsdfcIcon from 'src/assets/coins/zc-usdfc.svg';
 import { SvgIcon } from 'src/types';
 import { hexToString } from 'viem';
 import { ZERO_BI } from './collateral';
@@ -124,7 +125,7 @@ export const currencyMap: Readonly<
         symbol: CurrencySymbol.USDFC,
         name: USDFC.onChain().name,
         icon: UsdfcIcon,
-        zcIcon: ZcUsdcIcon,
+        zcIcon: ZcUsdfcIcon,
         coinGeckoId: 'usdfc',
         isCollateral: true,
         toBaseUnit: (amount: number) =>
