@@ -104,6 +104,7 @@ jobs:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           exitOnceUploaded: true
           skip: "main"
+          onlyChanged: true
 
       - name: Publish Web App
         uses: actions/upload-artifact@v4
