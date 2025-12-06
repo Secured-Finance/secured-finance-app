@@ -14,7 +14,6 @@ if (isChromatic()) {
 }
 
 export const parameters = {
-    layout: 'fullscreen',
     actions: { argTypesRegex: '^on.*' },
     controls: {
         matchers: {
