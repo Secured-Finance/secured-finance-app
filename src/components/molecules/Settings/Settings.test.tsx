@@ -1,9 +1,20 @@
 import { composeStories } from '@storybook/react';
 import { initialStore } from 'src/stories/mocks/mockStore';
+import { account, connector } from 'src/stories/mocks/mockWallet';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './Settings.stories';
 
 const { Default } = composeStories(stories);
+
+// Mock useAccount to return our mock connector
+jest.mock('wagmi', () => ({
+    ...jest.requireActual('wagmi'),
+    useAccount: () => ({
+        address: account.address,
+        connector: connector,
+        isConnected: true,
+    }),
+}));
 
 describe('Settings component', () => {
     it('should render settings component', async () => {
@@ -29,7 +40,10 @@ describe('Settings component', () => {
         expect(button).toHaveAttribute('aria-checked', 'false');
 
         fireEvent.click(button);
-        expect(button).toHaveAttribute('aria-checked', 'true');
+
+        await waitFor(() =>
+            expect(button).toHaveAttribute('aria-checked', 'true')
+        );
     });
 
     it('should render disabled and checked testnet button', async () => {
@@ -64,9 +78,9 @@ describe('Settings component', () => {
 
         fireEvent.click(toggle);
 
-        await waitFor(() => {
-            expect(store.getState().blockchain.testnetEnabled).toBe(true);
-        });
+        await waitFor(() =>
+            expect(store.getState().blockchain.testnetEnabled).toBe(true)
+        );
     });
 
     it('should reflect correct testnet mode when on Sepolia', async () => {

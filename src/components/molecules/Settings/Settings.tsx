@@ -18,7 +18,6 @@ export const Settings = ({ isProduction }: { isProduction: boolean }) => {
 
     const handleChange = useCallback(async () => {
         const newState = !testnetEnabled;
-        dispatch(updateTestnetEnabled(newState));
 
         if (chainId && connector?.switchChain) {
             const supportedChainIds = getSupportedChainIds();
@@ -28,7 +27,12 @@ export const Settings = ({ isProduction }: { isProduction: boolean }) => {
                 supportedChainIds
             );
 
-            await connector.switchChain(targetChain.id);
+            try {
+                await connector.switchChain(targetChain.id);
+                dispatch(updateTestnetEnabled(newState));
+            } catch (error) {
+                console.error('Failed to switch chain:', error);
+            }
         }
     }, [chainId, connector, dispatch, testnetEnabled]);
 
