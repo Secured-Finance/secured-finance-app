@@ -14,9 +14,14 @@ import {
     updateChainId,
     updateIsChainIdDetected,
     updateLatestBlock,
+    updateTestnetEnabled,
 } from 'src/store/blockchain';
 import { RootState } from 'src/store/types';
-import { getSupportedChainIds, getSupportedNetworks } from 'src/utils';
+import {
+    getSupportedChainIds,
+    getSupportedNetworks,
+    isTestnetChain,
+} from 'src/utils';
 import {
     InterfaceEvents,
     InterfaceProperties,
@@ -84,6 +89,9 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
                 updateChainError(!getSupportedChainIds().includes(chainId))
             );
             dispatch(updateChainId(chainId));
+
+            const isTestnet = isTestnetChain(chainId);
+            dispatch(updateTestnetEnabled(isTestnet));
         },
         [dispatch]
     );

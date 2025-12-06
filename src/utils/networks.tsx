@@ -17,6 +17,11 @@ import {
 } from 'viem/chains';
 import { isProdEnv } from './displayUtils';
 
+type ChainPair = {
+    mainnet: Chain;
+    testnet: Chain | undefined;
+};
+
 type ChainInformation = {
     chain: Chain;
     icon: React.ReactNode;
@@ -39,10 +44,45 @@ const mainnetNetworks: Chain[] = [
     polygonZkEvm,
 ];
 
+const chainPairs: ChainPair[] = [
+    { mainnet: mainnet, testnet: sepolia },
+    { mainnet: filecoin, testnet: filecoinCalibration },
+    { mainnet: arbitrum, testnet: arbitrumSepolia },
+    { mainnet: avalanche, testnet: avalancheFuji },
+    { mainnet: polygonZkEvm, testnet: undefined },
+];
+
 export const getSupportedNetworks = () => {
     return isProdEnv()
         ? mainnetNetworks.concat(testnetNetworks)
         : testnetNetworks;
+};
+
+export const isTestnetChain = (chainId: number): boolean => {
+    return testnetNetworks.some(network => network.id === chainId);
+};
+
+export const getAnalogousChain = (
+    currentChainId: number,
+    toTestnet: boolean,
+    supportedChains: number[]
+): Chain => {
+    let chain: Chain | undefined;
+
+    const pair = chainPairs.find(
+        p => p.mainnet.id === currentChainId || p.testnet?.id === currentChainId
+    );
+
+    if (pair) {
+        chain = toTestnet ? pair.testnet ?? testnetNetworks[0] : pair.mainnet;
+    }
+
+    if (chain && supportedChains.includes(chain.id)) {
+        return chain;
+    }
+
+    const fallbackChain = toTestnet ? testnetNetworks[0] : mainnetNetworks[0];
+    return fallbackChain;
 };
 
 export const SupportedChainsList: ChainInformation[] = [

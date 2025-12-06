@@ -9,7 +9,7 @@ const initialState: Blockchain = {
         process.env.SF_ENV === Environment.PRODUCTION ? mainnet.id : sepolia.id,
     chainError: false,
     lastActionTimestamp: 0,
-    testnetEnabled: false,
+    testnetEnabled: !(process.env.SF_ENV === Environment.PRODUCTION),
     isChainIdDetected: false,
 };
 
@@ -30,6 +30,12 @@ const blockchainSlice = createSlice({
             state.lastActionTimestamp = Date.now();
         },
         updateTestnetEnabled(state, action: PayloadAction<boolean>) {
+            // In non-production environments, testnetEnabled is always true (locked)
+            if (process.env.SF_ENV !== Environment.PRODUCTION) {
+                state.testnetEnabled = true;
+                return;
+            }
+            // In production, allow toggling
             state.testnetEnabled = action.payload;
         },
         updateIsChainIdDetected(state, action: PayloadAction<boolean>) {
