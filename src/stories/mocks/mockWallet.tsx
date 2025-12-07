@@ -1,4 +1,4 @@
-import { http } from 'viem';
+import { http, type Chain } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 import { createConfig } from 'wagmi';
 import { sepolia } from 'wagmi/chains';
@@ -9,9 +9,23 @@ const privateKey =
 
 export const account = privateKeyToAccount(privateKey);
 
-const connector = mock({
+export const connector = mock({
     accounts: [account.address],
 });
+
+// Add switchChain for test mocking
+// Type assertion needed because we're adding to factory for test purposes
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(connector as any).switchChain = async ({
+    chainId,
+}: {
+    chainId: number;
+}): Promise<Chain> => {
+    const chains = [sepolia];
+    const chain = chains.find(c => c.id === chainId);
+    if (!chain) throw new Error(`Chain ${chainId} not supported`);
+    return chain;
+};
 
 export const config = createConfig({
     chains: [sepolia],
@@ -20,8 +34,3 @@ export const config = createConfig({
     },
     connectors: [connector],
 });
-
-// Add switchChain mock for testing
-connector.switchChain = async (chainId: number) => {
-    return { id: chainId } as Chain;
-};
