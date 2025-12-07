@@ -87,7 +87,12 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
         ? availableChains.testnetChainsList
         : availableChains.mainnetChainsList;
 
-    const selectedNetwork = chainList.find(
+    const allChains = [
+        ...availableChains.mainnetChainsList,
+        ...availableChains.testnetChainsList,
+    ];
+
+    const selectedNetwork = allChains.find(
         d => Networks[d.chainId].toLowerCase() === networkName.toLowerCase()
     );
     const { connector: activeConnector } = useAccount();

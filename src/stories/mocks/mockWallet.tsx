@@ -20,3 +20,8 @@ export const config = createConfig({
     },
     connectors: [connector],
 });
+
+// Add switchChain mock for testing
+connector.switchChain = async (chainId: number) => {
+    return { id: chainId } as Chain;
+};
