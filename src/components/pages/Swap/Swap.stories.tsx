@@ -1,15 +1,15 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { Bridge } from './Bridge';
+import { Swap } from './Swap';
 
 export default {
-    title: 'Pages/Bridge',
-    component: Bridge,
+    title: 'Pages/Swap',
+    component: Swap,
     args: {},
     parameters: {
         chromatic: { delay: 8000 },
     },
-} as Meta<typeof Bridge>;
+} as Meta<typeof Swap>;
 
-const Template: StoryFn<typeof Bridge> = () => <Bridge />;
+const Template: StoryFn<typeof Swap> = () => <Swap />;
 
 export const Default = Template.bind({});
