@@ -1,6 +1,5 @@
 export * from './address';
 export * from './assets';
-export * from './bridge';
 export * from './collateral';
 export * from './currencies';
 export * from './currencyList';
@@ -18,6 +17,7 @@ export * from './portfolio';
 export * from './protocol';
 export * from './rate';
 export * from './strings';
+export * from './swap';
 export * from './tableDefinitions';
 export * from './validation';
 export * from './wallet';

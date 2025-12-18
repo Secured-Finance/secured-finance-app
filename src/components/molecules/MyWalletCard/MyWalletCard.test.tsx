@@ -11,10 +11,10 @@ describe('test MyWalletCard component', () => {
         expect(screen.getByText('de926d...aa4f')).toBeInTheDocument();
     });
 
-    it('should contain a link to the Bridge page', async () => {
+    it('should contain a link to the Swap page', async () => {
         await waitFor(() => render(<Default />));
-        const bridgeButton = screen.getByRole('button', { name: 'Bridge' });
-        expect(bridgeButton.parentElement).toHaveAttribute('href', '/bridge');
+        const bridgeButton = screen.getByRole('button', { name: 'Swap' });
+        expect(bridgeButton.parentElement).toHaveAttribute('href', '/swap');
     });
 
     it('should hide bridge dialog when hideBridge is true', async () => {
