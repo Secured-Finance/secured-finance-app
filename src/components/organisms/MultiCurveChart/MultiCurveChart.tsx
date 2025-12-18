@@ -195,6 +195,13 @@ export const MultiCurveChart = ({
     }, [JSON.stringify(curves)]);
 
     const handleCurrencyClick = (ccy: CurrencySymbol) => {
+        // Clear chart tooltip before changing datasets
+        const chart = chartRef.current;
+        if (chart?.tooltip) {
+            chart.tooltip.setActiveElements([], { x: 0, y: 0 });
+            chart.update('none');
+        }
+
         if (activeCurrencies.has(ccy)) {
             setActiveCurrencies(prev => {
                 const newSet = new Set(prev);
@@ -208,47 +215,76 @@ export const MultiCurveChart = ({
                 return newSet;
             });
         }
+
+        setTooltipVisible(false);
+        setTooltipLabel(undefined);
+        setTooltipPos(undefined);
     };
 
     const customTooltip = useCallback(
         ({
-            chart,
             tooltip,
         }: {
             chart: ChartJS<'line'>;
             tooltip: TooltipModel<'line'>;
         }) => {
-            if (tooltip.opacity === 0) {
+            if (
+                !tooltip ||
+                tooltip.opacity === 0 ||
+                !tooltip.dataPoints ||
+                tooltip.dataPoints.length === 0
+            ) {
                 setTooltipVisible(false);
                 return;
             }
 
-            const canvas = chart.canvas;
-
-            if (canvas) {
-                const left = tooltip.x;
-                const top = tooltip.y;
-                if (tooltipPos?.top !== top || tooltipPos?.left !== left) {
-                    setTooltipPos({ top: top, left: left });
-                    setTooltipVisible(true);
-                    setTooltipLabel(tooltip.title[0]);
-                }
+            // Validate that x and y exist
+            if (
+                tooltip.x === null ||
+                tooltip.x === undefined ||
+                tooltip.y === null ||
+                tooltip.y === undefined
+            ) {
+                setTooltipVisible(false);
+                return;
             }
+
+            const { x, y, title } = tooltip;
+
+            if (!title?.length) {
+                setTooltipVisible(false);
+                return;
+            }
+
+            setTooltipPos({ top: y, left: x });
+            setTooltipLabel(title[0]);
+            setTooltipVisible(true);
         },
-        [tooltipPos?.left, tooltipPos?.top]
+        []
     );
 
-    const dataOptions: ChartOptions<'line'> = {
-        ...options,
-        plugins: {
-            tooltip: {
-                enabled: false,
-                external: customTooltip,
-                xAlign: 'left',
-                yAlign: 'center',
+    const dataOptions: ChartOptions<'line'> = useMemo(
+        () => ({
+            ...options,
+            animation: false,
+            plugins: {
+                tooltip: {
+                    enabled: false,
+                    external: customTooltip,
+                    xAlign: 'left',
+                    yAlign: 'center',
+                },
             },
-        },
-    };
+        }),
+        [customTooltip]
+    );
+
+    const chartData = useMemo(
+        () => getData(curves, activeCurrencies, labels, isGlobalItayose),
+        [curves, activeCurrencies, labels, isGlobalItayose]
+    );
+
+    const chartPlugins = useMemo(() => [crossHairMultiPlugin], []);
 
     const tooltipData = useMemo(() => {
         if (!tooltipLabel) {
@@ -273,6 +309,30 @@ export const MultiCurveChart = ({
 
         return activeData;
     }, [activeCurrencies, curves, labels, tooltipLabel]);
+
+    useEffect(() => {
+        const canvas = chartRef.current?.canvas;
+        const chart = chartRef.current;
+        if (!canvas || !chart) return;
+
+        const handleMouseLeave = () => {
+            // Clear chart's internal tooltip state
+            if (chart.tooltip) {
+                chart.tooltip.setActiveElements([], { x: 0, y: 0 });
+                chart.update('none');
+            }
+
+            setTooltipVisible(false);
+            setTooltipLabel(undefined);
+            setTooltipPos(undefined);
+        };
+
+        canvas.addEventListener('mouseleave', handleMouseLeave);
+
+        return () => {
+            canvas.removeEventListener('mouseleave', handleMouseLeave);
+        };
+    }, []);
 
     return (
         <div className='box-border rounded-b-2xl border border-[#2D4064] bg-cardBackground/20 drop-shadow-tab'>
@@ -300,17 +360,12 @@ export const MultiCurveChart = ({
             <div className='relative pb-7 pl-6 pr-5'>
                 <Line
                     className='h-[354px] rounded-b-xl bg-black-20'
-                    data={getData(
-                        curves,
-                        activeCurrencies,
-                        labels,
-                        isGlobalItayose
-                    )}
+                    data={chartData}
                     options={dataOptions}
                     ref={chartRef}
                     onClick={() => {}}
                     data-chromatic='ignore'
-                    plugins={[crossHairMultiPlugin]}
+                    plugins={chartPlugins}
                 />
                 {tooltipPos && (
                     <GraphTooltip
@@ -351,6 +406,7 @@ const GraphTooltip = ({
             style={{
                 top: position?.top,
                 left: position?.left,
+                pointerEvents: 'none',
             }}
         >
             {sortedData.map(([currencySymbol, rate], index) => {
