@@ -6,6 +6,7 @@ import {
     currencyMap,
     ordinaryFormat,
     usdFormat,
+    usdFormatPrice,
 } from 'src/utils';
 
 export const CurrencyItem = ({
@@ -39,7 +40,7 @@ export const CurrencyItem = ({
     if (amount !== undefined && price !== undefined) {
         secondLine = usdFormat(currency.fromBaseUnit(amount) * price, 2);
     } else if (price) {
-        secondLine = usdFormat(price, 2);
+        secondLine = usdFormatPrice(price, ccy, 2);
     } else {
         secondLine = currency.name;
     }

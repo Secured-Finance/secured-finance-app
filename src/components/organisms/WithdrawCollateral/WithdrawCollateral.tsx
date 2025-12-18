@@ -124,6 +124,7 @@ export const WithdrawCollateral = ({
     const [isFullCoverage, setIsFullCoverage] = useState<boolean>(false);
 
     useEffect(() => {
+        if (state.currentStep !== Step.withdrawCollateral) return;
         if (!isFullCoverage) {
             setCollateralBigInt(
                 amountFormatterToBase[asset](Number(collateral ?? ''))
@@ -134,7 +135,14 @@ export const WithdrawCollateral = ({
             );
             setCollateral(collateralList[asset]?.available.toString());
         }
-    }, [asset, collateral, isFullCoverage, collateralList, collateralBigInt]);
+    }, [
+        asset,
+        collateral,
+        isFullCoverage,
+        collateralList,
+        collateralBigInt,
+        state.currentStep,
+    ]);
 
     const { data: priceList } = useLastPrices();
     const { onWithdrawCollateral } = useWithdrawCollateral(

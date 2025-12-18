@@ -1,23 +1,40 @@
 import { Popover, Transition } from '@headlessui/react';
-import { Fragment, useCallback, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { Fragment, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Gear from 'src/assets/icons/gear.svg';
 import { Toggle } from 'src/components/atoms';
 import { updateTestnetEnabled } from 'src/store/blockchain';
+import { RootState } from 'src/store/types';
+import { getAnalogousChain, getSupportedChainIds } from 'src/utils';
+import { useAccount } from 'wagmi';
 
 export const Settings = ({ isProduction }: { isProduction: boolean }) => {
     const dispatch = useDispatch();
-    const [testnetsEnabled, setTestnetsEnabled] = useState(!isProduction);
+    const chainId = useSelector((state: RootState) => state.blockchain.chainId);
+    const testnetEnabled = useSelector(
+        (state: RootState) => state.blockchain.testnetEnabled
+    );
+    const { connector } = useAccount();
 
-    useEffect(() => {
-        dispatch(updateTestnetEnabled(!isProduction));
-    }, [dispatch, isProduction]);
+    const handleChange = useCallback(async () => {
+        const newState = !testnetEnabled;
 
-    const handleChange = useCallback(() => {
-        const newState = !testnetsEnabled;
-        setTestnetsEnabled(newState);
-        dispatch(updateTestnetEnabled(newState));
-    }, [dispatch, testnetsEnabled]);
+        if (chainId && connector?.switchChain) {
+            const supportedChainIds = getSupportedChainIds();
+            const targetChain = getAnalogousChain(
+                chainId,
+                newState,
+                supportedChainIds
+            );
+
+            try {
+                await connector.switchChain(targetChain.id);
+                dispatch(updateTestnetEnabled(newState));
+            } catch (error) {
+                console.error('Failed to switch chain:', error);
+            }
+        }
+    }, [chainId, connector, dispatch, testnetEnabled]);
 
     return (
         <Popover className='relative w-fit'>
@@ -51,7 +68,7 @@ export const Settings = ({ isProduction }: { isProduction: boolean }) => {
                                         Testnet mode
                                     </span>
                                     <Toggle
-                                        checked={testnetsEnabled}
+                                        checked={testnetEnabled}
                                         disabled={!isProduction}
                                         onChange={handleChange}
                                     />

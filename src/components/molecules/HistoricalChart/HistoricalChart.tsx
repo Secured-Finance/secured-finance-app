@@ -197,6 +197,12 @@ export function HistoricalChart({
         const { candlestickSeries, chart: candleStickChart } =
             createCandlestickChart(chartContainerRef.current, isMobile);
 
+        candlestickSeries.applyOptions({
+            borderVisible: true,
+            borderUpColor: colors.secondary['700'],
+            borderDownColor: colors.galacticOrange,
+        });
+
         const { volumeSeries, chart: volumeChart } = createVolumeChart(
             secondContainerRef.current,
             timeScale,
@@ -259,6 +265,15 @@ export function HistoricalChart({
         });
 
         setupCharts(candlestickSeries, volumeSeries);
+
+        if (data.length > 0) {
+            const chartWidth = chartContainerRef.current?.clientWidth;
+            const targetBarSpacing = chartWidth / 30;
+
+            candleStickChart.timeScale().applyOptions({
+                barSpacing: targetBarSpacing,
+            });
+        }
 
         subscribeToChartEvents(
             candleStickChart,

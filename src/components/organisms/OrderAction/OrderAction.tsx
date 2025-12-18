@@ -1,7 +1,8 @@
 import { track } from '@amplitude/analytics-browser';
 import { OrderSide } from '@secured-finance/sf-client';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Button, ButtonSizes } from 'src/components/atoms';
 import {
     DepositCollateral,
@@ -18,7 +19,6 @@ import {
     useOrders,
 } from 'src/hooks';
 import { useBalances } from 'src/hooks/useBalances';
-import { setWalletDialogOpen } from 'src/store/interactions';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { ButtonEvents } from 'src/utils';
@@ -44,7 +44,7 @@ export const OrderAction = ({
 }: OrderActionProps) => {
     const isTablet = useBreakpoint('laptop');
     const { isConnected } = useAccount();
-    const dispatch = useDispatch();
+    const { open } = useWeb3Modal();
     const { placeOrder, placePreOrder } = useOrders();
     const chainError = useSelector(
         (state: RootState) => state.blockchain.chainError
@@ -129,11 +129,7 @@ export const OrderAction = ({
                     </Button>
                 ))}
             {!isConnected && (
-                <Button
-                    fullWidth
-                    onClick={() => dispatch(setWalletDialogOpen(true))}
-                    size={buttonSize}
-                >
+                <Button fullWidth onClick={() => open()} size={buttonSize}>
                     Connect Wallet
                 </Button>
             )}

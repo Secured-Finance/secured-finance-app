@@ -1,5 +1,6 @@
 import { GraphClientProvider } from '@secured-finance/sf-graph-client';
 import type { StoryContext, StoryFn } from '@storybook/react';
+import { createWeb3Modal } from '@web3modal/wagmi/react';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import 'src/bigIntPatch';
@@ -26,6 +27,11 @@ export const withWalletProvider = (Story: StoryFn, Context: StoryContext) => {
         autoConnect: Context.parameters && Context.parameters.connected,
         publicClient: publicClient,
         connectors: [connector],
+    });
+
+    createWeb3Modal({
+        wagmiConfig: config,
+        projectId: '123',
     });
 
     useEffect(() => {

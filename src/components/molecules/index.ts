@@ -19,6 +19,7 @@ export * from './DelistedCurrencyDisclaimer';
 export * from './Dialog';
 export * from './FailurePanel';
 export * from './HamburgerMenu';
+export * from './HistoricalChart';
 export * from './HorizontalTab';
 export * from './InfoToolTip';
 export * from './LineChart';

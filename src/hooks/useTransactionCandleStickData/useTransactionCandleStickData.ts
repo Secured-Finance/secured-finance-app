@@ -34,7 +34,9 @@ export const useTransactionCandleStickData = (
         const editableTransactions = [...transactions];
         const timestamp = Math.floor(Date.now() / 1000);
         const intervalTimestamp =
-            timestamp - (timestamp % Number(selectedTimeScale));
+            Math.ceil(timestamp / Number(selectedTimeScale)) *
+            Number(selectedTimeScale);
+
         if (
             transactions.length > 0 &&
             intervalTimestamp > Number(transactions[0].timestamp)
@@ -77,14 +79,16 @@ export const useTransactionCandleStickData = (
             const low = safeDivide(item.low, 100);
             const close = safeDivide(item.close, 100);
             // Add the actual item
-            result.push({
-                time: item.timestamp,
-                open,
-                high,
-                low,
-                close,
-                vol: volAdjusted,
-            });
+            if (volAdjusted > 0) {
+                result.push({
+                    time: item.timestamp,
+                    open,
+                    high,
+                    low,
+                    close,
+                    vol: volAdjusted,
+                });
+            }
 
             previousItem = item;
         }
