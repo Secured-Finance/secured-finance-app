@@ -74,9 +74,9 @@ export const MyWalletCard = ({
                                         <Filecoin className='h-10 w-10' />
                                         <AxelarFil className='-ml-3 h-10 w-10' />
                                     </div>
-                                    <Link href='/bridge'>
+                                    <Link href='/swap'>
                                         <Button size={ButtonSizes.sm}>
-                                            Bridge
+                                            Swap
                                         </Button>
                                     </Link>
                                 </div>

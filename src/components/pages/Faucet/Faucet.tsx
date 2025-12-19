@@ -377,8 +377,8 @@ export const Faucet = () => {
                     itemList={[
                         ['Status', 'Success'],
                         [
-                            'Ethereum Address',
-                            AddressUtils.format(account ?? '', 8),
+                            'Transaction hash',
+                            AddressUtils.format(txHash ?? '', 8),
                         ],
                     ]}
                     txHash={txHash}

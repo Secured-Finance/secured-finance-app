@@ -29,7 +29,6 @@ import {
     trackButtonEvent,
     trackCollateralEvent,
 } from 'src/utils/events';
-import { useAccount } from 'wagmi';
 
 enum Step {
     withdrawCollateral = 1,
@@ -112,7 +111,6 @@ export const WithdrawCollateral = ({
 } & DialogState) => {
     const { blockExplorerUrl } = useBlockExplorerUrl();
     const handleContractTransaction = useHandleContractTransaction();
-    const { address } = useAccount();
     const [asset, setAsset] = useState(CurrencySymbol.ETH);
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [collateral, setCollateral] = useState<string>();
@@ -291,8 +289,8 @@ export const WithdrawCollateral = ({
                                 itemList={[
                                     ['Status', 'Complete'],
                                     [
-                                        'Ethereum Address',
-                                        AddressUtils.format(address ?? '', 8),
+                                        'Transaction hash',
+                                        AddressUtils.format(txHash ?? '', 8),
                                     ],
                                     [
                                         'Amount',
