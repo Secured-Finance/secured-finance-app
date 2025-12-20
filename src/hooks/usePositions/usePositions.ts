@@ -5,6 +5,7 @@ import useSF from 'src/hooks/useSecuredFinance';
 import {
     CurrencySymbol,
     amountFormatterFromBase,
+    currencyMap,
     hexToCurrencySymbol,
     toCurrency,
 } from 'src/utils';
@@ -74,6 +75,13 @@ export const usePositions = (
                         (totalBorrowPVPerCurrency[ccy] ?? 0) +
                         Math.abs(presentValue);
                 }
+            });
+
+            ret.sort((a, b) => {
+                const aCcy = hexToCurrencySymbol(a.currency);
+                const bCcy = hexToCurrencySymbol(b.currency);
+                if (!aCcy || !bCcy) return 0;
+                return currencyMap[aCcy].index - currencyMap[bCcy].index;
             });
 
             return {

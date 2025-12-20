@@ -16,9 +16,9 @@ export const PRODUCTION_LINKS = [
         dataCy: 'history',
     },
     {
-        text: 'Bridge',
-        link: '/bridge',
-        dataCy: 'bridge',
+        text: 'Swap',
+        link: '/swap',
+        dataCy: 'swap',
         className: 'hidden desktop:flex',
     },
     {
