@@ -6,13 +6,18 @@ import * as dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { useCallback, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { HorizontalListItemTable } from 'src/components/atoms';
+import {
+    HorizontalListItemTable,
+    SortArrows,
+    TextLink,
+} from 'src/components/atoms';
 import {
     COMPACT_TABLE_DEFAULT_HEIGHT,
     CompactCoreTable,
     MenuItem,
     TableActionMenu,
     TableCardHeader,
+    Tooltip,
 } from 'src/components/molecules';
 import { UnwindDialog, UnwindDialogType } from 'src/components/organisms';
 import { Position, useBreakpoint, useLastPrices } from 'src/hooks';
@@ -34,7 +39,6 @@ import {
     isPastDate,
     loanTypeFromFVColumnDefinition,
     priceYieldColumnDefinition,
-    tableHeaderDefinition,
 } from 'src/utils';
 import { Amount, Maturity } from 'src/utils/entities';
 
@@ -383,11 +387,49 @@ export const ActiveTradeTable = ({
                         </div>
                     );
                 },
-                header: tableHeaderDefinition(
-                    'Time to Maturity',
-                    'Maturity of a loan contract is the date on which the contract is set to expire.',
-                    'left'
-                ),
+                header: header => {
+                    const titleComponent = (
+                        <button
+                            className='relative cursor-pointer select-none'
+                            onClick={header.column.getToggleSortingHandler()}
+                        >
+                            <span className='flex flex-row items-center justify-center gap-1'>
+                                <span>Time to Maturity</span>
+                                {header.column.getCanSort() && (
+                                    <span data-testid='sorting-icons'>
+                                        <SortArrows
+                                            isSorted={header.column.getIsSorted()}
+                                        />
+                                    </span>
+                                )}
+                            </span>
+                        </button>
+                    );
+
+                    return (
+                        <div
+                            data-testid='table-header-wrapper'
+                            className='flex justify-start px-2'
+                        >
+                            <Tooltip
+                                placement='bottom'
+                                iconElement={titleComponent}
+                            >
+                                <span>
+                                    This shows the time remaining until each
+                                    position&apos;s maturity. If this position
+                                    isn&apos;t closed before maturity, it will{' '}
+                                    <TextLink
+                                        href='https://docs.secured.finance/fixed-rate-lending/advanced-topics/market-dynamics/auto-rolling'
+                                        text='auto-roll'
+                                    />{' '}
+                                    into the next 3-month term at close-to-mid
+                                    pricing.
+                                </span>
+                            </Tooltip>
+                        </div>
+                    );
+                },
             }),
             priceYieldColumnDefinition(
                 columnHelper,
