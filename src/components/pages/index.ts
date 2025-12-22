@@ -1,4 +1,3 @@
-export * from './Bridge';
 export * from './Campaign';
 export * from './EmergencyGlobalSettlement';
 export * from './Faucet';
@@ -8,3 +7,4 @@ export * from './Landing';
 export * from './PointsDashboard';
 export * from './PortfolioManagement';
 export * from './Stats';
+export * from './Swap';

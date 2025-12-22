@@ -21,8 +21,8 @@ export const LinkList: MoreLink[] = [
         isInternal: true,
     },
     {
-        text: 'Bridge',
-        href: '/bridge',
+        text: 'Swap',
+        href: '/swap',
         icon: <TokenSwapIcon className='h-5 w-5' />,
         isInternal: true,
     },

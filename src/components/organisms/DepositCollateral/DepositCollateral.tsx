@@ -104,7 +104,7 @@ export const DepositCollateral = ({
     onClose,
     collateralList,
     source,
-    defaultCcySymbol = CurrencySymbol.USDC,
+    defaultCcySymbol,
 }: {
     collateralList: Partial<Record<CurrencySymbol, CollateralInfo>>;
     defaultCcySymbol?: string;
