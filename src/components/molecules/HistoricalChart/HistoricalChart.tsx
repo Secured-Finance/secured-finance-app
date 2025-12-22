@@ -236,7 +236,38 @@ export function HistoricalChart({
                         hour: '2-digit',
                         minute: '2-digit',
                         second: '2-digit',
+                        hour12: false,
                     });
+                },
+            },
+            timeScale: {
+                tickMarkFormatter: (
+                    timestamp: number,
+                    tickMarkType: number
+                ) => {
+                    const date = new Date(timestamp * 1000);
+                    switch (tickMarkType) {
+                        case 0: // Year
+                            return date.getFullYear().toString();
+                        case 1: // Month
+                            return date.toLocaleDateString('en-GB', {
+                                month: 'short',
+                            });
+                        case 2: // Day
+                            return date.toLocaleDateString('en-GB', {
+                                day: 'numeric',
+                                month: 'short',
+                            });
+                        case 3: // Time
+                        case 4: // TimeWithSeconds
+                            return date.toLocaleTimeString('en-GB', {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                hour12: false,
+                            });
+                        default:
+                            return date.toLocaleDateString('en-GB');
+                    }
                 },
             },
         });
