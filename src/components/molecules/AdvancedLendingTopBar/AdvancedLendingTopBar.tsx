@@ -294,9 +294,8 @@ export const AdvancedLendingTopBar = ({
                                                     This shows the time
                                                     remaining until this order
                                                     book&apos;s maturity. At
-                                                    maturity, positions in this
-                                                    order book that aren&apos;t
-                                                    closed beforehand will{' '}
+                                                    maturity, any open positions
+                                                    will{' '}
                                                     <TextLink
                                                         href='https://docs.secured.finance/fixed-rate-lending/advanced-topics/market-dynamics/auto-rolling'
                                                         text='auto-roll'

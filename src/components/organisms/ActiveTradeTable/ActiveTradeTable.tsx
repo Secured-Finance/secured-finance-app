@@ -417,8 +417,8 @@ export const ActiveTradeTable = ({
                             >
                                 <span>
                                     This shows the time remaining until each
-                                    position&apos;s maturity. If this position
-                                    isn&apos;t closed before maturity, it will{' '}
+                                    position&apos;s maturity. At maturity, any
+                                    open positions will{' '}
                                     <TextLink
                                         href='https://docs.secured.finance/fixed-rate-lending/advanced-topics/market-dynamics/auto-rolling'
                                         text='auto-roll'
