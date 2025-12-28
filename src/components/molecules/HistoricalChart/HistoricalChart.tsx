@@ -203,19 +203,47 @@ export function HistoricalChart({
             borderDownColor: colors.galacticOrange,
         });
 
+        const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const dateOnlyScales = [
+            HistoricalDataIntervals['1D'],
+            HistoricalDataIntervals['3D'],
+            HistoricalDataIntervals['1W'],
+            HistoricalDataIntervals['1MTH'],
+        ];
+        const shouldShowDateOnly = dateOnlyScales.includes(timeScale);
+        const isMonthlyScale = timeScale === HistoricalDataIntervals['1MTH'];
+
+        const formatTimeLabel = (
+            timestamp: number,
+            use24HourFormat = false
+        ) => {
+            const date = new Date(timestamp * 1000);
+            if (isMonthlyScale || shouldShowDateOnly) {
+                const formatted = date.toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: '2-digit',
+                    timeZone: localTz,
+                });
+                return formatted.replace(/(\w{3})\s(\d{2})(,?)$/, "$1 '$2$3");
+            }
+            const formatted = date.toLocaleString('en-GB', {
+                day: '2-digit',
+                month: 'short',
+                year: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: !use24HourFormat,
+                timeZone: localTz,
+            });
+            return formatted.replace(/(\w{3})\s(\d{2}),/, "$1 '$2,");
+        };
+
         candleStickChart.applyOptions({
             localization: {
-                timeFormatter: (timestamp: number) => {
-                    const date = new Date(timestamp * 1000);
-                    return date.toLocaleString('en-GB', {
-                        day: '2-digit',
-                        month: 'short',
-                        year: '2-digit',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit',
-                    });
-                },
+                timeFormatter: (timestamp: number) =>
+                    formatTimeLabel(timestamp),
             },
         });
 
@@ -227,18 +255,8 @@ export function HistoricalChart({
 
         volumeChart.applyOptions({
             localization: {
-                timeFormatter: (timestamp: number) => {
-                    const date = new Date(timestamp * 1000);
-                    return date.toLocaleString('en-GB', {
-                        day: '2-digit',
-                        month: 'short',
-                        year: '2-digit',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit',
-                        hour12: false,
-                    });
-                },
+                timeFormatter: (timestamp: number) =>
+                    formatTimeLabel(timestamp, true),
             },
             timeScale: {
                 tickMarkFormatter: (
@@ -246,27 +264,81 @@ export function HistoricalChart({
                     tickMarkType: number
                 ) => {
                     const date = new Date(timestamp * 1000);
+                    const hoursLocal = date.getHours();
+                    const minutesLocal = date.getMinutes();
+                    const isLocalMidnight =
+                        hoursLocal === 0 && minutesLocal === 0;
+
                     switch (tickMarkType) {
                         case 0: // Year
                             return date.getFullYear().toString();
                         case 1: // Month
                             return date.toLocaleDateString('en-GB', {
                                 month: 'short',
+                                timeZone: localTz,
                             });
                         case 2: // Day
-                            return date.toLocaleDateString('en-GB', {
-                                day: 'numeric',
-                                month: 'short',
-                            });
-                        case 3: // Time
-                        case 4: // TimeWithSeconds
+                            if (isMonthlyScale) {
+                                return date.toLocaleDateString('en-GB', {
+                                    month: 'short',
+                                    timeZone: localTz,
+                                });
+                            }
+                            if (shouldShowDateOnly || isLocalMidnight) {
+                                return date.toLocaleDateString('en-GB', {
+                                    day: 'numeric',
+                                    month: 'short',
+                                    timeZone: localTz,
+                                });
+                            }
+
                             return date.toLocaleTimeString('en-GB', {
                                 hour: '2-digit',
                                 minute: '2-digit',
                                 hour12: false,
+                                timeZone: localTz,
+                            });
+                        case 3: // Time
+                        case 4: // TimeWithSeconds
+                            if (isMonthlyScale) {
+                                return date.toLocaleDateString('en-GB', {
+                                    month: 'short',
+                                    timeZone: localTz,
+                                });
+                            }
+                            if (shouldShowDateOnly || isLocalMidnight) {
+                                return date.toLocaleDateString('en-GB', {
+                                    day: 'numeric',
+                                    month: 'short',
+                                    timeZone: localTz,
+                                });
+                            }
+                            return date.toLocaleTimeString('en-GB', {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                hour12: false,
+                                timeZone: localTz,
                             });
                         default:
-                            return date.toLocaleDateString('en-GB');
+                            if (isMonthlyScale) {
+                                return date.toLocaleDateString('en-GB', {
+                                    month: 'short',
+                                    timeZone: localTz,
+                                });
+                            }
+                            if (shouldShowDateOnly || isLocalMidnight) {
+                                return date.toLocaleDateString('en-GB', {
+                                    day: 'numeric',
+                                    month: 'short',
+                                    timeZone: localTz,
+                                });
+                            }
+                            return date.toLocaleTimeString('en-GB', {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                hour12: false,
+                                timeZone: localTz,
+                            });
                     }
                 },
             },
