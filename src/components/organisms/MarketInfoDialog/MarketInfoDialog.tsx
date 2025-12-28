@@ -5,7 +5,8 @@ import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import ArrowUpSquare from 'src/assets/icons/arrow-up-square.svg';
 import DocumentTextIcon from 'src/assets/icons/document-text.svg';
-import { Tooltip } from 'src/components/molecules';
+import { TextLink } from 'src/components/atoms';
+import { InfoToolTip, Tooltip } from 'src/components/molecules';
 import { useGetCountdown } from 'src/hooks';
 import { currencyMap, formatLoanValue, handlePriceSource } from 'src/utils';
 import { MarketInfoDialogProps } from './types';
@@ -118,7 +119,23 @@ export const MarketInfoDialog = ({
                             </li>
                             {time && (
                                 <li className='flex justify-between'>
-                                    <span>Countdown</span>
+                                    <div className='flex flex-row items-center gap-1'>
+                                        <span>Time to Maturity</span>
+                                        <InfoToolTip placement='bottom'>
+                                            <span>
+                                                This shows the time remaining
+                                                until this order book&apos;s
+                                                maturity. At maturity, any open
+                                                positions will{' '}
+                                                <TextLink
+                                                    href='https://docs.secured.finance/fixed-rate-lending/advanced-topics/market-dynamics/auto-rolling'
+                                                    text='auto-roll'
+                                                />{' '}
+                                                into the next 3-month term at
+                                                close-to-mid pricing.
+                                            </span>
+                                        </InfoToolTip>
+                                    </div>
                                     <span className='tabular-nums'>
                                         {`${time.days}:${time.hours}:${time.minutes}:${time.seconds}`}
                                     </span>
