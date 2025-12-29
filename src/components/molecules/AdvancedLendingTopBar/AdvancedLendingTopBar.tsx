@@ -8,11 +8,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import DocumentTextIcon from 'src/assets/icons/document-text.svg';
 import { MarketTab, TextLink } from 'src/components/atoms';
 import { Timer } from 'src/components/atoms/Timer';
-import {
-    CurrencyMaturityDropdown,
-    InfoToolTip,
-    Tooltip,
-} from 'src/components/molecules';
+import { CurrencyMaturityDropdown, Tooltip } from 'src/components/molecules';
 import { MarketInfoDialog } from 'src/components/organisms';
 import {
     MarketPhase,
@@ -281,34 +277,26 @@ export const AdvancedLendingTopBar = ({
                                     />
                                 </div>
                                 <div className='flex w-[14%] flex-col desktop:w-[10%]'>
-                                    <section
-                                        className='flex h-fit flex-grow flex-col'
-                                        aria-label='Time to Maturity'
-                                    >
-                                        <div className='flex flex-row items-center gap-1'>
-                                            <span className='laptop:typography-caption-2 whitespace-nowrap text-[11px] text-neutral-400'>
-                                                Time to Maturity
-                                            </span>
-                                            <InfoToolTip placement='bottom'>
-                                                <span>
-                                                    This shows the time
-                                                    remaining until this order
-                                                    book&apos;s maturity. At
-                                                    maturity, any open positions
-                                                    will{' '}
-                                                    <TextLink
-                                                        href='https://docs.secured.finance/fixed-rate-lending/advanced-topics/market-dynamics/auto-rolling'
-                                                        text='auto-roll'
-                                                    />{' '}
-                                                    into the next 3-month term
-                                                    at close-to-mid pricing.
-                                                </span>
-                                            </InfoToolTip>
-                                        </div>
-                                        <span className='typography-caption flex items-center whitespace-nowrap leading-4 text-neutral-50 desktop:leading-6'>
+                                    <MarketTab
+                                        name='Time to Maturity'
+                                        value={
                                             <span className='tabular-nums'>{`${time?.days}:${time?.hours}:${time?.minutes}:${time?.seconds}`}</span>
-                                        </span>
-                                    </section>
+                                        }
+                                        tooltip={
+                                            <span>
+                                                This shows the time remaining
+                                                until this order book&apos;s
+                                                maturity. At maturity, any open
+                                                positions will{' '}
+                                                <TextLink
+                                                    href='https://docs.secured.finance/fixed-rate-lending/advanced-topics/market-dynamics/auto-rolling'
+                                                    text='auto-roll'
+                                                />{' '}
+                                                into the next 3-month term at
+                                                close-to-mid pricing.
+                                            </span>
+                                        }
+                                    />
                                 </div>
                             </div>
                         )}

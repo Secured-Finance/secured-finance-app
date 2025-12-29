@@ -26,7 +26,11 @@ import {
 import { LoanValue, Maturity } from './entities';
 
 export const tableHeaderDefinition =
-    <TData,>(title: string, titleHint?: string, align: Alignment = 'center') =>
+    <TData,>(
+        title: string,
+        titleHint?: React.ReactNode,
+        align: Alignment = 'center'
+    ) =>
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (header: HeaderContext<TData, any>) =>
         (
