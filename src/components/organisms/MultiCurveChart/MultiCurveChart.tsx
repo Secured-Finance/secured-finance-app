@@ -238,17 +238,6 @@ export const MultiCurveChart = ({
                 return;
             }
 
-            // Validate that x and y exist
-            if (
-                tooltip.x === null ||
-                tooltip.x === undefined ||
-                tooltip.y === null ||
-                tooltip.y === undefined
-            ) {
-                setTooltipVisible(false);
-                return;
-            }
-
             const { x, y, title } = tooltip;
 
             if (!title?.length) {
@@ -276,15 +265,14 @@ export const MultiCurveChart = ({
                 },
             },
         }),
-        [customTooltip]
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        []
     );
 
     const chartData = useMemo(
         () => getData(curves, activeCurrencies, labels, isGlobalItayose),
         [curves, activeCurrencies, labels, isGlobalItayose]
     );
-
-    const chartPlugins = useMemo(() => [crossHairMultiPlugin], []);
 
     const tooltipData = useMemo(() => {
         if (!tooltipLabel) {
@@ -365,7 +353,7 @@ export const MultiCurveChart = ({
                     ref={chartRef}
                     onClick={() => {}}
                     data-chromatic='ignore'
-                    plugins={chartPlugins}
+                    plugins={[crossHairMultiPlugin]}
                 />
                 {tooltipPos && (
                     <GraphTooltip
