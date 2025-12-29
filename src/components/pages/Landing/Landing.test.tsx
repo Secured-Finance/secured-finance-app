@@ -1,7 +1,11 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
 import { zeroRates } from 'src/hooks/useYieldCurveHistoricalRates/constant';
-import { dec22Fixture, maturities } from 'src/stories/mocks/fixtures';
+import {
+    dec22Fixture,
+    mar23Fixture,
+    maturities,
+} from 'src/stories/mocks/fixtures';
 import { initialStore } from 'src/stories/mocks/mockStore';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor, within } from 'src/test-utils.js';
@@ -42,9 +46,17 @@ const preloadedState = {
     wallet: { address: '0x1' },
 };
 
+const baseLendingMarkets = {
+    [CurrencySymbol.aUSDC]: {
+        [dec22Fixture.toNumber()]: maturities[dec22Fixture.toNumber()],
+    },
+} as Record<CurrencySymbol, Record<number, (typeof maturities)[number]>>;
+
 const baseWithBannerProps = {
     ccy: CurrencySymbol.aUSDC,
+    maturity: dec22Fixture.toNumber(),
     market: maturities[dec22Fixture.toNumber()],
+    lendingMarkets: baseLendingMarkets,
     delistedCurrencySet: new Set<CurrencySymbol>(),
     children: <div>Banner Child Example</div>,
     isItayose: false,
@@ -349,5 +361,171 @@ describe('Landing Component', () => {
             screen.getByText(/Market aUSDC-.*is open for pre-orders now until/i)
         ).toBeInTheDocument();
         expect(screen.getByText(/Place Order Now/)).toBeInTheDocument();
+    });
+
+    describe('Auto-roll banner', () => {
+        const AUTO_ROLL_TEXT =
+            /When this order book reaches maturity, any open positions will/i;
+        const DAY_IN_SECONDS = 24 * 60 * 60;
+
+        const createLendingMarkets = (
+            earliestMaturity: number,
+            isOpened = true,
+            isMatured = false,
+            additionalMarkets?: Record<
+                CurrencySymbol,
+                Record<number, (typeof maturities)[number]>
+            >
+        ) =>
+            ({
+                [CurrencySymbol.aUSDC]: {
+                    [earliestMaturity]: {
+                        ...maturities[dec22Fixture.toNumber()],
+                        maturity: earliestMaturity,
+                        isOpened,
+                        isMatured,
+                    },
+                    [mar23Fixture.toNumber()]: {
+                        ...maturities[mar23Fixture.toNumber()],
+                        isOpened: true,
+                        isMatured: false,
+                    },
+                },
+                ...(additionalMarkets || {}),
+            } as Record<
+                CurrencySymbol,
+                Record<number, (typeof maturities)[number]>
+            >);
+
+        const renderWithMaturity = (
+            daysFromNow: number,
+            options?: {
+                maturity?: number;
+                lendingMarkets?: Record<
+                    CurrencySymbol,
+                    Record<number, (typeof maturities)[number]>
+                >;
+                isOpened?: boolean;
+                isMatured?: boolean;
+                market?: (typeof maturities)[number];
+            }
+        ) => {
+            const maturity =
+                options?.maturity ??
+                Math.floor(Date.now() / 1000) + daysFromNow * DAY_IN_SECONDS;
+            const lendingMarkets =
+                options?.lendingMarkets ??
+                createLendingMarkets(
+                    maturity,
+                    options?.isOpened,
+                    options?.isMatured
+                );
+
+            render(
+                <WithBanner
+                    {...baseWithBannerProps}
+                    maturity={maturity}
+                    market={options?.market}
+                    lendingMarkets={lendingMarkets}
+                />
+            );
+        };
+
+        it('shows auto-roll banner when market is earliest maturing and within 7 days', () => {
+            renderWithMaturity(5);
+
+            expect(screen.getByText(AUTO_ROLL_TEXT)).toBeInTheDocument();
+            expect(
+                screen.getByText(/into the next 3-month term/i)
+            ).toBeInTheDocument();
+            expect(
+                screen.getByText(/This helps mitigate reinvestment risk/i)
+            ).toBeInTheDocument();
+        });
+
+        it('shows auto-roll banner with clickable auto-roll link', () => {
+            renderWithMaturity(3);
+
+            const autoRollLink = screen.getByText('auto-roll');
+            expect(autoRollLink.closest('a')).toHaveAttribute(
+                'href',
+                'https://docs.secured.finance/fixed-rate-lending/advanced-topics/market-dynamics/auto-rolling'
+            );
+        });
+
+        it.each([
+            ['more than 7 days before maturity', 10, undefined],
+            ['maturity has passed', -1, undefined],
+            ['market is not opened', 5, { isOpened: false }],
+            ['market is matured', 5, { isMatured: true }],
+        ])('does not show auto-roll banner when %s', (_, days, options) => {
+            renderWithMaturity(days, options);
+            expect(screen.queryByText(AUTO_ROLL_TEXT)).not.toBeInTheDocument();
+        });
+
+        it('does not show auto-roll banner when current market is not the earliest maturing', () => {
+            const earliestMaturity =
+                Math.floor(Date.now() / 1000) + 5 * DAY_IN_SECONDS;
+            renderWithMaturity(5, {
+                maturity: mar23Fixture.toNumber(),
+                lendingMarkets: createLendingMarkets(earliestMaturity),
+            });
+            expect(screen.queryByText(AUTO_ROLL_TEXT)).not.toBeInTheDocument();
+        });
+
+        it('does not show auto-roll banner when current currency is not the earliest maturing', () => {
+            const earliestMaturity =
+                Math.floor(Date.now() / 1000) + 5 * DAY_IN_SECONDS;
+            renderWithMaturity(5, {
+                lendingMarkets: {
+                    ...createLendingMarkets(earliestMaturity),
+                    [CurrencySymbol.WFIL]: {
+                        [earliestMaturity - DAY_IN_SECONDS]: {
+                            ...maturities[dec22Fixture.toNumber()],
+                            maturity: earliestMaturity - DAY_IN_SECONDS,
+                            isOpened: true,
+                            isMatured: false,
+                        },
+                    },
+                },
+            });
+            expect(screen.queryByText(AUTO_ROLL_TEXT)).not.toBeInTheDocument();
+        });
+
+        it('shows auto-roll banner below pre-open order notification when both are present', () => {
+            const earliestMaturity =
+                Math.floor(Date.now() / 1000) + 5 * DAY_IN_SECONDS;
+            renderWithMaturity(5, {
+                market: {
+                    ...maturities[dec22Fixture.toNumber()],
+                    maturity: earliestMaturity,
+                    isPreOrderPeriod: true,
+                },
+            });
+
+            const preOrderText = screen.getByText(
+                /Market aUSDC-.*is open for pre-orders now until/i
+            );
+            const autoRollText = screen.getByText(AUTO_ROLL_TEXT);
+            const preOrderAlert = preOrderText.closest('[role="alert"]');
+            const autoRollAlert = autoRollText.closest('[role="alert"]');
+
+            expect(preOrderText).toBeInTheDocument();
+            expect(autoRollText).toBeInTheDocument();
+            if (preOrderAlert && autoRollAlert) {
+                expect(
+                    preOrderAlert.compareDocumentPosition(autoRollAlert) &
+                        Node.DOCUMENT_POSITION_FOLLOWING
+                ).toBeTruthy();
+            }
+        });
+
+        it.each([
+            ['exactly 7 days before maturity', 7],
+            ['exactly 0 days (at maturity)', 0],
+        ])('shows auto-roll banner at %s', (_, days) => {
+            renderWithMaturity(days);
+            expect(screen.getByText(AUTO_ROLL_TEXT)).toBeInTheDocument();
+        });
     });
 });
