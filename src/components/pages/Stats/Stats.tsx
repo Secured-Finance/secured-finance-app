@@ -63,8 +63,7 @@ export const Stats = () => {
     const { data: isGlobalItayose } = useIsGlobalItayose();
     const { data: currencies = [] } = useCurrencies();
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
-    const { totalValueLockedInUSD, currencies: totalValueLockedCurrencies } =
-        useTotalValueLockedAndCurrencies();
+    const { totalValueLockedInUSD } = useTotalValueLockedAndCurrencies();
     const securedFinance = useSF();
     const currentChainId = securedFinance?.config.chain.id;
 
@@ -125,7 +124,7 @@ export const Stats = () => {
                         values={[
                             {
                                 name: 'Digital Assets',
-                                value: totalValueLockedCurrencies.length.toString(),
+                                value: currencies.length.toString(),
                             },
                             {
                                 name: 'Total Value Locked',

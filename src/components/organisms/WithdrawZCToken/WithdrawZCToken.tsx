@@ -32,7 +32,6 @@ import {
     trackButtonEvent,
     trackZCTokenEvent,
 } from 'src/utils/events';
-import { useAccount } from 'wagmi';
 
 enum Step {
     withdrawZCToken = 1,
@@ -161,7 +160,6 @@ export const WithdrawZCToken = ({
 } & DialogState) => {
     const { blockExplorerUrl } = useBlockExplorerUrl();
     const handleContractTransaction = useHandleContractTransaction();
-    const { address } = useAccount();
     const [asset, setAsset] = useState<string>();
     const [currencySymbol, setCurrencySymbol] = useState(CurrencySymbol.ETH);
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
@@ -371,8 +369,8 @@ export const WithdrawZCToken = ({
                                 itemList={[
                                     ['Status', 'Complete'],
                                     [
-                                        'Ethereum Address',
-                                        AddressUtils.format(address ?? '', 8),
+                                        'Transaction hash',
+                                        AddressUtils.format(txHash ?? '', 8),
                                     ],
                                     [
                                         'Amount',

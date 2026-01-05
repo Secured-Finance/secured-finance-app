@@ -24,6 +24,7 @@ export default {
                 name: 'USDC',
             },
         },
+        defaultCcySymbol: CurrencySymbol.USDC,
     },
     decorators: [withWalletProvider],
 } as Meta<typeof DepositCollateral>;

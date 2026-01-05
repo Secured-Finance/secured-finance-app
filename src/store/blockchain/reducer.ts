@@ -1,17 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Environment } from 'src/utils';
-import { filecoin, filecoinCalibration } from 'viem/chains';
+import { mainnet, sepolia } from 'viem/chains';
 import { Blockchain } from './type';
 
 const initialState: Blockchain = {
     latestBlock: 0,
     chainId:
-        process.env.SF_ENV === Environment.PRODUCTION
-            ? filecoin.id
-            : filecoinCalibration.id,
+        process.env.SF_ENV === Environment.PRODUCTION ? mainnet.id : sepolia.id,
     chainError: false,
     lastActionTimestamp: 0,
-    testnetEnabled: false,
+    testnetEnabled: !(process.env.SF_ENV === Environment.PRODUCTION),
     isChainIdDetected: false,
 };
 
@@ -32,6 +30,12 @@ const blockchainSlice = createSlice({
             state.lastActionTimestamp = Date.now();
         },
         updateTestnetEnabled(state, action: PayloadAction<boolean>) {
+            // In non-production environments, testnetEnabled is always true (locked)
+            if (process.env.SF_ENV !== Environment.PRODUCTION) {
+                state.testnetEnabled = true;
+                return;
+            }
+            // In production, allow toggling
             state.testnetEnabled = action.payload;
         },
         updateIsChainIdDetected(state, action: PayloadAction<boolean>) {
