@@ -236,11 +236,15 @@ export const WithBanner = ({
 
     const shouldShowAutoRollBanner = useMemo(() => {
         if (!earliestMaturingMarket) return false;
+        if (maturity !== earliestMaturingMarket.market.maturity) {
+            return false;
+        }
 
-        // Only show for the earliest maturing market
+        const currentMarket = lendingMarkets[ccy]?.[maturity];
         if (
-            ccy !== earliestMaturingMarket.currency ||
-            maturity !== earliestMaturingMarket.market.maturity
+            !currentMarket ||
+            !currentMarket.isOpened ||
+            currentMarket.isMatured
         ) {
             return false;
         }
@@ -252,7 +256,7 @@ export const WithBanner = ({
         return (
             daysUntilMaturity >= 0 && daysUntilMaturity <= DAYS_BEFORE_MATURITY
         );
-    }, [earliestMaturingMarket, ccy, maturity]);
+    }, [earliestMaturingMarket, ccy, maturity, lendingMarkets]);
 
     const alertContent = (() => {
         if (maximumOpenOrderLimit) {
