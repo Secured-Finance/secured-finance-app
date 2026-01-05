@@ -6,6 +6,7 @@ export * from './currencyList';
 export * from './date';
 export * from './env';
 export * from './events/interface';
+export * from './faucet';
 export * from './fee';
 export * from './formatNumbers';
 export * from './handleContractError';

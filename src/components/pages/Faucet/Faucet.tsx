@@ -17,6 +17,8 @@ import {
     Separator,
 } from 'src/components/atoms';
 import {
+    Alert,
+    AlertSeverity,
     CurrencyDropdown,
     Dialog,
     SuccessPanel,
@@ -38,7 +40,12 @@ import {
     toCurrency,
     toOptions,
 } from 'src/utils';
-import { useAccount, useWalletClient } from 'wagmi';
+import {
+    formatErrorMessage,
+    getTokenContractAddress,
+    mintTokens,
+} from 'src/utils/faucet';
+import { useAccount, useChainId, useWalletClient } from 'wagmi';
 
 const MenuAddToken = ({
     address,
@@ -101,41 +108,70 @@ export const Faucet = () => {
     const handleContractTransaction = useHandleContractTransaction();
     const { address: account } = useAccount();
     const { data: client } = useWalletClient();
+    const chainId = useChainId();
     const sf = useSF();
 
     const { data: currencies } = useCurrencies();
-    const assetList = toOptions(currencies, CurrencySymbol.USDC).filter(
-        ccy =>
-            currencyMap[ccy.value].toCurrency().isToken &&
-            ccy.label !== CurrencySymbol.USDFC &&
-            ccy.label !== CurrencySymbol.JPYC
-    );
+    const assetList = useMemo(() => {
+        const list = toOptions(currencies, CurrencySymbol.USDC).filter(
+            ccy =>
+                currencyMap[ccy.value].toCurrency().isToken &&
+                ccy.label !== CurrencySymbol.USDFC
+        );
+
+        // Sort by sortPriority (lower numbers first), defaulting to 999 if not set
+        return list.sort((a, b) => {
+            const priorityA = currencyMap[a.value].sortPriority ?? 999;
+            const priorityB = currencyMap[b.value].sortPriority ?? 999;
+            return priorityA - priorityB;
+        });
+    }, [currencies]);
 
     const [ccy, setCcy] = useState<CurrencySymbol | null>(null);
     const [address, setAddress] = useState<string>('');
     const [isPending, setIsPending] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [txHash, setTxHash] = useState<string | undefined>();
+    const [error, setError] = useState<string | null>(null);
+
+    // Clear error when currency changes
+    useEffect(() => {
+        setError(null);
+    }, [ccy]);
+
+    const selectedAsset = useMemo(
+        () =>
+            ccy
+                ? assetList.find(item => item.value === ccy) || assetList[0]
+                : assetList[0],
+        [ccy, assetList]
+    );
 
     const token = useMemo(() => {
         if (!ccy) return null;
         const currency = toCurrency(ccy);
-        if (currency instanceof Token) {
-            return currency;
-        }
-
-        return null;
+        return currency instanceof Token ? currency : null;
     }, [ccy]);
 
     const mint = useCallback(async () => {
-        if (!account || !sf || !token || !(token instanceof Token)) return;
+        if (
+            !account ||
+            !sf ||
+            !token ||
+            !(token instanceof Token) ||
+            !client ||
+            !ccy
+        )
+            return;
+
         setIsPending(true);
+        setError(null);
         try {
-            const tx = await sf.mintERC20Token(token);
+            const tx = await mintTokens(ccy, token, account, sf, client);
             const transactionStatus = await handleContractTransaction(tx);
 
             if (!transactionStatus) {
-                console.error('Some error occurred');
+                setError('Transaction failed. Please try again.');
             } else {
                 setTxHash(tx);
                 track('Mint Tokens', {
@@ -144,12 +180,11 @@ export const Faucet = () => {
                 setIsOpen(true);
             }
         } catch (e) {
-            if (e instanceof Error) {
-                console.error(e.message);
-            }
+            console.error(e);
+            setError(formatErrorMessage(e));
         }
         setIsPending(false);
-    }, [account, sf, token, handleContractTransaction]);
+    }, [account, sf, token, handleContractTransaction, client, ccy]);
 
     const addToMetamask = useCallback(
         async (token: Token | null) => {
@@ -167,16 +202,39 @@ export const Faucet = () => {
     );
 
     useEffect(() => {
-        const getContractAddress = async () => {
-            if (!sf || !token || !(token instanceof Token)) return '';
-            const address = await sf.getERC20TokenContractAddress(token);
-            return address;
-        };
+        if (!sf || !token || !(token instanceof Token) || !ccy) {
+            setAddress('');
+            return;
+        }
 
-        getContractAddress().then(address => {
-            setAddress(address);
-        });
-    }, [sf, token]);
+        let isActive = true;
+        setAddress('');
+
+        getTokenContractAddress(ccy, token, sf)
+            .then(address => {
+                if (isActive && address) {
+                    setAddress(address);
+                }
+            })
+            .catch(err => {
+                console.error('Failed to fetch token address:', err);
+                if (isActive) {
+                    setAddress('');
+                }
+            });
+
+        return () => {
+            isActive = false;
+        };
+    }, [sf, token, ccy, chainId]);
+
+    const firstAssetValue = assetList.length > 0 ? assetList[0].value : null;
+
+    useEffect(() => {
+        if (firstAssetValue) {
+            setCcy(prev => (prev !== firstAssetValue ? firstAssetValue : prev));
+        }
+    }, [firstAssetValue]);
 
     return (
         <Page title='Test Pilot Program'>
@@ -191,18 +249,8 @@ export const Faucet = () => {
                                 <div className='grid h-14 grid-flow-col items-center justify-start gap-x-3 rounded-xl border border-neutral-3 bg-black-20 px-2 tablet:justify-stretch'>
                                     <CurrencyDropdown
                                         currencyOptionList={assetList}
-                                        selected={assetList[0]}
-                                        onChange={ccy => {
-                                            if (
-                                                assetList
-                                                    .map(item => item.label)
-                                                    .includes(ccy)
-                                            ) {
-                                                setCcy(ccy as CurrencySymbol);
-                                            } else {
-                                                setCcy(null);
-                                            }
-                                        }}
+                                        selected={selectedAsset}
+                                        onChange={setCcy}
                                         variant='fixedWidth'
                                     />
 
@@ -294,11 +342,14 @@ export const Faucet = () => {
                                     </div>
                                     <div></div>
                                 </div>
-                                <div className='flex justify-center'>
+                                <div className='flex flex-col items-center gap-4'>
                                     <Button
                                         onClick={mint}
                                         disabled={
-                                            !account || isPending || chainError
+                                            !account ||
+                                            !client ||
+                                            isPending ||
+                                            chainError
                                         }
                                         size={ButtonSizes.lg}
                                     >
@@ -306,6 +357,15 @@ export const Faucet = () => {
                                             ? 'Minting...'
                                             : 'Mint tokens'}
                                     </Button>
+                                    {error && (
+                                        <div className='w-full max-w-md'>
+                                            <Alert
+                                                severity={AlertSeverity.Error}
+                                                title='Error'
+                                                subtitle={error}
+                                            />
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         ) : (
