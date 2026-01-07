@@ -39,6 +39,7 @@ jobs:
 
   cypress-run:
     name: Cypress Run Tests
+    if: github.event.inputs.environment == 'development' || github.event.inputs.environment == 'ci-build'
     needs: build-and-test-all
     uses: ./.github/workflows/cypress-test.yml
     with:
@@ -75,7 +76,7 @@ jobs:
     name: Deploy on IPFS via Storacha
     if: github.event.inputs.environment != 'ci-build'
     environment: ${{ github.event.inputs.environment }}
-    needs: [build-and-test-all, cypress-run]
+    needs: [build-and-test-all]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -88,7 +89,7 @@ jobs:
 
       - name: Upload to IPFS via Storacha
         id: storacha
-        uses: storacha/add-to-web3@v3
+        uses: Secured-Finance/add-to-web3@v4
         with:
           path_to_add: 'dist'
           secret_key: ${{ secrets.STORACHA_PRINCIPAL }}
