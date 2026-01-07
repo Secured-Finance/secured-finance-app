@@ -211,35 +211,7 @@ export const WithBanner = ({
 
     const currencyArray = Array.from(delistedCurrencySet);
 
-    const earliestMaturingMarket = useMemo(() => {
-        const allMarkets: Array<{
-            market: LendingMarket;
-            currency: CurrencySymbol;
-        }> = [];
-
-        Object.entries(lendingMarkets).forEach(([currency, markets]) => {
-            Object.values(markets).forEach(market => {
-                if (market.isOpened && !market.isMatured) {
-                    allMarkets.push({
-                        market,
-                        currency: currency as CurrencySymbol,
-                    });
-                }
-            });
-        });
-
-        if (allMarkets.length === 0) return null;
-
-        allMarkets.sort((a, b) => a.market.maturity - b.market.maturity);
-        return allMarkets[0];
-    }, [lendingMarkets]);
-
     const shouldShowAutoRollBanner = useMemo(() => {
-        if (!earliestMaturingMarket) return false;
-        if (maturity !== earliestMaturingMarket.market.maturity) {
-            return false;
-        }
-
         const currentMarket = lendingMarkets[ccy]?.[maturity];
         if (
             !currentMarket ||
@@ -249,14 +221,30 @@ export const WithBanner = ({
             return false;
         }
 
+        const marketsForCurrency = lendingMarkets[ccy];
+        if (!marketsForCurrency) return false;
+
+        const openMarkets = Object.values(marketsForCurrency).filter(
+            market => market.isOpened && !market.isMatured
+        );
+
+        if (openMarkets.length === 0) return false;
+
+        openMarkets.sort((a, b) => a.maturity - b.maturity);
+        const earliestMarketForCurrency = openMarkets[0];
+
+        if (maturity !== earliestMarketForCurrency.maturity) {
+            return false;
+        }
+
         const now = Date.now();
-        const maturityTime = earliestMaturingMarket.market.maturity * 1000;
+        const maturityTime = earliestMarketForCurrency.maturity * 1000;
         const daysUntilMaturity = (maturityTime - now) / DAY_IN_MS;
 
         return (
             daysUntilMaturity >= 0 && daysUntilMaturity <= DAYS_BEFORE_MATURITY
         );
-    }, [earliestMaturingMarket, ccy, maturity, lendingMarkets]);
+    }, [ccy, maturity, lendingMarkets]);
 
     const alertContent = (() => {
         if (maximumOpenOrderLimit) {
