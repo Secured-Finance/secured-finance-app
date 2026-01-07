@@ -89,7 +89,7 @@ jobs:
 
       - name: Upload to IPFS via Storacha
         id: storacha
-        uses: Secured-Finance/add-to-web3@v4
+        uses: Secured-Finance/add-to-web3@v4.0.0
         with:
           path_to_add: 'dist'
           secret_key: ${{ secrets.STORACHA_PRINCIPAL }}
