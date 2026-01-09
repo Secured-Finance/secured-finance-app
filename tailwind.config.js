@@ -296,6 +296,8 @@ module.exports = {
                 usdc: '#2775CA',
                 usdfc: '#EAAC00',
                 jpyc: '#16449A',
+                umint: '#F2F2F2',
+                isnr: '#000AD2',
             },
             pill: {
                 fil: 'rgba(0, 144, 255, 0.7)',
@@ -304,6 +306,8 @@ module.exports = {
                 usdc: '#2775CA',
                 usdfc: '#EAAC00',
                 jpyc: '#16449A',
+                umint: 'rgba(242, 242, 242, 0.7)',
+                isnr: 'rgba(0, 10, 210, 0.7)',
             },
         },
     },
