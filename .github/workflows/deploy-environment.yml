@@ -102,27 +102,3 @@ jobs:
       - name: Output IPFS URL
         run: |
           echo "IPFS URL: ${{ steps.storacha.outputs.url }}"
-
-      - name: Update Cloudflare DNSLink
-        if: success()
-        run: |
-          ZONE_ID="${{ secrets.CLOUDFLARE_ZONE_ID }}"
-          RECORD_NAME="_dnslink"
-          CID="${{ steps.storacha.outputs.cid }}"
-          DNSLINK_VALUE="dnslink=/ipfs/${CID}"
-
-          # Get the record ID
-          RECORD_ID=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/${ZONE_ID}/dns_records?name=${RECORD_NAME}" \
-            -H "X-Auth-Email: ${{ secrets.CLOUDFLARE_EMAIL }}" \
-            -H "X-Auth-Key: ${{ secrets.CLOUDFLARE_API_KEY }}" \
-            -H "Content-Type: application/json" | jq -r '.result[0].id')
-
-          # Update the TXT record
-          curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/${ZONE_ID}/dns_records/${RECORD_ID}" \
-            -H "X-Auth-Email: ${{ secrets.CLOUDFLARE_EMAIL }}" \
-            -H "X-Auth-Key: ${{ secrets.CLOUDFLARE_API_KEY }}" \
-            -H "Content-Type: application/json" \
-            --data "{\"type\":\"TXT\",\"name\":\"${RECORD_NAME}\",\"content\":\"${DNSLINK_VALUE}\",\"ttl\":3600}" \
-            | jq '.'
-
-          echo "DNSLink updated to: ${DNSLINK_VALUE}"
