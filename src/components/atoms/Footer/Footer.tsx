@@ -8,7 +8,7 @@ const STATUS_PAGE_LINK = 'https://secured-finance.statuspage.io/';
 
 const getVersion = () => {
     if (getUsePackageVersion() && getCommitHash() !== '.storybook') {
-        return 'deployment-10/01/2026-v1';
+        return 'deployment-10/01/2026-v2';
     }
 
     return getCommitHash();
