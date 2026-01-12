@@ -48,7 +48,7 @@ jobs:
   deploy-on-fleek:
     runs-on: ubuntu-latest
     name: Deploy on Fleek
-    if: github.event.inputs.environment != 'ci-build' || false
+    if: false
     environment: ${{ github.event.inputs.environment }}
     env:
       FLEEK_TOKEN: ${{ secrets.FLEEK_TOKEN }}
@@ -87,7 +87,7 @@ jobs:
           path: ./build
 
       - name: Pin to Filebase
-        uses: aquiladev/ipfs-action@v1
+        uses: aquiladev/ipfs-action@master
         with:
           path: ./build
           service: filebase
