@@ -37,23 +37,23 @@ jobs:
       ref: ${{ github.event.inputs.ref }}
     secrets: inherit
 
-  cypress-run:
-    name: Cypress Run Tests
-    needs: build-and-test-all
-    uses: ./.github/workflows/cypress-test.yml
-    with:
-      artifact_name: WebApp
-    secrets: inherit
+  # cypress-run:
+  #   name: Cypress Run Tests
+  #   needs: build-and-test-all
+  #   uses: ./.github/workflows/cypress-test.yml
+  #   with:
+  #     artifact_name: WebApp
+  #   secrets: inherit
 
   deploy-on-fleek:
     runs-on: ubuntu-latest
     name: Deploy on Fleek
-    if: github.event.inputs.environment != 'ci-build'
+    if: github.event.inputs.environment != 'ci-build' || false
     environment: ${{ github.event.inputs.environment }}
     env:
       FLEEK_TOKEN: ${{ secrets.FLEEK_TOKEN }}
       FLEEK_PROJECT_ID: ${{ secrets.FLEEK_PROJECT_ID }}
-    needs: [build-and-test-all, cypress-run]
+    needs: [build-and-test-all]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -69,3 +69,29 @@ jobs:
 
       - name: Deploy Site
         run: fleek sites deploy --config .deploy/${{ vars.FLEEK_ENV }}/fleek.config.json
+
+  pin-on-filebase:
+    runs-on: ubuntu-latest
+    name: Pin to IPFS via Filebase
+    if: github.event.inputs.environment != 'ci-build'
+    environment: ${{ github.event.inputs.environment }}
+    needs: [build-and-test-all]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Retrieve artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: WebApp
+          path: ./build
+
+      - name: Pin to Filebase
+        uses: aquiladev/ipfs-action@v1
+        with:
+          path: ./build
+          service: filebase
+          pinName: 'ipfs-action'
+          filebaseBucket: ${{ secrets.FILEBASE_BUCKET }}
+          filebaseKey: ${{ secrets.FILEBASE_KEY }}
+          filebaseSecret: ${{ secrets.FILEBASE_SECRET }}

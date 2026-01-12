@@ -1,6 +1,5 @@
 import clsx from 'clsx';
 import Link from 'next/link';
-import packageJson from 'package.json';
 import ExternalLink from 'src/assets/icons/external-link.svg';
 import { getCommitHash, getEnvShort, getUsePackageVersion } from 'src/utils';
 import { isChipVisibleForEnv } from 'src/utils/displayUtils';
@@ -9,7 +8,7 @@ const STATUS_PAGE_LINK = 'https://secured-finance.statuspage.io/';
 
 const getVersion = () => {
     if (getUsePackageVersion() && getCommitHash() !== '.storybook') {
-        return packageJson.version;
+        return 'v1-13/01/2026';
     }
 
     return getCommitHash();
