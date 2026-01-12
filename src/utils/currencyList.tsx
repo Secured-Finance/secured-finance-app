@@ -22,6 +22,8 @@ import ZcEthIcon from 'src/assets/coins/zc-eth.svg';
 import ZcFilIcon from 'src/assets/coins/zc-fil.svg';
 import ZcJpycIcon from 'src/assets/coins/zc-jpyc.svg';
 import ZcUsdcIcon from 'src/assets/coins/zc-usdc.svg';
+import uMINTIcon from 'src/assets/coins/umint.svg';
+import iSNRIcon from 'src/assets/coins/isnr.svg';
 import ZcUsdfcIcon from 'src/assets/coins/zc-usdfc.svg';
 import { SvgIcon } from 'src/types';
 import { hexToString } from 'viem';
@@ -40,6 +42,8 @@ import { WBTC } from './currencies/wbtc';
 import { WETHE } from './currencies/wethe';
 import { WPFIL } from './currencies/wpfil';
 import { Maturity } from './entities';
+import { UMINT } from './currencies/umint';
+import { ISNR } from './currencies/isnr';
 
 BigNumberJS.set({ EXPONENTIAL_AT: 30 }); // setting to a decent limit
 
@@ -58,6 +62,8 @@ export enum CurrencySymbol {
     wpFIL = 'wpFIL',
     USDFC = 'USDFC',
     JPYC = 'JPYC',
+    UMINT = 'uMINT',
+    ISNR = 'iSNR',
 }
 
 export const currencyMap: Readonly<
@@ -178,8 +184,44 @@ export const currencyMap: Readonly<
         longName: 'Wrapped Ether',
         hasOrderBook: true,
     },
-    [CurrencySymbol.WBTC]: {
+    [CurrencySymbol.UMINT]: {
         index: 6,
+        symbol: CurrencySymbol.UMINT,
+        name: UMINT.onChain().name,
+        icon: uMINTIcon,
+        coinGeckoId: 'ubs_umint_eth',
+        isCollateral: true,
+        toBaseUnit: (amount: number) =>
+            convertToBlockchainUnit(amount, UMINT.onChain()),
+        fromBaseUnit: (amount: bigint) =>
+            convertFromBlockchainUnit(amount, UMINT.onChain()),
+        toCurrency: () => UMINT.onChain(),
+        chartColor: tailwindConfig.theme.colors.chart.umint,
+        pillColor: tailwindConfig.theme.colors.pill.umint,
+        roundingDecimal: 2,
+        longName: 'DigiFT uMINT',
+        hasOrderBook: false,
+    },
+    [CurrencySymbol.ISNR]: {
+        index: 7,
+        symbol: CurrencySymbol.ISNR,
+        name: ISNR.onChain().name,
+        icon: iSNRIcon,
+        coinGeckoId: '',
+        isCollateral: true,
+        toBaseUnit: (amount: number) =>
+            convertToBlockchainUnit(amount, ISNR.onChain()),
+        fromBaseUnit: (amount: bigint) =>
+            convertFromBlockchainUnit(amount, ISNR.onChain()),
+        toCurrency: () => ISNR.onChain(),
+        chartColor: tailwindConfig.theme.colors.chart.isnr,
+        pillColor: tailwindConfig.theme.colors.pill.isnr,
+        roundingDecimal: 2,
+        longName: 'DigiFT iSNR',
+        hasOrderBook: false,
+    },
+    [CurrencySymbol.WBTC]: {
+        index: 8,
         symbol: CurrencySymbol.WBTC,
         name: WBTC.onChain().name,
         icon: WBtcIcon,
@@ -198,7 +240,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.BTCb]: {
-        index: 7,
+        index: 9,
         symbol: CurrencySymbol.BTCb,
         name: BTCB.onChain().name,
         icon: BtcIcon,
@@ -217,7 +259,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.FIL]: {
-        index: 8,
+        index: 10,
         symbol: CurrencySymbol.FIL,
         name: 'Filecoin',
         icon: FilIcon,
@@ -236,7 +278,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.tFIL]: {
-        index: 9,
+        index: 11,
         symbol: CurrencySymbol.tFIL,
         name: 'Filecoin',
         icon: FilIcon,
@@ -255,7 +297,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.WFIL]: {
-        index: 10,
+        index: 12,
         symbol: CurrencySymbol.WFIL,
         name: WFIL.onChain().name,
         icon: WFilIcon,
@@ -276,7 +318,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.axlFIL]: {
-        index: 11,
+        index: 13,
         symbol: CurrencySymbol.axlFIL,
         name: 'Axelar Wrapped FIL',
         icon: WFilIcon,
@@ -295,7 +337,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.iFIL]: {
-        index: 12,
+        index: 14,
         symbol: CurrencySymbol.iFIL,
         name: 'Infinity Pool Staked FIL',
         icon: IFilIcon,
@@ -313,7 +355,7 @@ export const currencyMap: Readonly<
         hasOrderBook: false,
     },
     [CurrencySymbol.wpFIL]: {
-        index: 13,
+        index: 15,
         symbol: CurrencySymbol.wpFIL,
         name: 'Wrapped PFIL Token',
         icon: WPFilIcon,
@@ -415,6 +457,10 @@ export function toCurrencySymbol(ccy: string) {
             return CurrencySymbol.wpFIL;
         case CurrencySymbol.JPYC:
             return CurrencySymbol.JPYC;
+        case CurrencySymbol.UMINT:
+            return CurrencySymbol.UMINT;
+        case CurrencySymbol.ISNR:
+            return CurrencySymbol.ISNR;
         default:
             return undefined;
     }
