@@ -86,12 +86,17 @@ jobs:
           name: WebApp
           path: ./build
 
+      - name: Set deployment timestamp
+        id: timestamp
+        run: echo "time=$(date -u +%Y-%m-%dT%H-%M-%SZ)" >> $GITHUB_OUTPUT
+
       - name: Pin to Filebase
         uses: aquiladev/ipfs-action@master
         with:
           path: ./build
           service: filebase
-          pinName: 'ipfs-action'
+          pinName: '${{ vars.FLEEK_ENV }}-deployment-${{ steps.timestamp.outputs.time }}'
           filebaseBucket: ${{ secrets.FILEBASE_BUCKET }}
           filebaseKey: ${{ secrets.FILEBASE_KEY }}
           filebaseSecret: ${{ secrets.FILEBASE_SECRET }}
+          key: ${{ secrets.IPNS_KEY }}
