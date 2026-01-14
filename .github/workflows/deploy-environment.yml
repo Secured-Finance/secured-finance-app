@@ -105,10 +105,13 @@ jobs:
         env:
           FILEBASE_KEY: ${{ secrets.FILEBASE_KEY }}
           FILEBASE_SECRET: ${{ secrets.FILEBASE_SECRET }}
-          IPNS_KEY: ${{ secrets.IPNS_KEY }}
+          IPNS_LABEL: ${{ secrets.IPNS_LABEL }}
           IPFS_HASH: ${{ steps.ipfs-pin.outputs.hash }}
         run: |
-          curl -X POST "https://api.filebase.io/v1/names/$FILEBASE_NAME_ID" \
-            -u "$FILEBASE_KEY:$FILEBASE_SECRET" \
+          TOKEN=$(echo -n "$FILEBASE_KEY:$FILEBASE_SECRET" | base64)
+
+          # Update the IPNS name
+          curl -X PUT "https://api.filebase.io/v1/names/$IPNS_LABEL" \
+            -H "Authorization: Bearer $TOKEN" \
             -H "Content-Type: application/json" \
             -d "{\"cid\": \"$IPFS_HASH\"}"
