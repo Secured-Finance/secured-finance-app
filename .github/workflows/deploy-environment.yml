@@ -111,11 +111,11 @@ jobs:
           # Create base64 bearer token
           TOKEN=$(printf '%s:%s' "$FILEBASE_KEY" "$FILEBASE_SECRET" | base64 -w 0)
 
-          # Update the IPNS name with explicit JSON
           curl -X PUT \
             "https://api.filebase.io/v1/names/${FILEBASE_IPNS_LABEL}" \
             -H "Authorization: Bearer ${TOKEN}" \
             -H "Content-Type: application/json" \
             -d '{"cid":"'"${IPFS_HASH}"'"}' \
-            --fail-with-body \
-            -v
+            --fail-with-body
+
+          echo "✅ IPNS name '${FILEBASE_IPNS_LABEL}' updated to CID: ${IPFS_HASH}"
