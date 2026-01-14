@@ -117,5 +117,3 @@ jobs:
             -H "Content-Type: application/json" \
             -d '{"cid":"'"${IPFS_HASH}"'"}' \
             --fail-with-body
-
-          echo "✅ IPNS name '${FILEBASE_IPNS_LABEL}' updated to CID: ${IPFS_HASH}"
