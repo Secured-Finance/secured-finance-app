@@ -91,6 +91,7 @@ jobs:
         run: echo "time=$(date -u +%Y-%m-%dT%H-%M-%SZ)" >> $GITHUB_OUTPUT
 
       - name: Pin to Filebase
+        id: ipfs-pin
         uses: aquiladev/ipfs-action@master
         with:
           path: ./build
@@ -99,4 +100,15 @@ jobs:
           filebaseBucket: ${{ secrets.FILEBASE_BUCKET }}
           filebaseKey: ${{ secrets.FILEBASE_KEY }}
           filebaseSecret: ${{ secrets.FILEBASE_SECRET }}
-          key: ${{ secrets.IPNS_KEY }}
+
+      - name: Update Filebase Name (IPNS)
+        env:
+          FILEBASE_KEY: ${{ secrets.FILEBASE_KEY }}
+          FILEBASE_SECRET: ${{ secrets.FILEBASE_SECRET }}
+          IPNS_KEY: ${{ secrets.IPNS_KEY }}
+          IPFS_HASH: ${{ steps.ipfs-pin.outputs.hash }}
+        run: |
+          curl -X POST "https://api.filebase.io/v1/names/$FILEBASE_NAME_ID" \
+            -u "$FILEBASE_KEY:$FILEBASE_SECRET" \
+            -H "Content-Type: application/json" \
+            -d "{\"cid\": \"$IPFS_HASH\"}"
