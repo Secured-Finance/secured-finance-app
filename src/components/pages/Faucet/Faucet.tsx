@@ -104,11 +104,20 @@ export const Faucet = () => {
     const sf = useSF();
 
     const { data: currencies } = useCurrencies();
-    const assetList = toOptions(currencies, CurrencySymbol.USDC).filter(
-        ccy =>
-            currencyMap[ccy.value].toCurrency().isToken &&
-            ccy.label !== CurrencySymbol.USDFC
-    );
+    const unsupportedFaucetTokens = new Set<CurrencySymbol>([
+        CurrencySymbol.USDFC,
+        CurrencySymbol.JPYC,
+        CurrencySymbol.UMINT,
+        CurrencySymbol.ISNR,
+    ]);
+
+    const assetList = toOptions(currencies, CurrencySymbol.USDC).filter(ccy => {
+        const currency = currencyMap[ccy.value].toCurrency();
+        return (
+            currency.isToken &&
+            !unsupportedFaucetTokens.has(ccy.label as CurrencySymbol)
+        );
+    });
 
     const [ccy, setCcy] = useState<CurrencySymbol | null>(null);
     const [address, setAddress] = useState<string>('');
@@ -376,8 +385,8 @@ export const Faucet = () => {
                     itemList={[
                         ['Status', 'Success'],
                         [
-                            'Ethereum Address',
-                            AddressUtils.format(account ?? '', 8),
+                            'Transaction hash',
+                            AddressUtils.format(txHash ?? '', 8),
                         ],
                     ]}
                     txHash={txHash}

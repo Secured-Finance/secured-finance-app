@@ -11,6 +11,7 @@ import BtcIcon from 'src/assets/coins/btc.svg';
 import EthIcon from 'src/assets/coins/eth2.svg';
 import FilIcon from 'src/assets/coins/fil.svg';
 import IFilIcon from 'src/assets/coins/ifil.svg';
+import JpycIcon from 'src/assets/coins/jpyc.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
 import UsdfcIcon from 'src/assets/coins/usdfc.svg';
 import WBtcIcon from 'src/assets/coins/wbtc.svg';
@@ -19,7 +20,11 @@ import WPFilIcon from 'src/assets/coins/wpfil.svg';
 import ZcBtcIcon from 'src/assets/coins/zc-btc.svg';
 import ZcEthIcon from 'src/assets/coins/zc-eth.svg';
 import ZcFilIcon from 'src/assets/coins/zc-fil.svg';
+import ZcJpycIcon from 'src/assets/coins/zc-jpyc.svg';
 import ZcUsdcIcon from 'src/assets/coins/zc-usdc.svg';
+import uMINTIcon from 'src/assets/coins/umint.svg';
+import iSNRIcon from 'src/assets/coins/isnr.svg';
+import ZcUsdfcIcon from 'src/assets/coins/zc-usdfc.svg';
 import { SvgIcon } from 'src/types';
 import { hexToString } from 'viem';
 import { ZERO_BI } from './collateral';
@@ -29,6 +34,7 @@ import { BTCB } from './currencies/btcb';
 import { FIL } from './currencies/fil';
 import { WFIL } from './currencies/filecoin';
 import { IFIL } from './currencies/ifil';
+import { JPYC } from './currencies/jpyc';
 import { TFIL } from './currencies/tfil';
 import { USDC } from './currencies/usdc';
 import { USDFC } from './currencies/usdfc';
@@ -36,6 +42,8 @@ import { WBTC } from './currencies/wbtc';
 import { WETHE } from './currencies/wethe';
 import { WPFIL } from './currencies/wpfil';
 import { Maturity } from './entities';
+import { UMINT } from './currencies/umint';
+import { ISNR } from './currencies/isnr';
 
 BigNumberJS.set({ EXPONENTIAL_AT: 30 }); // setting to a decent limit
 
@@ -53,13 +61,35 @@ export enum CurrencySymbol {
     iFIL = 'iFIL',
     wpFIL = 'wpFIL',
     USDFC = 'USDFC',
+    JPYC = 'JPYC',
+    UMINT = 'uMINT',
+    ISNR = 'iSNR',
 }
 
 export const currencyMap: Readonly<
     Record<CurrencySymbol, Readonly<CurrencyInfo>>
 > = {
-    [CurrencySymbol.USDC]: {
+    [CurrencySymbol.JPYC]: {
         index: 0,
+        symbol: CurrencySymbol.JPYC,
+        name: JPYC.onChain().name,
+        icon: JpycIcon,
+        zcIcon: ZcJpycIcon,
+        coinGeckoId: 'jpycoin',
+        isCollateral: true,
+        toBaseUnit: (amount: number) =>
+            convertToBlockchainUnit(amount, JPYC.onChain()),
+        fromBaseUnit: (amount: bigint) =>
+            convertFromBlockchainUnit(amount, JPYC.onChain()),
+        toCurrency: () => JPYC.onChain(),
+        chartColor: tailwindConfig.theme.colors.chart.jpyc,
+        pillColor: tailwindConfig.theme.colors.pill.jpyc,
+        roundingDecimal: 0,
+        longName: 'JPY Coin',
+        hasOrderBook: true,
+    },
+    [CurrencySymbol.USDC]: {
+        index: 1,
         symbol: CurrencySymbol.USDC,
         name: USDC.onChain().name,
         icon: UsdcIcon,
@@ -78,7 +108,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.aUSDC]: {
-        index: 1,
+        index: 2,
         symbol: CurrencySymbol.aUSDC,
         name: 'aUSDC',
         icon: UsdcIcon,
@@ -97,11 +127,11 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.USDFC]: {
-        index: 2,
+        index: 3,
         symbol: CurrencySymbol.USDFC,
         name: USDFC.onChain().name,
         icon: UsdfcIcon,
-        zcIcon: ZcUsdcIcon,
+        zcIcon: ZcUsdfcIcon,
         coinGeckoId: 'usdfc',
         isCollateral: true,
         toBaseUnit: (amount: number) =>
@@ -116,7 +146,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.ETH]: {
-        index: 3,
+        index: 4,
         symbol: CurrencySymbol.ETH,
         // TODO: update sf-core to use the right name
         name: 'Ether',
@@ -136,7 +166,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.WETHe]: {
-        index: 4,
+        index: 5,
         symbol: CurrencySymbol.WETHe,
         name: WETHE.onChain().name,
         icon: EthIcon,
@@ -154,8 +184,44 @@ export const currencyMap: Readonly<
         longName: 'Wrapped Ether',
         hasOrderBook: true,
     },
+    [CurrencySymbol.UMINT]: {
+        index: 6,
+        symbol: CurrencySymbol.UMINT,
+        name: UMINT.onChain().name,
+        icon: uMINTIcon,
+        coinGeckoId: 'ubs_umint_eth',
+        isCollateral: true,
+        toBaseUnit: (amount: number) =>
+            convertToBlockchainUnit(amount, UMINT.onChain()),
+        fromBaseUnit: (amount: bigint) =>
+            convertFromBlockchainUnit(amount, UMINT.onChain()),
+        toCurrency: () => UMINT.onChain(),
+        chartColor: tailwindConfig.theme.colors.chart.umint,
+        pillColor: tailwindConfig.theme.colors.pill.umint,
+        roundingDecimal: 2,
+        longName: 'DigiFT uMINT',
+        hasOrderBook: false,
+    },
+    [CurrencySymbol.ISNR]: {
+        index: 7,
+        symbol: CurrencySymbol.ISNR,
+        name: ISNR.onChain().name,
+        icon: iSNRIcon,
+        coinGeckoId: '',
+        isCollateral: true,
+        toBaseUnit: (amount: number) =>
+            convertToBlockchainUnit(amount, ISNR.onChain()),
+        fromBaseUnit: (amount: bigint) =>
+            convertFromBlockchainUnit(amount, ISNR.onChain()),
+        toCurrency: () => ISNR.onChain(),
+        chartColor: tailwindConfig.theme.colors.chart.isnr,
+        pillColor: tailwindConfig.theme.colors.pill.isnr,
+        roundingDecimal: 2,
+        longName: 'DigiFT iSNR',
+        hasOrderBook: false,
+    },
     [CurrencySymbol.WBTC]: {
-        index: 5,
+        index: 8,
         symbol: CurrencySymbol.WBTC,
         name: WBTC.onChain().name,
         icon: WBtcIcon,
@@ -174,7 +240,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.BTCb]: {
-        index: 6,
+        index: 9,
         symbol: CurrencySymbol.BTCb,
         name: BTCB.onChain().name,
         icon: BtcIcon,
@@ -193,7 +259,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.FIL]: {
-        index: 7,
+        index: 10,
         symbol: CurrencySymbol.FIL,
         name: 'Filecoin',
         icon: FilIcon,
@@ -212,7 +278,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.tFIL]: {
-        index: 8,
+        index: 11,
         symbol: CurrencySymbol.tFIL,
         name: 'Filecoin',
         icon: FilIcon,
@@ -231,7 +297,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.WFIL]: {
-        index: 9,
+        index: 12,
         symbol: CurrencySymbol.WFIL,
         name: WFIL.onChain().name,
         icon: WFilIcon,
@@ -252,7 +318,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.axlFIL]: {
-        index: 10,
+        index: 13,
         symbol: CurrencySymbol.axlFIL,
         name: 'Axelar Wrapped FIL',
         icon: WFilIcon,
@@ -271,7 +337,7 @@ export const currencyMap: Readonly<
         hasOrderBook: true,
     },
     [CurrencySymbol.iFIL]: {
-        index: 11,
+        index: 14,
         symbol: CurrencySymbol.iFIL,
         name: 'Infinity Pool Staked FIL',
         icon: IFilIcon,
@@ -289,7 +355,7 @@ export const currencyMap: Readonly<
         hasOrderBook: false,
     },
     [CurrencySymbol.wpFIL]: {
-        index: 12,
+        index: 15,
         symbol: CurrencySymbol.wpFIL,
         name: 'Wrapped PFIL Token',
         icon: WPFilIcon,
@@ -389,6 +455,12 @@ export function toCurrencySymbol(ccy: string) {
             return CurrencySymbol.iFIL;
         case CurrencySymbol.wpFIL:
             return CurrencySymbol.wpFIL;
+        case CurrencySymbol.JPYC:
+            return CurrencySymbol.JPYC;
+        case CurrencySymbol.UMINT:
+            return CurrencySymbol.UMINT;
+        case CurrencySymbol.ISNR:
+            return CurrencySymbol.ISNR;
         default:
             return undefined;
     }
@@ -459,6 +531,7 @@ export const convertZCTokenFromBaseAmount = (
     !maturity || maturity.isZero()
         ? convertFromGvUnit(amount)
         : amountFormatterFromBase[symbol](amount);
+
 export const convertZCTokenToBaseAmount = (
     symbol: CurrencySymbol,
     amount: number,

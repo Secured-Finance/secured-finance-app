@@ -27,10 +27,10 @@ describe('usePositions', () => {
             expect(mock.getPositions).toHaveBeenCalledTimes(1);
             const newValue = result.current;
             expect(newValue.data.positions).toHaveLength(4);
-            expect(newValue.data.positions[0].currency).toBe(ethBytes32);
+            expect(newValue.data.positions[0].currency).toBe(usdcBytes32);
             expect(newValue.data.positions[1].currency).toBe(ethBytes32);
-            expect(newValue.data.positions[2].currency).toBe(wfilBytes32);
-            expect(newValue.data.positions[3].currency).toBe(usdcBytes32);
+            expect(newValue.data.positions[2].currency).toBe(ethBytes32);
+            expect(newValue.data.positions[3].currency).toBe(wfilBytes32);
             expect(newValue.isPending).toEqual(false);
         });
     });
@@ -44,16 +44,16 @@ describe('usePositions', () => {
             const newValue = result.current;
             expect(newValue.data.positions).toHaveLength(4);
             expect(newValue.data.positions[0].marketPrice).toStrictEqual(
-                BigInt(9750)
+                BigInt(9403)
             );
             expect(newValue.data.positions[1].marketPrice).toStrictEqual(
-                BigInt(9500)
-            );
-            expect(newValue.data.positions[2].marketPrice).toStrictEqual(
                 BigInt(9750)
             );
+            expect(newValue.data.positions[2].marketPrice).toStrictEqual(
+                BigInt(9500)
+            );
             expect(newValue.data.positions[3].marketPrice).toStrictEqual(
-                BigInt(9403)
+                BigInt(9750)
             );
         });
     });

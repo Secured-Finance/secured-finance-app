@@ -13,6 +13,9 @@ const commonOptions = {
         textColor: colors.slateGray,
         fontFamily: "'Roboto Mono', sans-serif",
     },
+    localization: {
+        locale: 'en-US',
+    },
     grid: {
         vertLines: {
             visible: false,

@@ -10,13 +10,14 @@ import {
     useGetUsersQuery,
     useNonceLazyQuery,
 } from '@secured-finance/sf-point-client';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { snakeCase } from 'change-case';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
 import CountUp from 'react-countup';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { SiweMessage } from 'siwe';
 import {
     Button,
@@ -42,16 +43,14 @@ import {
     useCollateralCurrencies,
     usePoints,
 } from 'src/hooks';
-import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
     SupportedChainsList,
     ordinaryFormat,
     percentFormat,
-    readWalletFromStore,
 } from 'src/utils';
-import { useAccount, useConnect, useSignMessage } from 'wagmi';
+import { useAccount, useSignMessage } from 'wagmi';
 import { getShareMessage, quoteTweetUrl } from './constants';
 
 const POLL_INTERVAL = 600000; // 10 minutes
@@ -157,7 +156,7 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
     });
     const { isLoading, signMessageAsync, reset } = useSignMessage();
     const { address, isConnected } = useAccount();
-    const dispatch = useDispatch();
+    const { open } = useWeb3Modal();
 
     return (
         <GradientBox>
@@ -285,7 +284,7 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
                                 size={ButtonSizes.lg}
                                 onClick={async () => {
                                     if (!isConnected) {
-                                        dispatch(setWalletDialogOpen(true));
+                                        open();
                                         return;
                                     }
 
@@ -337,7 +336,7 @@ const QuestList = ({ chainId }: { chainId: number }) => {
     const [isDefaultDepositCcySymbol, setIsDefaultDepositCcySymbol] = useState<
         string | undefined
     >(undefined);
-    const { connectors } = useConnect();
+    const { connector: activeConnector } = useAccount();
     const { data, loading } = useGetQuestsQuery({
         pollInterval: POLL_INTERVAL,
         ...POINT_API_QUERY_OPTIONS,
@@ -353,9 +352,6 @@ const QuestList = ({ chainId }: { chainId: number }) => {
             ),
         [collateralBalances, collateralCurrencies]
     );
-
-    const provider = readWalletFromStore();
-    const connector = connectors.find(connect => connect.name === provider);
 
     const PointTag = ({
         point,
@@ -490,7 +486,7 @@ const QuestList = ({ chainId }: { chainId: number }) => {
                     }
                     onClick={() => {
                         if (questChainId !== chainId) {
-                            connector
+                            activeConnector
                                 ?.switchChain?.(Number(questChainId))
                                 .then(() => {
                                     setTimeout(() => call(), 500);

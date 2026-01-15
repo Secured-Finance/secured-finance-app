@@ -67,6 +67,16 @@ export const crossHairPlugin = {
             chart.tooltip._active.length
         ) {
             const activePoint = chart.tooltip._active[0];
+
+            if (
+                !activePoint ||
+                !activePoint.element ||
+                activePoint.element.x === undefined ||
+                activePoint.element.y === undefined
+            ) {
+                return;
+            }
+
             const ctx = chart.ctx;
             const x = activePoint.element.x;
             const y = activePoint.element.y;
@@ -100,6 +110,15 @@ export const crossHairMultiPlugin = {
             chart.tooltip._active.length
         ) {
             const activePoint = chart.tooltip._active[0];
+
+            if (
+                !activePoint ||
+                !activePoint.element ||
+                activePoint.element.x === undefined
+            ) {
+                return;
+            }
+
             const ctx = chart.ctx;
             const x = activePoint.element.x;
             const topY = chart.scales.y.top;

@@ -23,8 +23,7 @@ export const GlobalItayose = () => {
     const dispatch = useDispatch();
     const router = useRouter();
     const { data: currencies = [] } = useCurrencies();
-    const { totalValueLockedInUSD, currencies: totalValueLockedCurrencies } =
-        useTotalValueLockedAndCurrencies();
+    const { totalValueLockedInUSD } = useTotalValueLockedAndCurrencies();
     const assetList = toOptions(currencies, CurrencySymbol.USDC);
 
     const { currency } = useSelector((state: RootState) =>
@@ -126,7 +125,7 @@ export const GlobalItayose = () => {
                             values={[
                                 {
                                     name: 'Digital Assets',
-                                    value: totalValueLockedCurrencies.length.toString(),
+                                    value: currencies.length.toString(),
                                 },
                                 {
                                     name: 'Total Value Locked',

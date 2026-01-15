@@ -45,6 +45,7 @@ import {
     amountFormatterFromBase,
     amountFormatterToBase,
     calculateFee,
+    currencyMap,
     divide,
     generateWalletSourceInformation,
     ordinaryFormat,
@@ -347,7 +348,10 @@ export function AdvancedLendingOrderCard({
                                             : availableToLend
                                     ),
                                     0,
-                                    2
+                                    Math.max(
+                                        currencyMap[currency].roundingDecimal,
+                                        2
+                                    )
                                 )} ${isMobile ? '' : currency}`}
                             </span>
                         </div>
@@ -447,10 +451,6 @@ export function AdvancedLendingOrderCard({
                         showError={showPreOrderError}
                     />
                     <div className='flex flex-col gap-1 py-1'>
-                        <OrderDisplayBox
-                            field='Required Collateral'
-                            value={'--'}
-                        />
                         <OrderDisplayBox
                             field='Fees'
                             value={calculateFee(maturity, orderFee)}

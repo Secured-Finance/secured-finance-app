@@ -104,7 +104,7 @@ export const DepositCollateral = ({
     onClose,
     collateralList,
     source,
-    defaultCcySymbol = CurrencySymbol.USDC,
+    defaultCcySymbol,
 }: {
     collateralList: Partial<Record<CurrencySymbol, CollateralInfo>>;
     defaultCcySymbol?: string;
@@ -122,6 +122,8 @@ export const DepositCollateral = ({
     const [isFullCoverage, setIsFullCoverage] = useState<boolean>(false);
 
     useEffect(() => {
+        if (state.currentStep !== Step.depositCollateral) return;
+
         if (!isFullCoverage) {
             setCollateralBigInt(
                 amountFormatterToBase[asset](Number(collateral ?? ''))
@@ -132,7 +134,14 @@ export const DepositCollateral = ({
             );
             setCollateral(collateralList[asset]?.available.toString());
         }
-    }, [asset, collateral, isFullCoverage, collateralList, collateralBigInt]);
+    }, [
+        asset,
+        collateral,
+        isFullCoverage,
+        collateralList,
+        collateralBigInt,
+        state.currentStep,
+    ]);
 
     const { data: priceList } = useLastPrices();
     const { onDepositCollateral } = useDepositCollateral(

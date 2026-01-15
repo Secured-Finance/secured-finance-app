@@ -489,10 +489,7 @@ export const AdvancedLending = ({
     return (
         <>
             <div className='grid gap-2'>
-                <MovingTape
-                    nonMaturedMarketOptionList={maturitiesOptionList}
-                    favourites={savedMarkets}
-                />
+                <MovingTape favourites={savedMarkets} />
                 <ThreeColumnsWithTopBar
                     topBar={
                         <div className='relative mb-5 h-20 transition-all duration-300'>
@@ -741,13 +738,7 @@ export const AdvancedLending = ({
     );
 };
 
-const MovingTape = ({
-    nonMaturedMarketOptionList,
-    favourites,
-}: {
-    nonMaturedMarketOptionList: MaturityOptionList;
-    favourites: SavedMarket[];
-}) => {
+const MovingTape = ({ favourites }: { favourites: SavedMarket[] }) => {
     const [showFavouritesOnly, setShowFavouritesOnly] = useState(false);
     const [resetKey, setResetKey] = useState(0);
     const router = useRouter();
@@ -765,7 +756,11 @@ const MovingTape = ({
 
     const result = useMemo(() => {
         return currencies.flatMap(asset =>
-            nonMaturedMarketOptionList.map(maturity => {
+            Object.values(lendingMarkets[asset]).map(market => {
+                const maturity = {
+                    label: market.name,
+                    value: new Maturity(market.maturity),
+                };
                 const data = lendingMarkets[asset]?.[+maturity.value];
                 const preOpeningDate = dayjs(data?.preOpeningDate * 1000);
                 const now = dayjs();
@@ -797,8 +792,6 @@ const MovingTape = ({
     }, [
         // eslint-disable-next-line react-hooks/exhaustive-deps
         JSON.stringify(lendingMarkets),
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        JSON.stringify(nonMaturedMarketOptionList),
         favourites,
     ]);
 
