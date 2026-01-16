@@ -22,6 +22,7 @@ export const CurrencyItem = ({
     maxDecimals = 2,
     showCurrency = false,
     warning,
+    truncate = false,
 }: {
     amount?: bigint;
     ccy: CurrencySymbol;
@@ -34,6 +35,7 @@ export const CurrencyItem = ({
     maxDecimals?: number;
     showCurrency?: boolean;
     warning?: string;
+    truncate?: boolean;
 } & ColorFormat) => {
     let secondLine: string;
     const currency = currencyMap[ccy];
@@ -64,10 +66,11 @@ export const CurrencyItem = ({
     return (
         <div
             data-testid='currency-amount-item'
-            className={clsx('flex flex-col', {
+            className={clsx('flex min-w-0 flex-col', {
                 'text-right': align === 'right',
                 'text-center': align === 'center',
                 'text-left': align === 'left',
+                'shrink-0': align === 'right',
             })}
         >
             <span
@@ -88,7 +91,11 @@ export const CurrencyItem = ({
                 )}
             </span>
             {compact === false ? (
-                <span className='typography-caption-2 h-5 text-[#6F74B0]'>
+                <span
+                    className={clsx('typography-caption-2 h-5 text-[#6F74B0]', {
+                        truncate: truncate,
+                    })}
+                >
                     {secondLine}
                 </span>
             ) : null}
