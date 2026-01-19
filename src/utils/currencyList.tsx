@@ -11,7 +11,9 @@ import BtcIcon from 'src/assets/coins/btc.svg';
 import EthIcon from 'src/assets/coins/eth2.svg';
 import FilIcon from 'src/assets/coins/fil.svg';
 import IFilIcon from 'src/assets/coins/ifil.svg';
+import iSNRIcon from 'src/assets/coins/isnr.svg';
 import JpycIcon from 'src/assets/coins/jpyc.svg';
+import uMINTIcon from 'src/assets/coins/umint.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
 import UsdfcIcon from 'src/assets/coins/usdfc.svg';
 import WBtcIcon from 'src/assets/coins/wbtc.svg';
@@ -22,8 +24,6 @@ import ZcEthIcon from 'src/assets/coins/zc-eth.svg';
 import ZcFilIcon from 'src/assets/coins/zc-fil.svg';
 import ZcJpycIcon from 'src/assets/coins/zc-jpyc.svg';
 import ZcUsdcIcon from 'src/assets/coins/zc-usdc.svg';
-import uMINTIcon from 'src/assets/coins/umint.svg';
-import iSNRIcon from 'src/assets/coins/isnr.svg';
 import ZcUsdfcIcon from 'src/assets/coins/zc-usdfc.svg';
 import { SvgIcon } from 'src/types';
 import { hexToString } from 'viem';
@@ -34,16 +34,16 @@ import { BTCB } from './currencies/btcb';
 import { FIL } from './currencies/fil';
 import { WFIL } from './currencies/filecoin';
 import { IFIL } from './currencies/ifil';
+import { ISNR } from './currencies/isnr';
 import { JPYC } from './currencies/jpyc';
 import { TFIL } from './currencies/tfil';
+import { UMINT } from './currencies/umint';
 import { USDC } from './currencies/usdc';
 import { USDFC } from './currencies/usdfc';
 import { WBTC } from './currencies/wbtc';
 import { WETHE } from './currencies/wethe';
 import { WPFIL } from './currencies/wpfil';
 import { Maturity } from './entities';
-import { UMINT } from './currencies/umint';
-import { ISNR } from './currencies/isnr';
 
 BigNumberJS.set({ EXPONENTIAL_AT: 30 }); // setting to a decent limit
 
@@ -199,7 +199,7 @@ export const currencyMap: Readonly<
         chartColor: tailwindConfig.theme.colors.chart.umint,
         pillColor: tailwindConfig.theme.colors.pill.umint,
         roundingDecimal: 2,
-        longName: 'DigiFT uMINT',
+        longName: 'UBS Money Market Investment Fund Token',
         hasOrderBook: false,
     },
     [CurrencySymbol.ISNR]: {

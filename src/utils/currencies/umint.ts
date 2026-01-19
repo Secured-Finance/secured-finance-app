@@ -2,7 +2,7 @@ import { Token } from '@secured-finance/sf-core';
 
 export class UMINT extends Token {
     private constructor() {
-        super(18, 'uMINT', 'DigiFT uMINT', true);
+        super(18, 'uMINT', 'UBS Money Market Investment Fund Token', true);
     }
 
     private static instance: UMINT;
