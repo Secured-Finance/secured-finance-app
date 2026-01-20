@@ -28,7 +28,7 @@ export const Settings = ({ isProduction }: { isProduction: boolean }) => {
             );
 
             try {
-                await connector.switchChain(targetChain.id);
+                await connector.switchChain({ chainId: targetChain.id });
                 dispatch(updateTestnetEnabled(newState));
             } catch (error) {
                 console.error('Failed to switch chain:', error);

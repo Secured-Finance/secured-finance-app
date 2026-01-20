@@ -6,7 +6,7 @@
   "dependencies": {
     "@amplitude/analytics-browser": "^2.4.0",
     "@amplitude/plugin-page-view-tracking-browser": "^2.1.0",
-    "@apollo/client": "^3.10.4",
+    "@apollo/client": "3.10.4",
     "@custom-react-hooks/use-lock-body-scroll": "^1.4.19",
     "@glif/filecoin-number": "^1.1.0-beta.11",
     "@headlessui/react": "^1.7.15",
@@ -16,22 +16,23 @@
     "@nextui-org/table": "^2.0.33",
     "@nextui-org/theme": "^2.2.4",
     "@reduxjs/toolkit": "^1.8.1",
-    "@secured-finance/sf-client": "0.2.0-beta.199",
+    "@secured-finance/sf-client": "file:secured-finance-sf-client.tgz",
     "@secured-finance/sf-core": "0.2.0-beta.187",
-    "@secured-finance/sf-graph-client": "0.2.0-beta.200",
+    "@secured-finance/sf-graph-client": "file:secured-finance-sf-graph-client.tgz",
     "@secured-finance/sf-point-client": "0.2.0-beta.187",
     "@svgr/webpack": "^8.1.0",
-    "@tanstack/react-query": "^5.20.5",
+    "@tanstack/react-query": "^5.56.0",
     "@tanstack/react-table": "^8.17.3",
     "@tippyjs/react": "^4.2.6",
-    "@wagmi/connectors": "^3.1.5",
-    "@web3modal/wagmi": "^3.5.7",
+    "@wagmi/connectors": "5.11.2",
+    "@web3modal/wagmi": "5.1.11",
     "axios": "^0.21.1",
     "bignumber.js": "^9.0.1",
     "change-case": "^5.4.4",
     "chart.js": "^3.8.0",
     "clsx": "^2.1.0",
     "dom-to-image": "^2.6.0",
+    "framer-motion": "^12.23.24",
     "jdenticon": "^3.3.0",
     "lightweight-charts": "^4.1.3",
     "next": "13.5.4",
@@ -45,8 +46,8 @@
     "react-redux": "^7.2.2",
     "react-responsive": "^9.0.2",
     "siwe": "^2.3.2",
-    "viem": "^1.21.1",
-    "wagmi": "^1.4.12"
+    "viem": "^2.41.0",
+    "wagmi": "2.19.5"
   },
   "scripts": {
     "start": "next dev",
@@ -57,7 +58,7 @@
     "export": "next export -o ./build",
     "build:server": "next build",
     "preexport": "rm -rf ./build",
-    "test": "node --expose-gc ./node_modules/.bin/jest --watch --logHeapUsage",
+    "test": "node --expose-gc ./node_modules/.bin/jest --watchAll=false --logHeapUsage",
     "test:cov": "node --expose-gc --no-compilation-cache ./node_modules/.bin/jest --watchAll=false --collectCoverage --logHeapUsage --ci",
     "typecheck": "tsc  -p ./tsconfig.json",
     "prettier:check": "prettier --check 'src/**/*.{ts,tsx,js,jsx,json}' '*.{ts,tsx,js,jsx,json}' '!package.json'",
@@ -102,7 +103,7 @@
     "@storybook/react": "^7.6.15",
     "@storybook/testing-library": "^0.2.2",
     "@tanstack/eslint-plugin-query": "^4.29.25",
-    "@tanstack/react-query-devtools": "^5.20.5",
+    "@tanstack/react-query-devtools": "^5.56.0",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.2.1",
     "@testing-library/user-event": "^14.5.2",
@@ -158,5 +159,10 @@
   },
   "resolutions": {
     "webpack": "^5"
+  },
+  "overrides": {
+    "@storybook/manager-api": "7.6.20",
+    "@storybook/preview-api": "7.6.20",
+    "@wagmi/core": "2.22.1"
   }
 }

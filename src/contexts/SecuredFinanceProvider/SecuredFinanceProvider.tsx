@@ -27,16 +27,8 @@ import {
     InterfaceProperties,
     associateWallet,
 } from 'src/utils/events';
-import { hexToNumber } from 'viem';
-import {
-    PublicClient,
-    WalletClient,
-    useAccount,
-    useConnect,
-    useNetwork,
-    usePublicClient,
-    useWalletClient,
-} from 'wagmi';
+import { PublicClient, WalletClient, hexToNumber } from 'viem';
+import { useAccount, usePublicClient, useWalletClient } from 'wagmi';
 
 export interface SFContext {
     securedFinance?: SecuredFinanceClient;
@@ -52,10 +44,13 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
     const searchParams = useSearchParams();
     const router = useRouter();
     const { open } = useWeb3Modal();
-    const { address, isConnected, connector: activeConnector } = useAccount();
-    const { chain } = useNetwork();
+    const {
+        address,
+        isConnected,
+        connector: activeConnector,
+        chain,
+    } = useAccount();
     const chainId = useSelector((state: RootState) => state.blockchain.chainId);
-    const { connect, connectors } = useConnect();
     const { data: client } = useWalletClient();
     const publicClient = usePublicClient({
         chainId: chainId,
@@ -189,7 +184,7 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
             associateWallet(address, chainName, false);
             return;
         }
-    }, [connect, address, connectors, chainName]);
+    }, [address, chainName]);
 
     useEffect(() => {
         if (!publicClient) return;
@@ -251,20 +246,12 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
             );
         } else if (getSupportedChainIds().includes(selectedChainId)) {
             if (activeConnector) {
-                activeConnector.switchChain?.(selectedChainId);
+                activeConnector.switchChain?.({ chainId: selectedChainId });
             } else {
                 open();
             }
         }
-    }, [
-        searchParams,
-        chainId,
-        connectors,
-        router,
-        dispatch,
-        open,
-        activeConnector,
-    ]);
+    }, [searchParams, chainId, router, dispatch, open, activeConnector]);
 
     return (
         <Context.Provider value={{ securedFinance }}>

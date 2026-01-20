@@ -9,9 +9,9 @@ import Header from 'src/components/organisms/Header/Header';
 import { Layout } from 'src/components/templates';
 import { updateChainError } from 'src/store/blockchain';
 import { connectWallet, updateBalance } from 'src/store/wallet';
-import { account, connector, publicClient } from 'src/stories/mocks/mockWallet';
 import timemachine from 'timemachine';
-import { WagmiConfig, createConfig } from 'wagmi';
+import { useConnect, WagmiProvider } from 'wagmi';
+import { account, config } from './../src/stories/mocks/mockWallet';
 
 export const withAppLayout = (Story: StoryFn) => {
     return (
@@ -21,31 +21,45 @@ export const withAppLayout = (Story: StoryFn) => {
     );
 };
 
-export const withWalletProvider = (Story: StoryFn, Context: StoryContext) => {
+const WalletConnector = ({
+    children,
+    isConnected,
+}: {
+    children: React.ReactNode;
+    isConnected: boolean;
+}) => {
     const dispatch = useDispatch();
-    const config = createConfig({
-        autoConnect: Context.parameters && Context.parameters.connected,
-        publicClient: publicClient,
-        connectors: [connector],
-    });
-
-    createWeb3Modal({
-        wagmiConfig: config,
-        projectId: '123',
-    });
+    const { connectors, connect } = useConnect();
 
     useEffect(() => {
-        const timeoutId = setTimeout(() => {
-            dispatch(connectWallet(account.address));
-        }, 300);
+        if (isConnected && connectors.length > 0) {
+            const timeoutId = setTimeout(() => {
+                // Connect using wagmi's connect function
+                connect({ connector: connectors[0] });
+                dispatch(connectWallet(account.address));
+            }, 300);
 
-        return () => clearTimeout(timeoutId);
-    }, [dispatch]);
+            return () => clearTimeout(timeoutId);
+        }
+    }, [isConnected, connectors, connect, dispatch]);
+
+    return <>{children}</>;
+};
+
+export const withWalletProvider = (Story: StoryFn, Context: StoryContext) => {
+    const isConnected = Context.parameters?.connected ?? false;
+
+    createWeb3Modal({
+            wagmiConfig: config,
+            projectId: '123',
+    });
 
     return (
-        <WagmiConfig config={config}>
-            <Story />
-        </WagmiConfig>
+        <WagmiProvider config={config}>
+            <WalletConnector isConnected={isConnected}>
+                <Story />
+            </WalletConnector>
+        </WagmiProvider>
     );
 };
 

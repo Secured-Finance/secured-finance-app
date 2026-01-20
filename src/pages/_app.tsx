@@ -4,15 +4,15 @@ import {
     ApolloClient,
     ApolloLink,
     ApolloProvider,
-    InMemoryCache,
     createHttpLink,
+    InMemoryCache,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { NextUIProvider } from '@nextui-org/system';
 import { GraphApolloClient } from '@secured-finance/sf-graph-client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { createWeb3Modal } from '@web3modal/wagmi/react';
+import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
 import { AppProps } from 'next/app';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
@@ -38,12 +38,8 @@ import {
     getWalletConnectId,
 } from 'src/utils';
 import * as gtag from 'src/utils/gtag';
-import { WagmiConfig, configureChains, createConfig } from 'wagmi';
-import { InjectedConnector } from 'wagmi/connectors/injected';
-import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
-import { alchemyProvider } from 'wagmi/providers/alchemy';
-import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
-import { publicProvider } from 'wagmi/providers/public';
+import { Chain } from 'viem/chains';
+import { fallback, http, Transport, WagmiProvider } from 'wagmi';
 import '../assets/css/index.css';
 
 const Header = dynamic(() => import('src/components/organisms/Header/Header'), {
@@ -53,8 +49,6 @@ const Header = dynamic(() => import('src/components/organisms/Header/Header'), {
 const gaTag = getGoogleAnalyticsTag();
 
 const projectId = getWalletConnectId();
-
-const queryClient = new QueryClient();
 
 const TrackingCode = ({ gaTag }: { gaTag: string }) => {
     return (
@@ -102,52 +96,45 @@ const ankrNetworkKeys: Record<string, string> = {
     '314': 'filecoin',
 };
 
-const { chains, publicClient } = configureChains(
-    networks,
-    [
-        alchemyProvider({
-            apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ?? '',
-        }),
-        jsonRpcProvider({
-            rpc: chain => {
-                const chainId = chain.id.toString();
-                if (
-                    process.env.NEXT_PUBLIC_ANKR_API_KEY &&
-                    Object.keys(ankrNetworkKeys).includes(chainId)
-                ) {
-                    return {
-                        http: `https://rpc.ankr.com/${ankrNetworkKeys[chainId]}/${process.env.NEXT_PUBLIC_ANKR_API_KEY}`,
-                    };
-                } else {
-                    return null;
-                }
-            },
-        }),
-        publicProvider(),
-    ],
-    { pollingInterval: 12_000 }
-);
+// Helper function to create transport for each chain
+const createTransport = (chain: Chain): Transport => {
+    const chainId = chain.id.toString();
+    const transports: ReturnType<typeof http>[] = [];
+    const alchemyKey = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY;
+    const ankrKey = process.env.NEXT_PUBLIC_ANKR_API_KEY;
 
-const config = createConfig({
-    autoConnect: true,
-    publicClient: publicClient,
-    connectors: [
-        new WalletConnectConnector({
-            chains,
-            options: {
-                projectId: projectId,
-                showQrModal: false,
-            },
-        }),
-        new InjectedConnector({
-            chains,
-            options: {
-                name: 'Injected',
-                shimDisconnect: true,
-            },
-        }),
-    ],
-});
+    // Alchemy provider (if API key exists)
+    if (alchemyKey) {
+        const alchemyUrls: Record<number, string> = {
+            1: `https://eth-mainnet.g.alchemy.com/v2/${alchemyKey}`,
+            11155111: `https://eth-sepolia.g.alchemy.com/v2/${alchemyKey}`,
+            42161: `https://arb-mainnet.g.alchemy.com/v2/${alchemyKey}`,
+            421614: `https://arb-sepolia.g.alchemy.com/v2/${alchemyKey}`,
+            43114: `https://avax-mainnet.g.alchemy.com/v2/${alchemyKey}`,
+            43113: `https://avax-fuji.g.alchemy.com/v2/${alchemyKey}`,
+        };
+        if (alchemyUrls[chain.id]) {
+            transports.push(http(alchemyUrls[chain.id]));
+        }
+    }
+
+    // Ankr provider (for Filecoin networks)
+    if (ankrKey && Object.keys(ankrNetworkKeys).includes(chainId)) {
+        transports.push(
+            http(`https://rpc.ankr.com/${ankrNetworkKeys[chainId]}/${ankrKey}`)
+        );
+    }
+
+    // Public provider (fallback)
+    if (chain.rpcUrls.default.http[0]) {
+        transports.push(http(chain.rpcUrls.default.http[0]));
+    }
+
+    // Use fallback if multiple transports, otherwise single transport
+    return transports.length > 1
+        ? fallback(transports)
+        : transports[0] || http();
+};
 
 const metadata = {
     name: 'Secured Finance',
@@ -156,18 +143,31 @@ const metadata = {
     icons: ['https://avatars.githubusercontent.com/u/37784886'],
 };
 
-createWeb3Modal({
-    wagmiConfig: config,
+const queryClient = new QueryClient();
+
+export const wagmiConfig = defaultWagmiConfig({
+    chains: networks as [Chain, ...Chain[]],
     projectId: projectId,
-    chains: chains,
-    metadata: metadata,
-    enableAnalytics: true,
-    themeMode: 'light',
-    themeVariables: {
-        '--w3m-font-family': "'Suisse International', sans-serif",
-        '--w3m-accent': '#002133',
-        '--w3m-color-mix': '#5162FF',
+    metadata,
+    ssr: true,
+    auth: {
+        email: false,
+        socials: undefined,
+        showWallets: true,
+        walletFeatures: false,
     },
+    transports: networks.reduce((acc, chain) => {
+        acc[chain.id] = createTransport(chain);
+        return acc;
+    }, {} as Record<number, Transport>),
+});
+
+createWeb3Modal({
+    wagmiConfig,
+    projectId,
+    enableAnalytics: true,
+    enableSwaps: false,
+    enableOnramp: false,
 });
 
 const httpLink = createHttpLink({
@@ -256,16 +256,16 @@ const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     return (
         <CookiesProvider>
             <NextUIProvider>
-                <QueryClientProvider client={queryClient}>
-                    <ApolloProvider client={client}>
-                        <WagmiConfig config={config}>
+                <WagmiProvider config={wagmiConfig}>
+                    <QueryClientProvider client={queryClient}>
+                        <ApolloProvider client={client}>
                             <SecuredFinanceProvider>
                                 {children}
                             </SecuredFinanceProvider>
-                        </WagmiConfig>
-                    </ApolloProvider>
-                    <ReactQueryDevtools initialIsOpen={false} />
-                </QueryClientProvider>
+                        </ApolloProvider>
+                        <ReactQueryDevtools initialIsOpen={false} />
+                    </QueryClientProvider>
+                </WagmiProvider>
             </NextUIProvider>
         </CookiesProvider>
     );

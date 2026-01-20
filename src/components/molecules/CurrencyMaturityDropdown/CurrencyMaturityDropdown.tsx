@@ -323,7 +323,7 @@ export const CurrencyMaturityDropdown = ({
                                     close();
                                 }}
                                 onSortChange={handleSortChange}
-                                sortState={sortState}
+                                sortState={sortState as SortDescriptor}
                                 onFavouriteToggle={
                                     handleFavouriteToggle ?? (() => {})
                                 }

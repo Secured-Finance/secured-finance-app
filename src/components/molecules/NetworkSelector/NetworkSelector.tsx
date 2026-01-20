@@ -103,7 +103,7 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
             if (!activeConnector) {
                 return;
             }
-            await activeConnector.switchChain?.(id);
+            await activeConnector.switchChain?.({ chainId: id });
             router.push({
                 pathname: router.pathname,
                 query: undefined,
