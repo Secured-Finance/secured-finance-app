@@ -97,7 +97,7 @@ jobs:
           path: ./build
           service: filebase
           pinName: '${{ vars.FLEEK_ENV }}-deployment-${{ steps.timestamp.outputs.time }}'
-          filebaseBucket: ${{ secrets.FILEBASE_BUCKET }}
+          filebaseBucket: ${{ vars.FILEBASE_BUCKET }}
           filebaseKey: ${{ secrets.FILEBASE_KEY }}
           filebaseSecret: ${{ secrets.FILEBASE_SECRET }}
 
