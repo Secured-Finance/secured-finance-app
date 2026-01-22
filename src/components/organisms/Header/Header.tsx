@@ -27,6 +27,7 @@ import {
     getShowStablecoinAppUrl,
     getStablecoinAppUrl,
     getSupportedNetworks,
+    getVaultsAppUrl,
 } from 'src/utils';
 import { AddressUtils } from 'src/utils/address';
 import { isProdEnv } from 'src/utils/displayUtils';
@@ -100,7 +101,6 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     const btnSize = isMobile ? ButtonSizes.sm : undefined;
 
     const isShowStablecoinLink = getShowStablecoinAppUrl();
-    const isShowPointsTag = (!isShowStablecoinLink && isMobile) || !isMobile;
 
     return (
         <>
@@ -144,15 +144,13 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                         )}
                     </div>
                     <div className='col-span-2 flex flex-row items-center justify-end gap-2 laptop:col-span-1 laptop:gap-2.5'>
+                        <VaultsExternalLink />
                         {isShowStablecoinLink && <StablecoinExternalLink />}
-                        {isShowPointsTag && (
-                            <PointsTag
-                                isConnected={
-                                    verifiedData && address && userData
-                                }
-                                points={userPoints}
-                            />
-                        )}
+                        <PointsTag
+                            isConnected={verifiedData && address && userData}
+                            points={userPoints}
+                        />
+
                         {isConnected && address ? (
                             <>
                                 <NetworkSelector
@@ -269,7 +267,7 @@ const PointsTag = ({
                 }
             }}
             className={clsx(
-                'typography-mobile-body-5 tablet:typography-desktop-body-4 flex h-8 flex-shrink-0 items-center justify-center gap-1 rounded-lg bg-neutral-800 px-2.5 py-[5px] font-semibold text-neutral-50 ring-1 ring-neutral-500 hover:bg-tertiary-700/10 hover:ring-tertiary-500 active:border-transparent tablet:h-10 tablet:rounded-xl tablet:pr-3 tablet:ring-[1.5px]',
+                'typography-mobile-body-5 tablet:typography-desktop-body-4 flex hidden h-8 flex-shrink-0 items-center justify-center gap-1 rounded-lg bg-neutral-800 px-2.5 py-[5px] font-semibold text-neutral-50 ring-1 ring-neutral-500 hover:bg-tertiary-700/10 hover:ring-tertiary-500 active:border-transparent tablet:h-10 tablet:rounded-xl tablet:pr-3 tablet:ring-[1.5px] desktop:flex',
                 {
                     'tablet:pl-3': !showPoints,
                     'tablet:pl-2.5': showPoints,
@@ -280,6 +278,26 @@ const PointsTag = ({
             <Badge className='flex h-[13px] w-[13px] flex-shrink-0 tablet:h-4 tablet:w-4' />
             {isConnected && points !== undefined ? pointsDisplay : 'Points'}
         </button>
+    );
+};
+
+const VaultsExternalLink = () => {
+    const vaultsUrl = getVaultsAppUrl();
+    return (
+        vaultsUrl && (
+            <Link
+                href={vaultsUrl}
+                target='_blank'
+                className={clsx(
+                    'hidden laptop:flex',
+                    'typography-mobile-body-5 tablet:typography-desktop-body-4 flex h-8 flex-shrink-0 items-center justify-center gap-1.5 rounded-lg bg-neutral-800 px-2.5 py-2.5 font-semibold text-neutral-50 ring-1 ring-neutral-500 hover:bg-white-10 hover:ring-white-10 active:border-transparent tablet:h-10 tablet:rounded-xl tablet:pr-3 tablet:ring-[1.5px]'
+                )}
+                aria-label='Vaults external link'
+            >
+                Vaults
+                <ArrowUpSquare className='h-4 w-4 text-neutral-50' />
+            </Link>
+        )
     );
 };
 

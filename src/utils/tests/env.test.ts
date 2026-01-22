@@ -13,6 +13,7 @@ import {
     getSubgraphUrl,
     getSupportedChainIds,
     getUsePackageVersion,
+    getVaultsAppUrl,
     getWalletConnectId,
 } from 'src/utils';
 
@@ -206,6 +207,21 @@ describe('getShowStablecoinAppUrl', () => {
         const showStablecoinAppUrl = getShowStablecoinAppUrl();
         expect(showStablecoinAppUrl).toBe(false);
         expect(typeof showStablecoinAppUrl).toBe('boolean');
+    });
+});
+
+describe('getVaultsAppUrl', () => {
+    it('should return the value of the environment variable', () => {
+        process.env.NEXT_PUBLIC_VAULTS_APP_URL = 'test';
+        const vaultsAppUrl = getVaultsAppUrl();
+        expect(vaultsAppUrl).toBe('test');
+        expect(typeof vaultsAppUrl).toBe('string');
+    });
+
+    it('should return empty if variable is not set', () => {
+        process.env.NEXT_PUBLIC_VAULTS_APP_URL = '';
+        const vaultsAppUrl = getVaultsAppUrl();
+        expect(vaultsAppUrl).toBe('');
     });
 });
 
