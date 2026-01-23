@@ -1,6 +1,7 @@
 import SF from 'src/assets/icons/SF-KO.svg';
 import AwardIcon from 'src/assets/icons/award-fill.svg';
 import Discord from 'src/assets/icons/discord.svg';
+import FaucetIcon from 'src/assets/icons/faucet.svg';
 import GitBook from 'src/assets/icons/gitbook.svg';
 import Medium from 'src/assets/icons/medium.svg';
 import TokenSwapIcon from 'src/assets/icons/token-swap-fill.svg';
@@ -15,15 +16,21 @@ type MoreLink = {
 
 export const LinkList: MoreLink[] = [
     {
+        text: 'Swap',
+        href: '/swap',
+        icon: <TokenSwapIcon className='h-5 w-5' />,
+        isInternal: true,
+    },
+    {
         text: 'Points',
         href: '/points',
         icon: <AwardIcon className='h-5 w-5' />,
         isInternal: true,
     },
     {
-        text: 'Swap',
-        href: '/swap',
-        icon: <TokenSwapIcon className='h-5 w-5' />,
+        text: 'Faucet',
+        href: '/faucet',
+        icon: <FaucetIcon className='h-5 w-5' />,
         isInternal: true,
     },
     {

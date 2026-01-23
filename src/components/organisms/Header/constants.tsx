@@ -35,6 +35,7 @@ export const DEV_LINKS = [
         text: 'Faucet',
         link: '/faucet',
         dataCy: 'faucet',
+        className: 'flex laptop:hidden desktop:flex',
     },
 ];
 
