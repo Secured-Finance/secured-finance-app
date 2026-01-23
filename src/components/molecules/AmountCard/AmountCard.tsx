@@ -17,7 +17,7 @@ export const AmountCard = ({
                 <span className='typography-button-3 leading-6 text-white'>
                     {amount.currency}
                 </span>
-                <span className='typography-caption-3 text-white-60'>
+                <span className='typography-caption-3 truncate text-white-60'>
                     {currencyMap[amount.currency].longName}
                 </span>
             </div>

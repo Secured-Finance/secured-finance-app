@@ -3,11 +3,11 @@ import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { HTMLAttributes, Ref, forwardRef, useState } from 'react';
+import { forwardRef, HTMLAttributes, Ref, useState } from 'react';
 import Burger from 'src/assets/img/menu.svg';
 import SFLogoSmall from 'src/assets/img/small-logo.svg';
 import { CloseButton } from 'src/components/atoms';
-import { LinkList } from 'src/utils';
+import { getVaultsAppUrl, LinkList } from 'src/utils';
 import { UrlObject } from 'url';
 
 const NextLink = forwardRef(
@@ -83,6 +83,16 @@ export const HamburgerMenu = ({
     links: { label: string; link: string; className?: string }[];
 }) => {
     const [showMore, setShowMore] = useState<boolean>(false);
+    const filteredLinkList = LinkList.filter(link => !link.isInternal);
+    const vaultsUrl = getVaultsAppUrl();
+
+    if (vaultsUrl) {
+        filteredLinkList.unshift({
+            text: 'Vaults',
+            href: vaultsUrl,
+            icon: <SFLogoSmall className='h-5 w-5 rounded-full text-white' />,
+        });
+    }
 
     return (
         <Menu>
@@ -156,9 +166,7 @@ export const HamburgerMenu = ({
 
                                 {showMore && (
                                     <div className='w-full px-4'>
-                                        {LinkList.filter(
-                                            link => !link.isInternal
-                                        ).map(link => (
+                                        {filteredLinkList.map(link => (
                                             <MobileItemLink
                                                 key={link.text}
                                                 text={link.text}
