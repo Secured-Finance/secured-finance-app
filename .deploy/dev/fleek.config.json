@@ -1,9 +1,0 @@
-{
-    "sites": [
-      {
-        "slug": "dev-secured-finance",
-        "distDir": ".deploy/dev/build",
-        "buildCommand": ""
-      }
-    ]
-  }
