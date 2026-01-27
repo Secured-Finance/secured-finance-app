@@ -1,6 +1,6 @@
 {
   "name": "secured-finance-web",
-  "version": "1.6.3",
+  "version": "1.7.0",
   "private": true,
   "homepage": ".",
   "dependencies": {
@@ -16,7 +16,7 @@
     "@nextui-org/table": "^2.0.33",
     "@nextui-org/theme": "^2.2.4",
     "@reduxjs/toolkit": "^1.8.1",
-    "@secured-finance/sf-client": "0.2.0-beta.199",
+    "@secured-finance/sf-client": "0.2.0-beta.201",
     "@secured-finance/sf-core": "0.2.0-beta.187",
     "@secured-finance/sf-graph-client": "0.2.0-beta.200",
     "@secured-finance/sf-point-client": "0.2.0-beta.187",
