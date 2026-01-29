@@ -1,9 +1,0 @@
-{
-    "sites": [
-      {
-        "slug": "uat-secured-finance",
-        "distDir": ".deploy/uat/build",
-        "buildCommand": ""
-      }
-    ]
-  }

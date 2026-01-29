@@ -45,14 +45,11 @@ jobs:
       artifact_name: WebApp
     secrets: inherit
 
-  deploy-on-fleek:
+  pin-on-filebase:
     runs-on: ubuntu-latest
-    name: Deploy on Fleek
+    name: Pin to IPFS via Filebase
     if: github.event.inputs.environment != 'ci-build'
     environment: ${{ github.event.inputs.environment }}
-    env:
-      FLEEK_TOKEN: ${{ secrets.FLEEK_TOKEN }}
-      FLEEK_PROJECT_ID: ${{ secrets.FLEEK_PROJECT_ID }}
     needs: [build-and-test-all, cypress-run]
     steps:
       - name: Checkout
@@ -62,10 +59,31 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: WebApp
-          path: .deploy/${{ vars.FLEEK_ENV }}/build
+          path: ./build
 
-      - name: Install Fleek CLI
-        run: npm i -g @fleek-platform/cli
+      - name: Set deployment timestamp
+        id: timestamp
+        run: echo "time=$(date -u +%Y-%m-%dT%H-%M-%SZ)" >> $GITHUB_OUTPUT
 
-      - name: Deploy Site
-        run: fleek sites deploy --config .deploy/${{ vars.FLEEK_ENV }}/fleek.config.json
+      - name: Pin to Filebase
+        id: ipfs-pin
+        uses: aquiladev/ipfs-action@master
+        with:
+          path: ./build
+          service: filebase
+          pinName: 'build'
+          # pinName: '${{ vars.FILEBASE_ENV }}-deployment-${{ steps.timestamp.outputs.time }}'
+          filebaseBucket: ${{ vars.FILEBASE_BUCKET }}
+          filebaseKey: ${{ secrets.FILEBASE_KEY }}
+          filebaseSecret: ${{ secrets.FILEBASE_SECRET }}
+
+      - name: Update Filebase Site
+        env:
+          FILEBASE_RPC_KEY: ${{ secrets.FILEBASE_RPC_KEY }}
+          FILEBASE_BUCKET: ${{ vars.FILEBASE_BUCKET }}
+          IPFS_HASH: ${{ steps.ipfs-pin.outputs.hash }}
+        run: |
+          curl -X POST \
+            "https://rpc.filebase.io/api/v0/name/publish?arg=/ipfs/${IPFS_HASH}&key=${FILEBASE_BUCKET}.myfilebase.site" \
+            -H "Authorization: Bearer ${FILEBASE_RPC_KEY}" \
+            --fail-with-body
