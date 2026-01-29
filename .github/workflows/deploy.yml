@@ -60,18 +60,13 @@ jobs:
           filebaseKey: ${{ secrets.FILEBASE_KEY }}
           filebaseSecret: ${{ secrets.FILEBASE_SECRET }}
 
-      # - name: Update Filebase Name (IPNS)
-      #   env:
-      #     FILEBASE_KEY: ${{ secrets.FILEBASE_KEY }}
-      #     FILEBASE_SECRET: ${{ secrets.FILEBASE_SECRET }}
-      #     FILEBASE_IPNS_LABEL: ${{ secrets.FILEBASE_IPNS_LABEL }}
-      #     IPFS_HASH: ${{ steps.ipfs-pin.outputs.hash }}
-      #   run: |
-      #     # Create base64 bearer token
-      #     TOKEN=$(printf '%s:%s' "$FILEBASE_KEY" "$FILEBASE_SECRET" | base64 -w 0)
-      #     curl -X PUT \
-      #       "https://api.filebase.io/v1/names/${FILEBASE_IPNS_LABEL}" \
-      #       -H "Authorization: Bearer ${TOKEN}" \
-      #       -H "Content-Type: application/json" \
-      #       -d '{"cid":"'"${IPFS_HASH}"'"}' \
-      #       --fail-with-body
+      - name: Update Filebase Site
+        env:
+          FILEBASE_RPC_KEY: ${{ secrets.FILEBASE_RPC_KEY }}
+          FILEBASE_BUCKET: ${{ vars.FILEBASE_BUCKET }}
+          IPFS_HASH: ${{ steps.ipfs-pin.outputs.hash }}
+        run: |
+          curl -X POST \
+            "https://rpc.filebase.io/api/v0/name/publish?arg=/ipfs/${IPFS_HASH}&key=${FILEBASE_BUCKET}.myfilebase.site" \
+            -H "Authorization: Bearer ${FILEBASE_RPC_KEY}" \
+            --fail-with-body
