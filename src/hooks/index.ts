@@ -1,5 +1,5 @@
 export * from './queries';
-export * from './use24HVolume';
+export * from './use24HMarketStats';
 export * from './useBalances';
 export * from './useBlockExplorerUrl';
 export * from './useBorrowableAmount';

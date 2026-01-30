@@ -25,7 +25,7 @@ import {
     MarketPhase,
     baseContracts,
     emptyCollateralBook,
-    use24HVolume,
+    use24HMarketStats,
     useBorrowOrderBook,
     useBreakpoint,
     useCollateralBook,
@@ -92,7 +92,7 @@ export const Toolbar = ({
     handleTermChange: (v: Maturity) => void;
 }) => {
     const { data: priceList } = useLastPrices();
-    const { data: volumePerMarket } = use24HVolume();
+    const { data: marketStats } = use24HMarketStats();
     const selectedTerm = useMemo(
         () => options.find(o => o.value === selected.value),
         [options, selected]
@@ -128,7 +128,7 @@ export const Toolbar = ({
                                         maturityList={options}
                                         onChange={onChange}
                                         isItayosePage
-                                        volumePerMarket={volumePerMarket}
+                                        marketStats={marketStats}
                                     />
                                     <p className='whitespace-nowrap pl-1 text-[11px] leading-4 tablet:text-xs laptop:text-xs'>
                                         {`Maturity ${

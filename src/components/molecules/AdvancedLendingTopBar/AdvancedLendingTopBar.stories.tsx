@@ -4,7 +4,7 @@ import type { Meta } from '@storybook/react';
 import { StoryFn } from '@storybook/react';
 import {
     currencyList,
-    dailyMarketStats,
+    dec22Fixture,
     maturityOptions,
 } from 'src/stories/mocks/fixtures';
 import { mockDailyVolumes, mockRecentTrades } from 'src/stories/mocks/queries';
@@ -33,13 +33,22 @@ export default {
             type: 'block',
         },
         currencyPrice: 3.56,
-        marketInfo: dailyMarketStats,
         handleFavouriteToggle: () => {},
         savedMarkets: [],
         isItayosePeriod: false,
-        volumePerMarket: {
-            'WFIL-1669852800': 520,
-            'USDC-1669852800': 11000000,
+        marketStats: {
+            'WFIL-1669852800': {
+                high: LoanValue.fromPrice(9899, dec22Fixture.toNumber()),
+                lastPrice: 9900,
+                low: LoanValue.fromPrice(9457, dec22Fixture.toNumber()),
+                volume: 520,
+            },
+            'USDC-1669852800': {
+                high: LoanValue.fromPrice(9800, dec22Fixture.toNumber()),
+                lastPrice: 9420,
+                low: LoanValue.fromPrice(9600, dec22Fixture.toNumber()),
+                volume: 11,
+            },
         },
     },
     parameters: {

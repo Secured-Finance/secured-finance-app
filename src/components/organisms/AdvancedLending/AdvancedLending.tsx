@@ -38,7 +38,7 @@ import {
     MarketPhase,
     baseContracts,
     emptyOrderList,
-    use24HVolume,
+    use24HMarketStats,
     useBorrowOrderBook,
     useBreakpoint,
     useCurrencies,
@@ -68,19 +68,13 @@ import {
     setMaturity,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import {
-    DailyMarketInfo,
-    MaturityOptionList,
-    SavedMarket,
-    TransactionList,
-} from 'src/types';
+import { MaturityOptionList, SavedMarket } from 'src/types';
 import {
     ButtonEvents,
     ButtonProperties,
     CurrencySymbol,
     ZERO_BI,
     checkOrderIsFilled,
-    currencyMap,
     formatLoanValue,
     formatOrders,
     getMappedOrderStatus,
@@ -95,40 +89,6 @@ import {
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { trackButtonEvent } from 'src/utils/events';
 import { useAccount } from 'wagmi';
-
-const useTradeHistoryDetails = (
-    transactions: TransactionList,
-    currency: CurrencySymbol,
-    maturity: Maturity
-) => {
-    return useMemo(() => {
-        let min = 10000;
-        let max = 0;
-        let sum = ZERO_BI;
-
-        if (!transactions.length) {
-            min = 0;
-            max = 0;
-        }
-
-        for (const t of transactions) {
-            const price = +t.executionPrice;
-            if (price < min) {
-                min = price;
-            }
-            if (price > max) {
-                max = price;
-            }
-            sum += BigInt(t.amount);
-        }
-
-        return {
-            min: LoanValue.fromPrice(min, maturity.toNumber()),
-            max: LoanValue.fromPrice(max, maturity.toNumber()),
-            sum: currencyMap[currency].fromBaseUnit(sum),
-        };
-    }, [currency, maturity, transactions]);
-};
 
 export const AdvancedLending = ({
     collateralBook,
@@ -151,7 +111,6 @@ export const AdvancedLending = ({
     const { currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
-    const [timestamp, setTimestamp] = useState<number>(1643713200);
     const [isChecked, setIsChecked] = useState(false);
 
     const dispatch = useDispatch();
@@ -171,7 +130,7 @@ export const AdvancedLending = ({
         isItayosePeriod ? TableType.OPEN_ORDERS : TableType.ACTIVE_POSITION
     );
 
-    const { data: volumePerMarket } = use24HVolume();
+    const { data: marketStats } = use24HMarketStats();
 
     const selectedTerm = useMemo(() => {
         return (
@@ -238,10 +197,6 @@ export const AdvancedLending = ({
     const securedFinance = useSF();
     const currentChainId = securedFinance?.config.chain.id;
     const isSubgraphSupported = useIsSubgraphSupported(currentChainId);
-
-    useEffect(() => {
-        setTimestamp(Math.round(new Date().getTime() / 1000));
-    }, []);
 
     const handleFavouriteToggle = useCallback(
         (market: string) => {
@@ -418,35 +373,11 @@ export const AdvancedLending = ({
         ...orderbookArgs
     );
 
-    const { data: transactionHistory } = useGraphClientHook(
-        {
-            currency: toBytes32(currency),
-            maturity: maturity,
-            from: timestamp - 24 * 3600,
-            to: timestamp,
-            sides: [OrderSide.LEND, OrderSide.BORROW],
-        },
-        queries.TransactionHistoryDocument,
-        'transactionHistory',
-        !isSubgraphSupported
-    );
-
     const selectedAsset = useMemo(() => {
         return (
             assetList.find(option => option.value === currency) || assetList[0]
         );
     }, [currency, assetList]);
-
-    const tradeHistoryDetails = useTradeHistoryDetails(
-        transactionHistory ?? [],
-        currency,
-        selectedTerm.value
-    );
-
-    const dailyMarketInfo: DailyMarketInfo = {
-        high: formatLoanValue(tradeHistoryDetails.max, 'price'),
-        low: formatLoanValue(tradeHistoryDetails.min, 'price'),
-    };
 
     const {
         rates,
@@ -574,9 +505,9 @@ export const AdvancedLending = ({
                                 onTermChange={handleTermChange}
                                 currencyPrice={currencyPrice}
                                 currentMarket={currentMarket}
-                                marketInfo={
+                                marketStats={
                                     isSubgraphSupported
-                                        ? dailyMarketInfo
+                                        ? marketStats
                                         : undefined
                                 }
                                 isItayosePeriod={isItayosePeriod}
@@ -586,10 +517,8 @@ export const AdvancedLending = ({
                                     ]?.utcOpeningDate
                                 }
                                 nextMarketPhase={marketPhase}
-                                currency={currency}
                                 handleFavouriteToggle={handleFavouriteToggle}
                                 savedMarkets={savedMarkets}
-                                volumePerMarket={volumePerMarket}
                             />
                         </div>
                     }
