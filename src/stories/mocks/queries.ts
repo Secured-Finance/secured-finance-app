@@ -1230,7 +1230,7 @@ export const mockTransactionsQuery = [
             query: TRANSACTIONS_BY_TIMESTAMP_AND_MATURITY_QUERY(
                 timestamps,
                 maturityList,
-                usdcBytes32
+                wfilBytes32
             ),
         },
         result: {
