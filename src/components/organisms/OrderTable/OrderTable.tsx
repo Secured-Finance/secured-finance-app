@@ -143,7 +143,7 @@ export const OrderTable = ({
                 'left',
                 'left'
             ),
-            loanTypeColumnDefinition(columnHelper, 'Type', 'type'),
+            loanTypeColumnDefinition(columnHelper, 'Side', 'type'),
             priceYieldColumnDefinition(
                 columnHelper,
                 'Order Price',

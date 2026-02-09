@@ -142,7 +142,7 @@ export const OrderHistoryTable = ({
                 'left',
                 'left'
             ),
-            loanTypeColumnDefinition(columnHelper, 'Type', 'type'),
+            loanTypeColumnDefinition(columnHelper, 'Side', 'type'),
             inputPriceYieldColumnDefinition(
                 columnHelper,
                 'Price',

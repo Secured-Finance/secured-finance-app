@@ -146,7 +146,7 @@ export const MyTransactionsTable = ({
                 'left',
                 'left'
             ),
-            loanTypeColumnDefinition(columnHelper, 'Type', 'type'),
+            loanTypeColumnDefinition(columnHelper, 'Side', 'type'),
             priceYieldColumnDef('Price', 'price', 'price'),
             priceYieldColumnDef('APR%', 'apr', 'rate'),
             amountColumnDefinition(

@@ -37,7 +37,7 @@ export const WithdrawPositionTable = ({
                 'Asset',
                 'contract'
             ),
-            loanTypeFromFVColumnDefinition(columnHelper, 'Type', 'side'),
+            loanTypeFromFVColumnDefinition(columnHelper, 'Side', 'side'),
             amountColumnDefinition(
                 columnHelper,
                 'Snapshot Value',

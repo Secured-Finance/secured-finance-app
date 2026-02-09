@@ -338,7 +338,7 @@ export const ActiveTradeTable = ({
             ),
             loanTypeFromFVColumnDefinition(
                 columnHelper,
-                'Type',
+                'Side',
                 'side',
                 'left'
             ),
