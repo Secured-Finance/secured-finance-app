@@ -214,6 +214,7 @@ export const OrderHistoryTable = ({
             options={{
                 name: 'order-history-table',
                 pagination: pagination,
+                hoverRow: _id => true,
             }}
             isLoading={isLoading}
         />

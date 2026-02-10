@@ -1,12 +1,15 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { getUTCMonthYear } from '@secured-finance/sf-core';
 import clsx from 'clsx';
+import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import ErrorCircleIcon from 'src/assets/icons/error-circle.svg';
 import WarningCircleIcon from 'src/assets/icons/warning-circle.svg';
 import { CurrencyIcon } from 'src/components/atoms';
 import { Tooltip } from 'src/components/molecules';
+import { MarketPhase, useMarketPhase } from 'src/hooks';
 import {
+    CurrencySymbol,
     currencyMap,
     hexToCurrencySymbol,
     isMaturityPastDays,
@@ -30,8 +33,16 @@ export const TableContractCell = ({
         | 'compactCurrencyOnly';
     delistedContractSide?: OrderSide;
 }) => {
+    const router = useRouter();
     const ccy = useMemo(() => hexToCurrencySymbol(ccyByte32), [ccyByte32]);
+
+    const marketPhase = useMarketPhase(
+        ccy ?? CurrencySymbol.ETH,
+        maturity.toNumber()
+    );
+
     const contract = useMemo(() => {
+        if (!ccy) return '';
         if (variant === 'currencyOnly' || variant === 'compactCurrencyOnly')
             return `${ccy}`;
         if (variant === 'contractOnly')
@@ -64,8 +75,37 @@ export const TableContractCell = ({
             <ErrorCircleIcon />
         );
 
+    const isClickable =
+        marketPhase === MarketPhase.PRE_ORDER ||
+        marketPhase === MarketPhase.ITAYOSE ||
+        marketPhase === MarketPhase.OPEN;
+
+    const handleClick = () => {
+        if (!isClickable) return;
+        router.push({
+            pathname: '/',
+            query: {
+                market: contract,
+            },
+        });
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        if (!isClickable) return;
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleClick();
+        }
+    };
+
     return (
-        <div className='flex flex-col'>
+        <div
+            className='flex flex-col'
+            onClick={isClickable ? handleClick : undefined}
+            onKeyDown={isClickable ? handleKeyDown : undefined}
+            role={isClickable ? 'button' : undefined}
+            tabIndex={isClickable ? 0 : undefined}
+        >
             <div
                 className={clsx('flex flex-row justify-start', {
                     'tablet:w-32':

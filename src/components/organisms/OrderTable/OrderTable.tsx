@@ -233,6 +233,7 @@ export const OrderTable = ({
                     data={data}
                     options={{
                         name: 'open-order-table',
+                        hoverRow: _id => true,
                         pagination: {
                             containerHeight:
                                 height || COMPACT_TABLE_DEFAULT_HEIGHT,

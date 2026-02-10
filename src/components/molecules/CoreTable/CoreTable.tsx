@@ -388,22 +388,20 @@ export const CompactCoreTable = <T,>({
                 </thead>
             ) : null}
 
-            <tbody>
-                {rows.map((row, index) => (
+            <tbody className="before:block before:h-[6px] before:content-['']">
+                {rows.map(row => (
                     <tr
                         key={row.id}
                         data-testid={`${coreTableOptions.name}-row`}
+                        className={clsx({
+                            'hover:bg-neutral-700/50':
+                                coreTableOptions.hoverRow?.(row.id),
+                        })}
                     >
                         {row.getVisibleCells().map(cell => (
                             <td
                                 key={cell.id}
-                                className={clsx(
-                                    'min-w-fit whitespace-nowrap px-4 pb-1 text-center font-medium',
-                                    {
-                                        'pt-2': index === 0,
-                                        'pt-0': index !== 0,
-                                    }
-                                )}
+                                className='min-w-fit whitespace-nowrap px-4 py-0.5 text-center font-medium'
                             >
                                 {flexRender(
                                     cell.column.columnDef.cell,

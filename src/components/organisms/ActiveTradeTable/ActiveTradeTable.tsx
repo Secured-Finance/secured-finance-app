@@ -488,6 +488,7 @@ export const ActiveTradeTable = ({
                     columns={columns}
                     options={{
                         name: 'active-trade-table',
+                        hoverRow: _id => true,
                         pagination: {
                             containerHeight:
                                 height || COMPACT_TABLE_DEFAULT_HEIGHT,

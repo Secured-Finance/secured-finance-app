@@ -191,6 +191,7 @@ export const MyTransactionsTable = ({
             data={data}
             columns={columns}
             options={{
+                hoverRow: _id => true,
                 name: 'my-transactions-table',
                 pagination: pagination,
             }}
