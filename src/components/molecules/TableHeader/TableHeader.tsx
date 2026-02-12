@@ -13,7 +13,7 @@ export const TableHeader = ({
     horizontalPadding = true,
 }: {
     title: string;
-    titleHint?: string;
+    titleHint?: React.ReactNode;
     sortingHandler?: ((event: unknown) => void) | undefined;
     isSorted?: boolean | SortDirection;
     align?: Alignment;
