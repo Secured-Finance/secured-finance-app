@@ -36,7 +36,7 @@ describe('ActiveTradeTable Component', () => {
         expect(initialRows[8]).toHaveTextContent('Borrow');
         expect(initialRows[9]).toHaveTextContent('Lend');
         expect(initialRows[10]).toHaveTextContent('Lend');
-        fireEvent.click(screen.getByText('Type'));
+        fireEvent.click(screen.getByText('Side'));
         const sortedRowsAsc = screen.getAllByRole('row');
         expect(sortedRowsAsc[1]).toHaveTextContent('Lend');
         expect(sortedRowsAsc[2]).toHaveTextContent('Lend');
@@ -48,7 +48,7 @@ describe('ActiveTradeTable Component', () => {
         expect(sortedRowsAsc[8]).toHaveTextContent('Borrow');
         expect(sortedRowsAsc[9]).toHaveTextContent('Borrow');
         expect(sortedRowsAsc[9]).toHaveTextContent('Borrow');
-        fireEvent.click(screen.getByText('Type'));
+        fireEvent.click(screen.getByText('Side'));
         const sortedRowsDesc = screen.getAllByRole('row');
         expect(sortedRowsDesc[1]).toHaveTextContent('Borrow');
         expect(sortedRowsDesc[2]).toHaveTextContent('Borrow');

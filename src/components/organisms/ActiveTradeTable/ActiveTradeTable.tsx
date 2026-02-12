@@ -6,7 +6,7 @@ import * as dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { useCallback, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { HorizontalListItemTable } from 'src/components/atoms';
+import { HorizontalListItemTable, TextLink } from 'src/components/atoms';
 import {
     COMPACT_TABLE_DEFAULT_HEIGHT,
     CompactCoreTable,
@@ -338,7 +338,7 @@ export const ActiveTradeTable = ({
             ),
             loanTypeFromFVColumnDefinition(
                 columnHelper,
-                'Type',
+                'Side',
                 'side',
                 'left'
             ),
@@ -385,7 +385,15 @@ export const ActiveTradeTable = ({
                 },
                 header: tableHeaderDefinition(
                     'Time to Maturity',
-                    'Maturity of a loan contract is the date on which the contract is set to expire.',
+                    <span>
+                        This shows the time remaining until each position&apos;s
+                        maturity. At maturity, any open positions will{' '}
+                        <TextLink
+                            href='https://docs.secured.finance/fixed-rate-lending/advanced-topics/market-dynamics/auto-rolling'
+                            text='auto-roll'
+                        />{' '}
+                        into the next 3-month term at close-to-mid pricing.
+                    </span>,
                     'left'
                 ),
             }),
@@ -488,6 +496,7 @@ export const ActiveTradeTable = ({
                     columns={columns}
                     options={{
                         name: 'active-trade-table',
+                        hoverRow: _id => true,
                         pagination: {
                             containerHeight:
                                 height || COMPACT_TABLE_DEFAULT_HEIGHT,

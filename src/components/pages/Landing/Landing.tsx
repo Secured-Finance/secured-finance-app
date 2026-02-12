@@ -50,6 +50,8 @@ export const emptyOptionList = [
 ];
 
 const ITAYOSE_PERIOD = 60 * 60 * 1000; // 1 hour in milli-seconds
+const DAY_IN_MS = 24 * 60 * 60 * 1000; // 1 day in milli-seconds
+const DAYS_BEFORE_MATURITY = 7;
 
 export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
     const dispatch = useDispatch();
@@ -140,7 +142,9 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
         >
             <WithBanner
                 ccy={currency}
+                maturity={maturity}
                 market={itayoseMarket}
+                lendingMarkets={lendingMarkets}
                 delistedCurrencySet={delistedCurrencySet}
                 isItayose={isItayosePeriod}
                 maximumOpenOrderLimit={maximumOpenOrderLimit}
@@ -182,7 +186,9 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
 
 export const WithBanner = ({
     ccy,
+    maturity,
     market,
+    lendingMarkets,
     delistedCurrencySet,
     children,
     isItayose,
@@ -190,7 +196,9 @@ export const WithBanner = ({
     preOrderDays,
 }: {
     ccy: CurrencySymbol;
+    maturity: number;
     market: LendingMarket | undefined;
+    lendingMarkets: Record<CurrencySymbol, Record<number, LendingMarket>>;
     delistedCurrencySet: Set<CurrencySymbol>;
     children: React.ReactNode;
     isItayose: boolean;
@@ -202,6 +210,41 @@ export const WithBanner = ({
         : 0;
 
     const currencyArray = Array.from(delistedCurrencySet);
+
+    const shouldShowAutoRollBanner = useMemo(() => {
+        const currentMarket = lendingMarkets[ccy]?.[maturity];
+        if (
+            !currentMarket ||
+            !currentMarket.isOpened ||
+            currentMarket.isMatured
+        ) {
+            return false;
+        }
+
+        const marketsForCurrency = lendingMarkets[ccy];
+        if (!marketsForCurrency) return false;
+
+        const openMarkets = Object.values(marketsForCurrency).filter(
+            market => market.isOpened && !market.isMatured
+        );
+
+        if (openMarkets.length === 0) return false;
+
+        openMarkets.sort((a, b) => a.maturity - b.maturity);
+        const earliestMarketForCurrency = openMarkets[0];
+
+        if (maturity !== earliestMarketForCurrency.maturity) {
+            return false;
+        }
+
+        const now = Date.now();
+        const maturityTime = earliestMarketForCurrency.maturity * 1000;
+        const daysUntilMaturity = (maturityTime - now) / DAY_IN_MS;
+
+        return (
+            daysUntilMaturity >= 0 && daysUntilMaturity <= DAYS_BEFORE_MATURITY
+        );
+    }, [ccy, maturity, lendingMarkets]);
 
     const alertContent = (() => {
         if (maximumOpenOrderLimit) {
@@ -295,6 +338,26 @@ export const WithBanner = ({
                     <Alert
                         severity={alertContent.severity}
                         title={alertContent.title}
+                    />
+                </div>
+            )}
+            {shouldShowAutoRollBanner && (
+                <div className='px-3 laptop:px-0'>
+                    <Alert
+                        severity={AlertSeverity.Info}
+                        title={
+                            <>
+                                When this order book reaches maturity, any open
+                                positions will{' '}
+                                <TextLink
+                                    href='https://docs.secured.finance/fixed-rate-lending/advanced-topics/market-dynamics/auto-rolling'
+                                    text='auto-roll'
+                                />{' '}
+                                into the next 3-month term at close-to-mid
+                                pricing. This helps mitigate reinvestment risk
+                                and reduces operational costs.
+                            </>
+                        }
                     />
                 </div>
             )}

@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import DocumentTextIcon from 'src/assets/icons/document-text.svg';
-import { MarketTab } from 'src/components/atoms';
+import { MarketTab, TextLink } from 'src/components/atoms';
 import { Timer } from 'src/components/atoms/Timer';
 import { CurrencyMaturityDropdown, Tooltip } from 'src/components/molecules';
 import { MarketInfoDialog } from 'src/components/organisms';
@@ -278,9 +278,23 @@ export const AdvancedLendingTopBar = ({
                                 </div>
                                 <div className='flex w-[14%] flex-col desktop:w-[10%]'>
                                     <MarketTab
-                                        name='Countdown'
+                                        name='Time to Maturity'
                                         value={
                                             <span className='tabular-nums'>{`${time?.days}:${time?.hours}:${time?.minutes}:${time?.seconds}`}</span>
+                                        }
+                                        tooltip={
+                                            <span>
+                                                This shows the time remaining
+                                                until this order book&apos;s
+                                                maturity. At maturity, any open
+                                                positions will{' '}
+                                                <TextLink
+                                                    href='https://docs.secured.finance/fixed-rate-lending/advanced-topics/market-dynamics/auto-rolling'
+                                                    text='auto-roll'
+                                                />{' '}
+                                                into the next 3-month term at
+                                                close-to-mid pricing.
+                                            </span>
                                         }
                                     />
                                 </div>

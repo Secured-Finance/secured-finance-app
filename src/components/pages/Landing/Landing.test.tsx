@@ -42,9 +42,17 @@ const preloadedState = {
     wallet: { address: '0x1' },
 };
 
+const baseLendingMarkets = {
+    [CurrencySymbol.aUSDC]: {
+        [dec22Fixture.toNumber()]: maturities[dec22Fixture.toNumber()],
+    },
+} as Record<CurrencySymbol, Record<number, (typeof maturities)[number]>>;
+
 const baseWithBannerProps = {
     ccy: CurrencySymbol.aUSDC,
+    maturity: dec22Fixture.toNumber(),
     market: maturities[dec22Fixture.toNumber()],
+    lendingMarkets: baseLendingMarkets,
     delistedCurrencySet: new Set<CurrencySymbol>(),
     children: <div>Banner Child Example</div>,
     isItayose: false,
@@ -349,5 +357,110 @@ describe('Landing Component', () => {
             screen.getByText(/Market aUSDC-.*is open for pre-orders now until/i)
         ).toBeInTheDocument();
         expect(screen.getByText(/Place Order Now/)).toBeInTheDocument();
+    });
+
+    describe('Auto-roll banner', () => {
+        const AUTO_ROLL_TEXT =
+            /When this order book reaches maturity, any open positions will/i;
+
+        it('shows banner when within 7 days', () => {
+            const maturity = Math.floor(Date.now() / 1000) + 5 * 24 * 60 * 60;
+            const lendingMarkets: Partial<
+                Record<
+                    CurrencySymbol,
+                    Record<number, (typeof maturities)[number]>
+                >
+            > = {
+                [CurrencySymbol.aUSDC]: {
+                    [maturity]: {
+                        ...maturities[dec22Fixture.toNumber()],
+                        maturity,
+                    },
+                },
+            };
+
+            render(
+                <WithBanner
+                    {...baseWithBannerProps}
+                    maturity={maturity}
+                    market={undefined}
+                    lendingMarkets={
+                        lendingMarkets as Record<
+                            CurrencySymbol,
+                            Record<number, (typeof maturities)[number]>
+                        >
+                    }
+                />
+            );
+
+            expect(screen.getByText(AUTO_ROLL_TEXT)).toBeInTheDocument();
+        });
+
+        it('does not show when more than 7 days away', () => {
+            const maturity = Math.floor(Date.now() / 1000) + 10 * 24 * 60 * 60;
+            const lendingMarkets: Partial<
+                Record<
+                    CurrencySymbol,
+                    Record<number, (typeof maturities)[number]>
+                >
+            > = {
+                [CurrencySymbol.aUSDC]: {
+                    [maturity]: {
+                        ...maturities[dec22Fixture.toNumber()],
+                        maturity,
+                    },
+                },
+            };
+
+            render(
+                <WithBanner
+                    {...baseWithBannerProps}
+                    maturity={maturity}
+                    market={undefined}
+                    lendingMarkets={
+                        lendingMarkets as Record<
+                            CurrencySymbol,
+                            Record<number, (typeof maturities)[number]>
+                        >
+                    }
+                />
+            );
+
+            expect(screen.queryByText(AUTO_ROLL_TEXT)).not.toBeInTheDocument();
+        });
+
+        it('shows for all currencies', () => {
+            const maturity = Math.floor(Date.now() / 1000) + 5 * 24 * 60 * 60;
+            const lendingMarkets: Partial<
+                Record<
+                    CurrencySymbol,
+                    Record<number, (typeof maturities)[number]>
+                >
+            > = {
+                [CurrencySymbol.ETH]: {
+                    [maturity]: {
+                        ...maturities[dec22Fixture.toNumber()],
+                        maturity,
+                    },
+                },
+            };
+
+            render(
+                <WithBanner
+                    {...baseWithBannerProps}
+                    ccy={CurrencySymbol.ETH}
+                    maturity={maturity}
+                    market={undefined}
+                    lendingMarkets={
+                        lendingMarkets as Record<
+                            CurrencySymbol,
+                            Record<number, (typeof maturities)[number]>
+                        >
+                    }
+                />
+            );
+
+            expect(screen.getByText(AUTO_ROLL_TEXT)).toBeInTheDocument();
+        });
     });
 });

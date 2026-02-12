@@ -65,10 +65,17 @@ AdvancedViewConnected.args = {
 
 export const WithBannerExample = () => {
     const mockMarket = maturities[dec22Fixture.toNumber()];
+    const mockLendingMarkets = {
+        [CurrencySymbol.aUSDC]: {
+            [dec22Fixture.toNumber()]: mockMarket,
+        },
+    } as Record<CurrencySymbol, Record<number, typeof mockMarket>>;
     return (
         <WithBanner
             ccy={CurrencySymbol.aUSDC}
+            maturity={dec22Fixture.toNumber()}
             market={mockMarket}
+            lendingMarkets={mockLendingMarkets}
             delistedCurrencySet={new Set()}
             isItayose={false}
             maximumOpenOrderLimit={undefined}
