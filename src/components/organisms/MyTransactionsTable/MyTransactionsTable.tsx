@@ -146,7 +146,7 @@ export const MyTransactionsTable = ({
                 'left',
                 'left'
             ),
-            loanTypeColumnDefinition(columnHelper, 'Type', 'type'),
+            loanTypeColumnDefinition(columnHelper, 'Side', 'type'),
             priceYieldColumnDef('Price', 'price', 'price'),
             priceYieldColumnDef('APR%', 'apr', 'rate'),
             amountColumnDefinition(
@@ -191,6 +191,7 @@ export const MyTransactionsTable = ({
             data={data}
             columns={columns}
             options={{
+                hoverRow: _id => true,
                 name: 'my-transactions-table',
                 pagination: pagination,
             }}

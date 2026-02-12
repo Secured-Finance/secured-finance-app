@@ -143,7 +143,7 @@ export const OrderTable = ({
                 'left',
                 'left'
             ),
-            loanTypeColumnDefinition(columnHelper, 'Type', 'type'),
+            loanTypeColumnDefinition(columnHelper, 'Side', 'type'),
             priceYieldColumnDefinition(
                 columnHelper,
                 'Order Price',
@@ -233,6 +233,7 @@ export const OrderTable = ({
                     data={data}
                     options={{
                         name: 'open-order-table',
+                        hoverRow: _id => true,
                         pagination: {
                             containerHeight:
                                 height || COMPACT_TABLE_DEFAULT_HEIGHT,

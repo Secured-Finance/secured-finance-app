@@ -142,7 +142,7 @@ export const OrderHistoryTable = ({
                 'left',
                 'left'
             ),
-            loanTypeColumnDefinition(columnHelper, 'Type', 'type'),
+            loanTypeColumnDefinition(columnHelper, 'Side', 'type'),
             inputPriceYieldColumnDefinition(
                 columnHelper,
                 'Price',
@@ -214,6 +214,7 @@ export const OrderHistoryTable = ({
             options={{
                 name: 'order-history-table',
                 pagination: pagination,
+                hoverRow: _id => true,
             }}
             isLoading={isLoading}
         />
