@@ -85,7 +85,7 @@ export const TableContractCell = ({
         router.push({
             pathname: '/',
             query: {
-                market: contract,
+                market: `${ccy}-${getUTCMonthYear(maturity.toNumber(), true)}`,
             },
         });
     };
