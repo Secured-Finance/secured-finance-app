@@ -113,7 +113,9 @@ export function AdvancedLendingOrderCard({
         if (
             orderBook.data &&
             orderBook.data.borrowOrderbook &&
-            orderBook.data.lendOrderbook
+            orderBook.data.lendOrderbook &&
+            orderBook.data.borrowOrderbook[0].amount !== ZERO_BI &&
+            orderBook.data.lendOrderbook[0].amount !== ZERO_BI
         ) {
             const borrowPrice = orderBook.data.borrowOrderbook[0].value.price;
             const lendPrice = orderBook.data.lendOrderbook[0].value.price;
