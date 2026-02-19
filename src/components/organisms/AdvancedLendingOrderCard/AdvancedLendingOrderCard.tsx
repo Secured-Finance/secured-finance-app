@@ -1,7 +1,7 @@
 import { track } from '@amplitude/analytics-browser';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { VisibilityState } from '@tanstack/react-table';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     CollateralManagementConciseTab,
@@ -28,7 +28,6 @@ import {
 } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import {
-    resetUnitPrice,
     selectLandingOrderForm,
     setAmount,
     setOrderType,
@@ -80,6 +79,7 @@ export function AdvancedLendingOrderCard({
     marketPrice?: number;
     delistedCurrencySet: Set<CurrencySymbol>;
 }): JSX.Element {
+    const dispatch = useDispatch();
     const {
         currency,
         amount,
@@ -100,6 +100,7 @@ export function AdvancedLendingOrderCard({
     );
 
     const { data: orderFee = 0 } = useOrderFee(currency);
+    const hasAutoFilledPrice = useRef(false);
 
     const { address, isConnected } = useAccount();
 
@@ -123,6 +124,39 @@ export function AdvancedLendingOrderCard({
         }
         return undefined;
     }, [orderBook.data]);
+
+    useEffect(() => {
+        // Auto-fill price only on first mount after browser load
+        if (
+            !hasAutoFilledPrice.current &&
+            !unitPriceExists &&
+            orderType === OrderType.LIMIT &&
+            isConnected
+        ) {
+            let priceToSet: string | undefined;
+
+            if (midPrice !== undefined) {
+                // Rule 1: Both sides have orders → use Mid Price
+                priceToSet = midPrice.toString();
+            } else if (marketPrice) {
+                // Rule 2 & 3: One side or no sides → use Market Price
+                priceToSet = marketPrice.toString();
+            }
+
+            if (priceToSet) {
+                dispatch(setUnitPrice(priceToSet));
+                hasAutoFilledPrice.current = true;
+            }
+        }
+    }, [
+        unitPriceExists,
+        orderType,
+        isConnected,
+        orderBook.data,
+        midPrice,
+        marketPrice,
+        dispatch,
+    ]);
 
     const loanValue = useMemo(() => {
         if (!maturity) return LoanValue.ZERO;
@@ -148,8 +182,6 @@ export function AdvancedLendingOrderCard({
         if (!isConnected) return undefined;
         return (marketPrice / 100.0).toString();
     }, [maturity, marketPrice, unitPrice, isConnected, unitPriceExists]);
-
-    const dispatch = useDispatch();
 
     const collateralUsagePercent = useMemo(() => {
         return collateralBook.coverage / 100.0;
@@ -326,7 +358,6 @@ export function AdvancedLendingOrderCard({
                             selectedOption={orderType}
                             handleClick={option => {
                                 dispatch(setOrderType(option as OrderType));
-                                dispatch(resetUnitPrice());
                                 trackButtonEvent(
                                     ButtonEvents.ORDER_TYPE,
                                     ButtonProperties.ORDER_TYPE,
