@@ -62,7 +62,6 @@ import { useOrderbook } from 'src/hooks/useOrderbook';
 import useSF from 'src/hooks/useSecuredFinance';
 import {
     resetAmount,
-    resetUnitPrice,
     selectLandingOrderForm,
     setCurrency,
     setMaturity,
@@ -482,7 +481,6 @@ export const AdvancedLending = ({
     const handleCurrencyChange = useCallback(
         (v: CurrencySymbol) => {
             dispatch(setCurrency(v));
-            dispatch(resetUnitPrice());
             dispatch(resetAmount());
             trackButtonEvent(
                 ButtonEvents.CURRENCY_CHANGE,
@@ -496,7 +494,6 @@ export const AdvancedLending = ({
     const handleTermChange = useCallback(
         (v: Maturity) => {
             dispatch(setMaturity(Number(v)));
-            dispatch(resetUnitPrice());
             trackButtonEvent(
                 ButtonEvents.TERM_CHANGE,
                 ButtonProperties.TERM,

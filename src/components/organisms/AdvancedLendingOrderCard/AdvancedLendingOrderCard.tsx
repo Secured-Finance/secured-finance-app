@@ -101,6 +101,7 @@ export function AdvancedLendingOrderCard({
 
     const { data: orderFee = 0 } = useOrderFee(currency);
     const hasAutoFilledPrice = useRef(false);
+    const hasUserEditedPrice = useRef(false);
 
     const { address, isConnected } = useAccount();
 
@@ -125,22 +126,28 @@ export function AdvancedLendingOrderCard({
         return undefined;
     }, [orderBook.data]);
 
+    // Reset auto-fill flag when currency or maturity changes
+    // This allows price to auto-fill for each new market
     useEffect(() => {
-        // Auto-fill price only on first mount after browser load
+        hasAutoFilledPrice.current = false;
+        hasUserEditedPrice.current = false;
+    }, [currency, maturity]);
+
+    useEffect(() => {
         if (
             !hasAutoFilledPrice.current &&
-            !unitPriceExists &&
+            !hasUserEditedPrice.current &&
             orderType === OrderType.LIMIT &&
-            isConnected
+            isConnected &&
+            orderBook.data
         ) {
             let priceToSet: string | undefined;
-
             if (midPrice !== undefined) {
-                // Rule 1: Both sides have orders → use Mid Price
+                // Priority 1: Both sides have orders → use Mid Price
                 priceToSet = midPrice.toString();
             } else if (marketPrice) {
-                // Rule 2 & 3: One side or no sides → use Market Price
-                priceToSet = marketPrice.toString();
+                // Priority 2: One/no sides → use Mark Price
+                priceToSet = (marketPrice / 100.0).toString();
             }
 
             if (priceToSet) {
@@ -156,6 +163,8 @@ export function AdvancedLendingOrderCard({
         midPrice,
         marketPrice,
         dispatch,
+        currency,
+        maturity,
     ]);
 
     const loanValue = useMemo(() => {
@@ -170,18 +179,6 @@ export function AdvancedLendingOrderCard({
         if (!marketPrice) return LoanValue.ZERO;
         return LoanValue.fromPrice(marketPrice, maturity, calculationDate);
     }, [maturity, unitPrice, unitPriceExists, marketPrice, calculationDate]);
-
-    const unitPriceValue = useMemo(() => {
-        if (!maturity) return undefined;
-        if (!unitPriceExists) {
-            return undefined;
-        } else if (unitPrice !== undefined) {
-            return unitPrice.toString();
-        }
-        if (!marketPrice) return undefined;
-        if (!isConnected) return undefined;
-        return (marketPrice / 100.0).toString();
-    }, [maturity, marketPrice, unitPrice, isConnected, unitPriceExists]);
 
     const collateralUsagePercent = useMemo(() => {
         return collateralBook.coverage / 100.0;
@@ -392,9 +389,12 @@ export function AdvancedLendingOrderCard({
                             field='Price'
                             disabled={isBondPriceFieldDisabled}
                             initialValue={
-                                isMarketOrderType ? 'Market' : unitPriceValue
+                                isMarketOrderType
+                                    ? 'Market'
+                                    : unitPrice?.toString()
                             }
                             onValueChange={v => {
+                                hasUserEditedPrice.current = true;
                                 v !== undefined
                                     ? dispatch(setUnitPrice(v.toString()))
                                     : dispatch(setUnitPrice(''));
@@ -416,11 +416,12 @@ export function AdvancedLendingOrderCard({
                                 <button
                                     className='typography-desktop-body-4 font-semibold text-primary-500'
                                     disabled={!midPrice}
-                                    onClick={() =>
+                                    onClick={() => {
+                                        hasUserEditedPrice.current = true;
                                         dispatch(
                                             setUnitPrice(midPrice?.toString())
-                                        )
-                                    }
+                                        );
+                                    }}
                                 >
                                     Mid
                                 </button>
