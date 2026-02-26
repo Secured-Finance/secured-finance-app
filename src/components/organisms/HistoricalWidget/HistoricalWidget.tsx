@@ -1,6 +1,6 @@
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { DropdownSelector, RadioButton } from 'src/components/atoms';
 import { HistoricalChart } from 'src/components/molecules';
@@ -31,9 +31,19 @@ export const HistoricalWidget = () => {
     const [selectedTimeScale, setSelectedTimeScale] =
         useState<HistoricalDataIntervals>(HistoricalDataIntervals['5M']);
 
+    const queryInterval = useMemo(() => {
+        if (
+            selectedTimeScale === HistoricalDataIntervals['1W'] ||
+            selectedTimeScale === HistoricalDataIntervals['1MTH']
+        ) {
+            return HistoricalDataIntervals['1D'];
+        }
+        return selectedTimeScale;
+    }, [selectedTimeScale]);
+
     const historicalTradeData = useGraphClientHook(
         {
-            interval: selectedTimeScale,
+            interval: queryInterval,
             currency: toBytes32(currency),
             maturity: maturity,
         },
