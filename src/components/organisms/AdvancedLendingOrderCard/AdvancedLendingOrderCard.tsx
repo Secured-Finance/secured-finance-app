@@ -1,7 +1,7 @@
 import { track } from '@amplitude/analytics-browser';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { VisibilityState } from '@tanstack/react-table';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     CollateralManagementConciseTab,
@@ -28,7 +28,6 @@ import {
 } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import {
-    resetUnitPrice,
     selectLandingOrderForm,
     setAmount,
     setOrderType,
@@ -80,6 +79,7 @@ export function AdvancedLendingOrderCard({
     marketPrice?: number;
     delistedCurrencySet: Set<CurrencySymbol>;
 }): JSX.Element {
+    const dispatch = useDispatch();
     const {
         currency,
         amount,
@@ -100,6 +100,8 @@ export function AdvancedLendingOrderCard({
     );
 
     const { data: orderFee = 0 } = useOrderFee(currency);
+    const hasAutoFilledPrice = useRef(false);
+    const hasUserEditedPrice = useRef(false);
 
     const { address, isConnected } = useAccount();
 
@@ -113,7 +115,9 @@ export function AdvancedLendingOrderCard({
         if (
             orderBook.data &&
             orderBook.data.borrowOrderbook &&
-            orderBook.data.lendOrderbook
+            orderBook.data.lendOrderbook &&
+            orderBook.data.borrowOrderbook[0].amount !== ZERO_BI &&
+            orderBook.data.lendOrderbook[0].amount !== ZERO_BI
         ) {
             const borrowPrice = orderBook.data.borrowOrderbook[0].value.price;
             const lendPrice = orderBook.data.lendOrderbook[0].value.price;
@@ -121,6 +125,47 @@ export function AdvancedLendingOrderCard({
         }
         return undefined;
     }, [orderBook.data]);
+
+    // Reset auto-fill flag when currency or maturity changes
+    // This allows price to auto-fill for each new market
+    useEffect(() => {
+        hasAutoFilledPrice.current = false;
+        hasUserEditedPrice.current = false;
+    }, [currency, maturity]);
+
+    useEffect(() => {
+        if (
+            !hasAutoFilledPrice.current &&
+            !hasUserEditedPrice.current &&
+            orderType === OrderType.LIMIT &&
+            isConnected &&
+            orderBook.data
+        ) {
+            let priceToSet: string | undefined;
+            if (midPrice !== undefined) {
+                // Priority 1: Both sides have orders → use Mid Price
+                priceToSet = midPrice.toString();
+            } else if (marketPrice) {
+                // Priority 2: One/no sides → use Mark Price
+                priceToSet = (marketPrice / 100.0).toString();
+            }
+
+            if (priceToSet) {
+                dispatch(setUnitPrice(priceToSet));
+                hasAutoFilledPrice.current = true;
+            }
+        }
+    }, [
+        unitPriceExists,
+        orderType,
+        isConnected,
+        orderBook.data,
+        midPrice,
+        marketPrice,
+        dispatch,
+        currency,
+        maturity,
+    ]);
 
     const loanValue = useMemo(() => {
         if (!maturity) return LoanValue.ZERO;
@@ -134,20 +179,6 @@ export function AdvancedLendingOrderCard({
         if (!marketPrice) return LoanValue.ZERO;
         return LoanValue.fromPrice(marketPrice, maturity, calculationDate);
     }, [maturity, unitPrice, unitPriceExists, marketPrice, calculationDate]);
-
-    const unitPriceValue = useMemo(() => {
-        if (!maturity) return undefined;
-        if (!unitPriceExists) {
-            return undefined;
-        } else if (unitPrice !== undefined) {
-            return unitPrice.toString();
-        }
-        if (!marketPrice) return undefined;
-        if (!isConnected) return undefined;
-        return (marketPrice / 100.0).toString();
-    }, [maturity, marketPrice, unitPrice, isConnected, unitPriceExists]);
-
-    const dispatch = useDispatch();
 
     const collateralUsagePercent = useMemo(() => {
         return collateralBook.coverage / 100.0;
@@ -324,7 +355,6 @@ export function AdvancedLendingOrderCard({
                             selectedOption={orderType}
                             handleClick={option => {
                                 dispatch(setOrderType(option as OrderType));
-                                dispatch(resetUnitPrice());
                                 trackButtonEvent(
                                     ButtonEvents.ORDER_TYPE,
                                     ButtonProperties.ORDER_TYPE,
@@ -359,9 +389,12 @@ export function AdvancedLendingOrderCard({
                             field='Price'
                             disabled={isBondPriceFieldDisabled}
                             initialValue={
-                                isMarketOrderType ? 'Market' : unitPriceValue
+                                isMarketOrderType
+                                    ? 'Market'
+                                    : unitPrice?.toString()
                             }
                             onValueChange={v => {
+                                hasUserEditedPrice.current = true;
                                 v !== undefined
                                     ? dispatch(setUnitPrice(v.toString()))
                                     : dispatch(setUnitPrice(''));
@@ -383,11 +416,12 @@ export function AdvancedLendingOrderCard({
                                 <button
                                     className='typography-desktop-body-4 font-semibold text-primary-500'
                                     disabled={!midPrice}
-                                    onClick={() =>
+                                    onClick={() => {
+                                        hasUserEditedPrice.current = true;
                                         dispatch(
                                             setUnitPrice(midPrice?.toString())
-                                        )
-                                    }
+                                        );
+                                    }}
                                 >
                                     Mid
                                 </button>

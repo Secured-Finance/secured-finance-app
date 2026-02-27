@@ -62,7 +62,6 @@ import { useOrderbook } from 'src/hooks/useOrderbook';
 import useSF from 'src/hooks/useSecuredFinance';
 import {
     resetAmount,
-    resetUnitPrice,
     selectLandingOrderForm,
     setCurrency,
     setMaturity,
@@ -133,7 +132,6 @@ const useTradeHistoryDetails = (
 export const AdvancedLending = ({
     collateralBook,
     maturitiesOptionList,
-    marketPrice,
     delistedCurrencySet,
     setIsItayose,
     setMaximumOpenOrderLimit,
@@ -141,7 +139,6 @@ export const AdvancedLending = ({
 }: {
     collateralBook: CollateralBook;
     maturitiesOptionList: MaturityOptionList;
-    marketPrice: number | undefined;
     delistedCurrencySet: Set<CurrencySymbol>;
     setIsItayose: (value: boolean) => void;
     setMaximumOpenOrderLimit: (value: boolean) => void;
@@ -484,7 +481,6 @@ export const AdvancedLending = ({
     const handleCurrencyChange = useCallback(
         (v: CurrencySymbol) => {
             dispatch(setCurrency(v));
-            dispatch(resetUnitPrice());
             dispatch(resetAmount());
             trackButtonEvent(
                 ButtonEvents.CURRENCY_CHANGE,
@@ -498,7 +494,6 @@ export const AdvancedLending = ({
     const handleTermChange = useCallback(
         (v: Maturity) => {
             dispatch(setMaturity(Number(v)));
-            dispatch(resetUnitPrice());
             trackButtonEvent(
                 ButtonEvents.TERM_CHANGE,
                 ButtonProperties.TERM,
@@ -785,7 +780,7 @@ export const AdvancedLending = ({
                     </>
                     <AdvancedLendingOrderCard
                         collateralBook={collateralBook}
-                        marketPrice={marketPrice}
+                        marketPrice={currentMarket?.value.price}
                         delistedCurrencySet={delistedCurrencySet}
                         isItayose={isItayosePeriod}
                         calculationDate={
