@@ -127,15 +127,17 @@ export const AdvancedLendingEstimationFields = ({
 
     const unitPriceValue = useMemo(() => {
         if (!maturity) return undefined;
-        if (!unitPriceExists) {
-            return undefined;
-        } else if (unitPrice !== undefined) {
+
+        // Priority 1: Use Redux unitPrice if it exists
+        if (unitPriceExists && unitPrice !== undefined) {
             return unitPrice.toString();
         }
-        if (!marketPrice) return undefined;
+
+        // Priority 2: Fall back to market price
         if (!isConnected) return undefined;
+        if (!marketPrice) return undefined;
         return (marketPrice / 100.0).toString();
-    }, [maturity, marketPrice, unitPrice, isConnected, unitPriceExists]);
+    }, [maturity, unitPrice, unitPriceExists, marketPrice, isConnected]);
 
     const showDashes = useMemo(() => {
         const isEmptyAmount = amount <= 0;

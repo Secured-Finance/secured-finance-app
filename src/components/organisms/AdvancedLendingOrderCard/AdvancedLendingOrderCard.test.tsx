@@ -117,7 +117,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         await waitFor(() => {
             const inputs = screen.getAllByRole('textbox');
             expect(screen.getByText('Price')).toBeInTheDocument();
-            expect(inputs[0].getAttribute('value')).toBe('95');
+            expect(inputs[0].getAttribute('value')).toBe('96.9');
 
             expect(screen.getByText('Size')).toBeInTheDocument();
             expect(inputs[1].getAttribute('value')).toBe('500');
@@ -130,7 +130,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         ).toBeInTheDocument();
         expect(screen.getByText('Future Value')).toBeInTheDocument();
         expect(
-            await screen.findByText('526 USDC ($526.00)')
+            await screen.findByText('516 USDC ($516.00)')
         ).toBeInTheDocument();
     });
 
@@ -690,7 +690,7 @@ describe('AdvancedLendingOrderCard Component', () => {
             expect(input).toHaveAttribute('value', expectedValue);
         };
 
-        it('should show the market price when market price is defined and unit price is undefined', () => {
+        it('should show the mid price when market price is defined and unit price is undefined and orderbook is available', async () => {
             render(<Default marketPrice={9600} />, {
                 preloadedState: {
                     ...preloadedState,
@@ -702,7 +702,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                 },
             });
 
-            assertBondPriceInputValue('96');
+            await waitFor(() => assertBondPriceInputValue('96.9'));
         });
 
         it('should show the bond price as undefined when market price and unit price are undefined', () => {
