@@ -51,6 +51,7 @@ const ActiveTradeTableMobile = ({
     tableActionMenu: (
         maturity: number,
         amount: bigint,
+        futureValue: bigint,
         ccy: CurrencySymbol,
         side: OrderSide
     ) => {
@@ -70,6 +71,8 @@ const ActiveTradeTableMobile = ({
                 const amount = row.amount;
                 const absAmount = amount < 0 ? -amount : amount;
                 const futureValue = row.futureValue;
+                const absFutureValue =
+                    futureValue < 0 ? -futureValue : futureValue;
                 const marketPrice = row.marketPrice;
                 const side =
                     BigInt(futureValue) < 0 ? OrderSide.BORROW : OrderSide.LEND;
@@ -79,6 +82,7 @@ const ActiveTradeTableMobile = ({
                 const items = tableActionMenu(
                     maturity.toNumber(),
                     absAmount,
+                    absFutureValue,
                     ccy,
                     reversedSide
                 );
@@ -193,6 +197,7 @@ export const ActiveTradeTable = ({
         (
             maturity: number,
             amount: bigint,
+            futureValue: bigint,
             ccy: CurrencySymbol,
             side: OrderSide
         ) => {
@@ -235,8 +240,11 @@ export const ActiveTradeTable = ({
             let label = 'Close';
             let type: UnwindDialogType;
             let disableAction;
+            let targetAmount = amount;
 
             if (delistedCurrencySet.has(ccy)) {
+                targetAmount = futureValue;
+
                 if (side === OrderSide.LEND) {
                     label = 'Repay';
                     type = 'REPAY';
@@ -256,7 +264,7 @@ export const ActiveTradeTable = ({
                     onClick: (): void => {
                         setUnwindDialogData({
                             maturity: new Maturity(maturity),
-                            amount: new Amount(amount, ccy),
+                            amount: new Amount(targetAmount, ccy),
                             show: true,
                             side: side,
                             type: type,
@@ -450,7 +458,10 @@ export const ActiveTradeTable = ({
                     const maturity = Number(info.row.original.maturity);
                     const ccy = hexToCurrencySymbol(info.row.original.currency);
                     const amount = BigInt(info.row.original.amount);
+                    const futureValue = BigInt(info.row.original.futureValue);
                     const absAmount = amount < 0 ? -amount : amount;
+                    const absFutureValue =
+                        futureValue < 0 ? -futureValue : futureValue;
                     const side =
                         BigInt(info.row.original.futureValue) < 0
                             ? OrderSide.LEND
@@ -462,6 +473,7 @@ export const ActiveTradeTable = ({
                             items={getTableActionMenu(
                                 maturity,
                                 absAmount,
+                                absFutureValue,
                                 ccy,
                                 side
                             )}

@@ -238,6 +238,7 @@ export const UnwindDialog = ({
                         collateral={collateralBook}
                         loanValue={marketValue}
                         showZCUsage={['UNWIND'].includes(type)}
+                        isRemoveOrder={type !== 'UNWIND'}
                     />
                 );
             case Step.processing:

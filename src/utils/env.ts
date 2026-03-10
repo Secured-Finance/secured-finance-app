@@ -131,3 +131,27 @@ export const getGoogleAnalyticsTag = () => {
 
     return NEXT_PUBLIC_GOOGLE_ANALYTICS_TAG;
 };
+
+const DELISTED_CURRENCIES: Record<number, string | undefined> = {
+    1: process.env.NEXT_PUBLIC_DELISTED_CURRENCIES_1,
+    11155111: process.env.NEXT_PUBLIC_DELISTED_CURRENCIES_11155111,
+    314: process.env.NEXT_PUBLIC_DELISTED_CURRENCIES_314,
+    314159: process.env.NEXT_PUBLIC_DELISTED_CURRENCIES_314159,
+    42161: process.env.NEXT_PUBLIC_DELISTED_CURRENCIES_42161,
+    421614: process.env.NEXT_PUBLIC_DELISTED_CURRENCIES_421614,
+};
+
+export const getDelistedCurrencies = (chainId?: number): string[] => {
+    if (!chainId) return [];
+
+    const delistedStr = DELISTED_CURRENCIES[chainId];
+
+    if (!delistedStr || delistedStr.trim() === '') {
+        return [];
+    }
+
+    return delistedStr
+        .split(',')
+        .map(s => s.trim())
+        .filter(s => s !== '');
+};

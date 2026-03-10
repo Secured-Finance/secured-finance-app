@@ -215,7 +215,8 @@ export const WithBanner = ({
         if (
             !currentMarket ||
             !currentMarket.isOpened ||
-            currentMarket.isMatured
+            currentMarket.isMatured ||
+            delistedCurrencySet.has(ccy)
         ) {
             return false;
         }
@@ -243,7 +244,7 @@ export const WithBanner = ({
         return (
             daysUntilMaturity >= 0 && daysUntilMaturity <= DAYS_BEFORE_MATURITY
         );
-    }, [ccy, maturity, lendingMarkets]);
+    }, [ccy, maturity, lendingMarkets, delistedCurrencySet]);
 
     const alertContent = (() => {
         if (maximumOpenOrderLimit) {
