@@ -296,13 +296,13 @@ export const NewOrderBookWidget = ({
               )
             : '0.00%';
 
-    const maxLendAmount = useMemo(() => {
-        return getMaxAmount(lendOrders);
-    }, [lendOrders]);
-
-    const maxBorrowAmount = useMemo(() => {
-        return getMaxAmount(borrowOrders);
-    }, [borrowOrders]);
+    const maxAmountInOrderbook = useMemo(() => {
+        const maxLendAmount = getMaxAmount(lendOrders);
+        const maxBorrowAmount = getMaxAmount(borrowOrders);
+        return maxLendAmount > maxBorrowAmount
+            ? maxLendAmount
+            : maxBorrowAmount;
+    }, [borrowOrders, lendOrders]);
 
     const buyColumns = useMemo(
         () => [
@@ -347,7 +347,7 @@ export const NewOrderBookWidget = ({
                     <AmountCell
                         value={info.getValue()}
                         amount={info.row.original.cumulativeAmount}
-                        totalAmount={maxBorrowAmount}
+                        totalAmount={maxAmountInOrderbook}
                         position='borrow'
                         currency={currency}
                         cbLimit={
@@ -364,7 +364,7 @@ export const NewOrderBookWidget = ({
                 ),
             }),
         ],
-        [aggregationFactor, currency, maxBorrowAmount, maxLendUnitPrice]
+        [aggregationFactor, currency, maxAmountInOrderbook, maxLendUnitPrice]
     );
 
     const sellColumns = useMemo(
@@ -375,7 +375,7 @@ export const NewOrderBookWidget = ({
                     <AmountCell
                         value={info.getValue()}
                         amount={info.row.original.cumulativeAmount}
-                        totalAmount={maxLendAmount}
+                        totalAmount={maxAmountInOrderbook}
                         position='lend'
                         currency={currency}
                         cbLimit={
@@ -427,7 +427,7 @@ export const NewOrderBookWidget = ({
                 ),
             }),
         ],
-        [aggregationFactor, currency, maxLendAmount, minBorrowUnitPrice]
+        [aggregationFactor, currency, maxAmountInOrderbook, minBorrowUnitPrice]
     );
 
     const handleClick = (rowId: string, side: OrderSide): void => {
