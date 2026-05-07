@@ -1,23 +1,17 @@
-import { ethBytes32, ifilBytes32 } from 'src/stories/mocks/fixtures';
+import {
+    ethBytes32,
+    ifilBytes32,
+    wfilBytes32,
+} from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook, waitFor } from 'src/test-utils';
 import { CurrencySymbol } from 'src/utils';
-import * as envUtils from 'src/utils/env';
 import { useCurrencies } from './useCurrencies';
 
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
-jest.mock('src/utils/env', () => ({
-    ...jest.requireActual('src/utils/env'),
-    getDelistedCurrencies: jest.fn(() => []),
-}));
 
 describe('useCurrencies', () => {
-    const mockGetDelistedCurrencies =
-        envUtils.getDelistedCurrencies as jest.MockedFunction<
-            typeof envUtils.getDelistedCurrencies
-        >;
-
     it('should return the list of currencies that have an order book in order', async () => {
         const { result } = renderHook(() => useCurrencies());
         await waitFor(() =>
@@ -49,11 +43,13 @@ describe('useCurrencies', () => {
         );
     });
 
-    it('should merge delisted currencies from environment variables', async () => {
-        mockGetDelistedCurrencies.mockReturnValue(['WFIL']);
-
+    it('should merge token vault currencies', async () => {
+        mock.tokenVault.getUsedCurrencies.mockResolvedValueOnce([wfilBytes32]);
         mock.getCurrencies.mockResolvedValueOnce([ethBytes32]);
-        const { result } = renderHook(() => useCurrencies());
+
+        const { result } = renderHook(() =>
+            useCurrencies(true, undefined, '0x123')
+        );
         await waitFor(() =>
             expect(result.current.data).toEqual([
                 CurrencySymbol.ETH,
@@ -63,10 +59,12 @@ describe('useCurrencies', () => {
     });
 
     it('should remove duplicates when delisted currency is also in active currencies', async () => {
-        mockGetDelistedCurrencies.mockReturnValue(['ETH']);
-
+        mock.tokenVault.getUsedCurrencies.mockResolvedValueOnce([ethBytes32]);
         mock.getCurrencies.mockResolvedValueOnce([ethBytes32]);
-        const { result } = renderHook(() => useCurrencies());
+
+        const { result } = renderHook(() =>
+            useCurrencies(true, undefined, '0x123')
+        );
         await waitFor(() => {
             expect(result.current.data).toEqual([CurrencySymbol.ETH]);
             // Should only contain ETH once, not twice
@@ -75,10 +73,15 @@ describe('useCurrencies', () => {
     });
 
     it('should filter delisted currencies by hasOrderBook when showAll is false', async () => {
-        mockGetDelistedCurrencies.mockReturnValue(['WFIL', 'iFIL']);
-
+        mock.tokenVault.getUsedCurrencies.mockResolvedValueOnce([
+            wfilBytes32,
+            ifilBytes32,
+        ]);
         mock.getCurrencies.mockResolvedValueOnce([ethBytes32]);
-        const { result } = renderHook(() => useCurrencies(false));
+
+        const { result } = renderHook(() =>
+            useCurrencies(false, undefined, '0x123')
+        );
         await waitFor(() => {
             // WFIL has orderBook, iFIL does not
             expect(result.current.data).toEqual([
@@ -89,10 +92,15 @@ describe('useCurrencies', () => {
     });
 
     it('should include all delisted currencies when showAll is true', async () => {
-        mockGetDelistedCurrencies.mockReturnValue(['WFIL', 'iFIL']);
-
+        mock.tokenVault.getUsedCurrencies.mockResolvedValueOnce([
+            wfilBytes32,
+            ifilBytes32,
+        ]);
         mock.getCurrencies.mockResolvedValueOnce([ethBytes32]);
-        const { result } = renderHook(() => useCurrencies(true));
+
+        const { result } = renderHook(() =>
+            useCurrencies(true, undefined, '0x123')
+        );
         await waitFor(() => {
             expect(result.current.data).toEqual([
                 CurrencySymbol.ETH,

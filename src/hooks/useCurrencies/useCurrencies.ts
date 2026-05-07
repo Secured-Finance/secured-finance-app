@@ -1,43 +1,40 @@
 import { useQuery } from '@tanstack/react-query';
-import {
-    CurrencySymbol,
-    currencyMap,
-    getDelistedCurrencies,
-    hexToCurrencySymbol,
-    toCurrencySymbol,
-} from 'src/utils';
+import { CurrencySymbol, currencyMap, hexToCurrencySymbol } from 'src/utils';
 import { QueryKeys } from '../queries';
 import useSF from '../useSecuredFinance';
 
-export const useCurrencies = (showAll = false, chainId?: number) => {
+export const useCurrencies = (
+    showAll = false,
+    chainId?: number,
+    address?: string
+) => {
     const securedFinance = useSF();
+
     return useQuery({
         queryKey: [
             QueryKeys.CURRENCIES,
             securedFinance?.config.chain.id,
             chainId,
+            address,
         ],
         queryFn: async () => {
-            const currencies = await securedFinance?.getCurrencies(chainId);
-            return currencies ?? [];
+            const [currenciesResult, usedCurrenciesResult] = await Promise.all([
+                securedFinance?.getCurrencies(chainId),
+                address
+                    ? securedFinance?.tokenVault.getUsedCurrencies(address)
+                    : Promise.resolve([]),
+            ]);
+
+            return Array.from(
+                new Set([
+                    ...(currenciesResult ?? []),
+                    ...(usedCurrenciesResult ?? []),
+                ])
+            );
         },
         select: currencies => {
-            const activeCurrencies = currencies
+            return currencies
                 .map(hexToCurrencySymbol)
-                .filter((ccy): ccy is CurrencySymbol => ccy !== undefined);
-
-            const delistedCurrencies = getDelistedCurrencies(
-                chainId ?? securedFinance?.config.chain.id
-            )
-                .map(toCurrencySymbol)
-                .filter((ccy): ccy is CurrencySymbol => ccy !== undefined);
-
-            // Merge and remove duplicates
-            const allCurrencies = Array.from(
-                new Set([...activeCurrencies, ...delistedCurrencies])
-            );
-
-            return allCurrencies
                 .filter(
                     (ccy): ccy is CurrencySymbol =>
                         ccy !== undefined &&
