@@ -1,14 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/store/types';
 import { CurrencySymbol, currencyMap, hexToCurrencySymbol } from 'src/utils';
 import { QueryKeys } from '../queries';
 import useSF from '../useSecuredFinance';
 
-export const useCurrencies = (
-    showAll = false,
-    chainId?: number,
-    address?: string
-) => {
+export const useCurrencies = (showAll = false, chainId?: number) => {
     const securedFinance = useSF();
+    const { address } = useSelector((state: RootState) => state.wallet);
 
     return useQuery({
         queryKey: [

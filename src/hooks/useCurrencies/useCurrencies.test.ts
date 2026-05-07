@@ -11,6 +11,8 @@ import { useCurrencies } from './useCurrencies';
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
+const preloadedState = { wallet: { address: '0x1', balance: 0 } };
+
 describe('useCurrencies', () => {
     it('should return the list of currencies that have an order book in order', async () => {
         const { result } = renderHook(() => useCurrencies());
@@ -47,9 +49,9 @@ describe('useCurrencies', () => {
         mock.tokenVault.getUsedCurrencies.mockResolvedValueOnce([wfilBytes32]);
         mock.getCurrencies.mockResolvedValueOnce([ethBytes32]);
 
-        const { result } = renderHook(() =>
-            useCurrencies(true, undefined, '0x123')
-        );
+        const { result } = renderHook(() => useCurrencies(), {
+            preloadedState,
+        });
         await waitFor(() =>
             expect(result.current.data).toEqual([
                 CurrencySymbol.ETH,
@@ -62,9 +64,9 @@ describe('useCurrencies', () => {
         mock.tokenVault.getUsedCurrencies.mockResolvedValueOnce([ethBytes32]);
         mock.getCurrencies.mockResolvedValueOnce([ethBytes32]);
 
-        const { result } = renderHook(() =>
-            useCurrencies(true, undefined, '0x123')
-        );
+        const { result } = renderHook(() => useCurrencies(), {
+            preloadedState,
+        });
         await waitFor(() => {
             expect(result.current.data).toEqual([CurrencySymbol.ETH]);
             // Should only contain ETH once, not twice
@@ -79,9 +81,9 @@ describe('useCurrencies', () => {
         ]);
         mock.getCurrencies.mockResolvedValueOnce([ethBytes32]);
 
-        const { result } = renderHook(() =>
-            useCurrencies(false, undefined, '0x123')
-        );
+        const { result } = renderHook(() => useCurrencies(false), {
+            preloadedState,
+        });
         await waitFor(() => {
             // WFIL has orderBook, iFIL does not
             expect(result.current.data).toEqual([
@@ -98,9 +100,9 @@ describe('useCurrencies', () => {
         ]);
         mock.getCurrencies.mockResolvedValueOnce([ethBytes32]);
 
-        const { result } = renderHook(() =>
-            useCurrencies(true, undefined, '0x123')
-        );
+        const { result } = renderHook(() => useCurrencies(true), {
+            preloadedState,
+        });
         await waitFor(() => {
             expect(result.current.data).toEqual([
                 CurrencySymbol.ETH,
