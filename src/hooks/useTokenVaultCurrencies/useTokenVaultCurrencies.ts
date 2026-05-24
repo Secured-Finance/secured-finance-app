@@ -7,7 +7,7 @@ export const useTokenVaultCurrencies = (account: string | undefined) => {
     const securedFinance = useSF();
 
     return useQuery({
-        queryKey: [QueryKeys.USED_CURRENCIES_FOR_ORDERS, account],
+        queryKey: [QueryKeys.USED_CURRENCIES_TOKEN_VAULT, account],
         queryFn: async () => {
             const currencies =
                 await securedFinance?.tokenVault.getUsedCurrencies(

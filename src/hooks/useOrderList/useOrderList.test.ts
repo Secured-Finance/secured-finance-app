@@ -14,10 +14,13 @@ const usedCurrencies = [
     CurrencySymbol.USDC,
 ];
 
+const preloadedState = { wallet: { address: '0x1', balance: 0 } };
+
 describe('useOrderList', () => {
     it('should return a sorted array of activeOrders and inactiveOrders by creation date', async () => {
-        const { result } = renderHook(() =>
-            useOrderList('0x1', usedCurrencies)
+        const { result } = renderHook(
+            () => useOrderList('0x1', usedCurrencies),
+            { preloadedState }
         );
 
         const value = result.current;

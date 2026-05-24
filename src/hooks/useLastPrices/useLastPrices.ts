@@ -1,17 +1,26 @@
 import { useQuery } from '@tanstack/react-query';
 import { BigNumber as BigNumberJS } from 'bignumber.js';
+import { useSelector } from 'react-redux';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
+import { RootState } from 'src/store/types';
 import { CurrencySymbol, ZERO_BI, toCurrency } from 'src/utils';
 import { useCurrencies } from '../useCurrencies';
+import { useTokenVaultCurrencies } from '../useTokenVaultCurrencies';
 
 const DECIMALS = 8;
 
 export const useLastPrices = (chainId?: number) => {
     const securedFinance = useSF();
-    const { data: currencies, isSuccess: isCurrencySuccess } = useCurrencies(
-        true,
-        chainId
+    const { address } = useSelector((state: RootState) => state.wallet);
+    const { data: currenciesResult = [], isSuccess: isCurrencySuccess } =
+        useCurrencies(true, chainId);
+    const {
+        data: tokenVaultCurrencies = [],
+        isSuccess: isTokenVaultCurrenciesSuccess,
+    } = useTokenVaultCurrencies(address);
+    const currencies = Array.from(
+        new Set([...currenciesResult, ...tokenVaultCurrencies])
     );
 
     return useQuery({
@@ -61,6 +70,9 @@ export const useLastPrices = (chainId?: number) => {
                 [CurrencySymbol.UMINT, ZERO_BI],
                 [CurrencySymbol.ISNR, ZERO_BI],
             ] as [CurrencySymbol, bigint][],
-        enabled: !!securedFinance && isCurrencySuccess,
+        enabled:
+            !!securedFinance &&
+            isCurrencySuccess &&
+            isTokenVaultCurrenciesSuccess,
     });
 };
