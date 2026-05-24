@@ -15,10 +15,8 @@ export const useLastPrices = (chainId?: number) => {
     const { address } = useSelector((state: RootState) => state.wallet);
     const { data: currenciesResult = [], isSuccess: isCurrencySuccess } =
         useCurrencies(true, chainId);
-    const {
-        data: tokenVaultCurrencies = [],
-        isSuccess: isTokenVaultCurrenciesSuccess,
-    } = useTokenVaultCurrencies(address);
+    const { data: tokenVaultCurrencies = [] } =
+        useTokenVaultCurrencies(address);
     const currencies = Array.from(
         new Set([...currenciesResult, ...tokenVaultCurrencies])
     );
@@ -70,9 +68,6 @@ export const useLastPrices = (chainId?: number) => {
                 [CurrencySymbol.UMINT, ZERO_BI],
                 [CurrencySymbol.ISNR, ZERO_BI],
             ] as [CurrencySymbol, bigint][],
-        enabled:
-            !!securedFinance &&
-            isCurrencySuccess &&
-            isTokenVaultCurrenciesSuccess,
+        enabled: !!securedFinance && isCurrencySuccess,
     });
 };
