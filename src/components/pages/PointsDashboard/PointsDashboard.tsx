@@ -637,7 +637,7 @@ export const PointsDashboard = () => {
         <>
             <Page title='Points' name='point-dashboard'>
                 <div className='px-3 laptop:px-0'>
-                    <Alert
+                    {/* <Alert
                         title={
                             <>
                                 Earn SF Points with Your Contributions to the
@@ -646,6 +646,21 @@ export const PointsDashboard = () => {
                                 <TextLink
                                     href='https://docs.secured.finance/top/secured-finance-points-sfp'
                                     text='Secured Finance Docs'
+                                />
+                            </>
+                        }
+                        isShowCloseButton={false}
+                    /> */}
+                    <Alert
+                        title={
+                            <>
+                                The current phase of Secured Finance Points
+                                ended after April 30, 2026 (UTC). Points earned
+                                to date will be retained. Learn more in
+                                the&nbsp;
+                                <TextLink
+                                    href='https://docs.secured.finance/community/tokenomics/secured-finance-points-sfp-v2'
+                                    text='official docs'
                                 />
                             </>
                         }
