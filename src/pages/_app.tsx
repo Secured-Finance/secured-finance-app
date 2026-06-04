@@ -137,6 +137,7 @@ const config = createConfig({
             options: {
                 projectId: projectId,
                 showQrModal: false,
+                isNewChainsStale: false,
             },
         }),
         new InjectedConnector({
