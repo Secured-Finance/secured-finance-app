@@ -85,12 +85,11 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const dispatchChainError = useCallback(
         (chainId: number) => {
-            dispatch(
-                updateChainError(!getSupportedChainIds().includes(chainId))
-            );
+            const isSupportedChain = getSupportedChainIds().includes(chainId);
+            dispatch(updateChainError(!isSupportedChain));
             dispatch(updateChainId(chainId));
 
-            const isTestnet = isTestnetChain(chainId);
+            const isTestnet = isSupportedChain && isTestnetChain(chainId);
             dispatch(updateTestnetEnabled(isTestnet));
         },
         [dispatch]

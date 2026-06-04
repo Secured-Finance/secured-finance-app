@@ -158,5 +158,8 @@
   },
   "resolutions": {
     "webpack": "^5"
+  },
+  "overrides": {
+    "@walletconnect/ethereum-provider": "2.11.0-canary-up-patch"
   }
 }
