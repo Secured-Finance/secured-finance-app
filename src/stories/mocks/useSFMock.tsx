@@ -605,6 +605,8 @@ export const mockUseSF = () => {
             withdrawCollateral: jest.fn(() =>
                 Promise.resolve('0xb98bd7c7f656290hu071e52d1a56e6uyh98765e4')
             ),
+
+            getUsedCurrencies: jest.fn(() => Promise.resolve([wfilBytes32])),
         },
     };
 

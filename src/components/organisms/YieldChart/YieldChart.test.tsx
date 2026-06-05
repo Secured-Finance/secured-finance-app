@@ -8,9 +8,11 @@ const { Default, Loading } = composeStories(stories);
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
+const preloadedState = { wallet: { address: '0x1', balance: 0 } };
+
 describe('YieldChart Component', () => {
     it('should render YieldChart', async () => {
-        const { container } = render(<Default />);
+        const { container } = render(<Default />, { preloadedState });
         expect(await screen.findByText('$6.00')).toBeInTheDocument();
         expect(container).toMatchSnapshot();
     });
