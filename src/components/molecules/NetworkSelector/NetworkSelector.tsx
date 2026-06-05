@@ -103,11 +103,15 @@ export const NetworkSelector = ({ networkName }: { networkName: string }) => {
             if (!activeConnector) {
                 return;
             }
-            await activeConnector.switchChain?.(id);
-            router.push({
-                pathname: router.pathname,
-                query: undefined,
-            });
+            try {
+                await activeConnector.switchChain?.(id);
+                router.push({
+                    pathname: router.pathname,
+                    query: undefined,
+                });
+            } catch (error) {
+                console.error('Failed to switch chain:', error);
+            }
         },
         [activeConnector, chainList, router]
     );

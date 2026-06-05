@@ -85,12 +85,11 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const dispatchChainError = useCallback(
         (chainId: number) => {
-            dispatch(
-                updateChainError(!getSupportedChainIds().includes(chainId))
-            );
+            const isSupportedChain = getSupportedChainIds().includes(chainId);
+            dispatch(updateChainError(!isSupportedChain));
             dispatch(updateChainId(chainId));
 
-            const isTestnet = isTestnetChain(chainId);
+            const isTestnet = isSupportedChain && isTestnetChain(chainId);
             dispatch(updateTestnetEnabled(isTestnet));
         },
         [dispatch]
@@ -107,7 +106,9 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
     );
 
     useEffect(() => {
-        // this is required to get the chainId on initial page load
+        // Read the injected provider's chain once on mount to initialize Redux state.
+        // This must NOT re-run when handleChainChanged changes — that would overwrite the
+        // WalletConnect chain with whatever window.ethereum (MetaMask) is currently on.
         const fetchChainId = async () => {
             if (window.ethereum) {
                 const chainId = await (window.ethereum as any).request({
@@ -118,6 +119,10 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
             }
         };
         fetchChainId();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
         (window.ethereum as any)?.on('chainChanged', handleChainChanged);
         return () => {
             (window.ethereum as any)?.removeListener(
@@ -125,7 +130,7 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
                 handleChainChanged
             );
         };
-    }, [dispatchChainError, handleChainChanged, dispatch]);
+    }, [handleChainChanged]);
 
     useEffect(() => {
         if (chain) {
@@ -251,7 +256,9 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
             );
         } else if (getSupportedChainIds().includes(selectedChainId)) {
             if (activeConnector) {
-                activeConnector.switchChain?.(selectedChainId);
+                activeConnector.switchChain?.(selectedChainId)?.catch(error => {
+                    console.error('Failed to switch chain:', error);
+                });
             } else {
                 open();
             }
