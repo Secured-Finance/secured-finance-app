@@ -490,6 +490,12 @@ const QuestList = ({ chainId }: { chainId: number }) => {
                                 ?.switchChain?.(Number(questChainId))
                                 .then(() => {
                                     setTimeout(() => call(), 500);
+                                })
+                                .catch(error => {
+                                    console.error(
+                                        'Failed to switch chain:',
+                                        error
+                                    );
                                 });
                         } else {
                             call();
