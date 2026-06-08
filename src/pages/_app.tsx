@@ -139,7 +139,7 @@ const createTransport = (chain: Chain): Transport => {
 const metadata = {
     name: 'Secured Finance',
     description: 'DeFi Lending Platform | Secured Finance',
-    url: 'http://localhost:3000', // origin must match your domain & subdomain
+    url: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000', // origin must match your domain & subdomain
     icons: ['https://avatars.githubusercontent.com/u/37784886'],
 };
 
