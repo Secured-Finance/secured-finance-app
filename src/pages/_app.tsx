@@ -112,6 +112,7 @@ const createTransport = (chain: Chain): Transport => {
             421614: `https://arb-sepolia.g.alchemy.com/v2/${alchemyKey}`,
             43114: `https://avax-mainnet.g.alchemy.com/v2/${alchemyKey}`,
             43113: `https://avax-fuji.g.alchemy.com/v2/${alchemyKey}`,
+            1101: `https://polygonzkevm-mainnet.g.alchemy.com/v2/${alchemyKey}`,
         };
         if (alchemyUrls[chain.id]) {
             transports.push(http(alchemyUrls[chain.id]));
