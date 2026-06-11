@@ -1,15 +1,19 @@
 import { useMemo } from 'react';
-import { OrderBookEntry, sortOrders, useOrderbook } from 'src/hooks';
+import { OrderBook, OrderBookEntry, sortOrders, useOrderbook } from 'src/hooks';
 import { ZERO_BI } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 
 export type AggregationFactorType = 1 | 10 | 100 | 1000;
 
-export const usePrepareOrderbookData = <
-    T extends keyof NonNullable<ReturnType<typeof useOrderbook>[0]['data']>
->(
+interface OrderbookData {
+    borrowOrderbook: OrderBook;
+    lendOrderbook: OrderBook;
+}
+type OrderbookKey = keyof OrderbookData;
+
+export const usePrepareOrderbookData = (
     data: ReturnType<typeof useOrderbook>[0]['data'],
-    orderbookType: T,
+    orderbookType: OrderbookKey,
     limit: number,
     aggregationFactor: AggregationFactorType
 ) => {

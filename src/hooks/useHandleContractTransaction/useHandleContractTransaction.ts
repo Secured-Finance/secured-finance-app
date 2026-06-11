@@ -13,7 +13,7 @@ export const useHandleContractTransaction = () => {
 
     const handleContractTransaction = useCallback(
         async (tx: Hex | undefined) => {
-            if (!tx) {
+            if (!tx || !publicClient) {
                 return false;
             }
             const contractReceipt =

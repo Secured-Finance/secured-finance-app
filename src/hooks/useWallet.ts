@@ -9,7 +9,6 @@ export const useWalletStore = () => {
     const { address, isConnected } = useAccount();
     const { data: balance } = useBalance({
         address,
-        watch: true,
     });
     const block = useSelector(
         (state: RootState) => state.blockchain.latestBlock

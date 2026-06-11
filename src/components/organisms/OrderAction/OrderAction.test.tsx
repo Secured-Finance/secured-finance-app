@@ -159,7 +159,7 @@ describe('OrderAction component', () => {
         expect(
             screen.queryByTestId('place-order-button')
         ).not.toBeInTheDocument();
-        const button = screen.getByTestId('deposit-collateral-button');
+        const button = await screen.findByTestId('deposit-collateral-button');
         await waitFor(() => expect(button).toBeEnabled());
         fireEvent.click(button);
         expect(
