@@ -197,7 +197,7 @@ describe('PlaceOrder component', () => {
                     ).toBeInTheDocument();
                 });
 
-                it('should not display a warning if the user places a lend order', () => {
+                it('should not display a warning if the user places a lend order', async () => {
                     render(
                         <UnderMinimumCollateralThreshold
                             maturity={dec24Fixture}
@@ -207,7 +207,11 @@ describe('PlaceOrder component', () => {
                             }
                         />
                     );
-                    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+                    await waitFor(() => {
+                        expect(
+                            screen.queryByRole('alert')
+                        ).not.toBeInTheDocument();
+                    });
                 });
             });
 
@@ -235,7 +239,7 @@ describe('PlaceOrder component', () => {
                         ).toBeInTheDocument();
                     });
 
-                    it('should not display a warning if the user places a lend order', () => {
+                    it('should not display a warning if the user places a lend order', async () => {
                         render(
                             <UnderMinimumCollateralThreshold
                                 side={OrderSide.LEND}
@@ -244,9 +248,11 @@ describe('PlaceOrder component', () => {
                                 }
                             />
                         );
-                        expect(
-                            screen.queryByRole('alert')
-                        ).not.toBeInTheDocument();
+                        await waitFor(() => {
+                            expect(
+                                screen.queryByRole('alert')
+                            ).not.toBeInTheDocument();
+                        });
                     });
                 });
             });
@@ -270,14 +276,19 @@ describe('PlaceOrder component', () => {
         });
     });
 
-    it('should show Confirm Borrow as  title when side is BORROW', () => {
+    it('should show Confirm Borrow as  title when side is BORROW', async () => {
         render(<Default />);
-        expect(screen.getByText('Confirm Borrow')).toBeInTheDocument();
+
+        await waitFor(() => {
+            expect(screen.getByText('Confirm Borrow')).toBeInTheDocument();
+        });
     });
 
-    it('should show Confirm Lend as  title when side is LEND', () => {
+    it('should show Confirm Lend as  title when side is LEND', async () => {
         render(<Default side={OrderSide.LEND} />);
-        expect(screen.getByText('Confirm Lend')).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.getByText('Confirm Lend')).toBeInTheDocument();
+        });
     });
 
     it('should call onClose and emit cancel button event when CANCEL_BUTTON is clicked', () => {

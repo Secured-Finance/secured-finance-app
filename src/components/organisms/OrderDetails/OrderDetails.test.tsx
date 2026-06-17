@@ -116,6 +116,6 @@ describe('OrderDetails Component', () => {
 
     it('should display bond price as Market if orderType is Market', async () => {
         render(<MarketOrder />);
-        expect(screen.getByText('Market')).toBeInTheDocument();
+        expect(await screen.findByText('Market')).toBeInTheDocument();
     });
 });

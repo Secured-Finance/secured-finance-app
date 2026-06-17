@@ -19,6 +19,8 @@ module.exports = withBundleAnalyzer({
         esmExternals: false,
     },
 
+    transpilePackages: ['wagmi', '@wagmi/core', '@web3modal/wagmi'],
+
     webpack: (config, options) => webpack.webpackOverride(config),
 
     async headers() {
