@@ -166,14 +166,12 @@ describe('AdvancedLendingOrderCard Component', () => {
     it('place order button should be disabled if amount is zero', async () => {
         render(<Default />, { preloadedState });
 
-        await waitFor(() => {
-            const button = screen.getByTestId('place-order-button');
-            expect(button).toBeInTheDocument();
-            expect(screen.getByText('Place Order')).toBeInTheDocument();
-            const input = screen.getByRole('textbox', { name: 'Size' });
-            fireEvent.change(input, { target: { value: '0' } });
-            expect(button).toBeDisabled();
-        });
+        const button = await screen.findByTestId('place-order-button');
+        expect(button).toBeInTheDocument();
+        expect(screen.getByText('Place Order')).toBeInTheDocument();
+        const input = screen.getByRole('textbox', { name: 'Size' });
+        fireEvent.change(input, { target: { value: '0' } });
+        await waitFor(() => expect(button).toBeDisabled());
     });
 
     // skipped because walletSelector is removed
@@ -208,12 +206,10 @@ describe('AdvancedLendingOrderCard Component', () => {
         });
 
         const slider = screen.getByRole('slider');
-        const input = screen.getByRole('textbox', { name: 'Size' });
+        const input = await screen.findByRole('textbox', { name: 'Size' });
 
-        await waitFor(() => {
-            fireEvent.change(slider, { target: { value: 50 } });
-            expect(input).toHaveValue('2,601.575');
-        });
+        fireEvent.change(slider, { target: { value: 50 } });
+        await waitFor(() => expect(input).toHaveValue('2,601.575'));
 
         expect(track).toHaveBeenCalledWith(InteractionEvents.SLIDER, {
             [InteractionProperties.SLIDER_VALUE]: 50,
@@ -261,23 +257,21 @@ describe('AdvancedLendingOrderCard Component', () => {
     });
 
     it('slider should move according to source balance', async () => {
-        await waitFor(() =>
-            render(<Default />, {
-                preloadedState: {
-                    ...preloadedState,
-                    landingOrderForm: {
-                        ...preloadedState.landingOrderForm,
-                        currency: CurrencySymbol.WFIL,
-                        side: OrderSide.LEND,
-                        amount: '500000000000000000000',
-                    },
+        render(<Default />, {
+            preloadedState: {
+                ...preloadedState,
+                landingOrderForm: {
+                    ...preloadedState.landingOrderForm,
+                    currency: CurrencySymbol.WFIL,
+                    side: OrderSide.LEND,
+                    amount: '500000000000000000000',
                 },
-            })
-        );
+            },
+        });
 
         expect(await screen.findByText('10,000 WFIL')).toBeInTheDocument();
         const slider = screen.getByRole('slider');
-        const input = screen.getByRole('textbox', { name: 'Size' });
+        const input = await screen.findByRole('textbox', { name: 'Size' });
 
         expect(input).toHaveValue('500');
         fireEvent.change(slider, { target: { value: 100 } });
@@ -303,23 +297,21 @@ describe('AdvancedLendingOrderCard Component', () => {
     });
 
     it('amount should be set to max wallet amount if input amount is greater than wallet amount and wallet source is changed', async () => {
-        await waitFor(() =>
-            render(<Default />, {
-                preloadedState: {
-                    ...preloadedState,
-                    landingOrderForm: {
-                        ...preloadedState.landingOrderForm,
-                        currency: CurrencySymbol.WFIL,
-                        side: OrderSide.LEND,
-                        amount: '500000000000000000000',
-                    },
+        render(<Default />, {
+            preloadedState: {
+                ...preloadedState,
+                landingOrderForm: {
+                    ...preloadedState.landingOrderForm,
+                    currency: CurrencySymbol.WFIL,
+                    side: OrderSide.LEND,
+                    amount: '500000000000000000000',
                 },
-            })
-        );
+            },
+        });
 
         expect(await screen.findByText('10,000 WFIL')).toBeInTheDocument();
         const slider = screen.getByRole('slider');
-        const input = screen.getByRole('textbox', { name: 'Size' });
+        const input = await screen.findByRole('textbox', { name: 'Size' });
 
         expect(input).toHaveValue('500');
         fireEvent.change(slider, { target: { value: 100 } });
@@ -350,27 +342,27 @@ describe('AdvancedLendingOrderCard Component', () => {
                 },
             },
         });
-        await waitFor(() => {
-            const input = screen.getByRole('textbox', { name: 'Size' });
-            fireEvent.change(input, { target: { value: '200' } });
-            const button = screen.getByTestId('place-order-button');
-            expect(button).not.toBeDisabled();
-        });
+        const input = await screen.findByRole('textbox', { name: 'Size' });
+        fireEvent.change(input, { target: { value: '200' } });
+        await waitFor(() =>
+            expect(screen.getByTestId('place-order-button')).not.toBeDisabled()
+        );
 
-        await waitFor(async () => {
-            const input = screen.getByRole('textbox', { name: 'Size' });
-            fireEvent.change(input, { target: { value: '20000' } });
-            const placeOrderButton = screen.queryByTestId('place-order-button');
-            expect(placeOrderButton).not.toBeInTheDocument();
-            const depositButton = screen.getByTestId(
-                'deposit-collateral-button'
-            );
-            expect(depositButton).toBeInTheDocument();
-            fireEvent.click(depositButton);
+        await waitFor(() => {
+            fireEvent.change(screen.getByRole('textbox', { name: 'Size' }), {
+                target: { value: '20000' },
+            });
             expect(
-                screen.getByRole('dialog', { name: 'Deposit' })
+                screen.queryByTestId('place-order-button')
+            ).not.toBeInTheDocument();
+            expect(
+                screen.getByTestId('deposit-collateral-button')
             ).toBeInTheDocument();
         });
+        fireEvent.click(screen.getByTestId('deposit-collateral-button'));
+        expect(
+            screen.getByRole('dialog', { name: 'Deposit' })
+        ).toBeInTheDocument();
     });
 
     it('should not disable button in Borrow orders when input is less than available to borrow amount', async () => {
@@ -387,10 +379,8 @@ describe('AdvancedLendingOrderCard Component', () => {
                 },
             },
         });
-        await waitFor(() => {
-            const input = screen.getByRole('textbox', { name: 'Size' });
-            fireEvent.change(input, { target: { value: '100' } });
-        });
+        const input = await screen.findByRole('textbox', { name: 'Size' });
+        fireEvent.change(input, { target: { value: '100' } });
         await waitFor(() => {
             expect(screen.getByText('867.19 WFIL')).toBeInTheDocument();
         });
@@ -430,10 +420,12 @@ describe('AdvancedLendingOrderCard Component', () => {
                 },
             },
         });
-        expect(
-            screen.queryByText('Available to Borrow')
-        ).not.toBeInTheDocument();
-        expect(screen.queryByText('Available to Lend')).toBeInTheDocument();
+        await waitFor(() => {
+            expect(
+                screen.queryByText('Available to Borrow')
+            ).not.toBeInTheDocument();
+            expect(screen.queryByText('Available to Lend')).toBeInTheDocument();
+        });
     });
 
     it('should disable elements and hide order inputs when wallet is not connected', async () => {
@@ -569,6 +561,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                 expect(
                     await screen.findByText('4,000 USDC')
                 ).toBeInTheDocument();
+                await screen.findByLabelText('Price');
                 changeInputValue('Price', '0');
                 changeInputValue('Size', '10');
                 await assertPlaceOrderButtonIsDisabled();
@@ -658,6 +651,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                 expect(
                     await screen.findByText('4,000 USDC')
                 ).toBeInTheDocument();
+                await screen.findByLabelText('Size');
                 changeInputValue('Size', '10');
                 await assertPlaceOrderButtonIsEnabled();
                 assertInvalidBondPriceErrorIsNotShown();
@@ -705,7 +699,7 @@ describe('AdvancedLendingOrderCard Component', () => {
             await waitFor(() => assertBondPriceInputValue('96.9'));
         });
 
-        it('should show the bond price as undefined when market price and unit price are undefined', () => {
+        it('should show the bond price as undefined when market price and unit price are undefined', async () => {
             render(<Default marketPrice={undefined} />, {
                 preloadedState: {
                     ...preloadedState,
@@ -717,10 +711,10 @@ describe('AdvancedLendingOrderCard Component', () => {
                 },
             });
 
-            assertBondPriceInputValue('');
+            await waitFor(() => assertBondPriceInputValue(''));
         });
 
-        it('should show the unit price when market price and unit price are defined', () => {
+        it('should show the unit price when market price and unit price are defined', async () => {
             render(<Default marketPrice={9600} />, {
                 preloadedState: {
                     ...preloadedState,
@@ -731,7 +725,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                     },
                 },
             });
-            assertBondPriceInputValue('92');
+            await waitFor(() => assertBondPriceInputValue('92'));
         });
 
         it('should be reset to Market display when changing order type from LIMIT to MARKET', async () => {
@@ -745,7 +739,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                     },
                 },
             });
-            assertBondPriceInputValue('92');
+            await waitFor(() => assertBondPriceInputValue('92'));
             expect(screen.getAllByText('Market')).toHaveLength(1);
 
             const marketButton = screen.getByRole('radio', {
@@ -771,18 +765,19 @@ describe('AdvancedLendingOrderCard Component', () => {
             });
 
             expect(await screen.findByText('6.35%')).toBeInTheDocument();
+            await screen.findByLabelText('Price');
             changeInputValue('Price', '94');
             expect(screen.getByText('7.70%')).toBeInTheDocument();
         });
 
         it('should not reset user input value of bond price when switching order side', async () => {
             render(<Default marketPrice={9600} />, { preloadedState });
-            changeInputValue('Price', '20');
-            assertBondPriceInputValue('20');
             await waitFor(() => {
-                fireEvent.click(screen.getByText('Lend/Buy'));
+                changeInputValue('Price', '20');
+                assertBondPriceInputValue('20');
             });
-            assertBondPriceInputValue('20');
+            fireEvent.click(screen.getByText('Lend/Buy'));
+            await waitFor(() => assertBondPriceInputValue('20'));
         });
     });
 
@@ -795,14 +790,17 @@ describe('AdvancedLendingOrderCard Component', () => {
                 [ButtonProperties.ORDER_TYPE]: OrderType.LIMIT,
             });
             fireEvent.click(screen.getByText('Lend/Buy'));
-            expect(track).toHaveBeenCalledWith(ButtonEvents.ORDER_SIDE, {
-                [ButtonProperties.ORDER_SIDE]: 'Lend/Buy',
+            await waitFor(() => {
+                expect(track).toHaveBeenCalledWith(ButtonEvents.ORDER_SIDE, {
+                    [ButtonProperties.ORDER_SIDE]: 'Lend/Buy',
+                });
             });
         });
 
-        it('should emit BOND_PRICE event when bond price is changed', () => {
+        it('should emit BOND_PRICE event when bond price is changed', async () => {
             const track = jest.spyOn(analytics, 'track');
             render(<Default marketPrice={9600} />, { preloadedState });
+            await screen.findByLabelText('Price');
             changeInputValue('Price', '20');
             expect(track).toHaveBeenCalledWith(InteractionEvents.BOND_PRICE, {
                 [InteractionProperties.BOND_PRICE]: '20',

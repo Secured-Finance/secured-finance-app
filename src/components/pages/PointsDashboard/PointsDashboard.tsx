@@ -154,7 +154,7 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
         fetchPolicy: 'no-cache',
         ...POINT_API_QUERY_OPTIONS,
     });
-    const { isLoading, signMessageAsync, reset } = useSignMessage();
+    const { isPending, signMessageAsync, reset } = useSignMessage();
     const { address, isConnected } = useAccount();
     const { open } = useWeb3Modal();
 
@@ -318,7 +318,7 @@ const UserPointInfo = ({ chainId }: { chainId: number }) => {
 
                                     reset();
                                 }}
-                                disabled={isLoading || loading}
+                                disabled={isPending || loading}
                             >
                                 {!isConnected ? 'Connect Wallet' : 'Join'}
                             </Button>
@@ -486,17 +486,22 @@ const QuestList = ({ chainId }: { chainId: number }) => {
                     }
                     onClick={() => {
                         if (questChainId !== chainId) {
-                            activeConnector
-                                ?.switchChain?.(Number(questChainId))
-                                .then(() => {
-                                    setTimeout(() => call(), 500);
-                                })
-                                .catch(error => {
-                                    console.error(
-                                        'Failed to switch chain:',
-                                        error
-                                    );
+                            const switchPromise =
+                                activeConnector?.switchChain?.({
+                                    chainId: Number(questChainId),
                                 });
+                            if (switchPromise) {
+                                switchPromise
+                                    .then(() => {
+                                        setTimeout(() => call(), 500);
+                                    })
+                                    .catch(error => {
+                                        console.error(
+                                            'Failed to switch chain:',
+                                            error
+                                        );
+                                    });
+                            }
                         } else {
                             call();
                         }
