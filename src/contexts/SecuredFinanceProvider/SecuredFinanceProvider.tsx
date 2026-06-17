@@ -251,11 +251,14 @@ const SecuredFinanceProvider: React.FC<{ children: React.ReactNode }> = ({
             );
         } else if (getSupportedChainIds().includes(selectedChainId)) {
             if (activeConnector) {
-                activeConnector
-                    .switchChain?.({ chainId: selectedChainId })
-                    .catch(error => {
+                const switchPromise = activeConnector.switchChain?.({
+                    chainId: selectedChainId,
+                });
+                if (switchPromise) {
+                    switchPromise.catch(error => {
                         console.error('Failed to switch chain:', error);
                     });
+                }
             } else {
                 open();
             }

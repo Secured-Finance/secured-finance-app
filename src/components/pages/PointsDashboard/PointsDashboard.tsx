@@ -486,19 +486,22 @@ const QuestList = ({ chainId }: { chainId: number }) => {
                     }
                     onClick={() => {
                         if (questChainId !== chainId) {
-                            activeConnector
-                                ?.switchChain?.({
+                            const switchPromise =
+                                activeConnector?.switchChain?.({
                                     chainId: Number(questChainId),
-                                })
-                                .then(() => {
-                                    setTimeout(() => call(), 500);
-                                })
-                                .catch(error => {
-                                    console.error(
-                                        'Failed to switch chain:',
-                                        error
-                                    );
                                 });
+                            if (switchPromise) {
+                                switchPromise
+                                    .then(() => {
+                                        setTimeout(() => call(), 500);
+                                    })
+                                    .catch(error => {
+                                        console.error(
+                                            'Failed to switch chain:',
+                                            error
+                                        );
+                                    });
+                            }
                         } else {
                             call();
                         }
