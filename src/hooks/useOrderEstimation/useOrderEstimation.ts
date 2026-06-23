@@ -6,11 +6,13 @@ import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
+import { OrderType } from 'src/types';
 import { ZERO_BI, toCurrency } from 'src/utils';
 
 export const useOrderEstimation = (
     account: string | undefined,
-    skip = false
+    skip = false,
+    marketPrice?: number
 ) => {
     const securedFinance = useSF();
 
@@ -20,6 +22,7 @@ export const useOrderEstimation = (
         maturity,
         amount,
         unitPrice,
+        orderType,
         isBorrowedCollateral,
         sourceAccount,
     } = useSelector((state: RootState) =>
@@ -36,6 +39,13 @@ export const useOrderEstimation = (
             ? amount
             : ZERO_BI;
 
+    const unitPriceForEstimation = useMemo(() => {
+        if (orderType === OrderType.MARKET) {
+            return marketPrice ?? 0;
+        }
+        return (unitPrice ?? 0) * 100.0;
+    }, [orderType, marketPrice, unitPrice]);
+
     return useQuery({
         queryKey: [
             QueryKeys.ORDER_ESTIMATE,
@@ -44,7 +54,7 @@ export const useOrderEstimation = (
             account,
             side,
             amount,
-            unitPrice,
+            unitPriceForEstimation,
             additionalDepositAmount,
             ignoreBorrowedAmount,
         ],
@@ -55,7 +65,7 @@ export const useOrderEstimation = (
                 account ?? '',
                 side,
                 amount,
-                (unitPrice ?? 0) * 100.0,
+                unitPriceForEstimation,
                 additionalDepositAmount,
                 ignoreBorrowedAmount
             );

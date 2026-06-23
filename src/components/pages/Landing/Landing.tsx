@@ -172,6 +172,7 @@ export const Landing = ({ view = 'Advanced' }: { view?: ViewType }) => {
                     <AdvancedLending
                         collateralBook={collateralBook}
                         maturitiesOptionList={nonMaturedMarketOptionList}
+                        marketPrice={marketPrice}
                         delistedCurrencySet={delistedCurrencySet}
                         setIsItayose={setIsItayosePeriod}
                         setMaximumOpenOrderLimit={setMaximumOpenOrderLimit}

@@ -27,6 +27,7 @@ export default {
         collateralBook: emptyCollateralBook,
         maturitiesOptionList: maturityOptions,
         rates: yieldCurveRates,
+        marketPrice: 9917,
         delistedCurrencySet: defaultDelistedStatusSet,
         setIsItayose: () => {},
         setMaximumOpenOrderLimit: () => {},

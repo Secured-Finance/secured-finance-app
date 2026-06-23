@@ -20,6 +20,7 @@ import { useAccount } from 'wagmi';
 
 interface AdvancedLendingEstimationFieldsProps {
     assetPrice: number;
+    markPrice?: number;
     marketPrice?: number;
     calculationDate?: number;
     hasLendOpenOrders?: boolean;
@@ -28,6 +29,7 @@ interface AdvancedLendingEstimationFieldsProps {
 
 export const AdvancedLendingEstimationFields = ({
     assetPrice,
+    markPrice,
     marketPrice,
     calculationDate,
     hasLendOpenOrders,
@@ -51,7 +53,8 @@ export const AdvancedLendingEstimationFields = ({
 
     const { data: orderEstimationInfo } = useOrderEstimation(
         address,
-        orderType === OrderType.LIMIT
+        orderType === OrderType.LIMIT,
+        marketPrice
     );
 
     const orderEstimationAmount = useMemo(() => {
@@ -98,9 +101,9 @@ export const AdvancedLendingEstimationFields = ({
                 calculationDate
             );
         }
-        if (!marketPrice) return LoanValue.ZERO;
-        return LoanValue.fromPrice(marketPrice, maturity, calculationDate);
-    }, [maturity, unitPrice, unitPriceExists, marketPrice, calculationDate]);
+        if (!markPrice) return LoanValue.ZERO;
+        return LoanValue.fromPrice(markPrice, maturity, calculationDate);
+    }, [maturity, unitPrice, unitPriceExists, markPrice, calculationDate]);
 
     const estimatedLoanValue = useMemo(() => {
         if (
@@ -135,9 +138,9 @@ export const AdvancedLendingEstimationFields = ({
 
         // Priority 2: Fall back to market price
         if (!isConnected) return undefined;
-        if (!marketPrice) return undefined;
-        return (marketPrice / 100.0).toString();
-    }, [maturity, unitPrice, unitPriceExists, marketPrice, isConnected]);
+        if (!markPrice) return undefined;
+        return (markPrice / 100.0).toString();
+    }, [maturity, unitPrice, unitPriceExists, markPrice, isConnected]);
 
     const showDashes = useMemo(() => {
         const isEmptyAmount = amount <= 0;
