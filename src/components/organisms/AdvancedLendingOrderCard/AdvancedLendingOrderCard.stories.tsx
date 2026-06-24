@@ -10,7 +10,6 @@ export default {
     component: AdvancedLendingOrderCard,
     args: {
         collateralBook: collateralBook37,
-        marketPrice: 9917,
         markPrice: 9917,
         delistedCurrencySet: defaultDelistedStatusSet,
         isItayose: false,

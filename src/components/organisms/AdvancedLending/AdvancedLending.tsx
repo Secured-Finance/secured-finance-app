@@ -132,7 +132,6 @@ const useTradeHistoryDetails = (
 export const AdvancedLending = ({
     collateralBook,
     maturitiesOptionList,
-    marketPrice,
     delistedCurrencySet,
     setIsItayose,
     setMaximumOpenOrderLimit,
@@ -140,7 +139,6 @@ export const AdvancedLending = ({
 }: {
     collateralBook: CollateralBook;
     maturitiesOptionList: MaturityOptionList;
-    marketPrice: number | undefined;
     delistedCurrencySet: Set<CurrencySymbol>;
     setIsItayose: (value: boolean) => void;
     setMaximumOpenOrderLimit: (value: boolean) => void;
@@ -783,7 +781,6 @@ export const AdvancedLending = ({
                     <AdvancedLendingOrderCard
                         collateralBook={collateralBook}
                         markPrice={currentMarket?.value.price}
-                        marketPrice={marketPrice}
                         delistedCurrencySet={delistedCurrencySet}
                         isItayose={isItayosePeriod}
                         calculationDate={

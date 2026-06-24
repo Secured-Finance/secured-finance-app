@@ -21,7 +21,6 @@ import { useAccount } from 'wagmi';
 interface AdvancedLendingEstimationFieldsProps {
     assetPrice: number;
     markPrice?: number;
-    marketPrice?: number;
     calculationDate?: number;
     hasLendOpenOrders?: boolean;
     hasBorrowOpenOrders?: boolean;
@@ -30,7 +29,6 @@ interface AdvancedLendingEstimationFieldsProps {
 export const AdvancedLendingEstimationFields = ({
     assetPrice,
     markPrice,
-    marketPrice,
     calculationDate,
     hasLendOpenOrders,
     hasBorrowOpenOrders,
@@ -53,8 +51,7 @@ export const AdvancedLendingEstimationFields = ({
 
     const { data: orderEstimationInfo } = useOrderEstimation(
         address,
-        orderType === OrderType.LIMIT,
-        marketPrice
+        orderType === OrderType.LIMIT
     );
 
     const orderEstimationAmount = useMemo(() => {

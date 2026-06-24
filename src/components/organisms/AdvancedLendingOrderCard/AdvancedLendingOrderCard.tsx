@@ -24,6 +24,7 @@ import {
     useBreakpoint,
     useLastPrices,
     useMarket,
+    useOrderEstimation,
     useOrderFee,
 } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
@@ -47,6 +48,7 @@ import {
     currencyMap,
     divide,
     generateWalletSourceInformation,
+    multiply,
     ordinaryFormat,
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
@@ -70,7 +72,6 @@ export function AdvancedLendingOrderCard({
     calculationDate,
     preOrderPosition = 'none',
     markPrice,
-    marketPrice,
     delistedCurrencySet,
 }: {
     collateralBook: CollateralBook;
@@ -78,7 +79,6 @@ export function AdvancedLendingOrderCard({
     calculationDate?: number;
     preOrderPosition?: 'borrow' | 'lend' | 'none';
     markPrice?: number;
-    marketPrice?: number;
     delistedCurrencySet: Set<CurrencySymbol>;
 }): JSX.Element {
     const dispatch = useDispatch();
@@ -169,12 +169,36 @@ export function AdvancedLendingOrderCard({
         maturity,
     ]);
 
+    const { data: orderEstimationInfo } = useOrderEstimation(
+        address,
+        orderType === OrderType.LIMIT
+    );
+
+    const estimatedLoanValue = useMemo(() => {
+        if (
+            !orderEstimationInfo ||
+            !maturity ||
+            !orderEstimationInfo.filledAmount ||
+            !orderEstimationInfo.filledAmountInFV
+        )
+            return LoanValue.ZERO;
+        return LoanValue.fromPrice(
+            divide(
+                multiply(
+                    orderEstimationInfo.filledAmount,
+                    10000.0,
+                    currencyMap[currency].roundingDecimal
+                ),
+                orderEstimationInfo.filledAmountInFV,
+                currencyMap[currency].roundingDecimal
+            ),
+            maturity,
+            calculationDate
+        );
+    }, [orderEstimationInfo, currency, maturity, calculationDate]);
+
     const loanValue = useMemo(() => {
         if (!maturity) return LoanValue.ZERO;
-        if (orderType === OrderType.MARKET) {
-            if (!marketPrice) return LoanValue.ZERO;
-            return LoanValue.fromPrice(marketPrice, maturity, calculationDate);
-        }
         if (unitPrice !== undefined && unitPriceExists) {
             return LoanValue.fromPrice(
                 unitPrice * 100.0,
@@ -184,15 +208,7 @@ export function AdvancedLendingOrderCard({
         }
         if (!markPrice) return LoanValue.ZERO;
         return LoanValue.fromPrice(markPrice, maturity, calculationDate);
-    }, [
-        maturity,
-        orderType,
-        marketPrice,
-        unitPrice,
-        unitPriceExists,
-        markPrice,
-        calculationDate,
-    ]);
+    }, [maturity, unitPrice, unitPriceExists, markPrice, calculationDate]);
 
     const collateralUsagePercent = useMemo(() => {
         return collateralBook.coverage / 100.0;
@@ -472,7 +488,6 @@ export function AdvancedLendingOrderCard({
                     <div className='mb-2.5 flex flex-col gap-1 laptop:mb-0'>
                         <AdvancedLendingEstimationFields
                             markPrice={markPrice}
-                            marketPrice={marketPrice}
                             calculationDate={calculationDate}
                             assetPrice={price}
                             hasLendOpenOrders={
@@ -488,7 +503,11 @@ export function AdvancedLendingOrderCard({
                         />
                     </div>
                     <OrderAction
-                        loanValue={loanValue}
+                        loanValue={
+                            orderType === OrderType.LIMIT
+                                ? loanValue
+                                : estimatedLoanValue
+                        }
                         collateralBook={collateralBook}
                         validation={shouldDisableActionButton}
                         isCurrencyDelisted={delistedCurrencySet.has(currency)}

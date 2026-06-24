@@ -25,7 +25,6 @@ export default {
     args: {
         assetPrice: 3.56,
         markPrice: lastTradePrice,
-        marketPrice: lastTradePrice,
         calculationDate: undefined,
         hasLendOpenOrders: true,
         hasBorrowOpenOrders: true,
@@ -81,7 +80,6 @@ export const MarketOrder = MarketOrderTemplate.bind({});
 MarketOrder.args = {
     assetPrice: 3.56,
     markPrice: lastTradePrice,
-    marketPrice: lastTradePrice,
     calculationDate: undefined,
     hasLendOpenOrders: true,
     hasBorrowOpenOrders: true,
@@ -109,7 +107,6 @@ export const ShowDashes = ShowDashesTemplate.bind({});
 ShowDashes.args = {
     assetPrice: 3.56,
     markPrice: lastTradePrice,
-    marketPrice: lastTradePrice,
     calculationDate: undefined,
     hasLendOpenOrders: false,
     hasBorrowOpenOrders: true,

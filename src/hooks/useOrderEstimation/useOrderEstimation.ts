@@ -11,8 +11,7 @@ import { ZERO_BI, toCurrency } from 'src/utils';
 
 export const useOrderEstimation = (
     account: string | undefined,
-    skip = false,
-    marketPrice?: number
+    skip = false
 ) => {
     const securedFinance = useSF();
 
@@ -41,10 +40,10 @@ export const useOrderEstimation = (
 
     const unitPriceForEstimation = useMemo(() => {
         if (orderType === OrderType.MARKET) {
-            return marketPrice ?? 0;
+            return 0;
         }
         return (unitPrice ?? 0) * 100.0;
-    }, [orderType, marketPrice, unitPrice]);
+    }, [orderType, unitPrice]);
 
     return useQuery({
         queryKey: [
