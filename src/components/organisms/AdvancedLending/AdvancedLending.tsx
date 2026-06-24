@@ -780,7 +780,7 @@ export const AdvancedLending = ({
                     </>
                     <AdvancedLendingOrderCard
                         collateralBook={collateralBook}
-                        marketPrice={currentMarket?.value.price}
+                        markPrice={currentMarket?.value.price}
                         delistedCurrencySet={delistedCurrencySet}
                         isItayose={isItayosePeriod}
                         calculationDate={

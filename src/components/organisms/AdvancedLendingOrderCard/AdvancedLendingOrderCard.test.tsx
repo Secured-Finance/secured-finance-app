@@ -685,7 +685,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         };
 
         it('should show the mid price when market price is defined and unit price is undefined and orderbook is available', async () => {
-            render(<Default marketPrice={9600} />, {
+            render(<Default markPrice={9600} />, {
                 preloadedState: {
                     ...preloadedState,
                     landingOrderForm: {
@@ -700,7 +700,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         });
 
         it('should show the bond price as undefined when market price and unit price are undefined', async () => {
-            render(<Default marketPrice={undefined} />, {
+            render(<Default markPrice={undefined} />, {
                 preloadedState: {
                     ...preloadedState,
                     landingOrderForm: {
@@ -715,7 +715,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         });
 
         it('should show the unit price when market price and unit price are defined', async () => {
-            render(<Default marketPrice={9600} />, {
+            render(<Default markPrice={9600} />, {
                 preloadedState: {
                     ...preloadedState,
                     landingOrderForm: {
@@ -729,7 +729,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         });
 
         it('should be reset to Market display when changing order type from LIMIT to MARKET', async () => {
-            render(<Default marketPrice={9600} />, {
+            render(<Default markPrice={9600} />, {
                 preloadedState: {
                     ...preloadedState,
                     landingOrderForm: {
@@ -754,7 +754,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         });
 
         it('should calculate the APR from the user input bond price', async () => {
-            render(<Default marketPrice={9600} />, {
+            render(<Default markPrice={9600} />, {
                 preloadedState: {
                     ...preloadedState,
                     landingOrderForm: {
@@ -771,7 +771,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         });
 
         it('should not reset user input value of bond price when switching order side', async () => {
-            render(<Default marketPrice={9600} />, { preloadedState });
+            render(<Default markPrice={9600} />, { preloadedState });
             await waitFor(() => {
                 changeInputValue('Price', '20');
                 assertBondPriceInputValue('20');
@@ -799,7 +799,7 @@ describe('AdvancedLendingOrderCard Component', () => {
 
         it('should emit BOND_PRICE event when bond price is changed', async () => {
             const track = jest.spyOn(analytics, 'track');
-            render(<Default marketPrice={9600} />, { preloadedState });
+            render(<Default markPrice={9600} />, { preloadedState });
             await screen.findByLabelText('Price');
             changeInputValue('Price', '20');
             expect(track).toHaveBeenCalledWith(InteractionEvents.BOND_PRICE, {

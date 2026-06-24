@@ -24,7 +24,7 @@ export default {
     decorators: [withWalletProvider],
     args: {
         assetPrice: 3.56,
-        marketPrice: lastTradePrice,
+        markPrice: lastTradePrice,
         calculationDate: undefined,
         hasLendOpenOrders: true,
         hasBorrowOpenOrders: true,
@@ -79,7 +79,7 @@ const MarketOrderTemplate: StoryFn<
 export const MarketOrder = MarketOrderTemplate.bind({});
 MarketOrder.args = {
     assetPrice: 3.56,
-    marketPrice: lastTradePrice,
+    markPrice: lastTradePrice,
     calculationDate: undefined,
     hasLendOpenOrders: true,
     hasBorrowOpenOrders: true,
@@ -106,7 +106,7 @@ const ShowDashesTemplate: StoryFn<
 export const ShowDashes = ShowDashesTemplate.bind({});
 ShowDashes.args = {
     assetPrice: 3.56,
-    marketPrice: lastTradePrice,
+    markPrice: lastTradePrice,
     calculationDate: undefined,
     hasLendOpenOrders: false,
     hasBorrowOpenOrders: true,

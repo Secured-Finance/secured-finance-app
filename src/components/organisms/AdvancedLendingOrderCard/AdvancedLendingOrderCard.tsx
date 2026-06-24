@@ -24,6 +24,7 @@ import {
     useBreakpoint,
     useLastPrices,
     useMarket,
+    useOrderEstimation,
     useOrderFee,
 } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
@@ -47,6 +48,7 @@ import {
     currencyMap,
     divide,
     generateWalletSourceInformation,
+    multiply,
     ordinaryFormat,
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
@@ -69,14 +71,14 @@ export function AdvancedLendingOrderCard({
     isItayose = false,
     calculationDate,
     preOrderPosition = 'none',
-    marketPrice,
+    markPrice,
     delistedCurrencySet,
 }: {
     collateralBook: CollateralBook;
     isItayose?: boolean;
     calculationDate?: number;
     preOrderPosition?: 'borrow' | 'lend' | 'none';
-    marketPrice?: number;
+    markPrice?: number;
     delistedCurrencySet: Set<CurrencySymbol>;
 }): JSX.Element {
     const dispatch = useDispatch();
@@ -145,9 +147,9 @@ export function AdvancedLendingOrderCard({
             if (midPrice !== undefined) {
                 // Priority 1: Both sides have orders → use Mid Price
                 priceToSet = midPrice.toString();
-            } else if (marketPrice) {
+            } else if (markPrice) {
                 // Priority 2: One/no sides → use Mark Price
-                priceToSet = (marketPrice / 100.0).toString();
+                priceToSet = (markPrice / 100.0).toString();
             }
 
             if (priceToSet) {
@@ -161,11 +163,39 @@ export function AdvancedLendingOrderCard({
         isConnected,
         orderBook.data,
         midPrice,
-        marketPrice,
+        markPrice,
         dispatch,
         currency,
         maturity,
     ]);
+
+    const { data: orderEstimationInfo } = useOrderEstimation(
+        address,
+        orderType === OrderType.LIMIT
+    );
+
+    const estimatedLoanValue = useMemo(() => {
+        if (
+            !orderEstimationInfo ||
+            !maturity ||
+            !orderEstimationInfo.filledAmount ||
+            !orderEstimationInfo.filledAmountInFV
+        )
+            return LoanValue.ZERO;
+        return LoanValue.fromPrice(
+            divide(
+                multiply(
+                    orderEstimationInfo.filledAmount,
+                    10000.0,
+                    currencyMap[currency].roundingDecimal
+                ),
+                orderEstimationInfo.filledAmountInFV,
+                currencyMap[currency].roundingDecimal
+            ),
+            maturity,
+            calculationDate
+        );
+    }, [orderEstimationInfo, currency, maturity, calculationDate]);
 
     const loanValue = useMemo(() => {
         if (!maturity) return LoanValue.ZERO;
@@ -176,9 +206,9 @@ export function AdvancedLendingOrderCard({
                 calculationDate
             );
         }
-        if (!marketPrice) return LoanValue.ZERO;
-        return LoanValue.fromPrice(marketPrice, maturity, calculationDate);
-    }, [maturity, unitPrice, unitPriceExists, marketPrice, calculationDate]);
+        if (!markPrice) return LoanValue.ZERO;
+        return LoanValue.fromPrice(markPrice, maturity, calculationDate);
+    }, [maturity, unitPrice, unitPriceExists, markPrice, calculationDate]);
 
     const collateralUsagePercent = useMemo(() => {
         return collateralBook.coverage / 100.0;
@@ -457,7 +487,7 @@ export function AdvancedLendingOrderCard({
                     </div>
                     <div className='mb-2.5 flex flex-col gap-1 laptop:mb-0'>
                         <AdvancedLendingEstimationFields
-                            marketPrice={marketPrice}
+                            markPrice={markPrice}
                             calculationDate={calculationDate}
                             assetPrice={price}
                             hasLendOpenOrders={
@@ -473,7 +503,11 @@ export function AdvancedLendingOrderCard({
                         />
                     </div>
                     <OrderAction
-                        loanValue={loanValue}
+                        loanValue={
+                            orderType === OrderType.LIMIT
+                                ? loanValue
+                                : estimatedLoanValue
+                        }
                         collateralBook={collateralBook}
                         validation={shouldDisableActionButton}
                         isCurrencyDelisted={delistedCurrencySet.has(currency)}
