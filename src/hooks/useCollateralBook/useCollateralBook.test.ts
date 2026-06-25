@@ -6,6 +6,8 @@ import { CollateralBook, useCollateralBook } from './';
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
+const preloadedState = { wallet: { address: '0x1', balance: 0 } };
+
 afterEach(() => mock.tokenVault.getCollateralBook.mockClear());
 
 describe('useCollateralBook hook', () => {
@@ -56,7 +58,9 @@ describe('useCollateralBook hook', () => {
     });
 
     it('should compute the non collaterals in USD', async () => {
-        const { result } = renderHook(() => useCollateralBook('0x0'));
+        const { result } = renderHook(() => useCollateralBook('0x0'), {
+            preloadedState,
+        });
 
         await waitFor(() =>
             expect(mock.tokenVault.getCollateralBook).toHaveBeenCalledTimes(1)
