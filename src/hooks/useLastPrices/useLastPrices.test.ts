@@ -6,9 +6,13 @@ import { useLastPrices } from './useLastPrices';
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
+const preloadedState = { wallet: { address: '0x1', balance: 0 } };
+
 describe('useLastPrices', () => {
     it('should return the last prices', async () => {
-        const { result } = renderHook(() => useLastPrices());
+        const { result } = renderHook(() => useLastPrices(), {
+            preloadedState,
+        });
 
         await waitFor(() => {
             expect(result.current.isSuccess).toEqual(true);

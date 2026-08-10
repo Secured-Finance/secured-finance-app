@@ -181,6 +181,9 @@ const formatCollateral = (
         .forEach((ccy: string) => {
             const currency = ccy as CurrencySymbol;
             const amount = collateral[ccy];
+            if (priceList[currency] === undefined) {
+                return;
+            }
             const usdValue =
                 amountFormatterFromBase[currency](amount) * priceList[currency];
 
