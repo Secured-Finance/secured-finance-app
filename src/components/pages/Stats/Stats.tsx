@@ -26,10 +26,10 @@ import {
     useLastPrices,
     useLendingMarkets,
     useTotalValueLockedAndCurrencies,
+    useYieldCurveMarketRates,
 } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import {
-    CurrencySymbol,
     Environment,
     PREVIOUS_TOTAL_USERS,
     Rate,
@@ -101,10 +101,7 @@ export const Stats = () => {
         );
     }, [userCountAndVolume.data?.volumesByCurrency, priceList]);
 
-    const defaultCurrency =
-        Object.keys(curves).length > 0
-            ? (Object.keys(curves)[0] as CurrencySymbol)
-            : CurrencySymbol.USDC;
+    const { maturityList } = useYieldCurveMarketRates();
 
     const currencyArray = Array.from(delistedCurrencySet);
 
@@ -156,11 +153,7 @@ export const Stats = () => {
                             <MultiCurveChart
                                 title='Yield Curve'
                                 curves={curves}
-                                labels={Object.values(
-                                    lendingContracts[defaultCurrency]
-                                )
-                                    .filter(o => o.isReady && !o.isMatured)
-                                    .map(o => o.name)}
+                                labels={maturityList.map(m => m.label)}
                             />
                         </div>
                     ) : (
