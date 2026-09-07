@@ -13,6 +13,7 @@ import {
     ButtonSizes,
     SupportedNetworks,
     Tab,
+    TextLink,
 } from 'src/components/atoms';
 import {
     HamburgerMenu,
@@ -24,6 +25,8 @@ import { useBreakpoint } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { RootState } from 'src/store/types';
 import {
+    getIncidentAlertLink,
+    getIncidentAlertMessage,
     getShowStablecoinAppUrl,
     getStablecoinAppUrl,
     getSupportedNetworks,
@@ -72,6 +75,31 @@ const HeaderMessage = ({
     return <></>;
 };
 
+const IncidentAlert = () => {
+    const message = getIncidentAlertMessage();
+    const link = getIncidentAlertLink();
+
+    if (!message) {
+        return <></>;
+    }
+
+    return (
+        <div
+            role='alert'
+            className='typography-caption-2 w-full bg-red p-[1px] text-center text-neutral-8'
+            data-testid='incident-alert'
+        >
+            {message}
+            {link && (
+                <>
+                    {' '}
+                    <TextLink text='View official updates' href={link} />
+                </>
+            )}
+        </div>
+    );
+};
+
 const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     const { open } = useWeb3Modal();
     const securedFinance = useSF();
@@ -105,6 +133,7 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     return (
         <>
             <div className='relative'>
+                <IncidentAlert />
                 <HeaderMessage
                     isChainIdDetected={isChainIdDetected}
                     chainId={currentChainId}

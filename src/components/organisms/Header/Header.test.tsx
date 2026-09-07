@@ -122,4 +122,42 @@ describe('Header component', () => {
             expect(screen.queryByText('164 Points')).not.toBeInTheDocument(); //
         });
     });
+
+    it('should not render an incident alert when no message is set', () => {
+        mockRouter.push('/');
+        render(<Primary />);
+        expect(screen.queryByTestId('incident-alert')).not.toBeInTheDocument();
+    });
+
+    it('should render an incident alert when a message is set', () => {
+        process.env.NEXT_PUBLIC_INCIDENT_ALERT_MESSAGE = 'Incident message';
+        process.env.NEXT_PUBLIC_INCIDENT_ALERT_LINK = 'https://x.com/test';
+
+        mockRouter.push('/');
+        render(<Primary />);
+
+        expect(screen.getByTestId('incident-alert')).toBeInTheDocument();
+        expect(screen.getByText('Incident message')).toBeInTheDocument();
+        expect(screen.getByText('View official updates')).toHaveAttribute(
+            'href',
+            'https://x.com/test'
+        );
+
+        process.env.NEXT_PUBLIC_INCIDENT_ALERT_MESSAGE = '';
+        process.env.NEXT_PUBLIC_INCIDENT_ALERT_LINK = '';
+    });
+
+    it('should not render the official updates link when no link is set', () => {
+        process.env.NEXT_PUBLIC_INCIDENT_ALERT_MESSAGE = 'Incident message';
+
+        mockRouter.push('/');
+        render(<Primary />);
+
+        expect(screen.getByTestId('incident-alert')).toBeInTheDocument();
+        expect(
+            screen.queryByText('View official updates')
+        ).not.toBeInTheDocument();
+
+        process.env.NEXT_PUBLIC_INCIDENT_ALERT_MESSAGE = '';
+    });
 });

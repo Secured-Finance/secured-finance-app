@@ -5,6 +5,8 @@ import {
     getEnvironment,
     getGoogleAnalyticsTag,
     getGraphqlServerUrl,
+    getIncidentAlertLink,
+    getIncidentAlertMessage,
     getNonSubgraphSupportedChainIds,
     getReferralMessage,
     getShowStablecoinAppUrl,
@@ -207,6 +209,38 @@ describe('getShowStablecoinAppUrl', () => {
         const showStablecoinAppUrl = getShowStablecoinAppUrl();
         expect(showStablecoinAppUrl).toBe(false);
         expect(typeof showStablecoinAppUrl).toBe('boolean');
+    });
+});
+
+describe('getIncidentAlertMessage', () => {
+    it('should return the value of the environment variable', () => {
+        process.env.NEXT_PUBLIC_INCIDENT_ALERT_MESSAGE = 'test message';
+        const incidentAlertMessage = getIncidentAlertMessage();
+        expect(incidentAlertMessage).toBe('test message');
+        expect(typeof incidentAlertMessage).toBe('string');
+    });
+
+    it('should return empty if variable is not set', () => {
+        process.env.NEXT_PUBLIC_INCIDENT_ALERT_MESSAGE = '';
+        const incidentAlertMessage = getIncidentAlertMessage();
+        expect(incidentAlertMessage).toBe('');
+        expect(typeof incidentAlertMessage).toBe('string');
+    });
+});
+
+describe('getIncidentAlertLink', () => {
+    it('should return the value of the environment variable', () => {
+        process.env.NEXT_PUBLIC_INCIDENT_ALERT_LINK = 'https://x.com/test';
+        const incidentAlertLink = getIncidentAlertLink();
+        expect(incidentAlertLink).toBe('https://x.com/test');
+        expect(typeof incidentAlertLink).toBe('string');
+    });
+
+    it('should return empty if variable is not set', () => {
+        process.env.NEXT_PUBLIC_INCIDENT_ALERT_LINK = '';
+        const incidentAlertLink = getIncidentAlertLink();
+        expect(incidentAlertLink).toBe('');
+        expect(typeof incidentAlertLink).toBe('string');
     });
 });
 
