@@ -93,7 +93,7 @@ const IncidentAlert = () => {
             {link && (
                 <>
                     {' '}
-                    <TextLink text='View official updates' href={link} />
+                    <TextLink text='our official X account.' href={link} />
                 </>
             )}
         </div>
