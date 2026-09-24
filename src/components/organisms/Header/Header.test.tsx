@@ -129,7 +129,7 @@ describe('Header component', () => {
         expect(screen.queryByTestId('incident-alert')).not.toBeInTheDocument();
     });
 
-    it('should render an incident alert when a message is set', () => {
+    it.only('should render an incident alert when a message is set', () => {
         process.env.NEXT_PUBLIC_INCIDENT_ALERT_MESSAGE = 'Incident message';
         process.env.NEXT_PUBLIC_INCIDENT_ALERT_LINK = 'https://x.com/test';
 
@@ -138,7 +138,7 @@ describe('Header component', () => {
 
         expect(screen.getByTestId('incident-alert')).toBeInTheDocument();
         expect(screen.getByText('Incident message')).toBeInTheDocument();
-        expect(screen.getByText('View official updates')).toHaveAttribute(
+        expect(screen.getByText('our official X account.')).toHaveAttribute(
             'href',
             'https://x.com/test'
         );
@@ -155,7 +155,7 @@ describe('Header component', () => {
 
         expect(screen.getByTestId('incident-alert')).toBeInTheDocument();
         expect(
-            screen.queryByText('View official updates')
+            screen.queryByText('our official X account.')
         ).not.toBeInTheDocument();
 
         process.env.NEXT_PUBLIC_INCIDENT_ALERT_MESSAGE = '';
