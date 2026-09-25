@@ -52,7 +52,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          branch: pages deploy .deploy/build --project-name=secured-finance-app --branch="${{ github.event.pull_request.head.ref || github.ref_name }}"
+          command: pages deploy .deploy/build --project-name=secured-finance-app --branch="${{ github.event.pull_request.head.ref || github.ref_name }}"
 
       - name: Get the output url
         run: echo "Deploy url is ${{ steps.deploy.outputs.deployment-url }}"
