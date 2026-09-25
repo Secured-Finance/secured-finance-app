@@ -141,6 +141,14 @@ const DELISTED_CURRENCIES: Record<number, string | undefined> = {
     421614: process.env.NEXT_PUBLIC_DELISTED_CURRENCIES_421614,
 };
 
+export const getIncidentAlertMessage = (): string => {
+    return process.env.NEXT_PUBLIC_INCIDENT_ALERT_MESSAGE || '';
+};
+
+export const getIncidentAlertLink = (): string => {
+    return process.env.NEXT_PUBLIC_INCIDENT_ALERT_LINK || '';
+};
+
 export const getDelistedCurrencies = (chainId?: number): string[] => {
     if (!chainId) return [];
 
