@@ -43,3 +43,6 @@ build-storybook.log
 
 # Typecheck
 tsconfig.tsbuildinfo
+
+# Claude
+CLAUDE.md
