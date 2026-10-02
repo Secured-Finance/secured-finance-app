@@ -189,6 +189,17 @@ export const mockUseSF = () => {
             ])
         ),
 
+        getOrderUnitPriceRange: jest.fn(() =>
+            Promise.resolve([
+                BigInt(1),
+                BigInt(10000),
+                BigInt(1),
+                BigInt(10000),
+                BigInt(0),
+                true as boolean,
+            ] as const)
+        ),
+
         getOrderBookDetails: jest.fn(() => {
             const maturities = [
                 maturitiesMockFromContract(ethBytes32),

@@ -33,8 +33,8 @@ import {
     CurrencySymbol,
     ZERO_BI,
     currencyMap,
-    divide,
     formatLoanValue,
+    fromUnitPrice,
     getMaxAmount,
     ordinaryFormat,
     percentFormat,
@@ -272,10 +272,12 @@ export const NewOrderBookWidget = ({
     const spread =
         lendOrders.length > 0 && borrowOrders.length > 0
             ? ordinaryFormat(
-                  Math.abs(
-                      borrowOrders[borrowOrders.length - 1].value.price -
-                          lendOrders[0].value.price
-                  ) / 100.0,
+                  fromUnitPrice(
+                      Math.abs(
+                          borrowOrders[borrowOrders.length - 1].value.price -
+                              lendOrders[0].value.price
+                      )
+                  ),
                   2,
                   2
               )
@@ -437,7 +439,7 @@ export const NewOrderBookWidget = ({
                 : borrowOrders[parseInt(rowId)];
         globalDispatch(setOrderType(OrderType.LIMIT));
         globalDispatch(
-            setUnitPrice(divide(rowData.value.price, 100).toString())
+            setUnitPrice(fromUnitPrice(rowData.value.price).toString())
         );
     };
 
