@@ -50,6 +50,7 @@ import {
     currencyMap,
     divide,
     formatUnitPrice,
+    fromUnitPrice,
     generateWalletSourceInformation,
     multiply,
     ordinaryFormat,
@@ -174,7 +175,7 @@ export function AdvancedLendingOrderCard({
                 priceToSet = midPrice.toString();
             } else if (markPrice) {
                 // Priority 2: One/no sides → use Mark Price
-                priceToSet = (markPrice / 100.0).toString();
+                priceToSet = fromUnitPrice(markPrice).toString();
             }
 
             if (priceToSet) {
@@ -226,7 +227,7 @@ export function AdvancedLendingOrderCard({
         if (!maturity) return LoanValue.ZERO;
         if (unitPrice !== undefined && unitPriceExists) {
             return LoanValue.fromPrice(
-                unitPrice * 100.0,
+                toUnitPrice(unitPrice),
                 maturity,
                 calculationDate
             );

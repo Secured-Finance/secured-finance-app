@@ -1,6 +1,7 @@
 import { MAX_COVERAGE } from './collateral';
-import { CurrencySymbol, divide } from './currencyList';
+import { CurrencySymbol } from './currencyList';
 import { LoanValue } from './entities';
+import { fromUnitPrice } from './unitPrice';
 
 export const usdFormat = (
     number: number | bigint,
@@ -75,7 +76,7 @@ export const formatLoanValue = (
 ) => {
     if (type === 'price') {
         if (!value) return '--.--';
-        return divide(value.price, 100).toFixed(decimal).toString();
+        return fromUnitPrice(value.price).toFixed(decimal).toString();
     } else {
         if (!value) return '--.--%';
         return percentFormat(
