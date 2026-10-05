@@ -11,8 +11,10 @@ import {
     currencyMap,
     divide,
     formatLoanValue,
+    fromUnitPrice,
     multiply,
     ordinaryFormat,
+    toUnitPrice,
     usdFormat,
 } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
@@ -93,7 +95,7 @@ export const AdvancedLendingEstimationFields = ({
         if (!maturity) return LoanValue.ZERO;
         if (unitPrice !== undefined && unitPriceExists) {
             return LoanValue.fromPrice(
-                unitPrice * 100.0,
+                toUnitPrice(unitPrice),
                 maturity,
                 calculationDate
             );
@@ -136,7 +138,7 @@ export const AdvancedLendingEstimationFields = ({
         // Priority 2: Fall back to market price
         if (!isConnected) return undefined;
         if (!markPrice) return undefined;
-        return (markPrice / 100.0).toString();
+        return fromUnitPrice(markPrice).toString();
     }, [maturity, unitPrice, unitPriceExists, markPrice, isConnected]);
 
     const showDashes = useMemo(() => {

@@ -31,6 +31,7 @@ export * from './useOrderbook';
 export * from './useOrderEstimation';
 export * from './useOrderFee';
 export * from './useOrderList';
+export * from './useOrderUnitPriceRange';
 export * from './useOrders';
 export * from './usePagination';
 export * from './usePoints';

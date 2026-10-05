@@ -7,7 +7,7 @@ import useSF from 'src/hooks/useSecuredFinance';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { OrderType } from 'src/types';
-import { ZERO_BI, toCurrency } from 'src/utils';
+import { ZERO_BI, toCurrency, toUnitPrice } from 'src/utils';
 
 export const useOrderEstimation = (
     account: string | undefined,
@@ -42,7 +42,7 @@ export const useOrderEstimation = (
         if (orderType === OrderType.MARKET) {
             return 0;
         }
-        return (unitPrice ?? 0) * 100.0;
+        return toUnitPrice(unitPrice ?? 0);
     }, [orderType, unitPrice]);
 
     return useQuery({

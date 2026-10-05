@@ -26,6 +26,7 @@ import {
     useMarket,
     useOrderEstimation,
     useOrderFee,
+    useOrderUnitPriceRange,
 } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import {
@@ -41,15 +42,19 @@ import {
     ButtonEvents,
     ButtonProperties,
     CurrencySymbol,
+    DEFAULT_ORDER_UNIT_PRICE_RANGE,
     ZERO_BI,
     amountFormatterFromBase,
     amountFormatterToBase,
     calculateFee,
     currencyMap,
     divide,
+    formatUnitPrice,
+    fromUnitPrice,
     generateWalletSourceInformation,
     multiply,
     ordinaryFormat,
+    toUnitPrice,
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import {
@@ -64,6 +69,25 @@ const getOrderSideText = (
 ) => {
     if (side === 'Lend') return 'Lend/Buy';
     return 'Borrow/Sell';
+};
+
+const getOrderUnitPriceErrorMessage = (range?: {
+    min: number;
+    max: number;
+}) => {
+    if (!range) {
+        return 'Unable to validate bond price. Please try again.';
+    }
+    const { min, max } = range;
+    if (max === DEFAULT_ORDER_UNIT_PRICE_RANGE.max) {
+        return `Price must be at least ${formatUnitPrice(min)}.`;
+    }
+    if (min === DEFAULT_ORDER_UNIT_PRICE_RANGE.min) {
+        return `Price must be at most ${formatUnitPrice(max)}.`;
+    }
+    return `Price must be between ${formatUnitPrice(min)} and ${formatUnitPrice(
+        max
+    )}.`;
 };
 
 export function AdvancedLendingOrderCard({
@@ -102,6 +126,8 @@ export function AdvancedLendingOrderCard({
     );
 
     const { data: orderFee = 0 } = useOrderFee(currency);
+    const { data: orderUnitPriceRange, isError: isOrderUnitPriceRangeError } =
+        useOrderUnitPriceRange(currency, maturity);
     const hasAutoFilledPrice = useRef(false);
     const hasUserEditedPrice = useRef(false);
 
@@ -149,7 +175,7 @@ export function AdvancedLendingOrderCard({
                 priceToSet = midPrice.toString();
             } else if (markPrice) {
                 // Priority 2: One/no sides → use Mark Price
-                priceToSet = (markPrice / 100.0).toString();
+                priceToSet = fromUnitPrice(markPrice).toString();
             }
 
             if (priceToSet) {
@@ -201,7 +227,7 @@ export function AdvancedLendingOrderCard({
         if (!maturity) return LoanValue.ZERO;
         if (unitPrice !== undefined && unitPriceExists) {
             return LoanValue.fromPrice(
-                unitPrice * 100.0,
+                toUnitPrice(unitPrice),
                 maturity,
                 calculationDate
             );
@@ -327,15 +353,53 @@ export function AdvancedLendingOrderCard({
         }
     }, [dispatch, isItayose]);
 
-    const isInvalidBondPrice = unitPrice === 0 && orderType === OrderType.LIMIT;
     const isLendingSide = side === OrderSide.LEND;
+    const isLimitOrder = orderType === OrderType.LIMIT;
+    const isInvalidBondPrice = unitPrice === 0 && isLimitOrder;
+
+    const allowedUnitPriceRange = useMemo(() => {
+        if (!orderUnitPriceRange) return undefined;
+
+        return isLendingSide
+            ? {
+                  min: orderUnitPriceRange.minLendUnitPrice,
+                  max: orderUnitPriceRange.maxLendUnitPrice,
+              }
+            : {
+                  min: orderUnitPriceRange.minBorrowUnitPrice,
+                  max: orderUnitPriceRange.maxBorrowUnitPrice,
+              };
+    }, [isLendingSide, orderUnitPriceRange]);
+
+    const shouldValidateOrderUnitPrice =
+        isLimitOrder && unitPrice !== undefined && unitPrice !== 0;
+    const normalizedUnitPrice =
+        unitPrice === undefined ? undefined : toUnitPrice(unitPrice);
+    const isOrderUnitPriceOutOfRange =
+        shouldValidateOrderUnitPrice &&
+        normalizedUnitPrice !== undefined &&
+        allowedUnitPriceRange !== undefined &&
+        (normalizedUnitPrice < allowedUnitPriceRange.min ||
+            normalizedUnitPrice > allowedUnitPriceRange.max);
+    const isOrderUnitPriceRangeUnavailable =
+        shouldValidateOrderUnitPrice && allowedUnitPriceRange === undefined;
+
+    const orderUnitPriceInformationRange =
+        allowedUnitPriceRange ?? DEFAULT_ORDER_UNIT_PRICE_RANGE;
+    const orderUnitPriceInformationText = `Input a value from ${formatUnitPrice(
+        orderUnitPriceInformationRange.min
+    )} through ${formatUnitPrice(orderUnitPriceInformationRange.max)}.`;
 
     const showPreOrderError =
         isItayose &&
         ((preOrderPosition === 'borrow' && isLendingSide) ||
             (preOrderPosition === 'lend' && !isLendingSide));
 
-    const shouldDisableActionButton = isInvalidBondPrice || showPreOrderError;
+    const shouldDisableActionButton =
+        isInvalidBondPrice ||
+        isOrderUnitPriceOutOfRange ||
+        isOrderUnitPriceRangeUnavailable ||
+        showPreOrderError;
 
     const isMarketOrderType = orderType === OrderType.MARKET;
 
@@ -433,7 +497,7 @@ export function AdvancedLendingOrderCard({
                                         v?.toString(),
                                 });
                             }}
-                            informationText='Input value greater than or equal to 0.01 and up to and including 100.'
+                            informationText={orderUnitPriceInformationText}
                             decimalPlacesAllowed={2}
                             maxLimit={100}
                             bgClassName={
@@ -460,6 +524,16 @@ export function AdvancedLendingOrderCard({
                         <ErrorInfo
                             errorMessage='Invalid bond price'
                             showError={isInvalidBondPrice}
+                        />
+                        <ErrorInfo
+                            errorMessage={getOrderUnitPriceErrorMessage(
+                                allowedUnitPriceRange
+                            )}
+                            showError={
+                                isOrderUnitPriceOutOfRange ||
+                                (isOrderUnitPriceRangeUnavailable &&
+                                    isOrderUnitPriceRangeError)
+                            }
                         />
                         <OrderInputBox
                             field='Size'

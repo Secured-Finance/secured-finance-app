@@ -19,5 +19,6 @@ export * from './rate';
 export * from './strings';
 export * from './swap';
 export * from './tableDefinitions';
+export * from './unitPrice';
 export * from './validation';
 export * from './wallet';

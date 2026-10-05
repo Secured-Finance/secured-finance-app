@@ -572,6 +572,84 @@ describe('AdvancedLendingOrderCard Component', () => {
                 assertInvalidBondPriceErrorIsNotShown();
             });
 
+            it('should show the allowed borrow range and disable the button when the bond price is below it', async () => {
+                mockSecuredFinance.getOrderUnitPriceRange.mockResolvedValueOnce(
+                    [
+                        BigInt(7000),
+                        BigInt(9000),
+                        BigInt(8000),
+                        BigInt(10000),
+                        BigInt(8500),
+                        false,
+                    ] as const
+                );
+
+                render(<Default />, { preloadedState });
+                await screen.findByTestId('place-order-button');
+                await waitFor(() =>
+                    expect(screen.getByLabelText('Price')).toBeEnabled()
+                );
+
+                changeInputValue('Price', '79.99');
+
+                expect(
+                    await screen.findByText('Price must be at least 80.')
+                ).toBeInTheDocument();
+                await assertPlaceOrderButtonIsDisabled();
+
+                changeInputValue('Price', '80');
+
+                await waitFor(() =>
+                    expect(
+                        screen.queryByText('Price must be at least 80.')
+                    ).not.toBeInTheDocument()
+                );
+                await assertPlaceOrderButtonIsEnabled();
+            });
+
+            it('should show the allowed lend range and disable the button when the bond price is above it', async () => {
+                mockSecuredFinance.getOrderUnitPriceRange.mockResolvedValueOnce(
+                    [
+                        BigInt(1),
+                        BigInt(9000),
+                        BigInt(8000),
+                        BigInt(10000),
+                        BigInt(8500),
+                        false,
+                    ] as const
+                );
+
+                render(<Default />, {
+                    preloadedState: {
+                        ...preloadedState,
+                        landingOrderForm: {
+                            ...preloadedState.landingOrderForm,
+                            side: OrderSide.LEND,
+                        },
+                    },
+                });
+                await screen.findByTestId('place-order-button');
+                await waitFor(() =>
+                    expect(screen.getByLabelText('Price')).toBeEnabled()
+                );
+
+                changeInputValue('Price', '90.01');
+
+                expect(
+                    await screen.findByText('Price must be at most 90.')
+                ).toBeInTheDocument();
+                await assertPlaceOrderButtonIsDisabled();
+
+                changeInputValue('Price', '90');
+
+                await waitFor(() =>
+                    expect(
+                        screen.queryByText('Price must be at most 90.')
+                    ).not.toBeInTheDocument()
+                );
+                await assertPlaceOrderButtonIsEnabled();
+            });
+
             it.skip('should not show error, place order button should be disabled if bond price is undefined for borrow orders', async () => {
                 render(<Default />, {
                     preloadedState: {
