@@ -9,6 +9,8 @@ import {
     getIncidentAlertMessage,
     getNonSubgraphSupportedChainIds,
     getReferralMessage,
+    getReopeningAlertLink,
+    getReopeningAlertMessage,
     getShowStablecoinAppUrl,
     getSquidWidgetIntegratorId,
     getStablecoinAppUrl,
@@ -241,6 +243,38 @@ describe('getIncidentAlertLink', () => {
         const incidentAlertLink = getIncidentAlertLink();
         expect(incidentAlertLink).toBe('');
         expect(typeof incidentAlertLink).toBe('string');
+    });
+});
+
+describe('getReopeningAlertMessage', () => {
+    it('should return the value of the environment variable', () => {
+        process.env.NEXT_PUBLIC_REOPENING_ALERT_MESSAGE = 'test message';
+        const reopeningAlertMessage = getReopeningAlertMessage();
+        expect(reopeningAlertMessage).toBe('test message');
+        expect(typeof reopeningAlertMessage).toBe('string');
+    });
+
+    it('should return empty if variable is not set', () => {
+        process.env.NEXT_PUBLIC_REOPENING_ALERT_MESSAGE = '';
+        const reopeningAlertMessage = getReopeningAlertMessage();
+        expect(reopeningAlertMessage).toBe('');
+        expect(typeof reopeningAlertMessage).toBe('string');
+    });
+});
+
+describe('getReopeningAlertLink', () => {
+    it('should return the value of the environment variable', () => {
+        process.env.NEXT_PUBLIC_REOPENING_ALERT_LINK = 'https://x.com/test';
+        const reopeningAlertLink = getReopeningAlertLink();
+        expect(reopeningAlertLink).toBe('https://x.com/test');
+        expect(typeof reopeningAlertLink).toBe('string');
+    });
+
+    it('should return empty if variable is not set', () => {
+        process.env.NEXT_PUBLIC_REOPENING_ALERT_LINK = '';
+        const reopeningAlertLink = getReopeningAlertLink();
+        expect(reopeningAlertLink).toBe('');
+        expect(typeof reopeningAlertLink).toBe('string');
     });
 });
 
