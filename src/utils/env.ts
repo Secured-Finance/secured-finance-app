@@ -149,6 +149,14 @@ export const getIncidentAlertLink = (): string => {
     return process.env.NEXT_PUBLIC_INCIDENT_ALERT_LINK || '';
 };
 
+export const getReopeningAlertMessage = (): string => {
+    return process.env.NEXT_PUBLIC_REOPENING_ALERT_MESSAGE || '';
+};
+
+export const getReopeningAlertLink = (): string => {
+    return process.env.NEXT_PUBLIC_REOPENING_ALERT_LINK || '';
+};
+
 export const getDelistedCurrencies = (chainId?: number): string[] => {
     if (!chainId) return [];
 

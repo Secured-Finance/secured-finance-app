@@ -129,7 +129,7 @@ describe('Header component', () => {
         expect(screen.queryByTestId('incident-alert')).not.toBeInTheDocument();
     });
 
-    it.only('should render an incident alert when a message is set', () => {
+    it('should render an incident alert when a message is set', () => {
         process.env.NEXT_PUBLIC_INCIDENT_ALERT_MESSAGE = 'Incident message';
         process.env.NEXT_PUBLIC_INCIDENT_ALERT_LINK = 'https://x.com/test';
 
@@ -159,5 +159,43 @@ describe('Header component', () => {
         ).not.toBeInTheDocument();
 
         process.env.NEXT_PUBLIC_INCIDENT_ALERT_MESSAGE = '';
+    });
+
+    it('should not render a reopening alert when no message is set', () => {
+        mockRouter.push('/');
+        render(<Primary />);
+        expect(screen.queryByTestId('reopening-alert')).not.toBeInTheDocument();
+    });
+
+    it('should render a reopening alert when a message is set', () => {
+        process.env.NEXT_PUBLIC_REOPENING_ALERT_MESSAGE = 'Reopening message';
+        process.env.NEXT_PUBLIC_REOPENING_ALERT_LINK = 'https://x.com/test';
+
+        mockRouter.push('/');
+        render(<Primary />);
+
+        expect(screen.getByTestId('reopening-alert')).toBeInTheDocument();
+        expect(screen.getByText('Reopening message')).toBeInTheDocument();
+        expect(screen.getByText('Read the full update.')).toHaveAttribute(
+            'href',
+            'https://x.com/test'
+        );
+
+        process.env.NEXT_PUBLIC_REOPENING_ALERT_MESSAGE = '';
+        process.env.NEXT_PUBLIC_REOPENING_ALERT_LINK = '';
+    });
+
+    it('should not render the read-more link when no link is set', () => {
+        process.env.NEXT_PUBLIC_REOPENING_ALERT_MESSAGE = 'Reopening message';
+
+        mockRouter.push('/');
+        render(<Primary />);
+
+        expect(screen.getByTestId('reopening-alert')).toBeInTheDocument();
+        expect(
+            screen.queryByText('Read the full update.')
+        ).not.toBeInTheDocument();
+
+        process.env.NEXT_PUBLIC_REOPENING_ALERT_MESSAGE = '';
     });
 });
