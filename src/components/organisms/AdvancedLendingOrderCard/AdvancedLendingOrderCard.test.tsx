@@ -2,7 +2,7 @@ import * as analytics from '@amplitude/analytics-browser';
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
 import { CollateralBook } from 'src/hooks';
-import { dec22Fixture } from 'src/stories/mocks/fixtures';
+import { dec22Fixture, dec24Fixture } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
@@ -58,6 +58,7 @@ const collateralBook0: CollateralBook = {
 };
 
 beforeEach(() => {
+    mockSecuredFinance.getMinPreOrderAmount.mockClear();
     timemachine.reset();
     timemachine.config({
         dateString: '2022-02-01T11:00:00.00Z',
@@ -495,6 +496,74 @@ describe('AdvancedLendingOrderCard Component', () => {
             expect(
                 screen.getByRole('button', { name: 'Place Order' })
             ).toBeDisabled();
+        });
+
+        it('should validate the minimum pre-order amount', async () => {
+            mockSecuredFinance.getMinPreOrderAmount.mockResolvedValueOnce(
+                BigInt(600000000)
+            );
+
+            render(<Default isItayose preOrderPosition='none' />, {
+                preloadedState: {
+                    ...preloadedState,
+                    landingOrderForm: {
+                        ...preloadedState.landingOrderForm,
+                        maturity: dec24Fixture.toNumber(),
+                    },
+                },
+            });
+
+            expect(
+                await screen.findByText('Minimum pre-order size is 600 USDC.')
+            ).toBeInTheDocument();
+            await waitFor(() =>
+                expect(screen.getByTestId('place-order-button')).toBeDisabled()
+            );
+
+            changeInputValue('Size', '600');
+
+            await waitFor(() =>
+                expect(
+                    screen.queryByText('Minimum pre-order size is 600 USDC.')
+                ).not.toBeInTheDocument()
+            );
+            await waitFor(() =>
+                expect(screen.getByTestId('place-order-button')).toBeEnabled()
+            );
+        });
+
+        it('should disable placing a pre-order if the minimum amount cannot be fetched', async () => {
+            mockSecuredFinance.getMinPreOrderAmount.mockRejectedValueOnce(
+                new Error('Failed to fetch')
+            );
+
+            render(<Default isItayose preOrderPosition='none' />, {
+                preloadedState: {
+                    ...preloadedState,
+                    landingOrderForm: {
+                        ...preloadedState.landingOrderForm,
+                        maturity: dec24Fixture.toNumber(),
+                    },
+                },
+            });
+
+            expect(
+                await screen.findByText(
+                    'Unable to validate the minimum pre-order size. Please try again.'
+                )
+            ).toBeInTheDocument();
+            expect(
+                await screen.findByTestId('place-order-button')
+            ).toBeDisabled();
+        });
+
+        it('should not fetch the minimum pre-order amount for an open market', async () => {
+            render(<Default />, { preloadedState });
+
+            await screen.findByTestId('place-order-button');
+            expect(
+                mockSecuredFinance.getMinPreOrderAmount
+            ).not.toHaveBeenCalled();
         });
     });
 

@@ -189,6 +189,8 @@ export const mockUseSF = () => {
             ])
         ),
 
+        getMinPreOrderAmount: jest.fn(() => Promise.resolve(ZERO_BI)),
+
         getOrderUnitPriceRange: jest.fn(() =>
             Promise.resolve([
                 BigInt(1),
