@@ -35,12 +35,14 @@ jobs:
           NPM_AUTH_TOKEN: ${{ secrets.PAT }}
 
       - name: Cypress run
-        uses: cypress-io/github-action@v3
+        uses: cypress-io/github-action@v7
         with:
           install: false
-          start: npx serve ./build
+          start: npx serve ./build -l 3000
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 180
+          record: false
+          component: false
         env:
           CYPRESS_TENDERLY_KEY: ${{ secrets.TENDERLY_KEY }}
 
