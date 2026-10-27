@@ -26,6 +26,7 @@ export * from './useLoanValues';
 export * from './useMarketLists';
 export * from './useMarketOrderList';
 export * from './useMaturities';
+export * from './useMinimumPreOrderAmount';
 export * from './useMaturityOptions';
 export * from './useOrderbook';
 export * from './useOrderEstimation';

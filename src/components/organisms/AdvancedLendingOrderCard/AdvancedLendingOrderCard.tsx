@@ -19,11 +19,14 @@ import {
 import { NewOrderBookWidget, OrderAction } from 'src/components/organisms';
 import {
     CollateralBook,
+    MarketPhase,
     useBalances,
     useBorrowableAmount,
     useBreakpoint,
     useLastPrices,
     useMarket,
+    useMarketPhase,
+    useMinimumPreOrderAmount,
     useOrderEstimation,
     useOrderFee,
     useOrderUnitPriceRange,
@@ -128,6 +131,12 @@ export function AdvancedLendingOrderCard({
     const { data: orderFee = 0 } = useOrderFee(currency);
     const { data: orderUnitPriceRange, isError: isOrderUnitPriceRangeError } =
         useOrderUnitPriceRange(currency, maturity);
+    const marketPhase = useMarketPhase(currency, maturity);
+    const isPreOrderPeriod = marketPhase === MarketPhase.PRE_ORDER;
+    const {
+        data: minimumPreOrderAmount,
+        isError: isMinimumPreOrderAmountError,
+    } = useMinimumPreOrderAmount(currency, isPreOrderPeriod);
     const hasAutoFilledPrice = useRef(false);
     const hasUserEditedPrice = useRef(false);
 
@@ -390,6 +399,22 @@ export function AdvancedLendingOrderCard({
         orderUnitPriceInformationRange.min
     )} through ${formatUnitPrice(orderUnitPriceInformationRange.max)}.`;
 
+    const isPreOrderAmountTooSmall =
+        isPreOrderPeriod &&
+        amountExists &&
+        minimumPreOrderAmount !== undefined &&
+        amount < minimumPreOrderAmount;
+    const isMinimumPreOrderAmountUnavailable =
+        isPreOrderPeriod && minimumPreOrderAmount === undefined;
+    const formattedMinimumPreOrderAmount =
+        minimumPreOrderAmount === undefined
+            ? ''
+            : ordinaryFormat(
+                  amountFormatterFromBase[currency](minimumPreOrderAmount),
+                  0,
+                  currencyMap[currency].roundingDecimal
+              );
+
     const showPreOrderError =
         isItayose &&
         ((preOrderPosition === 'borrow' && isLendingSide) ||
@@ -399,6 +424,8 @@ export function AdvancedLendingOrderCard({
         isInvalidBondPrice ||
         isOrderUnitPriceOutOfRange ||
         isOrderUnitPriceRangeUnavailable ||
+        isPreOrderAmountTooSmall ||
+        isMinimumPreOrderAmountUnavailable ||
         showPreOrderError;
 
     const isMarketOrderType = orderType === OrderType.MARKET;
@@ -551,6 +578,17 @@ export function AdvancedLendingOrderCard({
                             disabled={!isConnected}
                             bgClassName={
                                 !isConnected ? 'bg-neutral-700' : undefined
+                            }
+                        />
+                        <ErrorInfo
+                            errorMessage={`Minimum pre-order size is ${formattedMinimumPreOrderAmount} ${currency}.`}
+                            showError={isPreOrderAmountTooSmall}
+                        />
+                        <ErrorInfo
+                            errorMessage='Unable to validate the minimum pre-order size. Please try again.'
+                            showError={
+                                isMinimumPreOrderAmountUnavailable &&
+                                isMinimumPreOrderAmountError
                             }
                         />
                         <Slider
