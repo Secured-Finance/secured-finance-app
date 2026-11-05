@@ -161,6 +161,25 @@ describe('Header component', () => {
         process.env.NEXT_PUBLIC_INCIDENT_ALERT_MESSAGE = '';
     });
 
+    it('should not render the pause alert when no message is set', () => {
+        mockRouter.push('/');
+        render(<Primary />);
+        expect(screen.queryByTestId('pause-alert')).not.toBeInTheDocument();
+    });
+
+    it('should render the pause alert when a message is set', () => {
+        process.env.NEXT_PUBLIC_PAUSE_ALERT_MESSAGE = 'Pause message';
+
+        mockRouter.push('/');
+        render(<Primary />);
+
+        expect(screen.getByTestId('pause-alert')).toHaveTextContent(
+            'Pause message'
+        );
+
+        process.env.NEXT_PUBLIC_PAUSE_ALERT_MESSAGE = '';
+    });
+
     it('should not render a reopening alert when no message is set', () => {
         mockRouter.push('/');
         render(<Primary />);

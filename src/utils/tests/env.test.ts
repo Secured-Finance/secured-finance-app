@@ -9,6 +9,7 @@ import {
     getIncidentAlertMessage,
     getNonSubgraphSupportedChainIds,
     getReferralMessage,
+    getPauseAlertMessage,
     getReopeningAlertLink,
     getReopeningAlertMessage,
     getShowStablecoinAppUrl,
@@ -275,6 +276,18 @@ describe('getReopeningAlertLink', () => {
         const reopeningAlertLink = getReopeningAlertLink();
         expect(reopeningAlertLink).toBe('');
         expect(typeof reopeningAlertLink).toBe('string');
+    });
+});
+
+describe('getPauseAlertMessage', () => {
+    it('should return the value of the environment variable', () => {
+        process.env.NEXT_PUBLIC_PAUSE_ALERT_MESSAGE = 'test message';
+        expect(getPauseAlertMessage()).toBe('test message');
+    });
+
+    it('should return empty if variable is not set', () => {
+        process.env.NEXT_PUBLIC_PAUSE_ALERT_MESSAGE = '';
+        expect(getPauseAlertMessage()).toBe('');
     });
 });
 
