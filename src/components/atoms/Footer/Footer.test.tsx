@@ -19,6 +19,16 @@ describe('Footer component', () => {
         });
     });
 
+    describe('Protocol paused', () => {
+        it('should render the temporarily paused status when a pause message is set', () => {
+            process.env.NEXT_PUBLIC_PAUSE_ALERT_MESSAGE = 'Paused';
+            render(<Default />);
+            expect(screen.getByText('Temporarily Paused')).toBeInTheDocument();
+            expect(screen.queryByText('Online')).not.toBeInTheDocument();
+            process.env.NEXT_PUBLIC_PAUSE_ALERT_MESSAGE = '';
+        });
+    });
+
     describe('Version details', () => {
         it('should render footer with version', () => {
             process.env.NEXT_PUBLIC_USE_PACKAGE_VERSION = 'true';

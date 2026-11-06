@@ -1,9 +1,12 @@
+import {
+    CheckCircleIcon,
+    ExclamationTriangleIcon,
+} from '@heroicons/react/24/solid';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
-import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import ArrowUpSquare from 'src/assets/icons/arrow-up-square.svg';
 import Badge from 'src/assets/icons/badge.svg';
 import UserIcon from 'src/assets/icons/user-circle.svg';
@@ -28,6 +31,7 @@ import { RootState } from 'src/store/types';
 import {
     getIncidentAlertLink,
     getIncidentAlertMessage,
+    getPauseAlertMessage,
     getReopeningAlertLink,
     getReopeningAlertMessage,
     getShowStablecoinAppUrl,
@@ -131,6 +135,25 @@ const ReopeningAlert = () => {
     );
 };
 
+const PauseAlert = () => {
+    const message = getPauseAlertMessage();
+
+    if (!message) {
+        return <></>;
+    }
+
+    return (
+        <div
+            role='alert'
+            className='typography-caption-2 flex w-full items-center justify-center gap-1 bg-warning-700 p-[1px] text-center text-neutral-8'
+            data-testid='pause-alert'
+        >
+            <ExclamationTriangleIcon className='h-3 w-3 flex-shrink-0 text-neutral-8' />
+            <span>{message}</span>
+        </div>
+    );
+};
+
 const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     const { open } = useWeb3Modal();
     const securedFinance = useSF();
@@ -166,6 +189,7 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
             <div className='relative'>
                 <IncidentAlert />
                 <ReopeningAlert />
+                <PauseAlert />
                 <HeaderMessage
                     isChainIdDetected={isChainIdDetected}
                     chainId={currentChainId}

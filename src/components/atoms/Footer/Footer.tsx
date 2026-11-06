@@ -2,7 +2,12 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import packageJson from 'package.json';
 import ExternalLink from 'src/assets/icons/external-link.svg';
-import { getCommitHash, getEnvShort, getUsePackageVersion } from 'src/utils';
+import {
+    getCommitHash,
+    getEnvShort,
+    getPauseAlertMessage,
+    getUsePackageVersion,
+} from 'src/utils';
 import { isChipVisibleForEnv } from 'src/utils/displayUtils';
 
 const STATUS_PAGE_LINK = 'https://secured-finance.statuspage.io/';
@@ -33,6 +38,10 @@ export const Footer = () => {
 };
 
 const StatusButton = ({ active = true }) => {
+    const paused = !!getPauseAlertMessage();
+    const color = paused ? 'warning' : active ? 'success' : 'neutral';
+    const label = paused ? 'Temporarily Paused' : active ? 'Online' : 'Offline';
+
     return (
         <Link
             href={STATUS_PAGE_LINK}
@@ -44,32 +53,36 @@ const StatusButton = ({ active = true }) => {
                 className={clsx(
                     'flex flex-row items-center gap-1 rounded-md border-0.5 px-2 py-1',
                     {
-                        'border-success-300': active,
-                        'border-neutral-300': !active,
+                        'border-warning-300': color === 'warning',
+                        'border-success-300': color === 'success',
+                        'border-neutral-300': color === 'neutral',
                     }
                 )}
             >
                 <span
                     className={clsx('h-6px w-6px rounded-full', {
-                        'bg-success-500': active,
-                        'bg-neutral-500': !active,
+                        'bg-warning-500': color === 'warning',
+                        'bg-success-500': color === 'success',
+                        'bg-neutral-500': color === 'neutral',
                     })}
                 ></span>
                 <span
                     className={clsx(
                         'text-center text-[10px] font-semibold leading-[14px]',
                         {
-                            'text-success-300': active,
-                            'text-neutral-300': !active,
+                            'text-warning-300': color === 'warning',
+                            'text-success-300': color === 'success',
+                            'text-neutral-300': color === 'neutral',
                         }
                     )}
                 >
-                    {active ? 'Online' : 'Offline'}
+                    {label}
                 </span>
                 <ExternalLink
                     className={clsx('h-3 w-3', {
-                        'text-success-300': active,
-                        'text-neutral-300': !active,
+                        'text-warning-300': color === 'warning',
+                        'text-success-300': color === 'success',
+                        'text-neutral-300': color === 'neutral',
                     })}
                 />
             </div>
