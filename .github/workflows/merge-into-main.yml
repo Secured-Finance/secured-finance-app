@@ -15,20 +15,23 @@ jobs:
     steps:
       - name: Generate token
         id: generate_token
-        uses: tibdex/github-app-token@v1
+        uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2.2.2
         with:
-          app_id: ${{ secrets.MACHINE_USER_APP_ID }}
-          private_key: ${{ secrets.MACHINE_USER_PRIVATE_KEY }}
-      - uses: actions/checkout@v3
+          app-id: ${{ secrets.MACHINE_USER_APP_ID }}
+          private-key: ${{ secrets.MACHINE_USER_PRIVATE_KEY }}
+      - uses: actions/checkout@a37ce9120846195fa4ece8f58b268e6043cb2f26 # v3.7.0
         with:
           fetch-depth: 0
           ref: develop
           token: ${{ steps.generate_token.outputs.token }}
       - name: Merge into main and tag the version
         shell: bash
+        env:
+          APP_ID: ${{ secrets.MACHINE_USER_APP_ID }}
+          MERGE_COMMIT: ${{ github.event.inputs.commit || 'develop' }}
         run: |
           git config user.name "SF Machine User[bot]"
-          git config user.email "${{ secrets.MACHINE_USER_APP_ID }}+sf-machine-user[bot]@users.noreply.github.com"
+          git config user.email "${APP_ID}+sf-machine-user[bot]@users.noreply.github.com"
           git switch main
-          git merge ${{ github.event.inputs.commit || 'develop' }}
+          git merge "$MERGE_COMMIT"
           git push

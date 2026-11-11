@@ -18,10 +18,12 @@ jobs:
       environment_name: ${{ steps.identify-env.outputs.environment_name }}
     steps:
     - id: identify-env
+      env:
+        BRANCH_NAME: ${{ inputs.branch_name }}
       run: |
-        if [[ ${{ inputs.branch_name }} == refs/heads/main ]]; then
+        if [[ "$BRANCH_NAME" == refs/heads/main ]]; then
           echo "environment_name=staging" >> $GITHUB_OUTPUT
-        elif [[ ${{ inputs.branch_name }} == refs/heads/develop ]]; then
+        elif [[ "$BRANCH_NAME" == refs/heads/develop ]]; then
           echo "environment_name=development" >> $GITHUB_OUTPUT
         else
           echo "environment_name=ci-build" >> $GITHUB_OUTPUT

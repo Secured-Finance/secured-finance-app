@@ -19,12 +19,12 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@a37ce9120846195fa4ece8f58b268e6043cb2f26 # v3.7.0
         with:
           fetch-depth: 1
           ref: ${{ inputs.ref }}
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@3235b876344d2a9aa001b8d1453c930bba69e610 # v3.9.1
         with:
           node-version-file: '.nvmrc'
           cache: 'npm'
@@ -35,8 +35,9 @@ jobs:
           NPM_AUTH_TOKEN: ${{ secrets.PAT }}
 
       - name: Run Tests
+        env:
+          TEST_FILE: ${{ inputs.test_file }}
         run: |
-          TEST_FILE="${{ inputs.test_file }}"
           if [ -z "$TEST_FILE" ]; then
             npm run test:cov
           else
