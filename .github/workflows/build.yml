@@ -26,6 +26,8 @@ on:
         required: true
       SQUID_WIDGET_INTEGRATOR_ID:
         required: true
+      WALLET_CONNECT_ID:
+        required: true
 
 jobs:
   build-and-test-all:
@@ -64,6 +66,7 @@ jobs:
           NEXT_PUBLIC_ANKR_API_KEY=${{ secrets.ANKR_API_KEY }}
           NEXT_PUBLIC_AMPLITUDE_API_KEY=${{ secrets.AMPLITUDE_API_KEY }}
           NEXT_PUBLIC_SQUID_WIDGET_INTEGRATOR_ID=${{ secrets.SQUID_WIDGET_INTEGRATOR_ID }}
+          NEXT_PUBLIC_WALLET_CONNECT_ID=${{ secrets.WALLET_CONNECT_ID }}
           SF_ENV=${{ vars.SF_ENV }}
           NEXT_PUBLIC_USE_PACKAGE_VERSION=${{ vars.USE_PACKAGE_VERSION }}
           NEXT_PUBLIC_SUPPORTED_CHAIN_IDS=${{ vars.SUPPORTED_CHAIN_IDS }}
