@@ -1,6 +1,7 @@
 import { composeStories } from '@storybook/react';
 import packageJson from 'package.json';
-import { render, screen } from 'src/test-utils.js';
+import { mockRuntimeConfig } from 'src/stories/mocks/runtimeConfigMock';
+import { render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './Footer.stories';
 
 const { Default } = composeStories(stories);
@@ -20,12 +21,20 @@ describe('Footer component', () => {
     });
 
     describe('Protocol paused', () => {
-        it('should render the temporarily paused status when a pause message is set', () => {
-            process.env.NEXT_PUBLIC_PAUSE_ALERT_MESSAGE = 'Paused';
+        it('should render the temporarily paused status when a pause message is set', async () => {
+            mockRuntimeConfig({ pauseAlert: { message: 'Paused' } });
             render(<Default />);
-            expect(screen.getByText('Temporarily Paused')).toBeInTheDocument();
+            expect(
+                await screen.findByText('Temporarily Paused')
+            ).toBeInTheDocument();
             expect(screen.queryByText('Online')).not.toBeInTheDocument();
-            process.env.NEXT_PUBLIC_PAUSE_ALERT_MESSAGE = '';
+        });
+
+        it('should render the online status when the pause message is blank', async () => {
+            mockRuntimeConfig({ pauseAlert: { message: '   ' } });
+            render(<Default />);
+            await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+            expect(screen.getByText('Online')).toBeInTheDocument();
         });
     });
 

@@ -6,6 +6,10 @@ import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
 import 'jest-canvas-mock';
 import failOnConsole from 'jest-fail-on-console';
+import {
+    resetRuntimeConfigMock,
+    runtimeConfigFetch,
+} from 'src/stories/mocks/runtimeConfigMock';
 import timemachine from 'timemachine';
 
 jest.mock('next/router', () => jest.requireActual('next-router-mock'));
@@ -51,6 +55,11 @@ afterAll(() => {
     global.gc && global.gc();
 });
 
+beforeEach(() => {
+    global.fetch = jest.fn(runtimeConfigFetch);
+});
+
 afterEach(() => {
     cleanup();
+    resetRuntimeConfigMock();
 });

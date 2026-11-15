@@ -2,12 +2,8 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import packageJson from 'package.json';
 import ExternalLink from 'src/assets/icons/external-link.svg';
-import {
-    getCommitHash,
-    getEnvShort,
-    getPauseAlertMessage,
-    getUsePackageVersion,
-} from 'src/utils';
+import { useRuntimeConfig } from 'src/hooks';
+import { getCommitHash, getEnvShort, getUsePackageVersion } from 'src/utils';
 import { isChipVisibleForEnv } from 'src/utils/displayUtils';
 
 const STATUS_PAGE_LINK = 'https://secured-finance.statuspage.io/';
@@ -38,7 +34,8 @@ export const Footer = () => {
 };
 
 const StatusButton = ({ active = true }) => {
-    const paused = !!getPauseAlertMessage();
+    const { pauseAlert } = useRuntimeConfig();
+    const paused = !!pauseAlert.message;
     const color = paused ? 'warning' : active ? 'success' : 'neutral';
     const label = paused ? 'Temporarily Paused' : active ? 'Online' : 'Offline';
 

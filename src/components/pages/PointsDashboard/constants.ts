@@ -1,11 +1,9 @@
-import { getReferralMessage } from 'src/utils';
-
-export const getShareMessage = (code: string) => {
+export const getShareMessage = (code: string, referralMessage: string) => {
     const replacements: Record<string, string> = {
         '%URL%': window.location.origin + window.location.pathname,
         '%REF%': code,
     };
-    const shareMessage = getReferralMessage().replace(
+    const shareMessage = referralMessage.replace(
         /%\w+%/g,
         all => replacements[all] || all
     );
