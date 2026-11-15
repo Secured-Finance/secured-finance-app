@@ -1,15 +1,22 @@
 import { RuntimeConfig } from 'src/utils';
 
-let runtimeConfig: RuntimeConfig = {};
+// Default runtime config for every story and test. Alerts are left out so they
+// only render where a story or test sets one.
+export const initialRuntimeConfig: RuntimeConfig = {
+    referralMessage:
+        'Join the @Secured_Fi Points Program!\n\nSign up through the link below and receive 50 points as a welcome gift!\n\n%URL%?ref=%REF%',
+};
 
-// Sets the config served for NEXT_PUBLIC_RUNTIME_CONFIG_URL (see .env.test).
-// Reset to an empty config after every test in setupTests.js.
+let runtimeConfig: RuntimeConfig = initialRuntimeConfig;
+
+// Overrides fields of the config served for NEXT_PUBLIC_RUNTIME_CONFIG_URL (see .env.test).
+// Reset to initialRuntimeConfig after every test in setupTests.js.
 export const mockRuntimeConfig = (config: RuntimeConfig) => {
-    runtimeConfig = config;
+    runtimeConfig = { ...initialRuntimeConfig, ...config };
 };
 
 export const resetRuntimeConfigMock = () => {
-    runtimeConfig = {};
+    runtimeConfig = initialRuntimeConfig;
 };
 
 // Installed as global.fetch before every test in setupTests.js

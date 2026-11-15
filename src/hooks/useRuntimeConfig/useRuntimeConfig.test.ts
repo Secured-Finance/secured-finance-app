@@ -1,4 +1,7 @@
-import { mockRuntimeConfig } from 'src/stories/mocks/runtimeConfigMock';
+import {
+    initialRuntimeConfig,
+    mockRuntimeConfig,
+} from 'src/stories/mocks/runtimeConfigMock';
 import { renderHook, waitFor } from 'src/test-utils';
 import { useRuntimeConfig } from './useRuntimeConfig';
 
@@ -22,6 +25,30 @@ describe('useRuntimeConfig hook', () => {
         expect(global.fetch).toHaveBeenCalledWith(
             process.env.NEXT_PUBLIC_RUNTIME_CONFIG_URL,
             expect.objectContaining({ cache: 'no-cache' })
+        );
+    });
+
+    it('should return the default mock config when a test sets none', async () => {
+        const { result } = renderHook(() => useRuntimeConfig());
+
+        await waitFor(() =>
+            expect(result.current.referralMessage).toEqual(
+                initialRuntimeConfig.referralMessage
+            )
+        );
+        expect(result.current.pauseAlert.message).toEqual('');
+    });
+
+    it('should keep the default values a test does not override', async () => {
+        mockRuntimeConfig({ pauseAlert: { message: 'Remote pause' } });
+
+        const { result } = renderHook(() => useRuntimeConfig());
+
+        await waitFor(() =>
+            expect(result.current.pauseAlert.message).toEqual('Remote pause')
+        );
+        expect(result.current.referralMessage).toEqual(
+            initialRuntimeConfig.referralMessage
         );
     });
 
