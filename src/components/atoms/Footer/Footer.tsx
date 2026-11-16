@@ -34,10 +34,18 @@ export const Footer = () => {
 };
 
 const StatusButton = ({ active = true }) => {
-    const { pauseAlert } = useRuntimeConfig();
-    const paused = !!pauseAlert.message;
-    const color = paused ? 'warning' : active ? 'success' : 'neutral';
-    const label = paused ? 'Temporarily Paused' : active ? 'Online' : 'Offline';
+    const { pauseAlert, status } = useRuntimeConfig();
+    // Whether the protocol is paused is only known from a valid config
+    const known = status === 'success';
+    const paused = known && !!pauseAlert.message;
+    const color = paused ? 'warning' : known && active ? 'success' : 'neutral';
+    const label = !known
+        ? 'Unknown'
+        : paused
+        ? 'Temporarily Paused'
+        : active
+        ? 'Online'
+        : 'Offline';
 
     return (
         <Link
@@ -45,6 +53,9 @@ const StatusButton = ({ active = true }) => {
             target='_blank'
             rel='noopener noreferrer'
             aria-label='Status Page'
+            // Hidden but still taking space while loading, so neither a stale
+            // status nor an "Unknown" flash shows on every page load
+            className={clsx({ invisible: status === 'loading' })}
         >
             <div
                 className={clsx(

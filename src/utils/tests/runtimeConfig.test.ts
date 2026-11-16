@@ -5,10 +5,22 @@ import {
 } from '../runtimeConfig';
 
 describe('parseRuntimeConfig', () => {
-    it('should return an empty config for non-object input', () => {
-        expect(parseRuntimeConfig(null)).toEqual({});
-        expect(parseRuntimeConfig('config')).toEqual({});
-        expect(parseRuntimeConfig([])).toEqual({});
+    it.each([null, 'config', []])(
+        'should throw for non-object input: %p',
+        raw => {
+            expect(() => parseRuntimeConfig(raw)).toThrow(
+                'Invalid runtime config: the config must be an object'
+            );
+        }
+    );
+
+    it('should accept an empty config', () => {
+        expect(parseRuntimeConfig({})).toEqual({
+            incidentAlert: undefined,
+            reopeningAlert: undefined,
+            pauseAlert: undefined,
+            referralMessage: undefined,
+        });
     });
 
     it('should keep valid fields', () => {
@@ -20,7 +32,7 @@ describe('parseRuntimeConfig', () => {
         });
 
         expect(config).toEqual({
-            incidentAlert: { message: 'Incident', link: 'https://x.com' },
+            incidentAlert: { message: 'Incident', link: 'https://x.com/' },
             reopeningAlert: { message: 'Reopened', link: undefined },
             pauseAlert: { message: 'Paused' },
             referralMessage: 'Join us',
@@ -37,18 +49,70 @@ describe('parseRuntimeConfig', () => {
         expect(config.pauseAlert).toEqual({ message: '' });
     });
 
-    it('should drop fields with an unexpected type', () => {
+    it('should keep an empty string so a notice can be cleared on purpose', () => {
+        expect(parseRuntimeConfig({ pauseAlert: { message: '' } })).toEqual(
+            expect.objectContaining({ pauseAlert: { message: '' } })
+        );
+    });
+
+    it.each([
+        [
+            { pauseAlert: { message: 123 } },
+            'pauseAlert.message must be a string',
+        ],
+        [
+            { pauseAlert: { message: null } },
+            'pauseAlert.message must be a string',
+        ],
+        [{ pauseAlert: 'Paused' }, 'pauseAlert must be an object'],
+        [{ incidentAlert: 'Incident' }, 'incidentAlert must be an object'],
+        [{ incidentAlert: [] }, 'incidentAlert must be an object'],
+        [
+            { reopeningAlert: { message: 'Reopened', link: 1 } },
+            'reopeningAlert.link must be a string',
+        ],
+        [{ referralMessage: ['Join us'] }, 'referralMessage must be a string'],
+    ])('should throw for a field of the wrong type: %j', (raw, message) => {
+        expect(() => parseRuntimeConfig(raw)).toThrow(
+            `Invalid runtime config: ${message}`
+        );
+    });
+
+    it.each([
+        'https://x.com/Secured_Fi/status/1',
+        'https://twitter.com/Secured_Fi',
+        'https://secured.finance/',
+        'https://blog.secured.finance/post',
+        'https://medium.com/secured-finance/postmortem-28bd48e68f22',
+    ])('should keep an https link to an allowed host: %s', link => {
         const config = parseRuntimeConfig({
-            incidentAlert: 'Incident',
-            pauseAlert: { message: 1 },
-            referralMessage: ['Join us'],
+            incidentAlert: { message: 'Incident', link },
         });
 
-        expect(config).toEqual({
-            incidentAlert: undefined,
-            reopeningAlert: undefined,
-            pauseAlert: { message: undefined },
-            referralMessage: undefined,
+        expect(config.incidentAlert?.link).toEqual(link);
+    });
+
+    it.each([
+        'javascript:alert(1)',
+        'JavaScript:alert(1)',
+        ' javascript:alert(1)',
+        'http://x.com/Secured_Fi',
+        'data:text/html,<script>alert(1)</script>',
+        '//evil.com',
+        'https://secured.finance.evil.com',
+        'https://evilsecured.finance',
+        'https://x.com@evil.com',
+        'https://medium.com/@attacker/fake-withdrawal',
+        'https://medium.com/secured-finance-fake/post',
+        'not a url',
+    ])('should drop a link that is not allowed: %s', link => {
+        const config = parseRuntimeConfig({
+            reopeningAlert: { message: 'Reopened', link },
+        });
+
+        expect(config.reopeningAlert).toEqual({
+            message: 'Reopened',
+            link: undefined,
         });
     });
 });
@@ -107,5 +171,16 @@ describe('fetchRuntimeConfig', () => {
         await expect(
             fetchRuntimeConfig('https://config.test/a.json')
         ).rejects.toThrow('Failed to fetch runtime config: 404');
+    });
+
+    it('should throw when the config is invalid', async () => {
+        global.fetch = jest.fn().mockResolvedValue({
+            ok: true,
+            json: () => Promise.resolve({ pauseAlert: { message: 123 } }),
+        });
+
+        await expect(
+            fetchRuntimeConfig('https://config.test/a.json')
+        ).rejects.toThrow('Invalid runtime config');
     });
 });

@@ -3,6 +3,7 @@ import {
     mockRuntimeConfig,
 } from 'src/stories/mocks/runtimeConfigMock';
 import { renderHook, waitFor } from 'src/test-utils';
+import { RuntimeConfig } from 'src/utils';
 import { useRuntimeConfig } from './useRuntimeConfig';
 
 describe('useRuntimeConfig hook', () => {
@@ -12,6 +13,7 @@ describe('useRuntimeConfig hook', () => {
         const { result } = renderHook(() => useRuntimeConfig());
 
         expect(result.current.pauseAlert.message).toEqual('');
+        expect(result.current.status).toEqual('loading');
     });
 
     it('should return the values from the fetched config', async () => {
@@ -22,6 +24,7 @@ describe('useRuntimeConfig hook', () => {
         await waitFor(() =>
             expect(result.current.pauseAlert.message).toEqual('Remote pause')
         );
+        expect(result.current.status).toEqual('success');
         expect(global.fetch).toHaveBeenCalledWith(
             process.env.NEXT_PUBLIC_RUNTIME_CONFIG_URL,
             expect.objectContaining({ cache: 'no-cache' })
@@ -52,16 +55,32 @@ describe('useRuntimeConfig hook', () => {
         );
     });
 
-    it('should resolve to empty values when the fetch fails', async () => {
+    // The hook retries once after ~1s before reporting the error
+    it('should report an error with empty values when the fetch fails', async () => {
         global.fetch = jest.fn().mockRejectedValue(new Error('network'));
 
         const { result } = renderHook(() => useRuntimeConfig());
 
-        await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+        await waitFor(() => expect(result.current.status).toEqual('error'), {
+            timeout: 3000,
+        });
         expect(result.current.pauseAlert.message).toEqual('');
     });
 
-    it('should not fetch when no config url is set', () => {
+    it('should report an error when the config is invalid', async () => {
+        mockRuntimeConfig({
+            pauseAlert: { message: 123 },
+        } as unknown as RuntimeConfig);
+
+        const { result } = renderHook(() => useRuntimeConfig());
+
+        await waitFor(() => expect(result.current.status).toEqual('error'), {
+            timeout: 3000,
+        });
+        expect(result.current.pauseAlert.message).toEqual('');
+    });
+
+    it('should not fetch and report an error when no config url is set', () => {
         const url = process.env.NEXT_PUBLIC_RUNTIME_CONFIG_URL;
         process.env.NEXT_PUBLIC_RUNTIME_CONFIG_URL = '';
 
@@ -69,6 +88,7 @@ describe('useRuntimeConfig hook', () => {
 
         expect(global.fetch).not.toHaveBeenCalled();
         expect(result.current.pauseAlert.message).toEqual('');
+        expect(result.current.status).toEqual('error');
 
         process.env.NEXT_PUBLIC_RUNTIME_CONFIG_URL = url;
     });
