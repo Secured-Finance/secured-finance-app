@@ -40,12 +40,17 @@ const readString = (value: unknown, field: string) => {
 };
 
 // Where the incident and reopening banners may link to. Add new ones here on purpose.
-// Subdomains of a host are allowed. Medium hosts anyone's posts, so only our publication is.
-const ALLOWED_LINKS: { host: string; pathPrefix?: string }[] = [
-    { host: 'secured.finance' },
-    { host: 'x.com' },
-    { host: 'twitter.com' },
-    { host: 'medium.com', pathPrefix: '/secured-finance/' },
+// Anyone can post on X and Medium (and get a <user>.medium.com subdomain), so those
+// are limited to our own account and publication. pathPrefix is lowercase, no trailing slash.
+const ALLOWED_LINKS: {
+    host: string;
+    subdomains?: boolean;
+    pathPrefix?: string;
+}[] = [
+    { host: 'secured.finance', subdomains: true },
+    { host: 'x.com', pathPrefix: '/secured_fi' },
+    { host: 'twitter.com', pathPrefix: '/secured_fi' },
+    { host: 'medium.com', pathPrefix: '/secured-finance' },
 ];
 
 // Links come from a remote file, so only https links to the places above are kept.
@@ -54,12 +59,18 @@ const pickLink = (raw: string | undefined) => {
     if (!raw) return raw;
     try {
         const url = new URL(raw);
-        if (url.protocol !== 'https:') return undefined;
+        // user@host links are only there to mislead
+        if (url.protocol !== 'https:' || url.username || url.password) {
+            return undefined;
+        }
         const host = url.hostname.toLowerCase();
+        const path = url.pathname.toLowerCase();
         const allowed = ALLOWED_LINKS.some(
-            ({ host: h, pathPrefix }) =>
-                (host === h || host.endsWith(`.${h}`)) &&
-                (!pathPrefix || url.pathname.startsWith(pathPrefix))
+            ({ host: h, subdomains, pathPrefix }) =>
+                (host === h || (!!subdomains && host.endsWith(`.${h}`))) &&
+                (!pathPrefix ||
+                    path === pathPrefix ||
+                    path.startsWith(`${pathPrefix}/`))
         );
         return allowed ? url.href : undefined;
     } catch {

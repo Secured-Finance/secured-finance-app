@@ -25,14 +25,20 @@ describe('parseRuntimeConfig', () => {
 
     it('should keep valid fields', () => {
         const config = parseRuntimeConfig({
-            incidentAlert: { message: 'Incident', link: 'https://x.com' },
+            incidentAlert: {
+                message: 'Incident',
+                link: 'https://x.com/Secured_Fi',
+            },
             reopeningAlert: { message: 'Reopened' },
             pauseAlert: { message: 'Paused' },
             referralMessage: 'Join us',
         });
 
         expect(config).toEqual({
-            incidentAlert: { message: 'Incident', link: 'https://x.com/' },
+            incidentAlert: {
+                message: 'Incident',
+                link: 'https://x.com/Secured_Fi',
+            },
             reopeningAlert: { message: 'Reopened', link: undefined },
             pauseAlert: { message: 'Paused' },
             referralMessage: 'Join us',
@@ -79,10 +85,13 @@ describe('parseRuntimeConfig', () => {
     });
 
     it.each([
+        'https://x.com/Secured_Fi',
         'https://x.com/Secured_Fi/status/1',
+        'https://x.com/secured_fi/status/1',
         'https://twitter.com/Secured_Fi',
         'https://secured.finance/',
         'https://blog.secured.finance/post',
+        'https://medium.com/secured-finance',
         'https://medium.com/secured-finance/postmortem-28bd48e68f22',
     ])('should keep an https link to an allowed host: %s', link => {
         const config = parseRuntimeConfig({
@@ -104,6 +113,12 @@ describe('parseRuntimeConfig', () => {
         'https://x.com@evil.com',
         'https://medium.com/@attacker/fake-withdrawal',
         'https://medium.com/secured-finance-fake/post',
+        'https://attacker.medium.com/secured-finance/post-abc123',
+        'https://x.com/attacker/status/1',
+        'https://x.com/Secured_Fi_fake/status/1',
+        'https://mobile.x.com/attacker/status/1',
+        'https://evil.com@x.com/Secured_Fi',
+        'https://user:pass@secured.finance/',
         'not a url',
     ])('should drop a link that is not allowed: %s', link => {
         const config = parseRuntimeConfig({

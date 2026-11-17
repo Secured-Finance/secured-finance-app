@@ -140,7 +140,10 @@ describe('Header component', () => {
 
         it('should not render any alert when the messages are empty', async () => {
             mockRuntimeConfig({
-                incidentAlert: { message: '', link: 'https://x.com/test' },
+                incidentAlert: {
+                    message: '',
+                    link: 'https://x.com/Secured_Fi/status/1',
+                },
                 reopeningAlert: { message: '' },
                 pauseAlert: { message: '' },
             });
@@ -162,7 +165,7 @@ describe('Header component', () => {
             mockRuntimeConfig({
                 incidentAlert: {
                     message: 'Incident message',
-                    link: 'https://x.com/test',
+                    link: 'https://x.com/Secured_Fi/status/1',
                 },
             });
 
@@ -174,7 +177,7 @@ describe('Header component', () => {
             ).toHaveTextContent('Incident message');
             expect(screen.getByText('our official X account.')).toHaveAttribute(
                 'href',
-                'https://x.com/test'
+                'https://x.com/Secured_Fi/status/1'
             );
         });
 
@@ -209,7 +212,7 @@ describe('Header component', () => {
             mockRuntimeConfig({
                 reopeningAlert: {
                     message: 'Reopening message',
-                    link: 'https://x.com/test',
+                    link: 'https://x.com/Secured_Fi/status/1',
                 },
             });
 
@@ -221,7 +224,7 @@ describe('Header component', () => {
             ).toHaveTextContent('Reopening message');
             expect(screen.getByText('Read the full update.')).toHaveAttribute(
                 'href',
-                'https://x.com/test'
+                'https://x.com/Secured_Fi/status/1'
             );
         });
 
