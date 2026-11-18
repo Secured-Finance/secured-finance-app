@@ -59,7 +59,7 @@ jobs:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
       - name: Build Native Dependencies
-        run: npm rebuild canvas sharp
+        run: npm rebuild canvas sharp esbuild @swc/core
 
       - run: |
           cat <<'EOF' > .env.local
