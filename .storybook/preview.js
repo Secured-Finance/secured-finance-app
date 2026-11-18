@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import 'src/assets/css/index.css';
 import { MockSecuredFinanceProvider } from './../src/stories/mocks/MockSecuredFinanceProvider';
 import { mockStore } from './../src/stories/mocks/mockStore';
-import { withMockDate } from './decorators';
+import { withMockDate, withRuntimeConfig } from './decorators';
 
 const queryClient = new QueryClient();
 if (isChromatic()) {
@@ -56,6 +56,8 @@ export const parameters = {
 };
 
 export const decorators = [
+    // First in the list, so it renders inside the QueryClientProvider below
+    withRuntimeConfig,
     Story => (
         <Provider store={mockStore}>
             <QueryClientProvider client={queryClient}>

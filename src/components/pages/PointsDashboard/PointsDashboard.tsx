@@ -42,6 +42,7 @@ import {
     useCollateralBalances,
     useCollateralCurrencies,
     usePoints,
+    useRuntimeConfig,
 } from 'src/hooks';
 import { RootState } from 'src/store/types';
 import {
@@ -57,7 +58,8 @@ const POLL_INTERVAL = 600000; // 10 minutes
 const POINT_API_QUERY_OPTIONS = { context: { type: 'point-dashboard' } };
 
 const ReferralCode = ({ code }: { code: string }) => {
-    const shareMessage = getShareMessage(code);
+    const { referralMessage } = useRuntimeConfig();
+    const shareMessage = getShareMessage(code, referralMessage);
 
     return (
         <div className='flex h-28 w-full flex-col items-center justify-center'>

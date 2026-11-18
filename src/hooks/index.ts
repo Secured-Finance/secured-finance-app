@@ -34,6 +34,7 @@ export * from './useOrderFee';
 export * from './useOrderList';
 export * from './useOrderUnitPriceRange';
 export * from './useOrders';
+export * from './useRuntimeConfig';
 export * from './usePagination';
 export * from './usePoints';
 export * from './usePositions';

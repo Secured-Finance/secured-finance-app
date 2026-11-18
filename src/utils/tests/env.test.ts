@@ -5,14 +5,8 @@ import {
     getEnvironment,
     getGoogleAnalyticsTag,
     getGraphqlServerUrl,
-    getIncidentAlertLink,
-    getIncidentAlertMessage,
     getNonSubgraphSupportedChainIds,
-    getReferralMessage,
-    getPauseAlertMessage,
-    getReopeningAlertLink,
-    getReopeningAlertMessage,
-    getShowStablecoinAppUrl,
+    getRuntimeConfigUrl,
     getSquidWidgetIntegratorId,
     getStablecoinAppUrl,
     getSubgraphUrl,
@@ -199,95 +193,21 @@ describe('getStablecoinAppUrl', () => {
     });
 });
 
-describe('getShowStablecoinAppUrl', () => {
+describe('getRuntimeConfigUrl', () => {
     it('should return the value of the environment variable', () => {
-        process.env.NEXT_PUBLIC_SHOW_STABLECOIN_APP_URL = 'true';
-        const showStablecoinAppUrl = getShowStablecoinAppUrl();
-        expect(showStablecoinAppUrl).toBe(true);
-        expect(typeof showStablecoinAppUrl).toBe('boolean');
+        process.env.NEXT_PUBLIC_RUNTIME_CONFIG_URL =
+            'https://example.com/config.json';
+        expect(getRuntimeConfigUrl()).toBe('https://example.com/config.json');
     });
 
-    it('should return false if variable is not set', () => {
-        process.env.NEXT_PUBLIC_SHOW_STABLECOIN_APP_URL = '';
-        const showStablecoinAppUrl = getShowStablecoinAppUrl();
-        expect(showStablecoinAppUrl).toBe(false);
-        expect(typeof showStablecoinAppUrl).toBe('boolean');
-    });
-});
-
-describe('getIncidentAlertMessage', () => {
-    it('should return the value of the environment variable', () => {
-        process.env.NEXT_PUBLIC_INCIDENT_ALERT_MESSAGE = 'test message';
-        const incidentAlertMessage = getIncidentAlertMessage();
-        expect(incidentAlertMessage).toBe('test message');
-        expect(typeof incidentAlertMessage).toBe('string');
+    it('should return empty if variable is set to empty', () => {
+        process.env.NEXT_PUBLIC_RUNTIME_CONFIG_URL = '';
+        expect(getRuntimeConfigUrl()).toBe('');
     });
 
-    it('should return empty if variable is not set', () => {
-        process.env.NEXT_PUBLIC_INCIDENT_ALERT_MESSAGE = '';
-        const incidentAlertMessage = getIncidentAlertMessage();
-        expect(incidentAlertMessage).toBe('');
-        expect(typeof incidentAlertMessage).toBe('string');
-    });
-});
-
-describe('getIncidentAlertLink', () => {
-    it('should return the value of the environment variable', () => {
-        process.env.NEXT_PUBLIC_INCIDENT_ALERT_LINK = 'https://x.com/test';
-        const incidentAlertLink = getIncidentAlertLink();
-        expect(incidentAlertLink).toBe('https://x.com/test');
-        expect(typeof incidentAlertLink).toBe('string');
-    });
-
-    it('should return empty if variable is not set', () => {
-        process.env.NEXT_PUBLIC_INCIDENT_ALERT_LINK = '';
-        const incidentAlertLink = getIncidentAlertLink();
-        expect(incidentAlertLink).toBe('');
-        expect(typeof incidentAlertLink).toBe('string');
-    });
-});
-
-describe('getReopeningAlertMessage', () => {
-    it('should return the value of the environment variable', () => {
-        process.env.NEXT_PUBLIC_REOPENING_ALERT_MESSAGE = 'test message';
-        const reopeningAlertMessage = getReopeningAlertMessage();
-        expect(reopeningAlertMessage).toBe('test message');
-        expect(typeof reopeningAlertMessage).toBe('string');
-    });
-
-    it('should return empty if variable is not set', () => {
-        process.env.NEXT_PUBLIC_REOPENING_ALERT_MESSAGE = '';
-        const reopeningAlertMessage = getReopeningAlertMessage();
-        expect(reopeningAlertMessage).toBe('');
-        expect(typeof reopeningAlertMessage).toBe('string');
-    });
-});
-
-describe('getReopeningAlertLink', () => {
-    it('should return the value of the environment variable', () => {
-        process.env.NEXT_PUBLIC_REOPENING_ALERT_LINK = 'https://x.com/test';
-        const reopeningAlertLink = getReopeningAlertLink();
-        expect(reopeningAlertLink).toBe('https://x.com/test');
-        expect(typeof reopeningAlertLink).toBe('string');
-    });
-
-    it('should return empty if variable is not set', () => {
-        process.env.NEXT_PUBLIC_REOPENING_ALERT_LINK = '';
-        const reopeningAlertLink = getReopeningAlertLink();
-        expect(reopeningAlertLink).toBe('');
-        expect(typeof reopeningAlertLink).toBe('string');
-    });
-});
-
-describe('getPauseAlertMessage', () => {
-    it('should return the value of the environment variable', () => {
-        process.env.NEXT_PUBLIC_PAUSE_ALERT_MESSAGE = 'test message';
-        expect(getPauseAlertMessage()).toBe('test message');
-    });
-
-    it('should return empty if variable is not set', () => {
-        process.env.NEXT_PUBLIC_PAUSE_ALERT_MESSAGE = '';
-        expect(getPauseAlertMessage()).toBe('');
+    it('should return empty if variable is not defined', () => {
+        delete process.env.NEXT_PUBLIC_RUNTIME_CONFIG_URL;
+        expect(getRuntimeConfigUrl()).toBe('');
     });
 });
 
@@ -303,22 +223,6 @@ describe('getVaultsAppUrl', () => {
         process.env.NEXT_PUBLIC_VAULTS_APP_URL = '';
         const vaultsAppUrl = getVaultsAppUrl();
         expect(vaultsAppUrl).toBe('');
-    });
-});
-
-describe('getReferralMessage', () => {
-    it('should return the value of the environment variable', () => {
-        process.env.NEXT_PUBLIC_REFERRAL_MESSAGE = 'test';
-        const referralMessage = getReferralMessage();
-        expect(referralMessage).toBe('test');
-        expect(typeof referralMessage).toBe('string');
-    });
-
-    it('should return empty string if variable is not set', () => {
-        process.env.NEXT_PUBLIC_REFERRAL_MESSAGE = '';
-        const referralMessage = getReferralMessage();
-
-        expect(referralMessage).toBe('');
     });
 });
 

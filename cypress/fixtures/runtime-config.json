@@ -1,0 +1,14 @@
+{
+  "incidentAlert": {
+    "message": "",
+    "link": ""
+  },
+  "reopeningAlert": {
+    "message": "",
+    "link": ""
+  },
+  "pauseAlert": {
+    "message": ""
+  },
+  "referralMessage": ""
+}

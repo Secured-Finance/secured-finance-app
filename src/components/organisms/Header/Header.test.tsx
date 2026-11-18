@@ -1,6 +1,7 @@
 import { composeStories } from '@storybook/react';
 import mockRouter from 'next-router-mock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
+import { mockRuntimeConfig } from 'src/stories/mocks/runtimeConfigMock';
 import * as stories from './Header.stories';
 
 const { Primary } = composeStories(stories);
@@ -123,98 +124,124 @@ describe('Header component', () => {
         });
     });
 
-    it('should not render an incident alert when no message is set', () => {
-        mockRouter.push('/');
-        render(<Primary />);
-        expect(screen.queryByTestId('incident-alert')).not.toBeInTheDocument();
-    });
+    describe('Runtime config alerts', () => {
+        it('should not render any alert by default', async () => {
+            mockRouter.push('/');
+            render(<Primary />);
+            await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+            expect(
+                screen.queryByTestId('incident-alert')
+            ).not.toBeInTheDocument();
+            expect(
+                screen.queryByTestId('reopening-alert')
+            ).not.toBeInTheDocument();
+            expect(screen.queryByTestId('pause-alert')).not.toBeInTheDocument();
+        });
 
-    it('should render an incident alert when a message is set', () => {
-        process.env.NEXT_PUBLIC_INCIDENT_ALERT_MESSAGE = 'Incident message';
-        process.env.NEXT_PUBLIC_INCIDENT_ALERT_LINK = 'https://x.com/test';
+        it('should not render any alert when the messages are empty', async () => {
+            mockRuntimeConfig({
+                incidentAlert: {
+                    message: '',
+                    link: 'https://x.com/Secured_Fi/status/1',
+                },
+                reopeningAlert: { message: '' },
+                pauseAlert: { message: '' },
+            });
 
-        mockRouter.push('/');
-        render(<Primary />);
+            mockRouter.push('/');
+            render(<Primary />);
 
-        expect(screen.getByTestId('incident-alert')).toBeInTheDocument();
-        expect(screen.getByText('Incident message')).toBeInTheDocument();
-        expect(screen.getByText('our official X account.')).toHaveAttribute(
-            'href',
-            'https://x.com/test'
-        );
+            await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+            expect(
+                screen.queryByTestId('incident-alert')
+            ).not.toBeInTheDocument();
+            expect(
+                screen.queryByTestId('reopening-alert')
+            ).not.toBeInTheDocument();
+            expect(screen.queryByTestId('pause-alert')).not.toBeInTheDocument();
+        });
 
-        process.env.NEXT_PUBLIC_INCIDENT_ALERT_MESSAGE = '';
-        process.env.NEXT_PUBLIC_INCIDENT_ALERT_LINK = '';
-    });
+        it('should render an incident alert when a message is set', async () => {
+            mockRuntimeConfig({
+                incidentAlert: {
+                    message: 'Incident message',
+                    link: 'https://x.com/Secured_Fi/status/1',
+                },
+            });
 
-    it('should not render the official updates link when no link is set', () => {
-        process.env.NEXT_PUBLIC_INCIDENT_ALERT_MESSAGE = 'Incident message';
+            mockRouter.push('/');
+            render(<Primary />);
 
-        mockRouter.push('/');
-        render(<Primary />);
+            expect(
+                await screen.findByTestId('incident-alert')
+            ).toHaveTextContent('Incident message');
+            expect(screen.getByText('our official X account.')).toHaveAttribute(
+                'href',
+                'https://x.com/Secured_Fi/status/1'
+            );
+        });
 
-        expect(screen.getByTestId('incident-alert')).toBeInTheDocument();
-        expect(
-            screen.queryByText('our official X account.')
-        ).not.toBeInTheDocument();
+        it('should not render the official updates link when no link is set', async () => {
+            mockRuntimeConfig({
+                incidentAlert: { message: 'Incident message' },
+            });
 
-        process.env.NEXT_PUBLIC_INCIDENT_ALERT_MESSAGE = '';
-    });
+            mockRouter.push('/');
+            render(<Primary />);
 
-    it('should not render the pause alert when no message is set', () => {
-        mockRouter.push('/');
-        render(<Primary />);
-        expect(screen.queryByTestId('pause-alert')).not.toBeInTheDocument();
-    });
+            expect(
+                await screen.findByTestId('incident-alert')
+            ).toBeInTheDocument();
+            expect(
+                screen.queryByText('our official X account.')
+            ).not.toBeInTheDocument();
+        });
 
-    it('should render the pause alert when a message is set', () => {
-        process.env.NEXT_PUBLIC_PAUSE_ALERT_MESSAGE = 'Pause message';
+        it('should render the pause alert when a message is set', async () => {
+            mockRuntimeConfig({ pauseAlert: { message: 'Pause message' } });
 
-        mockRouter.push('/');
-        render(<Primary />);
+            mockRouter.push('/');
+            render(<Primary />);
 
-        expect(screen.getByTestId('pause-alert')).toHaveTextContent(
-            'Pause message'
-        );
+            expect(await screen.findByTestId('pause-alert')).toHaveTextContent(
+                'Pause message'
+            );
+        });
 
-        process.env.NEXT_PUBLIC_PAUSE_ALERT_MESSAGE = '';
-    });
+        it('should render a reopening alert when a message is set', async () => {
+            mockRuntimeConfig({
+                reopeningAlert: {
+                    message: 'Reopening message',
+                    link: 'https://x.com/Secured_Fi/status/1',
+                },
+            });
 
-    it('should not render a reopening alert when no message is set', () => {
-        mockRouter.push('/');
-        render(<Primary />);
-        expect(screen.queryByTestId('reopening-alert')).not.toBeInTheDocument();
-    });
+            mockRouter.push('/');
+            render(<Primary />);
 
-    it('should render a reopening alert when a message is set', () => {
-        process.env.NEXT_PUBLIC_REOPENING_ALERT_MESSAGE = 'Reopening message';
-        process.env.NEXT_PUBLIC_REOPENING_ALERT_LINK = 'https://x.com/test';
+            expect(
+                await screen.findByTestId('reopening-alert')
+            ).toHaveTextContent('Reopening message');
+            expect(screen.getByText('Read the full update.')).toHaveAttribute(
+                'href',
+                'https://x.com/Secured_Fi/status/1'
+            );
+        });
 
-        mockRouter.push('/');
-        render(<Primary />);
+        it('should not render the read-more link when no link is set', async () => {
+            mockRuntimeConfig({
+                reopeningAlert: { message: 'Reopening message' },
+            });
 
-        expect(screen.getByTestId('reopening-alert')).toBeInTheDocument();
-        expect(screen.getByText('Reopening message')).toBeInTheDocument();
-        expect(screen.getByText('Read the full update.')).toHaveAttribute(
-            'href',
-            'https://x.com/test'
-        );
+            mockRouter.push('/');
+            render(<Primary />);
 
-        process.env.NEXT_PUBLIC_REOPENING_ALERT_MESSAGE = '';
-        process.env.NEXT_PUBLIC_REOPENING_ALERT_LINK = '';
-    });
-
-    it('should not render the read-more link when no link is set', () => {
-        process.env.NEXT_PUBLIC_REOPENING_ALERT_MESSAGE = 'Reopening message';
-
-        mockRouter.push('/');
-        render(<Primary />);
-
-        expect(screen.getByTestId('reopening-alert')).toBeInTheDocument();
-        expect(
-            screen.queryByText('Read the full update.')
-        ).not.toBeInTheDocument();
-
-        process.env.NEXT_PUBLIC_REOPENING_ALERT_MESSAGE = '';
+            expect(
+                await screen.findByTestId('reopening-alert')
+            ).toBeInTheDocument();
+            expect(
+                screen.queryByText('Read the full update.')
+            ).not.toBeInTheDocument();
+        });
     });
 });

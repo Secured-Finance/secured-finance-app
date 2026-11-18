@@ -25,16 +25,10 @@ import {
     NetworkSelector,
     Settings,
 } from 'src/components/molecules';
-import { useBreakpoint } from 'src/hooks';
+import { useBreakpoint, useRuntimeConfig } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { RootState } from 'src/store/types';
 import {
-    getIncidentAlertLink,
-    getIncidentAlertMessage,
-    getPauseAlertMessage,
-    getReopeningAlertLink,
-    getReopeningAlertMessage,
-    getShowStablecoinAppUrl,
     getStablecoinAppUrl,
     getSupportedNetworks,
     getVaultsAppUrl,
@@ -82,10 +76,13 @@ const HeaderMessage = ({
     return <></>;
 };
 
-const IncidentAlert = () => {
-    const message = getIncidentAlertMessage();
-    const link = getIncidentAlertLink();
-
+const IncidentAlert = ({
+    message,
+    link,
+}: {
+    message: string;
+    link: string;
+}) => {
     if (!message) {
         return <></>;
     }
@@ -107,10 +104,13 @@ const IncidentAlert = () => {
     );
 };
 
-const ReopeningAlert = () => {
-    const message = getReopeningAlertMessage();
-    const link = getReopeningAlertLink();
-
+const ReopeningAlert = ({
+    message,
+    link,
+}: {
+    message: string;
+    link: string;
+}) => {
     if (!message) {
         return <></>;
     }
@@ -135,9 +135,7 @@ const ReopeningAlert = () => {
     );
 };
 
-const PauseAlert = () => {
-    const message = getPauseAlertMessage();
-
+const PauseAlert = ({ message }: { message: string }) => {
     if (!message) {
         return <></>;
     }
@@ -159,6 +157,7 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     const securedFinance = useSF();
     const isMobile = useBreakpoint('tablet');
     const { address, isConnected } = useAccount();
+    const runtimeConfig = useRuntimeConfig();
 
     // const {
     //     user: { data: userData },
@@ -182,14 +181,12 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
 
     const btnSize = isMobile ? ButtonSizes.sm : undefined;
 
-    const isShowStablecoinLink = getShowStablecoinAppUrl();
-
     return (
         <>
             <div className='relative'>
-                <IncidentAlert />
-                <ReopeningAlert />
-                <PauseAlert />
+                <IncidentAlert {...runtimeConfig.incidentAlert} />
+                <ReopeningAlert {...runtimeConfig.reopeningAlert} />
+                <PauseAlert {...runtimeConfig.pauseAlert} />
                 <HeaderMessage
                     isChainIdDetected={isChainIdDetected}
                     chainId={currentChainId}
@@ -230,7 +227,7 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                     </div>
                     <div className='col-span-2 flex flex-row items-center justify-end gap-2 laptop:col-span-1 laptop:gap-2.5'>
                         <VaultsExternalLink />
-                        {isShowStablecoinLink && <StablecoinExternalLink />}
+                        <StablecoinExternalLink />
                         {/* <PointsTag
                             isConnected={verifiedData && address && userData}
                             points={userPoints}

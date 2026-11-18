@@ -1,5 +1,6 @@
 import { GraphClientProvider } from '@secured-finance/sf-graph-client';
 import type { StoryContext, StoryFn } from '@storybook/react';
+import { useQueryClient } from '@tanstack/react-query';
 import { createWeb3Modal } from '@web3modal/wagmi/react';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
@@ -7,9 +8,12 @@ import 'src/bigIntPatch';
 import { Footer } from 'src/components/atoms';
 import Header from 'src/components/organisms/Header/Header';
 import { Layout } from 'src/components/templates';
+import { QueryKeys } from 'src/hooks/queries';
 import { updateChainError } from 'src/store/blockchain';
 import { connectWallet, updateBalance } from 'src/store/wallet';
 import { account } from 'src/stories/mocks/mockWallet';
+import { initialRuntimeConfig } from 'src/stories/mocks/runtimeConfigMock';
+import { RuntimeConfig, getRuntimeConfigUrl } from 'src/utils';
 import timemachine from 'timemachine';
 import { WagmiProvider, useConnect } from 'wagmi';
 import { config } from './../src/stories/mocks/mockWallet';
@@ -61,6 +65,39 @@ export const withWalletProvider = (Story: StoryFn, Context: StoryContext) => {
         </WagmiProvider>
     );
 };
+
+const RuntimeConfigProvider = ({
+    children,
+    config,
+}: {
+    children: React.ReactNode;
+    config: RuntimeConfig;
+}) => {
+    const queryClient = useQueryClient();
+    const queryKey = [QueryKeys.RUNTIME_CONFIG, getRuntimeConfigUrl()];
+
+    // Seeds the cache read by useRuntimeConfig; only rewritten when the story's config changes
+    if (
+        JSON.stringify(queryClient.getQueryData(queryKey)) !==
+        JSON.stringify(config)
+    ) {
+        queryClient.setQueryData(queryKey, config);
+    }
+
+    return <>{children}</>;
+};
+
+// Stories get initialRuntimeConfig; override fields with the `runtimeConfig` parameter
+export const withRuntimeConfig = (Story: StoryFn, Context: StoryContext) => (
+    <RuntimeConfigProvider
+        config={{
+            ...initialRuntimeConfig,
+            ...Context.parameters?.runtimeConfig,
+        }}
+    >
+        <Story />
+    </RuntimeConfigProvider>
+);
 
 export const WithGraphClient = (Story: StoryFn) => (
     <GraphClientProvider network='sepolia'>
