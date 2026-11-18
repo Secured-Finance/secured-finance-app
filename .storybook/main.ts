@@ -26,6 +26,7 @@ const config: StorybookConfig = {
     env: config => ({
         ...config,
         COMMIT_HASH: '.storybook',
+        NEXT_PUBLIC_RUNTIME_CONFIG_URL: '',
     }),
 };
 

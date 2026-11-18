@@ -15,3 +15,11 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands';
+
+// Serve a fixed runtime config so tests don't depend on the live file on R2.
+// A spec can override it with its own cy.intercept to test config-driven UI.
+beforeEach(() => {
+    cy.intercept('GET', 'https://config.secured.finance/*.json', {
+        fixture: 'runtime-config.json',
+    });
+});
