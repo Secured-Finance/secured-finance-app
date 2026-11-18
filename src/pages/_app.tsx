@@ -57,17 +57,7 @@ const TrackingCode = ({ gaTag }: { gaTag: string }) => {
                 src={`https://www.googletagmanager.com/gtag/js?id=${gaTag}`}
             />
             <Script id='google-analytics' strategy='afterInteractive'>
-                {`
-                    window.dataLayer = window.dataLayer || [];
-                    function gtag(){dataLayer.push(arguments);}
-                    gtag('js', new Date());
-                    gtag('config', '${gaTag}');
-                    window.addEventListener('hashchange', () => {
-                        gtag('config', '${gaTag}', {
-                            page_path: window.location.pathname + window.location.hash,
-                        });
-                    });
-                    `}
+                {gtag.getInlineScript(gaTag)}
             </Script>
         </>
     );

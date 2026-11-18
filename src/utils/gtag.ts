@@ -22,3 +22,18 @@ export const event = ({ action, category, label, value }: GTagEvent) => {
         });
     }
 };
+
+// Inline bootstrap for Google Analytics, rendered by _app.tsx.
+// _document.tsx puts the hash of this exact string into the Content Security
+// Policy, so it must stay a pure function of the tag.
+export const getInlineScript = (gaTag: string) => `
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', '${gaTag}');
+    window.addEventListener('hashchange', () => {
+        gtag('config', '${gaTag}', {
+            page_path: window.location.pathname + window.location.hash,
+        });
+    });
+`;
