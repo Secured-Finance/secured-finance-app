@@ -86,12 +86,15 @@ describe('buildContentSecurityPolicy', () => {
             rpcUrls: ['http://insecure.example.com', 'not a url'],
             serviceUrls: [undefined, ''],
         });
-        const sources = directive(result, 'connect-src');
+        const baseline = buildContentSecurityPolicy({
+            ...options,
+            rpcUrls: [],
+            serviceUrls: [],
+        });
 
-        expect(sources.some(s => s.includes('insecure.example.com'))).toBe(
-            false
+        expect(directive(result, 'connect-src')).toEqual(
+            directive(baseline, 'connect-src')
         );
-        expect(sources).not.toContain('undefined');
     });
 
     it('should not list a source twice', () => {
