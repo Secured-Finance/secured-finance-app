@@ -98,7 +98,7 @@ jobs:
 
       - name: Upload Code Coverage
         if: inputs.environment_name == 'development' || inputs.environment_name == 'ci-build'
-        uses: codecov/codecov-action@f32b3a3741e1053eb607407145bc9619351dc93b # v2.1.0
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: unit-tests
