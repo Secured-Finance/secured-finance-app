@@ -148,6 +148,7 @@
     "prettier": "^2.8.8",
     "prettier-plugin-tailwindcss": "^0.2.8",
     "process": "^0.11.10",
+    "serve": "14.2.6",
     "storybook": "^7.6.15",
     "storybook-addon-apollo-client": "^5.0.0",
     "storybook-addon-cookie": "^3.2.0",
