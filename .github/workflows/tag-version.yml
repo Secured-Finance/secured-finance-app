@@ -21,24 +21,27 @@ jobs:
     steps:
       - name: Generate token
         id: generate_token
-        uses: tibdex/github-app-token@v1
+        uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2.2.2
         with:
-          app_id: ${{ secrets.MACHINE_USER_APP_ID }}
-          private_key: ${{ secrets.MACHINE_USER_PRIVATE_KEY }}
-      - uses: actions/checkout@v3
+          app-id: ${{ secrets.MACHINE_USER_APP_ID }}
+          private-key: ${{ secrets.MACHINE_USER_PRIVATE_KEY }}
+      - uses: actions/checkout@a37ce9120846195fa4ece8f58b268e6043cb2f26 # v3.7.0
         with:
           fetch-depth: 0
           token: ${{ steps.generate_token.outputs.token }}
       - name: Tag the version
         shell: bash
+        env:
+          APP_ID: ${{ secrets.MACHINE_USER_APP_ID }}
+          VERSION_TYPE: ${{ github.event.inputs.version }}
         run: |
           git config user.name "SF Machine User[bot]"
-          git config user.email "${{ secrets.MACHINE_USER_APP_ID }}+sf-machine-user[bot]@users.noreply.github.com"
-          if [ "${{ github.event.inputs.version }}" = "hotfix" ]; then
+          git config user.email "${APP_ID}+sf-machine-user[bot]@users.noreply.github.com"
+          if [ "$VERSION_TYPE" = "hotfix" ]; then
             npm version patch -m "Hotfix: %s"
-          elif [ "${{ github.event.inputs.version }}" = "patch" ]; then
+          elif [ "$VERSION_TYPE" = "patch" ]; then
             npm version patch -m "Release: %s"
-          elif [ "${{ github.event.inputs.version }}" = "minor" ]; then
+          elif [ "$VERSION_TYPE" = "minor" ]; then
             npm version minor -m "Release: %s"
           else
             npm version major -m "Release: %s"

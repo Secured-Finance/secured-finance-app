@@ -16,6 +16,7 @@ export * from './networks';
 export * from './portfolio';
 export * from './protocol';
 export * from './rate';
+export * from './runtimeConfig';
 export * from './strings';
 export * from './swap';
 export * from './tableDefinitions';

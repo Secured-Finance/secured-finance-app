@@ -89,21 +89,8 @@ export const getStablecoinAppUrl = (): string => {
     return stablecoinAppUrl;
 };
 
-export const getShowStablecoinAppUrl = () => {
-    const NEXT_PUBLIC_SHOW_STABLECOIN_APP_URL =
-        process.env.NEXT_PUBLIC_SHOW_STABLECOIN_APP_URL;
-    if (!NEXT_PUBLIC_SHOW_STABLECOIN_APP_URL) {
-        return false;
-    }
-    return NEXT_PUBLIC_SHOW_STABLECOIN_APP_URL === 'true';
-};
-
 export const getVaultsAppUrl = (): string => {
     return process.env.NEXT_PUBLIC_VAULTS_APP_URL || '';
-};
-
-export const getReferralMessage = (): string => {
-    return process.env.NEXT_PUBLIC_REFERRAL_MESSAGE || '';
 };
 
 export const getSquidWidgetIntegratorId = () => {
@@ -141,24 +128,8 @@ const DELISTED_CURRENCIES: Record<number, string | undefined> = {
     421614: process.env.NEXT_PUBLIC_DELISTED_CURRENCIES_421614,
 };
 
-export const getIncidentAlertMessage = (): string => {
-    return process.env.NEXT_PUBLIC_INCIDENT_ALERT_MESSAGE || '';
-};
-
-export const getIncidentAlertLink = (): string => {
-    return process.env.NEXT_PUBLIC_INCIDENT_ALERT_LINK || '';
-};
-
-export const getReopeningAlertMessage = (): string => {
-    return process.env.NEXT_PUBLIC_REOPENING_ALERT_MESSAGE || '';
-};
-
-export const getReopeningAlertLink = (): string => {
-    return process.env.NEXT_PUBLIC_REOPENING_ALERT_LINK || '';
-};
-
-export const getPauseAlertMessage = (): string => {
-    return process.env.NEXT_PUBLIC_PAUSE_ALERT_MESSAGE || '';
+export const getRuntimeConfigUrl = (): string => {
+    return process.env.NEXT_PUBLIC_RUNTIME_CONFIG_URL || '';
 };
 
 export const getDelistedCurrencies = (chainId?: number): string[] => {
