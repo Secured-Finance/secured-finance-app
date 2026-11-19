@@ -25,7 +25,10 @@ jobs:
     name: Print Environment
     steps:
       - name: Print Environment
-        run: echo "Deploying ${{ github.event.inputs.ref }} on ${{ github.event.inputs.environment }} Environment"
+        env:
+          DEPLOY_REF: ${{ github.event.inputs.ref }}
+          DEPLOY_ENV: ${{ github.event.inputs.environment }}
+        run: echo "Deploying $DEPLOY_REF on $DEPLOY_ENV Environment"
 
   build-and-test-all:
     name: Build and Test
@@ -53,10 +56,10 @@ jobs:
     needs: [build-and-test-all, cypress-run]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@a37ce9120846195fa4ece8f58b268e6043cb2f26 # v3.7.0
 
       - name: Retrieve artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: WebApp
           path: ./build
@@ -67,7 +70,7 @@ jobs:
 
       - name: Pin to Filebase
         id: ipfs-pin
-        uses: aquiladev/ipfs-action@master
+        uses: aquiladev/ipfs-action@eeededc1146dae4c4e4ed70cec415cb7e1318cdb # master as of 2026-11-11
         with:
           path: ./build
           service: filebase
