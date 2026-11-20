@@ -31,6 +31,10 @@ export const usePoints = () => {
             };
             setCookie('verified_data', verifiedData, {
                 expires,
+                // Only this app reads the token, so the cookie never needs to
+                // travel on a cross-site request or over plain http
+                sameSite: 'strict',
+                secure: window.location.protocol === 'https:',
             });
         }
     }, [verifyData, setCookie]);
