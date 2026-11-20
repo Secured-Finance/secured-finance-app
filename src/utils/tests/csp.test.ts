@@ -117,4 +117,21 @@ describe('buildContentSecurityPolicy', () => {
         expect(directive(policy, 'base-uri')).toEqual(["'self'"]);
         expect(directive(policy, 'form-action')).toEqual(["'self'"]);
     });
+
+    it('should load gtag.js only from www.googletagmanager.com', () => {
+        const sources = directive(policy, 'script-src');
+
+        expect(sources).toContain('https://www.googletagmanager.com');
+        expect(sources).not.toContain('https://*.googletagmanager.com');
+    });
+
+    it('should upgrade insecure requests outside development', () => {
+        const dev = buildContentSecurityPolicy({
+            ...options,
+            isDevelopment: true,
+        });
+
+        expect(policy.split('; ')).toContain('upgrade-insecure-requests');
+        expect(dev.split('; ')).not.toContain('upgrade-insecure-requests');
+    });
 });

@@ -100,12 +100,14 @@ export const buildContentSecurityPolicy = ({
     serviceUrls,
     inlineScriptHashes,
 }: ContentSecurityPolicyOptions): string => {
-    const directives: Record<string, (string | undefined)[]> = {
+    const directives: Record<string, (string | undefined)[] | undefined> = {
         'default-src': ["'self'"],
         'script-src': [
             "'self'",
             ...inlineScriptHashes.map(hash => `'sha256-${hash}'`),
-            'https://*.googletagmanager.com',
+            // gtag.js is only served from www; a wildcard here would allow
+            // any googletagmanager.com host to run script
+            'https://www.googletagmanager.com',
             isDevelopment ? "'unsafe-eval'" : undefined,
         ],
         'style-src': [
@@ -143,9 +145,16 @@ export const buildContentSecurityPolicy = ({
         'object-src': ["'none'"],
         'base-uri': ["'self'"],
         'form-action': ["'self'"],
+        // Works in a meta tag. Left out in development, where the app is
+        // served over http://localhost and upgrading would break it.
+        'upgrade-insecure-requests': isDevelopment ? undefined : [],
     };
 
     return Object.entries(directives)
-        .map(([name, sources]) => `${name} ${unique(sources).join(' ')}`)
+        .filter(([, sources]) => sources !== undefined)
+        .map(([name, sources]) => {
+            const values = unique(sources ?? []);
+            return values.length ? `${name} ${values.join(' ')}` : name;
+        })
         .join('; ');
 };

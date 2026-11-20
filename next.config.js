@@ -47,7 +47,9 @@ module.exports = withBundleAnalyzer({
                     {
                         key: 'Content-Security-Policy',
                         // The full policy is a <meta> tag (src/utils/csp.ts).
-                        // frame-ancestors only works as a header.
+                        // frame-ancestors only works as a header, so it is
+                        // repeated here for hosts that send these headers
+                        // (Cloudflare Pages previews). Filebase does not.
                         value: "frame-ancestors 'none'; upgrade-insecure-requests",
                     },
                 ],
