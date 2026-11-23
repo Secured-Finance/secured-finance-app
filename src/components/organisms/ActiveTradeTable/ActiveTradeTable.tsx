@@ -15,7 +15,13 @@ import {
     TableCardHeader,
 } from 'src/components/molecules';
 import { UnwindDialog, UnwindDialogType } from 'src/components/organisms';
-import { Position, useBreakpoint, useLastPrices } from 'src/hooks';
+import {
+    MAINTENANCE_LABEL,
+    Position,
+    useBreakpoint,
+    useIsUnderMaintenance,
+    useLastPrices,
+} from 'src/hooks';
 import {
     resetUnitPrice,
     setCurrency,
@@ -58,6 +64,7 @@ const ActiveTradeTableMobile = ({
         text: string;
         onClick: () => void;
         disabled?: boolean;
+        tooltip?: string;
     }[];
     delistedCurrencySet: Set<CurrencySymbol>;
 }) => {
@@ -149,6 +156,7 @@ const ActiveTradeTableMobile = ({
                                             key={index}
                                             text={item.text}
                                             disabled={item.disabled}
+                                            tooltip={item.tooltip}
                                             onClick={item.onClick}
                                         />
                                     );
@@ -184,6 +192,10 @@ export const ActiveTradeTable = ({
     const router = useRouter();
     const dispatch = useDispatch();
     const isTablet = useBreakpoint('laptop');
+    const isUnderMaintenance = useIsUnderMaintenance();
+    const maintenanceTooltip = isUnderMaintenance
+        ? MAINTENANCE_LABEL
+        : undefined;
 
     const handleCurrencyChange = useCallback(
         (v: CurrencySymbol) => {
@@ -204,6 +216,8 @@ export const ActiveTradeTable = ({
             const items = [
                 {
                     text: 'Add/Reduce',
+                    disabled: isUnderMaintenance,
+                    tooltip: maintenanceTooltip,
                     onClick: (): void => {
                         dispatch(setMaturity(maturity));
                         handleCurrencyChange(ccy);
@@ -222,6 +236,8 @@ export const ActiveTradeTable = ({
                 },
                 {
                     text: 'Close',
+                    disabled: isUnderMaintenance,
+                    tooltip: maintenanceTooltip,
                     onClick: (): void => {
                         setUnwindDialogData({
                             maturity: new Maturity(maturity),
@@ -270,11 +286,19 @@ export const ActiveTradeTable = ({
                             type: type,
                         });
                     },
-                    disabled: disableAction,
+                    disabled: disableAction || isUnderMaintenance,
+                    tooltip: maintenanceTooltip,
                 },
             ];
         },
-        [delistedCurrencySet, dispatch, handleCurrencyChange, router]
+        [
+            delistedCurrencySet,
+            dispatch,
+            handleCurrencyChange,
+            isUnderMaintenance,
+            maintenanceTooltip,
+            router,
+        ]
     );
 
     const getMaturityDisplayValue = useCallback(

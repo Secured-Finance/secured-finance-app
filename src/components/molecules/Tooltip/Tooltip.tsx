@@ -13,6 +13,7 @@ type TooltipProps = Pick<TippyProps, 'placement'> &
         align?: Alignment;
         mode?: TooltipMode;
         disabled?: boolean;
+        className?: string;
     }>;
 
 export const Tooltip = ({
@@ -22,6 +23,7 @@ export const Tooltip = ({
     mode = TooltipMode.Dark,
     placement,
     disabled,
+    className,
 }: TooltipProps) => {
     const isMobile = useBreakpoint('tablet');
 
@@ -50,7 +52,8 @@ export const Tooltip = ({
                     'pointer-events-auto flex items-start focus:outline-none',
                     {
                         'cursor-pointer': !disabled,
-                    }
+                    },
+                    className
                 )}
             >
                 {cloneElement(
@@ -59,5 +62,31 @@ export const Tooltip = ({
                 )}
             </div>
         </Tippy>
+    );
+};
+
+// Wraps children in a tooltip only when there is content, e.g. why a button is disabled
+export const OptionalTooltip = ({
+    content,
+    fullWidth = false,
+    children,
+}: {
+    content?: string;
+    fullWidth?: boolean;
+    children: React.ReactElement;
+}) => {
+    if (!content) return children;
+
+    // Own wrapper so the tooltip renders right after its trigger, as tippy needs for keyboard access
+    return (
+        <div className={clsx({ 'w-full': fullWidth })}>
+            <Tooltip
+                iconElement={children}
+                placement='top'
+                className={clsx({ 'w-full': fullWidth })}
+            >
+                {content}
+            </Tooltip>
+        </div>
     );
 };

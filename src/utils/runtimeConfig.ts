@@ -7,6 +7,8 @@ export type RuntimeConfig = {
     reopeningAlert?: { message?: string; link?: string };
     pauseAlert?: { message?: string };
     referralMessage?: string;
+    // Chains where trading is paused for maintenance
+    maintenanceChainIds?: number[];
 };
 
 export type ResolvedRuntimeConfig = {
@@ -14,6 +16,7 @@ export type ResolvedRuntimeConfig = {
     reopeningAlert: { message: string; link: string };
     pauseAlert: { message: string };
     referralMessage: string;
+    maintenanceChainIds: number[];
 };
 
 const FETCH_TIMEOUT_MS = 5000;
@@ -37,6 +40,17 @@ const readString = (value: unknown, field: string) => {
     if (value === undefined) return undefined;
     if (typeof value !== 'string') throw invalid(field, 'a string');
     return value.trim();
+};
+
+const readChainIds = (value: unknown, field: string) => {
+    if (value === undefined) return undefined;
+    if (
+        !Array.isArray(value) ||
+        !value.every(id => Number.isInteger(id) && id > 0)
+    ) {
+        throw invalid(field, 'an array of chain ids');
+    }
+    return value as number[];
 };
 
 // Where the incident and reopening banners may link to. Add new ones here on purpose.
@@ -101,6 +115,10 @@ export const parseRuntimeConfig = (raw: unknown): RuntimeConfig => {
             message: readString(pauseAlert.message, 'pauseAlert.message'),
         },
         referralMessage: readString(raw.referralMessage, 'referralMessage'),
+        maintenanceChainIds: readChainIds(
+            raw.maintenanceChainIds,
+            'maintenanceChainIds'
+        ),
     };
 };
 
@@ -141,4 +159,5 @@ export const resolveRuntimeConfig = (
         message: remote?.pauseAlert?.message ?? '',
     },
     referralMessage: remote?.referralMessage ?? '',
+    maintenanceChainIds: remote?.maintenanceChainIds ?? [],
 });

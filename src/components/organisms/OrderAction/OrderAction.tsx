@@ -4,6 +4,7 @@ import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Button, ButtonSizes } from 'src/components/atoms';
+import { OptionalTooltip } from 'src/components/molecules';
 import {
     DepositCollateral,
     PlaceOrder,
@@ -11,9 +12,11 @@ import {
 } from 'src/components/organisms';
 import {
     CollateralBook,
+    MAINTENANCE_LABEL,
     MarketPhase,
     useBreakpoint,
     useCurrencies,
+    useIsUnderMaintenance,
     useLastPrices,
     useMarketPhase,
     useOrders,
@@ -60,6 +63,7 @@ export const OrderAction = ({
         );
 
     const marketPhase = useMarketPhase(currency, maturity);
+    const isUnderMaintenance = useIsUnderMaintenance();
 
     const balances = useBalances();
 
@@ -90,6 +94,7 @@ export const OrderAction = ({
     };
 
     const isPlaceOrderDisabled =
+        isUnderMaintenance ||
         validation ||
         !amount ||
         (marketPhase !== MarketPhase.PRE_ORDER &&
@@ -101,19 +106,26 @@ export const OrderAction = ({
         <>
             {isConnected &&
                 (canPlaceOrder ? (
-                    <Button
-                        disabled={isPlaceOrderDisabled || chainError}
+                    <OptionalTooltip
+                        content={
+                            isUnderMaintenance ? MAINTENANCE_LABEL : undefined
+                        }
                         fullWidth
-                        onClick={() => {
-                            setOpenPlaceOrderDialog(true);
-                            track(ButtonEvents.PLACE_ORDER_BUTTON);
-                        }}
-                        data-testid='place-order-button'
-                        aria-label={getButtonText()}
-                        size={buttonSize}
                     >
-                        {getButtonText()}
-                    </Button>
+                        <Button
+                            disabled={isPlaceOrderDisabled || chainError}
+                            fullWidth
+                            onClick={() => {
+                                setOpenPlaceOrderDialog(true);
+                                track(ButtonEvents.PLACE_ORDER_BUTTON);
+                            }}
+                            data-testid='place-order-button'
+                            aria-label={getButtonText()}
+                            size={buttonSize}
+                        >
+                            {getButtonText()}
+                        </Button>
+                    </OptionalTooltip>
                 ) : (
                     <Button
                         disabled={chainError}

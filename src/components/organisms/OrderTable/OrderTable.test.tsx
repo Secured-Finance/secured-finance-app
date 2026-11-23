@@ -1,5 +1,7 @@
 import { composeStories } from '@storybook/react';
-import { render, screen } from 'src/test-utils.js';
+import userEvent from '@testing-library/user-event';
+import { mockRuntimeConfig } from 'src/stories/mocks/runtimeConfigMock';
+import { render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './OrderTable.stories';
 
 const { Default } = composeStories(stories);
@@ -20,5 +22,26 @@ describe('OrderTable Component', () => {
         expect(rows[16]).toHaveTextContent('WFIL-MAR2024');
         expect(rows[16]).toHaveTextContent('96.00');
         expect(rows[16]).toHaveTextContent('4.16');
+    });
+
+    it('should disable cancel when the chain is under maintenance', async () => {
+        mockRuntimeConfig({ maintenanceChainIds: [314159] });
+        render(<Default />, {
+            preloadedState: {
+                blockchain: { chainId: 314159, chainError: false },
+            },
+        });
+        // the buttons are remounted inside the tooltip once the config loads
+        await waitFor(() =>
+            screen
+                .getAllByRole('button', { name: 'Cancel' })
+                .forEach(button => expect(button).toBeDisabled())
+        );
+        const buttons = screen.getAllByRole('button', { name: 'Cancel' });
+        expect(buttons).toHaveLength(17);
+        await userEvent.hover(buttons[0].parentElement as HTMLElement);
+        expect(
+            await screen.findByText('Paused for maintenance')
+        ).toBeInTheDocument();
     });
 });

@@ -25,10 +25,15 @@ import {
     NetworkSelector,
     Settings,
 } from 'src/components/molecules';
-import { useBreakpoint, useRuntimeConfig } from 'src/hooks';
+import {
+    useBreakpoint,
+    useIsUnderMaintenance,
+    useRuntimeConfig,
+} from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { RootState } from 'src/store/types';
 import {
+    getNetworkName,
     getStablecoinAppUrl,
     getSupportedNetworks,
     getVaultsAppUrl,
@@ -152,12 +157,29 @@ const PauseAlert = ({ message }: { message: string }) => {
     );
 };
 
+const MaintenanceAlert = ({ chainId }: { chainId: number }) => (
+    <div
+        role='alert'
+        className='typography-caption-2 flex w-full items-center justify-center gap-1 bg-warning-700 p-[1px] text-center text-neutral-8'
+        data-testid='maintenance-alert'
+    >
+        <ExclamationTriangleIcon className='h-3 w-3 flex-shrink-0 text-neutral-8' />
+        <span>
+            Trading on {getNetworkName(chainId) ?? 'this network'} is
+            temporarily paused for maintenance. Placing, cancelling and
+            unwinding orders is unavailable. Deposits and withdrawals work as
+            usual. We will announce here when trading resumes.
+        </span>
+    </div>
+);
+
 const Header = ({ showNavigation }: { showNavigation: boolean }) => {
     const { open } = useWeb3Modal();
     const securedFinance = useSF();
     const isMobile = useBreakpoint('tablet');
     const { address, isConnected } = useAccount();
     const runtimeConfig = useRuntimeConfig();
+    const isUnderMaintenance = useIsUnderMaintenance();
 
     // const {
     //     user: { data: userData },
@@ -187,6 +209,9 @@ const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                 <IncidentAlert {...runtimeConfig.incidentAlert} />
                 <ReopeningAlert {...runtimeConfig.reopeningAlert} />
                 <PauseAlert {...runtimeConfig.pauseAlert} />
+                {isUnderMaintenance && (
+                    <MaintenanceAlert chainId={currentChainId} />
+                )}
                 <HeaderMessage
                     isChainIdDetected={isChainIdDetected}
                     chainId={currentChainId}

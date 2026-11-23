@@ -18,6 +18,7 @@ import {
 import { isProdEnv } from './displayUtils';
 
 type ChainPair = {
+    name: string;
     mainnet: Chain;
     testnet: Chain | undefined;
 };
@@ -45,12 +46,18 @@ const mainnetNetworks: Chain[] = [
 ];
 
 const chainPairs: ChainPair[] = [
-    { mainnet: mainnet, testnet: sepolia },
-    { mainnet: filecoin, testnet: filecoinCalibration },
-    { mainnet: arbitrum, testnet: arbitrumSepolia },
-    { mainnet: avalanche, testnet: avalancheFuji },
-    { mainnet: polygonZkEvm, testnet: undefined },
+    { name: 'Ethereum', mainnet: mainnet, testnet: sepolia },
+    { name: 'Filecoin', mainnet: filecoin, testnet: filecoinCalibration },
+    { name: 'Arbitrum', mainnet: arbitrum, testnet: arbitrumSepolia },
+    { name: 'Avalanche', mainnet: avalanche, testnet: avalancheFuji },
+    { name: 'Polygon zkEVM', mainnet: polygonZkEvm, testnet: undefined },
 ];
+
+// Same name for a mainnet and its testnet, e.g. Filecoin for 314 and 314159
+export const getNetworkName = (chainId: number) =>
+    chainPairs.find(
+        pair => pair.mainnet.id === chainId || pair.testnet?.id === chainId
+    )?.name;
 
 export const getSupportedNetworks = () => {
     return isProdEnv()

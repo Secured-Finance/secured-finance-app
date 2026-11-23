@@ -243,5 +243,44 @@ describe('Header component', () => {
                 screen.queryByText('Read the full update.')
             ).not.toBeInTheDocument();
         });
+
+        it('should render the maintenance alert on a chain under maintenance', async () => {
+            mockRuntimeConfig({ maintenanceChainIds: [314159] });
+
+            mockRouter.push('/');
+            render(<Primary />, {
+                preloadedState: {
+                    blockchain: { chainId: 314159, chainError: false },
+                },
+            });
+
+            expect(
+                await screen.findByTestId('maintenance-alert')
+            ).toHaveTextContent(
+                'Trading on Filecoin is temporarily paused for maintenance. Placing, cancelling and unwinding orders is unavailable. Deposits and withdrawals work as usual. We will announce here when trading resumes.'
+            );
+        });
+
+        it('should not render the maintenance alert on other chains', async () => {
+            mockRuntimeConfig({
+                pauseAlert: { message: 'Pause message' },
+                maintenanceChainIds: [314159],
+            });
+
+            mockRouter.push('/');
+            render(<Primary />, {
+                preloadedState: {
+                    blockchain: { chainId: 11155111, chainError: false },
+                },
+            });
+
+            // the pause alert shows once the config has loaded
+            expect(
+                await screen.findByTestId('pause-alert')
+            ).toBeInTheDocument();
+            expect(
+                screen.queryByTestId('maintenance-alert')
+            ).not.toBeInTheDocument();
+        });
     });
 });

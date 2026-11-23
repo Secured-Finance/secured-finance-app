@@ -45,6 +45,25 @@ describe('parseRuntimeConfig', () => {
         });
     });
 
+    it('should keep the maintenance chain ids', () => {
+        expect(
+            parseRuntimeConfig({ maintenanceChainIds: [314, 314159] })
+                .maintenanceChainIds
+        ).toEqual([314, 314159]);
+        expect(
+            parseRuntimeConfig({ maintenanceChainIds: [] }).maintenanceChainIds
+        ).toEqual([]);
+    });
+
+    it.each([['314'], [[314, '314159']], [[1.5]], [[0]], [{ 314: true }]])(
+        'should throw when maintenanceChainIds is %p',
+        maintenanceChainIds => {
+            expect(() => parseRuntimeConfig({ maintenanceChainIds })).toThrow(
+                'Invalid runtime config: maintenanceChainIds must be an array of chain ids'
+            );
+        }
+    );
+
     it('should trim values so whitespace-only values are empty', () => {
         const config = parseRuntimeConfig({
             incidentAlert: { message: '  Incident  ', link: ' ' },
@@ -139,6 +158,7 @@ describe('resolveRuntimeConfig', () => {
             reopeningAlert: { message: '', link: '' },
             pauseAlert: { message: '' },
             referralMessage: '',
+            maintenanceChainIds: [],
         });
     });
 
