@@ -1,7 +1,7 @@
 import { composeStories } from '@storybook/react';
 import mockRouter from 'next-router-mock';
-import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { mockRuntimeConfig } from 'src/stories/mocks/runtimeConfigMock';
+import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './Header.stories';
 
 const { Primary } = composeStories(stories);
@@ -257,7 +257,7 @@ describe('Header component', () => {
             expect(
                 await screen.findByTestId('maintenance-alert')
             ).toHaveTextContent(
-                'New orders on Ethereum are temporarily paused for maintenance. You can still cancel orders, close positions, deposit and withdraw.'
+                'Trading on Ethereum is temporarily paused for maintenance. We will announce here when it resumes.'
             );
         });
 
