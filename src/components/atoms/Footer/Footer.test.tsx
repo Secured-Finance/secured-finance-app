@@ -61,10 +61,10 @@ describe('Footer component', () => {
         });
 
         it('should render the maintenance status on a chain under maintenance', async () => {
-            mockRuntimeConfig({ maintenanceChainIds: [314159] });
+            mockRuntimeConfig({ maintenanceChainIds: [11155111] });
             render(<Default />, {
                 preloadedState: {
-                    blockchain: { chainId: 314159, chainError: false },
+                    blockchain: { chainId: 11155111, chainError: false },
                 },
             });
             expect(await screen.findByText('Maintenance')).toBeInTheDocument();
@@ -72,10 +72,10 @@ describe('Footer component', () => {
         });
 
         it('should render the online status on a chain not under maintenance', async () => {
-            mockRuntimeConfig({ maintenanceChainIds: [314159] });
+            mockRuntimeConfig({ maintenanceChainIds: [11155111] });
             render(<Default />, {
                 preloadedState: {
-                    blockchain: { chainId: 11155111, chainError: false },
+                    blockchain: { chainId: 1, chainError: false },
                 },
             });
             expect(await screen.findByText('Online')).toBeInTheDocument();

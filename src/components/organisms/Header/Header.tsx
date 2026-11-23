@@ -165,10 +165,9 @@ const MaintenanceAlert = ({ chainId }: { chainId: number }) => (
     >
         <ExclamationTriangleIcon className='h-3 w-3 flex-shrink-0 text-neutral-8' />
         <span>
-            Trading on {getNetworkName(chainId) ?? 'this network'} is
-            temporarily paused for maintenance. Placing, cancelling and
-            unwinding orders is unavailable. Deposits and withdrawals work as
-            usual. We will announce here when trading resumes.
+            New orders on {getNetworkName(chainId) ?? 'this network'} are
+            temporarily paused for maintenance. You can still cancel orders,
+            close positions, deposit and withdraw.
         </span>
     </div>
 );

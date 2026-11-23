@@ -15,6 +15,7 @@ import {
     useBlockExplorerUrl,
     useHandleContractTransaction,
     useIsUnderCollateralThresholdForBorrowOrders,
+    useIsUnderMaintenance,
 } from 'src/hooks';
 import { OrderType, PlaceOrderFunction } from 'src/types';
 import {
@@ -154,6 +155,9 @@ export const PlaceOrder = ({
         orderAmount.toBigInt()
     );
 
+    // Catches a dialog opened before maintenance started
+    const isUnderMaintenance = useIsUnderMaintenance();
+
     const [errorMessage, setErrorMessage] = useState(
         'Your order could not be placed'
     );
@@ -278,7 +282,10 @@ export const PlaceOrder = ({
             title={state.title}
             description={state.description}
             callToAction={state.buttonText}
-            disableActionButton={showWarning}
+            disableActionButton={
+                showWarning ||
+                (state.currentStep === Step.orderConfirm && isUnderMaintenance)
+            }
             onClick={() => onClick(state.currentStep)}
             showCancelButton={state.currentStep === Step.orderConfirm}
         >

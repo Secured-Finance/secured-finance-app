@@ -200,6 +200,29 @@ describe('fetchRuntimeConfig', () => {
         expect(config.pauseAlert).toEqual({ message: 'Paused' });
     });
 
+    it('should warn once about an unsupported maintenance chain id and keep the config', async () => {
+        const warn = jest.spyOn(console, 'warn').mockImplementation();
+        global.fetch = jest.fn().mockResolvedValue({
+            ok: true,
+            json: () =>
+                Promise.resolve({
+                    pauseAlert: { message: 'Paused' },
+                    maintenanceChainIds: [11155111, 3140],
+                }),
+        });
+
+        const config = await fetchRuntimeConfig('https://config.test/a.json');
+        await fetchRuntimeConfig('https://config.test/a.json');
+
+        expect(config.maintenanceChainIds).toEqual([11155111, 3140]);
+        expect(config.pauseAlert).toEqual({ message: 'Paused' });
+        expect(warn).toHaveBeenCalledTimes(1);
+        expect(warn).toHaveBeenCalledWith(
+            'Runtime config: maintenanceChainIds has 3140, which is not a supported chain'
+        );
+        warn.mockRestore();
+    });
+
     it('should throw when the response is not ok', async () => {
         global.fetch = jest.fn().mockResolvedValue({ ok: false, status: 404 });
 

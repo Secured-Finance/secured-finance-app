@@ -1,3 +1,5 @@
+import { getSupportedChainIds } from './env';
+
 // Operational config fetched at runtime from NEXT_PUBLIC_RUNTIME_CONFIG_URL.
 // It is the only source for these values: anything missing, blank or not yet
 // loaded resolves to an empty string, and empty values render nothing.
@@ -122,6 +124,30 @@ export const parseRuntimeConfig = (raw: unknown): RuntimeConfig => {
     };
 };
 
+const warnedChainIds = new Set<number>();
+
+// An unknown id is kept so a typo can't drop the rest of the config, but it pauses
+// nothing, so it is logged once per id
+const warnUnknownChainIds = (chainIds: number[] = []) => {
+    if (!chainIds.length) return;
+    let supported: number[];
+    try {
+        supported = getSupportedChainIds();
+    } catch {
+        // Only a warning, so it must never fail the fetch
+        return;
+    }
+    chainIds
+        .filter(id => !supported.includes(id) && !warnedChainIds.has(id))
+        .forEach(id => {
+            warnedChainIds.add(id);
+            // eslint-disable-next-line no-console
+            console.warn(
+                `Runtime config: maintenanceChainIds has ${id}, which is not a supported chain`
+            );
+        });
+};
+
 export const fetchRuntimeConfig = async (
     url: string
 ): Promise<RuntimeConfig> => {
@@ -138,7 +164,9 @@ export const fetchRuntimeConfig = async (
                 `Failed to fetch runtime config: ${response.status}`
             );
         }
-        return parseRuntimeConfig(await response.json());
+        const config = parseRuntimeConfig(await response.json());
+        warnUnknownChainIds(config.maintenanceChainIds);
+        return config;
     } finally {
         clearTimeout(timeout);
     }

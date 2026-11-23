@@ -11,17 +11,11 @@ import {
 import {
     COMPACT_TABLE_DEFAULT_HEIGHT,
     CompactCoreTable,
-    OptionalTooltip,
     TableActionMenu,
     TableCardHeader,
 } from 'src/components/molecules';
 import { RemoveOrderDialog } from 'src/components/organisms';
-import {
-    MAINTENANCE_LABEL,
-    Order,
-    useBreakpoint,
-    useIsUnderMaintenance,
-} from 'src/hooks';
+import { Order, useBreakpoint } from 'src/hooks';
 import {
     AmountCell,
     MobileTableWrapper,
@@ -51,11 +45,9 @@ type RemoveOrderDialogDataType = {
 const OrderTableMobile = ({
     data,
     cancelOrder,
-    isUnderMaintenance,
 }: {
     data: OpenOrder[];
     cancelOrder: (v: RemoveOrderDialogDataType) => void;
-    isUnderMaintenance: boolean;
 }) => {
     return (
         <MobileTableWrapper>
@@ -105,33 +97,23 @@ const OrderTableMobile = ({
                                     }
                                 />
                             </div>
-                            <OptionalTooltip
-                                content={
-                                    isUnderMaintenance
-                                        ? MAINTENANCE_LABEL
-                                        : undefined
-                                }
+                            <Button
+                                size={ButtonSizes.sm}
                                 fullWidth
+                                variant={ButtonVariants.secondary}
+                                onClick={() =>
+                                    cancelOrder({
+                                        orderId: orderId,
+                                        maturity: maturity,
+                                        amount: new Amount(amount, ccy),
+                                        side: side,
+                                        isOpen: true,
+                                        orderUnitPrice: Number(unitPrice),
+                                    })
+                                }
                             >
-                                <Button
-                                    size={ButtonSizes.sm}
-                                    fullWidth
-                                    variant={ButtonVariants.secondary}
-                                    disabled={isUnderMaintenance}
-                                    onClick={() =>
-                                        cancelOrder({
-                                            orderId: orderId,
-                                            maturity: maturity,
-                                            amount: new Amount(amount, ccy),
-                                            side: side,
-                                            isOpen: true,
-                                            orderUnitPrice: Number(unitPrice),
-                                        })
-                                    }
-                                >
-                                    Cancel
-                                </Button>
-                            </OptionalTooltip>
+                                Cancel
+                            </Button>
                         </div>
                     )
                 );
@@ -148,7 +130,6 @@ export const OrderTable = ({
     height?: number;
 }) => {
     const isTablet = useBreakpoint('laptop');
-    const isUnderMaintenance = useIsUnderMaintenance();
     const [removeOrderDialogData, setRemoveOrderDialogData] =
         useState<RemoveOrderDialogDataType>();
     const columns = useMemo(
@@ -226,10 +207,6 @@ export const OrderTable = ({
                                 {
                                     text: 'Cancel',
                                     onClick: removeOrder,
-                                    disabled: isUnderMaintenance,
-                                    tooltip: isUnderMaintenance
-                                        ? MAINTENANCE_LABEL
-                                        : undefined,
                                 },
                             ]}
                         />
@@ -240,7 +217,7 @@ export const OrderTable = ({
                 ),
             }),
         ],
-        [isUnderMaintenance]
+        []
     );
 
     return (
@@ -249,7 +226,6 @@ export const OrderTable = ({
                 <OrderTableMobile
                     data={data}
                     cancelOrder={v => setRemoveOrderDialogData(v)}
-                    isUnderMaintenance={isUnderMaintenance}
                 />
             ) : (
                 <CompactCoreTable

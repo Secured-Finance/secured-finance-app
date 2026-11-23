@@ -94,10 +94,10 @@ describe('ActiveTradeTable Component', () => {
     });
 
     it('should disable add/reduce and explain why in a tooltip when the chain is under maintenance', async () => {
-        mockRuntimeConfig({ maintenanceChainIds: [314159] });
+        mockRuntimeConfig({ maintenanceChainIds: [11155111] });
         render(<Default />, {
             preloadedState: {
-                blockchain: { chainId: 314159, chainError: false },
+                blockchain: { chainId: 11155111, chainError: false },
             },
         });
         // the buttons are remounted inside the tooltip once the config loads
@@ -113,24 +113,23 @@ describe('ActiveTradeTable Component', () => {
         ).toBeInTheDocument();
     });
 
-    it('should disable close and explain why in a tooltip when the chain is under maintenance', async () => {
-        mockRuntimeConfig({ maintenanceChainIds: [314159] });
+    it('should keep close enabled when the chain is under maintenance', async () => {
+        mockRuntimeConfig({ maintenanceChainIds: [11155111] });
         render(<Default />, {
             preloadedState: {
-                blockchain: { chainId: 314159, chainError: false },
+                blockchain: { chainId: 11155111, chainError: false },
             },
         });
-        // the buttons are remounted inside the tooltip once the config loads
+        // add/reduce is disabled once the config loads
         await waitFor(() =>
-            screen
-                .getAllByRole('button', { name: 'Close' })
-                .forEach(button => expect(button).toBeDisabled())
+            expect(
+                screen.getAllByRole('button', { name: 'Add/Reduce' })[0]
+            ).toBeDisabled()
         );
-        const buttons = screen.getAllByRole('button', { name: 'Close' });
-        await userEvent.hover(buttons[0].parentElement as HTMLElement);
-        expect(
-            await screen.findByText('Paused for maintenance')
-        ).toBeInTheDocument();
+        const closeButtons = screen.getAllByRole('button', { name: 'Close' });
+        closeButtons.forEach(button => expect(button).toBeEnabled());
+        fireEvent.click(closeButtons[0]);
+        expect(screen.getByRole('dialog')).toBeInTheDocument();
     });
 
     it('should display hours and minutes when maturity is less than 24 hours', async () => {

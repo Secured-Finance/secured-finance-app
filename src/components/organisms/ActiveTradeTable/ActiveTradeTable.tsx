@@ -236,8 +236,6 @@ export const ActiveTradeTable = ({
                 },
                 {
                     text: 'Close',
-                    disabled: isUnderMaintenance,
-                    tooltip: maintenanceTooltip,
                     onClick: (): void => {
                         setUnwindDialogData({
                             maturity: new Maturity(maturity),
@@ -286,8 +284,7 @@ export const ActiveTradeTable = ({
                             type: type,
                         });
                     },
-                    disabled: disableAction || isUnderMaintenance,
-                    tooltip: maintenanceTooltip,
+                    disabled: disableAction,
                 },
             ];
         },

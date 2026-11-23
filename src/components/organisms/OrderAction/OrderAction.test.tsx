@@ -127,12 +127,12 @@ describe('OrderAction component', () => {
     });
 
     it('should disable the button and explain why in a tooltip when the chain is under maintenance', async () => {
-        mockRuntimeConfig({ maintenanceChainIds: [314159] });
+        mockRuntimeConfig({ maintenanceChainIds: [11155111] });
         await waitFor(() =>
             render(<RenderOrderSideButton />, {
                 preloadedState: {
                     ...preloadedState,
-                    blockchain: { chainId: 314159, chainError: false },
+                    blockchain: { chainId: 11155111, chainError: false },
                 },
             })
         );

@@ -81,12 +81,12 @@ describe('useRuntimeConfig hook', () => {
     });
 
     it('should return the maintenance chain ids from the config', async () => {
-        mockRuntimeConfig({ maintenanceChainIds: [314, 314159] });
+        mockRuntimeConfig({ maintenanceChainIds: [11155111] });
 
         const { result } = renderHook(() => useRuntimeConfig());
 
         await waitFor(() => expect(result.current.status).toEqual('success'));
-        expect(result.current.maintenanceChainIds).toEqual([314, 314159]);
+        expect(result.current.maintenanceChainIds).toEqual([11155111]);
     });
 
     it('should resolve the maintenance chain ids to an empty list when unset', async () => {

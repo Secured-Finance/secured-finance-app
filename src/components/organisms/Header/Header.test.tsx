@@ -245,32 +245,32 @@ describe('Header component', () => {
         });
 
         it('should render the maintenance alert on a chain under maintenance', async () => {
-            mockRuntimeConfig({ maintenanceChainIds: [314159] });
+            mockRuntimeConfig({ maintenanceChainIds: [11155111] });
 
             mockRouter.push('/');
             render(<Primary />, {
                 preloadedState: {
-                    blockchain: { chainId: 314159, chainError: false },
+                    blockchain: { chainId: 11155111, chainError: false },
                 },
             });
 
             expect(
                 await screen.findByTestId('maintenance-alert')
             ).toHaveTextContent(
-                'Trading on Filecoin is temporarily paused for maintenance. Placing, cancelling and unwinding orders is unavailable. Deposits and withdrawals work as usual. We will announce here when trading resumes.'
+                'New orders on Ethereum are temporarily paused for maintenance. You can still cancel orders, close positions, deposit and withdraw.'
             );
         });
 
         it('should not render the maintenance alert on other chains', async () => {
             mockRuntimeConfig({
                 pauseAlert: { message: 'Pause message' },
-                maintenanceChainIds: [314159],
+                maintenanceChainIds: [11155111],
             });
 
             mockRouter.push('/');
             render(<Primary />, {
                 preloadedState: {
-                    blockchain: { chainId: 11155111, chainError: false },
+                    blockchain: { chainId: 1, chainError: false },
                 },
             });
 
