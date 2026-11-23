@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import packageJson from 'package.json';
 import ExternalLink from 'src/assets/icons/external-link.svg';
-import { useRuntimeConfig } from 'src/hooks';
+import { useIsUnderMaintenance, useRuntimeConfig } from 'src/hooks';
 import { getCommitHash, getEnvShort, getUsePackageVersion } from 'src/utils';
 import { isChipVisibleForEnv } from 'src/utils/displayUtils';
 
@@ -35,14 +35,23 @@ export const Footer = () => {
 
 const StatusButton = ({ active = true }) => {
     const { pauseAlert, status } = useRuntimeConfig();
+    const isUnderMaintenance = useIsUnderMaintenance();
     // Whether the protocol is paused is only known from a valid config
     const known = status === 'success';
     const paused = known && !!pauseAlert.message;
-    const color = paused ? 'warning' : known && active ? 'success' : 'neutral';
+    const maintenance = known && isUnderMaintenance;
+    const color =
+        paused || maintenance
+            ? 'warning'
+            : known && active
+            ? 'success'
+            : 'neutral';
     const label = !known
         ? 'Unknown'
         : paused
         ? 'Temporarily Paused'
+        : maintenance
+        ? 'Maintenance'
         : active
         ? 'Online'
         : 'Offline';

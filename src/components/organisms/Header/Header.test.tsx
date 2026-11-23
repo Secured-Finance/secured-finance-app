@@ -1,7 +1,7 @@
 import { composeStories } from '@storybook/react';
 import mockRouter from 'next-router-mock';
-import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { mockRuntimeConfig } from 'src/stories/mocks/runtimeConfigMock';
+import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './Header.stories';
 
 const { Primary } = composeStories(stories);
@@ -241,6 +241,45 @@ describe('Header component', () => {
             ).toBeInTheDocument();
             expect(
                 screen.queryByText('Read the full update.')
+            ).not.toBeInTheDocument();
+        });
+
+        it('should render the maintenance alert on a chain under maintenance', async () => {
+            mockRuntimeConfig({ maintenanceChainIds: [11155111] });
+
+            mockRouter.push('/');
+            render(<Primary />, {
+                preloadedState: {
+                    blockchain: { chainId: 11155111, chainError: false },
+                },
+            });
+
+            expect(
+                await screen.findByTestId('maintenance-alert')
+            ).toHaveTextContent(
+                'Trading on Ethereum is temporarily paused for maintenance. We will announce here when it resumes.'
+            );
+        });
+
+        it('should not render the maintenance alert on other chains', async () => {
+            mockRuntimeConfig({
+                pauseAlert: { message: 'Pause message' },
+                maintenanceChainIds: [11155111],
+            });
+
+            mockRouter.push('/');
+            render(<Primary />, {
+                preloadedState: {
+                    blockchain: { chainId: 1, chainError: false },
+                },
+            });
+
+            // the pause alert shows once the config has loaded
+            expect(
+                await screen.findByTestId('pause-alert')
+            ).toBeInTheDocument();
+            expect(
+                screen.queryByTestId('maintenance-alert')
             ).not.toBeInTheDocument();
         });
     });

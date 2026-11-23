@@ -1,3 +1,5 @@
+import { getSupportedChainIds } from './env';
+
 // Operational config fetched at runtime from NEXT_PUBLIC_RUNTIME_CONFIG_URL.
 // It is the only source for these values: anything missing, blank or not yet
 // loaded resolves to an empty string, and empty values render nothing.
@@ -7,6 +9,8 @@ export type RuntimeConfig = {
     reopeningAlert?: { message?: string; link?: string };
     pauseAlert?: { message?: string };
     referralMessage?: string;
+    // Chains where trading is paused for maintenance
+    maintenanceChainIds?: number[];
 };
 
 export type ResolvedRuntimeConfig = {
@@ -14,6 +18,7 @@ export type ResolvedRuntimeConfig = {
     reopeningAlert: { message: string; link: string };
     pauseAlert: { message: string };
     referralMessage: string;
+    maintenanceChainIds: number[];
 };
 
 const FETCH_TIMEOUT_MS = 5000;
@@ -37,6 +42,17 @@ const readString = (value: unknown, field: string) => {
     if (value === undefined) return undefined;
     if (typeof value !== 'string') throw invalid(field, 'a string');
     return value.trim();
+};
+
+const readChainIds = (value: unknown, field: string) => {
+    if (value === undefined) return undefined;
+    if (
+        !Array.isArray(value) ||
+        !value.every(id => Number.isInteger(id) && id > 0)
+    ) {
+        throw invalid(field, 'an array of chain ids');
+    }
+    return value as number[];
 };
 
 // Where the incident and reopening banners may link to. Add new ones here on purpose.
@@ -101,7 +117,35 @@ export const parseRuntimeConfig = (raw: unknown): RuntimeConfig => {
             message: readString(pauseAlert.message, 'pauseAlert.message'),
         },
         referralMessage: readString(raw.referralMessage, 'referralMessage'),
+        maintenanceChainIds: readChainIds(
+            raw.maintenanceChainIds,
+            'maintenanceChainIds'
+        ),
     };
+};
+
+const warnedChainIds = new Set<number>();
+
+// An unknown id is kept so a typo can't drop the rest of the config, but it pauses
+// nothing, so it is logged once per id
+const warnUnknownChainIds = (chainIds: number[] = []) => {
+    if (!chainIds.length) return;
+    let supported: number[];
+    try {
+        supported = getSupportedChainIds();
+    } catch {
+        // Only a warning, so it must never fail the fetch
+        return;
+    }
+    chainIds
+        .filter(id => !supported.includes(id) && !warnedChainIds.has(id))
+        .forEach(id => {
+            warnedChainIds.add(id);
+            // eslint-disable-next-line no-console
+            console.warn(
+                `Runtime config: maintenanceChainIds has ${id}, which is not a supported chain`
+            );
+        });
 };
 
 export const fetchRuntimeConfig = async (
@@ -120,7 +164,9 @@ export const fetchRuntimeConfig = async (
                 `Failed to fetch runtime config: ${response.status}`
             );
         }
-        return parseRuntimeConfig(await response.json());
+        const config = parseRuntimeConfig(await response.json());
+        warnUnknownChainIds(config.maintenanceChainIds);
+        return config;
     } finally {
         clearTimeout(timeout);
     }
@@ -141,4 +187,5 @@ export const resolveRuntimeConfig = (
         message: remote?.pauseAlert?.message ?? '',
     },
     referralMessage: remote?.referralMessage ?? '',
+    maintenanceChainIds: remote?.maintenanceChainIds ?? [],
 });

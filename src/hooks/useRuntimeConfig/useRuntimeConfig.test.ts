@@ -80,6 +80,22 @@ describe('useRuntimeConfig hook', () => {
         expect(result.current.pauseAlert.message).toEqual('');
     });
 
+    it('should return the maintenance chain ids from the config', async () => {
+        mockRuntimeConfig({ maintenanceChainIds: [11155111] });
+
+        const { result } = renderHook(() => useRuntimeConfig());
+
+        await waitFor(() => expect(result.current.status).toEqual('success'));
+        expect(result.current.maintenanceChainIds).toEqual([11155111]);
+    });
+
+    it('should resolve the maintenance chain ids to an empty list when unset', async () => {
+        const { result } = renderHook(() => useRuntimeConfig());
+
+        await waitFor(() => expect(result.current.status).toEqual('success'));
+        expect(result.current.maintenanceChainIds).toEqual([]);
+    });
+
     it('should not fetch and report an error when no config url is set', () => {
         const url = process.env.NEXT_PUBLIC_RUNTIME_CONFIG_URL;
         process.env.NEXT_PUBLIC_RUNTIME_CONFIG_URL = '';

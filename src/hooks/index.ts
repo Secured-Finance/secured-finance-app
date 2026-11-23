@@ -23,6 +23,7 @@ export * from './useItayoseEstimation';
 export * from './useLastPrices';
 export * from './useLendingMarkets';
 export * from './useLoanValues';
+export * from './useMaintenance';
 export * from './useMarketLists';
 export * from './useMarketOrderList';
 export * from './useMaturities';
