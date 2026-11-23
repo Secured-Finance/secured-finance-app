@@ -1,7 +1,9 @@
 import * as analytics from '@amplitude/analytics-browser';
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
+import userEvent from '@testing-library/user-event';
 import { dec22Fixture, usdcBytes32 } from 'src/stories/mocks/fixtures';
+import { mockRuntimeConfig } from 'src/stories/mocks/runtimeConfigMock';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
@@ -122,6 +124,28 @@ describe('OrderAction component', () => {
         ).toBeInTheDocument();
         const button = screen.getByTestId('place-order-button');
         await waitFor(() => expect(button).toBeDisabled());
+    });
+
+    it('should disable the button and explain why in a tooltip when the chain is under maintenance', async () => {
+        mockRuntimeConfig({ maintenanceChainIds: [11155111] });
+        await waitFor(() =>
+            render(<RenderOrderSideButton />, {
+                preloadedState: {
+                    ...preloadedState,
+                    blockchain: { chainId: 11155111, chainError: false },
+                },
+            })
+        );
+        // the button is remounted inside the tooltip once the config loads
+        await waitFor(() =>
+            expect(screen.getByTestId('place-order-button')).toBeDisabled()
+        );
+        const button = screen.getByTestId('place-order-button');
+        expect(button).toHaveTextContent('Borrow');
+        await userEvent.hover(button.parentElement as HTMLElement);
+        expect(
+            await screen.findByText('Paused for maintenance')
+        ).toBeInTheDocument();
     });
 
     it('should render order side on the place order button if provided as props', async () => {

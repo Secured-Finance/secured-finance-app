@@ -45,6 +45,25 @@ describe('parseRuntimeConfig', () => {
         });
     });
 
+    it('should keep the maintenance chain ids', () => {
+        expect(
+            parseRuntimeConfig({ maintenanceChainIds: [314, 314159] })
+                .maintenanceChainIds
+        ).toEqual([314, 314159]);
+        expect(
+            parseRuntimeConfig({ maintenanceChainIds: [] }).maintenanceChainIds
+        ).toEqual([]);
+    });
+
+    it.each([['314'], [[314, '314159']], [[1.5]], [[0]], [{ 314: true }]])(
+        'should throw when maintenanceChainIds is %p',
+        maintenanceChainIds => {
+            expect(() => parseRuntimeConfig({ maintenanceChainIds })).toThrow(
+                'Invalid runtime config: maintenanceChainIds must be an array of chain ids'
+            );
+        }
+    );
+
     it('should trim values so whitespace-only values are empty', () => {
         const config = parseRuntimeConfig({
             incidentAlert: { message: '  Incident  ', link: ' ' },
@@ -139,6 +158,7 @@ describe('resolveRuntimeConfig', () => {
             reopeningAlert: { message: '', link: '' },
             pauseAlert: { message: '' },
             referralMessage: '',
+            maintenanceChainIds: [],
         });
     });
 
@@ -178,6 +198,29 @@ describe('fetchRuntimeConfig', () => {
             expect.objectContaining({ cache: 'no-cache' })
         );
         expect(config.pauseAlert).toEqual({ message: 'Paused' });
+    });
+
+    it('should warn once about an unsupported maintenance chain id and keep the config', async () => {
+        const warn = jest.spyOn(console, 'warn').mockImplementation();
+        global.fetch = jest.fn().mockResolvedValue({
+            ok: true,
+            json: () =>
+                Promise.resolve({
+                    pauseAlert: { message: 'Paused' },
+                    maintenanceChainIds: [11155111, 3140],
+                }),
+        });
+
+        const config = await fetchRuntimeConfig('https://config.test/a.json');
+        await fetchRuntimeConfig('https://config.test/a.json');
+
+        expect(config.maintenanceChainIds).toEqual([11155111, 3140]);
+        expect(config.pauseAlert).toEqual({ message: 'Paused' });
+        expect(warn).toHaveBeenCalledTimes(1);
+        expect(warn).toHaveBeenCalledWith(
+            'Runtime config: maintenanceChainIds has 3140, which is not a supported chain'
+        );
+        warn.mockRestore();
     });
 
     it('should throw when the response is not ok', async () => {

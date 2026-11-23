@@ -2,6 +2,7 @@ import * as analytics from '@amplitude/analytics-browser';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
 import { dec22Fixture, dec24Fixture } from 'src/stories/mocks/fixtures';
+import { mockRuntimeConfig } from 'src/stories/mocks/runtimeConfigMock';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
@@ -35,6 +36,34 @@ describe('PlaceOrder component', () => {
         expect(screen.getByText('Confirm Borrow')).toBeInTheDocument();
         const button = screen.getByTestId('dialog-action-button');
         expect(button).toHaveTextContent('OK');
+    });
+
+    it('should disable the confirm button when the chain is under maintenance', async () => {
+        mockRuntimeConfig({ maintenanceChainIds: [11155111] });
+        render(<Default />, {
+            preloadedState: {
+                ...preloadedState,
+                blockchain: { chainId: 11155111, chainError: false },
+            },
+        });
+
+        await waitFor(() =>
+            expect(screen.getByTestId('dialog-action-button')).toBeDisabled()
+        );
+    });
+
+    it('should keep the confirm button enabled on a chain not under maintenance', async () => {
+        mockRuntimeConfig({ maintenanceChainIds: [11155111] });
+        render(<Default />, {
+            preloadedState: {
+                ...preloadedState,
+                blockchain: { chainId: 1, chainError: false },
+            },
+        });
+
+        await screen.findByRole('dialog');
+        await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+        expect(screen.getByTestId('dialog-action-button')).toBeEnabled();
     });
 
     it('should display the borrow remaining and the collateral usage', async () => {
