@@ -14,7 +14,7 @@ jobs:
     name: Cypress Run Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@a37ce9120846195fa4ece8f58b268e6043cb2f26 # v3.7.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
@@ -22,7 +22,7 @@ jobs:
           cache: 'npm'
 
       - name: Download the build folders of the WebApp
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: ${{ inputs.artifact_name }}
           path: build
@@ -36,7 +36,7 @@ jobs:
         run: npm rebuild cypress
 
       - name: Cypress run
-        uses: cypress-io/github-action@18016a55674bd02cabf197de5762a1710cb5577c # v7.4.9
+        uses: cypress-io/github-action@0ed14f5d30c4ad6e5e8ffb6f57dbb69150137a3f # v7.4.10
         with:
           install: false
           start: npx serve ./build -l 3000
