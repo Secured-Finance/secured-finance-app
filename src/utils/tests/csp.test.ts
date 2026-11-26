@@ -1,7 +1,7 @@
 import { buildContentSecurityPolicy } from '../csp';
 
 const options = {
-    isDevelopment: false,
+    isNextDev: false,
     rpcUrls: [
         'https://eth.merkle.io',
         'https://api.node.glif.io/rpc/v1',
@@ -70,7 +70,7 @@ describe('buildContentSecurityPolicy', () => {
     it('should relax the policy for next dev only', () => {
         const dev = buildContentSecurityPolicy({
             ...options,
-            isDevelopment: true,
+            isNextDev: true,
         });
 
         expect(directive(dev, 'script-src')).toContain("'unsafe-eval'");
@@ -128,7 +128,7 @@ describe('buildContentSecurityPolicy', () => {
     it('should upgrade insecure requests outside development', () => {
         const dev = buildContentSecurityPolicy({
             ...options,
-            isDevelopment: true,
+            isNextDev: true,
         });
 
         expect(policy.split('; ')).toContain('upgrade-insecure-requests');

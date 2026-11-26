@@ -3,6 +3,7 @@ import { Head, Html, Main, NextScript } from 'next/document';
 import {
     getGoogleAnalyticsTag,
     getGraphqlServerUrl,
+    getRuntimeConfigUrl,
     getSubgraphUrl,
     getSupportedNetworks,
 } from 'src/utils';
@@ -17,11 +18,17 @@ const getContentSecurityPolicy = () => {
     const gaTag = getGoogleAnalyticsTag();
 
     return buildContentSecurityPolicy({
-        isDevelopment: process.env.NODE_ENV !== 'production',
+        // NODE_ENV, not SF_ENV: every deployed build, previews included,
+        // must get the exact policy production enforces
+        isNextDev: process.env.NODE_ENV === 'development',
         rpcUrls: getSupportedNetworks().map(
             chain => chain.rpcUrls.default.http[0]
         ),
-        serviceUrls: [getGraphqlServerUrl(), getSubgraphUrl(314)],
+        serviceUrls: [
+            getGraphqlServerUrl(),
+            getSubgraphUrl(314),
+            getRuntimeConfigUrl(),
+        ],
         inlineScriptHashes: gaTag ? [sha256(getInlineScript(gaTag))] : [],
     });
 };

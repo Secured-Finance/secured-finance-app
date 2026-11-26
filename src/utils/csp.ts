@@ -72,7 +72,7 @@ const EMPTY_SHA256 = '47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=';
 
 export type ContentSecurityPolicyOptions = {
     // next dev needs eval for fast refresh and talks to localhost
-    isDevelopment: boolean;
+    isNextDev: boolean;
     // Public RPC endpoints of the supported chains
     rpcUrls: string[];
     // Endpoints set through env (points API, custom subgraph, ...)
@@ -95,7 +95,7 @@ const unique = (sources: (string | undefined)[]) =>
     Array.from(new Set(sources.filter((s): s is string => !!s)));
 
 export const buildContentSecurityPolicy = ({
-    isDevelopment,
+    isNextDev,
     rpcUrls,
     serviceUrls,
     inlineScriptHashes,
@@ -108,7 +108,7 @@ export const buildContentSecurityPolicy = ({
             // gtag.js is only served from www; a wildcard here would allow
             // any googletagmanager.com host to run script
             'https://www.googletagmanager.com',
-            isDevelopment ? "'unsafe-eval'" : undefined,
+            isNextDev ? "'unsafe-eval'" : undefined,
         ],
         'style-src': [
             "'self'",
@@ -133,9 +133,7 @@ export const buildContentSecurityPolicy = ({
             ...WALLET_CONNECT_CONNECT,
             ...COINBASE_WALLET,
             ...ANALYTICS,
-            ...(isDevelopment
-                ? ['http://localhost:*', 'ws://localhost:*']
-                : []),
+            ...(isNextDev ? ['http://localhost:*', 'ws://localhost:*'] : []),
         ],
         'frame-src': ["'self'", SQUID_WIDGET, ...WALLET_CONNECT_FRAMES],
         // The wallet modal renders buttons with an empty ontouchstart=""
@@ -147,7 +145,7 @@ export const buildContentSecurityPolicy = ({
         'form-action': ["'self'"],
         // Works in a meta tag. Left out in development, where the app is
         // served over http://localhost and upgrading would break it.
-        'upgrade-insecure-requests': isDevelopment ? undefined : [],
+        'upgrade-insecure-requests': isNextDev ? undefined : [],
     };
 
     return Object.entries(directives)
