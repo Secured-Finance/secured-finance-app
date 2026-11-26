@@ -46,20 +46,11 @@ module.exports = withBundleAnalyzer({
                     },
                     {
                         key: 'Content-Security-Policy',
-                        value: [
-                            "default-src 'self'",
-                            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://cdn.amplitude.com https://api.amplitude.com",
-                            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-                            "font-src 'self' https://fonts.gstatic.com",
-                            "img-src 'self' data: https: blob:",
-                            "connect-src 'self' https://*.secured.finance https://api.amplitude.com https://*.amplitude.com https://www.google-analytics.com https://rpc.ankr.com https://*.alchemy.com https://*.alchemyapi.io https://*.walletconnect.org https://*.walletconnect.com wss: https:",
-                            "frame-src 'self' https://studio.squidrouter.com https://verify.walletconnect.org https://verify.walletconnect.com",
-                            "object-src 'none'",
-                            "base-uri 'self'",
-                            "form-action 'self'",
-                            "frame-ancestors 'none'",
-                            'upgrade-insecure-requests',
-                        ].join('; '),
+                        // The full policy is a <meta> tag (src/utils/csp.ts).
+                        // frame-ancestors only works as a header, so it is
+                        // repeated here for hosts that send these headers
+                        // (Cloudflare Pages previews). Filebase does not.
+                        value: "frame-ancestors 'none'; upgrade-insecure-requests",
                     },
                 ],
             },

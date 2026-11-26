@@ -37,6 +37,7 @@ import {
     getSupportedNetworks,
     getWalletConnectId,
 } from 'src/utils';
+import { reportCspViolations } from 'src/utils/cspReporter';
 import * as gtag from 'src/utils/gtag';
 import { Chain } from 'viem/chains';
 import { Transport, WagmiProvider, fallback, http } from 'wagmi';
@@ -57,17 +58,7 @@ const TrackingCode = ({ gaTag }: { gaTag: string }) => {
                 src={`https://www.googletagmanager.com/gtag/js?id=${gaTag}`}
             />
             <Script id='google-analytics' strategy='afterInteractive'>
-                {`
-                    window.dataLayer = window.dataLayer || [];
-                    function gtag(){dataLayer.push(arguments);}
-                    gtag('js', new Date());
-                    gtag('config', '${gaTag}');
-                    window.addEventListener('hashchange', () => {
-                        gtag('config', '${gaTag}', {
-                            page_path: window.location.pathname + window.location.hash,
-                        });
-                    });
-                    `}
+                {gtag.getInlineScript(gaTag)}
             </Script>
         </>
     );
@@ -84,6 +75,9 @@ if (typeof window !== 'undefined') {
         appVersion: process.env.SF_ENV,
         logLevel: amplitude.Types.LogLevel.None,
     });
+    reportCspViolations(violation =>
+        amplitude.track('CSP Violation', violation)
+    );
 }
 
 const chainIds = getSupportedChainIds();
