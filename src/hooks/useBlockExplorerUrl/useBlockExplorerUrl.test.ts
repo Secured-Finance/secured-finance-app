@@ -50,12 +50,4 @@ describe('useBlockExplorerUrl', () => {
         const { blockExplorerUrl } = result.current;
         expect(blockExplorerUrl).toBe('https://snowtrace.io');
     });
-
-    it('should return polygonscan link when chain is Polygon ZkEvm', () => {
-        process.env.SF_ENV = Environment.PRODUCTION;
-        mock.config.chain.id = 1101;
-        const { result } = renderHook(() => useBlockExplorerUrl());
-        const { blockExplorerUrl } = result.current;
-        expect(blockExplorerUrl).toBe('https://zkevm.polygonscan.com');
-    });
 });

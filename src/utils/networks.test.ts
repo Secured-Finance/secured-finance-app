@@ -55,10 +55,6 @@ describe('isTestnetChain', () => {
         it('should return false for Avalanche mainnet', () => {
             expect(isTestnetChain(43114)).toBe(false);
         });
-
-        it('should return false for Polygon zkEVM', () => {
-            expect(isTestnetChain(1101)).toBe(false);
-        });
     });
 
     describe('Unknown chains', () => {
@@ -74,7 +70,7 @@ describe('isTestnetChain', () => {
 
 describe('getAnalogousChain', () => {
     const allSupportedChainIds = [
-        1, 11155111, 314, 314159, 42161, 421614, 43114, 43113, 1101,
+        1, 11155111, 314, 314159, 42161, 421614, 43114, 43113,
     ];
 
     describe('Mainnet to Testnet conversion', () => {
@@ -100,12 +96,6 @@ describe('getAnalogousChain', () => {
             const result = getAnalogousChain(43114, true, allSupportedChainIds);
             expect(result.id).toBe(43113);
             expect(result.name).toBe('Avalanche Fuji');
-        });
-
-        it('should return Sepolia fallback for Polygon zkEVM (no testnet pair)', () => {
-            const result = getAnalogousChain(1101, true, allSupportedChainIds);
-            expect(result.id).toBe(11155111);
-            expect(result.name).toBe('Sepolia');
         });
     });
 
