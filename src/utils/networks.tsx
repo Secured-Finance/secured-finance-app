@@ -2,7 +2,6 @@ import Arbitrum from 'src/assets/icons/arbitrum-network.svg';
 import Avalanche from 'src/assets/icons/avalanche-network.svg';
 import Ethereum from 'src/assets/icons/ethereum-network.svg';
 import Filecoin from 'src/assets/icons/filecoin-network.svg';
-import Polygon from 'src/assets/icons/polygon-network.svg';
 import {
     Chain,
     arbitrum,
@@ -12,7 +11,6 @@ import {
     filecoin,
     filecoinCalibration,
     mainnet,
-    polygonZkEvm,
     sepolia,
 } from 'viem/chains';
 import { isProdEnv } from './displayUtils';
@@ -42,7 +40,6 @@ const mainnetNetworks: Chain[] = [
     filecoin,
     arbitrum,
     avalanche,
-    polygonZkEvm,
 ];
 
 const chainPairs: ChainPair[] = [
@@ -50,7 +47,6 @@ const chainPairs: ChainPair[] = [
     { name: 'Filecoin', mainnet: filecoin, testnet: filecoinCalibration },
     { name: 'Arbitrum', mainnet: arbitrum, testnet: arbitrumSepolia },
     { name: 'Avalanche', mainnet: avalanche, testnet: avalancheFuji },
-    { name: 'Polygon zkEVM', mainnet: polygonZkEvm, testnet: undefined },
 ];
 
 // Same name for a mainnet and its testnet, e.g. Filecoin for 314 and 314159
@@ -115,12 +111,6 @@ export const SupportedChainsList: ChainInformation[] = [
         chain: avalanche,
         icon: (
             <Avalanche className='h-4 w-4 rounded-full tablet:h-5 tablet:w-5' />
-        ),
-    },
-    {
-        chain: polygonZkEvm,
-        icon: (
-            <Polygon className='h-4 w-4 rounded-full tablet:h-5 tablet:w-5' />
         ),
     },
     {
